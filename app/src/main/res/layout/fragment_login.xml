@@ -1,0 +1,75 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/login_fragment_crouton_anchor"
+             android:layout_width="match_parent"
+             android:background="@color/C2"
+             android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="33dp"
+            android:paddingRight="33dp"
+            tools:context="com.leadermes.emerald.fragments.LoginFragment">
+
+            <EditText
+                android:id="@+id/factory_name"
+                style="@style/FontStyle_T6"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="42dp"
+                android:background="@drawable/edit_text_background_selector"
+                android:hint="@string/login_fields_factory_name_hint"
+                android:paddingLeft="14dp"
+                android:singleLine="true"
+                android:textColorHint="@color/T4_color"/>
+
+            <EditText
+                android:id="@+id/factory_url"
+                style="@style/FontStyle_T6"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background_selector"
+                android:hint="@string/login_fields_factory_url_hint"
+                android:inputType="textUri"
+                android:paddingLeft="14dp"
+                android:singleLine="true"
+                android:textColorHint="@color/T4_color"/>
+
+            <EditText
+                android:id="@+id/user_name"
+                style="@style/FontStyle_T6"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background_selector"
+                android:hint="@string/login_fields_user_name_hint"
+                android:paddingLeft="14dp"
+                android:singleLine="true"
+                android:textColorHint="@color/T4_color"/>
+
+            <EditText
+                android:id="@+id/password"
+                style="@style/FontStyle_T6"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_background_selector"
+                android:hint="@string/login_fields_password_hint"
+                android:inputType="textPassword"
+                android:paddingLeft="14dp"
+                android:singleLine="true"
+                android:textColorHint="@color/T4_color"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

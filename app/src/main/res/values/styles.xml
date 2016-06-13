@@ -8,4 +8,222 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="dialog_fragment" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+    </style>
+
+
+    <style name="BreeSerifRegular">
+        <item name="fontPath">fonts/BreeSerif-Regular.ttf</item>
+    </style>
+
+    <style name="DroidSans">
+        <item name="fontPath">fonts/DroidSans.ttf</item>
+    </style>
+
+    <style name="DroidSansBold">
+        <item name="fontPath">fonts/DroidSans-Bold.ttf</item>
+    </style>
+
+    <style name="FontStyle_T1" parent="DroidSansBold">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T2" parent="DroidSans">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T3" parent="BreeSerifRegular">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T4" parent="DroidSans">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/T4_color</item>
+    </style>
+
+    <style name="FontStyle_T5" parent="BreeSerifRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/T5_color</item>
+    </style>
+
+    <style name="FontStyle_T6" parent="DroidSans">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T7" parent="BreeSerifRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T8" parent="BreeSerifRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="FontStyle_T9" parent="DroidSansBold">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T10" parent="DroidSans">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T11" parent="BreeSerifRegular">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T12" parent="BreeSerifRegular">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/T12_color</item>
+    </style>
+
+    <style name="FontStyle_T13" parent="DroidSans">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T14" parent="DroidSans">
+        <item name="android:textSize">43sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T15" parent="DroidSansBold">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <!--no use for this font style by now-->
+    <style name="FontStyle_T16" parent="DroidSansBold">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T17" parent="DroidSansBold">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <!--no use for this font style by now-->
+    <style name="FontStyle_T18" parent="DroidSansBold">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="FontStyle_T19" parent="DroidSansBold">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T20" parent="DroidSans">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T21" parent="DroidSansBold">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T22" parent="DroidSans">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T23" parent="DroidSans">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="FontStyle_T24_Splash_logo" parent="BreeSerifRegular">
+        <item name="android:textSize">33sp</item>
+        <item name="android:textColor">@color/T12_color</item>
+    </style>
+
+    <style name="FontStyle_T25_Splash_logo" parent="DroidSans">
+        <item name="android:textSize">33sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T24" parent="DroidSans">
+        <item name="android:textSize">33sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="FontStyle_T25" parent="DroidSans">
+        <item name="android:textSize">33sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T26" parent="DroidSans">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FontStyle_T27" parent="DroidSans">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T28" parent="DroidSansBold">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_T29" parent="DroidSansBold">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/C6</item>
+    </style>
+
+    <style name="FontStyle_T30" parent="DroidSans">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="FontStyle_T31" parent="DroidSansBold">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/C8</item>
+    </style>
+
+    <style name="FontStyle_T32" parent="DroidSans">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/C6</item>
+    </style>
+
+    <style name="FontStyle_T33" parent="DroidSansBold">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/C6</item>
+    </style>
+
+    <style name="FontStyle_T34" parent="DroidSans">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/C8</item>
+    </style>
+
+    <style name="FontStyle_T35" parent="DroidSans">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/C1</item>
+    </style>
+
+    <style name="FontStyle_TCriticalMachineMore" parent="DroidSans">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/C16</item>
+    </style>
+
+    <style name="T5" parent="BreeSerifRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

@@ -3,4 +3,36 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="C1">#01054d</color>
+    <color name="C2">#dfdfdf</color>
+    <color name="C3">#fb165c</color>
+    <color name="C4">#f2b752</color>
+
+    <color name="C5">#1aa917</color>
+    <color name="C6">#c11117</color>
+    <color name="C7">#fda400</color>
+    <color name="C8">#959595</color>
+    <color name="C9">#166715</color>
+    <color name="C10">#d1eed1</color>
+    <color name="C11">#eaeaea</color>
+    <color name="C12">#f2d0d2</color>
+    <color name="C13">#b3b3c2</color>
+    <color name="C14">#a2c2a1</color>
+    <color name="C15">#fee3b6</color>
+
+    <color name="status_bar">#00033a</color>
+    <color name="white">#ffffff</color>
+    <color name="white_with_transparency">#E6404040</color>
+    <color name="T4_color">#b5b5b5</color>
+    <color name="T5_color">#66ffffff</color>
+    <color name="C16">#0080ff</color>
+    <color name="T12_color">#1683fb</color>
+    <color name="C17">#b78491</color>
+    <color name="C18">#849c8e</color>
+    <color name="C19">#f7f7f7</color>
+    <color name="transparentColor">#00000000</color>
+    <color name="whiteHalfTransparent">#80FFFFFF</color>
+    <color name="white12PercentTransparent">#1AFFFFFF</color>
+    <color name="recycler_view_divider">#c9c9c9</color>
 </resources>
