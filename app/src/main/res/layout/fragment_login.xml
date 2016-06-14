@@ -29,6 +29,7 @@
                 android:hint="@string/login_fields_factory_name_hint"
                 android:paddingLeft="14dp"
                 android:singleLine="true"
+                android:text="Lordan"
                 android:textColorHint="@color/T4_color"/>
 
             <EditText
@@ -42,6 +43,7 @@
                 android:inputType="textUri"
                 android:paddingLeft="14dp"
                 android:singleLine="true"
+                android:text="https://apilordan.my.leadermes.com"
                 android:textColorHint="@color/T4_color"/>
 
             <EditText
@@ -54,6 +56,7 @@
                 android:hint="@string/login_fields_user_name_hint"
                 android:paddingLeft="14dp"
                 android:singleLine="true"
+                android:text="leaderapi"
                 android:textColorHint="@color/T4_color"/>
 
             <EditText
@@ -68,6 +71,7 @@
                 android:inputType="textPassword"
                 android:paddingLeft="14dp"
                 android:singleLine="true"
+                android:text="api123"
                 android:textColorHint="@color/T4_color"/>
 
         </LinearLayout>

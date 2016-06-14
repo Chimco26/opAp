@@ -5,9 +5,6 @@ import com.zemingo.logrecorder.ZLogger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by slava-android on 1/31/2016.
- */
 public class DateUtils
 {
     private static final String LOG_TAG = DateUtils.class.getSimpleName();

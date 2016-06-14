@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-/**
- * Created by slava-android on 1/13/2016.
- */
 public class SessionResponse
 {
     @SerializedName("JGetUserSessionIDResult")

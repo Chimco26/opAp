@@ -8,9 +8,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.zemingo.logrecorder.ZLogger;
 
-/**
- * Created by Michael on 15/07/13.
- */
 public class SoftKeyboardUtil
 {
 	protected static final String LOG_TAG = SoftKeyboardUtil.class.getSimpleName();

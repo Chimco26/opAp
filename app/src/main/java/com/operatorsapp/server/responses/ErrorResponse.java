@@ -2,11 +2,7 @@ package com.operatorsapp.server.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Slava on 1/29/2015.
- */
-public class ErrorResponse
-{
+public class ErrorResponse {
     @SerializedName("ErrorDescription")
     private String mErrorDesc;
 
@@ -16,33 +12,27 @@ public class ErrorResponse
     @SerializedName("ErrorCode")
     private int mErrorCode;
 
-    public String getErrorDesc()
-    {
+    public String getErrorDesc() {
         return mErrorDesc;
     }
 
-    public void setErrorDesc(String errorDesc)
-    {
+    public void setErrorDesc(String errorDesc) {
         mErrorDesc = errorDesc;
     }
 
-    public String getErrorMessage()
-    {
+    public String getErrorMessage() {
         return mErrorMessage;
     }
 
-    public void setErrorMessage(String errorMessage)
-    {
+    public void setErrorMessage(String errorMessage) {
         mErrorMessage = errorMessage;
     }
 
-    public int getErrorCode()
-    {
+    public int getErrorCode() {
         return mErrorCode;
     }
 
-    public void setErrorCode(int errorCode)
-    {
+    public void setErrorCode(int errorCode) {
         mErrorCode = errorCode;
     }
 }

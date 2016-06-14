@@ -1,8 +1,5 @@
 package com.operatorsapp.server;
 
-/**
- * Created by slava-android on 1/17/2016.
- */
 public class ErrorObject
 {
     private ErrorCode mError;

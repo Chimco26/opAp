@@ -28,4 +28,7 @@
     <string name="credentials_error">Credentials error</string>
     <string name="could_not_log_in">Could not log in -</string>
     <string name="login_screen_title">Add Factory</string>
+
+    <string name="done">DONE</string>
+    <string name="add_another"></string>
 </resources>

@@ -1,8 +1,5 @@
 package com.operatorsapp.utils;
 
-/**
- * Created by slava-android on 2/15/2016.
- */
 public class TimeUtils
 {
     public static final int ONE_MINUTE_IN_SECONDS = 60;

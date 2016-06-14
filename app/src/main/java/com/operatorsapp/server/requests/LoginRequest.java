@@ -2,11 +2,7 @@ package com.operatorsapp.server.requests;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by slava-android on 1/7/2016.
- */
-public class LoginRequest
-{
+public class LoginRequest {
     @SerializedName("Username")
     private String mUserName;
 
@@ -19,8 +15,7 @@ public class LoginRequest
     @SerializedName("Platform")
     private String mPlatform = "mobile";
 
-    public LoginRequest(String userName, String password)
-    {
+    public LoginRequest(String userName, String password) {
         mUserName = userName;
         mPassword = password;
     }

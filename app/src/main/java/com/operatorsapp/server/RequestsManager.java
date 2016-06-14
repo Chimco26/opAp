@@ -1,29 +1,19 @@
-/*
 package com.operatorsapp.server;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.operatorsapp.server.interfaces.EmeraldServiceRequests;
-import com.operatorsapp.server.requests.BaseRequest;
 import com.operatorsapp.server.requests.LoginRequest;
-import com.operatorsapp.server.responses.FactoryServerDataResponse;
+import com.operatorsapp.server.responses.ErrorResponse;
 import com.operatorsapp.server.responses.SessionResponse;
-import com.zemingo.logrecorder.ZLogger;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import retrofit.Callback;
-import retrofit.Response;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RequestsManager {
     private static final String LOG_TAG = RequestsManager.class.getSimpleName();
@@ -31,7 +21,7 @@ public class RequestsManager {
     private final ExecutorService mBackThreadExecutor;
     private HashMap<String, EmeraldServiceRequests> mEmeraldServiceRequestsHashMap;
 
-    public enum MachineServerStatus {
+    /*public enum MachineServerStatus {
         NO_JOB(0), WORKING_OK(1), PARAMETER_DEVIATION(2), STOPPED(3), COMMUNICATION_FAILURE(4), SETUP_WORKING(5), SETUP_STOPPED(6), SETUP_COMMUNICATION_FAILURE(7);
 
         private int mId;
@@ -43,7 +33,7 @@ public class RequestsManager {
         public int getId() {
             return mId;
         }
-    }
+    }*/
 
     public static RequestsManager getInstance() {
         if (msInstance == null) {
@@ -65,23 +55,15 @@ public class RequestsManager {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
         } else {
-            Gson gson = new Gson();
-            Client client;
+            OkHttpClient okHttpClient;
             if (timeout >= 0 && timeUnit != null) {
-                client = HttpClientFactory.getOkClient(timeout, timeUnit);
+                okHttpClient = new OkHttpClient.Builder().writeTimeout(timeout, timeUnit).connectTimeout(timeout, timeUnit).readTimeout(timeout, timeUnit).build();
             } else {
-                client = HttpClientFactory.getOkClient();
+                okHttpClient = new OkHttpClient();
             }
+            Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
-            //end point "https://apidev.my.leadermes.com"
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(siteUrl).setConverter(new GsonConverter(gson)).setLogLevel(RestAdapter.LogLevel.FULL).setClient(client).setLog(new RestAdapter.Log() {
-                @Override
-                public void log(String message) {
-                    Log.i("retrofit", message);
-                }
-            }).setExecutors(mBackThreadExecutor, mBackThreadExecutor).build();
-
-            EmeraldServiceRequests emeraldServiceRequests = restAdapter.create(EmeraldServiceRequests.class);
+            EmeraldServiceRequests emeraldServiceRequests = retrofit.create(EmeraldServiceRequests.class);
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldServiceRequests);
             return emeraldServiceRequests;
         }
@@ -90,13 +72,14 @@ public class RequestsManager {
     // In use
     public void getUserSessionId(String siteUrl, String userName, String password, final OnRequestManagerResponseListener<String> listener) {
         LoginRequest loginRequest = new LoginRequest(userName, password);
-        getRetroFitServiceRequests(siteUrl).getUserSessionId(loginRequest, new Callback<SessionResponse>() {
+        Call<SessionResponse> call = getRetroFitServiceRequests(siteUrl).getUserSessionId(loginRequest);
+        call.enqueue(new retrofit2.Callback<SessionResponse>() {
             @Override
-            public void onResponse(Response<SessionResponse> response) {
-                SessionResponse.GetUserSessionIDResult sessionResult = sessionResponse.getGetUserSessionIDResult();
+            public void onResponse(Call<SessionResponse> call, retrofit2.Response<SessionResponse> response) {
+                SessionResponse.GetUserSessionIDResult sessionResult = response.body().getGetUserSessionIDResult();
                 if (sessionResult.getErrorResponse() == null) {
-                    if (sessionResponse.getGetUserSessionIDResult().getSessionIds() != null && sessionResponse.getGetUserSessionIDResult().getSessionIds().get(0) != null) {
-                        listener.onRequestSucceed(sessionResponse.getGetUserSessionIDResult().getSessionIds().get(0).getSessionId());
+                    if (response.body().getGetUserSessionIDResult().getSessionIds() != null && response.body().getGetUserSessionIDResult().getSessionIds().get(0) != null) {
+                        listener.onRequestSucceed(response.body().getGetUserSessionIDResult().getSessionIds().get(0).getSessionId());
                     }
                 } else {
                     ErrorObject errorObject = translateToErrorCode(sessionResult.getErrorResponse());
@@ -105,42 +88,41 @@ public class RequestsManager {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<SessionResponse> call, Throwable t) {
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 listener.onRequestFailed(errorObject);
             }
-
         });
     }
 
-    // In use
+    /*// In use
     public void getSiteData(String siteUrl, String sessionId, final OnRequestManagerResponseListener<SitePieAndPeeData> callback) {
         BaseRequest baseRequest = new BaseRequest(sessionId);
         int specificRequestTimeout = 13;
-        getRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getFactoryData(baseRequest, new RequestCallback<>(new OnRequestManagerResponseListener<FactoryServerDataResponse>() {
+        getRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getFactoryData(baseRequest, new retrofit2.Callback<FactoryServerDataResponse>() {
             @Override
-            public void onRequestSucceed(FactoryServerDataResponse result) {
+            public void onResponse(Call<FactoryServerDataResponse> call, retrofit2.Response<FactoryServerDataResponse> response) {
                 ZLogger.v(LOG_TAG, "onRequestSucceed(), getSiteData request got data from server");
 
                 SitePieAndPeeData sitePieAndPeeData = new SitePieAndPeeData();
-                sitePieAndPeeData.setPEE(result.getPEE());
-                statusAggregation(result.getMachineDepartmentStatus(), sitePieAndPeeData);
+                sitePieAndPeeData.setPEE(response.body().getPEE());
+                statusAggregation(response.body().getMachineDepartmentStatus(), sitePieAndPeeData);
                 if (callback != null) {
                     callback.onRequestSucceed(sitePieAndPeeData);
                 }
             }
 
             @Override
-            public void onRequestFailed(ErrorObject reason) {
-                ZLogger.w(LOG_TAG, "onRequestFailed(), getSiteData request failed to get data from server reason: " + reason.getDetailedDescription());
+            public void onFailure(Call<FactoryServerDataResponse> call, Throwable t) {
+                ZLogger.w(LOG_TAG, "onRequestFailed(), getSiteData request failed to get data from server reason: " + t.getMessage());
                 if (callback != null) {
-                    callback.onRequestFailed(reason);
+                    callback.onRequestFailed(new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage()));
                 }
             }
-        }));
-    }
+        });
+    }*/
 
-    private void statusAggregation(ArrayList<MachineDepartmentStatus> machineDepartmentStatuses, SitePieAndPeeData sitePieAndPeeData) {
+    /*private void statusAggregation(ArrayList<MachineDepartmentStatus> machineDepartmentStatuses, SitePieAndPeeData sitePieAndPeeData) {
         for (MachineDepartmentStatus machineDepartmentStatus : machineDepartmentStatuses) {
             if (machineDepartmentStatus.getMachineStatusId() == MachineServerStatus.WORKING_OK.getId()) {
                 sitePieAndPeeData.setWorkingPercentage(machineDepartmentStatus.getMachinePC());
@@ -154,18 +136,18 @@ public class RequestsManager {
                 sitePieAndPeeData.setSetupPercentage(sitePieAndPeeData.getSetupPercentage() + machineDepartmentStatus.getMachinePC());
             }
         }
-    }
+    }*/
 
-    // In use
+    /*// In use
     public void getFactoryOeePee(final String siteUrl, String sessionId, final OnRequestManagerResponseListener<ArrayList<Float>> callback) {
         GetRangeOEEPEE getRangeOEEPEE = new GetRangeOEEPEE(sessionId, DateUtils.getFormattedToYesterday(), 3);
-        getRetroFitServiceRequests(siteUrl).getFactoryHistoryPEE(getRangeOEEPEE, new RequestCallback<>(new OnRequestManagerResponseListener<GetOeePeeDataResponse>() {
+        getRetroFitServiceRequests(siteUrl).getFactoryHistoryPEE(getRangeOEEPEE, new retrofit2.Callback<GetOeePeeDataResponse>() {
             @Override
-            public void onRequestSucceed(GetOeePeeDataResponse result) {
+            public void onResponse(Call<GetOeePeeDataResponse> call, retrofit2.Response<GetOeePeeDataResponse> response) {
                 ZLogger.v(LOG_TAG, "onRequestSucceed(), getFactoryOeePee request got data from server");
 
                 ArrayList<Float> mHistoryPee = new ArrayList<Float>();
-                ArrayList<OeePeeData> mPeeFromServer = result.getOeePeeData();
+                ArrayList<OeePeeData> mPeeFromServer = response.body().getOeePeeData();
 
                 sortHistoryPeeByDate(mPeeFromServer);
 
@@ -178,16 +160,16 @@ public class RequestsManager {
             }
 
             @Override
-            public void onRequestFailed(ErrorObject reason) {
-                ZLogger.w(LOG_TAG, "onRequestFailed(), getFactoryOeePee request failed to get data from server reason: " + reason.getDetailedDescription());
+            public void onFailure(Call<GetOeePeeDataResponse> call, Throwable t) {
+                ZLogger.w(LOG_TAG, "onRequestFailed(), getFactoryOeePee request failed to get data from server reason: " + t.getMessage());
                 if (callback != null) {
-                    callback.onRequestFailed(reason);
+                    callback.onRequestFailed(new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage()));
                 }
             }
-        }));
-    }
+        });
+    }*/
 
-    private void sortHistoryPeeByDate(ArrayList<OeePeeData> mPeeFromServer) {
+    /*private void sortHistoryPeeByDate(ArrayList<OeePeeData> mPeeFromServer) {
         Collections.sort(mPeeFromServer, new Comparator<OeePeeData>() {
             @Override
             public int compare(OeePeeData lhs, OeePeeData rhs) {
@@ -210,28 +192,28 @@ public class RequestsManager {
                 return rightDate.compareTo(leftDate);
             }
         });
-    }
+    }*/
 
-    public void getSiteGeneralData(String siteUrl, String sessionId, final OnRequestManagerResponseListener<ApiAllDepartmentsResponse> callback) {
+    /*public void getSiteGeneralData(String siteUrl, String sessionId, final OnRequestManagerResponseListener<ApiAllDepartmentsResponse> callback) {
         BaseRequest baseRequest = new BaseRequest(sessionId);
-        getRetroFitServiceRequests(siteUrl).getSiteGeneralData(baseRequest, new RequestCallback<>(new OnRequestManagerResponseListener<ApiAllDepartmentsResponse>() {
+        getRetroFitServiceRequests(siteUrl).getSiteGeneralData(baseRequest, new retrofit2.Callback<ApiAllDepartmentsResponse>() {
             @Override
-            public void onRequestSucceed(ApiAllDepartmentsResponse result) {
+            public void onResponse(Call<ApiAllDepartmentsResponse> call, retrofit2.Response<ApiAllDepartmentsResponse> response) {
                 if (callback != null) {
-                    callback.onRequestSucceed(result);
+                    callback.onRequestSucceed(response.body());
                 }
             }
 
             @Override
-            public void onRequestFailed(ErrorObject reason) {
+            public void onFailure(Call<ApiAllDepartmentsResponse> call, Throwable t) {
                 if (callback != null) {
-                    callback.onRequestFailed(reason);
+                    callback.onRequestFailed(new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage()));
                 }
             }
-        }));
-    }
+        });
+    }*/
 
-    public static List<String> splitEqually(String text, int size) {
+    /*public static List<String> splitEqually(String text, int size) {
         // Give the list the right capacity to start with. You could use an array
         // instead if you wanted.
         List<String> ret = new ArrayList<String>((text.length() + size - 1) / size);
@@ -240,9 +222,9 @@ public class RequestsManager {
             ret.add(text.substring(start, Math.min(text.length(), start + size)));
         }
         return ret;
-    }
+    }*/
 
-    private class RequestCallbackWithResultArray<T> implements Callback<ServerResponse<T>> {
+    /*private class RequestCallbackWithResultArray<T> implements Callback<ServerResponse<T>> {
         private OnRequestManagerResponseListener<T> mOnRequestManagerResponseListener;
 
         private RequestCallbackWithResultArray(OnRequestManagerResponseListener<T> onRequestManagerResponseListener) {
@@ -250,24 +232,24 @@ public class RequestsManager {
         }
 
         @Override
-        public void success(ServerResponse<T> obj, Response response) {
-            if (obj.getErrorResponse() == null) {
-                mOnRequestManagerResponseListener.onRequestSucceed(obj.getResult());
+        public void onResponse(Call<ServerResponse<T>> call, Response<ServerResponse<T>> response) {
+            if (response.body().getErrorResponse() == null) {
+                mOnRequestManagerResponseListener.onRequestSucceed(response.body().getResult());
                 return;
             }
 
             // 104 SessionInvalid
-            if (obj.getErrorResponse().getErrorCode() == 104) {
-                mOnRequestManagerResponseListener.onRequestSucceed(obj.getResult());
+            if (response.body().getErrorResponse().getErrorCode() == 104) {
+                mOnRequestManagerResponseListener.onRequestSucceed(response.body().getResult());
             } else {
-                ErrorObject errorObject = translateToErrorCode(obj.getErrorResponse());
+                ErrorObject errorObject = translateToErrorCode(response.body().getErrorResponse());
                 mOnRequestManagerResponseListener.onRequestFailed(errorObject);
             }
         }
 
         @Override
-        public void failure(RetrofitError error) {
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, error.getMessage());
+        public void onFailure(Call<ServerResponse<T>> call, Throwable t) {
+            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
             mOnRequestManagerResponseListener.onRequestFailed(errorObject);
         }
 
@@ -284,7 +266,7 @@ public class RequestsManager {
             }
             return ErrorObject.ErrorCode.Unknown;
         }
-    }
+    }*/
 
     public interface OnRequestManagerResponseListener<T> {
         void onRequestSucceed(T result);
@@ -292,7 +274,7 @@ public class RequestsManager {
         void onRequestFailed(ErrorObject reason);
     }
 
-    private class RequestCallback<T extends ErrorBaseRespone> implements Callback<T> {
+   /* private class RequestCallback<T extends ErrorBaseRespone> implements Callback<T> {
         private OnRequestManagerResponseListener<T> mOnRequestManagerResponseListener;
 
         private RequestCallback(OnRequestManagerResponseListener<T> onRequestManagerResponseListener) {
@@ -300,26 +282,26 @@ public class RequestsManager {
         }
 
         @Override
-        public void success(T t, Response response) {
-            if (t.getErrorResponse() == null) {
-                mOnRequestManagerResponseListener.onRequestSucceed(t);
+        public void onResponse(Call<T> call, Response<T> response) {
+            if (response.body().getErrorResponse() == null) {
+                mOnRequestManagerResponseListener.onRequestSucceed(response.body());
                 return;
             }
             // 104 SessionInvalid
-            if (t.getErrorResponse().getErrorCode() == 104) {
-                mOnRequestManagerResponseListener.onRequestSucceed(t);
+            if (response.body().getErrorResponse().getErrorCode() == 104) {
+                mOnRequestManagerResponseListener.onRequestSucceed(response.body());
             } else {
-                ErrorObject errorObject = translateToErrorCode(t.getErrorResponse());
+                ErrorObject errorObject = translateToErrorCode(response.body().getErrorResponse());
                 mOnRequestManagerResponseListener.onRequestFailed(errorObject);
             }
         }
 
         @Override
-        public void failure(RetrofitError error) {
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, error.getMessage());
+        public void onFailure(Call<T> call, Throwable t) {
+            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
             mOnRequestManagerResponseListener.onRequestFailed(errorObject);
         }
-    }
+    }*/
 
     private ErrorObject translateToErrorCode(ErrorResponse errorResponse) {
         ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
@@ -334,4 +316,3 @@ public class RequestsManager {
         return ErrorObject.ErrorCode.Unknown;
     }
 }
-*/

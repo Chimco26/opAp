@@ -158,14 +158,14 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setIcon(null);
-            actionBar.setHomeAsUpIndicator(R.drawable.x_button_selector);
+//            actionBar.setHomeAsUpIndicator(R.drawable.x_button_selector);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             View view = inflator.inflate(R.layout.actionbar_title_and_button_view, null);
-            ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.login_screen_title));
+            ((TextView) view.findViewById(R.id.title)).setText("");
             mLoginButton = (TextView) view.findViewById(R.id.right_action_bar_button);
-            if (mCurrentScreenMode == ScreenMode.UPDATE_SITE) {
-                mLoginButton.setText(getString(R.string.login_screen_save));
-            }
+//            if (mCurrentScreenMode == ScreenMode.UPDATE_SITE) {
+//                mLoginButton.setText(getString(R.string.login_screen_save));
+//            }
             mLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -320,7 +320,9 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     @Override
     public void onLoginSucceeded(String data) {
         dismissProgressDialog();
-        if (mCurrentScreenMode.equals(ScreenMode.ADD_NEW_SITE)) {
+        TwoButtonDialogFragment twoButtonDialogFragment = TwoButtonDialogFragment.newInstance("Your connected", R.string.add_another, R.string.done);
+        twoButtonDialogFragment.show(getFragmentManager(), TwoButtonDialogFragment.DIALOG);
+        /*if (mCurrentScreenMode.equals(ScreenMode.ADD_NEW_SITE)) {
             if (mCallback != null) {
                 mCallback.onLoginSuccess(data);
             }
@@ -329,7 +331,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
                 mCallback.onUpdatedSuccessfully(data);
             }
         }
-        getFragmentManager().popBackStack();
+        getFragmentManager().popBackStack();*/
     }
 
     private boolean dataWasChanged() {
