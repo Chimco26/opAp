@@ -8,11 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
-/**
- * Created by slava-android on 1/10/2016.
- */
-public class TwoButtonDialogFragment extends DialogFragment
-{
+public class TwoButtonDialogFragment extends DialogFragment {
     public final static String DIALOG = "dialog";
     private final static String DIALOG_MESSAGE = "AlertDialogFragment.dialogMessage";
     private final static String POSITIVE_BUTTON_TEXT = "AlertDialogFragment.positiveButtonText";
@@ -22,8 +18,7 @@ public class TwoButtonDialogFragment extends DialogFragment
     private String mPositiveButtonText;
     private String mNegativeButtonText;
 
-    public static TwoButtonDialogFragment newInstance(String message, int positiveButtonText, int negativeButtonString)
-    {
+    public static TwoButtonDialogFragment newInstance(String message, int positiveButtonText, int negativeButtonString) {
         TwoButtonDialogFragment twoButtonDialogFragment = new TwoButtonDialogFragment();
         Bundle args = new Bundle();
         args.putString(DIALOG_MESSAGE, message);
@@ -34,11 +29,9 @@ public class TwoButtonDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
             mMessageText = getArguments().getString(DIALOG_MESSAGE);
             mPositiveButtonText = getResources().getString(getArguments().getInt(POSITIVE_BUTTON_TEXT));
             mNegativeButtonText = getResources().getString(getArguments().getInt(NEGATIVE_BUTTON_TEXT));
@@ -47,25 +40,18 @@ public class TwoButtonDialogFragment extends DialogFragment
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)
-    {
-        return new AlertDialog.Builder(getActivity()).setMessage(mMessageText).setNegativeButton(mNegativeButtonText, new DialogInterface.OnClickListener()
-        {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AlertDialog.Builder(getActivity()).setMessage(mMessageText).setNegativeButton(mNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                if (mListener != null)
-                {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mListener != null) {
                     mListener.onTwoButtonDialogNegativeButtonClick(dialog, getTargetRequestCode());
                 }
             }
-        }).setPositiveButton(mPositiveButtonText, new DialogInterface.OnClickListener()
-        {
+        }).setPositiveButton(mPositiveButtonText, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                if (mListener != null)
-                {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mListener != null) {
                     mListener.onTwoButtonDialogPositiveButtonClick(dialog, getTargetRequestCode());
                 }
             }
@@ -74,28 +60,22 @@ public class TwoButtonDialogFragment extends DialogFragment
 
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try
-        {
+        try {
             mListener = (OnDialogButtonsListener) getTargetFragment();
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnDialogButtonsListener");
         }
     }
 
     @Override
-    public void onDetach()
-    {
+    public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    public interface OnDialogButtonsListener
-    {
+    public interface OnDialogButtonsListener {
         void onTwoButtonDialogPositiveButtonClick(DialogInterface dialog, int requestCode);
 
         void onTwoButtonDialogNegativeButtonClick(DialogInterface dialog, int requestCode);

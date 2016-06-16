@@ -16,23 +16,8 @@ public class ErrorResponse {
         return mErrorDesc;
     }
 
-    public void setErrorDesc(String errorDesc) {
-        mErrorDesc = errorDesc;
-    }
-
-    public String getErrorMessage() {
-        return mErrorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        mErrorMessage = errorMessage;
-    }
-
     public int getErrorCode() {
         return mErrorCode;
     }
 
-    public void setErrorCode(int errorCode) {
-        mErrorCode = errorCode;
-    }
 }

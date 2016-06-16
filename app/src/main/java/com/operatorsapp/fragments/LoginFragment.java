@@ -1,5 +1,6 @@
 package com.operatorsapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -26,7 +27,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.dialogs.TwoButtonDialogFragment;
 import com.operatorsapp.fragments.interfaces.OnBackPressedListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.fragments.interfaces.OnLoginListener;
 import com.operatorsapp.managers.AccountManager;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -47,16 +47,9 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     private EditText mSiteUrl;
     private EditText mUserName;
     private EditText mPassword;
-    private OnLoginListener mCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private TextView mLoginButton;
-    private ScreenMode mCurrentScreenMode;
     private Site mSiteForEdit;
-    private String mUrlBeforeEdit;
-
-    private enum ScreenMode {
-        ADD_NEW_SITE, UPDATE_SITE
-    }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -79,14 +72,6 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
 
     public LoginFragment() {
         // Required empty public constructor
-    }
-
-    public static LoginFragment newInstance(String siteId) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(SITE_ID_ARGUMENT, siteId);
-        fragment.setArguments(bundle);
-        return fragment;
     }
 
     public static LoginFragment newInstance() {
@@ -114,7 +99,6 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
                 mSiteName.setText(mSiteForEdit.getSiteName());
                 mSiteUrl.setText(mSiteForEdit.getSiteUrl());
                 mUserName.setText(mSiteForEdit.getUserName());
-                mUrlBeforeEdit = mSiteForEdit.getSiteUrl();
                 byte[] decode = Base64.decode(mSiteForEdit.getPassword(), Base64.NO_WRAP);
                 String password = "";
                 try {
@@ -124,18 +108,12 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
                     e.printStackTrace();
                 }
                 mPassword.setText(password);
-                mCurrentScreenMode = ScreenMode.UPDATE_SITE;
             }
-        } else {
-            mCurrentScreenMode = ScreenMode.ADD_NEW_SITE;
-            mUrlBeforeEdit = "";
         }
-
         mSiteName.addTextChangedListener(mTextWatcher);
         mSiteUrl.addTextChangedListener(mTextWatcher);
         mUserName.addTextChangedListener(mTextWatcher);
         mPassword.addTextChangedListener(mTextWatcher);
-
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -158,14 +136,10 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setIcon(null);
-//            actionBar.setHomeAsUpIndicator(R.drawable.x_button_selector);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
-            View view = inflator.inflate(R.layout.actionbar_title_and_button_view, null);
+            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_button_view, null);
             ((TextView) view.findViewById(R.id.title)).setText("");
             mLoginButton = (TextView) view.findViewById(R.id.right_action_bar_button);
-//            if (mCurrentScreenMode == ScreenMode.UPDATE_SITE) {
-//                mLoginButton.setText(getString(R.string.login_screen_save));
-//            }
             mLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -184,11 +158,6 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            mCallback = (OnLoginListener) getTargetFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Calling fragment must implement OnSessionListener interface");
-        }
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
@@ -242,24 +211,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     }
 
     private void tryToLogin() {
-        String alias = "";
-
-        if (!mUrlBeforeEdit.equals(mSiteUrl.getText().toString())) {
-            if (mSiteForEdit != null) {
-                alias = AccountManager.getInstance().getAliasForSiteUrlExcludingSiteId(mSiteUrl.getText().toString(), mSiteForEdit.getSiteId());
-            } else {
-                alias = AccountManager.getInstance().getAliasForSiteUrlExcludingSiteId(mSiteUrl.getText().toString(), null);
-            }
-        }
-
-        //todo explain the flow here..
-        if (!TextUtils.isEmpty(alias)) {
-            TwoButtonDialogFragment twoButtonDialogFragment = TwoButtonDialogFragment.newInstance(alias + "\n" + getString(R.string.login_dialog_alias_already_exists_with_the_same_url_add) + " " + mSiteName.getText() + " ?", R.string.login_dialog_add, R.string.login_dialog_cancel);
-            twoButtonDialogFragment.setTargetFragment(this, TRYING_TO_OVERRIDE_EXISTING_SITE_REQUEST_CODE);
-            twoButtonDialogFragment.show(getChildFragmentManager(), TwoButtonDialogFragment.DIALOG);
-        } else {
-            performLogin();
-        }
+        performLogin();
     }
 
     public void performLogin() {
@@ -269,17 +221,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
         String previousSiteId = "";
-        if (mSiteForEdit != null) {
-            previousSiteId = mSiteForEdit.getSiteId();
-        }
-
         AccountManager.getInstance().performLogin(siteName, siteUrl, userName, password, previousSiteId);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallback = null;
     }
 
     @Override
@@ -320,18 +262,9 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     @Override
     public void onLoginSucceeded(String data) {
         dismissProgressDialog();
-        TwoButtonDialogFragment twoButtonDialogFragment = TwoButtonDialogFragment.newInstance("Your connected", R.string.add_another, R.string.done);
+        TwoButtonDialogFragment twoButtonDialogFragment = TwoButtonDialogFragment.newInstance("", R.string.add_another, R.string.done);
         twoButtonDialogFragment.show(getFragmentManager(), TwoButtonDialogFragment.DIALOG);
-        /*if (mCurrentScreenMode.equals(ScreenMode.ADD_NEW_SITE)) {
-            if (mCallback != null) {
-                mCallback.onLoginSuccess(data);
-            }
-        } else if (mCurrentScreenMode.equals(ScreenMode.UPDATE_SITE)) {
-            if (mCallback != null) {
-                mCallback.onUpdatedSuccessfully(data);
-            }
-        }
-        getFragmentManager().popBackStack();*/
+        mLoginButton.setText("");
     }
 
     private boolean dataWasChanged() {

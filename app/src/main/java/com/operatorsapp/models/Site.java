@@ -1,10 +1,6 @@
 package com.operatorsapp.models;
 
-/**
- * Created by slava-android on 1/13/2016.
- */
-public class Site
-{
+public class Site {
     private String mId;
     private String mSiteName;
     private String mSiteUrl;
@@ -12,8 +8,7 @@ public class Site
     private String mUserName;
     private String mPassword;
 
-    public Site(String id, String siteName, String siteUrl, String sessionId, String userName, String password)
-    {
+    public Site(String id, String siteName, String siteUrl, String sessionId, String userName, String password) {
         mId = id;
         mSiteName = siteName;
         mSiteUrl = siteUrl;
@@ -22,58 +17,47 @@ public class Site
         mPassword = password;
     }
 
-    public String getSiteName()
-    {
+    public String getSiteName() {
         return mSiteName;
     }
 
-    public String getSiteUrl()
-    {
+    public String getSiteUrl() {
         return mSiteUrl;
     }
 
-    public String getSessionId()
-    {
+    public String getSessionId() {
         return mSessionId;
     }
 
-    public String getUserName()
-    {
+    public String getUserName() {
         return mUserName;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return mPassword;
     }
 
-    public String getSiteId()
-    {
+    public String getSiteId() {
         return mId;
     }
 
-    public void setSiteUrl(String siteUrl)
-    {
+    public void setSiteUrl(String siteUrl) {
         mSiteUrl = siteUrl;
     }
 
-    public void setSessionId(String sessionId)
-    {
+    public void setSessionId(String sessionId) {
         mSessionId = sessionId;
     }
 
-    public void setUserName(String userName)
-    {
+    public void setUserName(String userName) {
         mUserName = userName;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         mPassword = password;
     }
 
-    public void setSiteName(String siteName)
-    {
+    public void setSiteName(String siteName) {
         mSiteName = siteName;
     }
 }

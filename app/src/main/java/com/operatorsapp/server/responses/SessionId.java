@@ -2,13 +2,11 @@ package com.operatorsapp.server.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SessionId
-{
+public class SessionId {
     @SerializedName("session")
     private String mSessionId;
 
-    public String getSessionId()
-    {
+    public String getSessionId() {
         return mSessionId;
     }
 }

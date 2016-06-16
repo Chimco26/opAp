@@ -11,49 +11,37 @@ import android.widget.ProgressBar;
 import com.operatorsapp.R;
 import com.zemingo.logrecorder.ZLogger;
 
-/**
- * Created by Doron on 09/03/2015.
- */
-public class ProgressDialogFragment extends DialogFragment
-{
+public class ProgressDialogFragment extends DialogFragment {
     private static String LOG_TAG = ProgressDialogFragment.class.getSimpleName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.dialog_fragment);
         setCancelable(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProgressBar progressBar = (ProgressBar) inflater.inflate(R.layout.custom_progress_bar, container, false);
         progressBar.setIndeterminate(true);
-        //        progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_dialog_animation));
         return progressBar;
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
-        try
-        {
+        try {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             getDialog().setCanceledOnTouchOutside(false);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ZLogger.d(LOG_TAG, "onResume():" + e.getMessage());
         }
     }
 
     @Override
-    public void onCancel(DialogInterface dialog)
-    {
+    public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         getActivity().onBackPressed();
     }

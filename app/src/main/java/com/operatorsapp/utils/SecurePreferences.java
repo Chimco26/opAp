@@ -43,16 +43,13 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SecurePreferences
-{
+public class SecurePreferences {
     public static final String LOG_TAG = SecurePreferences.class.getSimpleName();
 
-    public static class SecurePreferencesException extends RuntimeException
-    {
+    public static class SecurePreferencesException extends RuntimeException {
         private static final long serialVersionUID = -2841329574410383766L;
 
-        public SecurePreferencesException(Throwable e)
-        {
+        public SecurePreferencesException(Throwable e) {
             super(e);
         }
     }
@@ -86,10 +83,8 @@ public class SecurePreferences
      *                       be used to decipher the value.
      * @throws SecurePreferencesException
      */
-    private SecurePreferences(Context context, String preferenceName, String secureKey, boolean encryptKeys) throws SecurePreferencesException
-    {
-        try
-        {
+    private SecurePreferences(Context context, String preferenceName, String secureKey, boolean encryptKeys) throws SecurePreferencesException {
+        try {
             this.writer = Cipher.getInstance(TRANSFORMATION);
             this.reader = Cipher.getInstance(TRANSFORMATION);
             this.keyWriter = Cipher.getInstance(KEY_TRANSFORMATION);
@@ -99,32 +94,24 @@ public class SecurePreferences
             this.preferences = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
 
             this.encryptKeys = encryptKeys;
-        }
-        catch (GeneralSecurityException e)
-        {
+        } catch (GeneralSecurityException e) {
             throw new SecurePreferencesException(e);
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             throw new SecurePreferencesException(e);
         }
     }
 
-    public static void initInstance(Context context)
-    {
-        if (msSecurePreferences == null)
-        {
+    public static void initInstance(Context context) {
+        if (msSecurePreferences == null) {
             msSecurePreferences = new SecurePreferences(context, "user_preferences", "nJHNGHDJKH9sBoaTbo0ksds87y34jHG^%RFghjg", true);
         }
     }
 
-    public static SecurePreferences getInstance()
-    {
+    public static SecurePreferences getInstance() {
         return msSecurePreferences;
     }
 
-    protected void initCiphers(String secureKey) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException
-    {
+    protected void initCiphers(String secureKey) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException {
         IvParameterSpec ivSpec = getIv();
         SecretKeySpec secretKey = getSecretKey(secureKey);
 
@@ -133,61 +120,49 @@ public class SecurePreferences
         keyWriter.init(Cipher.ENCRYPT_MODE, secretKey);
     }
 
-    protected IvParameterSpec getIv()
-    {
+    protected IvParameterSpec getIv() {
         byte[] iv = new byte[writer.getBlockSize()];
         System.arraycopy("fldsjfodasjifudslfjdsaofshaufihadsf".getBytes(), 0, iv, 0, writer.getBlockSize());
         return new IvParameterSpec(iv);
     }
 
-    protected SecretKeySpec getSecretKey(String key) throws UnsupportedEncodingException, NoSuchAlgorithmException
-    {
+    protected SecretKeySpec getSecretKey(String key) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         byte[] keyBytes = createKeyBytes(key);
         return new SecretKeySpec(keyBytes, TRANSFORMATION);
     }
 
-    protected byte[] createKeyBytes(String key) throws UnsupportedEncodingException, NoSuchAlgorithmException
-    {
+    protected byte[] createKeyBytes(String key) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(SECRET_KEY_HASH_TRANSFORMATION);
         md.reset();
         byte[] keyBytes = md.digest(key.getBytes(CHARSET));
         return keyBytes;
     }
 
-    public boolean containsKey(String key)
-    {
+    public boolean containsKey(String key) {
         return preferences.contains(toKey(key));
     }
 
-    public void removeValue(String key)
-    {
+    public void removeValue(String key) {
         preferences.edit().remove(toKey(key)).commit();
     }
 
-    public synchronized void setString(String key, String value)
-    {
-        if (value == null)
-        {
+    public synchronized void setString(String key, String value) {
+        if (value == null) {
             preferences.edit().remove(toKey(key)).commit();
-        }
-        else
-        {
+        } else {
             putValue(toKey(key), value);
         }
     }
 
-    public void setObject(String key, Object value)
-    {
+    public void setObject(String key, Object value) {
         Gson gson = new Gson();
         String json = gson.toJson(value);
         setString(key, json);
     }
 
-    public <T> T getObject(String key, Class<T> type) throws SecurePreferencesException
-    {
+    public <T> T getObject(String key, Class<T> type) throws SecurePreferencesException {
         String jsonValue = getString(key);
-        if (TextUtils.isEmpty(jsonValue))
-        {
+        if (TextUtils.isEmpty(jsonValue)) {
             return null;
         }
 
@@ -195,65 +170,51 @@ public class SecurePreferences
         return gson.fromJson(jsonValue, type);
     }
 
-    public void setInt(String key, int value)
-    {
+    public void setInt(String key, int value) {
         setString(key, String.valueOf(value));
     }
 
-    public int getInt(String key) throws SecurePreferencesException
-    {
+    public int getInt(String key) throws SecurePreferencesException {
         String intValue = getString(key);
-        if (TextUtils.isEmpty(intValue))
-        {
+        if (TextUtils.isEmpty(intValue)) {
             return -1;
         }
 
         return Integer.parseInt(intValue);
     }
 
-    public void setFloat(String key, float value)
-    {
+    public void setFloat(String key, float value) {
         setString(key, String.valueOf(value));
     }
 
-    public float getFloat(String key) throws SecurePreferencesException
-    {
+    public float getFloat(String key) throws SecurePreferencesException {
         String floatValue = getString(key);
-        if (TextUtils.isEmpty(floatValue))
-        {
+        if (TextUtils.isEmpty(floatValue)) {
             return -1;
         }
 
         return Float.parseFloat(floatValue);
     }
 
-    public void setBoolean(String key, boolean value)
-    {
+    public void setBoolean(String key, boolean value) {
         setString(key, String.valueOf(value));
     }
 
-    public boolean getBoolean(String key, boolean defaultValue)
-    {
+    public boolean getBoolean(String key, boolean defaultValue) {
         String booleanValue = getString(key);
-        if (TextUtils.isEmpty(booleanValue))
-        {
+        if (TextUtils.isEmpty(booleanValue)) {
             return defaultValue;
         }
 
         return Boolean.parseBoolean(booleanValue);
     }
 
-    public synchronized String getString(String key) throws SecurePreferencesException
-    {
-        if (preferences.contains(toKey(key)))
-        {
+    public synchronized String getString(String key) throws SecurePreferencesException {
+        if (preferences.contains(toKey(key))) {
             String securedEncodedValue = preferences.getString(toKey(key), "");
-            try
-            {
+            try {
                 return decrypt(securedEncodedValue);
-            }
-            catch (SecurePreferencesException e)
-            {
+            } catch (SecurePreferencesException e) {
                 ZLogger.e(LOG_TAG, "getString(), failed on key " + key);
                 throw e;
             }
@@ -261,83 +222,62 @@ public class SecurePreferences
         return null;
     }
 
-    public synchronized String getString(String key, String defaultValue) throws SecurePreferencesException
-    {
+    public synchronized String getString(String key, String defaultValue) throws SecurePreferencesException {
         String value = getString(key);
-        if (TextUtils.isEmpty(value))
-        {
+        if (TextUtils.isEmpty(value)) {
             return defaultValue;
         }
 
         return value;
     }
 
-    private void clear()
-    {
+    private void clear() {
         preferences.edit().clear().commit();
     }
 
-    private String toKey(String key)
-    {
-        if (encryptKeys)
-        {
+    private String toKey(String key) {
+        if (encryptKeys) {
             return encrypt(key, keyWriter);
-        }
-        else
-        {
+        } else {
             return key;
         }
     }
 
-    private void putValue(String key, String value) throws SecurePreferencesException
-    {
+    private void putValue(String key, String value) throws SecurePreferencesException {
         String secureValueEncoded = encrypt(value, writer);
 
         preferences.edit().putString(key, secureValueEncoded).commit();
     }
 
-    protected String encrypt(String value, Cipher writer) throws SecurePreferencesException
-    {
+    protected String encrypt(String value, Cipher writer) throws SecurePreferencesException {
         byte[] secureValue;
-        try
-        {
+        try {
             secureValue = convert(writer, value.getBytes(CHARSET));
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             throw new SecurePreferencesException(e);
         }
         String secureValueEncoded = Base64.encodeToString(secureValue, Base64.NO_WRAP);
         return secureValueEncoded;
     }
 
-    protected String decrypt(String securedEncodedValue)
-    {
+    protected String decrypt(String securedEncodedValue) {
         byte[] securedValue = Base64.decode(securedEncodedValue, Base64.NO_WRAP);
         byte[] value = convert(reader, securedValue);
-        if (value == null)
-        {
+        if (value == null) {
             ZLogger.e(LOG_TAG, "decrypt(), value is null");
             return null;
         }
-        try
-        {
+        try {
             return new String(value, CHARSET);
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             throw new SecurePreferencesException(e);
         }
     }
 
-    private static byte[] convert(Cipher cipher, byte[] bs) throws SecurePreferencesException
-    {
-        try
-        {
+    private static byte[] convert(Cipher cipher, byte[] bs) throws SecurePreferencesException {
+        try {
             return cipher.doFinal(bs);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new SecurePreferencesException(e);
         }
     }

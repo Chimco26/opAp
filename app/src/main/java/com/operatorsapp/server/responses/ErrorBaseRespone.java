@@ -2,13 +2,11 @@ package com.operatorsapp.server.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ErrorBaseRespone
-{
+public class ErrorBaseRespone {
     @SerializedName("error")
     ErrorResponse mErrorResponse;
 
-    public ErrorResponse getErrorResponse()
-    {
+    public ErrorResponse getErrorResponse() {
         return mErrorResponse;
     }
 }

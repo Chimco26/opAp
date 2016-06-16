@@ -1,5 +1,6 @@
 package com.operatorsapp.managers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
@@ -30,7 +31,7 @@ public class CroutonCreator {
             ZLogger.v(LOG_TAG, "showCrouton(), trying to show same crouton type twice");
             return;
         }
-        Crouton crouton = null;
+        Crouton crouton;
         switch (croutonType) {
             case CREDENTIALS_ERROR:
                 crouton = createCrouton(activity, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
@@ -86,6 +87,7 @@ public class CroutonCreator {
         return false;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     private Crouton createCrouton(Activity activity, SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonType croutonType) {
         if (croutonDurationInMilliseconds == 0) {

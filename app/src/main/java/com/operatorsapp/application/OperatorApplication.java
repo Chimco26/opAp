@@ -3,9 +3,8 @@ package com.operatorsapp.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
-import com.operatorsapp.common.Params;
-import com.operatorsapp.managers.CriticalMachinesManager;
 import com.operatorsapp.managers.PersistenceManager;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -22,10 +21,10 @@ public class OperatorApplication extends Application {
 
         msApplicationContext = getApplicationContext();
         PersistenceManager.initInstance(msApplicationContext);
-        CriticalMachinesManager.initInstance();
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
-        if (Params.IS_IN_DEVELOP_MODE) {
+        if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
     }

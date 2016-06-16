@@ -1,10 +1,9 @@
 package com.operatorsapp.activities;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentNavigat
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
-        onFragmentNavigation(new LoginFragment().newInstance(), true);
+        onFragmentNavigation(new LoginFragment().newInstance(), false);
     }
 
     @Override
