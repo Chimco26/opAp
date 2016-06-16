@@ -1,6 +1,7 @@
 package com.operatorsapp.server;
 
 import com.operatorsapp.server.interfaces.EmeraldServiceRequests;
+import com.operatorsapp.server.mocks.RetrofitMockClient;
 import com.operatorsapp.server.requests.LoginRequest;
 import com.operatorsapp.server.responses.ErrorResponse;
 import com.operatorsapp.server.responses.SessionResponse;
@@ -41,11 +42,24 @@ public class RequestsManager {
         } else {
             OkHttpClient okHttpClient;
             if (timeout >= 0 && timeUnit != null) {
-                okHttpClient = new OkHttpClient.Builder().writeTimeout(timeout, timeUnit).connectTimeout(timeout, timeUnit).readTimeout(timeout, timeUnit).build();
+                okHttpClient = new OkHttpClient.Builder()
+                        //add mock
+                        .addInterceptor(new RetrofitMockClient())
+                        .writeTimeout(timeout, timeUnit)
+                        .connectTimeout(timeout, timeUnit)
+                        .readTimeout(timeout, timeUnit)
+                        .build();
             } else {
-                okHttpClient = new OkHttpClient();
+                okHttpClient = new OkHttpClient.Builder()
+                        //add mock
+                        .addInterceptor(new RetrofitMockClient())
+                        .build();
             }
-            Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(siteUrl)
+                    .client(okHttpClient)
+                    .build();
 
             EmeraldServiceRequests emeraldServiceRequests = retrofit.create(EmeraldServiceRequests.class);
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldServiceRequests);

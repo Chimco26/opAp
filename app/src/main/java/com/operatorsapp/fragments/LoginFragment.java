@@ -34,8 +34,11 @@ import com.operatorsapp.models.Site;
 import com.operatorsapp.server.ErrorObject;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.zemingo.logrecorder.ZLogger;
+import com.operatorsapp.server.mocks.RetrofitMockClient;
 
 import java.io.UnsupportedEncodingException;
+
+import okhttp3.Response;
 
 public class LoginFragment extends Fragment implements TwoButtonDialogFragment.OnDialogButtonsListener, OnBackPressedListener, AccountManager.OnLoginListener {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -211,7 +214,8 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     }
 
     private void tryToLogin() {
-        performLogin();
+          performLogin();
+//       getMockClient().intercept();
     }
 
     public void performLogin() {
@@ -315,5 +319,10 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
                 }
             }
         });
+    }
+
+    public static RetrofitMockClient getMockClient() {
+        RetrofitMockClient retrofitMockClient = new RetrofitMockClient();
+        return retrofitMockClient;
     }
 }

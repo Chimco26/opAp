@@ -1,9 +1,7 @@
-package com.operatorsapp.mocks;
+package com.operatorsapp.server.mocks;
 
 import com.operatorsapp.BuildConfig;
-
 import java.io.IOException;
-
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
@@ -25,18 +23,24 @@ public class RetrofitMockClient implements Interceptor {
                 responseString = "";
             }
 
-            response = new Response.Builder()
-                    .code(200)
-                    .message(responseString)
-                    .request(chain.request())
-                    .protocol(Protocol.HTTP_1_0)
-                    .body(ResponseBody.create(MediaType.parse(MIME_TYPE), responseString.getBytes()))
-                    .addHeader("content-type", "application/json")
-                    .build();
+            response = getResponse(chain, responseString);
         } else {
             response = chain.proceed(chain.request());
         }
 
+        return response;
+    }
+
+    private Response getResponse(Chain chain, String responseString) {
+        Response response;
+        response = new Response.Builder()
+                .code(200)
+                .message(responseString)
+                .request(chain.request())
+                .protocol(Protocol.HTTP_1_0)
+                .body(ResponseBody.create(MediaType.parse(MIME_TYPE), responseString.getBytes()))
+                .addHeader("content-type", "application/json")
+                .build();
         return response;
     }
 }
