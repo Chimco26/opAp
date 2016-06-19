@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -33,6 +34,7 @@ public class RequestsManager {
     }
 
     private EmeraldServiceRequests getRetroFitServiceRequests(String siteUrl) {
+        // -1  to get default timeout
         return getRetroFitServiceRequests(siteUrl, -1, null);
     }
 
@@ -45,8 +47,8 @@ public class RequestsManager {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
                         .addInterceptor(new RetrofitMockClient())
-                        .writeTimeout(timeout, timeUnit)
                         .connectTimeout(timeout, timeUnit)
+                        .writeTimeout(timeout, timeUnit)
                         .readTimeout(timeout, timeUnit)
                         .build();
             } else {
@@ -68,17 +70,17 @@ public class RequestsManager {
     }
 
     // In use
-    public void getUserSessionId(String siteUrl, String userName, String password, final OnRequestManagerResponseListener<String> listener) {
+    public void getUserSessionId(String siteUrl, String userName, String password, final OnRequestManagerResponseListener<Response<SessionResponse>> listener) {
         LoginRequest loginRequest = new LoginRequest(userName, password);
         Call<SessionResponse> call = getRetroFitServiceRequests(siteUrl).getUserSessionId(loginRequest);
         call.enqueue(new retrofit2.Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, retrofit2.Response<SessionResponse> response) {
-                ZLogger.d(LOG_TAG, "onRequestSucceed(), ");
+                ZLogger.d(LOG_TAG, "onRequestSucceed(), " + response.toString());
                 SessionResponse.GetUserSessionIDResult sessionResult = response.body().getGetUserSessionIDResult();
                 if (sessionResult.getErrorResponse() == null) {
                     if (response.body().getGetUserSessionIDResult().getSessionIds() != null && response.body().getGetUserSessionIDResult().getSessionIds().get(0) != null) {
-                        listener.onRequestSucceed(response.body().getGetUserSessionIDResult().getSessionIds().get(0).getSessionId());
+                        listener.onRequestSucceed(response);
                     }
                 } else {
                     ErrorObject errorObject = translateToErrorCode(sessionResult.getErrorResponse());
@@ -88,7 +90,7 @@ public class RequestsManager {
 
             @Override
             public void onFailure(Call<SessionResponse> call, Throwable t) {
-                ZLogger.d(LOG_TAG, "onRequestFailed(), ");
+                ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 listener.onRequestFailed(errorObject);
             }
@@ -96,7 +98,7 @@ public class RequestsManager {
     }
 
     public interface OnRequestManagerResponseListener<T> {
-        void onRequestSucceed(T result);
+        void onRequestSucceed(T response);
 
         void onRequestFailed(ErrorObject reason);
     }

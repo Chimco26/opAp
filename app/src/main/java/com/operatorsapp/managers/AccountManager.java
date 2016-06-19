@@ -1,27 +1,25 @@
 package com.operatorsapp.managers;
 
-import android.text.TextUtils;
 import android.util.Base64;
 
 import com.operatorsapp.models.Site;
-import com.operatorsapp.polling.LoginDemoJob;
 import com.operatorsapp.server.ErrorObject;
 import com.operatorsapp.server.RequestsManager;
-import com.operatorsapp.utils.IdUtils;
+import com.operatorsapp.server.responses.SessionResponse;
 import com.zemingo.logrecorder.ZLogger;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import retrofit2.Response;
 
-public class AccountManager implements LoginDemoJob.OnLoginDemoJobListener {
+
+public class AccountManager {
     private static final String LOG_TAG = AccountManager.class.getSimpleName();
+    private static String ENDPOINT = "https://apilordan.my.leadermes.com";
     private static AccountManager msInstance;
-    private final ArrayList<Site> mSites = new ArrayList<>();
+    private Site mSite;
     private AtomicBoolean mSessionActive = new AtomicBoolean(false);
     private OnLoginListener mLoginListener;
-    private String mSiteId;
 
     public static AccountManager getInstance() {
         if (msInstance == null) {
@@ -31,89 +29,51 @@ public class AccountManager implements LoginDemoJob.OnLoginDemoJobListener {
     }
 
     public AccountManager() {
-        if (PersistenceManager.getInstance().getSites() != null) {
-            mSites.addAll(PersistenceManager.getInstance().getSites());
+        mSite = PersistenceManager.getInstance().getSite();
+    }
+
+    public void saveSite(String id, String siteName, String siteUrl, String sessionId, String userName, String password) {
+        saveSite(new Site(id, siteName, siteUrl, sessionId, userName, password));
+    }
+
+    public void saveSite(Site newSite) {
+        if (mSite == null) {
+            mSite = new Site(newSite.getSiteId(), newSite.getSiteName(), newSite.getSiteUrl(), newSite.getSessionId(), newSite.getUserName(), newSite.getPassword());
+        } else {
+            mSite.setSessionId(newSite.getSiteId());
+            mSite.setSessionId(newSite.getSiteName());
+            mSite.setSessionId(newSite.getSiteUrl());
+            mSite.setSiteName(newSite.getSessionId());
+            mSite.setUserName(newSite.getUserName());
+            mSite.setPassword(newSite.getPassword());
         }
+        PersistenceManager.getInstance().saveSite(mSite);
     }
 
-    public Site getSiteById(String id) {
-        Site wantedSite = null;
-        for (Site site : mSites) {
-            if (site.getSiteId().equals(id)) {
-                wantedSite = site;
-            }
-        }
-        return wantedSite;
-    }
-
-    public void saveSelectedSite(String siteId) {
-        PersistenceManager.getInstance().saveSelectedSite(siteId);
-    }
-
-    public String getSelectedSiteId() {
-        return PersistenceManager.getInstance().getSelectedSiteId();
-    }
-
-    public void saveSite(String id, String siteName, String siteUrl, String sessionId, String userName, String password, String previousSiteId) {
-        saveSite(new Site(id, siteName, siteUrl, sessionId, userName, password), previousSiteId);
-    }
-
-    public void saveSite(Site newSite, String previousSiteId) {
-        String siteId = TextUtils.isEmpty(previousSiteId) ? newSite.getSiteId() : previousSiteId;
-        boolean siteAlreadyExists = false;
-        for (Site site : mSites) {
-            if (site.getSiteId().equals(siteId)) {
-                if (!TextUtils.isEmpty(previousSiteId)) {
-                    if (previousSiteId.equals(getSelectedSiteId())) {// saving site id of focused item to retrieve it later
-                        saveSelectedSite(newSite.getSiteId());
-                    }
-                    site.setSiteUrl(newSite.getSiteUrl());
-                }
-                site.setSessionId(newSite.getSessionId());
-                site.setSiteName(newSite.getSiteName());
-                site.setUserName(newSite.getUserName());
-                site.setPassword(newSite.getPassword());
-                siteAlreadyExists = true;
-                break;
-            }
-        }
-
-        if (!siteAlreadyExists) {
-            mSites.add(newSite);
-        }
-        PersistenceManager.getInstance().saveSites(mSites);
-    }
-
-    public void performLogin(final String siteName, final String siteUrl, final String userName, String password, final String previousSiteId) {
-        String generatedId = previousSiteId;
-        if (TextUtils.isEmpty(previousSiteId)) {
-            generatedId = IdUtils.generateId();
-        }
-
-        final String newSiteId = generatedId;
+    public void performLogin(final String id, final String siteName, final String siteUrl, final String userName, String password) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
-        RequestsManager.getInstance().getUserSessionId(siteUrl, userName, EncryptedPassword, new RequestsManager.OnRequestManagerResponseListener<String>() {
+        RequestsManager.getInstance().getUserSessionId(siteUrl, userName, EncryptedPassword, new RequestsManager.OnRequestManagerResponseListener<Response<SessionResponse>>() {
             @Override
-            public void onRequestSucceed(String result) {
-                ZLogger.d(LOG_TAG, "onRequestSucceed(), ");
+            public void onRequestSucceed(Response<SessionResponse> result) {
+                ZLogger.d(LOG_TAG, "onRequestSucceed(), " + result);
                 if (mLoginListener != null) {
                     mLoginListener.onLoginSucceeded(siteName);
                 }
-                AccountManager.getInstance().saveSite(newSiteId, siteName, siteUrl, result, userName, EncryptedPassword, previousSiteId);
+                if (result.body().getGetUserSessionIDResult().getSessionIds().get(0).getSessionId() != null) {
+                    AccountManager.getInstance().saveSite(id, siteName, siteUrl, result.body().getGetUserSessionIDResult().getSessionIds().get(0).getSessionId(), userName, EncryptedPassword);
+                } else {
+                    ZLogger.d(LOG_TAG, "onRequest(), getSessionId failed");
+                    mLoginListener.onLoginFailed(ErrorObject.ErrorCode.Unknown);
+                }
                 mSessionActive.set(true);
-
-                mSiteId = newSiteId;
-                LoginDemoJob.getInstance(mSiteId).registerLoginDemoJobListener(AccountManager.this);
-                LoginDemoJob.getInstance(mSiteId).startJob(10, 10, TimeUnit.SECONDS);
             }
 
             @Override
             public void onRequestFailed(final ErrorObject reason) {
-                ZLogger.d(LOG_TAG, "onRequestFailed(), ");
+                ZLogger.d(LOG_TAG, "onRequestFailed(), " + reason.toString());
                 if (mLoginListener != null) {
                     mLoginListener.onLoginFailed(reason.getError());
                 }
-                LoginDemoJob.getInstance(mSiteId).startJob(10, 10, TimeUnit.SECONDS);
             }
         });
     }
@@ -124,22 +84,6 @@ public class AccountManager implements LoginDemoJob.OnLoginDemoJobListener {
 
     public void unRegisterLoginListener() {
         mLoginListener = null;
-        if (mSiteId != null)
-            LoginDemoJob.getInstance(mSiteId).unRegisterLoginDemoJobListener();
-    }
-
-    @Override
-    public void onLoginSucceeded(String data) {
-        if (mLoginListener != null) {
-            mLoginListener.onLoginSucceeded(data);
-        }
-    }
-
-    @Override
-    public void onLoginFailed(ErrorObject.ErrorCode errorCode) {
-        if (mLoginListener != null) {
-            mLoginListener.onLoginFailed(errorCode);
-        }
     }
 
     public interface OnLoginListener {

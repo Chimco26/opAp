@@ -21,7 +21,9 @@ public class ErrorObject {
         Unknown,
         Retrofit,
         /*SessionInvalid,*/
-        Credentials_mismatch,
+        Credentials_mismatch,;
+
+
     }
 
     @Override

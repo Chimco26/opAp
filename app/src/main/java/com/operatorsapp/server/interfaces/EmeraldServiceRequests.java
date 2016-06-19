@@ -10,8 +10,6 @@ import retrofit2.http.POST;
 
 public interface EmeraldServiceRequests {
 
-    String ENDPOINT = "https://apilordan.my.leadermes.com";
-
     @POST("/LeaderMESApi/JGetUserSessionID")
     Call<SessionResponse> getUserSessionId(@Body LoginRequest loginRequest);
 }

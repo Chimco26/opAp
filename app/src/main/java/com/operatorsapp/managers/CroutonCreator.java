@@ -66,12 +66,12 @@ public class CroutonCreator {
         mCurrentCrouton.setCroutonType(croutonType);
     }
 
-    public void cancelAllCroutons() {
-        if (mCurrentCrouton != null) {
-            mCurrentCrouton.removeCrouton();
-        }
-        Crouton.cancelAllCroutons();
-    }
+//    public void cancelAllCroutons() {
+//        if (mCurrentCrouton != null) {
+//            mCurrentCrouton.removeCrouton();
+//        }
+//        Crouton.cancelAllCroutons();
+//    }
 
     public void hideConnectivityCrouton() {
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
@@ -86,6 +86,7 @@ public class CroutonCreator {
         }
         return false;
     }
+
 
     @SuppressLint("InflateParams")
     @NonNull
@@ -121,7 +122,7 @@ public class CroutonCreator {
         private CroutonType mCroutonType;
 
         public boolean isEmpty() {
-            return mCrouton == null ? true : false;
+            return mCrouton == null;
         }
 
         public Crouton getCrouton() {

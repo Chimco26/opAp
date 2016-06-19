@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentNavigat
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
-        onFragmentNavigation(new LoginFragment().newInstance(), false);
+        onFragmentNavigation(LoginFragment.newInstance(), false);
     }
 
     @Override

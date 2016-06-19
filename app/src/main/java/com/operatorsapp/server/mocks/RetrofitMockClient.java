@@ -1,7 +1,11 @@
 package com.operatorsapp.server.mocks;
 
-import com.operatorsapp.BuildConfig;
+import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.utils.NetworkAvailable;
+
 import java.io.IOException;
+
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
@@ -14,10 +18,16 @@ public class RetrofitMockClient implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response;
-        if (BuildConfig.DEBUG) {
+        boolean isStatusMock = !NetworkAvailable.isNetworkAvailable(OperatorApplication.getAppContext());
+        if (isStatusMock) {
             String responseString;
 
-            if (chain.request().url().toString().contains("/LeaderMESApi/JGetUserSessionID")) {
+            final HttpUrl url = chain.request().url();
+
+            // Parse the url String.
+            final String[] parsedUrl = url.toString().split("/");
+            // parsedUrl.length-1 = last split
+            if (parsedUrl[parsedUrl.length - 1].equals("JGetUserSessionID")) {
                 responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42409.48046875\"}]}}";
             } else {
                 responseString = "";
@@ -27,7 +37,6 @@ public class RetrofitMockClient implements Interceptor {
         } else {
             response = chain.proceed(chain.request());
         }
-
         return response;
     }
 

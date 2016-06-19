@@ -29,20 +29,16 @@ import com.operatorsapp.fragments.interfaces.OnBackPressedListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.AccountManager;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.models.Site;
 import com.operatorsapp.server.ErrorObject;
+import com.operatorsapp.utils.IdUtils;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.zemingo.logrecorder.ZLogger;
-import com.operatorsapp.server.mocks.RetrofitMockClient;
-
-import java.io.UnsupportedEncodingException;
-
-import okhttp3.Response;
 
 public class LoginFragment extends Fragment implements TwoButtonDialogFragment.OnDialogButtonsListener, OnBackPressedListener, AccountManager.OnLoginListener {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private static final String SITE_ID_ARGUMENT = "com.leadermes.emerald.fragments.site_argument";
     private static final int DISCARD_CHANGES_DIALOG_FRAGMENT = 1003;
     private static final int TRYING_TO_OVERRIDE_EXISTING_SITE_REQUEST_CODE = 1004;
     private static final int CROUTON_DURATION = 5000;
@@ -52,7 +48,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     private EditText mPassword;
     private OnCroutonRequestListener mCroutonCallback;
     private TextView mLoginButton;
-    private Site mSiteForEdit;
+    private final Site mSite;
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -75,6 +71,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
 
     public LoginFragment() {
         // Required empty public constructor
+        mSite = PersistenceManager.getInstance().getSite();
     }
 
     public static LoginFragment newInstance() {
@@ -95,24 +92,6 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
         mSiteUrl = (EditText) rootView.findViewById(R.id.factory_url);
         mUserName = (EditText) rootView.findViewById(R.id.user_name);
         mPassword = (EditText) rootView.findViewById(R.id.password);
-        if (getArguments() != null && getArguments().containsKey(SITE_ID_ARGUMENT)) {
-            String siteId = getArguments().getString(SITE_ID_ARGUMENT);
-            if (!TextUtils.isEmpty(siteId)) {
-                mSiteForEdit = AccountManager.getInstance().getSiteById(siteId);
-                mSiteName.setText(mSiteForEdit.getSiteName());
-                mSiteUrl.setText(mSiteForEdit.getSiteUrl());
-                mUserName.setText(mSiteForEdit.getUserName());
-                byte[] decode = Base64.decode(mSiteForEdit.getPassword(), Base64.NO_WRAP);
-                String password = "";
-                try {
-                    password = new String(decode, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    ZLogger.w(LOG_TAG, "onCreateView(), can't decode password");
-                    e.printStackTrace();
-                }
-                mPassword.setText(password);
-            }
-        }
         mSiteName.addTextChangedListener(mTextWatcher);
         mSiteUrl.addTextChangedListener(mTextWatcher);
         mUserName.addTextChangedListener(mTextWatcher);
@@ -214,8 +193,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     }
 
     private void tryToLogin() {
-          performLogin();
-//       getMockClient().intercept();
+        performLogin();
     }
 
     public void performLogin() {
@@ -224,8 +202,7 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
-        String previousSiteId = "";
-        AccountManager.getInstance().performLogin(siteName, siteUrl, userName, password, previousSiteId);
+        AccountManager.getInstance().performLogin(IdUtils.generateId(), siteName, siteUrl, userName, password);
     }
 
     @Override
@@ -272,14 +249,14 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
     }
 
     private boolean dataWasChanged() {
-        if (mSiteForEdit == null) {
+        if (mSite == null) {
             return true;
         }
         String siteUrl = mSiteUrl.getText().toString();
         String siteName = mSiteName.getText().toString();
         String userName = mUserName.getText().toString();
         String password = Base64.encodeToString(mPassword.getText().toString().getBytes(), Base64.NO_WRAP);
-        return !(siteUrl.equals(mSiteForEdit.getSiteUrl()) && siteName.equals(mSiteForEdit.getSiteName()) && userName.equals(mSiteForEdit.getUserName()) && password.equals(mSiteForEdit.getPassword()));
+        return !(siteUrl.equals(mSite.getSiteUrl()) && siteName.equals(mSite.getSiteName()) && userName.equals(mSite.getUserName()) && password.equals(mSite.getPassword()));
     }
 
     private void dismissProgressDialog() {
@@ -319,10 +296,5 @@ public class LoginFragment extends Fragment implements TwoButtonDialogFragment.O
                 }
             }
         });
-    }
-
-    public static RetrofitMockClient getMockClient() {
-        RetrofitMockClient retrofitMockClient = new RetrofitMockClient();
-        return retrofitMockClient;
     }
 }

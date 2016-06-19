@@ -1,5 +1,9 @@
 package com.operatorsapp.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 public class TimeUtils {
     public static final int ONE_MINUTE_IN_SECONDS = 60;
     public static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
