@@ -1,25 +1,18 @@
 package com.operatorsapp.models;
 
 public class Site {
-    private String mId;
-    private String mSiteName;
     private String mSiteUrl;
     private String mSessionId;
     private String mUserName;
     private String mPassword;
 
-    public Site(String id, String siteName, String siteUrl, String sessionId, String userName, String password) {
-        mId = id;
-        mSiteName = siteName;
+    public Site(String siteUrl, String sessionId, String userName, String password) {
         mSiteUrl = siteUrl;
         mSessionId = sessionId;
         mUserName = userName;
         mPassword = password;
     }
 
-    public String getSiteName() {
-        return mSiteName;
-    }
 
     public String getSiteUrl() {
         return mSiteUrl;
@@ -37,9 +30,6 @@ public class Site {
         return mPassword;
     }
 
-    public String getSiteId() {
-        return mId;
-    }
 
     public void setSiteUrl(String siteUrl) {
         mSiteUrl = siteUrl;
@@ -57,7 +47,4 @@ public class Site {
         mPassword = password;
     }
 
-    public void setSiteName(String siteName) {
-        mSiteName = siteName;
-    }
 }

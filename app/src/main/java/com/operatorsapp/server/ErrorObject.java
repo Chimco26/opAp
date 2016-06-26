@@ -1,6 +1,8 @@
 package com.operatorsapp.server;
 
-public class ErrorObject {
+import com.operators.infra.ErrorObjectInterface;
+
+public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;
     private String mDetailedDescription;
 
@@ -9,22 +11,16 @@ public class ErrorObject {
         mDetailedDescription = detailedDescription;
     }
 
+    @Override
     public ErrorCode getError() {
         return mError;
     }
 
-   /* public String getDetailedDescription() {
+    @Override
+    public String getDetailedDescription() {
         return mDetailedDescription;
-    }*/
-
-    public enum ErrorCode {
-        Unknown,
-        Retrofit,
-        /*SessionInvalid,*/
-        Credentials_mismatch,;
-
-
     }
+
 
     @Override
     public String toString() {
