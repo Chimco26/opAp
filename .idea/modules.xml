@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

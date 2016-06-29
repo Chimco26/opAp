@@ -1,37 +1,42 @@
 package com.operatorsapp.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.infra.ErrorObjectInterface;
+import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.LoginUICallback;
-import com.operators.networkbridge.server.ErrorObject;
+import com.operators.logincore.PersistenceManagerInterface;
+import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
-import com.operatorsapp.utils.IdUtils;
-import com.zemingo.logrecorder.ZLogger;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -40,7 +45,7 @@ public class LoginFragment extends Fragment {
     private EditText mSiteUrl;
     private EditText mUserName;
     private EditText mPassword;
-    private TextView mLoginButton;
+    private Button mLoginButton;
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -89,6 +94,14 @@ public class LoginFragment extends Fragment {
         mUserName.addTextChangedListener(mTextWatcher);
         mPassword.addTextChangedListener(mTextWatcher);
 
+        mLoginButton = (Button) rootView.findViewById(R.id.loginBtn);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tryToLogin();
+            }
+        });
+
         setActionBar();
 
         doSilentLogin();
@@ -103,9 +116,9 @@ public class LoginFragment extends Fragment {
             public void onLoginSucceeded() {
                 Log.d(LOG_TAG, "login, onLoginSucceeded(),  go Next");
                 dismissProgressDialog();
+
                 MyDialogFragment myDialog = new MyDialogFragment();
                 myDialog.show(getFragmentManager(), LOG_TAG);
-                mLoginButton.setText("");
             }
 
             @Override
@@ -136,26 +149,20 @@ public class LoginFragment extends Fragment {
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(false);
-            actionBar.setIcon(R.drawable.logo);
-            LayoutInflater inflator = LayoutInflater.from(getActivity());
-            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_button_view, null);
-            ((TextView) view.findViewById(R.id.title)).setText("");
-            mLoginButton = (TextView) view.findViewById(R.id.right_action_bar_button);
-            mLoginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tryToLogin();
-                    ZLogger.v(LOG_TAG, "onClick(), login button clicked");
-                }
-            });
-
-            mLoginButton.setEnabled(isAllFieldsAreValid());
-            actionBar.setCustomView(view);
-            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(true);
+            SpannableString s = new SpannableString(getString(R.string.login_screen_title));
+            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            LayoutInflater inflator = LayoutInflater.from(getActivity());
+            View view = inflator.inflate(R.layout.actionbar_title_view, null);
+            ((TextView) view.findViewById(R.id.title)).setText(s);
+            // used custom view to add font style to the title
+            actionBar.setCustomView(view);
+            actionBar.setIcon(R.drawable.logo);
         }
     }
 
@@ -192,9 +199,9 @@ public class LoginFragment extends Fragment {
             public void onLoginSucceeded() {
                 Log.d(LOG_TAG, "login, onLoginSucceeded() ");
                 dismissProgressDialog();
+
                 MyDialogFragment myDialog = new MyDialogFragment();
                 myDialog.show(getFragmentManager(), LOG_TAG);
-                mLoginButton.setText("");
 
             }
 

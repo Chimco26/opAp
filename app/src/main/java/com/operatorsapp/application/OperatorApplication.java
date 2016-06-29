@@ -3,12 +3,13 @@ package com.operatorsapp.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
-import com.operators.networkbridge.LoginNetworkBridge;
+import com.operators.loginnetworkbridge.LoginNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.LoginPersistenceManager;
-import com.operatorsapp.server.LoginNetworkManager;
+import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -23,14 +24,20 @@ public class OperatorApplication extends Application {
         super.onCreate();
 
         msApplicationContext = getApplicationContext();
-        LoginPersistenceManager.initInstance(msApplicationContext);
-        LoginNetworkManager.initInstance();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
+        LoginPersistenceManager.initInstance(msApplicationContext);
+        NetworkManager.initInstance();
+
+        GetMachinesNetworkBridge getMachinesNetworkBridge = new GetMachinesNetworkBridge();
+        getMachinesNetworkBridge.inject(NetworkManager.getInstance());
+
         LoginNetworkBridge loginNetworkBridge = new LoginNetworkBridge();
-        loginNetworkBridge.inject(LoginNetworkManager.getInstance());
-        LoginCore.getInstance().inject(LoginPersistenceManager.getInstance(),  loginNetworkBridge);
+        loginNetworkBridge.inject(NetworkManager.getInstance());
+
+        LoginCore.getInstance().inject(LoginPersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
+
 
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;

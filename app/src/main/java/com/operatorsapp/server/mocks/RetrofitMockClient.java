@@ -28,7 +28,9 @@ public class RetrofitMockClient implements Interceptor {
             final String[] parsedUrl = url.toString().split("/");
             // parsedUrl.length-1 = last split
             if (parsedUrl[parsedUrl.length - 1].equals("JGetUserSessionID")) {
-                responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42409.48046875\"}]}}";
+                responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42547.7052039699\"}]}}";
+            } else if (parsedUrl[parsedUrl.length - 1].equals("GetMachinesForFactory")) {
+                responseString = "{\"error\":null,\"machines\":[{\"machineId\":\"7\",\"machineName\":\"injection\"}, {\"machineID\":\"9\",\"machineName\":\"imulation\"}]}";
             } else {
                 responseString = "";
             }

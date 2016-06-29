@@ -43,4 +43,5 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.5'
     compile 'me.grantland:autofittextview:0.2.+'
     compile project(':infra')
+    compile project(':GetMachinesNetworkBridge')
 }
