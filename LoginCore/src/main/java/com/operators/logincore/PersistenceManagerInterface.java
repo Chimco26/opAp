@@ -1,5 +1,7 @@
 package com.operators.logincore;
 
+import java.util.ArrayList;
+
 public interface PersistenceManagerInterface {
 
     String getSiteUrl();
@@ -10,6 +12,7 @@ public interface PersistenceManagerInterface {
 
     String getSessionId();
 
+    ArrayList getMachines();
 
     void setSiteUrl(String siteUrl);
 
@@ -18,4 +21,6 @@ public interface PersistenceManagerInterface {
     void setPassword(String password);
 
     void setSessionId(String sessionId);
+
+    void saveMachines(ArrayList machines);
 }

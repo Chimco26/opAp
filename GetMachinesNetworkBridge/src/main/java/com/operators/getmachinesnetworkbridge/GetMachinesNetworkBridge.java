@@ -1,6 +1,8 @@
 package com.operators.getmachinesnetworkbridge;
 
 
+import android.util.Log;
+
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
@@ -20,6 +22,10 @@ import retrofit2.Response;
 public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterface {
     private static final String LOG_TAG = GetMachinesNetworkBridge.class.getSimpleName();
 
+    private final int TOTAL_RETRIES = 3;
+    private int retryCount = 0;
+    private final int specificRequestTimeout = 17;
+
     private GetMachineNetworkManagerInterface mGetMachineNetworkManagerInterface;
 
     public GetMachinesNetworkBridge() {
@@ -28,7 +34,6 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
     @Override
     public void getMachinesForFactory(String siteUrl, String sessionId, final GetMachinesCallback callback) {
-        int specificRequestTimeout = 17;
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
         Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
         call.enqueue(new Callback<MachinesResponse>() {
@@ -43,7 +48,12 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
             @Override
             public void onFailure(Call<MachinesResponse> call, Throwable t) {
+                if (retryCount++ < TOTAL_RETRIES) {
+                    Log.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
+                    call.clone().enqueue(this);
+                } else {
 
+                }
             }
         });
     }

@@ -50,7 +50,8 @@ public class LoginCore {
                 mGetMachinesNetworkBridgeInterface.getMachinesForFactory(siteUrl, sessionId, new GetMachinesCallback() {
                     @Override
                     public void onLoginSucceeded(ArrayList machines) {
-
+                        mPersistenceManagerInterface.saveMachines(machines);
+                        loginUICallback.onLoginSucceeded();
                     }
 
                     @Override
@@ -58,7 +59,7 @@ public class LoginCore {
 
                     }
                 });
-                loginUICallback.onLoginSucceeded();
+
             }
 
             @Override

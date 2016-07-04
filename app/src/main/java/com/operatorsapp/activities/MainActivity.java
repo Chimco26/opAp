@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.List;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentNavigationListener, OnCroutonRequestListener {
 
@@ -73,5 +76,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentNavigat
             ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
             return null;
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

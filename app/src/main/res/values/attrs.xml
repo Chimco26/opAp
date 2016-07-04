@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="AspectRatioImageView">
+        <attr name="widthRatio" format="integer" />
+        <attr name="heightRatio" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomTypeFace">
+        <attr name="customFont" format="string" />
+        <attr name="customFontStyle" format="string" />
+    </declare-styleable>
+
+
+    <declare-styleable name="PlayPauseAttr">
+        <attr name="play" format="boolean" />
+        <attr name="pause" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="selected_text_view">
+        <attr name="toggle_state" format="boolean" />
+        <attr name="toggle_on_click" format="boolean" />
+        <attr name="text_toggle_on" format="string" />
+        <attr name="text_toggle_off" format="string" />
+        <attr name="text_disabled" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="settings_header">
+        <attr name="header_text" format="string" />
+        <attr name="divider_visible" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatLabelLayout">
+        <attr name="floatLabelTextAppearance" format="reference" />
+        <attr name="floatLabelSidePadding" format="reference|dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ShowHidePasswordEditText">
+        <attr name="icn_password_disabled" format="integer" />
+        <attr name="icn_password_hidden" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ToogleImageButton">
+        <attr name="checked" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SettingsBaseListItem">
+        <attr name="settingsTitle" format="string" />
+        <attr name="settingsDescription" format="string" />
+        <attr name="settingsImage" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="BlueButtonSettingsListItem">
+        <attr name="settingsBlueButtonText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="SensitivitySpinnerListItem">
+        <attr name="sensitivityTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="SettingsEditTextListItem">
+        <attr name="settingsEditTextTitle" format="string" />
+        <attr name="settings_ic_show_password" format="integer" />
+        <attr name="settings_ic_hide_password" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="EmptyButtonSettingsListItem">
+        <attr name="buttonTitle" format="string" />
+        <attr name="buttonImage" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CameraErrorVideoView">
+        <attr name="errorTitle" format="string" />
+        <attr name="errorSubtitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AspectRatioFrameLayout">
+        <attr name="aspectRatioHeight" format="integer" />
+        <attr name="aspectRatioWidth" format="integer" />
+    </declare-styleable>
+
+</resources>

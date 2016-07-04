@@ -1,6 +1,8 @@
 package com.operators.loginnetworkbridge;
 
 
+import android.util.Log;
+
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
@@ -19,6 +21,10 @@ import retrofit2.Response;
 public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
     private static final String LOG_TAG = LoginNetworkBridge.class.getSimpleName();
 
+    private final int TOTAL_RETRIES = 3;
+    private int retryCount = 0;
+    private final int specificRequestTimeout = 17;
+
     private LoginNetworkManagerInterface mLoginNetworkManagerInterface;
 
     public LoginNetworkBridge() {
@@ -27,7 +33,6 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
     @Override
     public void login(final String siteUrl, final String userName, final String password, final LoginCoreCallback loginCoreCallback) {
-        int specificRequestTimeout = 17;
         LoginRequest loginRequest = new LoginRequest(userName, password);
         Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
         call.enqueue(new retrofit2.Callback<SessionResponse>() {
@@ -46,9 +51,14 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<SessionResponse> call, Throwable t) {
-                ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
-                loginCoreCallback.onLoginFailed(errorObject);
+                if (retryCount++ < TOTAL_RETRIES) {
+                    Log.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
+                    call.clone().enqueue(this);
+                } else {
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                    loginCoreCallback.onLoginFailed(errorObject);
+                }
             }
         });
     }

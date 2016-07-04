@@ -29,7 +29,15 @@
     <string name="credentials_error">Credentials error</string>
     <string name="could_not_log_in">Could not log in -</string>
 
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">Link Machine</string>
+
     <string name="done">DONE</string>
     <string name="add_another"></string>
     <string name="ok">OK</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="go">Go</string>
+    <string name="machine_id_name">Machine ID Name</string>
 </resources>

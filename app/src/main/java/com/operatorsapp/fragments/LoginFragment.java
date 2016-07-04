@@ -10,42 +10,49 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.infra.ErrorObjectInterface;
-import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.LoginUICallback;
-import com.operators.logincore.PersistenceManagerInterface;
 import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.OnFragmentNavigationListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.ShowHidePasswordEditText;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
     private static final int CROUTON_DURATION = 5000;
+    private OnFragmentNavigationListener mCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
     private EditText mUserName;
     private EditText mPassword;
-    private Button mLoginButton;
+    private RelativeLayout mLoginButton;
+    private ImageView mLoginBtnBackground;
+    private ImageView mShowHidePass;
+    private boolean mIsVisible = false;
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -57,6 +64,19 @@ public class LoginFragment extends Fragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (mLoginButton != null) {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
+                if (isAllFieldsAreValid()) {
+                    mLoginBtnBackground.setBackgroundResource(R.drawable.button_bg);
+                } else {
+                    mLoginBtnBackground.setBackgroundResource(R.drawable.button_bg_disabled);
+                }
+
+                if (!TextUtils.isEmpty(mPassword.getText().toString())) {
+                    mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
+                    mShowHidePass.setEnabled(true);
+                } else {
+                    mShowHidePass.setImageResource(R.drawable.icn_password_disabled);
+                    mShowHidePass.setEnabled(false);
+                }
             }
         }
 
@@ -89,16 +109,44 @@ public class LoginFragment extends Fragment {
         mSiteUrl = (EditText) rootView.findViewById(R.id.factory_url);
         mUserName = (EditText) rootView.findViewById(R.id.user_name);
         mPassword = (EditText) rootView.findViewById(R.id.password);
+        mLoginBtnBackground = (ImageView) rootView.findViewById(R.id.loginBtn_background);
+
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                tryToLogin();
+                return true;
+            }
+
+        });
 
         mSiteUrl.addTextChangedListener(mTextWatcher);
         mUserName.addTextChangedListener(mTextWatcher);
         mPassword.addTextChangedListener(mTextWatcher);
+        mShowHidePass = (ImageView) rootView.findViewById(R.id.show_hide_pass);
+        mShowHidePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mShowHidePass.isEnabled()) {
+                    if (!mIsVisible) {
+                        mPassword.setTransformationMethod(null);
+                        mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
+                        mIsVisible = true;
+                    } else {
+                        mPassword.setTransformationMethod(new PasswordTransformationMethod());
+                        mShowHidePass.setImageResource(R.drawable.icn_password_disabled);
+                        mIsVisible = false;
+                    }
+                }
+            }
+        });
 
-        mLoginButton = (Button) rootView.findViewById(R.id.loginBtn);
+        mLoginButton = (RelativeLayout) rootView.findViewById(R.id.loginBtn);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tryToLogin();
+                if (mLoginButton.isEnabled())
+                    tryToLogin();
             }
         });
 
@@ -117,8 +165,13 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "login, onLoginSucceeded(),  go Next");
                 dismissProgressDialog();
 
-                MyDialogFragment myDialog = new MyDialogFragment();
-                myDialog.show(getFragmentManager(), LOG_TAG);
+//                MyDialogFragment myDialog = new MyDialogFragment();
+//                myDialog.show(getFragmentManager(), LOG_TAG);
+
+                if (mCallback != null) {
+                    //todo false
+                    mCallback.onFragmentNavigation(SelectMachineFragment.newInstance(LoginPersistenceManager.getInstance().getMachines()), true);
+                }
             }
 
             @Override
@@ -170,6 +223,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
+            mCallback = (OnFragmentNavigationListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
@@ -185,7 +239,7 @@ public class LoginFragment extends Fragment {
     private boolean isAllFieldsAreValid() {
         String factoryUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
-        String password = mPassword.toString();
+        String password = mPassword.getText().toString();
         return !TextUtils.isEmpty(factoryUrl) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password);
     }
 
@@ -200,8 +254,13 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "login, onLoginSucceeded() ");
                 dismissProgressDialog();
 
-                MyDialogFragment myDialog = new MyDialogFragment();
-                myDialog.show(getFragmentManager(), LOG_TAG);
+//                MyDialogFragment myDialog = new MyDialogFragment();
+//                myDialog.show(getFragmentManager(), LOG_TAG);
+                SelectMachineFragment selectMachineFragment = new SelectMachineFragment();
+                if (mCallback != null) {
+                    //todo false
+                    mCallback.onFragmentNavigation(selectMachineFragment, true);
+                }
 
             }
 

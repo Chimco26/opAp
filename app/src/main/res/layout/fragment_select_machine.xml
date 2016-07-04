@@ -1,0 +1,110 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_fragment_crouton_anchor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/C2">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_factory" />
+
+    <LinearLayout
+        android:id="@+id/layout_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        tools:context="com.leadermes.emerald.fragments.LoginFragment">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginTop="45dp"
+            android:background="@android:color/darker_gray"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        tools:context="com.leadermes.emerald.fragments.LoginFragment">
+
+        <TextView
+            android:id="@+id/select_machine_title"
+            style="@style/FontStyle_T120"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="43dp"
+            android:layout_weight="0.35"
+            android:text="Enter Machine\nID / Name"
+            android:textSize="40dp" />
+
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginTop="45dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="43dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+            <com.operatorsapp.view.BaseSearchView
+                android:id="@+id/machine_id_name"
+                style="@style/FontStyle_T6"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12.2dp"
+                android:layout_marginTop="12.2dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_background_selector"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="14dp"
+                android:singleLine="true"
+                android:textColorHint="@color/T4_color" />
+
+            <RelativeLayout
+                android:id="@+id/goBtn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="27.8dp">
+
+                <ImageView
+                    android:id="@+id/goBtn_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_bg_disabled" />
+
+                <TextView
+                    style="@style/FontStyle_T9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:text="@string/go"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
