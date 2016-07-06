@@ -6,7 +6,8 @@ public interface ErrorObjectInterface {
         Unknown,
         Retrofit,
         SessionInvalid,
-        Credentials_mismatch
+        Credentials_mismatch,
+        Get_machines_failed
     }
 
     ErrorCode getError();

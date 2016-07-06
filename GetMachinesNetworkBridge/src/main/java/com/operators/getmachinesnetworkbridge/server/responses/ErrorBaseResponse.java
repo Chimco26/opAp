@@ -2,7 +2,7 @@ package com.operators.getmachinesnetworkbridge.server.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ErrorBaseRespone {
+public class ErrorBaseResponse {
     @SerializedName("error")
     ErrorResponse mErrorResponse;
 

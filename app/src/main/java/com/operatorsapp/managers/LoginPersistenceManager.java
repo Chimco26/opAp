@@ -20,7 +20,7 @@ public class LoginPersistenceManager implements PersistenceManagerInterface {
     private static final String PREF_USERNAME = "pref.PREF_USERNAME";
     private static final String PREF_PASSWORD = "pref.PREF_PASSWORD";
     private static final String PREF_SESSION_ID = "pref.PREF_SESSION_ID";
-    private static final String PREF_MACHINES = "pref.PREF_MACHINES";
+    private static final String PREF_MACHINE_ID = "pref.PREF_MACHINE_ID";
 
     private static LoginPersistenceManager msInstance;
     private Gson mGson;
@@ -85,18 +85,12 @@ public class LoginPersistenceManager implements PersistenceManagerInterface {
         SecurePreferences.getInstance().setString(PREF_SESSION_ID, sessionId);
     }
 
-    @Override
-    public void saveMachines(ArrayList machines) {
-        SecurePreferences.getInstance().setString(PREF_MACHINES, mGson.toJson(machines));
+    public int getMachineId() {
+        return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID);
     }
 
-    @Override
-    public ArrayList<Machine> getMachines() {
-        String machinesJsonString = SecurePreferences.getInstance().getString(PREF_MACHINES);
-        Type listType = new TypeToken<ArrayList<Machine>>() {
-        }.getType();
-
-        return mGson.fromJson(machinesJsonString, listType);
+    public void setMachineId(int machineId) {
+        SecurePreferences.getInstance().setInt(PREF_MACHINE_ID, machineId);
     }
 
 }

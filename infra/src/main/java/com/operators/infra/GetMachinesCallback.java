@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public interface GetMachinesCallback {
 
-    void onLoginSucceeded(ArrayList machines);
+    void onGetMachinesSucceeded(ArrayList machines);
 
-    void onLoginFailed(ErrorObjectInterface reason);
+    void onGetMachinesFailed(ErrorObjectInterface reason);
 }

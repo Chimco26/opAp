@@ -12,7 +12,6 @@ public interface PersistenceManagerInterface {
 
     String getSessionId();
 
-    ArrayList getMachines();
 
     void setSiteUrl(String siteUrl);
 
@@ -22,5 +21,4 @@ public interface PersistenceManagerInterface {
 
     void setSessionId(String sessionId);
 
-    void saveMachines(ArrayList machines);
 }

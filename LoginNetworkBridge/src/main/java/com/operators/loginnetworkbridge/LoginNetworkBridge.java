@@ -3,7 +3,6 @@ package com.operators.loginnetworkbridge;
 
 import android.util.Log;
 
-import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
@@ -16,6 +15,7 @@ import com.zemingo.logrecorder.ZLogger;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
@@ -27,15 +27,11 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
     private LoginNetworkManagerInterface mLoginNetworkManagerInterface;
 
-    public LoginNetworkBridge() {
-
-    }
-
     @Override
     public void login(final String siteUrl, final String userName, final String password, final LoginCoreCallback loginCoreCallback) {
         LoginRequest loginRequest = new LoginRequest(userName, password);
         Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
-        call.enqueue(new retrofit2.Callback<SessionResponse>() {
+        call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
                 SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();

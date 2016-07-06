@@ -28,11 +28,6 @@ public class LoginCore {
         return msInstance;
     }
 
-    public LoginCore() {
-
-    }
-
-
     public void inject(PersistenceManagerInterface persistenceManagerInterface, LoginNetworkBridgeInterface loginNetworkBridgeInterface, GetMachinesNetworkBridgeInterface getMachinesNetworkBridgeInterface) {
         mPersistenceManagerInterface = persistenceManagerInterface;
         mLoginNetworkBridgeInterface = loginNetworkBridgeInterface;
@@ -44,22 +39,22 @@ public class LoginCore {
         mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(String sessionId) {
-                ZLogger.d(LOG_TAG, "login, onLoginSucceeded(), " + sessionId);
+                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
                 saveSite(sessionId, siteUrl, username, password);
 
-                mGetMachinesNetworkBridgeInterface.getMachinesForFactory(siteUrl, sessionId, new GetMachinesCallback() {
+                mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback() {
                     @Override
-                    public void onLoginSucceeded(ArrayList machines) {
-                        mPersistenceManagerInterface.saveMachines(machines);
-                        loginUICallback.onLoginSucceeded();
+                    public void onGetMachinesSucceeded(ArrayList machines) {
+                        ZLogger.d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
+                        loginUICallback.onLoginSucceeded(machines);
                     }
 
                     @Override
-                    public void onLoginFailed(ErrorObjectInterface reason) {
-
+                    public void onGetMachinesFailed(ErrorObjectInterface reason) {
+                        ZLogger.d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
+                        loginUICallback.onLoginFailed(reason);
                     }
                 });
-
             }
 
             @Override
@@ -68,16 +63,6 @@ public class LoginCore {
                 loginUICallback.onLoginFailed(reason);
             }
         });
-    }
-
-    public void silentLogin(final LoginUICallback loginUICallback) {
-        if (isAllDataAreValid()) {
-            login(getSaveSiteUrl(), getSaveUsername(), getSavePassword(), loginUICallback);
-        } else {
-            Log.d(LOG_TAG, "silentLogin, Data to login is null");
-            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Data to login is null");
-            loginUICallback.onLoginFailed(errorObject);
-        }
     }
 
 
@@ -94,18 +79,6 @@ public class LoginCore {
     public String getSavePassword() {
         return mPersistenceManagerInterface.getPassword();
 
-    }
-
-    public String getSaveSessionId() {
-        return mPersistenceManagerInterface.getSessionId();
-
-    }
-
-    private boolean isAllDataAreValid() {
-        String siteUrl = getSaveSiteUrl();
-        String userName = getSaveUsername();
-        String password = getSavePassword();
-        return siteUrl != null && userName != null && password != null;
     }
 
     public void saveSite(String sessionId, String siteUrl, String username, String password) {

@@ -12,7 +12,7 @@ public class SessionResponse {
         return mUserSessionIDResult;
     }
 
-    public class UserSessionIDResult extends ErrorBaseRespone {
+    public class UserSessionIDResult extends ErrorBaseResponse {
         @SerializedName("session")
         private ArrayList<SessionId> mSessionIds;
 

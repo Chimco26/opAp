@@ -11,6 +11,7 @@ import com.operators.getmachinesnetworkbridge.server.responses.Machine;
 import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -28,22 +29,28 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
     private GetMachineNetworkManagerInterface mGetMachineNetworkManagerInterface;
 
-    public GetMachinesNetworkBridge() {
-
-    }
-
     @Override
-    public void getMachinesForFactory(String siteUrl, String sessionId, final GetMachinesCallback callback) {
+    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback getMachinesCallback) {
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
         Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
         call.enqueue(new Callback<MachinesResponse>() {
             @Override
             public void onResponse(Call<MachinesResponse> call, Response<MachinesResponse> response) {
-                ArrayList<Machine> machines = new ArrayList<>();
-                for (Machine machine : response.body().getMachines()) {
-                    machines.add(machine);
+                ArrayList<Machine> machines = response.body().getMachines();
+                if (response.body().getErrorResponse() == null) {
+                    if (machines != null && machines.size() > 0) {
+                        ZLogger.d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
+                        getMachinesCallback.onGetMachinesSucceeded(machines);
+                    } else {
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
+                        getMachinesCallback.onGetMachinesFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.d(LOG_TAG, "onRequest(), getMachines failed");
+                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                    getMachinesCallback.onGetMachinesFailed(errorObject);
                 }
-                callback.onLoginSucceeded(machines);
             }
 
             @Override
@@ -52,7 +59,9 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     Log.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
                     call.clone().enqueue(this);
                 } else {
-
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "General Error");
+                    getMachinesCallback.onGetMachinesFailed(errorObject);
                 }
             }
         });
@@ -74,5 +83,4 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
         }
         return ErrorObject.ErrorCode.Unknown;
     }
-
 }
