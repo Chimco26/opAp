@@ -1,6 +1,5 @@
 package com.operatorsapp.fragments.interfaces;
 
-import android.app.Activity;
 import android.text.SpannableStringBuilder;
 
 import com.operatorsapp.managers.CroutonCreator;

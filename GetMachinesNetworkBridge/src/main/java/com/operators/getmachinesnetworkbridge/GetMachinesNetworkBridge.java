@@ -1,16 +1,14 @@
 package com.operators.getmachinesnetworkbridge;
 
 
-import android.util.Log;
-
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
 import com.operators.getmachinesnetworkbridge.server.responses.ErrorResponse;
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
 import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
+import com.operators.infra.Machine;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
     private GetMachineNetworkManagerInterface mGetMachineNetworkManagerInterface;
 
     @Override
-    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback getMachinesCallback) {
+    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback) {
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
         Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
         call.enqueue(new Callback<MachinesResponse>() {
@@ -56,7 +54,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
             @Override
             public void onFailure(Call<MachinesResponse> call, Throwable t) {
                 if (retryCount++ < TOTAL_RETRIES) {
-                    Log.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
+                    ZLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
                     call.clone().enqueue(this);
                 } else {
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());

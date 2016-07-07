@@ -27,43 +27,47 @@ public class RetrofitMockClient implements Interceptor {
             // Parse the url String.
             final String[] parsedUrl = url.toString().split("/");
             // parsedUrl.length-1 = last split
-            if (parsedUrl[parsedUrl.length - 1].equals("JGetUserSessionID")) {
-                responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42547.7052039699\"}]}}";
-            } else if (parsedUrl[parsedUrl.length - 1].equals("GetMachinesForFactory")) {
-                responseString = "{\n" +
-                        "  \"error\": null,\n" +
-                        "  \"machines\": [\n" +
-                        "    {\n" +
-                        "      \"DefaultControllerFieldName\": null,\n" +
-                        "      \"Department\": 0,\n" +
-                        "      \"DisplayOrder\": 0,\n" +
-                        "      \"Id\": 123,\n" +
-                        "      \"MachineLName\": \"0393\",\n" +
-                        "      \"MachineName\": \"0393 - OREN\",\n" +
-                        "      \"MachineStatus\": 0\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "      \"DefaultControllerFieldName\": null,\n" +
-                        "      \"Department\": 0,\n" +
-                        "      \"DisplayOrder\": 0,\n" +
-                        "      \"Id\": 1234,\n" +
-                        "      \"MachineLName\": \"1587\",\n" +
-                        "      \"MachineName\": \"1587 - YOSSI\",\n" +
-                        "      \"MachineStatus\": 0\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "      \"DefaultControllerFieldName\": null,\n" +
-                        "      \"Department\": 0,\n" +
-                        "      \"DisplayOrder\": 0,\n" +
-                        "      \"Id\": 12345,\n" +
-                        "      \"MachineLName\": \"1777\",\n" +
-                        "      \"MachineName\": \"1777 - OPP\",\n" +
-                        "      \"MachineStatus\": 0\n" +
-                        "    }\n" +
-                        "  ]\n" +
-                        "}";
-            } else {
-                responseString = "";
+            switch (parsedUrl[parsedUrl.length - 1]) {
+                case "JGetUserSessionID":
+                    responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42547.7052039699\"}]}}";
+                    break;
+                case "GetMachinesForFactory":
+                    responseString = "{\n" +
+                            "  \"error\": null,\n" +
+                            "  \"machines\": [\n" +
+                            "    {\n" +
+                            "      \"DefaultControllerFieldName\": null,\n" +
+                            "      \"Department\": 0,\n" +
+                            "      \"DisplayOrder\": 0,\n" +
+                            "      \"Id\": 123,\n" +
+                            "      \"MachineLName\": \"0393\",\n" +
+                            "      \"MachineName\": \"0393 - OREN\",\n" +
+                            "      \"MachineStatus\": 0\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"DefaultControllerFieldName\": null,\n" +
+                            "      \"Department\": 0,\n" +
+                            "      \"DisplayOrder\": 0,\n" +
+                            "      \"Id\": 1234,\n" +
+                            "      \"MachineLName\": \"1587\",\n" +
+                            "      \"MachineName\": \"1587 - YOSSI\",\n" +
+                            "      \"MachineStatus\": 0\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"DefaultControllerFieldName\": null,\n" +
+                            "      \"Department\": 0,\n" +
+                            "      \"DisplayOrder\": 0,\n" +
+                            "      \"Id\": 12345,\n" +
+                            "      \"MachineLName\": \"1777\",\n" +
+                            "      \"MachineName\": \"1777 - OPP\",\n" +
+                            "      \"MachineStatus\": 0\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}";
+                    break;
+                default:
+                    responseString = "";
+                    break;
             }
 
             response = getResponse(chain, responseString);

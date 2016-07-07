@@ -1,7 +1,5 @@
 package com.operatorsapp.server;
 
-import android.support.annotation.NonNull;
-
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
@@ -81,6 +79,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                     .connectTimeout(timeout, timeUnit)
                     .writeTimeout(timeout, timeUnit)
                     .readTimeout(timeout, timeUnit)
+//                    .sslSocketFactory(sslContext.getSocketFactory())
                     .build();
         } else {
             okHttpClient = new OkHttpClient.Builder()

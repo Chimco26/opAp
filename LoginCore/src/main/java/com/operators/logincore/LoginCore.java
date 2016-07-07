@@ -1,13 +1,15 @@
 package com.operators.logincore;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
+import com.operators.infra.Machine;
+import com.operators.logincore.interfaces.LoginUICallback;
+import com.operators.logincore.interfaces.PersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class LoginCore {
         mGetMachinesNetworkBridgeInterface = getMachinesNetworkBridgeInterface;
     }
 
-    public void login(final String siteUrl, final String username, final String password, final LoginUICallback loginUICallback) {
+    public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
         mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, new LoginCoreCallback() {
             @Override
@@ -42,9 +44,9 @@ public class LoginCore {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
                 saveSite(sessionId, siteUrl, username, password);
 
-                mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback() {
+                mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
-                    public void onGetMachinesSucceeded(ArrayList machines) {
+                    public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
                         ZLogger.d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
                         loginUICallback.onLoginSucceeded(machines);
                     }
@@ -63,22 +65,6 @@ public class LoginCore {
                 loginUICallback.onLoginFailed(reason);
             }
         });
-    }
-
-
-    public String getSaveSiteUrl() {
-        return mPersistenceManagerInterface.getSiteUrl();
-
-    }
-
-    public String getSaveUsername() {
-        return mPersistenceManagerInterface.getUserName();
-
-    }
-
-    public String getSavePassword() {
-        return mPersistenceManagerInterface.getPassword();
-
     }
 
     public void saveSite(String sessionId, String siteUrl, String username, String password) {

@@ -51,6 +51,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
                     Log.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
                     call.clone().enqueue(this);
                 } else {
+                    retryCount = 0;
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     loginCoreCallback.onLoginFailed(errorObject);

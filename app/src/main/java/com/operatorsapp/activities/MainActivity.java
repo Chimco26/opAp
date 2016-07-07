@@ -8,18 +8,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.gson.Gson;
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
+import com.operators.infra.Machine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnNavigationListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.zemingo.logrecorder.ZLogger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
 
         mCroutonCreator = new CroutonCreator();
         onFragmentNavigation(LoginFragment.newInstance(), false);
+
+        updateAndroidSecurityProvider(this);
     }
 
     @Override
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
     @Override
     public void goToDashboardActivity(Machine machine) {
         Intent intent = new Intent(this, DashboardActivity.class);
-
         Gson gson = new Gson();
         String machineString = gson.toJson(machine);
         Bundle bundle = new Bundle();
@@ -64,6 +67,19 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
         finish();
     }
 
+
+    private void updateAndroidSecurityProvider(Activity callingActivity) {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Thrown when Google Play Services is not installed, up-to-date, or enabled
+            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+            GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            ZLogger.e("SecurityException", "Google Play Services not available.");
+        }
+    }
+
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
@@ -72,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
     }
 
     @Override
-    public void onShowCroutonRequest( SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
         }
@@ -82,17 +98,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
     public void onHideConnectivityCroutonRequest() {
         if (mCroutonCreator != null) {
             mCroutonCreator.hideConnectivityCrouton();
-        }
-    }
-
-    private Fragment getCurrentFragment() {
-        try {
-            List<Fragment> fragments = getSupportFragmentManager().getFragments();
-            int fragmentBackStackSize = fragments.size();
-            return fragments.get(fragmentBackStackSize - 1);
-        } catch (NullPointerException ex) {
-            ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
-            return null;
         }
     }
 

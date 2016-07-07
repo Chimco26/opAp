@@ -1,4 +1,4 @@
-package com.operators.logincore;
+package com.operators.logincore.interfaces;
 
 import java.util.ArrayList;
 

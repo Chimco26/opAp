@@ -1,6 +1,5 @@
 package com.operatorsapp.utils;
 
-import android.app.Activity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
@@ -12,9 +11,6 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 
-/**
- * Created by Admin on 06-Jul-16.
- */
 public class ShowCrouton {
     private static final int CROUTON_DURATION = 5000;
 

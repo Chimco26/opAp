@@ -9,7 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
+import com.operators.infra.Machine;
 import com.operatorsapp.R;
 
 import java.util.ArrayList;

@@ -2,15 +2,9 @@ package com.operatorsapp.managers;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
-import com.operators.logincore.PersistenceManagerInterface;
+import com.operators.logincore.interfaces.PersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class LoginPersistenceManager implements PersistenceManagerInterface {
 
@@ -23,7 +17,6 @@ public class LoginPersistenceManager implements PersistenceManagerInterface {
     private static final String PREF_MACHINE_ID = "pref.PREF_MACHINE_ID";
 
     private static LoginPersistenceManager msInstance;
-    private Gson mGson;
 
     public static LoginPersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -42,7 +35,6 @@ public class LoginPersistenceManager implements PersistenceManagerInterface {
 
     private LoginPersistenceManager(Context context) {
         SecurePreferences.initInstance(context);
-        mGson = new Gson();
     }
 
     @Override

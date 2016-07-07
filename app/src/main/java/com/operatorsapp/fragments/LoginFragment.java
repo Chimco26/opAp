@@ -1,7 +1,6 @@
 package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,25 +24,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
 import com.operators.infra.ErrorObjectInterface;
+import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
-import com.operators.logincore.LoginUICallback;
-import com.operators.loginnetworkbridge.server.ErrorObject;
+import com.operators.logincore.interfaces.LoginUICallback;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnNavigationListener;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private static final int CROUTON_DURATION = 5000;
     private OnNavigationListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
@@ -136,39 +130,6 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    private void doSilentLogin() {
-        ProgressDialogManager.show(getActivity());
-        OperatorApplication.silentLogin(new LoginUICallback() {
-            @Override
-            public void onLoginSucceeded(ArrayList machines) {
-                Log.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                dismissProgressDialog();
-
-                if (mNavigationCallback != null) {
-                    //todo false
-                    ArrayList<Machine> machineArrayList;
-                    machineArrayList = machines;
-                    for (Machine machine : machineArrayList) {
-                        if (machine.getId() == LoginPersistenceManager.getInstance().getMachineId()) {
-                            mNavigationCallback.goToDashboardActivity(machine);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onLoginFailed(final ErrorObjectInterface reason) {
-                dismissProgressDialog();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShowCrouton.croutonError(mCroutonCallback, reason);
-                    }
-                });
-            }
-        });
-    }
-
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -180,7 +141,7 @@ public class LoginFragment extends Fragment {
             if (mLoginButton != null) {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
                 if (isAllFieldsAreValid()) {
-                    mLoginBtnBackground.setBackgroundResource(R.drawable.button_bg);
+                    mLoginBtnBackground.setBackgroundResource(R.drawable.login_button_selector);
                 } else {
                     mLoginBtnBackground.setBackgroundResource(R.drawable.button_bg_disabled);
                 }
@@ -240,16 +201,14 @@ public class LoginFragment extends Fragment {
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
-        LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback() {
+        LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
-            public void onLoginSucceeded(ArrayList machines) {
-                Log.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
+            public void onLoginSucceeded(ArrayList<Machine> machines) {
+                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
                 dismissProgressDialog();
                 if (mNavigationCallback != null) {
-                    //todo false
                     mNavigationCallback.onFragmentNavigation(SelectMachineFragment.newInstance(machines), true);
                 }
-
             }
 
             @Override
@@ -265,6 +224,37 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    private void doSilentLogin() {
+        ProgressDialogManager.show(getActivity());
+        LoginCore.getInstance().login(LoginPersistenceManager.getInstance().getSiteUrl(),
+                LoginPersistenceManager.getInstance().getUserName(),
+                LoginPersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
+                    @Override
+                    public void onLoginSucceeded(ArrayList<Machine> machines) {
+                        ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                        dismissProgressDialog();
+                        for (Machine machine : machines) {
+                            if (machine.getId() == LoginPersistenceManager.getInstance().getMachineId()) {
+                                if (mNavigationCallback != null) {
+                                    mNavigationCallback.goToDashboardActivity(machine);
+                                }
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onLoginFailed(final ErrorObjectInterface reason) {
+                        dismissProgressDialog();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowCrouton.croutonError(mCroutonCallback, reason);
+                            }
+                        });
+                    }
+                });
+    }
 
     private void dismissProgressDialog() {
         getActivity().runOnUiThread(new Runnable() {
@@ -274,42 +264,4 @@ public class LoginFragment extends Fragment {
             }
         });
     }
-
-   /* private void croutonError(ErrorObjectInterface reason) {
-        if (ErrorObject.ErrorCode.Credentials_mismatch.equals(reason.getError())) {
-            String prefix = getString(R.string.could_not_log_in).concat(" ");
-            String credentialsError = getString(R.string.credentials_error);
-            final SpannableStringBuilder str = new SpannableStringBuilder(prefix + credentialsError);
-            str.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            showCrouton(str, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-        } else {
-            String prefix = getString(R.string.could_not_log_in).concat(" ");
-            String networkError = getString(R.string.no_communication);
-            final SpannableStringBuilder str = new SpannableStringBuilder(prefix + networkError);
-            str.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            showCrouton(str, CroutonCreator.CroutonType.NETWORK_ERROR);
-        }
-    }
-
-    private void showCrouton(final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mCroutonCallback != null) {
-                    mCroutonCallback.onShowCroutonRequest(getActivity(), str, CROUTON_DURATION, R.id.login_fragment_crouton_anchor, credentialsError);
-                }
-            }
-        });
-    }*/
-
-//    public static class MyDialogFragment extends DialogFragment {
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            return new AlertDialog.Builder(getActivity())
-//                    .setTitle(R.string.done)
-//                    .setPositiveButton(getResources().getString(R.string.ok), null)
-//                    .create();
-//        }
-//    }
 }

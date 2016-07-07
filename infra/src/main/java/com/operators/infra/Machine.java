@@ -1,4 +1,5 @@
-package com.operators.getmachinesnetworkbridge.server.responses;
+package com.operators.infra;
+
 
 import com.google.gson.annotations.SerializedName;
 

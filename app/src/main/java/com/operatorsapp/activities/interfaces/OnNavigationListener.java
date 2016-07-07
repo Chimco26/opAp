@@ -2,9 +2,7 @@ package com.operatorsapp.activities.interfaces;
 
 import android.support.v4.app.Fragment;
 
-import com.operators.getmachinesnetworkbridge.server.responses.Machine;
-
-import java.util.ArrayList;
+import com.operators.infra.Machine;
 
 public interface OnNavigationListener {
     // responsibility of fragment transaction is of activity, so every fragment which wants to go to another one pass
