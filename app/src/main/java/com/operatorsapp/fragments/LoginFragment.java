@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,7 @@ import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnNavigationListener;
+import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -40,7 +39,7 @@ import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private OnNavigationListener mNavigationCallback;
+    private OnGoToNextScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
     private EditText mUserName;
@@ -57,14 +56,16 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        // For now, It is necessary Settings screen
+        LoginPersistenceManager.getInstance().setTotalRetries(3);
+        LoginPersistenceManager.getInstance().setRequestTimeOut(17);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnNavigationListener) context;
+            mNavigationCallback = (OnGoToNextScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
@@ -83,7 +84,9 @@ public class LoginFragment extends Fragment {
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                tryToLogin();
+                if (isAllFieldsAreValid()) {
+                    tryToLogin();
+                }
                 return true;
             }
 
@@ -117,15 +120,17 @@ public class LoginFragment extends Fragment {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLoginButton.isEnabled())
+                if (mLoginButton.isEnabled()) {
                     tryToLogin();
+                }
             }
         });
 
         setActionBar();
 
-        if (LoginPersistenceManager.getInstance().getMachineId() != -1)
+        if (LoginPersistenceManager.getInstance().isSelectedMachine()) {
             doSilentLogin();
+        }
 
         return rootView;
     }
@@ -207,7 +212,7 @@ public class LoginFragment extends Fragment {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
                 dismissProgressDialog();
                 if (mNavigationCallback != null) {
-                    mNavigationCallback.onFragmentNavigation(SelectMachineFragment.newInstance(machines), true);
+                    mNavigationCallback.goToSelectMachineFrafment(SelectMachineFragment.newInstance(machines), true);
                 }
             }
 
@@ -224,6 +229,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
         ProgressDialogManager.show(getActivity());
         LoginCore.getInstance().login(LoginPersistenceManager.getInstance().getSiteUrl(),
@@ -233,14 +239,9 @@ public class LoginFragment extends Fragment {
                     public void onLoginSucceeded(ArrayList<Machine> machines) {
                         ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                         dismissProgressDialog();
-                        for (Machine machine : machines) {
-                            if (machine.getId() == LoginPersistenceManager.getInstance().getMachineId()) {
-                                if (mNavigationCallback != null) {
-                                    mNavigationCallback.goToDashboardActivity(machine);
-                                }
-                            }
+                        if (mNavigationCallback != null) {
+                            mNavigationCallback.goToDashboardActivity(LoginPersistenceManager.getInstance().getMachineId());
                         }
-
                     }
 
                     @Override

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class LoginCore {
 
     private static final String LOG_TAG = LoginCore.class.getSimpleName();
-
     private PersistenceManagerInterface mPersistenceManagerInterface;
     private static LoginCore msInstance;
     private LoginNetworkBridgeInterface mLoginNetworkBridgeInterface;
@@ -56,7 +55,7 @@ public class LoginCore {
                         ZLogger.d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
                         loginUICallback.onLoginFailed(reason);
                     }
-                });
+                }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
             }
 
             @Override
@@ -64,7 +63,7 @@ public class LoginCore {
                 ZLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
-        });
+        }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
     }
 
     public void saveSite(String sessionId, String siteUrl, String username, String password) {

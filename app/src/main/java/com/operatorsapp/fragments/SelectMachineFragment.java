@@ -12,6 +12,7 @@ import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnNavigationListener;
+import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
@@ -34,14 +35,14 @@ import java.util.ArrayList;
 
 public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String MACHINES_LIST = "machines_list";
-    private OnNavigationListener mNavigationCallback;
+    private OnGoToNextScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
     private RelativeLayout mGoButton;
     private ImageView mGoButtonBackground;
     private ArrayList<Machine> mMachinesList = new ArrayList<>();
     private int mMachineId;
-    private Machine mMachine;
     private AutoCompleteAdapter mAutoCompleteAdapter;
+    private boolean canGoNext = false;
 
     public static SelectMachineFragment newInstance(ArrayList machinesList) {
         Gson gson = new Gson();
@@ -58,7 +59,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnNavigationListener) context;
+            mNavigationCallback = (OnGoToNextScreenListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
@@ -94,6 +95,17 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         mSearchField.setAdapter(mAutoCompleteAdapter);
         mSearchField.setOnItemClickListener(this);
         mSearchField.addTextChangedListener(mTextWatcher);
+        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (canGoNext) {
+                    LoginPersistenceManager.getInstance().setMachineId(mMachineId);
+                    mNavigationCallback.goToDashboardActivity(mMachineId);
+                }
+                return true;
+            }
+
+        });
 
         mGoButton = (RelativeLayout) rootView.findViewById(R.id.goBtn);
         mGoButton.setEnabled(false);
@@ -102,7 +114,8 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             public void onClick(View v) {
                 if (mGoButton.isEnabled()) {
                     LoginPersistenceManager.getInstance().setMachineId(mMachineId);
-                    mNavigationCallback.goToDashboardActivity(mMachine);
+                    LoginPersistenceManager.getInstance().setSelectedMachine(true);
+                    mNavigationCallback.goToDashboardActivity(mMachineId);
                 }
             }
         });
@@ -132,11 +145,11 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mMachine = mAutoCompleteAdapter.getItem(position);
         mMachineId = mAutoCompleteAdapter.getItem(position).getId();
         String machineName = mAutoCompleteAdapter.getItem(position).getMachineName() == null ? "" : mAutoCompleteAdapter.getItem(position).getMachineName();
         mSearchField.setText(new StringBuilder(mMachineId + " - " + machineName));
 
+        canGoNext = true;
         mGoButton.setEnabled(true);
         mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
         mSearchField.dismissDropDown();
@@ -151,6 +164,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (before > count) {
+                canGoNext = false;
                 mGoButton.setEnabled(false);
                 mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
             }

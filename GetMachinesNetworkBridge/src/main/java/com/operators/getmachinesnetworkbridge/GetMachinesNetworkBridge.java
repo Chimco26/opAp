@@ -21,14 +21,12 @@ import retrofit2.Response;
 public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterface {
     private static final String LOG_TAG = GetMachinesNetworkBridge.class.getSimpleName();
 
-    private final int TOTAL_RETRIES = 3;
     private int retryCount = 0;
-    private final int specificRequestTimeout = 17;
 
     private GetMachineNetworkManagerInterface mGetMachineNetworkManagerInterface;
 
     @Override
-    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback) {
+    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback, final int totalRetries, int specificRequestTimeout) {
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
         Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
         call.enqueue(new Callback<MachinesResponse>() {
@@ -53,8 +51,8 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
 
             @Override
             public void onFailure(Call<MachinesResponse> call, Throwable t) {
-                if (retryCount++ < TOTAL_RETRIES) {
-                    ZLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
+                if (retryCount++ < totalRetries) {
+                    ZLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());

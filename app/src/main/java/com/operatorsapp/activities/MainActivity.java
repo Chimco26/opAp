@@ -8,16 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
-import com.google.gson.Gson;
-import com.operators.infra.Machine;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnNavigationListener;
+import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -25,7 +22,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements OnNavigationListener, OnCroutonRequestListener {
+public class MainActivity extends AppCompatActivity implements OnGoToNextScreenListener, OnCroutonRequestListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -39,14 +36,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
-        onFragmentNavigation(LoginFragment.newInstance(), false);
+        goToSelectMachineFrafment(LoginFragment.newInstance(), false);
 
         updateAndroidSecurityProvider(this);
     }
 
     @Override
-    public void onFragmentNavigation(Fragment fragment, boolean addToBackStack) {
-        ZLogger.d(LOG_TAG, "onFragmentNavigation(), " + fragment.getClass().getSimpleName());
+    public void goToSelectMachineFrafment(Fragment fragment, boolean addToBackStack) {
+        ZLogger.d(LOG_TAG, "goToSelectMachineFrafment(), " + fragment.getClass().getSimpleName());
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
         } else {
@@ -55,12 +52,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationListe
     }
 
     @Override
-    public void goToDashboardActivity(Machine machine) {
+    public void goToDashboardActivity(int machineId) {
         Intent intent = new Intent(this, DashboardActivity.class);
-        Gson gson = new Gson();
-        String machineString = gson.toJson(machine);
         Bundle bundle = new Bundle();
-        bundle.putString("machine", machineString);
+        bundle.putInt("machineId", machineId);
 
         intent.putExtras(bundle);
         startActivity(intent);
