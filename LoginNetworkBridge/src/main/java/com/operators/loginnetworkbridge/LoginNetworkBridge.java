@@ -3,7 +3,9 @@ package com.operators.loginnetworkbridge;
 
 import android.util.Log;
 
+import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
+import com.operators.infra.LoginNetworkBridgeCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
 import com.operators.loginnetworkbridge.server.ErrorObject;
@@ -27,7 +29,12 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
     @Override
     public void login(final String siteUrl, final String userName, final String password, final LoginCoreCallback loginCoreCallback, final int totalRetries, int specificRequestTimeout) {
         LoginRequest loginRequest = new LoginRequest(userName, password);
-        Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
+        Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS, new LoginNetworkBridgeCallback() {
+            @Override
+            public void onUrlFailed(ErrorObjectInterface reason) {
+
+            }
+        }).getUserSessionId(loginRequest);
         call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {

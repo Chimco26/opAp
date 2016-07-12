@@ -41,7 +41,7 @@ public class LoginCore {
             @Override
             public void onLoginSucceeded(String sessionId) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
-                saveSite(sessionId, siteUrl, username, password);
+                saveMachine(sessionId, siteUrl, username, password);
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
@@ -66,7 +66,7 @@ public class LoginCore {
         }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
     }
 
-    public void saveSite(String sessionId, String siteUrl, String username, String password) {
+    public void saveMachine(String sessionId, String siteUrl, String username, String password) {
         mPersistenceManagerInterface.setSessionId(sessionId);
         mPersistenceManagerInterface.setSiteUrl(siteUrl);
         mPersistenceManagerInterface.setUsername(username);

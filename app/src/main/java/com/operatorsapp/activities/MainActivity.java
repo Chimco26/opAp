@@ -14,7 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -22,7 +22,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements OnGoToNextScreenListener, OnCroutonRequestListener {
+public class MainActivity extends AppCompatActivity implements OnGoToScreenListener, OnCroutonRequestListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -36,14 +36,14 @@ public class MainActivity extends AppCompatActivity implements OnGoToNextScreenL
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
-        goToSelectMachineFrafment(LoginFragment.newInstance(), false);
+        goToFragment(LoginFragment.newInstance(), false);
 
         updateAndroidSecurityProvider(this);
     }
 
     @Override
-    public void goToSelectMachineFrafment(Fragment fragment, boolean addToBackStack) {
-        ZLogger.d(LOG_TAG, "goToSelectMachineFrafment(), " + fragment.getClass().getSimpleName());
+    public void goToFragment(Fragment fragment, boolean addToBackStack) {
+        ZLogger.d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
         } else {

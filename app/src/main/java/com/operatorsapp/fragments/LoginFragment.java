@@ -28,7 +28,7 @@ import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private OnGoToNextScreenListener mNavigationCallback;
+    private OnGoToScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
     private EditText mUserName;
@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnGoToNextScreenListener) context;
+            mNavigationCallback = (OnGoToScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
@@ -175,7 +175,7 @@ public class LoginFragment extends Fragment {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getString(R.string.login_screen_title));
+            SpannableString s = new SpannableString(getString(R.string.screen_title));
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
@@ -212,7 +212,7 @@ public class LoginFragment extends Fragment {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
                 dismissProgressDialog();
                 if (mNavigationCallback != null) {
-                    mNavigationCallback.goToSelectMachineFrafment(SelectMachineFragment.newInstance(machines), true);
+                    mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
                 }
             }
 

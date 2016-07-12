@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToNextScreenListener;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.managers.LoginPersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String MACHINES_LIST = "machines_list";
-    private OnGoToNextScreenListener mNavigationCallback;
+    private OnGoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
     private RelativeLayout mGoButton;
     private ImageView mGoButtonBackground;
@@ -59,7 +59,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnGoToNextScreenListener) context;
+            mNavigationCallback = (OnGoToScreenListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
@@ -134,7 +134,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getString(R.string.login_screen_title));
+            SpannableString s = new SpannableString(getString(R.string.screen_title));
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);

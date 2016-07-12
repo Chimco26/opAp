@@ -2,6 +2,10 @@ package com.operatorsapp.server;
 
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
+import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.infra.ErrorObjectInterface;
+import com.operators.infra.LoginNetworkBridgeCallback;
+import com.operators.loginnetworkbridge.LoginNetworkBridge;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -10,6 +14,7 @@ import com.zemingo.logrecorder.ZLogger;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -40,17 +45,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl) {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
 // -1  to get default timeout
-        return getLoginRetroFitServiceRequests(siteUrl, -1, null);
+        return getLoginRetroFitServiceRequests(siteUrl, -1, null, loginNetworkBridgeCallback);
     }
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
         } else {
-            Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+            Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit, loginNetworkBridgeCallback);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldLoginServiceRequests);
@@ -59,18 +64,22 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl) {
-        return getMachinesRetroFitServiceRequests(siteUrl, -1, null);
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
+        return getMachinesRetroFitServiceRequests(siteUrl, -1, null, loginNetworkBridgeCallback);
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit, loginNetworkBridgeCallback);
         return retrofit.create(EmeraldGetMachinesServiceRequests.class);
 
     }
 
-    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
+    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
+        HttpUrl httpUrl = HttpUrl.parse(siteUrl);
+        if (httpUrl == null) {
+            loginNetworkBridgeCallback.onUrlFailed(new ErrorObject(ErrorObjectInterface.ErrorCode.Unknown, "Site URL not correct"));
+        }
         OkHttpClient okHttpClient;
         if (timeout >= 0 && timeUnit != null) {
             okHttpClient = new OkHttpClient.Builder()

@@ -8,7 +8,7 @@
     <string name="unknown">Unknown</string>
 
     <!-- Login screen -->
-    <string name="login_screen_title">LeaderMES</string>
+    <string name="screen_title">LeaderMES</string>
     <string name="login_fields_error">All fields need to be filled up</string>
     <string name="login">Log In</string>
     <string name="login_screen_save">Save</string>
