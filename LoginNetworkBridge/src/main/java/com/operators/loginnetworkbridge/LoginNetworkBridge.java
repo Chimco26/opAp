@@ -32,7 +32,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
         Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS, new LoginNetworkBridgeCallback() {
             @Override
             public void onUrlFailed(ErrorObjectInterface reason) {
-
+                loginCoreCallback.onLoginFailed(reason);
             }
         }).getUserSessionId(loginRequest);
         call.enqueue(new Callback<SessionResponse>() {
