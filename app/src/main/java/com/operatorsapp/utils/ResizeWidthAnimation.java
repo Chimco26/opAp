@@ -1,26 +1,32 @@
 package com.operatorsapp.utils;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-public class ResizeWidthAnimation extends Animation {
+public class ResizeWidthAnimation extends Animation implements Animation.AnimationListener {
     private int mWidth;
     private int mStartWidth;
-    private View mView;
+    private View mLeftView;
+    private View mRightView;
+    private boolean mOpen;
+    private int mNewWith;
 
-    public ResizeWidthAnimation(View view, int width) {
-        mView = view;
+    public ResizeWidthAnimation(View leftView, View rightView, int width, boolean open) {
+        mLeftView = leftView;
+        mRightView = rightView;
         mWidth = width;
-        mStartWidth = view.getWidth();
+        mStartWidth = leftView.getWidth();
+        mOpen = open;
     }
 
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         int newWidth = mStartWidth + (int) ((mWidth - mStartWidth) * interpolatedTime);
 
-        mView.getLayoutParams().width = newWidth;
-        mView.requestLayout();
+        mLeftView.getLayoutParams().width = newWidth;
+        mLeftView.requestLayout();
     }
 
     @Override
@@ -33,4 +39,33 @@ public class ResizeWidthAnimation extends Animation {
         return true;
     }
 
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
+
+    private void openWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int openWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
+//        mRightLayout.setLayoutParams(mRightLayoutParams);
+//        mArrowLeft.setVisibility(View.INVISIBLE);
+//        mArrowRight.setVisibility(View.VISIBLE);
+    }
+
+    private void closeWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int closeWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
+        mLeftLayoutParams.width = closeWidth;
+        mRightLayoutParams.setMarginStart(closeWidth);
+//        mLeftLayout.requestLayout();
+//        mRightLayout.setLayoutParams(mRightLayoutParams);
+//        mArrowLeft.setVisibility(View.VISIBLE);
+//        mArrowRight.setVisibility(View.INVISIBLE);
+    }
 }

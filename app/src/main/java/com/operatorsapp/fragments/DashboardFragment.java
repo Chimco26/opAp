@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class DashboardFragment extends Fragment {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
+    public static final int DURATION_MILLIS = 200;
     private OnCroutonRequestListener mCroutonCallback;
 
     private RecyclerView mShiftLogRecycler;
@@ -95,7 +96,10 @@ public class DashboardFragment extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        final int width = size.x;
+        int width = size.x;
+        final int openWidth = width / 2;
+        final int closeWidth = width / 4;
+        final int betweenWidth = width * 3 / 8;
 
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -104,20 +108,20 @@ public class DashboardFragment extends Fragment {
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
-        mLeftLayoutParams.width = width / 4;
+        mLeftLayoutParams.width = closeWidth;
         mLeftLayout.requestLayout();
 
         mRightLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_rightLayout);
         final ViewGroup.MarginLayoutParams mRightLayoutParams = (ViewGroup.MarginLayoutParams) mRightLayout.getLayoutParams();
-        mRightLayoutParams.setMarginStart(width / 4);
+        mRightLayoutParams.setMarginStart(closeWidth);
         mRightLayout.setLayoutParams(mRightLayoutParams);
 
         mArrowLeft = (ImageView) view.findViewById(R.id.fragment_dashboard_arrow_right);
         mArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, width / 2);
-                anim.setDuration(200);
+                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mRightLayout, openWidth, true);
+                anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -127,12 +131,7 @@ public class DashboardFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mLeftLayoutParams.width = width / 2;
-                        mRightLayoutParams.setMarginStart(width / 2);
-                        mLeftLayout.requestLayout();
-                        mRightLayout.setLayoutParams(mRightLayoutParams);
-                        mArrowLeft.setVisibility(View.INVISIBLE);
-                        mArrowRight.setVisibility(View.VISIBLE);
+                        openWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams);
                     }
 
                     @Override
@@ -147,8 +146,8 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, width / 4);
-                anim.setDuration(200);
+                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mRightLayout, closeWidth, false);
+                anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -158,12 +157,7 @@ public class DashboardFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mLeftLayoutParams.width = width / 4;
-                        mRightLayoutParams.setMarginStart(width / 4);
-                        mLeftLayout.requestLayout();
-                        mRightLayout.setLayoutParams(mRightLayoutParams);
-                        mArrowLeft.setVisibility(View.VISIBLE);
-                        mArrowRight.setVisibility(View.INVISIBLE);
+                        closeWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams);
                     }
 
                     @Override
@@ -186,32 +180,41 @@ public class DashboardFragment extends Fragment {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         int currentX = mLeftLayout.getLayoutParams().width + (int) event.getRawX() - downX;
-                        if (currentX >= width / 4 && currentX <= width / 2) {
+                        if (currentX >= closeWidth && currentX <= openWidth) {
                             mLeftLayout.getLayoutParams().width = currentX;
                             mLeftLayout.requestLayout();
                             downX = (int) event.getRawX();
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (mLeftLayoutParams.width < width * 3 / 8) {
-                            mLeftLayoutParams.width = width / 4;
-                            mRightLayoutParams.setMarginStart(width / 4);
-                            mArrowLeft.setVisibility(View.VISIBLE);
-                            mArrowRight.setVisibility(View.INVISIBLE);
-
+                        if (mLeftLayoutParams.width < betweenWidth) {
+                            closeWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams);
                         } else {
-                            mLeftLayoutParams.width = width / 2;
-                            mRightLayoutParams.setMarginStart(width / 2);
-                            mArrowLeft.setVisibility(View.INVISIBLE);
-                            mArrowRight.setVisibility(View.VISIBLE);
+                            openWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams);
                         }
-                        mLeftLayout.requestLayout();
-                        mRightLayout.setLayoutParams(mRightLayoutParams);
                         break;
                 }
                 return false;
             }
         });
+    }
+
+    private void openWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int openWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
+        mLeftLayoutParams.width = openWidth;
+        mRightLayoutParams.setMarginStart(openWidth);
+        mLeftLayout.requestLayout();
+        mRightLayout.setLayoutParams(mRightLayoutParams);
+        mArrowLeft.setVisibility(View.INVISIBLE);
+        mArrowRight.setVisibility(View.VISIBLE);
+    }
+
+    private void closeWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int closeWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
+        mLeftLayoutParams.width = closeWidth;
+        mRightLayoutParams.setMarginStart(closeWidth);
+        mLeftLayout.requestLayout();
+        mRightLayout.setLayoutParams(mRightLayoutParams);
+        mArrowLeft.setVisibility(View.VISIBLE);
+        mArrowRight.setVisibility(View.INVISIBLE);
     }
 
     @Override
