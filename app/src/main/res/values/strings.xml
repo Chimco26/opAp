@@ -27,6 +27,7 @@
     <string name="login_dialog_message">Are you sure you want to\ndiscard changes?</string>
     <string name="network_error">Network Error</string>
     <string name="credentials_error">Credentials error</string>
+    <string name="url_error">Site URL not correct</string>
     <string name="could_not_log_in">Could not log in -</string>
 
     <!--Select machine screen -->

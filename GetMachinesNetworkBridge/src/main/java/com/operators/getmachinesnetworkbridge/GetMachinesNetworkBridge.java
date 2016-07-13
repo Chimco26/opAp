@@ -9,7 +9,6 @@ import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
 import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
-import com.operators.infra.LoginNetworkBridgeCallback;
 import com.operators.infra.Machine;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -30,12 +29,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
     @Override
     public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback, final int totalRetries, int specificRequestTimeout) {
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
-        Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS, new LoginNetworkBridgeCallback() {
-            @Override
-            public void onUrlFailed(ErrorObjectInterface reason) {
-                getMachinesCallback.onGetMachinesFailed(reason);
-            }
-        }).getMachinesForFactory(getMachinesRequest);
+        Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
         call.enqueue(new Callback<MachinesResponse>() {
             @Override
             public void onResponse(Call<MachinesResponse> call, Response<MachinesResponse> response) {

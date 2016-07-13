@@ -30,7 +30,7 @@ import com.operators.logincore.interfaces.LoginUICallback;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.managers.LoginPersistenceManager;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
@@ -57,8 +57,8 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         // For now, It is necessary Settings screen
-        LoginPersistenceManager.getInstance().setTotalRetries(3);
-        LoginPersistenceManager.getInstance().setRequestTimeOut(17);
+        PersistenceManager.getInstance().setTotalRetries(3);
+        PersistenceManager.getInstance().setRequestTimeOut(17);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class LoginFragment extends Fragment {
 
         setActionBar();
 
-        if (LoginPersistenceManager.getInstance().isSelectedMachine()) {
+        if (PersistenceManager.getInstance().isSelectedMachine()) {
             doSilentLogin();
         }
 
@@ -232,15 +232,15 @@ public class LoginFragment extends Fragment {
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
         ProgressDialogManager.show(getActivity());
-        LoginCore.getInstance().login(LoginPersistenceManager.getInstance().getSiteUrl(),
-                LoginPersistenceManager.getInstance().getUserName(),
-                LoginPersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
+        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(),
+                PersistenceManager.getInstance().getUserName(),
+                PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
                     @Override
                     public void onLoginSucceeded(ArrayList<Machine> machines) {
                         ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                         dismissProgressDialog();
                         if (mNavigationCallback != null) {
-                            mNavigationCallback.goToDashboardActivity(LoginPersistenceManager.getInstance().getMachineId());
+                            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
                         }
                     }
 

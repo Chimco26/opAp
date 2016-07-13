@@ -4,8 +4,6 @@ import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServi
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.infra.ErrorObjectInterface;
-import com.operators.infra.LoginNetworkBridgeCallback;
-import com.operators.loginnetworkbridge.LoginNetworkBridge;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -45,17 +43,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl) {
 // -1  to get default timeout
-        return getLoginRetroFitServiceRequests(siteUrl, -1, null, loginNetworkBridgeCallback);
+        return getLoginRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
         } else {
-            Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit, loginNetworkBridgeCallback);
+            Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldLoginServiceRequests);
@@ -64,22 +62,18 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
-        return getMachinesRetroFitServiceRequests(siteUrl, -1, null, loginNetworkBridgeCallback);
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl) {
+        return getMachinesRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit, loginNetworkBridgeCallback);
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
         return retrofit.create(EmeraldGetMachinesServiceRequests.class);
 
     }
 
-    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit, LoginNetworkBridgeCallback loginNetworkBridgeCallback) {
-        HttpUrl httpUrl = HttpUrl.parse(siteUrl);
-        if (httpUrl == null) {
-            loginNetworkBridgeCallback.onUrlFailed(new ErrorObject(ErrorObjectInterface.ErrorCode.Unknown, "Site URL not correct"));
-        }
+    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         OkHttpClient okHttpClient;
         if (timeout >= 0 && timeUnit != null) {
             okHttpClient = new OkHttpClient.Builder()

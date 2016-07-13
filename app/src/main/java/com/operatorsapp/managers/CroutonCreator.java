@@ -34,6 +34,7 @@ public class CroutonCreator {
         Crouton crouton;
         switch (croutonType) {
             case CREDENTIALS_ERROR:
+            case URL_ERROR:
                 crouton = createCrouton(activity, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
                 break;
             case CONNECTIVITY:
@@ -98,6 +99,7 @@ public class CroutonCreator {
         View croutonView = null;
         switch (croutonType) {
             case CREDENTIALS_ERROR:
+            case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
                 break;
             case CONNECTIVITY:
@@ -111,7 +113,7 @@ public class CroutonCreator {
     }
 
     public enum CroutonType {
-        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR
+        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR
     }
 
     public class EmeraldCrouton {

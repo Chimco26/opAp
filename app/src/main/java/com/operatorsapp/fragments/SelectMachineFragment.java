@@ -27,7 +27,7 @@ import com.operators.infra.Machine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
-import com.operatorsapp.managers.LoginPersistenceManager;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
@@ -99,7 +99,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (canGoNext) {
-                    LoginPersistenceManager.getInstance().setMachineId(mMachineId);
+                    PersistenceManager.getInstance().setMachineId(mMachineId);
                     mNavigationCallback.goToDashboardActivity(mMachineId);
                 }
                 return true;
@@ -113,8 +113,8 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 if (mGoButton.isEnabled()) {
-                    LoginPersistenceManager.getInstance().setMachineId(mMachineId);
-                    LoginPersistenceManager.getInstance().setSelectedMachine(true);
+                    PersistenceManager.getInstance().setMachineId(mMachineId);
+                    PersistenceManager.getInstance().setSelectedMachine(true);
                     mNavigationCallback.goToDashboardActivity(mMachineId);
                 }
             }

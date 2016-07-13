@@ -15,7 +15,13 @@ public class ShowCrouton {
     private static final int CROUTON_DURATION = 5000;
 
     public static void croutonError(OnCroutonRequestListener onCroutonRequestListener, ErrorObjectInterface reason) {
-        if (ErrorObject.ErrorCode.Credentials_mismatch.equals(reason.getError())) {
+        if (ErrorObject.ErrorCode.Url_not_correct.equals(reason.getError())) {
+            String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
+            String credentialsError = OperatorApplication.getAppContext().getString(R.string.url_error);
+            final SpannableStringBuilder str = new SpannableStringBuilder(prefix + credentialsError);
+            str.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            showCrouton(onCroutonRequestListener, str, CroutonCreator.CroutonType.URL_ERROR);
+        } else if (ErrorObject.ErrorCode.Credentials_mismatch.equals(reason.getError())) {
             String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
             String credentialsError = OperatorApplication.getAppContext().getString(R.string.credentials_error);
             final SpannableStringBuilder str = new SpannableStringBuilder(prefix + credentialsError);

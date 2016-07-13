@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
-import com.operators.infra.LoginNetworkBridgeCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
 import com.operators.loginnetworkbridge.server.ErrorObject;
@@ -16,6 +15,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,13 +28,14 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
     @Override
     public void login(final String siteUrl, final String userName, final String password, final LoginCoreCallback loginCoreCallback, final int totalRetries, int specificRequestTimeout) {
+        HttpUrl httpUrl = HttpUrl.parse(siteUrl);
+        if (httpUrl == null) {
+            loginCoreCallback.onLoginFailed(new ErrorObject(ErrorObjectInterface.ErrorCode.Url_not_correct, "Site URL is not correct"));
+            return;
+        }
+
         LoginRequest loginRequest = new LoginRequest(userName, password);
-        Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS, new LoginNetworkBridgeCallback() {
-            @Override
-            public void onUrlFailed(ErrorObjectInterface reason) {
-                loginCoreCallback.onLoginFailed(reason);
-            }
-        }).getUserSessionId(loginRequest);
+        Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
         call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {

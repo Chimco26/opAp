@@ -8,7 +8,7 @@ import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
-import com.operatorsapp.managers.LoginPersistenceManager;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -26,7 +26,7 @@ public class OperatorApplication extends Application {
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
-        LoginPersistenceManager.initInstance(msApplicationContext);
+        PersistenceManager.initInstance(msApplicationContext);
         NetworkManager.initInstance();
 
         GetMachinesNetworkBridge getMachinesNetworkBridge = new GetMachinesNetworkBridge();
@@ -35,7 +35,7 @@ public class OperatorApplication extends Application {
         LoginNetworkBridge loginNetworkBridge = new LoginNetworkBridge();
         loginNetworkBridge.inject(NetworkManager.getInstance());
 
-        LoginCore.getInstance().inject(LoginPersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
+        LoginCore.getInstance().inject(PersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
 
 
         if (BuildConfig.DEBUG) {

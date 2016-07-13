@@ -6,9 +6,9 @@ import com.operators.logincore.interfaces.PersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
-public class LoginPersistenceManager implements PersistenceManagerInterface {
+public class PersistenceManager implements PersistenceManagerInterface {
 
-    private static final String LOG_TAG = LoginPersistenceManager.class.getSimpleName();
+    private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
     private static final String PREF_SITE_URL = "pref.PREF_SITE_URL";
     private static final String PREF_USERNAME = "pref.PREF_USERNAME";
@@ -19,24 +19,24 @@ public class LoginPersistenceManager implements PersistenceManagerInterface {
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
 
-    private static LoginPersistenceManager msInstance;
+    private static PersistenceManager msInstance;
 
-    public static LoginPersistenceManager initInstance(Context context) {
+    public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
-            msInstance = new LoginPersistenceManager(context);
+            msInstance = new PersistenceManager(context);
         }
 
         return msInstance;
     }
 
-    public static LoginPersistenceManager getInstance() {
+    public static PersistenceManager getInstance() {
         if (msInstance == null) {
-            ZLogger.e(LOG_TAG, "getInstance(), fail, LoginPersistenceManager is not init");
+            ZLogger.e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
         }
         return msInstance;
     }
 
-    private LoginPersistenceManager(Context context) {
+    private PersistenceManager(Context context) {
         SecurePreferences.initInstance(context);
     }
 

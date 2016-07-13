@@ -7,7 +7,8 @@ public interface ErrorObjectInterface {
         Retrofit,
         SessionInvalid,
         Credentials_mismatch,
-        Get_machines_failed
+        Get_machines_failed,
+        Url_not_correct
     }
 
     ErrorCode getError();
