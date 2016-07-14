@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\ZemingoProjects\operatorsApp\GetMachinesNetworkBridge\src\main\assets"/><source path="C:\ZemingoProjects\operatorsApp\GetMachinesNetworkBridge\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="C:\ZemingoProjects\operatorsApp\GetMachinesNetworkBridge\src\release\assets"/></dataSet></merger>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/_Projects/LogRecorder_trunk/logrecorder/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">LogRecorder</string>
+    <string name="automatic_recordings_are_disabled">Automatic recordings are disabled</string>
+    <string name="email_feedback_body">User name: %1$s\nApplication version: %2$s\nDevice model: %3$s\nAndroid sdk version: %4$s</string>
+    <string name="email_feedback_subject">Feedback for FLIR FX app</string>
+    <string name="log_files_do_not_exist">No log files available</string>
+    <string name="marketing_data_unavailable">LP:Information is unavailable</string>
+    <string name="ok">OK</string>
+    <string name="title_activity_log_test">LogTestActivity</string>
+</resources>
