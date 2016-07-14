@@ -23,7 +23,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<ShiftLog> mShiftLogs;
     private boolean mClosedState;
-    private float mAlpha;
 
     public ShiftLogAdapter(Context context, ArrayList<ShiftLog> shiftLogs, boolean closedState) {
         mShiftLogs = shiftLogs;
@@ -35,13 +34,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         mClosedState = closedState;
     }
 
-    public void changeAlpha(float alpha) {
-        mAlpha = alpha;
-    }
-
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
-        private View mPriority;
         private AutofitTextView mTitle;
         private ImageView mIcon;
         private TextView mSubtitle;
@@ -49,7 +43,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         public ShiftLogViewHolder(View itemView) {
             super(itemView);
-            mPriority = itemView.findViewById(R.id.shift_log_item_priority);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mSubtitle = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle);
@@ -69,14 +62,13 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         final ShiftLogViewHolder shiftLogViewHolder = (ShiftLogViewHolder) holder;
 
         if (shiftLog.isPriority()) {
-            shiftLogViewHolder.mPriority.setBackgroundResource(R.color.C3);
+            holder.itemView.setBackgroundResource(R.color.C3T);
         } else {
-            shiftLogViewHolder.mPriority.setBackgroundResource(R.color.white);
+            holder.itemView.setBackgroundResource(R.color.white);
         }
         shiftLogViewHolder.mTitle.setText(shiftLog.getTitle());
         shiftLogViewHolder.mIcon.setImageResource(shiftLog.getIcon());
         shiftLogViewHolder.mSubtitle.setText(shiftLog.getSubtitle());
-        shiftLogViewHolder.mSubtitle.setAlpha(mAlpha);
         if (mClosedState) {
             shiftLogViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
         } else {

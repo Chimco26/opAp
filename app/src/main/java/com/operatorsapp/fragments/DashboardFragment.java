@@ -121,7 +121,7 @@ public class DashboardFragment extends Fragment {
         mArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
+                final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
@@ -150,21 +150,20 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
+                final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        //set subTitle invisible in adapter
+                        mShiftLogAdapter.changeState(true);
+                        mShiftLogAdapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
-                        //set subTitle invisible in adapter
-                        mShiftLogAdapter.changeState(true);
-                        mShiftLogAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -190,8 +189,7 @@ public class DashboardFragment extends Fragment {
                             mLeftLayout.requestLayout();
                             mDownX = (int) event.getRawX();
                             //set subTitle invisible in adapter
-//                            mShiftLogAdapter.changeState(currentX < betweenWidth);
-                            mShiftLogAdapter.changeAlpha((float) currentX / 1000);
+                            mShiftLogAdapter.changeState(currentX < betweenWidth);
                             mShiftLogAdapter.notifyDataSetChanged();
                         }
                         break;

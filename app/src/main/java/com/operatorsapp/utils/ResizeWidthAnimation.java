@@ -10,6 +10,7 @@ public class ResizeWidthAnimation extends Animation {
     private int mWidth;
     private int mStartWidth;
     private View mLeftView;
+    private int mNewWith;
 
     public ResizeWidthAnimation(View leftView, int width) {
         mLeftView = leftView;
@@ -19,9 +20,9 @@ public class ResizeWidthAnimation extends Animation {
 
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
-        int newWith = mStartWidth + (int) ((mWidth - mStartWidth) * interpolatedTime);
+        mNewWith = mStartWidth + (int) ((mWidth - mStartWidth) * interpolatedTime);
 
-        mLeftView.getLayoutParams().width = newWith;
+        mLeftView.getLayoutParams().width = mNewWith;
         mLeftView.requestLayout();
     }
 
@@ -35,4 +36,7 @@ public class ResizeWidthAnimation extends Animation {
         return true;
     }
 
+    public int getNewWith() {
+        return mNewWith;
+    }
 }

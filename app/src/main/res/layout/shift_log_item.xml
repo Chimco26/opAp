@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="130dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,12 +10,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal">
-
-        <View
-            android:id="@+id/shift_log_item_priority"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:background="@color/C3" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textSize="35sp"
