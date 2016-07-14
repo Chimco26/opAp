@@ -13,7 +13,7 @@ import com.operatorsapp.managers.CroutonCreator;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener  {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;

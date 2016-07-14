@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -44,12 +43,13 @@ public class DashboardFragment extends Fragment {
     private OnCroutonRequestListener mCroutonCallback;
 
     private RecyclerView mShiftLogRecycler;
-    private ArrayList<ShiftLog> mShiftLogs;
+    private ArrayList<ShiftLog> mShiftLogsList;
     private View mDividerView;
     private LinearLayout mLeftLayout, mRightLayout;
     private ImageView mArrowLeft;
     private ImageView mArrowRight;
-    private int downX;
+    private int mDownX;
+    private ShiftLogAdapter mShiftLogAdapter;
 
     public static DashboardFragment newInstance() {
         return new DashboardFragment();
@@ -58,32 +58,32 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mShiftLogs = new ArrayList<>();
+        mShiftLogsList = new ArrayList<>();
 
         ShiftLog s1 = new ShiftLog();
         s1.setPriority(true);
-        s1.setIcon(R.drawable.logo);
+        s1.setIcon(R.drawable.face);
         s1.setTitle("Machine Stopped");
         s1.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
         s1.setTime("17:30");
 
         ShiftLog s2 = new ShiftLog();
-        s2.setPriority(true);
-        s2.setIcon(R.drawable.bg_factory);
+        s2.setPriority(false);
+        s2.setIcon(R.drawable.face);
         s2.setTitle("Material Weight Low");
         s2.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
         s2.setTime("17:30");
 
         ShiftLog s3 = new ShiftLog();
         s3.setPriority(true);
-        s3.setIcon(R.drawable.btn_x);
+        s3.setIcon(R.drawable.face);
         s3.setTitle("Cycle Time High");
         s3.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
         s3.setTime("17:30");
 
-        mShiftLogs.add(s1);
-        mShiftLogs.add(s2);
-        mShiftLogs.add(s3);
+        mShiftLogsList.add(s1);
+        mShiftLogsList.add(s2);
+        mShiftLogsList.add(s3);
 
         setActionBar();
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -104,7 +104,8 @@ public class DashboardFragment extends Fragment {
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
-        mShiftLogRecycler.setAdapter(new ShiftLogAdapter(getActivity(), mShiftLogs));
+        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
@@ -120,7 +121,7 @@ public class DashboardFragment extends Fragment {
         mArrowLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mRightLayout, openWidth, true);
+                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
@@ -131,7 +132,10 @@ public class DashboardFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        openWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams);
+                        toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
+                        //set subTitle visible in adapter
+                        mShiftLogAdapter.changeState(false);
+                        mShiftLogAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -146,7 +150,7 @@ public class DashboardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mRightLayout, closeWidth, false);
+                ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
@@ -157,7 +161,10 @@ public class DashboardFragment extends Fragment {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        closeWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams);
+                        toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
+                        //set subTitle invisible in adapter
+                        mShiftLogAdapter.changeState(true);
+                        mShiftLogAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -170,27 +177,29 @@ public class DashboardFragment extends Fragment {
 
         mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
-
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        downX = (int) event.getRawX();
+                        mDownX = (int) event.getRawX();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        int currentX = mLeftLayout.getLayoutParams().width + (int) event.getRawX() - downX;
+                        int currentX = mLeftLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
                         if (currentX >= closeWidth && currentX <= openWidth) {
                             mLeftLayout.getLayoutParams().width = currentX;
                             mLeftLayout.requestLayout();
-                            downX = (int) event.getRawX();
+                            mDownX = (int) event.getRawX();
+                            //set subTitle invisible in adapter
+//                            mShiftLogAdapter.changeState(currentX < betweenWidth);
+                            mShiftLogAdapter.changeAlpha((float) currentX / 1000);
+                            mShiftLogAdapter.notifyDataSetChanged();
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         if (mLeftLayoutParams.width < betweenWidth) {
-                            closeWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams);
+                            toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
                         } else {
-                            openWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams);
+                            toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                         }
                         break;
                 }
@@ -199,22 +208,20 @@ public class DashboardFragment extends Fragment {
         });
     }
 
-    private void openWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int openWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
-        mLeftLayoutParams.width = openWidth;
-        mRightLayoutParams.setMarginStart(openWidth);
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open) {
+        mLeftLayoutParams.width = newWidth;
+        mRightLayoutParams.setMarginStart(newWidth);
         mLeftLayout.requestLayout();
         mRightLayout.setLayoutParams(mRightLayoutParams);
-        mArrowLeft.setVisibility(View.INVISIBLE);
-        mArrowRight.setVisibility(View.VISIBLE);
-    }
-
-    private void closeWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int closeWidth, ViewGroup.MarginLayoutParams mRightLayoutParams) {
-        mLeftLayoutParams.width = closeWidth;
-        mRightLayoutParams.setMarginStart(closeWidth);
-        mLeftLayout.requestLayout();
-        mRightLayout.setLayoutParams(mRightLayoutParams);
-        mArrowLeft.setVisibility(View.VISIBLE);
-        mArrowRight.setVisibility(View.INVISIBLE);
+        if (open) {
+            mArrowLeft.setVisibility(View.INVISIBLE);
+            mArrowRight.setVisibility(View.VISIBLE);
+        } else {
+            mArrowLeft.setVisibility(View.VISIBLE);
+            mArrowRight.setVisibility(View.INVISIBLE);
+        }
+        mShiftLogAdapter.changeState(!open);
+        mShiftLogAdapter.notifyDataSetChanged();
     }
 
     @Override

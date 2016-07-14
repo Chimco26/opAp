@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment {
             mNavigationCallback = (OnGoToScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
+            throw new ClassCastException("Calling fragment must implement interface");
         }
     }
 
