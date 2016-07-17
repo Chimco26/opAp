@@ -4,8 +4,11 @@ import android.app.Application;
 import android.content.Context;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
+import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
+import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
+import com.operators.machinestatuscore.MachineStatusCore;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
@@ -15,11 +18,13 @@ import com.zemingo.logrecorder.ZLogger;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
-public class OperatorApplication extends Application {
+public class OperatorApplication extends Application
+{
     private static Context msApplicationContext;
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
 
         msApplicationContext = getApplicationContext();
@@ -34,16 +39,18 @@ public class OperatorApplication extends Application {
 
         LoginNetworkBridge loginNetworkBridge = new LoginNetworkBridge();
         loginNetworkBridge.inject(NetworkManager.getInstance());
-
         LoginCore.getInstance().inject(PersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
 
 
-        if (BuildConfig.DEBUG) {
+
+        if (BuildConfig.DEBUG)
+        {
             ZLogger.DEBUG = true;
         }
     }
 
-    public static Context getAppContext() {
+    public static Context getAppContext()
+    {
         return msApplicationContext;
     }
 }

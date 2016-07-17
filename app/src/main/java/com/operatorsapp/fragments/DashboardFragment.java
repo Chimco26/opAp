@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,20 +28,25 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.operators.infra.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.FragmentUiListener;
+import com.operatorsapp.interfaces.MSDUIListener;
 import com.operatorsapp.model.ShiftLog;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements MSDUIListener
+{
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     public static final int DURATION_MILLIS = 200;
     private OnCroutonRequestListener mCroutonCallback;
+    private FragmentUiListener mFragmentUiListener;
 
     private RecyclerView mShiftLogRecycler;
     private ArrayList<ShiftLog> mShiftLogsList;
@@ -51,13 +57,21 @@ public class DashboardFragment extends Fragment {
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
 
-    public static DashboardFragment newInstance() {
+    private TextView mProductNameTextView;
+    private TextView mProductIdTextView;
+    private TextView mJobIdTextView;
+    private TextView mShiftIdTextView;
+    private TextView mTimerTextView;
+
+    public static DashboardFragment newInstance()
+    {
         return new DashboardFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         mShiftLogsList = new ArrayList<>();
 
         ShiftLog s1 = new ShiftLog();
@@ -90,7 +104,8 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         // get screen parameters
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -118,20 +133,25 @@ public class DashboardFragment extends Fragment {
         mRightLayout.setLayoutParams(mRightLayoutParams);
 
         mArrowLeft = (ImageView) view.findViewById(R.id.fragment_dashboard_arrow_right);
-        mArrowLeft.setOnClickListener(new View.OnClickListener() {
+        mArrowLeft.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
+                anim.setAnimationListener(new Animation.AnimationListener()
+                {
                     @Override
-                    public void onAnimationStart(Animation animation) {
+                    public void onAnimationStart(Animation animation)
+                    {
 
                     }
 
                     @Override
-                    public void onAnimationEnd(Animation animation) {
+                    public void onAnimationEnd(Animation animation)
+                    {
                         toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                         //set subTitle visible in adapter
                         mShiftLogAdapter.changeState(false);
@@ -139,28 +159,34 @@ public class DashboardFragment extends Fragment {
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animation animation) {
+                    public void onAnimationRepeat(Animation animation)
+                    {
 
                     }
                 });
             }
         });
         mArrowRight = (ImageView) view.findViewById(R.id.fragment_dashboard_arrow_left);
-        mArrowRight.setOnClickListener(new View.OnClickListener() {
+        mArrowRight.setOnClickListener(new View.OnClickListener()
+        {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
                 anim.setDuration(DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
+                anim.setAnimationListener(new Animation.AnimationListener()
+                {
                     @Override
-                    public void onAnimationStart(Animation animation) {
+                    public void onAnimationStart(Animation animation)
+                    {
 
                     }
 
                     @Override
-                    public void onAnimationEnd(Animation animation) {
+                    public void onAnimationEnd(Animation animation)
+                    {
                         toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
                         //set subTitle invisible in adapter
                         mShiftLogAdapter.changeState(true);
@@ -168,7 +194,8 @@ public class DashboardFragment extends Fragment {
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animation animation) {
+                    public void onAnimationRepeat(Animation animation)
+                    {
 
                     }
                 });
@@ -176,16 +203,20 @@ public class DashboardFragment extends Fragment {
         });
 
         mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
-        mDividerView.setOnTouchListener(new View.OnTouchListener() {
+        mDividerView.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                switch (event.getAction())
+                {
                     case MotionEvent.ACTION_DOWN:
                         mDownX = (int) event.getRawX();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         int currentX = mLeftLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
-                        if (currentX >= closeWidth && currentX <= openWidth) {
+                        if (currentX >= closeWidth && currentX <= openWidth)
+                        {
                             mLeftLayout.getLayoutParams().width = currentX;
                             mLeftLayout.requestLayout();
                             mDownX = (int) event.getRawX();
@@ -196,9 +227,12 @@ public class DashboardFragment extends Fragment {
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (mLeftLayoutParams.width < betweenWidth) {
+                        if (mLeftLayoutParams.width < betweenWidth)
+                        {
                             toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
-                        } else {
+                        }
+                        else
+                        {
                             toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                         }
                         break;
@@ -206,17 +240,27 @@ public class DashboardFragment extends Fragment {
                 return false;
             }
         });
+
+        mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
+        mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
+        mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
+        mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
+        mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
     }
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open)
+    {
         mLeftLayoutParams.width = newWidth;
         mRightLayoutParams.setMarginStart(newWidth);
         mLeftLayout.requestLayout();
         mRightLayout.setLayoutParams(mRightLayoutParams);
-        if (open) {
+        if (open)
+        {
             mArrowLeft.setVisibility(View.INVISIBLE);
             mArrowRight.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else
+        {
             mArrowLeft.setVisibility(View.VISIBLE);
             mArrowRight.setVisibility(View.INVISIBLE);
         }
@@ -225,24 +269,36 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        try {
+        try
+        {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
-        } catch (ClassCastException e) {
+            mFragmentUiListener = (FragmentUiListener) context;
+            mFragmentUiListener.onFragmentAttached(this);
+
+        }
+        catch (ClassCastException e)
+        {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mCroutonCallback = null;
+        mFragmentUiListener = null;
     }
 
-    private void setActionBar() {
+
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -266,4 +322,21 @@ public class DashboardFragment extends Fragment {
             actionBar.setIcon(R.drawable.logo);
         }
     }
+
+    @Override
+    public void onDeviceStatusChanged(MachineStatus machineStatus)
+    {
+        Log.i(LOG_TAG, "onDeviceStatusChanged()");
+        mProductNameTextView.setText(machineStatus.getProductName());
+        mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
+        mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
+        mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours)
+    {
+        mTimerTextView.setText(timeToEndInHours);
+    }
+
 }

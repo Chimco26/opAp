@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <LinearLayout
         android:id="@+id/fragment_dashboard_rightLayout"
         android:layout_width="match_parent"
@@ -62,4 +64,59 @@
         android:paddingEnd="5dp"
         android:src="@drawable/double_right_arrow" />
 
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/C2">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/text_view_product_name"
+            android:text="product_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="product_id"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/text_view_product_id"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="job_id"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/text_view_job_id"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="shift_id"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/text_view_shift_id"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="timer"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/text_view_timer"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </RelativeLayout>

@@ -1,1 +1,1 @@
-include ':app', ':LoginCore', ':LoginNetworkBridge', ':Infra', ':GetMachinesNetworkBridge'
+include ':app', ':LoginCore', ':LoginNetworkBridge', ':Infra', ':GetMachinesNetworkBridge', ':GetMachinesStatusNetworkBridge', ':MachineStatusCore'

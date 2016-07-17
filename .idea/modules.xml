@@ -3,12 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GetMachinesStatusNetworkBridge/GetMachinesStatusNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesStatusNetworkBridge/GetMachinesStatusNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/infra/Infra.iml" filepath="$PROJECT_DIR$/infra/Infra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeaderMES-operators.iml" filepath="$PROJECT_DIR$/LeaderMES-operators.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" filepath="$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/operatorsApp.iml" filepath="$PROJECT_DIR$/operatorsApp.iml" />
     </modules>
   </component>
 </project>

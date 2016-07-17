@@ -2,7 +2,7 @@ package com.operatorsapp.managers;
 
 import android.content.Context;
 
-import com.operators.logincore.interfaces.PersistenceManagerInterface;
+import com.operators.infra.PersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
