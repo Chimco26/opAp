@@ -68,12 +68,12 @@ public class RetrofitMockClient implements Interceptor {
                 case "GetMachineData":
                     responseString = "{\"error\":null,\"machineStatus\":{\n" +
                             "    \"MachineID\": 29,\n" +
-                            "    \"MachineLname\": \"6\",\n" +
+                            "    \"MachineLname\": \"Pokemon creator\",\n" +
                             "    \"MachineName\": \"65\",\n" +
                             "    \"MachineStatusEname\": \"Stop\",\n" +
                             "    \"MachineStatusID\": 3,\n" +
                             "    \"MachineStatusName\": \"6\",\t\n" +
-                            "    \"MachineStatusEname\": \"Stop\",\n" +
+                            "    \"MachineStatusEname\": \"Processing\",\n" +
                             "    \"OperatorID\": 234,\n" +
                             "    \"operatorName\": \"opi the operator\",\n" +
                             "    \"productName\": \"Pokemon\",\n" +

@@ -2,6 +2,7 @@ package com.operatorsapp.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -11,6 +12,7 @@ import com.operators.infra.MachineStatus;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.FragmentUiListener;
@@ -27,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, FragmentUiListener
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, FragmentUiListener, OnGoToScreenListener
 {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
@@ -82,9 +84,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         };
 
-
         PollingManager.getInstance().register(job, 0, TimeUnit.SECONDS);
-        job.startJob(0, 5, TimeUnit.SECONDS);
+        job.startJob(0, 60, TimeUnit.SECONDS);
 
     }
 
@@ -117,5 +118,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onFragmentAttached(MSDUIListener msduiListener)
     {
         mMSDUIListener = msduiListener;
+    }
+
+    @Override
+    public void goToFragment(Fragment fragment, boolean addToBackStack)
+    {
+        if (addToBackStack)
+        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
+        }
+        else
+        {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
+        }
+    }
+
+    @Override
+    public void goToDashboardActivity(int machine)
+    {
+
     }
 }

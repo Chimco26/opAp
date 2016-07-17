@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,8 @@ import android.widget.TextView;
 
 import com.operators.infra.MachineStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
+import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -46,6 +49,7 @@ public class DashboardFragment extends Fragment implements MSDUIListener
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     public static final int DURATION_MILLIS = 200;
     private OnCroutonRequestListener mCroutonCallback;
+    private OnGoToScreenListener mOnGoToScreenListener;
     private FragmentUiListener mFragmentUiListener;
 
     private RecyclerView mShiftLogRecycler;
@@ -62,6 +66,11 @@ public class DashboardFragment extends Fragment implements MSDUIListener
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
     private TextView mTimerTextView;
+    private TextView mMachineIdStatusBarTextView;
+    private TextView mMachineStatusStatusBarTextView;
+
+    private boolean mIsFirstJobSpinnerSelection = true;
+    private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance()
     {
@@ -74,30 +83,30 @@ public class DashboardFragment extends Fragment implements MSDUIListener
     {
         mShiftLogsList = new ArrayList<>();
 
-        ShiftLog s1 = new ShiftLog();
-        s1.setPriority(true);
-        s1.setIcon(R.drawable.face);
-        s1.setTitle("Machine Stopped");
-        s1.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s1.setTime("17:30");
+        ShiftLog shiftLog = new ShiftLog();
+        shiftLog.setPriority(true);
+        shiftLog.setIcon(R.drawable.face);
+        shiftLog.setTitle("Machine Stopped");
+        shiftLog.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
+        shiftLog.setTime("17:30");
 
-        ShiftLog s2 = new ShiftLog();
-        s2.setPriority(false);
-        s2.setIcon(R.drawable.face);
-        s2.setTitle("Material Weight Low");
-        s2.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s2.setTime("17:30");
+        ShiftLog shiftLog1 = new ShiftLog();
+        shiftLog1.setPriority(false);
+        shiftLog1.setIcon(R.drawable.face);
+        shiftLog1.setTitle("Material Weight Low");
+        shiftLog1.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
+        shiftLog1.setTime("17:30");
 
-        ShiftLog s3 = new ShiftLog();
-        s3.setPriority(true);
-        s3.setIcon(R.drawable.face);
-        s3.setTitle("Cycle Time High");
-        s3.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s3.setTime("17:30");
+        ShiftLog shiftLog2 = new ShiftLog();
+        shiftLog2.setPriority(true);
+        shiftLog2.setIcon(R.drawable.face);
+        shiftLog2.setTitle("Cycle Time High");
+        shiftLog2.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
+        shiftLog2.setTime("17:30");
 
-        mShiftLogsList.add(s1);
-        mShiftLogsList.add(s2);
-        mShiftLogsList.add(s3);
+        mShiftLogsList.add(shiftLog);
+        mShiftLogsList.add(shiftLog1);
+        mShiftLogsList.add(shiftLog2);
 
         setActionBar();
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -248,6 +257,18 @@ public class DashboardFragment extends Fragment implements MSDUIListener
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
     }
 
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        mIsFirstJobSpinnerSelection = true;
+        if (mCurrentMachineStatus != null)
+        {
+            initStatusLayout(mCurrentMachineStatus);
+        }
+    }
+
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open)
     {
         mLeftLayoutParams.width = newWidth;
@@ -275,6 +296,7 @@ public class DashboardFragment extends Fragment implements MSDUIListener
         try
         {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
+            mOnGoToScreenListener = (OnGoToScreenListener) getActivity();
             mFragmentUiListener = (FragmentUiListener) context;
             mFragmentUiListener.onFragmentAttached(this);
 
@@ -310,16 +332,55 @@ public class DashboardFragment extends Fragment implements MSDUIListener
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
-            ((TextView) view.findViewById(R.id.toolbar_title)).setText(s);
-            Spinner spinner = (Spinner) view.findViewById(R.id.toolbar_operator_spinner);
-            final String[] data = new String[2];
-            data[0] = "Sign in";
-            data[1] = "Sergey";
-            final ArrayAdapter<String> adapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, data);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+            TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
+            title.setText(s);
+            title.setVisibility(View.GONE);
+
+            Spinner operatorsSpinner = (Spinner) view.findViewById(R.id.toolbar_operator_spinner);
+            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.operators_spinner_array));
+            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
+
+
+            Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
+            final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
+            jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            jobsSpinner.setAdapter(jobsSpinnerAdapter);
+
+            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                    if (!mIsFirstJobSpinnerSelection)
+                    {
+                        Log.i(LOG_TAG, "Selected: " + position);
+                        if (position == 0)
+                        {
+                            mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                            mIsFirstJobSpinnerSelection = true;
+                        }
+                    }
+                    else
+                    {
+                        mIsFirstJobSpinnerSelection = false;
+                        Log.i(LOG_TAG, "Is First: " + mIsFirstJobSpinnerSelection);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent)
+                {
+
+                }
+            });
+
+
+            mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
+            mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             actionBar.setCustomView(view);
-            actionBar.setIcon(R.drawable.logo);
+//            actionBar.setIcon(R.drawable.logo);
         }
     }
 
@@ -327,10 +388,19 @@ public class DashboardFragment extends Fragment implements MSDUIListener
     public void onDeviceStatusChanged(MachineStatus machineStatus)
     {
         Log.i(LOG_TAG, "onDeviceStatusChanged()");
+        mCurrentMachineStatus = machineStatus;
+        initStatusLayout(mCurrentMachineStatus);
+
+    }
+
+    private void initStatusLayout(MachineStatus machineStatus)
+    {
         mProductNameTextView.setText(machineStatus.getProductName());
         mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));
+        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getMachineLname()));
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getMachineStatusEname()));
     }
 
     @Override

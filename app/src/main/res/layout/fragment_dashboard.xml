@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -15,7 +14,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/bg_factory" />
+            android:src="@drawable/bg_factory"/>
     </LinearLayout>
 
     <LinearLayout
@@ -23,14 +22,15 @@
         android:layout_width="340dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
+        android:layout_below="@+id/status_layout"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_dashboard_shift_log"
-            android:layout_marginRight="45dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginRight="45dp"/>
 
     </LinearLayout>
 
@@ -40,7 +40,7 @@
         android:layout_height="match_parent"
         android:layout_alignEnd="@id/fragment_dashboard_leftLayout"
         android:background="@android:color/transparent"
-        android:clickable="true" />
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/fragment_dashboard_arrow_left"
@@ -51,7 +51,7 @@
         android:paddingBottom="5dp"
         android:paddingEnd="5dp"
         android:src="@drawable/double_left_arrow"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
 
     <ImageView
@@ -62,60 +62,72 @@
         android:layout_centerVertical="true"
         android:paddingBottom="5dp"
         android:paddingEnd="5dp"
-        android:src="@drawable/double_right_arrow" />
-
+        android:src="@drawable/double_right_arrow"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/C2">
+        android:background="@color/C2"
+        android:orientation="vertical"
+        android:id="@+id/status_layout">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/text_view_product_name"
-            android:text="product_name"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="product_id"
             android:layout_marginLeft="20dp"
-            android:id="@+id/text_view_product_id"/>
+            android:layout_marginTop="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="job_id"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/text_view_job_id"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="shift_id"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/text_view_shift_id"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="timer"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/text_view_timer"/>
+            <TextView
+                android:id="@+id/text_view_product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="product_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@color/C20"/>
+
+            <TextView
+                android:id="@+id/text_view_product_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="product_id"
+                android:textColor="@color/status_bar"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/text_view_job_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="job_id"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/text_view_shift_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="shift_id"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/text_view_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="timer"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>
 
     </LinearLayout>

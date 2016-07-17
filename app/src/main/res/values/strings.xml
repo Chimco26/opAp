@@ -42,4 +42,24 @@
     <string name="go">Go</string>
     <string name="machine_id_name">Machine ID Name</string>
     <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
+    <string name="jobs_actions">Jobs actions</string>
+    <string name="job_id">JOB ID</string>
+    <string name="product_name">Product Name</string>
+    <string name="erp">ERP</string>
+    <string name="planned_start">Planned Start</string>
+    <string name="number_of_units">Number Of Units</string>
+
+
+    <array name="operators_spinner_array">
+        <item>Sign In</item>
+        <item>Sergey</item>
+        <item>Yossi</item>
+    </array>
+
+    <array name="jobs_spinner_array">
+        <item>New Job</item>
+        <item>Report Direct</item>
+        <item>Split Job</item>
+        <item>Report Production</item>
+    </array>
 </resources>
