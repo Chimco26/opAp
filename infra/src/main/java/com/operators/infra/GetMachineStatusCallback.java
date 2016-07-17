@@ -6,5 +6,5 @@ public interface GetMachineStatusCallback<T>
 {
     void onGetMachineStatusSucceeded(MachineStatus machineStatus);
 
-    void onGetMachineStatusFailed();
+    void onGetMachineStatusFailed(ErrorObjectInterface reason);
 }

@@ -6,7 +6,8 @@ import com.operators.infra.PersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
-public class PersistenceManager implements PersistenceManagerInterface {
+public class PersistenceManager implements PersistenceManagerInterface
+{
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
@@ -21,98 +22,122 @@ public class PersistenceManager implements PersistenceManagerInterface {
 
     private static PersistenceManager msInstance;
 
-    public static PersistenceManager initInstance(Context context) {
-        if (msInstance == null) {
+    public static PersistenceManager initInstance(Context context)
+    {
+        if (msInstance == null)
+        {
             msInstance = new PersistenceManager(context);
         }
 
         return msInstance;
     }
 
-    public static PersistenceManager getInstance() {
-        if (msInstance == null) {
+    public static PersistenceManager getInstance()
+    {
+        if (msInstance == null)
+        {
             ZLogger.e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
         }
         return msInstance;
     }
 
-    private PersistenceManager(Context context) {
+    private PersistenceManager(Context context)
+    {
         SecurePreferences.initInstance(context);
     }
 
     @Override
-    public String getSiteUrl() {
+    public String getSiteUrl()
+    {
         return SecurePreferences.getInstance().getString(PREF_SITE_URL);
     }
 
     @Override
-    public void setSiteUrl(String siteUrl) {
+    public void setSiteUrl(String siteUrl)
+    {
         SecurePreferences.getInstance().setString(PREF_SITE_URL, siteUrl);
     }
 
     @Override
-    public String getUserName() {
+    public String getUserName()
+    {
         return SecurePreferences.getInstance().getString(PREF_USERNAME);
     }
 
     @Override
-    public void setUsername(String username) {
+    public void setUsername(String username)
+    {
         SecurePreferences.getInstance().setString(PREF_USERNAME, username);
     }
 
     @Override
-    public String getPassword() {
+    public String getPassword()
+    {
         return SecurePreferences.getInstance().getString(PREF_PASSWORD);
     }
 
     @Override
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         SecurePreferences.getInstance().setString(PREF_PASSWORD, password);
     }
 
     @Override
-    public String getSessionId() {
+    public String getSessionId()
+    {
         return SecurePreferences.getInstance().getString(PREF_SESSION_ID);
     }
 
     @Override
-    public void setSessionId(String sessionId) {
+    public void setSessionId(String sessionId)
+    {
         SecurePreferences.getInstance().setString(PREF_SESSION_ID, sessionId);
     }
 
-    public int getMachineId() {
+
+    @Override
+    public int getMachineId()
+    {
         return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID);
     }
 
-    public void setMachineId(int machineId) {
+    @Override
+    public void setMachineId(int machineId)
+    {
         SecurePreferences.getInstance().setInt(PREF_MACHINE_ID, machineId);
     }
 
-    public boolean isSelectedMachine() {
+    public boolean isSelectedMachine()
+    {
         return SecurePreferences.getInstance().getBoolean(PREF_SELECTED_MACHINE, false);
     }
 
-    public void setSelectedMachine(boolean selected) {
+    public void setSelectedMachine(boolean selected)
+    {
         SecurePreferences.getInstance().setBoolean(PREF_SELECTED_MACHINE, selected);
     }
 
     @Override
-    public int getTotalRetries() {
+    public int getTotalRetries()
+    {
         return SecurePreferences.getInstance().getInt(PREF_TOTAL_RETRIES);
     }
 
     @Override
-    public void setTotalRetries(int totalRetries) {
+    public void setTotalRetries(int totalRetries)
+    {
         SecurePreferences.getInstance().setInt(PREF_TOTAL_RETRIES, totalRetries);
     }
 
     @Override
-    public int getRequestTimeout() {
+    public int getRequestTimeout()
+    {
         return SecurePreferences.getInstance().getInt(PREF_REQUEST_TIMEOUT);
     }
 
     @Override
-    public void setRequestTimeOut(int requestTimeOut) {
+    public void setRequestTimeOut(int requestTimeOut)
+    {
         SecurePreferences.getInstance().setInt(PREF_REQUEST_TIMEOUT, requestTimeOut);
     }
 

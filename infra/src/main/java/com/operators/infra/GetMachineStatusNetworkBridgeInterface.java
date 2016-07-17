@@ -5,5 +5,5 @@ package com.operators.infra;
  */
 public interface GetMachineStatusNetworkBridgeInterface
 {
-    void getMachineStatus(String siteUrl,String sessionId, String machineId, GetMachineStatusCallback callback, int totalRetries, int specificRequestTimeout);
+    void getMachineStatus(String siteUrl,String sessionId, int machineId, GetMachineStatusCallback callback, int totalRetries, int specificRequestTimeout);
 }

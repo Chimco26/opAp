@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
+import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.MachineStatus;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
@@ -15,26 +17,22 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.interfaces.FragmentUiListener;
-import com.operatorsapp.interfaces.MSDUIListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.polling.EmeraldJobBase;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-import com.zemingo.pollingmachanaim.PollingManager;
-
-import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, FragmentUiListener, OnGoToScreenListener
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, OnGoToScreenListener
 {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
-    private MSDUIListener mMSDUIListener;
+    private DashboardUICallbackListener mDashboardUICallbackListener;
+    private MachineStatusCore mMachineStatusCore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,44 +47,63 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-        final MachineStatusCore machineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
+        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
 
-        EmeraldJobBase job = new EmeraldJobBase()
+
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mMachineStatusCore.stopPolling();
+        mMachineStatusCore.unregisterListener();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mMachineStatusCore.registerListener(new MachineStatusUICallback()
         {
             @Override
-            protected void executeJob(final OnJobFinishedListener onJobFinishedListener)
+            public void onStatusReceivedSuccessfully(MachineStatus machineStatus)
             {
-                machineStatusCore.getMachineStatus(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), String.valueOf(PersistenceManager.getInstance().getMachineId()), new MachineStatusUICallback()
+                if (mDashboardUICallbackListener != null)
                 {
-                    @Override
-                    public void onStatusReceivedSuccessfully(MachineStatus machineStatus)
-                    {
-                        ZLogger.i(LOG_TAG, "received");
-                        mMSDUIListener.onDeviceStatusChanged(machineStatus);
-                        onJobFinishedListener.onJobFinished();
-                    }
+                    mDashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
+                }
+                else
+                {
+                    Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
 
-                    @Override
-                    public void onTimerChanged(String timeToEndInHours)
-                    {
-                        mMSDUIListener.onTimerChanged(timeToEndInHours);
-                    }
-
-                    @Override
-                    public void onStatusReceiveFailed()
-                    {
-                        ZLogger.i(LOG_TAG, "onStatusReceiveFailed()");
-
-                    }
-                });
+                }
             }
-        };
 
-        PollingManager.getInstance().register(job, 0, TimeUnit.SECONDS);
-        job.startJob(0, 60, TimeUnit.SECONDS);
+            @Override
+            public void onTimerChanged(String timeToEndInHours)
+            {
+                if (mDashboardUICallbackListener != null)
+                {
+                    mDashboardUICallbackListener.onTimerChanged(timeToEndInHours);
+                }
+                else
+                {
+                    Log.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
+                }
+            }
 
+            @Override
+            public void onStatusReceiveFailed(ErrorObjectInterface reason)
+            {
+                ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
+            }
+        });
+
+
+        mMachineStatusCore.startPolling();
     }
 
     @Override
@@ -115,9 +132,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     @Override
-    public void onFragmentAttached(MSDUIListener msduiListener)
+    public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener)
     {
-        mMSDUIListener = msduiListener;
+        mDashboardUICallbackListener = dashboardUICallbackListener;
     }
 
     @Override

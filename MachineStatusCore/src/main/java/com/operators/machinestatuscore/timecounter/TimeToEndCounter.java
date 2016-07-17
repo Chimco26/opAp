@@ -40,7 +40,6 @@ public class TimeToEndCounter
 
             public void onFinish()
             {
-
                 mOnTimeToEndChangedListener.onTimeToEndChanged(ZERO_TIME);
                 Log.i(LOG_TAG, "onFinish()");
             }

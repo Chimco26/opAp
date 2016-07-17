@@ -16,6 +16,8 @@ public interface PersistenceManagerInterface {
 
     int getRequestTimeout();
 
+    int getMachineId();
+
 
     void setSiteUrl(String siteUrl);
 
@@ -28,5 +30,7 @@ public interface PersistenceManagerInterface {
     void setTotalRetries(int totalRetries);
 
     void setRequestTimeOut(int requestTimeOut);
+
+    void setMachineId(int machineId);
 
 }

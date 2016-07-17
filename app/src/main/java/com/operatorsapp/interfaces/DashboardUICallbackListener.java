@@ -6,7 +6,7 @@ import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
 /**
  * Created by User on 14/07/2016.
  */
-public interface MSDUIListener
+public interface DashboardUICallbackListener
 {
   void onDeviceStatusChanged(MachineStatus machineStatus);
   void onTimerChanged(String timeToEndInHours);

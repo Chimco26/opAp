@@ -2,7 +2,6 @@ package com.operatorsapp.adapters;
 
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,8 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     public JobsRecyclerViewAdapter()
     {
         mJobsList = new ArrayList<>();
+        mJobsList.add("12");
+        mJobsList.add("123");
 
     }
 
@@ -45,12 +46,11 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        CardView cardView;
+
 
         public ViewHolder(View v)
         {
             super(v);
-           // cardView = (CardView)itemView.findViewById(R.id.job_card_view);
 
         }
     }

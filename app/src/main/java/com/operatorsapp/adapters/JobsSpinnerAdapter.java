@@ -57,13 +57,13 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
             {
                 mRowName.setTextColor(Color.BLACK);
                 mRowName.setText(item);
-                mRowName.setClickable(true);
+                row.setClickable(false);
             }
             else if (position > 0)
             {
                 mRowName.setTextColor(Color.GRAY);
                 mRowName.setText(item);
-                mRowName.setClickable(false);
+                row.setClickable(true);
             }
         }
         return row;
