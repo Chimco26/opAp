@@ -48,6 +48,7 @@
     <string name="erp">ERP</string>
     <string name="planned_start">Planned Start</string>
     <string name="number_of_units">Number Of Units</string>
+    <string name="new_job">New Job</string>
 
 
     <array name="operators_spinner_array">

@@ -14,11 +14,9 @@ import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
 import com.operators.polling.EmeraldJobBase;
 import com.zemingo.pollingmachanaim.JobBase;
 
+import java.util.concurrent.TimeUnit;
 
-;import java.util.concurrent.TimeUnit;
-
-public class MachineStatusCore implements OnTimeToEndChangedListener
-{
+public class MachineStatusCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = MachineStatusCore.class.getSimpleName();
     public static final int MILLISECONDS_TO_SECONDS = 1000;
     public static final int INTERVAL_DELAY = 60;
@@ -29,80 +27,60 @@ public class MachineStatusCore implements OnTimeToEndChangedListener
     private MachineStatusUICallback mMachineStatusUICallback;
     private EmeraldJobBase mJob;
 
-
-    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, PersistenceManagerInterface persistenceManagerInterface)
-    {
+    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, PersistenceManagerInterface persistenceManagerInterface) {
         mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridgeInterface;
         mPersistenceManagerInterface = persistenceManagerInterface;
     }
 
-    public void registerListener(MachineStatusUICallback machineStatusUICallback)
-    {
+    public void registerListener(MachineStatusUICallback machineStatusUICallback) {
         mMachineStatusUICallback = machineStatusUICallback;
     }
 
-    public void unregisterListener()
-    {
-        if (mMachineStatusUICallback != null)
-        {
+    public void unregisterListener() {
+        if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback = null;
         }
     }
 
-    public void startPolling()
-    {
-        mJob = new EmeraldJobBase()
-        {
+    public void startPolling() {
+        mJob = new EmeraldJobBase() {
             @Override
-            protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener)
-            {
+            protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
                 getMachineStatus(onJobFinishedListener);
             }
         };
 
-        //PollingManager.getInstance().register(mJob, START_DELAY, TimeUnit.SECONDS);
         mJob.startJob(START_DELAY, INTERVAL_DELAY, TimeUnit.SECONDS);
-
     }
 
-    public void stopPolling()
-    {
-        if (mJob != null)
-        {
+    public void stopPolling() {
+        if (mJob != null) {
             mJob.stopJob();
         }
     }
 
-    public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener)
-    {
-        mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mPersistenceManagerInterface.getSiteUrl(), mPersistenceManagerInterface.getSessionId(), mPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback()
-        {
+    public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
+        mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mPersistenceManagerInterface.getSiteUrl(), mPersistenceManagerInterface.getSessionId(), mPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
             @Override
-            public void onGetMachineStatusSucceeded(MachineStatus machineStatus)
-            {
+            public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
                 int timeToEndInSeconds = machineStatus.getShiftEndingIn() * MILLISECONDS_TO_SECONDS;
                 startTimer(timeToEndInSeconds);
 
-                if (mMachineStatusUICallback != null)
-                {
+                if (mMachineStatusUICallback != null) {
                     mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
                 }
-                else
-                {
+                else {
                     Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                 }
                 onJobFinishedListener.onJobFinished();
             }
 
             @Override
-            public void onGetMachineStatusFailed(ErrorObjectInterface reason)
-            {
-                if (mMachineStatusUICallback != null)
-                {
+            public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
+                if (mMachineStatusUICallback != null) {
                     mMachineStatusUICallback.onStatusReceiveFailed(reason);
                 }
-                else
-                {
+                else {
                     Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
 
                 }
@@ -111,24 +89,19 @@ public class MachineStatusCore implements OnTimeToEndChangedListener
         }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
     }
 
-    private void startTimer(int timeInSeconds)
-    {
-        if (mTimeToEndCounter == null)
-        {
+    private void startTimer(int timeInSeconds) {
+        if (mTimeToEndCounter == null) {
             mTimeToEndCounter = new TimeToEndCounter(this);
         }
         mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
     }
 
     @Override
-    public void onTimeToEndChanged(String formattedTimeToEnd)
-    {
-        if (mMachineStatusUICallback != null)
-        {
+    public void onTimeToEndChanged(String formattedTimeToEnd) {
+        if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback.onTimerChanged(formattedTimeToEnd);
         }
-        else
-        {
+        else {
             Log.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
         }
     }

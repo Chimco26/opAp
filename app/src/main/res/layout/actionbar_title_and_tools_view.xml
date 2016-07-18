@@ -22,7 +22,8 @@
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/toolbar_title">
+        android:layout_toRightOf="@id/toolbar_title"
+        android:id="@+id/linearLayout2">
 
     <ImageView
         android:layout_width="15dp"
@@ -64,12 +65,14 @@
 
     </LinearLayout>
 
+
     <LinearLayout
+
         android:layout_width="232dp"
         android:layout_height="32dp"
         android:background="@color/T12_color"
         android:padding="1dp"
-        android:id="@+id/linearLayout"
+        android:id="@+id/spinner_layout"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/toolbar_job_spinner"
         android:layout_marginEnd="24dp">
@@ -95,8 +98,29 @@
         android:drawSelectorOnTop="true"
         android:gravity="center"
         android:layout_marginEnd="23dp"
-        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignBottom="@+id/spinner_layout"
         android:layout_alignParentEnd="true"/>
+<!--add linearLayout-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close_image"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_x"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/linearLayout2"/>
+
+    <TextView
+        android:id="@+id/new_job_title"
+        android:layout_width="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
+        android:text="@string/new_job"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@+id/close_image"/>
 
 
 </RelativeLayout>
