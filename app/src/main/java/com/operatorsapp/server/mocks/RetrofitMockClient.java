@@ -84,6 +84,32 @@ public class RetrofitMockClient implements Interceptor {
                             "    }\n" +
                             "}";
                     break;
+                case "GetJobsListForMachine":
+                    responseString = "{\"error\":null,\n" +
+                            "\"titleFields\":\n" +
+                            "[\"jobId\",\"productName\",\"ERP\",\"plannedStart\",\"numberOfUnits\"],\n" +
+                            "\"jobs\":\n" +
+                            "    [\n" +
+                            "    {\n" +
+                            "\"jobId\": 123,\n" +
+                            "\"productName\": \"some name\",\n" +
+                            "\"ERP\": 6547,\n" +
+                            "\"plannedStart\": \"01/02/2016\",\n" +
+                            "\"numberOfUnits\": 999     \n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "\"jbId\": 456,\n" +
+                            "\"productName\":\"some other name\",\n" +
+                            "\"ERP\": 3214,\n" +
+                            "\"plannedStart\": \"01/05/2016\",\n" +
+                            "\"numberOfUnits\": 7     \n" +
+                            "    }\n" +
+                            "    ]\n" +
+                            "}\n";
+                    break;
+                case "StartJobForMachine":
+                    responseString = "";
+                    break;
                 default:
                     responseString = "";
                     break;

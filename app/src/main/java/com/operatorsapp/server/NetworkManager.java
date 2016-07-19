@@ -7,6 +7,10 @@ import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridg
 import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachinesStatusServiceRequest;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.infra.ErrorObjectInterface;
+import com.operators.jobsnetworkbridge.interfaces.EmeraldGetJobsListServiceRequests;
+import com.operators.jobsnetworkbridge.interfaces.EmeraldStartJobServiceRequests;
+import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkManagerInterface;
+import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -21,8 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface
-{
+public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -56,7 +59,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
-        } else {
+        }
+        else {
             Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
@@ -88,7 +92,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                     .readTimeout(timeout, timeUnit)
 //                    .sslSocketFactory(sslContext.getSocketFactory())
                     .build();
-        } else {
+        }
+        else {
             okHttpClient = new OkHttpClient.Builder()
                     //add mock
                     .addInterceptor(new RetrofitMockClient())
@@ -102,15 +107,35 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     @Override
-    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl) {
         return getMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
         return retrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
+    }
+
+    @Override
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return getJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldGetJobsListServiceRequests.class);
+    }
+
+    @Override
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return startJobForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldStartJobServiceRequests.class);
     }
 }

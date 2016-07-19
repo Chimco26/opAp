@@ -3,11 +3,12 @@ package com.operatorsapp.managers;
 import android.content.Context;
 
 import com.operators.infra.PersistenceManagerInterface;
+import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
-public class PersistenceManager implements PersistenceManagerInterface, MachineStatusPersistenceManagerInterface
+public class PersistenceManager implements PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface
 {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
