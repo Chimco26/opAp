@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:orientation="horizontal">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal">
 
     <TextView
         android:id="@+id/toolbar_title"
@@ -15,78 +15,81 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingStart="15dp"
-        tools:text="App Title" />
+        tools:text="App Title"/>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/toolbar_title"
-        android:id="@+id/linearLayout2">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/circle_yellow_indicator"
-        android:id="@+id/job_indicator"
-        android:gravity="center"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/job_indicator"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/linearLayout1">
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Machine Id/Name"
-            android:textColor="@color/white"
-            android:id="@+id/text_view_machine_id_name"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/linearLayout"/>
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/job_indicator"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/text_view_machine_id_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/linearLayout"
+                android:text="Machine Id/Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="machine status"
-            android:textColor="@color/white"
-            android:id="@+id/text_view_machine_status"
-            android:layout_below="@+id/linearLayout"
-            android:layout_alignStart="@+id/text_view_machine_id_name"/>
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/circle_yellow_indicator"
+                    android:id="@+id/job_indicator"
+                    />
+                <TextView
+                    android:id="@+id/text_view_machine_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="machine status"
+                    android:layout_marginLeft="5dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
 
     <LinearLayout
 
+        android:id="@+id/spinner_layout"
         android:layout_width="232dp"
         android:layout_height="32dp"
-        android:background="@color/T12_color"
-        android:padding="1dp"
-        android:id="@+id/spinner_layout"
         android:layout_alignParentTop="true"
+        android:layout_marginEnd="24dp"
         android:layout_toStartOf="@+id/toolbar_job_spinner"
-        android:layout_marginEnd="24dp">
+        android:background="@color/T12_color"
+        android:padding="1dp">
 
         <Spinner
             android:id="@+id/toolbar_operator_spinner"
             android:layout_width="230dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:background="?attr/colorPrimary"
             android:drawSelectorOnTop="true"
             android:dropDownVerticalOffset="40dp"
             android:gravity="center"
             app:theme="@style/ToolbarTheme"
-            tools:ignore="MissingPrefix" />
+            tools:ignore="MissingPrefix"/>
     </LinearLayout>
 
 
@@ -94,33 +97,12 @@
         android:id="@+id/toolbar_job_spinner"
         android:layout_width="230dp"
         android:layout_height="30dp"
+        android:layout_alignBottom="@+id/spinner_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp"
         android:background="@color/T12_color"
         android:drawSelectorOnTop="true"
-        android:gravity="center"
-        android:layout_marginEnd="23dp"
-        android:layout_alignBottom="@+id/spinner_layout"
-        android:layout_alignParentEnd="true"/>
-<!--add linearLayout-->
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/close_image"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/btn_x"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/linearLayout2"/>
-
-    <TextView
-        android:id="@+id/new_job_title"
-        android:layout_width="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_height="wrap_content"
-        android:text="@string/new_job"
-        android:gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/white"
-        android:layout_toRightOf="@+id/close_image"/>
+        android:gravity="center"/>
 
 
 </RelativeLayout>

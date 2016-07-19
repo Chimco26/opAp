@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/job_item_border"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:orientation="vertical">
@@ -20,6 +20,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
+            android:id="@+id/job_row_layout"
             >
             <TextView
                 android:id="@+id/text_view_job_id"

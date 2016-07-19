@@ -21,7 +21,6 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
-import com.operatorsapp.managers.MachineStatusPersistenceManager;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
@@ -46,11 +45,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
-        MachineStatusPersistenceManager.initInstance(getApplicationContext());
 
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, MachineStatusPersistenceManager.getInstance());
+        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
 
@@ -132,7 +130,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 
     @Override
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener)

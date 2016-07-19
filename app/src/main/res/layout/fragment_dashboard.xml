@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp">
 
 
@@ -93,14 +93,14 @@
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:background="@color/C20"/>
 
             <TextView
                 android:id="@+id/text_view_product_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:text="product_id"
                 android:textColor="@color/status_bar"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -109,7 +109,7 @@
                 android:id="@+id/text_view_job_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:text="job_id"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -117,7 +117,7 @@
                 android:id="@+id/text_view_shift_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:text="shift_id"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -125,7 +125,7 @@
                 android:id="@+id/text_view_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:text="timer"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>

@@ -337,7 +337,6 @@ public class DashboardFragment extends Fragment implements DashboardUICallbackLi
             });
 
             jobsSpinner.setSelection(3);
-
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             actionBar.setCustomView(view);
@@ -350,7 +349,6 @@ public class DashboardFragment extends Fragment implements DashboardUICallbackLi
         Log.i(LOG_TAG, "onDeviceStatusChanged()");
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
-
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
