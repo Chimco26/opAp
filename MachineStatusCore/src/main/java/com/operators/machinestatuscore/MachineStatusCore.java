@@ -2,15 +2,15 @@ package com.operators.machinestatuscore;
 
 import android.util.Log;
 
-import com.operators.infra.ErrorObjectInterface;
-import com.operators.infra.GetMachineStatusCallback;
-import com.operators.infra.GetMachineStatusNetworkBridgeInterface;
 
-import com.operators.infra.MachineStatus;
-import com.operators.infra.PersistenceManagerInterface;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
 import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
+import com.operators.machinestatusinfra.ErrorObjectInterface;
+import com.operators.machinestatusinfra.GetMachineStatusCallback;
+import com.operators.machinestatusinfra.GetMachineStatusNetworkBridgeInterface;
+import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
 import com.operators.polling.EmeraldJobBase;
 import com.zemingo.pollingmachanaim.JobBase;
 
@@ -22,14 +22,14 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     public static final int INTERVAL_DELAY = 60;
     public static final int START_DELAY = 0;
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
-    private PersistenceManagerInterface mPersistenceManagerInterface;
+    private MachineStatusPersistenceManagerInterface mMachineStatusPersistenceManagerInterface;
     private TimeToEndCounter mTimeToEndCounter;
     private MachineStatusUICallback mMachineStatusUICallback;
     private EmeraldJobBase mJob;
 
-    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, PersistenceManagerInterface persistenceManagerInterface) {
+    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, MachineStatusPersistenceManagerInterface machineStatusPersistenceManagerInterface) {
         mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridgeInterface;
-        mPersistenceManagerInterface = persistenceManagerInterface;
+        mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManagerInterface;
     }
 
     public void registerListener(MachineStatusUICallback machineStatusUICallback) {
@@ -60,7 +60,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     }
 
     public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
-        mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mPersistenceManagerInterface.getSiteUrl(), mPersistenceManagerInterface.getSessionId(), mPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
+        mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
             @Override
             public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
                 int timeToEndInSeconds = machineStatus.getShiftEndingIn() * MILLISECONDS_TO_SECONDS;
@@ -86,7 +86,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                 }
                 onJobFinishedListener.onJobFinished();
             }
-        }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
+        }, mMachineStatusPersistenceManagerInterface.getTotalRetries(), mMachineStatusPersistenceManagerInterface.getRequestTimeout());
     }
 
     private void startTimer(int timeInSeconds) {

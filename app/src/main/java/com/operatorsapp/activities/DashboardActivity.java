@@ -9,10 +9,11 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
-import com.operators.infra.ErrorObjectInterface;
-import com.operators.infra.MachineStatus;
+
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
+import com.operators.machinestatusinfra.ErrorObjectInterface;
+import com.operators.machinestatusinfra.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.DashboardFragment;
@@ -20,6 +21,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.MachineStatusPersistenceManager;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
@@ -44,10 +46,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
+        MachineStatusPersistenceManager.initInstance(getApplicationContext());
 
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
+        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, MachineStatusPersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
 

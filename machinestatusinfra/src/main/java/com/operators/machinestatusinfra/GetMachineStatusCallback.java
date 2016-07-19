@@ -1,5 +1,4 @@
-package com.operators.infra;
-
+package com.operators.machinestatusinfra;
 
 public interface GetMachineStatusCallback<T>
 {

@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
+            <option value="$PROJECT_DIR$/MachineStatusInfra" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/infra" />
           </set>
@@ -25,6 +26,7 @@
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
+            <option value="$PROJECT_DIR$/MachineStatusInfra" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/infra" />
           </set>

@@ -2,14 +2,12 @@ package com.operatorsapp.managers;
 
 import android.content.Context;
 
-import com.operators.infra.PersistenceManagerInterface;
+import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
-public class PersistenceManager implements PersistenceManagerInterface
-{
-
-    private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
+public class MachineStatusPersistenceManager implements MachineStatusPersistenceManagerInterface {
+    private static final String LOG_TAG = MachineStatusPersistenceManager.class.getSimpleName();
 
     private static final String PREF_SITE_URL = "pref.PREF_SITE_URL";
     private static final String PREF_USERNAME = "pref.PREF_USERNAME";
@@ -20,18 +18,18 @@ public class PersistenceManager implements PersistenceManagerInterface
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
 
-    private static PersistenceManager msInstance;
+    private static MachineStatusPersistenceManager msInstance;
 
-    public static PersistenceManager initInstance(Context context)
+    public static MachineStatusPersistenceManager initInstance(Context context)
     {
         if (msInstance == null)
         {
-            msInstance = new PersistenceManager(context);
+            msInstance = new MachineStatusPersistenceManager(context);
         }
         return msInstance;
     }
 
-    public static PersistenceManager getInstance()
+    public static MachineStatusPersistenceManager getInstance()
     {
         if (msInstance == null)
         {
@@ -40,7 +38,7 @@ public class PersistenceManager implements PersistenceManagerInterface
         return msInstance;
     }
 
-    private PersistenceManager(Context context)
+    private MachineStatusPersistenceManager(Context context)
     {
         SecurePreferences.initInstance(context);
     }
@@ -55,30 +53,6 @@ public class PersistenceManager implements PersistenceManagerInterface
     public void setSiteUrl(String siteUrl)
     {
         SecurePreferences.getInstance().setString(PREF_SITE_URL, siteUrl);
-    }
-
-    @Override
-    public String getUserName()
-    {
-        return SecurePreferences.getInstance().getString(PREF_USERNAME);
-    }
-
-    @Override
-    public void setUsername(String username)
-    {
-        SecurePreferences.getInstance().setString(PREF_USERNAME, username);
-    }
-
-    @Override
-    public String getPassword()
-    {
-        return SecurePreferences.getInstance().getString(PREF_PASSWORD);
-    }
-
-    @Override
-    public void setPassword(String password)
-    {
-        SecurePreferences.getInstance().setString(PREF_PASSWORD, password);
     }
 
     @Override
@@ -139,5 +113,4 @@ public class PersistenceManager implements PersistenceManagerInterface
     {
         SecurePreferences.getInstance().setInt(PREF_REQUEST_TIMEOUT, requestTimeOut);
     }
-
 }

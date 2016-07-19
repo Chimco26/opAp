@@ -8,9 +8,10 @@ import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.GetMachineStatusDataRequest;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStatusDataResponse;
-import com.operators.infra.GetMachineStatusCallback;
-import com.operators.infra.GetMachineStatusNetworkBridgeInterface;
-import com.operators.infra.MachineStatus;
+
+import com.operators.machinestatusinfra.GetMachineStatusCallback;
+import com.operators.machinestatusinfra.GetMachineStatusNetworkBridgeInterface;
+import com.operators.machinestatusinfra.MachineStatus;
 
 import java.util.concurrent.TimeUnit;
 

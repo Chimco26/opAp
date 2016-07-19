@@ -1,7 +1,7 @@
 package com.operators.getmachinesstatusnetworkbridge.server.responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.operators.infra.MachineStatus;
+import com.operators.machinestatusinfra.MachineStatus;
 
 public class MachineStatusDataResponse extends ErrorBaseResponse {
     @SerializedName("machineStatus")

@@ -29,7 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.operators.infra.MachineStatus;
+import com.operators.machinestatusinfra.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
