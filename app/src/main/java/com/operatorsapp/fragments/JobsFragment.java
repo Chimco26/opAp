@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.operators.jobscore.JobsCore;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.ErrorObjectInterface;
+import com.operators.jobsinfra.Job;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operatorsapp.R;
@@ -27,6 +28,8 @@ import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 
+import java.util.List;
+
 
 public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener
 {
@@ -34,8 +37,10 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     private RecyclerView mJobsRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
+    private List<Job> mJobList;
 
     private OnGoToScreenListener mOnGoToScreenListener;
+    private JobsCore mJobsCore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -44,13 +49,14 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         JobsNetworkBridge jobsNetworkBridge = new JobsNetworkBridge();
         jobsNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
 
-        JobsCore jobsCore = new JobsCore(jobsNetworkBridge, PersistenceManager.getInstance());
-        jobsCore.registerListener(new JobsForMachineUICallbackListener()
+        mJobsCore = new JobsCore(jobsNetworkBridge, PersistenceManager.getInstance());
+
+        mJobsCore.registerListener(new JobsForMachineUICallbackListener()
         {
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine)
             {
-                JobListForMachine newJobList = jobListForMachine;
+                mJobList = jobListForMachine.getJobs();
                 Log.i(LOG_TAG, "onJobListReceived()");
             }
 
@@ -76,8 +82,8 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
             }
         });
 
-        jobsCore.getJobsListForMachine();
-        jobsCore.startJobForMachine(0);
+        mJobsCore.getJobsListForMachine();
+        mJobsCore.startJobForMachine(0);
     }
 
     @Override
@@ -108,10 +114,43 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        mJobsCore.registerListener(new JobsForMachineUICallbackListener()
+        {
+            @Override
+            public void onJobListReceived(JobListForMachine jobListForMachine)
+            {
+                mJobList = jobListForMachine.getJobs();
+                Log.i(LOG_TAG, "onJobListReceived()");
+            }
+
+            @Override
+            public void onJobListReceiveFailed(ErrorObjectInterface reason)
+            {
+                Log.i(LOG_TAG, "onJobListReceiveFailed()");
+
+            }
+
+            @Override
+            public void onStartJobSuccess()
+            {
+                Log.i(LOG_TAG, "onStartJobSuccess()");
+
+            }
+
+            @Override
+            public void onStartJobFailed(ErrorObjectInterface reason)
+            {
+                Log.i(LOG_TAG, "onStartJobFailed()");
+
+            }
+        });
+
+        mJobsCore.getJobsListForMachine();
+
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
-        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this);
+        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mJobList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
     }
 
