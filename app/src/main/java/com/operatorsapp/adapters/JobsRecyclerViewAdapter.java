@@ -15,62 +15,61 @@ import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerViewAdapter.ViewHolder>
-{
+public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerViewAdapter.ViewHolder> {
     private List<Job> mJobsList;
     private OnJobSelectedCallbackListener mOnJobSelectedCallbackListener;
 
-    public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Job> jobsList)
-    {
+    public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Job> jobsList) {
         mOnJobSelectedCallbackListener = onJobSelectedCallbackListener;
         mJobsList = jobsList;
     }
 
     @Override
-    public JobsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public JobsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.job_recycler_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position)
-    {
+    public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
         final int jobId = mJobsList.get(position).getJobId();
 
-        holder.mJobRowLayout.setOnClickListener(new View.OnClickListener()
-        {
+        holder.mJobRowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                mOnJobSelectedCallbackListener.onJobSelected(jobId);
+            public void onClick(View v) {
+                mOnJobSelectedCallbackListener.onJobSelected(position);
             }
         });
 
         holder.mJobIdTextView.setText(String.valueOf(jobId));
         holder.mProductNameTextView.setText(mJobsList.get(position).getProductName());
+        holder.mERPTextView.setText(String.valueOf(mJobsList.get(position).getErp()));
+        holder.mPlannedStartTextView.setText(mJobsList.get(position).getPlannedStart());
+        holder.mNumberOfUnits.setText(String.valueOf(mJobsList.get(position).getNumberOfUnits()));
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mJobsList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout mJobRowLayout;
         private TextView mJobIdTextView;
         private TextView mProductNameTextView;
+        private TextView mERPTextView;
+        private TextView mPlannedStartTextView;
+        private TextView mNumberOfUnits;
 
-
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
             mJobRowLayout = (LinearLayout) view.findViewById(R.id.job_row_layout);
             mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
             mProductNameTextView = (TextView) view.findViewById(R.id.adapter_text_view_product_name);
+            mERPTextView = (TextView) view.findViewById(R.id.adapter_text_view_ERP);
+            mPlannedStartTextView = (TextView) view.findViewById(R.id.adapter_text_planned_start);
+            mNumberOfUnits = (TextView) view.findViewById(R.id.adapter_text_view_number_of_units);
         }
     }
 }

@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 public class Job {
 
    @SerializedName("jobId")
-    public int jobId;
+    private int jobId;
     @SerializedName("productName")
-    public String productName;
-    @SerializedName("erp")
-    public int erp;
+    private String productName;
+    @SerializedName("ERP")
+    private int erp;
     @SerializedName("plannedStart")
-    public String plannedStart;
+    private String plannedStart;
     @SerializedName("numberOfUnits")
-    public int numberOfUnits;
+    private int numberOfUnits;
 
     public int getJobId() {
         return jobId;

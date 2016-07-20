@@ -10,6 +10,10 @@ import android.util.Log;
 
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 
+import com.operators.jobscore.JobsCore;
+import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
+import com.operators.jobsinfra.JobListForMachine;
+import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatusinfra.ErrorObjectInterface;
@@ -18,6 +22,9 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
+import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
+import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -27,17 +34,18 @@ import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, OnGoToScreenListener
-{
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, OnGoToScreenListener, JobsFragmentToDashboardActivityCallback {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
     private DashboardUICallbackListener mDashboardUICallbackListener;
     private MachineStatusCore mMachineStatusCore;
+    private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
+    private DashboardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
+    private JobsCore mJobsCore;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
@@ -56,48 +64,38 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         mMachineStatusCore.stopPolling();
         mMachineStatusCore.unregisterListener();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        mMachineStatusCore.registerListener(new MachineStatusUICallback()
-        {
+        mMachineStatusCore.registerListener(new MachineStatusUICallback() {
             @Override
-            public void onStatusReceivedSuccessfully(MachineStatus machineStatus)
-            {
-                if (mDashboardUICallbackListener != null)
-                {
+            public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
+                if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
                 }
-                else
-                {
+                else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
 
             @Override
-            public void onTimerChanged(String timeToEndInHours)
-            {
-                if (mDashboardUICallbackListener != null)
-                {
+            public void onTimerChanged(String timeToEndInHours) {
+                if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onTimerChanged(timeToEndInHours);
                 }
-                else
-                {
+                else {
                     Log.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
             }
 
             @Override
-            public void onStatusReceiveFailed(ErrorObjectInterface reason)
-            {
+            public void onStatusReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
             }
         });
@@ -107,51 +105,102 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType)
-    {
+    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
     }
 
     @Override
-    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType)
-    {
+    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
     }
 
     @Override
-    public void onHideConnectivityCroutonRequest()
-    {
+    public void onHideConnectivityCroutonRequest() {
 
     }
 
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
-    public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener)
-    {
+    public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
         mDashboardUICallbackListener = dashboardUICallbackListener;
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean addToBackStack)
-    {
-        if (addToBackStack)
-        {
+    public void goToFragment(Fragment fragment, boolean addToBackStack) {
+        if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
         }
-        else
-        {
+        else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
         }
     }
 
     @Override
-    public void goToDashboardActivity(int machine)
-    {
+    public void goToDashboardActivity(int machine) {
 
+    }
+
+
+    @Override
+    public void initJobsCore() {
+        JobsNetworkBridge jobsNetworkBridge = new JobsNetworkBridge();
+        jobsNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+
+        mJobsCore = new JobsCore(jobsNetworkBridge, PersistenceManager.getInstance());
+
+        mJobsCore.registerListener(new JobsForMachineUICallbackListener() {
+            @Override
+            public void onJobListReceived(JobListForMachine jobListForMachine) {
+//                mJobList = jobListForMachine.getJobs();
+                mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                Log.i(LOG_TAG, "onJobListReceived()");
+
+            }
+
+            @Override
+            public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
+                Log.i(LOG_TAG, "onJobListReceiveFailed()");
+                mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed(reason);
+
+            }
+
+            @Override
+            public void onStartJobSuccess() {
+                Log.i(LOG_TAG, "onStartJobSuccess()");
+                mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
+
+            }
+
+            @Override
+            public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
+                Log.i(LOG_TAG, "onStartJobFailed()");
+                mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
+            }
+        });
+    }
+
+    @Override
+    public void onJobFragmentAttached(DashboardActivityToJobsFragmentCallback dashboardActivityToJobsFragmentCallback) {
+        mDashboardActivityToJobsFragmentCallback = dashboardActivityToJobsFragmentCallback;
+    }
+
+    @Override
+    public void getJobsForMachineList() {
+        mJobsCore.getJobsListForMachine();
+
+    }
+
+    @Override
+    public void startJobForMachine(int jobId) {
+        mJobsCore.startJobForMachine(jobId);
+    }
+
+    @Override
+    public void onSelectedJobFragmentAttachwed(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback) {
+        mDashboardActivityToSelectedJobFragmentCallback = dashboardActivityToSelectedJobFragmentCallback;
     }
 }

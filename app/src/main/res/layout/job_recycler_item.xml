@@ -43,7 +43,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/text_view_ERP"
+                android:id="@+id/adapter_text_view_ERP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -53,7 +53,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/text_planned_start"
+                android:id="@+id/adapter_text_planned_start"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -63,7 +63,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/text_view_number_of_units"
+                android:id="@+id/adapter_text_view_number_of_units"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
