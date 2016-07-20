@@ -15,15 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.operators.jobscore.JobsCore;
+import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
+import com.operators.jobsinfra.ErrorObjectInterface;
+import com.operators.jobsinfra.JobListForMachine;
+import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.adapters.JobsRecyclerViewAdapter;
-import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
-import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
 
 
-public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener {
+public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener
+{
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
     private RecyclerView mJobsRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -31,28 +37,76 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     private OnGoToScreenListener mOnGoToScreenListener;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        JobsNetworkBridge jobsNetworkBridge = new JobsNetworkBridge();
+        jobsNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+
+        JobsCore jobsCore = new JobsCore(jobsNetworkBridge, PersistenceManager.getInstance());
+        jobsCore.registerListener(new JobsForMachineUICallbackListener()
+        {
+            @Override
+            public void onJobListReceived(JobListForMachine jobListForMachine)
+            {
+                JobListForMachine newJobList = jobListForMachine;
+                Log.i(LOG_TAG, "onJobListReceived()");
+            }
+
+            @Override
+            public void onJobListReceiveFailed(ErrorObjectInterface reason)
+            {
+                Log.i(LOG_TAG, "onJobListReceiveFailed()");
+
+            }
+
+            @Override
+            public void onStartJobSuccess()
+            {
+                Log.i(LOG_TAG, "onStartJobSuccess()");
+
+            }
+
+            @Override
+            public void onStartJobFailed(ErrorObjectInterface reason)
+            {
+                Log.i(LOG_TAG, "onStartJobFailed()");
+
+            }
+        });
+
+        jobsCore.getJobsListForMachine();
+        jobsCore.startJobForMachine(0);
+    }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        try {
+        try
+        {
             mOnGoToScreenListener = (OnGoToScreenListener) getActivity();
 
         }
-        catch (ClassCastException e) {
+        catch (ClassCastException e)
+        {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
     }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         final View rootView = inflater.inflate(R.layout.fragment_jobs, container, false);
         setActionBar();
         return rootView;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -61,9 +115,11 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -75,9 +131,11 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
             View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
 
             ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
+            buttonClose.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     getFragmentManager().popBackStack();
                 }
             });
@@ -87,13 +145,15 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     @Override
-    public void onJobSelected(int jobId) {
+    public void onJobSelected(int jobId)
+    {
         Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + jobId);
         mOnGoToScreenListener.goToFragment(new SelectedJobFragment(), true);
     }
 
     @Override
-    public void onJobListLoadingFailed() {
+    public void onJobListLoadingFailed()
+    {
         Log.i(LOG_TAG, "onJobListLoadingFailed()");
     }
 }

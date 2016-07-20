@@ -21,6 +21,8 @@ public class PersistenceManager implements PersistenceManagerInterface, MachineS
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
+    private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
+
 
     private static PersistenceManager msInstance;
 
@@ -100,6 +102,18 @@ public class PersistenceManager implements PersistenceManagerInterface, MachineS
     public int getMachineId()
     {
         return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID);
+    }
+
+    @Override
+    public int getJobId()
+    {
+        return 0;
+    }
+
+    @Override
+    public void setJobId(int jobId)
+    {
+
     }
 
     @Override

@@ -3,7 +3,8 @@ package com.operators.jobsinfra;
 /**
  * Created by User on 19/07/2016.
  */
-public interface JobsPersistenceManagerInterface {
+public interface JobsPersistenceManagerInterface
+{
     String getSiteUrl();
 
     String getSessionId();
@@ -14,6 +15,9 @@ public interface JobsPersistenceManagerInterface {
 
     int getMachineId();
 
+    int getJobId();
+
+    void setJobId(int jobId);
 
     void setSiteUrl(String siteUrl);
 

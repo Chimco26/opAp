@@ -1,9 +1,12 @@
 package com.operatorsapp.server.mocks;
 
+import android.util.Log;
+
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.NetworkAvailable;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -13,6 +16,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class RetrofitMockClient implements Interceptor {
+    private static final String LOG_TAG = RetrofitMockClient.class.getSimpleName();
     private static final String MIME_TYPE = "application/json";
 
     @Override
@@ -84,7 +88,7 @@ public class RetrofitMockClient implements Interceptor {
                             "    }\n" +
                             "}";
                     break;
-                case "GetJobsListForMachine":
+                case "getJobsListForMachine":
                     responseString = "{\"error\":null,\n" +
                             "\"titleFields\":\n" +
                             "[\"jobId\",\"productName\",\"ERP\",\"plannedStart\",\"numberOfUnits\"],\n" +
@@ -108,7 +112,8 @@ public class RetrofitMockClient implements Interceptor {
                             "}\n";
                     break;
                 case "StartJobForMachine":
-                    responseString = "";
+                    Log.i(LOG_TAG,"StartJobForMachine request received");
+                    responseString = "{\"error\":null}";
                     break;
                 default:
                     responseString = "";

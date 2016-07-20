@@ -79,7 +79,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 else
                 {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
-
                 }
             }
 
