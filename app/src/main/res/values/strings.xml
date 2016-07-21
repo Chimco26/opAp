@@ -17,7 +17,7 @@
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
-    <string name="login_dialog_keep_editing">Keep Editing</string>
+   <!-- <string name="login_dialog_keep_editing">Keep Editing</string>
     <string name="login_dialog_alias_already_exists_with_the_same_url">already exists with the same URL:\nReplace</string>
     <string name="login_dialog_alias_already_exists_with_the_same_url_add">already exists with the same URL:\nAdd</string>
     <string name="login_dialog_replace">Replace</string>
@@ -25,7 +25,9 @@
     <string name="login_dialog_cancel">Cancel</string>
     <string name="login_dialog_discard">Discard</string>
     <string name="login_dialog_save">Save</string>
-    <string name="login_dialog_message">Are you sure you want to\ndiscard changes?</string>
+    <string name="login_dialog_message">Are you sure you want to\ndiscard changes?</string>-->
+    <string name="login_dialog_dismiss">Dismiss</string>
+    <string name="login_dialog_dismiss_all">Dismiss all</string>
     <string name="network_error">Network Error</string>
     <string name="credentials_error">Credentials error</string>
     <string name="url_error">Site URL not correct</string>

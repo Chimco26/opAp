@@ -65,6 +65,34 @@ public class RetrofitMockClient implements Interceptor {
                             "  ]\n" +
                             "}";
                     break;
+
+                case "GetMachineShiftLog":
+                    responseString = "{\n" +
+                            "  \"error\": null,\n" +
+                            "    \"events\": [\n" +
+                            "      {\n" +
+                            "        \"timestamp\": \"7:35\",\n" +
+                            "\t  \"type\": 2, \n" +
+                            "\t  \"title\": \"Machine 7 Stopped\",\n" +
+                            "        \"subtitle\": \"Stopped at: 05.11.1984\",\n" +
+                            "        \"priority\": 1,\n" +
+                            "  \"startTime\": \"7:35\",\n" +
+                            "  \"endTime\": \"8:56\",\n" +
+                            "  \"duration\": 5\n" +
+                            "      },\n" +
+                            "      {\n" +
+                            "        \"timestamp\": \"8:56\",\n" +
+                            "\t  \"type\": 1,\n" +
+                            "\t  \"title\": \"Place Platform\",\n" +
+                            "        \"subtitle\": \"please replace the platform for Machine\",\n" +
+                            "        \"priority\": 0,\n" +
+                            "  \"startTime\": \"10:22\",\n" +
+                            "  \"endTime\": \"23:45\",\n" +
+                            "  \"duration\": 7\n" +
+                            "      }\n" +
+                            "      ] \n" +
+                            "  }";
+                    break;
                 default:
                     responseString = "";
                     break;

@@ -1,9 +1,11 @@
 package com.operators.shiftloginfra;
 
 
-public interface ShiftLogCoreCallback {
+import java.util.ArrayList;
 
-    void onLoginSucceeded(ShiftLog shiftLog);
+public interface ShiftLogCoreCallback<T> {
 
-    void onLoginFailed(ErrorObjectInterface reason);
+    void onShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs);
+
+    void onShiftLogFailed(ErrorObjectInterface reason);
 }

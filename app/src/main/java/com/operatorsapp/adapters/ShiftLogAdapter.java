@@ -71,9 +71,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         } else {
             shiftLogViewHolder.mSubtitle.setVisibility(View.VISIBLE);
         }
-        int minutes = (int) ((shiftLog.getTimestamp() / (1000 * 60)) % 60);
-        int hours = (int) ((shiftLog.getTimestamp() / (1000 * 60 * 60)) % 24);
-        shiftLogViewHolder.mTime.setText(hours + ":" + minutes);
+//        int minutes = (int) ((shiftLog.getTimestamp() / (1000 * 60)) % 60);
+//        int hours = (int) ((shiftLog.getTimestamp() / (1000 * 60 * 60)) % 24);
+        shiftLogViewHolder.mTime.setText(shiftLog.getTimestamp()/*hours + ":" + minutes*/);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

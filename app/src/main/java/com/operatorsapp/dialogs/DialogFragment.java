@@ -6,9 +6,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 
-public class TwoButtonDialogFragment extends DialogFragment {
+public class DialogFragment extends android.support.v4.app.DialogFragment {
     public final static String DIALOG = "dialog";
     private final static String DIALOG_MESSAGE = "AlertDialogFragment.dialogMessage";
     private final static String POSITIVE_BUTTON_TEXT = "AlertDialogFragment.positiveButtonText";
@@ -18,14 +17,14 @@ public class TwoButtonDialogFragment extends DialogFragment {
     private String mPositiveButtonText;
     private String mNegativeButtonText;
 
-    public static TwoButtonDialogFragment newInstance(String message, int positiveButtonText, int negativeButtonString) {
-        TwoButtonDialogFragment twoButtonDialogFragment = new TwoButtonDialogFragment();
+    public static DialogFragment newInstance(String message, int positiveButtonText, int negativeButtonString) {
+        DialogFragment dialogFragment = new DialogFragment();
         Bundle args = new Bundle();
         args.putString(DIALOG_MESSAGE, message);
         args.putInt(POSITIVE_BUTTON_TEXT, positiveButtonText);
         args.putInt(NEGATIVE_BUTTON_TEXT, negativeButtonString);
-        twoButtonDialogFragment.setArguments(args);
-        return twoButtonDialogFragment;
+        dialogFragment.setArguments(args);
+        return dialogFragment;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class TwoButtonDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mListener != null) {
-                            mListener.onTwoButtonDialogNegativeButtonClick(dialog, getTargetRequestCode());
+                            mListener.onNegativeButtonClick(dialog, getTargetRequestCode());
                         }
                     }
                 })
@@ -54,7 +53,7 @@ public class TwoButtonDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mListener != null) {
-                            mListener.onTwoButtonDialogPositiveButtonClick(dialog, getTargetRequestCode());
+                            mListener.onPositiveButtonClick(dialog, getTargetRequestCode());
                         }
                     }
                 }).create();
@@ -78,8 +77,8 @@ public class TwoButtonDialogFragment extends DialogFragment {
     }
 
     public interface OnDialogButtonsListener {
-        void onTwoButtonDialogPositiveButtonClick(DialogInterface dialog, int requestCode);
+        void onPositiveButtonClick(DialogInterface dialog, int requestCode);
 
-        void onTwoButtonDialogNegativeButtonClick(DialogInterface dialog, int requestCode);
+        void onNegativeButtonClick(DialogInterface dialog, int requestCode);
     }
 }

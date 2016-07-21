@@ -8,7 +8,14 @@ public interface ShiftLogPersistenceManagerInterface {
 
     ArrayList getShiftLogs();
 
+    int getTotalRetries();
+
+    int getRequestTimeout();
 
     void saveShiftLogs(ArrayList<ShiftLog> shiftLogs);
+
+    void setTotalRetries(int totalRetries);
+
+    void setRequestTimeOut(int requestTimeOut);
 
 }

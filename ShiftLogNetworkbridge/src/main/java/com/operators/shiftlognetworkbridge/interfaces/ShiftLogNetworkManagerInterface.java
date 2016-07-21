@@ -1,5 +1,9 @@
 package com.operators.shiftlognetworkbridge.interfaces;
 
-public interface ShiftLogNetworkManagerInterface {
+import java.util.concurrent.TimeUnit;
 
+public interface ShiftLogNetworkManagerInterface {
+    EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl);
+
+    EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
 }

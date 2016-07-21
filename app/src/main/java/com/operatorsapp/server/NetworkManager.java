@@ -6,6 +6,7 @@ import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.infra.ErrorObjectInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
+import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
 import com.zemingo.logrecorder.ZLogger;
@@ -72,6 +73,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
         Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
         return retrofit.create(EmeraldGetMachinesServiceRequests.class);
 
+    }
+
+    @Override
+    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl) {
+        return getShiftLogRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldShiftLogServiceRequests.class);
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {

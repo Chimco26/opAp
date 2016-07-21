@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,30 +28,39 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
+import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.ShiftLog;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
+import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     public static final int DURATION_MILLIS = 200;
+    private static final int DISMISS_DIALOG_FRAGMENT = 1003;
+    private static final int DISMISS_ALL_DIALOG_FRAGMENT = 1004;
+
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
-    private ArrayList<ShiftLog> mShiftLogsList;
-    private View mDividerView;
     private LinearLayout mLeftLayout, mRightLayout;
     private ImageView mArrowLeft;
     private ImageView mArrowRight;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
+    Stack<ShiftLog> mShiftLogsStack = new Stack<ShiftLog>();
+    //    private ArrayList<ShiftLog> mShiftLogsList;
+    private View mDividerView;
 
     public static DashboardFragment newInstance() {
         return new DashboardFragment();
@@ -59,34 +69,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mShiftLogsList = new ArrayList<>();
 
-        ShiftLog s1 = new ShiftLog();
-        s1.setPriority(1);
-//        s1.setIcon(R.drawable.face);
-        s1.setTitle("Machine Stopped");
-        s1.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s1.setTimestamp(1468913111538L);
-
-        ShiftLog s2 = new ShiftLog();
-        s2.setPriority(2);
-//        s2.setIcon(R.drawable.face);
-        s2.setTitle("Material Weight Low");
-        s2.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s2.setTimestamp(1468913111538L);
-
-        ShiftLog s3 = new ShiftLog();
-        s3.setPriority(1);
-//        s3.setIcon(R.drawable.face);
-        s3.setTitle("Cycle Time High");
-        s3.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s3.setTimestamp(1468913111538L);
-
-        mShiftLogsList.add(s1);
-        mShiftLogsList.add(s2);
-        mShiftLogsList.add(s3);
-
-        setActionBar();
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -105,8 +88,6 @@ public class DashboardFragment extends Fragment {
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
-        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
-        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
@@ -205,6 +186,49 @@ public class DashboardFragment extends Fragment {
                 return false;
             }
         });
+
+        getShiftLogs();
+        setActionBar();
+    }
+
+    private void getShiftLogs() {
+        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "", new ShiftLogUICallback<ShiftLog>() {
+            @Override
+            public void onGetShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
+                //    mShiftLogsList = shiftLogs;
+                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), shiftLogs, true);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+                mShiftLogsStack.addAll(shiftLogs);
+
+//                if ((System.currentTimeMillis() - mShiftLogsStack.get(0).getTimeOfAdded()) < (30 * 1000)) {
+                DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsStack.get(0).getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                mShiftLogsStack.pop();
+                mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsStack);
+//                }
+
+//                for (int i = 0; i < shiftLogs.size(); i++) {
+//                    if (!shiftLogs.get(i).isDialogShown()) {
+//                        if ((System.currentTimeMillis() - shiftLogs.get(i).getTimeOfAdded()) < (30 * 1000)) {
+//                            DialogFragment dialogFragment = DialogFragment.newInstance(shiftLogs.get(i).getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+//                            dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+//                            shiftLogs.get(i).setDialogShown(true);
+//                            mShiftLogsStack.addAll(shiftLogs);
+//                            mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsStack);
+//                            break;
+//                        } else {
+//                            shiftLogs.get(i).setDialogShown(true);
+//                        }
+//                    }
+//                }
+            }
+
+            @Override
+            public void onGetShiftLogFailed(ErrorObjectInterface reason) {
+
+            }
+        });
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open) {
@@ -231,7 +255,7 @@ public class DashboardFragment extends Fragment {
             mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
 
         } catch (ClassCastException e) {
-            throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
+            throw new ClassCastException("Calling fragment must implement interface");
         }
     }
 
@@ -267,5 +291,16 @@ public class DashboardFragment extends Fragment {
             actionBar.setCustomView(view);
             actionBar.setIcon(R.drawable.logo);
         }
+    }
+
+    @Override
+    public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
+        mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(null);
+        dialog.dismiss();
     }
 }

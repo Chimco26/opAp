@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class ShiftLog {
 
     @SerializedName("timestamp")
-    private long mTimestamp;
+    private String mTimestamp;
     @SerializedName("type")
     private int mType;
     @SerializedName("title")
@@ -21,6 +21,7 @@ public class ShiftLog {
     @SerializedName("duration")
     private int mDuration;
     private boolean mDialogShown;
+    private long mTimeOfAdded;
 
     public int getPriority() {
         return mPriority;
@@ -54,11 +55,11 @@ public class ShiftLog {
         this.mType = mType;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return mTimestamp;
     }
 
-    public void setTimestamp(long time) {
+    public void setTimestamp(String time) {
         this.mTimestamp = time;
     }
 
@@ -92,5 +93,13 @@ public class ShiftLog {
 
     public void setDialogShown(boolean dialogShown) {
         this.mDialogShown = dialogShown;
+    }
+
+    public long getTimeOfAdded() {
+        return mTimeOfAdded;
+    }
+
+    public void setTimeOfAdded(long timeOfAdded) {
+        this.mTimeOfAdded = timeOfAdded;
     }
 }
