@@ -40,6 +40,10 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback = null;
         }
+        if (mTimeToEndCounter != null) {
+            mTimeToEndCounter.stopTimer();
+        }
+
     }
 
     public void startPolling() {
@@ -82,7 +86,6 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                 }
                 else {
                     Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
-
                 }
                 onJobFinishedListener.onJobFinished();
             }

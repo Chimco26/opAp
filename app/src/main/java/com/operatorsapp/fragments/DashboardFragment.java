@@ -36,6 +36,7 @@ import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.fragments.interfaces.SignInOperatorFragment;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.model.ShiftLog;
@@ -299,7 +300,7 @@ public class DashboardFragment extends Fragment implements DashboardUICallbackLi
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
-            TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
+            final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
             title.setText(s);
             title.setVisibility(View.GONE);
 
@@ -337,6 +338,21 @@ public class DashboardFragment extends Fragment implements DashboardUICallbackLi
             });
 
             jobsSpinner.setSelection(3);
+            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) {
+                        mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            operatorsSpinner.setSelection(1);
+
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             actionBar.setCustomView(view);
@@ -352,12 +368,12 @@ public class DashboardFragment extends Fragment implements DashboardUICallbackLi
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(machineStatus.getProductName());
+        mProductNameTextView.setText(machineStatus.getProductName() + ",");
         mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));
-        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getMachineLname()));
-        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getMachineStatusEname()));
+        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getMachineID()));
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getMachineStatusID()));
     }
 
     @Override

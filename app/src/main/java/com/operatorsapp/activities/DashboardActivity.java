@@ -1,5 +1,6 @@
 package com.operatorsapp.activities;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -38,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
+
     private DashboardUICallbackListener mDashboardUICallbackListener;
     private MachineStatusCore mMachineStatusCore;
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
@@ -111,7 +114,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
-
+        if (mCroutonCreator != null) {
+            mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
+        }
     }
 
     @Override
@@ -155,7 +160,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mJobsCore.registerListener(new JobsForMachineUICallbackListener() {
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
-//                mJobList = jobListForMachine.getJobs();
                 mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
                 Log.i(LOG_TAG, "onJobListReceived()");
 
@@ -165,14 +169,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onJobListReceiveFailed()");
                 mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed(reason);
-
             }
 
             @Override
             public void onStartJobSuccess() {
                 Log.i(LOG_TAG, "onStartJobSuccess()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
-
+                //TODO refresh, need to check with yossi
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                mMachineStatusCore.stopPolling();
+                mMachineStatusCore.startPolling();
             }
 
             @Override
@@ -196,11 +202,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void startJobForMachine(int jobId) {
+        Log.i(LOG_TAG, "startJobForMachine(), Job Id: " + jobId);
+        PersistenceManager.getInstance().setJobId(jobId);
         mJobsCore.startJobForMachine(jobId);
     }
 
     @Override
-    public void onSelectedJobFragmentAttachwed(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback) {
+    public void onSelectedJobFragmentAttached(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback) {
         mDashboardActivityToSelectedJobFragmentCallback = dashboardActivityToSelectedJobFragmentCallback;
     }
 }

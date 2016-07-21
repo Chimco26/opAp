@@ -6,7 +6,7 @@ package com.operatorsapp.interfaces;
 public interface JobsFragmentToDashboardActivityCallback {
     void onJobFragmentAttached(DashboardActivityToJobsFragmentCallback dashboardActivityToJobsFragmentCallback);
 
-    void onSelectedJobFragmentAttachwed(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback);
+    void onSelectedJobFragmentAttached(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback);
 
     void getJobsForMachineList();
 

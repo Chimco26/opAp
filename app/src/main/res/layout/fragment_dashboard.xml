@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="match_parent"
@@ -21,8 +21,8 @@
         android:id="@+id/fragment_dashboard_leftLayout"
         android:layout_width="340dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
         android:layout_below="@+id/status_layout"
+        android:layout_gravity="left"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
@@ -65,21 +65,30 @@
         android:src="@drawable/double_right_arrow"/>
 
     <LinearLayout
+        android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/C2"
-        android:orientation="vertical"
-        android:id="@+id/status_layout">
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/status_bar_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical">
 
-
+            <TextView
+                android:id="@+id/text_view_product_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/product"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/text_view_product_name"
@@ -90,45 +99,99 @@
                 android:textColor="@color/status_bar"
                 android:textStyle="bold"/>
 
-            <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:background="@color/C20"/>
+
+            <TextView
+                android:id="@+id/text_view_product_id_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/id"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <TextView
                 android:id="@+id/text_view_product_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
                 android:text="product_id"
-                android:textColor="@color/status_bar"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@color/C20"/>
+
+            <TextView
+                android:id="@+id/text_view_job_id_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="@string/job"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/status_bar"/>
 
             <TextView
                 android:id="@+id/text_view_job_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="10dp"
                 android:text="job_id"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@color/C20"/>
+
+            <TextView
+                android:id="@+id/text_view_shift_id_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="@string/shift"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/status_bar"/>
 
             <TextView
                 android:id="@+id/text_view_shift_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="10dp"
                 android:text="shift_id"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <TextView
-                android:id="@+id/text_view_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="timer"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/timer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignRight="@id/status_layout"
+        android:layout_above="@+id/fragment_dashboard_leftLayout"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_marginRight="40dp">
+
+        <TextView
+            android:id="@+id/text_view_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="timer"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_clock_blue"
+            android:id="@+id/imageView"/>
     </LinearLayout>
 </RelativeLayout>

@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -22,28 +24,28 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.adapters.JobsRecyclerViewAdapter;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.List;
 
 
-public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback {
+public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
-    private static final String JOB_ID = "jobId";
-    private static final String PRODUCT_NAME = "productName";
-    private static final String PRODUCT_ERP = "productERP";
-    private static final String PLANNED_START = "plannedStart";
-    private static final String NUMBER_OF_UNITS = "numberOfUnits";
+
     public static final String SELECTED_JOB = "selected_job";
     private RecyclerView mJobsRecyclerView;
+    private FrameLayout mErrorFrameLayout;
+    private Button mRetryButton;
     private RecyclerView.LayoutManager mLayoutManager;
     private JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
     private List<Job> mJobList;
 
     private OnGoToScreenListener mOnGoToScreenListener;
-
+    private OnCroutonRequestListener mOnCroutonRequestListener;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
 
     @Override
@@ -57,6 +59,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         super.onAttach(context);
         try {
             mOnGoToScreenListener = (OnGoToScreenListener) getActivity();
+            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
             mJobsFragmentToDashboardActivityCallback = (JobsFragmentToDashboardActivityCallback) getActivity();
             mJobsFragmentToDashboardActivityCallback.onJobFragmentAttached(this);
             mJobsFragmentToDashboardActivityCallback.initJobsCore();
@@ -75,9 +78,23 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mRetryButton.setOnClickListener(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRetryButton.setOnClickListener(this);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
+        mErrorFrameLayout = (FrameLayout)view.findViewById(R.id.error_job_frame_layout);
+        mRetryButton = (Button)view.findViewById(R.id.button_retry);
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
@@ -112,7 +129,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     public void onJobSelected(int position) {
 
         Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + mJobList.get(position).getJobId());
-        SelectedJobFragmentFragment selectedJobFragment = new SelectedJobFragmentFragment();
+        SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
         Bundle bundle = new Bundle();
         Gson gson = new Gson();
         Job job = mJobList.get(position);
@@ -127,13 +144,25 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     @Override
     public void onJobReceiveFailed(ErrorObjectInterface reason) {
         Log.i(LOG_TAG, "onJobReceiveFailed()");
+        mErrorFrameLayout.setVisibility(View.VISIBLE);
+        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
     }
 
     @Override
     public void onJobReceived(JobListForMachine jobListForMachine) {
+        mErrorFrameLayout.setVisibility(View.GONE);
         mJobList = jobListForMachine.getJobs();
         mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mJobList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_retry:{
+                mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
+                break;
+            }
+        }
+    }
 }

@@ -39,4 +39,7 @@ public class TimeToEndCounter {
 
         }.start();
     }
+    public void stopTimer(){
+        mCountDownTimer.cancel();
+    }
 }

@@ -71,11 +71,11 @@ public class RetrofitMockClient implements Interceptor {
                     break;
                 case "GetMachineData":
                     responseString = "{\"error\":null,\"machineStatus\":{\n" +
-                            "    \"MachineID\": 29,\n" +
+                            "    \"MachineID\": 25,\n" +
                             "    \"MachineLname\": \"Pokemon creator\",\n" +
                             "    \"MachineName\": \"65\",\n" +
                             "    \"MachineStatusEname\": \"Stop\",\n" +
-                            "    \"MachineStatusID\": 3,\n" +
+                            "    \"MachineStatusID\": 36,\n" +
                             "    \"MachineStatusName\": \"6\",\t\n" +
                             "    \"MachineStatusEname\": \"Processing\",\n" +
                             "    \"OperatorID\": 234,\n" +
@@ -83,12 +83,13 @@ public class RetrofitMockClient implements Interceptor {
                             "    \"productName\": \"Pokemon\",\n" +
                             "    \"productId\": 1234,\n" +
                             "    \"jobId\": 35,\n" +
-                            "    \"shiftId\": 45,\n" +
+                            "    \"shiftId\": 4537,\n" +
                             "    \"shiftEndingIn\": 10000 \n" +
                             "    }\n" +
                             "}";
                     break;
                 case "GetJobsListForMachine":
+//                case "getJobsListForMachine":
                     responseString = "{\"error\":null,\n" +
                             "\"titleFields\":\n" +
                             "[\"jobId\",\"productName\",\"ERP\",\"plannedStart\",\"numberOfUnits\"],\n" +

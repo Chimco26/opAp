@@ -222,7 +222,7 @@ public class LoginFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ShowCrouton.croutonError(mCroutonCallback, reason);
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                     }
                 });
             }
@@ -250,7 +250,7 @@ public class LoginFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ShowCrouton.croutonError(mCroutonCallback, reason);
+                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                             }
                         });
                     }

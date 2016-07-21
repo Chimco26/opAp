@@ -21,14 +21,14 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 
-public class SelectedJobFragmentFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
+public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
 
-    private static final String LOG_TAG = SelectedJobFragmentFragment.class.getSimpleName();
+    private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
 
-    private TextView mProductIdTextView;
     private Job mJob;
     private Button mCancelButton;
+    private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
 
 
@@ -36,7 +36,7 @@ public class SelectedJobFragmentFragment extends Fragment implements View.OnClic
     public void onAttach(Context context) {
         super.onAttach(context);
         mJobsFragmentToDashboardActivityCallback = (JobsFragmentToDashboardActivityCallback) getActivity();
-        mJobsFragmentToDashboardActivityCallback.onSelectedJobFragmentAttachwed(this);
+        mJobsFragmentToDashboardActivityCallback.onSelectedJobFragmentAttached(this);
     }
 
     @Nullable
@@ -51,17 +51,19 @@ public class SelectedJobFragmentFragment extends Fragment implements View.OnClic
         setActionBar();
 
         mCancelButton = (Button) view.findViewById(R.id.button_cancel);
+        mActivateNewJobButton = (Button)view.findViewById(R.id.button_activate_new_job);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.job_id_text_view);
-        mProductIdTextView = (TextView) view.findViewById(R.id.product_id_text_view);
+        TextView plannedStartTextView = (TextView) view.findViewById(R.id.planned_start_text_view);
         TextView productNameTextView = (TextView) view.findViewById(R.id.product_name_text_view);
         TextView productERP = (TextView) view.findViewById(R.id.erp_id_text_view);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity_text_view);
+
 
         jobIdTextView.setText(String.valueOf(mJob.getJobId()));
         productNameTextView.setText(mJob.getProductName());
         productERP.setText(String.valueOf(mJob.getErp()));
         quantityTextView.setText(String.valueOf(mJob.getNumberOfUnits()));
-
+        plannedStartTextView.setText(mJob.getPlannedStart());
 
         return view;
     }
@@ -71,6 +73,7 @@ public class SelectedJobFragmentFragment extends Fragment implements View.OnClic
     public void onResume() {
         super.onResume();
         mCancelButton.setOnClickListener(this);
+        mActivateNewJobButton.setOnClickListener(this);
 
 
     }
@@ -79,6 +82,7 @@ public class SelectedJobFragmentFragment extends Fragment implements View.OnClic
     public void onPause() {
         super.onPause();
         mCancelButton.setOnClickListener(null);
+        mActivateNewJobButton.setOnClickListener(null);
     }
 
 
@@ -126,11 +130,11 @@ public class SelectedJobFragmentFragment extends Fragment implements View.OnClic
 
     @Override
     public void onStartJobSuccess() {
-        Log.i(LOG_TAG,"onStartJobSuccess()" );
+        Log.i(LOG_TAG, "onStartJobSuccess()");
     }
 
     @Override
     public void onStartJobFailure() {
-        Log.i(LOG_TAG,"onStartJobFailure()" );
+        Log.i(LOG_TAG, "onStartJobFailure()");
     }
 }

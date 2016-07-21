@@ -29,6 +29,7 @@
     <string name="credentials_error">Credentials error</string>
     <string name="url_error">Site URL not correct</string>
     <string name="could_not_log_in">Could not log in -</string>
+    <string name="could_not_reach_server_error">Error - could not reach server</string>
 
     <!--Select machine screen -->
     <string name="select_machine_screen_title">Link Machine</string>
@@ -54,6 +55,16 @@
     <string name="erp_id">ERP id</string>
     <string name="quantity">Quantity</string>
     <string name="activate_new_job">Activate new job</string>
+    <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
+    <string name="product">Product</string>
+    <string name="id">ID -</string>
+    <string name="job">Job</string>
+    <string name="shift">Shift</string>
+    <string name="machine_id">Machine ID</string>
+    <string name="machine_status">Machine status</string>
+    <string name="operator_id">Operator Id</string>
+    <string name="operator_name">Operator name</string>
+    <string name="operator_sign_in">Operator Sign In</string>
 
 
     <array name="operators_spinner_array">
