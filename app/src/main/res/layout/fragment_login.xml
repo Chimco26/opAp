@@ -108,7 +108,8 @@
                         android:background="@drawable/edit_text_background_selector"
                         android:hint="@string/login_fields_password_hint"
                         android:inputType="textPassword"
-                        android:paddingLeft="14dp"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="40dp"
                         android:singleLine="true"
                         android:text="zemingo123"
                         android:textColorHint="@color/T4_color" />
@@ -120,7 +121,7 @@
                         android:paddingStart="10dp"
                         android:focusable="true"
                         android:clickable="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_gravity="end|center_vertical"
                         android:src="@drawable/icn_password_disabled" />
                 </FrameLayout>

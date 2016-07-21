@@ -6,6 +6,8 @@ import android.content.Context;
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
+import com.operators.shiftlogcore.ShiftLogCore;
+import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
@@ -36,6 +38,11 @@ public class OperatorApplication extends Application {
         loginNetworkBridge.inject(NetworkManager.getInstance());
 
         LoginCore.getInstance().inject(PersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
+
+        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
+
+        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
 
         if (BuildConfig.DEBUG) {

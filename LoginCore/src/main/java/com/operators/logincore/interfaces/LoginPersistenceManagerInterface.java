@@ -2,7 +2,7 @@ package com.operators.logincore.interfaces;
 
 import java.util.ArrayList;
 
-public interface PersistenceManagerInterface {
+public interface LoginPersistenceManagerInterface {
 
     String getSiteUrl();
 

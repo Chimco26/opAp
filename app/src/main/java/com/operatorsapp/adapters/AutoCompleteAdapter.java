@@ -74,7 +74,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
                         Machine machine = iterator.next();
                         int machineId = machine.getId();
                         String machineName = machine.getMachineName() == null ? "" : machine.getMachineName();
-                        if (!(machineId + " - " + machineName).contains(constraint)) {
+                        if (!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase())) {
                             iterator.remove();
                         }
                     }

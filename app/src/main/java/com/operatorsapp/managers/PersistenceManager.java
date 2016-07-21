@@ -2,11 +2,18 @@ package com.operatorsapp.managers;
 
 import android.content.Context;
 
-import com.operators.logincore.interfaces.PersistenceManagerInterface;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
+import com.operators.shiftlogcore.interfaces.ShiftLogPersistenceManagerInterface;
+import com.operators.shiftloginfra.ShiftLog;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
-public class PersistenceManager implements PersistenceManagerInterface {
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
@@ -18,8 +25,10 @@ public class PersistenceManager implements PersistenceManagerInterface {
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
+    private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
 
     private static PersistenceManager msInstance;
+    private Gson mGson;
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -38,6 +47,7 @@ public class PersistenceManager implements PersistenceManagerInterface {
 
     private PersistenceManager(Context context) {
         SecurePreferences.initInstance(context);
+        mGson = new Gson();
     }
 
     @Override
@@ -114,6 +124,20 @@ public class PersistenceManager implements PersistenceManagerInterface {
     @Override
     public void setRequestTimeOut(int requestTimeOut) {
         SecurePreferences.getInstance().setInt(PREF_REQUEST_TIMEOUT, requestTimeOut);
+    }
+
+    @Override
+    public void saveShiftLogs(ArrayList<ShiftLog> shiftLogs) {
+        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(shiftLogs));
+    }
+
+    @Override
+    public ArrayList<ShiftLog> getShiftLogs() {
+        String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS);
+        Type listType = new TypeToken<ArrayList<ShiftLog>>() {
+        }.getType();
+
+        return mGson.fromJson(shiftLogsJsonString, listType);
     }
 
 }

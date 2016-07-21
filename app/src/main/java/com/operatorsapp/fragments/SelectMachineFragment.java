@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 
 public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String MACHINES_LIST = "machines_list";
-    private OnGoToScreenListener mNavigationCallback;
+    private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
     private RelativeLayout mGoButton;
     private ImageView mGoButtonBackground;
@@ -59,7 +58,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnGoToScreenListener) context;
+            mNavigationCallback = (GoToScreenListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
@@ -134,12 +133,21 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getString(R.string.screen_title));
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
-            ((TextView) view.findViewById(R.id.title)).setText(s);
+            ImageView backButton = (ImageView) view.findViewById(R.id.action_bar_back_btn);
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().onBackPressed();
+                }
+            });
+            ((TextView) view.findViewById(R.id.title)).setText(getActivity().getResources().getString(R.string.link_machine));
             actionBar.setCustomView(view);
+            actionBar.setIcon(null);
+
         }
     }
 
@@ -148,6 +156,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         mMachineId = mAutoCompleteAdapter.getItem(position).getId();
         String machineName = mAutoCompleteAdapter.getItem(position).getMachineName() == null ? "" : mAutoCompleteAdapter.getItem(position).getMachineName();
         mSearchField.setText(new StringBuilder(mMachineId + " - " + machineName));
+        mSearchField.setSelection(mSearchField.length());
 
         canGoNext = true;
         mGoButton.setEnabled(true);
@@ -163,11 +172,10 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (before > count) {
-                canGoNext = false;
-                mGoButton.setEnabled(false);
-                mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
-            }
+            canGoNext = false;
+            mGoButton.setEnabled(false);
+            mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
+
         }
 
         @Override

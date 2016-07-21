@@ -14,7 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -22,7 +22,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements OnGoToScreenListener, OnCroutonRequestListener {
+public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;

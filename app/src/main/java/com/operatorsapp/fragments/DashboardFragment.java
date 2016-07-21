@@ -27,11 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.operators.shiftloginfra.ShiftLog;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
+import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.model.ShiftLog;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class DashboardFragment extends Fragment {
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     public static final int DURATION_MILLIS = 200;
     private OnCroutonRequestListener mCroutonCallback;
-
+    private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
     private ArrayList<ShiftLog> mShiftLogsList;
     private View mDividerView;
@@ -61,25 +62,25 @@ public class DashboardFragment extends Fragment {
         mShiftLogsList = new ArrayList<>();
 
         ShiftLog s1 = new ShiftLog();
-        s1.setPriority(true);
-        s1.setIcon(R.drawable.face);
+        s1.setPriority(1);
+//        s1.setIcon(R.drawable.face);
         s1.setTitle("Machine Stopped");
         s1.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s1.setTime("17:30");
+        s1.setTimestamp(1468913111538L);
 
         ShiftLog s2 = new ShiftLog();
-        s2.setPriority(false);
-        s2.setIcon(R.drawable.face);
+        s2.setPriority(2);
+//        s2.setIcon(R.drawable.face);
         s2.setTitle("Material Weight Low");
         s2.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s2.setTime("17:30");
+        s2.setTimestamp(1468913111538L);
 
         ShiftLog s3 = new ShiftLog();
-        s3.setPriority(true);
-        s3.setIcon(R.drawable.face);
+        s3.setPriority(1);
+//        s3.setIcon(R.drawable.face);
         s3.setTitle("Cycle Time High");
         s3.setSubtitle("Machine: 'ID\nStopped at: 05.11.1984");
-        s3.setTime("17:30");
+        s3.setTimestamp(1468913111538L);
 
         mShiftLogsList.add(s1);
         mShiftLogsList.add(s2);
@@ -99,7 +100,7 @@ public class DashboardFragment extends Fragment {
         int width = size.x;
         final int openWidth = width / 2;
         final int closeWidth = width / 4;
-        final int betweenWidth = width * 3 / 8;
+        final int middleWidth = width * 3 / 8;
 
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -189,12 +190,12 @@ public class DashboardFragment extends Fragment {
                             mLeftLayout.requestLayout();
                             mDownX = (int) event.getRawX();
                             //set subTitle invisible in adapter
-                            mShiftLogAdapter.changeState(currentX < betweenWidth);
+                            mShiftLogAdapter.changeState(currentX < middleWidth);
                             mShiftLogAdapter.notifyDataSetChanged();
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (mLeftLayoutParams.width < betweenWidth) {
+                        if (mLeftLayoutParams.width < middleWidth) {
                             toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
                         } else {
                             toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
@@ -227,6 +228,8 @@ public class DashboardFragment extends Fragment {
         super.onAttach(context);
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
+            mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
+
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
@@ -236,6 +239,7 @@ public class DashboardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mCroutonCallback = null;
+        mDialogsShiftLogListener = null;
     }
 
     private void setActionBar() {
@@ -246,7 +250,7 @@ public class DashboardFragment extends Fragment {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getString(R.string.screen_title));
+            SpannableString s = new SpannableString(getActivity().getString(R.string.screen_title));
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());

@@ -6,6 +6,7 @@ import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.infra.ErrorObjectInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
+import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -18,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface {
+public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();

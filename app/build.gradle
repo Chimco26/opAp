@@ -34,6 +34,9 @@ dependencies {
     compile project(':LoginNetworkBridge')
     compile project(':Infra')
     compile project(':GetMachinesNetworkBridge')
+    compile project(':ShiftLogCore')
+    compile project(':ShiftLogInfra')
+    compile project(':ShiftLogNetworkbridge')
     //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.google.code.gson:gson:2.6.2'

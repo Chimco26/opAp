@@ -6,14 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 
+import com.operators.shiftlogcore.ShiftLogCore;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.DashboardFragment;
+import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener  {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, DialogsShiftLogListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -44,8 +46,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onHideConnectivityCroutonRequest() {
 
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public ShiftLogCore getShiftLogCore() {
+        return ShiftLogCore.getInstance();
     }
 }

@@ -9,7 +9,7 @@ import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginUICallback;
-import com.operators.logincore.interfaces.PersistenceManagerInterface;
+import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class LoginCore {
 
     private static final String LOG_TAG = LoginCore.class.getSimpleName();
-    private PersistenceManagerInterface mPersistenceManagerInterface;
+    private LoginPersistenceManagerInterface mLoginPersistenceManagerInterface;
     private static LoginCore msInstance;
     private LoginNetworkBridgeInterface mLoginNetworkBridgeInterface;
     private GetMachinesNetworkBridgeInterface mGetMachinesNetworkBridgeInterface;
@@ -29,8 +29,8 @@ public class LoginCore {
         return msInstance;
     }
 
-    public void inject(PersistenceManagerInterface persistenceManagerInterface, LoginNetworkBridgeInterface loginNetworkBridgeInterface, GetMachinesNetworkBridgeInterface getMachinesNetworkBridgeInterface) {
-        mPersistenceManagerInterface = persistenceManagerInterface;
+    public void inject(LoginPersistenceManagerInterface loginPersistenceManagerInterface, LoginNetworkBridgeInterface loginNetworkBridgeInterface, GetMachinesNetworkBridgeInterface getMachinesNetworkBridgeInterface) {
+        mLoginPersistenceManagerInterface = loginPersistenceManagerInterface;
         mLoginNetworkBridgeInterface = loginNetworkBridgeInterface;
         mGetMachinesNetworkBridgeInterface = getMachinesNetworkBridgeInterface;
     }
@@ -55,7 +55,7 @@ public class LoginCore {
                         ZLogger.d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
                         loginUICallback.onLoginFailed(reason);
                     }
-                }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
+                }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
             }
 
             @Override
@@ -63,13 +63,13 @@ public class LoginCore {
                 ZLogger.d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
-        }, mPersistenceManagerInterface.getTotalRetries(), mPersistenceManagerInterface.getRequestTimeout());
+        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
     public void saveMachine(String sessionId, String siteUrl, String username, String password) {
-        mPersistenceManagerInterface.setSessionId(sessionId);
-        mPersistenceManagerInterface.setSiteUrl(siteUrl);
-        mPersistenceManagerInterface.setUsername(username);
-        mPersistenceManagerInterface.setPassword(password);
+        mLoginPersistenceManagerInterface.setSessionId(sessionId);
+        mLoginPersistenceManagerInterface.setSiteUrl(siteUrl);
+        mLoginPersistenceManagerInterface.setUsername(username);
+        mLoginPersistenceManagerInterface.setPassword(password);
     }
 }

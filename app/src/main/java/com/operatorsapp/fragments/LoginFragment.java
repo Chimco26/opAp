@@ -28,7 +28,7 @@ import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
-    private OnGoToScreenListener mNavigationCallback;
+    private GoToScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
     private EditText mUserName;
@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNavigationCallback = (OnGoToScreenListener) context;
+            mNavigationCallback = (GoToScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
@@ -104,10 +104,12 @@ public class LoginFragment extends Fragment {
                 if (mShowHidePass.isEnabled()) {
                     if (!isVisible) {
                         mPassword.setTransformationMethod(null);
+                        mPassword.setSelection(mPassword.length());
                         mShowHidePass.setImageResource(R.drawable.icn_show_password);
                         isVisible = true;
                     } else {
                         mPassword.setTransformationMethod(new PasswordTransformationMethod());
+                        mPassword.setSelection(mPassword.length());
                         mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
                         isVisible = false;
                     }
@@ -204,8 +206,8 @@ public class LoginFragment extends Fragment {
     private void tryToLogin() {
         ProgressDialogManager.show(getActivity());
         String siteUrl = mSiteUrl.getText().toString();
-        String userName = mUserName.getText().toString();
-        String password = mPassword.getText().toString();
+        String userName = mUserName.getText().toString().toLowerCase();
+        String password = mPassword.getText().toString().toLowerCase();
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {

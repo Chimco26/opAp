@@ -12,6 +12,9 @@
             <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
+            <option value="$PROJECT_DIR$/ShiftLogCore" />
+            <option value="$PROJECT_DIR$/ShiftLogInfra" />
+            <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
@@ -22,6 +25,9 @@
             <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
+            <option value="$PROJECT_DIR$/ShiftLogCore" />
+            <option value="$PROJECT_DIR$/ShiftLogInfra" />
+            <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
