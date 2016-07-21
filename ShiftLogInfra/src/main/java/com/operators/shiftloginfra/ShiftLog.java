@@ -20,7 +20,6 @@ public class ShiftLog {
     private String mEndTime;
     @SerializedName("duration")
     private int mDuration;
-    private boolean mDialogShown;
     private long mTimeOfAdded;
 
     public int getPriority() {
@@ -85,14 +84,6 @@ public class ShiftLog {
 
     public void setDuration(int mDuration) {
         this.mDuration = mDuration;
-    }
-
-    public boolean isDialogShown() {
-        return mDialogShown;
-    }
-
-    public void setDialogShown(boolean dialogShown) {
-        this.mDialogShown = dialogShown;
     }
 
     public long getTimeOfAdded() {

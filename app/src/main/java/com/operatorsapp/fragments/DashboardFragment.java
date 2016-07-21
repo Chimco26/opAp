@@ -40,15 +40,14 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
-    public static final int DURATION_MILLIS = 200;
-    private static final int DISMISS_DIALOG_FRAGMENT = 1003;
-    private static final int DISMISS_ALL_DIALOG_FRAGMENT = 1004;
+    private static final int ANIM_DURATION_MILLIS = 200;
+    private static final int THIRTY_SECONDS = 30 * 1000;
 
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
@@ -58,8 +57,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ImageView mArrowRight;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
-    Stack<ShiftLog> mShiftLogsStack = new Stack<ShiftLog>();
-    //    private ArrayList<ShiftLog> mShiftLogsList;
+    private ArrayDeque<ShiftLog> mShiftLogsQueue = new ArrayDeque<>();
+    private ArrayList<ShiftLog> mShiftLogsList = new ArrayList<>();
     private View mDividerView;
 
     public static DashboardFragment newInstance() {
@@ -104,7 +103,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @Override
             public void onClick(View v) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
-                anim.setDuration(DURATION_MILLIS);
+                anim.setDuration(ANIM_DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -133,7 +132,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @Override
             public void onClick(View v) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
-                anim.setDuration(DURATION_MILLIS);
+                anim.setDuration(ANIM_DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -195,17 +194,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "", new ShiftLogUICallback<ShiftLog>() {
             @Override
             public void onGetShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
-                //    mShiftLogsList = shiftLogs;
-                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), shiftLogs, true);
+                mShiftLogsQueue.addAll(shiftLogs);
+                mShiftLogsList.addAll(shiftLogs);
+
+                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                mShiftLogsStack.addAll(shiftLogs);
-
-//                if ((System.currentTimeMillis() - mShiftLogsStack.get(0).getTimeOfAdded()) < (30 * 1000)) {
-                DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsStack.get(0).getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+                DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                 dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-                mShiftLogsStack.pop();
-                mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsStack);
+//                mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsQueue);
 //                }
 
 //                for (int i = 0; i < shiftLogs.size(); i++) {
@@ -214,8 +212,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 //                            DialogFragment dialogFragment = DialogFragment.newInstance(shiftLogs.get(i).getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
 //                            dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
 //                            shiftLogs.get(i).setDialogShown(true);
-//                            mShiftLogsStack.addAll(shiftLogs);
-//                            mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsStack);
+//                            mShiftLogsQueue.addAll(shiftLogs);
+//                            mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsQueue);
 //                            break;
 //                        } else {
 //                            shiftLogs.get(i).setDialogShown(true);
@@ -296,11 +294,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
+        if ((System.currentTimeMillis() - mShiftLogsQueue.peek().getTimeOfAdded()) < (30 * 1000)) {
+            DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+            dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+        }
     }
 
     @Override
     public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
-        mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(null);
+        mShiftLogsQueue.clear();
         dialog.dismiss();
     }
 }
