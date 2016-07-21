@@ -13,6 +13,9 @@
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" filepath="$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" filepath="$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OperatorCore/OperatorCore.iml" filepath="$PROJECT_DIR$/OperatorCore/OperatorCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" filepath="$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

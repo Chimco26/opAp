@@ -55,4 +55,7 @@ dependencies {
     compile project(':JobsInfra')
     compile project(':JobsNetworkBridge')
     compile project(':JobsCore')
+    compile project(':OperatorCore')
+    compile project(':OperatorInfra')
+    compile project(':OperatorNetworkBridge')
 }

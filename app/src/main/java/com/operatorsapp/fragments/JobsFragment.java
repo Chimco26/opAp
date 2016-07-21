@@ -98,7 +98,6 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
-
     }
 
     private void setActionBar() {
