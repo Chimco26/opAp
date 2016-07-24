@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/NetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" filepath="$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogInfra/ShiftLogInfra.iml" filepath="$PROJECT_DIR$/ShiftLogInfra/ShiftLogInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogNetworkbridge/ShiftLogNetworkbridge.iml" filepath="$PROJECT_DIR$/ShiftLogNetworkbridge/ShiftLogNetworkbridge.iml" />
