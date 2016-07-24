@@ -74,8 +74,6 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         super.onResume();
         mCancelButton.setOnClickListener(this);
         mActivateNewJobButton.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -84,7 +82,6 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         mCancelButton.setOnClickListener(null);
         mActivateNewJobButton.setOnClickListener(null);
     }
-
 
     private void setActionBar() {
 

@@ -65,8 +65,14 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
             mJobsFragmentToDashboardActivityCallback.initJobsCore();
         }
         catch (ClassCastException e) {
-            throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
+            throw new ClassCastException("Calling fragment must implement required interface");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mJobsFragmentToDashboardActivityCallback.unregisterListeners();
     }
 
     @Nullable

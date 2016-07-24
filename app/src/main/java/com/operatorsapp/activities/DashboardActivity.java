@@ -19,6 +19,8 @@ import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatusinfra.ErrorObjectInterface;
 import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.operatorcore.OperatorCore;
+import com.operators.operatornetworkbridge.OperatorNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
 import com.operatorsapp.fragments.DashboardFragment;
@@ -28,6 +30,7 @@ import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -36,7 +39,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, OnGoToScreenListener, JobsFragmentToDashboardActivityCallback {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, OnGoToScreenListener, JobsFragmentToDashboardActivityCallback, SignInOperatorToDashboardActivityCallback {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -149,6 +152,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    @Override
+    public void unregisterListeners() {
+        mJobsCore.unregisterListener();
+    }
 
     @Override
     public void initJobsCore() {
@@ -174,7 +181,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStartJobSuccess() {
                 Log.i(LOG_TAG, "onStartJobSuccess()");
-                mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
+                //     mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 //TODO refresh, need to check with yossi
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
@@ -184,7 +191,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
-                mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
+                //   mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
             }
         });
     }
@@ -210,5 +217,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onSelectedJobFragmentAttached(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback) {
         mDashboardActivityToSelectedJobFragmentCallback = dashboardActivityToSelectedJobFragmentCallback;
+    }
+
+    @Override
+    public OperatorCore onSignInOperatorFragmentAttached() {
+        OperatorNetworkBridge operatorNetworkBridge = new OperatorNetworkBridge();
+        operatorNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+        return new OperatorCore(operatorNetworkBridge, PersistenceManager.getInstance());
+    }
+
+    @Override
+    public void onSetOperatorForMachineSuccess(String operatorId, String operatorName) {
+        PersistenceManager.getInstance().setOperatorId(operatorId);
+        PersistenceManager.getInstance().setOperatorName(operatorName);
+
+        Log.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
+
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //TODO need to check with yossi maybe he need to do more here
+        mMachineStatusCore.stopPolling();
+        mMachineStatusCore.startPolling();
     }
 }

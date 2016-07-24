@@ -1,4 +1,4 @@
-package com.operatorsapp.fragments.interfaces;
+package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,29 +12,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.app.operatorinfra.ErrorObjectInterface;
+import com.app.operatorinfra.Operator;
+import com.google.gson.Gson;
+import com.operators.operatorcore.OperatorCore;
+import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.OnGoToScreenListener;
+import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = SignInOperatorFragment.class.getSimpleName();
+    private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
+    private static final String SELECTED_OPERATOR = "selected_operator";
     private EditText mOperatorIdEditText;
     private Button mSignInButton;
+
+    private OperatorCore mOperatorCore;
+    private SignInOperatorToDashboardActivityCallback mSignInOperatorToDashboardActivityCallback;
+    private OnGoToScreenListener mOnGoToScreenListener;
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mSignInOperatorToDashboardActivityCallback = (SignInOperatorToDashboardActivityCallback) getActivity();
+        mOperatorCore = mSignInOperatorToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        mOnGoToScreenListener = (OnGoToScreenListener) getActivity();
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getActivity().getWindow().setSoftInputMode(
-//                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
     }
 
     @Nullable
@@ -50,8 +65,38 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         mOperatorIdEditText = (EditText) view.findViewById(R.id.operator_id_edit_text);
         mSignInButton = (Button) view.findViewById(R.id.button_operator_signIn);
-//        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(mOperatorIdEditText, InputMethodManager.SHOW_FORCED);
+
+        mOperatorCore.registerListener(new OperatorForMachineUICallbackListener() {
+            @Override
+            public void onOperatorDataReceived(Operator operator) {
+                Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
+
+                SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
+                Bundle bundle = new Bundle();
+                Gson gson = new Gson();
+                String jobString = gson.toJson(operator, Operator.class);
+                bundle.putString(SELECTED_OPERATOR, jobString);
+
+                selectedOperatorFragment.setArguments(bundle);
+                mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
+            }
+
+            @Override
+            public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+                Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            }
+
+            @Override
+            public void onSetOperatorSuccess() {
+
+            }
+
+            @Override
+            public void onSetOperatorFailed(ErrorObjectInterface reason) {
+
+            }
+        });
+
     }
 
     @Override
@@ -95,10 +140,19 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
                 String id = mOperatorIdEditText.getText().toString();
-                Log.i(TAG, "Operator id: " + id);
-                //TODO send to server
+                Log.i(LOG_TAG, "Operator id: " + id);
+                mOperatorCore.getOperatorById(id);
                 break;
             }
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mSignInOperatorToDashboardActivityCallback != null) {
+            mSignInOperatorToDashboardActivityCallback = null;
+        }
+        mOperatorCore.unregisterListener();
     }
 }

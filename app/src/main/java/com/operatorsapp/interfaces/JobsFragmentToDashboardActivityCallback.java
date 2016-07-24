@@ -13,4 +13,6 @@ public interface JobsFragmentToDashboardActivityCallback {
     void startJobForMachine(int jobId);
 
     void initJobsCore();
+
+    void unregisterListeners();
 }

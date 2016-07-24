@@ -113,7 +113,14 @@ public class RetrofitMockClient implements Interceptor {
                             "}\n";
                     break;
                 case "StartJobForMachine":
-                    Log.i(LOG_TAG,"StartJobForMachine request received");
+                    Log.i(LOG_TAG, "StartJobForMachine request received");
+                    responseString = "{\"error\":null}";
+                    break;
+                case "GetOperatorById":
+                    responseString = "{\"error\":null,\"operator\":{\"getOperatorId\":\"7\",\"operatorName\":\"Pikachu\"}}";
+                    break;
+                case "SetOperatorForMachine":
+                    Log.i(LOG_TAG, "SetOperatorForMachine request received");
                     responseString = "{\"error\":null}";
                     break;
                 default:
@@ -122,7 +129,8 @@ public class RetrofitMockClient implements Interceptor {
             }
 
             response = getResponse(chain, responseString);
-        } else {
+        }
+        else {
             response = chain.proceed(chain.request());
         }
         return response;

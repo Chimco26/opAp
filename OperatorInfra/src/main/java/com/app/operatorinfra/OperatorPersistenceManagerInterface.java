@@ -11,7 +11,9 @@ public interface OperatorPersistenceManagerInterface {
 
     int getMachineId();
 
-    int operatorId();
+    String getOperatorId();
+
+    String getOperatorName();
 
     void setSiteUrl(String siteUrl);
 
@@ -23,5 +25,7 @@ public interface OperatorPersistenceManagerInterface {
 
     void setMachineId(int machineId);
 
-    void setOperatorId();
+    void setOperatorId(String operatorId);
+
+    void setOperatorName(String operatorName);
 }

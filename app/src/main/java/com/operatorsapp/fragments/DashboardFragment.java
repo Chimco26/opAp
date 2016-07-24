@@ -36,7 +36,6 @@ import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.fragments.interfaces.SignInOperatorFragment;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.model.ShiftLog;

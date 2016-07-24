@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Operator{
 
-    @SerializedName("operatorId")
+    @SerializedName("getOperatorId")
     private String mOperatorId;
-    @SerializedName("0peratorName")
+    @SerializedName("operatorName")
     private String mOperatorName;
 
 
