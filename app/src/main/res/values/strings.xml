@@ -45,4 +45,6 @@
     <string name="go">Go</string>
     <string name="machine_id_name">Machine ID Name</string>
     <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
+    <string name="no_notifications">No Notifications</string>
+    <string name="no_data">No Data</string>
 </resources>

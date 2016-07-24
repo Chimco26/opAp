@@ -59,9 +59,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         final ShiftLogViewHolder shiftLogViewHolder = (ShiftLogViewHolder) holder;
 
         if (shiftLog.getPriority() == 1) {
-            holder.itemView.setBackgroundResource(R.color.C3T);
+//            holder.itemView.setBackgroundResource(R.color.C3T);
         } else {
-            holder.itemView.setBackgroundResource(R.color.white);
+//            holder.itemView.setBackgroundResource(R.color.white);
         }
         shiftLogViewHolder.mTitle.setText(shiftLog.getTitle());
 //        shiftLogViewHolder.mIcon.setImageResource();

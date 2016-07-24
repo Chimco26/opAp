@@ -38,6 +38,7 @@ import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
 import java.util.ArrayDeque;
@@ -53,8 +54,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
     private LinearLayout mLeftLayout, mRightLayout;
-    private ImageView mArrowLeft;
-    private ImageView mArrowRight;
+    private TextView mNoNotificationsText;
+    private LinearLayout mNoDataView;
+    private ImageView mLeftButton;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
     private ArrayDeque<ShiftLog> mShiftLogsQueue = new ArrayDeque<>();
@@ -98,60 +100,63 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mRightLayoutParams.setMarginStart(closeWidth);
         mRightLayout.setLayoutParams(mRightLayoutParams);
 
-        mArrowLeft = (ImageView) view.findViewById(R.id.fragment_dashboard_arrow_right);
-        mArrowLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
-                anim.setDuration(ANIM_DURATION_MILLIS);
-                mLeftLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+        mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
+        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
-                        //set subTitle visible in adapter
-                        mShiftLogAdapter.changeState(false);
-                        mShiftLogAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-            }
-        });
-        mArrowRight = (ImageView) view.findViewById(R.id.fragment_dashboard_arrow_left);
-        mArrowRight.setOnClickListener(new View.OnClickListener() {
+        mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
+        mLeftButton.setOnClickListener(new View.OnClickListener() {
+            boolean isOpen;
 
             @Override
             public void onClick(View v) {
-                final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
-                anim.setDuration(ANIM_DURATION_MILLIS);
-                mLeftLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        //set subTitle invisible in adapter
-                        mShiftLogAdapter.changeState(true);
-                        mShiftLogAdapter.notifyDataSetChanged();
-                    }
+                if (!isOpen) {
+                    final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
+                    anim.setDuration(ANIM_DURATION_MILLIS);
+                    mLeftLayout.startAnimation(anim);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
-                    }
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
+                            //set subTitle visible in adapter
+                            mShiftLogAdapter.changeState(false);
+                            mShiftLogAdapter.notifyDataSetChanged();
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    isOpen = true;
+                } else {
+                    final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
+                    anim.setDuration(ANIM_DURATION_MILLIS);
+                    mLeftLayout.startAnimation(anim);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            //set subTitle invisible in adapter
+                            mShiftLogAdapter.changeState(true);
+                            mShiftLogAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    isOpen = false;
+                }
             }
         });
 
@@ -191,9 +196,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void getShiftLogs() {
+        ProgressDialogManager.show(getActivity());
         mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "", new ShiftLogUICallback<ShiftLog>() {
             @Override
             public void onGetShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
+                dismissProgressDialog();
+                mNoDataView.setVisibility(View.GONE);
+                mNoNotificationsText.setVisibility(View.GONE);
                 mShiftLogsQueue.addAll(shiftLogs);
                 mShiftLogsList.addAll(shiftLogs);
 
@@ -224,24 +233,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
             @Override
             public void onGetShiftLogFailed(ErrorObjectInterface reason) {
-
+                dismissProgressDialog();
             }
         });
     }
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean open) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mRightLayoutParams.setMarginStart(newWidth);
         mLeftLayout.requestLayout();
         mRightLayout.setLayoutParams(mRightLayoutParams);
-        if (open) {
-            mArrowLeft.setVisibility(View.INVISIBLE);
-            mArrowRight.setVisibility(View.VISIBLE);
-        } else {
-            mArrowLeft.setVisibility(View.VISIBLE);
-            mArrowRight.setVisibility(View.INVISIBLE);
-        }
-        mShiftLogAdapter.changeState(!open);
+
+        mShiftLogAdapter.changeState(!isOpen);
         mShiftLogAdapter.notifyDataSetChanged();
     }
 
@@ -304,5 +307,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
         mShiftLogsQueue.clear();
         dialog.dismiss();
+    }
+
+    private void dismissProgressDialog() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ProgressDialogManager.dismiss();
+            }
+        });
     }
 }
