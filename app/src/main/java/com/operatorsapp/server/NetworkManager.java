@@ -2,10 +2,18 @@ package com.operatorsapp.server;
 
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
-import com.operators.getmachinesnetworkbridge.server.ErrorObject;
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachinesStatusServiceRequest;
+import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
+import com.operators.jobsnetworkbridge.interfaces.EmeraldGetJobsListServiceRequests;
+import com.operators.jobsnetworkbridge.interfaces.EmeraldStartJobServiceRequests;
+import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkManagerInterface;
+import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
+import com.operators.operatornetworkbridge.interfaces.EmeraldGetOperatorById;
+import com.operators.operatornetworkbridge.interfaces.EmeraldSetOperatorForMachine;
+import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
+import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -14,13 +22,12 @@ import com.zemingo.logrecorder.ZLogger;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface {
+public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -54,7 +61,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
-        } else {
+        }
+        else {
             Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
@@ -97,7 +105,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                     .readTimeout(timeout, timeUnit)
 //                    .sslSocketFactory(sslContext.getSocketFactory())
                     .build();
-        } else {
+        }
+        else {
             okHttpClient = new OkHttpClient.Builder()
                     //add mock
                     .addInterceptor(new RetrofitMockClient())
@@ -108,5 +117,60 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                 .baseUrl(siteUrl)
                 .client(okHttpClient)
                 .build();
+    }
+
+    @Override
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return getMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
+    }
+
+    @Override
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return getJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldGetJobsListServiceRequests.class);
+    }
+
+    @Override
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return startJobForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldStartJobServiceRequests.class);
+    }
+
+    @Override
+    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl) {
+        return getOperatorByIdRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldGetOperatorById.class);
+    }
+
+    @Override
+    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl) {
+        return setOperatorForMachineRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldSetOperatorForMachine.class);
     }
 }

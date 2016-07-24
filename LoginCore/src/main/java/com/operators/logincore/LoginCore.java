@@ -10,6 +10,7 @@ import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
+import com.operators.infra.PersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -66,10 +67,12 @@ public class LoginCore {
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
+
     public void saveMachine(String sessionId, String siteUrl, String username, String password) {
         mLoginPersistenceManagerInterface.setSessionId(sessionId);
         mLoginPersistenceManagerInterface.setSiteUrl(siteUrl);
         mLoginPersistenceManagerInterface.setUsername(username);
         mLoginPersistenceManagerInterface.setPassword(password);
+
     }
 }

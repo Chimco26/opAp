@@ -1,9 +1,12 @@
 package com.operatorsapp.server.mocks;
 
+import android.util.Log;
+
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.NetworkAvailable;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -13,6 +16,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class RetrofitMockClient implements Interceptor {
+    private static final String LOG_TAG = RetrofitMockClient.class.getSimpleName();
     private static final String MIME_TYPE = "application/json";
 
     @Override
@@ -92,6 +96,60 @@ public class RetrofitMockClient implements Interceptor {
                             "      }\n" +
                             "      ] \n" +
                             "  }";
+                    break;
+                case "GetMachineData":
+                    responseString = "{\"error\":null,\"machineStatus\":{\n" +
+                            "    \"MachineID\": 25,\n" +
+                            "    \"MachineLname\": \"Pokemon creator\",\n" +
+                            "    \"MachineName\": \"65\",\n" +
+                            "    \"MachineStatusEname\": \"Stop\",\n" +
+                            "    \"MachineStatusID\": 36,\n" +
+                            "    \"MachineStatusName\": \"6\",\t\n" +
+                            "    \"MachineStatusEname\": \"Processing\",\n" +
+                            "    \"OperatorID\": 234,\n" +
+                            "    \"operatorName\": \"opi the operator\",\n" +
+                            "    \"productName\": \"Pokemon\",\n" +
+                            "    \"productId\": 1234,\n" +
+                            "    \"jobId\": 35,\n" +
+                            "    \"shiftId\": 4537,\n" +
+                            "    \"shiftEndingIn\": 10000 \n" +
+                            "    }\n" +
+                            "}";
+                    break;
+                case "GetJobsListForMachine":
+//                case "getJobsListForMachine":
+                    responseString = "{\"error\":null,\n" +
+                            "\"titleFields\":\n" +
+                            "[\"jobId\",\"productName\",\"ERP\",\"plannedStart\",\"numberOfUnits\"],\n" +
+                            "\"jobs\":\n" +
+                            "    [\n" +
+                            "    {\n" +
+                            "\"jobId\": 123,\n" +
+                            "\"productName\": \"some name\",\n" +
+                            "\"ERP\": 6547,\n" +
+                            "\"plannedStart\": \"01/02/2016\",\n" +
+                            "\"numberOfUnits\": 999     \n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "\"jobId\": 456,\n" +
+                            "\"productName\":\"some other name\",\n" +
+                            "\"ERP\": 7896,\n" +
+                            "\"plannedStart\": \"01/05/2016\",\n" +
+                            "\"numberOfUnits\": 7     \n" +
+                            "    }\n" +
+                            "    ]\n" +
+                            "}\n";
+                    break;
+                case "StartJobForMachine":
+                    Log.i(LOG_TAG, "StartJobForMachine request received");
+                    responseString = "{\"error\":null}";
+                    break;
+                case "GetOperatorById":
+                    responseString = "{\"error\":null,\"operator\":{\"getOperatorId\":\"7\",\"operatorName\":\"Pikachu\"}}";
+                    break;
+                case "SetOperatorForMachine":
+                    Log.i(LOG_TAG, "SetOperatorForMachine request received");
+                    responseString = "{\"error\":null}";
                     break;
                 default:
                     responseString = "";

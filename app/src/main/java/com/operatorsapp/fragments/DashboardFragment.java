@@ -16,12 +16,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +33,10 @@ import android.widget.TextView;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.ShiftLog;
+import com.operators.machinestatusinfra.MachineStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
@@ -39,16 +44,20 @@ import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
+    private GoToScreenListener mOnGoToScreenListener;
+    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
@@ -62,6 +71,17 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayDeque<ShiftLog> mShiftLogsQueue = new ArrayDeque<>();
     private ArrayList<ShiftLog> mShiftLogsList = new ArrayList<>();
     private View mDividerView;
+
+    private TextView mProductNameTextView;
+    private TextView mProductIdTextView;
+    private TextView mJobIdTextView;
+    private TextView mShiftIdTextView;
+    private TextView mTimerTextView;
+    private TextView mMachineIdStatusBarTextView;
+    private TextView mMachineStatusStatusBarTextView;
+
+    private boolean mIsFirstJobSpinnerSelection = true;
+    private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance() {
         return new DashboardFragment();
@@ -85,6 +105,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         final int openWidth = width / 2;
         final int closeWidth = width / 4;
         final int middleWidth = width * 3 / 8;
+
+        mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
+        mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
+        mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
+        mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
+        mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
 
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -201,17 +227,21 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @Override
             public void onGetShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
                 dismissProgressDialog();
-                mNoDataView.setVisibility(View.GONE);
-                mNoNotificationsText.setVisibility(View.GONE);
-                mShiftLogsQueue.addAll(shiftLogs);
-                mShiftLogsList.addAll(shiftLogs);
+                if (shiftLogs != null && shiftLogs.size() > 0) {
+                    mShiftLogsQueue.clear();
+                    mShiftLogsList.clear();
 
-                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
-                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+                    mNoDataView.setVisibility(View.GONE);
+                    mNoNotificationsText.setVisibility(View.GONE);
+                    mShiftLogsQueue.addAll(shiftLogs);
+                    mShiftLogsList.addAll(shiftLogs);
 
-                DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
-                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                    mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
+                    mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+                    DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+                    dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                    dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
 //                mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsQueue);
 //                }
 
@@ -229,6 +259,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 //                        }
 //                    }
 //                }
+                }
+                //todo else
             }
 
             @Override
@@ -236,6 +268,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 dismissProgressDialog();
             }
         });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mIsFirstJobSpinnerSelection = true;
+        if (mCurrentMachineStatus != null) {
+            initStatusLayout(mCurrentMachineStatus);
+        }
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
@@ -254,6 +296,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
+            mOnGoToScreenListener = (GoToScreenListener) getActivity();
+            mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
+            mOnActivityCallbackRegistered.onFragmentAttached(this);
 
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
@@ -265,7 +310,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onDetach();
         mCroutonCallback = null;
         mDialogsShiftLogListener = null;
+        mOnActivityCallbackRegistered = null;
     }
+
 
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -281,16 +328,62 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
-            ((TextView) view.findViewById(R.id.toolbar_title)).setText(s);
-            Spinner spinner = (Spinner) view.findViewById(R.id.toolbar_operator_spinner);
-            final String[] data = new String[2];
-            data[0] = "Sign in";
-            data[1] = "Sergey";
-            final ArrayAdapter<String> adapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, data);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+            final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
+            title.setText(s);
+            title.setVisibility(View.GONE);
+
+            Spinner operatorsSpinner = (Spinner) view.findViewById(R.id.toolbar_operator_spinner);
+            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.operators_spinner_array));
+            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
+
+
+            final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
+            final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
+            jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            jobsSpinner.setAdapter(jobsSpinnerAdapter);
+
+            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (mIsFirstJobSpinnerSelection) {
+                        mIsFirstJobSpinnerSelection = false;
+                    } else {
+
+                        Log.i(LOG_TAG, "Selected: " + position);
+                        if (position == 0) {
+                            mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            jobsSpinner.setSelection(3);
+            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) {
+                        mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            operatorsSpinner.setSelection(1);
+
+            mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
+            mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             actionBar.setCustomView(view);
-            actionBar.setIcon(R.drawable.logo);
+//            actionBar.setIcon(R.drawable.logo);
         }
     }
 
@@ -317,4 +410,25 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
     }
+
+    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+        Log.i(LOG_TAG, "onDeviceStatusChanged()");
+        mCurrentMachineStatus = machineStatus;
+        initStatusLayout(mCurrentMachineStatus);
+    }
+
+    private void initStatusLayout(MachineStatus machineStatus) {
+        mProductNameTextView.setText(machineStatus.getProductName() + ",");
+        mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
+        mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
+        mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));
+        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getMachineID()));
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getMachineStatusID()));
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours) {
+        mTimerTextView.setText(timeToEndInHours);
+    }
+
 }

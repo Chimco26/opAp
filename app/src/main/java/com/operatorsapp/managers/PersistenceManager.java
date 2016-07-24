@@ -13,7 +13,16 @@ import com.zemingo.logrecorder.ZLogger;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface {
+import com.app.operatorinfra.OperatorPersistenceManagerInterface;
+import com.operators.infra.PersistenceManagerInterface;
+import com.operators.jobsinfra.JobsPersistenceManagerInterface;
+import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
+import com.operatorsapp.utils.SecurePreferences;
+import com.zemingo.logrecorder.ZLogger;
+
+import java.io.SequenceInputStream;
+
+public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
@@ -26,6 +35,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
+    private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
+    private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
+    private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
+
 
     private static PersistenceManager msInstance;
     private Gson mGson;
@@ -34,7 +47,6 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         if (msInstance == null) {
             msInstance = new PersistenceManager(context);
         }
-
         return msInstance;
     }
 
@@ -90,12 +102,45 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         SecurePreferences.getInstance().setString(PREF_SESSION_ID, sessionId);
     }
 
+
+    @Override
     public int getMachineId() {
         return SecurePreferences.getInstance().getInt(PREF_MACHINE_ID);
     }
 
+    @Override
+    public String getOperatorId() {
+        return SecurePreferences.getInstance().getString(PREF_OPERATOR_ID);
+    }
+
+    @Override
+    public String getOperatorName() {
+        return SecurePreferences.getInstance().getString(PREF_OPERATOR_NAME);
+    }
+
+    @Override
+    public int getJobId() {
+        return SecurePreferences.getInstance().getInt(PREF_JOB_ID);
+    }
+
+    @Override
+    public void setJobId(int jobId) {
+        SecurePreferences.getInstance().setInt(PREF_JOB_ID, jobId);
+    }
+
+    @Override
     public void setMachineId(int machineId) {
         SecurePreferences.getInstance().setInt(PREF_MACHINE_ID, machineId);
+    }
+
+    @Override
+    public void setOperatorId(String operatorId) {
+        SecurePreferences.getInstance().setString(PREF_OPERATOR_ID, operatorId);
+    }
+
+    @Override
+    public void setOperatorName(String operatorName) {
+        SecurePreferences.getInstance().setString(PREF_OPERATOR_NAME, operatorName);
     }
 
     public boolean isSelectedMachine() {

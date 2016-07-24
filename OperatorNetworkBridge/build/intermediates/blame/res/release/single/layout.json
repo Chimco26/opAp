@@ -20,12 +20,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_up_container.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple.xml",
@@ -36,12 +36,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_media.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_narrow.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_big_media_narrow.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_part_time.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_narrow.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_big_media_narrow.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_radio.xml",
