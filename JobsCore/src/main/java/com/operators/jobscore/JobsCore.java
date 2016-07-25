@@ -2,11 +2,9 @@ package com.operators.jobscore;
 
 import android.util.Log;
 
-import com.google.gson.internal.Primitives;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
-import com.operators.jobsinfra.Job;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
@@ -17,7 +15,6 @@ public class JobsCore {
     private JobsListForMachineNetworkBridgeInterface mJobsListForMachineNetworkBridgeInterface;
     private JobsPersistenceManagerInterface mJobsPersistenceManagerInterface;
     private JobsForMachineUICallbackListener mJobsForMachineUICallbackListener;
-
 
     public JobsCore(JobsListForMachineNetworkBridgeInterface jobsListForMachineNetworkBridgeInterface, JobsPersistenceManagerInterface jobsPersistenceManagerInterface) {
         mJobsListForMachineNetworkBridgeInterface = jobsListForMachineNetworkBridgeInterface;

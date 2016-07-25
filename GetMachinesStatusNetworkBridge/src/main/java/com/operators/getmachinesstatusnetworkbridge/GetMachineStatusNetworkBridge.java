@@ -21,7 +21,6 @@ import retrofit2.Response;
 
 public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBridgeInterface {
     private static final String LOG_TAG = GetMachineStatusNetworkBridge.class.getSimpleName();
-
     private GetMachineStatusNetworkManagerInterface mGetMachineStatusNetworkManagerInterface;
 
     public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManagerInterface) {
@@ -30,6 +29,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     }
 
     @Override
+
     public void getMachineStatus(String siteUrl, String sessionId, int machineId, final GetMachineStatusCallback getMachineStatusCallback, int totalRetries, int specificRequestTimeout) {
         GetMachineStatusDataRequest getMachineStatusDataRequest = new GetMachineStatusDataRequest(sessionId, machineId);
         Call<MachineStatusDataResponse> call = mGetMachineStatusNetworkManagerInterface.getMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineStatus(getMachineStatusDataRequest);

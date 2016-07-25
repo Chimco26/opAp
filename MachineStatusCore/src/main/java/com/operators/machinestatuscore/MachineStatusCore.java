@@ -1,5 +1,6 @@
 package com.operators.machinestatuscore;
 
+import android.content.Context;
 import android.util.Log;
 
 
@@ -18,21 +19,23 @@ import java.util.concurrent.TimeUnit;
 
 public class MachineStatusCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = MachineStatusCore.class.getSimpleName();
-    public static final int MILLISECONDS_TO_SECONDS = 1000;
-    public static final int INTERVAL_DELAY = 60;
-    public static final int START_DELAY = 0;
+    private static final int MILLISECONDS_TO_SECONDS = 1000;
+    private static final int INTERVAL_DELAY = 60;
+    private static final int START_DELAY = 0;
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
     private MachineStatusPersistenceManagerInterface mMachineStatusPersistenceManagerInterface;
     private TimeToEndCounter mTimeToEndCounter;
     private MachineStatusUICallback mMachineStatusUICallback;
     private EmeraldJobBase mJob;
+    private Context mContext;
 
     public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, MachineStatusPersistenceManagerInterface machineStatusPersistenceManagerInterface) {
         mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridgeInterface;
         mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManagerInterface;
     }
 
-    public void registerListener(MachineStatusUICallback machineStatusUICallback) {
+    public void registerListener(Context context, MachineStatusUICallback machineStatusUICallback) {
+        mContext = context;
         mMachineStatusUICallback = machineStatusUICallback;
     }
 
@@ -43,7 +46,6 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         if (mTimeToEndCounter != null) {
             mTimeToEndCounter.stopTimer();
         }
-
     }
 
     public void startPolling() {
@@ -67,16 +69,22 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
             @Override
             public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
-                int timeToEndInSeconds = machineStatus.getShiftEndingIn() * MILLISECONDS_TO_SECONDS;
-                startTimer(timeToEndInSeconds);
+                if (machineStatus != null) {
 
-                if (mMachineStatusUICallback != null) {
-                    mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                  int timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
+                    startTimer(timeToEndInSeconds);
+
+                    if (mMachineStatusUICallback != null) {
+                        mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                    }
+                    else {
+                        Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
+                    }
+                    onJobFinishedListener.onJobFinished();
                 }
                 else {
-                    Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
+                    Log.e(LOG_TAG,"machineStatus is null");
                 }
-                onJobFinishedListener.onJobFinished();
             }
 
             @Override
@@ -96,7 +104,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         if (mTimeToEndCounter == null) {
             mTimeToEndCounter = new TimeToEndCounter(this);
         }
-        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
+        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds, mContext);
     }
 
     @Override

@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/job_indicator"
+            android:layout_toRightOf="@+id/job_status_indicator"
             android:orientation="vertical">
 
             <LinearLayout
@@ -99,38 +99,38 @@
     <LinearLayout
 
         android:id="@+id/spinner_layout"
-        android:layout_width="232dp"
+        android:layout_width="400dp"
         android:layout_height="32dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="24dp"
-        android:layout_toStartOf="@+id/toolbar_job_spinner"
-        android:background="@color/T12_color"
         android:gravity="center"
-        android:padding="1dp">
+        android:padding="1dp"
+        android:layout_alignBottom="@+id/linearLayout2"
+        android:layout_alignParentEnd="true">
 
         <Spinner
             android:id="@+id/toolbar_operator_spinner"
-            android:layout_width="230dp"
-            android:layout_height="40dp"
-            android:background="?attr/colorPrimary"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
             android:drawSelectorOnTop="true"
             android:dropDownVerticalOffset="40dp"
             android:gravity="center"
             app:theme="@style/ToolbarTheme"
             tools:ignore="MissingPrefix"/>
+
+        <com.operatorsapp.view.EmeraldSpinner
+            android:id="@+id/toolbar_job_spinner"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/spinner_layout"
+            android:layout_alignParentEnd="true"
+            android:dropDownVerticalOffset="40dp"
+            android:layout_marginEnd="23dp"
+            android:gravity="center"
+            app:theme="@style/ToolbarTheme"
+            tools:ignore="MissingPrefix"/>
     </LinearLayout>
-
-
-    <Spinner
-        android:id="@+id/toolbar_job_spinner"
-        android:layout_width="230dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@+id/spinner_layout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="23dp"
-        android:background="@color/T12_color"
-        android:drawSelectorOnTop="true"
-        android:gravity="center"/>
 
 
 </RelativeLayout>

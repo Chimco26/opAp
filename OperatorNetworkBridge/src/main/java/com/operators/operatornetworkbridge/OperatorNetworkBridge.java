@@ -2,7 +2,6 @@ package com.operators.operatornetworkbridge;
 
 import android.util.Log;
 
-import com.app.operatorinfra.ErrorObjectInterface;
 import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
@@ -14,9 +13,7 @@ import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachine
 import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
 import com.operators.operatornetworkbridge.server.responses.OperatorDataResponse;
 import com.operators.operatornetworkbridge.server.responses.SetOperatorForMachineResponse;
-
 import java.util.concurrent.TimeUnit;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,10 +21,8 @@ import retrofit2.Response;
 
 public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     private static final String LOG_TAG = OperatorNetworkBridge.class.getSimpleName();
-
     private GetOperatorByIdNetworkManagerInterface mGetOperatorByIdNetworkManagerInterface;
     private SetOperatorForMachineNetworkManagerInterface mSetOperatorForMachineNetworkManagerInterface;
-
 
     public void inject(GetOperatorByIdNetworkManagerInterface getOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface setOperatorForMachineNetworkManagerInterface) {
         mGetOperatorByIdNetworkManagerInterface = getOperatorByIdNetworkManagerInterface;
@@ -83,7 +78,6 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             }
         });
     }
-
 
     private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
         ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());

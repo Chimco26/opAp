@@ -3,11 +3,11 @@ package com.operators.jobsnetworkbridge.server.requests;
 import com.google.gson.annotations.SerializedName;
 
 public class StartJobForMachineRequest {
-    @SerializedName("SessionId")
+    @SerializedName("SessionID")
     private String mSessionId;
-    @SerializedName("MachineId")
+    @SerializedName("MachineID")
     private int mMachineId;
-    @SerializedName("JobId")
+    @SerializedName("JobID")
     private int mJobId;
 
     public StartJobForMachineRequest(String sessionId, int machineId, int jobId) {

@@ -11,6 +11,6 @@ import retrofit2.http.POST;
 
 
 public interface EmeraldStartJobServiceRequests {
-    @POST("/LeaderMESApi/StartJobForMachine")
+    @POST("/LeaderMESApi/StartJobListForMachine")
     Call<StartJobForMachineResponse> startJobForMachine(@Body StartJobForMachineRequest startJobForMachineRequest);
 }

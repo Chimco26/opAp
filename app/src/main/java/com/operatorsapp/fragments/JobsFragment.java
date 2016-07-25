@@ -99,8 +99,8 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
-        mErrorFrameLayout = (FrameLayout)view.findViewById(R.id.error_job_frame_layout);
-        mRetryButton = (Button)view.findViewById(R.id.button_retry);
+        mErrorFrameLayout = (FrameLayout) view.findViewById(R.id.error_job_frame_layout);
+        mRetryButton = (Button) view.findViewById(R.id.button_retry);
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
@@ -145,12 +145,11 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
     }
 
-
     @Override
-    public void onJobReceiveFailed(ErrorObjectInterface reason) {
+    public void onJobReceiveFailed() {
         Log.i(LOG_TAG, "onJobReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
-        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
+        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
 
     @Override
@@ -163,8 +162,8 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button_retry:{
+        switch (v.getId()) {
+            case R.id.button_retry: {
                 mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
                 break;
             }

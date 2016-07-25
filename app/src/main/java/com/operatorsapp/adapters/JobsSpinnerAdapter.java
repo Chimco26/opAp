@@ -48,6 +48,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
         }
+
         String item = mSpinnerItems[position];
         if (item != null)
         {

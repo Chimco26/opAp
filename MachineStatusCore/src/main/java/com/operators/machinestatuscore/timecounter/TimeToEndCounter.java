@@ -1,11 +1,10 @@
 package com.operators.machinestatuscore.timecounter;
 
 
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
-
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
-
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -20,13 +19,17 @@ public class TimeToEndCounter {
         mOnTimeToEndChangedListener = onTimeToEndChangedListener;
     }
 
-    public void calculateTimeToEnd(final int timeInMilliseconds) {
+    public void calculateTimeToEnd(final int timeInMilliseconds,final Context context) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
+
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
-                String countDownTimer = String.format(Locale.ENGLISH, "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+
+                Locale locale = context.getResources().getConfiguration().locale;
+
+                String countDownTimer = String.format(locale, "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 mOnTimeToEndChangedListener.onTimeToEndChanged(countDownTimer);
@@ -39,7 +42,8 @@ public class TimeToEndCounter {
 
         }.start();
     }
-    public void stopTimer(){
+
+    public void stopTimer() {
         mCountDownTimer.cancel();
     }
 }

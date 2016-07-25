@@ -28,12 +28,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_seekbar_track_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_holo_dark.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_borderless_material.xml",
@@ -80,12 +80,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_text_cursor_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_seekbar_track_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_radio_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_seekbar_track_material.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_spinner_textfield_background_material.xml",

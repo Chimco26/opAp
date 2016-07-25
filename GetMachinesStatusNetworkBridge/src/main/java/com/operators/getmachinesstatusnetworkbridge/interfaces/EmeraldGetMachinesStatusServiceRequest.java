@@ -10,6 +10,6 @@ import retrofit2.http.POST;
 
 
 public interface EmeraldGetMachinesStatusServiceRequest {
-    @POST("/LeaderMESApi/GetMachineData")
+    @POST("/LeaderMESApi/GetCurrentMachineStatus")
     Call<MachineStatusDataResponse> getMachineStatus(@Body GetMachineStatusDataRequest getMachineStatusDataRequest);
 }
