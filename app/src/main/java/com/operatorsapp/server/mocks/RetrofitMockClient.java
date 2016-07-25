@@ -96,7 +96,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      }\n" +
                             "      ] \n" +
                             "  }";
-                    break;
+                 //   break;
                 case "GetMachineData":
                     responseString = "{\"error\":null,\"machineStatus\":{\n" +
                             "    \"MachineID\": 25,\n" +

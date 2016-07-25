@@ -8,12 +8,11 @@
         android:id="@+id/fragment_dashboard_rightLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:orientation="horizontal">
+        android:layout_gravity="end">
 
         <LinearLayout
             android:id="@+id/fragment_dashboard_no_data"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
