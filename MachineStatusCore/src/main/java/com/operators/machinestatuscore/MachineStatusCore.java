@@ -35,7 +35,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     }
 
     public void registerListener(Context context, MachineStatusUICallback machineStatusUICallback) {
-        mContext = context;
+        mContext = context; // TODO THIS IS A LEAK. not to be confused with a leek: https://www.youtube.com/watch?v=1wnE4vF9CQ4
         mMachineStatusUICallback = machineStatusUICallback;
     }
 
@@ -71,7 +71,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
             public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
                 if (machineStatus != null) {
 
-                  int timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
+                    int timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
                     startTimer(timeToEndInSeconds);
 
                     if (mMachineStatusUICallback != null) {
@@ -80,11 +80,12 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                     else {
                         Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                     }
-                    onJobFinishedListener.onJobFinished();
+
                 }
                 else {
-                    Log.e(LOG_TAG,"machineStatus is null");
+                    Log.e(LOG_TAG, "machineStatus is null");
                 }
+                onJobFinishedListener.onJobFinished();
             }
 
             @Override

@@ -14,6 +14,22 @@ public class EmeraldSpinner extends Spinner {
         super(context, attrs);
     }
 
+    public EmeraldSpinner(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public EmeraldSpinner(Context context, AttributeSet attrs, int defStyleAttr, int mode) {
+        super(context, attrs, defStyleAttr, mode);
+    }
+
+
+    public EmeraldSpinner(Context context) {
+        super(context);
+    }
+
+    public EmeraldSpinner(Context context, int mode) {
+        super(context, mode);
+    }
 
     @Override
     public void setSelection(int position)

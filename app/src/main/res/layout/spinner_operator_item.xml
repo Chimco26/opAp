@@ -4,15 +4,6 @@
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <com.operatorsapp.view.RoundedImageView
-        android:visibility="gone"
-        android:id="@+id/spinner_operator_item_image"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:src="@drawable/face"
-        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/spinner_operator_item_name"

@@ -22,8 +22,7 @@ import com.google.gson.Gson;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.GoToScreenListener;
-import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 
 public class SelectedOperatorFragment extends Fragment implements View.OnClickListener {
     public static final String LOG_TAG = SelectedOperatorFragment.class.getSimpleName();
@@ -31,13 +30,13 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     private Button mSignInButton;
     private Operator mSelectedOperator;
     private OperatorCore mOperatorCore;
-    private SignInOperatorToDashboardActivityCallback mSignInOperatorToDashboardActivityCallback;
+    private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mSignInOperatorToDashboardActivityCallback = (SignInOperatorToDashboardActivityCallback) getActivity();
-        mOperatorCore = mSignInOperatorToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
+        mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
     }
 
     @Nullable
@@ -76,7 +75,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             @Override
             public void onSetOperatorSuccess() {
                 Log.i(LOG_TAG, "onSetOperatorSuccess()");
-                mSignInOperatorToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+                mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             }
 
             @Override
@@ -129,6 +128,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
         switch (v.getId()) {
             case R.id.button_selected_operator_sign_in: {
                 mOperatorCore.setOperatorForMachine(mSelectedOperator.getOperatorId());
+
                 break;
             }
         }
@@ -137,8 +137,8 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mSignInOperatorToDashboardActivityCallback != null) {
-            mSignInOperatorToDashboardActivityCallback = null;
+        if (mOperatorCoreToDashboardActivityCallback != null) {
+            mOperatorCoreToDashboardActivityCallback = null;
         }
         mOperatorCore.unregisterListener();
     }

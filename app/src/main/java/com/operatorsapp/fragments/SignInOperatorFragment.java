@@ -25,7 +25,7 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.utils.ShowCrouton;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener {
@@ -36,7 +36,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private Button mSignInButton;
 
     private OperatorCore mOperatorCore;
-    private SignInOperatorToDashboardActivityCallback mSignInOperatorToDashboardActivityCallback;
+    private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
     private GoToScreenListener mOnGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private View view;
@@ -45,8 +45,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mSignInOperatorToDashboardActivityCallback = (SignInOperatorToDashboardActivityCallback) getActivity();
-        mOperatorCore = mSignInOperatorToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
+        mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
         mOnCroutonRequestListener = (OnCroutonRequestListener)getActivity();
     }
@@ -161,8 +161,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mSignInOperatorToDashboardActivityCallback != null) {
-            mSignInOperatorToDashboardActivityCallback = null;
+        if (mOperatorCoreToDashboardActivityCallback != null) {
+            mOperatorCoreToDashboardActivityCallback = null;
         }
         mOperatorCore.unregisterListener();
     }

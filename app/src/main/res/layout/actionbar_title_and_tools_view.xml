@@ -106,7 +106,7 @@
         android:layout_alignBottom="@+id/linearLayout2"
         android:layout_alignParentEnd="true">
 
-        <Spinner
+        <com.operatorsapp.view.EmeraldSpinner
             android:id="@+id/toolbar_operator_spinner"
             android:layout_weight="1"
             android:layout_width="wrap_content"

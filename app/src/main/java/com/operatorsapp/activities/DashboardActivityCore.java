@@ -10,12 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
+import com.app.operatorinfra.Operator;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
-import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.jobscore.JobsCore;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.JobListForMachine;
@@ -37,17 +37,18 @@ import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallbac
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
-import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.SignedInOperatorsManager;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, SignInOperatorToDashboardActivityCallback, DialogsShiftLogListener {
+public class DashboardActivityCore extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener {
 
-    private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
+    private static final String LOG_TAG = DashboardActivityCore.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
 
     private DashboardUICallbackListener mDashboardUICallbackListener;
@@ -257,6 +258,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setOperatorId(operatorId);
         PersistenceManager.getInstance().setOperatorName(operatorName);
 
+        SignedInOperatorsManager signedInOperatorsManager = new SignedInOperatorsManager();
+        signedInOperatorsManager.addOperator(new Operator(operatorId,operatorName));
         Log.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

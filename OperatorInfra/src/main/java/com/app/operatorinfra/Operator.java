@@ -10,6 +10,11 @@ public class Operator{
     @SerializedName("OperatorName")
     private String mOperatorName;
 
+    public Operator(String operatorId, String operatorName) {
+        mOperatorId = operatorId;
+        mOperatorName = operatorName;
+    }
+
     public String getOperatorId() {
         return mOperatorId;
     }
