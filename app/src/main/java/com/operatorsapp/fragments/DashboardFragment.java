@@ -423,7 +423,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
             });
 
-
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             mStatusIndicatorImageView = (ImageView) view.findViewById(R.id.job_indicator);
