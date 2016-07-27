@@ -249,7 +249,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"NoProgressCount\": 0,\n" +
                             "      \"Row_Counter\": 7,\n" +
                             "      \"ShiftID\": 258,\n" +
-                            "      \"shiftEndingIn\": 7117\n" +
+                            "      \"shiftEndingIn\": 60000\n" +
                             "    }\n" +
                             "  ],\n" +
                             "  \"error\": null\n" +

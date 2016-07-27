@@ -19,15 +19,8 @@ public class Operator{
         return mOperatorId;
     }
 
-    public void setOperatorId(String operatorId) {
-        this.mOperatorId = operatorId;
-    }
-
     public String getOperatorName() {
         return mOperatorName;
     }
 
-    public void setOperatorName(String operatorName) {
-        this.mOperatorName = operatorName;
-    }
 }

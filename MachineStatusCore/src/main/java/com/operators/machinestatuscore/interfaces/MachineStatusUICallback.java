@@ -7,7 +7,7 @@ import com.operators.machinestatusinfra.MachineStatus;
 public interface MachineStatusUICallback {
     void onStatusReceivedSuccessfully(MachineStatus machineStatus);
 
-    void onTimerChanged(String timeToEndInHours);
+    void onTimerChanged(long millisUntilFinished);
 
     void onStatusReceiveFailed(ErrorObjectInterface reason);
 }

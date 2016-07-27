@@ -20,15 +20,8 @@ public class JobListForMachine {
         return titleFields;
     }
 
-    public void setTitleFields(List<String> titleFields) {
-        this.titleFields = titleFields;
-    }
-
     public List<Job> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
-    }
 }

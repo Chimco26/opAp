@@ -26,57 +26,73 @@ public class OperatorCore {
     }
 
     public void unregisterListener() {
-        if (mOperatorForMachineUICallbackListener != null) {
-            mOperatorForMachineUICallbackListener = null;
-        }
+        mOperatorForMachineUICallbackListener = null;
     }
 
     public void getOperatorById(String operatorId) {
-        mOperatorNetworkBridgeInterface.getOperator(mOperatorPersistenceManagerInterface.getSiteUrl(), mOperatorPersistenceManagerInterface.getSessionId(), operatorId, new GetOperatorByIdCallback() {
-            @Override
-            public void onGetOperatorSucceeded(Operator operator) {
-                if (mOperatorForMachineUICallbackListener != null) {
-                    mOperatorForMachineUICallbackListener.onOperatorDataReceived(operator);
+        if (mOperatorPersistenceManagerInterface != null) {
+            mOperatorNetworkBridgeInterface.getOperator(mOperatorPersistenceManagerInterface.getSiteUrl(), mOperatorPersistenceManagerInterface.getSessionId(), operatorId, new GetOperatorByIdCallback() {
+                @Override
+                public void onGetOperatorSucceeded(Operator operator) {
+                    if (mOperatorForMachineUICallbackListener != null) {
+                        if (operator != null) {
+                            mOperatorForMachineUICallbackListener.onOperatorDataReceived(operator);
+                        }
+                        else {
+                            Log.w(LOG_TAG, "operator is nul");
+                        }
+                    }
+                    else {
+                        Log.w(LOG_TAG, "onGetOperatorSucceeded() UI Callback is null");
+                    }
                 }
-                else {
-                    Log.w(LOG_TAG, "onGetOperatorSucceeded() UI Callback is null");
-                }
-            }
 
-            @Override
-            public void onGetOperatorFailed(ErrorObjectInterface reason) {
-                if (mOperatorForMachineUICallbackListener != null) {
-                    mOperatorForMachineUICallbackListener.onOperatorDataReceiveFailure(reason);
+                @Override
+                public void onGetOperatorFailed(ErrorObjectInterface reason) {
+                    if (mOperatorForMachineUICallbackListener != null) {
+                        if (reason != null) {
+                            mOperatorForMachineUICallbackListener.onOperatorDataReceiveFailure(reason);
+                        }
+                        else {
+                            Log.w(LOG_TAG, "reason is nul");
+                        }
+                    }
+                    else {
+                        Log.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
+                    }
                 }
-                else {
-                    Log.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
-                }
-            }
-        }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());
+            }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());
+        }
     }
 
     public void setOperatorForMachine(String operatorId) {
-        mOperatorNetworkBridgeInterface.setOperatorForMachine(mOperatorPersistenceManagerInterface.getSiteUrl(), mOperatorPersistenceManagerInterface.getSessionId(), String.valueOf(mOperatorPersistenceManagerInterface.getMachineId()), operatorId, new SetOperatorForMachineCallback() {
-            @Override
-            public void onSetOperatorForMachineSuccess() {
-                if (mOperatorForMachineUICallbackListener != null) {
-                    mOperatorForMachineUICallbackListener.onSetOperatorSuccess();
+        if (mOperatorPersistenceManagerInterface != null) {
+            mOperatorNetworkBridgeInterface.setOperatorForMachine(mOperatorPersistenceManagerInterface.getSiteUrl(), mOperatorPersistenceManagerInterface.getSessionId(), String.valueOf(mOperatorPersistenceManagerInterface.getMachineId()), operatorId, new SetOperatorForMachineCallback() {
+                @Override
+                public void onSetOperatorForMachineSuccess() {
+                    if (mOperatorForMachineUICallbackListener != null) {
+                        mOperatorForMachineUICallbackListener.onSetOperatorSuccess();
+                    }
+                    else {
+                        Log.w(LOG_TAG, "onSetOperatorForMachineSuccess() UI Callback is null");
+                    }
                 }
-                else {
-                    Log.w(LOG_TAG, "onSetOperatorForMachineSuccess() UI Callback is null");
-                }
-            }
 
-            @Override
-            public void onSetOperatorForMachineFailed(ErrorObjectInterface reason) {
-                if (mOperatorForMachineUICallbackListener != null) {
-                    mOperatorForMachineUICallbackListener.onSetOperatorFailed(reason);
+                @Override
+                public void onSetOperatorForMachineFailed(ErrorObjectInterface reason) {
+                    if (mOperatorForMachineUICallbackListener != null) {
+                        if (reason != null) {
+                            mOperatorForMachineUICallbackListener.onSetOperatorFailed(reason);
+                        }
+                        else {
+                            Log.w(LOG_TAG, "reason is nul");
+                        }
+                    }
+                    else {
+                        Log.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
+                    }
                 }
-                else {
-                    Log.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
-                }
-            }
-        }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());
-
+            }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());
+        }
     }
 }

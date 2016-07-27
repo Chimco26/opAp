@@ -14,11 +14,12 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/button_cancel"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/btn_x" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/close_image"
+            android:padding="10dp"
+            android:background="@drawable/btn_x"/>
 
         <TextView
             android:id="@+id/new_job_title"

@@ -28,6 +28,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.List;
@@ -147,6 +148,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onJobReceiveFailed() {
+        dismissProgressDialog();
         Log.i(LOG_TAG, "onJobReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
@@ -154,6 +156,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onJobReceived(JobListForMachine jobListForMachine) {
+        dismissProgressDialog();
         mErrorFrameLayout.setVisibility(View.GONE);
         mJobList = jobListForMachine.getJobs();
         mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mJobList);
@@ -164,9 +167,20 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_retry: {
+                //Start Progress
+                ProgressDialogManager.show(getActivity());
                 mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
                 break;
             }
         }
+    }
+
+    private void dismissProgressDialog() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ProgressDialogManager.dismiss();
+            }
+        });
     }
 }

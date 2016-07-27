@@ -12,6 +12,7 @@ public class TimeToEndCounter {
     private static final String LOG_TAG = TimeToEndCounter.class.getSimpleName();
     private static final int COUNT_DOWN_INTERVAL = 1000;
     private static final String ZERO_TIME = "00:00:00";
+    public static final int FINISHED = 0;
     private OnTimeToEndChangedListener mOnTimeToEndChangedListener;
     private CountDownTimer mCountDownTimer;
 
@@ -19,7 +20,7 @@ public class TimeToEndCounter {
         mOnTimeToEndChangedListener = onTimeToEndChangedListener;
     }
 
-    public void calculateTimeToEnd(final int timeInMilliseconds,final Context context) {
+    public void calculateTimeToEnd(final int timeInMilliseconds) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
@@ -27,16 +28,12 @@ public class TimeToEndCounter {
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
 
-                Locale locale = context.getResources().getConfiguration().locale;
 
-                String countDownTimer = String.format(locale, "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-                mOnTimeToEndChangedListener.onTimeToEndChanged(countDownTimer);
+                mOnTimeToEndChangedListener.onTimeToEndChanged( millisUntilFinished);
             }
 
             public void onFinish() {
-                mOnTimeToEndChangedListener.onTimeToEndChanged(ZERO_TIME);
+                mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
                 Log.i(LOG_TAG, "onFinish()");
             }
 

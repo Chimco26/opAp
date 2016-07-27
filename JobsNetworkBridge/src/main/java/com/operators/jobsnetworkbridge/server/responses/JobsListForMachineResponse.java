@@ -14,24 +14,8 @@ public class JobsListForMachineResponse extends ErrorBaseResponse {
     @SerializedName("jobs")
     private List<Job> jobs = new ArrayList<Job>();
 
-    public List<String> getTitleFields() {
-        return titleFields;
-    }
-
-    public void setTitleFields(List<String> titleFields) {
-        this.titleFields = titleFields;
-    }
-
-    public List<Job> getJobs() {
-        return jobs;
-    }
-
     public JobListForMachine getJobListForMachine(){
         return new JobListForMachine(titleFields,jobs);
-    }
-
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
     }
 }
 

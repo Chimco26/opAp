@@ -26,9 +26,7 @@ public class JobsCore {
     }
 
     public void unregisterListener() {
-        if (mJobsForMachineUICallbackListener != null) {
-            mJobsForMachineUICallbackListener = null;
-        }
+        mJobsForMachineUICallbackListener = null;
     }
 
     public void getJobsListForMachine() {
@@ -37,11 +35,13 @@ public class JobsCore {
                     @Override
                     public void onGetJobsListForMachineSuccess(JobListForMachine jobListForMachine) {
                         if (mJobsForMachineUICallbackListener != null) {
-
-                            mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
+                            if (jobListForMachine != null) {
+                                mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
+                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() jobListForMachine is null ");
+                            }
                         }
                         else {
-                            Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() UI Callback is null ");
+                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
                     }
 
@@ -49,7 +49,12 @@ public class JobsCore {
                     public void onGetJobsListForMachineFailed(ErrorObjectInterface reason) {
                         Log.w(LOG_TAG, "Error getting job list");
                         if (mJobsForMachineUICallbackListener != null) {
-                            mJobsForMachineUICallbackListener.onJobListReceiveFailed(reason);
+                            if (reason != null) {
+                                mJobsForMachineUICallbackListener.onJobListReceiveFailed(reason);
+                            }
+                            else {
+                                Log.w(LOG_TAG, "reason is nul");
+                            }
                         }
                         else {
                             Log.w(LOG_TAG, "onGetJobsListForMachineFailed() UI Callback is null ");
@@ -64,12 +69,22 @@ public class JobsCore {
                     @Override
                     public void onStartJobForMachineSuccess() {
                         Log.i(LOG_TAG, "Starting job success");
-                        mJobsForMachineUICallbackListener.onStartJobSuccess();
+                        if (mJobsForMachineUICallbackListener != null) {
+                            mJobsForMachineUICallbackListener.onStartJobSuccess();
+                        }
+                        else {
+                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                        }
                     }
 
                     @Override
                     public void onStartJobForMachineFailed(ErrorObjectInterface reason) {
-                        mJobsForMachineUICallbackListener.onStartJobFailed(reason);
+                        if (mJobsForMachineUICallbackListener != null) {
+                            mJobsForMachineUICallbackListener.onStartJobFailed(reason);
+                        }
+                        else {
+                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                        }
                         Log.w(LOG_TAG, "Error starting job");
                     }
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());

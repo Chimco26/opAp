@@ -19,39 +19,20 @@ public class Job {
         return jobId;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
-
     public String getProductName() {
         return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public int getErp() {
         return erp;
     }
 
-    public void setErp(int erp) {
-        this.erp = erp;
-    }
-
     public String getPlannedStart() {
         return plannedStart;
-    }
-
-    public void setPlannedStart(String plannedStart) {
-        this.plannedStart = plannedStart;
     }
 
     public int getNumberOfUnits() {
         return numberOfUnits;
     }
 
-    public void setNumberOfUnits(int numberOfUnits) {
-        this.numberOfUnits = numberOfUnits;
-    }
 }
