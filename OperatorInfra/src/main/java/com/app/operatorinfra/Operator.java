@@ -5,21 +5,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class Operator{
 
-    @SerializedName("getOperatorId")
+    @SerializedName("OperatorID")
     private String mOperatorId;
-    @SerializedName("operatorName")
+    @SerializedName("OperatorName")
     private String mOperatorName;
 
+    public Operator(String operatorId, String operatorName) {
+        mOperatorId = operatorId;
+        mOperatorName = operatorName;
+    }
 
     public String getOperatorId() {
         return mOperatorId;
     }
 
-
     public void setOperatorId(String operatorId) {
         this.mOperatorId = operatorId;
     }
-
 
     public String getOperatorName() {
         return mOperatorName;

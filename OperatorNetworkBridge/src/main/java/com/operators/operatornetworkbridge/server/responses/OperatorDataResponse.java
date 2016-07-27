@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class OperatorDataResponse extends ErrorBaseResponse {
 
-    @SerializedName("operator")
-    private Operator mOperator = new Operator();
+    @SerializedName("Operator")
+    private Operator mOperator ;
 
     public Operator getOperator() {
         return mOperator;

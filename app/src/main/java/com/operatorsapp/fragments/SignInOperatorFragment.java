@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -11,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,7 +24,9 @@ import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
-import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.utils.ShowCrouton;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener {
 
@@ -33,16 +36,19 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private Button mSignInButton;
 
     private OperatorCore mOperatorCore;
-    private SignInOperatorToDashboardActivityCallback mSignInOperatorToDashboardActivityCallback;
+    private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
     private GoToScreenListener mOnGoToScreenListener;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
+    private View view;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mSignInOperatorToDashboardActivityCallback = (SignInOperatorToDashboardActivityCallback) getActivity();
-        mOperatorCore = mSignInOperatorToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
+        mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
+        mOnCroutonRequestListener = (OnCroutonRequestListener)getActivity();
     }
 
 
@@ -56,6 +62,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_operator_sign_in, container, false);
+        view = rootView;
         setActionBar();
         return rootView;
     }
@@ -69,6 +76,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mOperatorCore.registerListener(new OperatorForMachineUICallbackListener() {
             @Override
             public void onOperatorDataReceived(Operator operator) {
+              removePhoneKeypad();
                 Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
                 SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
@@ -84,6 +92,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @Override
             public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
                 Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+                removePhoneKeypad();
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
             }
 
             @Override
@@ -139,6 +149,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
+
                 String id = mOperatorIdEditText.getText().toString();
                 Log.i(LOG_TAG, "Operator id: " + id);
                 mOperatorCore.getOperatorById(id);
@@ -150,9 +161,17 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mSignInOperatorToDashboardActivityCallback != null) {
-            mSignInOperatorToDashboardActivityCallback = null;
+        if (mOperatorCoreToDashboardActivityCallback != null) {
+            mOperatorCoreToDashboardActivityCallback = null;
         }
         mOperatorCore.unregisterListener();
+    }
+
+    public void removePhoneKeypad() {
+        InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        IBinder binder = view.getWindowToken();
+        inputManager.hideSoftInputFromWindow(binder,
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

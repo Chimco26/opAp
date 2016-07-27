@@ -1,8 +1,5 @@
 package com.operators.jobsinfra;
 
-/**
- * Created by User on 19/07/2016.
- */
 public interface JobsPersistenceManagerInterface
 {
     String getSiteUrl();

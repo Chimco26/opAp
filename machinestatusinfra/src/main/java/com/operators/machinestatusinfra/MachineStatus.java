@@ -2,100 +2,57 @@ package com.operators.machinestatusinfra;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MachineStatus
 {
-        @SerializedName("MachineID")
-        private int machineID;
-        @SerializedName("MachineLname")
-        private String machineLname;
-        @SerializedName("MachineName")
-        private String machineName;
-        @SerializedName("MachineStatusEname")
-        private String machineStatusEname;
-        @SerializedName("MachineStatusID")
-        private int machineStatusID;
-        @SerializedName("MachineStatusName")
-        private String machineStatusName;
-        @SerializedName("OperatorID")
-        private int operatorID;
-        @SerializedName("operatorName")
-        private String operatorName;
-        @SerializedName("productName")
-        private String productName;
+        @SerializedName("DepartmentMachinePC")
+        private List<Object> mDepartmentMachinePC;
+        @SerializedName("DepartmentOeePee")
+        private List<Object> mDepartmentOeePee;
 
-        @SerializedName("productId")
-        private int productId;
-        @SerializedName("jobId")
-        private int jobId;
-        @SerializedName("shiftId")
-        private int shiftId;
-        @SerializedName("shiftEndingIn")
-        private int shiftEndingIn;
+        @SerializedName("MissingMachineIds")
+        private Object mMissingMachineIds;
+        @SerializedName("allMachinesData")
+        private List<AllMachinesData> mAllMachinesData;
 
-        public int getMachineID()
-        {
-            return machineID;
+        public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData) {
+                mDepartmentMachinePC = departmentMachinePC;
+                mDepartmentOeePee = departmentOeePee;
+                mMissingMachineIds = missingMachineIds;
+                mAllMachinesData = allMachinesData;
         }
 
-        public String getMachineLname()
-        {
-            return machineLname;
+        public List<Object> getDepartmentMachinePC() {
+                return mDepartmentMachinePC;
         }
 
-        public String getMachineName()
-        {
-            return machineName;
+        public void setDepartmentMachinePC(List<Object> departmentMachinePC) {
+                mDepartmentMachinePC = departmentMachinePC;
         }
 
-        public String getMachineStatusEname()
-        {
-            return machineStatusEname;
+        public List<Object> getDepartmentOeePee() {
+                return mDepartmentOeePee;
         }
 
-        public int getMachineStatusID()
-        {
-            return machineStatusID;
+        public void setDepartmentOeePee(List<Object> departmentOeePee) {
+                mDepartmentOeePee = departmentOeePee;
         }
 
-        public String getMachineStatusName()
-        {
-            return machineStatusName;
+        public Object getMissingMachineIds() {
+                return mMissingMachineIds;
         }
 
-        public int getOperatorID()
-        {
-            return operatorID;
+        public void setMissingMachineIds(Object missingMachineIds) {
+                mMissingMachineIds = missingMachineIds;
         }
 
-        public String getOperatorName()
-        {
-            return operatorName;
+        public List<AllMachinesData> getAllMachinesData() {
+                return mAllMachinesData;
         }
 
-        public String getProductName()
-        {
-            return productName;
+        public void setAllMachinesData(List<AllMachinesData> allMachinesData) {
+                mAllMachinesData = allMachinesData;
         }
-
-        public int getJobId()
-        {
-            return jobId;
-        }
-
-        public int getShiftId()
-        {
-            return shiftId;
-        }
-
-        public int getShiftEndingIn()
-        {
-            return shiftEndingIn;
-        }
-
-
-        public int getProductId()
-        {
-                return productId;
-        }
-
 }

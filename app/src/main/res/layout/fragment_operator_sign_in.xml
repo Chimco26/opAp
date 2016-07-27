@@ -3,7 +3,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="top|center_horizontal"
-              android:orientation="vertical">
+              android:id="@+id/operator_screen"
+              android:orientation="vertical"
+            >
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,5 +32,7 @@
             android:layout_marginLeft="40dp"
             android:text="@string/common_signin_button_text"/>
     </LinearLayout>
+
+
 
 </LinearLayout>

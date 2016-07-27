@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,7 +32,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.app.operatorinfra.Operator;
 import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.operatorcore.OperatorCore;
+import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
@@ -45,13 +49,17 @@ import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.managers.SignedInOperatorsManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.view.EmeraldSpinner;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
 
@@ -60,7 +68,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final int THIRTY_SECONDS = 30 * 1000;
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
-
+    private OperatorCore mOperatorCore;
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
@@ -73,6 +81,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
+    private int[] mIndicatorsArray = {
+            R.drawable.ic_indicator, // exceeding
+            R.drawable.ic_indicator_copy, // working
+            R.drawable.ic_indicator_copy_2, // setup
+            R.drawable.ic_indicator_copy_3, // stopped
+            R.drawable.ic_indicator_copy_4 // no data
+    };
 
     private TextView mProductNameTextView;
     private TextView mProductIdTextView;
@@ -81,8 +96,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mTimerTextView;
     private TextView mMachineIdStatusBarTextView;
     private TextView mMachineStatusStatusBarTextView;
+    private ImageView mStatusIndicatorImageView;
 
-    private boolean mIsFirstJobSpinnerSelection = true;
+    private List<Operator> mSignedOperatorsList;
+    private SignedInOperatorsManager mSignedInOperatorsManager;
+    private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
+    private Operator mSelectedOperator;
+
+
     private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance() {
@@ -108,6 +129,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         final int closeWidth = (int) (width * 0.173) /*/ 4*/;
         final int middleWidth = (int) (width * 0.31) /*3 / 8*/;
 
+        mSignedOperatorsList = new ArrayList<>();
+        mSignedInOperatorsManager = new SignedInOperatorsManager();
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
         mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
@@ -226,9 +249,34 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
 
+        mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
         getShiftLogs();
         setActionBar();
     }
+
+    OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
+        @Override
+        public void onOperatorDataReceived(Operator operator) {
+
+        }
+
+        @Override
+        public void onOperatorDataReceiveFailure(com.app.operatorinfra.ErrorObjectInterface reason) {
+
+        }
+
+        @Override
+        public void onSetOperatorSuccess() {
+            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
+        }
+
+        @Override
+        public void onSetOperatorFailed(com.app.operatorinfra.ErrorObjectInterface reason) {
+            Log.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
+        }
+
+    };
 
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
@@ -272,7 +320,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onResume() {
         super.onResume();
-        mIsFirstJobSpinnerSelection = true;
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
         }
@@ -297,7 +344,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
-
+            mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
+            mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -309,6 +357,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mCroutonCallback = null;
         mDialogsShiftLogListener = null;
         mOnActivityCallbackRegistered = null;
+        mOperatorCore.unregisterListener();
+        mOperatorCore = null;
     }
 
 
@@ -330,44 +380,44 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             title.setText(s);
             title.setVisibility(View.GONE);
 
-            Spinner operatorsSpinner = (Spinner) view.findViewById(R.id.toolbar_operator_spinner);
-            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.operators_spinner_array));
-            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
-
 
             final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
             final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
             jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             jobsSpinner.setAdapter(jobsSpinnerAdapter);
+            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
 
             jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (mIsFirstJobSpinnerSelection) {
-                        mIsFirstJobSpinnerSelection = false;
-                    } else {
-
-                        Log.i(LOG_TAG, "Selected: " + position);
-                        if (position == 0) {
-                            mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
-                        }
+                    if (position == 0) {
+                        mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
                     }
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });
 
-            jobsSpinner.setSelection(3);
+
+            EmeraldSpinner operatorsSpinner = (EmeraldSpinner) view.findViewById(R.id.toolbar_operator_spinner);
+            mSignedOperatorsList = mSignedInOperatorsManager.getOperators();
+            final ArrayAdapter<Operator> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mSignedOperatorsList);
+            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
+            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
             operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position == 0) {
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
+                    } else {
+                        mSelectedOperator = new Operator(mSignedOperatorsList.get(position).getOperatorId(), mSignedOperatorsList.get(position).getOperatorName());
+                        mOperatorCore.setOperatorForMachine(mSignedOperatorsList.get(position).getOperatorId());
                     }
                 }
 
@@ -376,10 +426,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 }
             });
-            operatorsSpinner.setSelection(1);
+
 
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
+            mStatusIndicatorImageView = (ImageView) view.findViewById(R.id.job_indicator);
             actionBar.setCustomView(view);
         }
     }
@@ -418,12 +469,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(new StringBuilder(machineStatus.getProductName() + ","));
-        mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
-        mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
-        mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));
-        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getMachineID()));
-        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getMachineStatusID()));
+        mProductNameTextView.setText(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + ",");
+        mProductIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+        mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+        mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
+        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusID()));
+
+        if (machineStatus.getAllMachinesData().get(0).getMachineStatusID() > mIndicatorsArray.length) {
+            Log.w(LOG_TAG, "Incorrect status id");
+        } else {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), mIndicatorsArray[machineStatus.getAllMachinesData().get(0).getMachineStatusID() - 1]));
+        }
     }
 
     @Override

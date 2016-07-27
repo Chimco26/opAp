@@ -1,5 +1,6 @@
 package com.operatorsapp.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
+import com.app.operatorinfra.Operator;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.jobscore.JobsCore;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
@@ -31,17 +37,18 @@ import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallbac
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
-import com.operatorsapp.interfaces.SignInOperatorToDashboardActivityCallback;
+import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.SignedInOperatorsManager;
 import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, SignInOperatorToDashboardActivityCallback, DialogsShiftLogListener {
+public class DashboardActivityCore extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener {
 
-    private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
+    private static final String LOG_TAG = DashboardActivityCore.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
 
     private DashboardUICallbackListener mDashboardUICallbackListener;
@@ -54,6 +61,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        updateAndroidSecurityProvider(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,6 +77,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    private void updateAndroidSecurityProvider(Activity callingActivity) {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Thrown when Google Play Services is not installed, up-to-date, or enabled
+            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+            GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            ZLogger.e("SecurityException", "Google Play Services not available.");
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -79,7 +99,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onResume() {
         super.onResume();
-        mMachineStatusCore.registerListener(new MachineStatusUICallback() {
+        mMachineStatusCore.registerListener(this, new MachineStatusUICallback() {
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
                 if (mDashboardUICallbackListener != null) {
@@ -136,6 +156,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public ShiftLogCore getShiftLogCore() {
         return ShiftLogCore.getInstance();
     }
+
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
         mDashboardUICallbackListener = dashboardUICallbackListener;
     }
@@ -170,22 +191,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mJobsCore.registerListener(new JobsForMachineUICallbackListener() {
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
-                mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
                 Log.i(LOG_TAG, "onJobListReceived()");
+                if( jobListForMachine.getJobs().size()!=0){
+                    mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                }else {
+                    mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                }
 
             }
 
             @Override
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onJobListReceiveFailed()");
-                mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed(reason);
+                mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
             }
 
             @Override
             public void onStartJobSuccess() {
                 Log.i(LOG_TAG, "onStartJobSuccess()");
-                //     mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
-                //TODO refresh, need to check with yossi
+                mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
                 mMachineStatusCore.startPolling();
@@ -194,7 +218,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
-                //   mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
+                mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
             }
         });
     }
@@ -234,10 +258,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setOperatorId(operatorId);
         PersistenceManager.getInstance().setOperatorName(operatorName);
 
+        SignedInOperatorsManager signedInOperatorsManager = new SignedInOperatorsManager();
+        signedInOperatorsManager.addOperator(new Operator(operatorId,operatorName));
         Log.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        //TODO need to check with yossi maybe he need to do more here
         mMachineStatusCore.stopPolling();
         mMachineStatusCore.startPolling();
     }

@@ -1,7 +1,9 @@
 package com.operatorsapp.managers;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
@@ -12,6 +14,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
@@ -34,6 +37,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
+    public static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
 
 
     private static PersistenceManager msInstance;
@@ -181,4 +185,16 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         return mGson.fromJson(shiftLogsJsonString, listType);
     }
 
+    public void saveSignedOperators(List<Operator> operators) {
+        SecurePreferences.getInstance().setString(PREF_OPERATORS_LIST, mGson.toJson(operators));
+        Log.d(LOG_TAG, "Operator saved");
+    }
+
+    public List<Operator> getSignedOperators() {
+        String operatorsjsonstring = SecurePreferences.getInstance().getString(PREF_OPERATORS_LIST);
+        Type listType = new TypeToken<ArrayList<Operator>>() {
+        }.getType();
+
+        return mGson.fromJson(operatorsjsonstring, listType);
+    }
 }

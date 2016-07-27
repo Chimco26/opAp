@@ -21,7 +21,6 @@ public class OperatorCore {
         mOperatorPersistenceManagerInterface = operatorPersistenceManagerInterface;
     }
 
-
     public void registerListener(OperatorForMachineUICallbackListener operatorForMachineUICallbackListener) {
         mOperatorForMachineUICallbackListener = operatorForMachineUICallbackListener;
     }

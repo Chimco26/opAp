@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class SetOperatorForMachineRequest {
-    @SerializedName("SessionId")
+    @SerializedName("SessionID")
     private String mSessionId;
-    @SerializedName("MachineId")
+    @SerializedName("MachineID")
     private String mMachineId;
-    @SerializedName("OperatorId")
+    @SerializedName("OperatorID")
     private String mOperatorId;
 
     public SetOperatorForMachineRequest(String sessionId, String machineId, String operatorId) {

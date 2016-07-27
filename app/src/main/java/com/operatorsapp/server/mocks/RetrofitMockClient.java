@@ -6,7 +6,6 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.NetworkAvailable;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -220,23 +219,40 @@ public class RetrofitMockClient implements Interceptor {
                             "  ]\n" +
                             "}";
                     break;
-                case "GetMachineData":
-                    responseString = "{\"error\":null,\"machineStatus\":{\n" +
-                            "    \"MachineID\": 25,\n" +
-                            "    \"MachineLname\": \"Pokemon creator\",\n" +
-                            "    \"MachineName\": \"65\",\n" +
-                            "    \"MachineStatusEname\": \"Stop\",\n" +
-                            "    \"MachineStatusID\": 36,\n" +
-                            "    \"MachineStatusName\": \"6\",\t\n" +
-                            "    \"MachineStatusEname\": \"Processing\",\n" +
-                            "    \"OperatorID\": 234,\n" +
-                            "    \"operatorName\": \"opi the operator\",\n" +
-                            "    \"productName\": \"Pokemon\",\n" +
-                            "    \"productId\": 1234,\n" +
-                            "    \"jobId\": 35,\n" +
-                            "    \"shiftId\": 4537,\n" +
-                            "    \"shiftEndingIn\": 10000 \n" +
+                case "GetCurrentMachineStatus":
+                    responseString = "{\n" +
+                            "  \"DepartmentMachinePC\": [],\n" +
+                            "  \"DepartmentOeePee\": [],\n" +
+                            "  \"MissingMachineIds\": null,\n" +
+                            "  \"allMachinesData\": [\n" +
+                            "    {\n" +
+                            "      \"CurrentJobID\": 346,\n" +
+                            "      \"CurrentProductEname\": \"0998plan124\",\n" +
+                            "      \"CurrentProductID\": 75,\n" +
+                            "      \"CurrentProductName\": \"0998plan124\",\n" +
+                            "      \"CurrentValue\": 0,\n" +
+                            "      \"DepartmentEname\": \"Milling\",\n" +
+                            "      \"DepartmentID\": 3,\n" +
+                            "      \"DepartmentLname\": \"Milling\",\n" +
+                            "      \"FieldEName\": null,\n" +
+                            "      \"FieldLName\": null,\n" +
+                            "      \"FieldName\": null,\n" +
+                            "      \"HighLimit\": 0,\n" +
+                            "      \"IsMoreMachineToDisplay\": false,\n" +
+                            "      \"LowLimit\": 0,\n" +
+                            "      \"MachineID\": 7,\n" +
+                            "      \"MachineLname\": \"0998\",\n" +
+                            "      \"MachineName\": \"0998 - HAAS998\",\n" +
+                            "      \"MachineStatusEname\": \"Working OK\",\n" +
+                            "      \"MachineStatusID\": 1,\n" +
+                            "      \"MachineStatusName\": \"פעיל ותקין\",\n" +
+                            "      \"NoProgressCount\": 0,\n" +
+                            "      \"Row_Counter\": 7,\n" +
+                            "      \"ShiftID\": 258,\n" +
+                            "      \"shiftEndingIn\": 7117\n" +
                             "    }\n" +
+                            "  ],\n" +
+                            "  \"error\": null\n" +
                             "}";
                     break;
                 case "GetJobsListForMachine":
@@ -263,12 +279,18 @@ public class RetrofitMockClient implements Interceptor {
                             "    ]\n" +
                             "}\n";
                     break;
-                case "StartJobForMachine":
+                case "StartJobListForMachine":
                     Log.i(LOG_TAG, "StartJobForMachine request received");
                     responseString = "{\"error\":null}";
                     break;
                 case "GetOperatorById":
-                    responseString = "{\"error\":null,\"operator\":{\"getOperatorId\":\"7\",\"operatorName\":\"Pikachu\"}}";
+                    responseString = "{\n" +
+                            "  \"Operator\": {\n" +
+                            "    \"OperatorID\": 2222,\n" +
+                            "    \"OperatorName\": \"דוד ארביטמן\"\n" +
+                            "  },\n" +
+                            "  \"error\": null\n" +
+                            "}";
                     break;
                 case "SetOperatorForMachine":
                     Log.i(LOG_TAG, "SetOperatorForMachine request received");

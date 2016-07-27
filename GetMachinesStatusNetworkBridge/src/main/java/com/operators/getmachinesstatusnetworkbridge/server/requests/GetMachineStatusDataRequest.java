@@ -1,12 +1,11 @@
 package com.operators.getmachinesstatusnetworkbridge.server.requests;
 
-
 import com.google.gson.annotations.SerializedName;
 
 public class GetMachineStatusDataRequest {
-    @SerializedName("SessionId")
+    @SerializedName("SessionID")
     private String mSessionId;
-    @SerializedName("MachineId")
+    @SerializedName("MachineID")
     private int mMachineId;
 
     public GetMachineStatusDataRequest(String sessionId, int machineId) {

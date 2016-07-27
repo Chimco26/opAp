@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 public class GetJobsListForMachineDataRequest {
 
 
-    @SerializedName("SessionId")
+    @SerializedName("SessionID")
     private String mSessionId;
-    @SerializedName("MachineId")
+    @SerializedName("MachineID")
     private int mMachineId;
 
     public GetJobsListForMachineDataRequest(String sessionId, int machineId) {

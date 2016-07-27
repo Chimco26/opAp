@@ -7,9 +7,9 @@ import java.util.List;
 
 public class JobListForMachine {
     @SerializedName("titleFields")
-    private List<String> titleFields = new ArrayList<String>();
+    private List<String> titleFields = new ArrayList<>();
     @SerializedName("jobs")
-    private List<Job> jobs = new ArrayList<Job>();
+    private List<Job> jobs = new ArrayList<>();
 
     public JobListForMachine(List<String> titleFields, List<Job> jobs) {
         this.titleFields = titleFields;
