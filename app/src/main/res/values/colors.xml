@@ -40,4 +40,5 @@
     <color name="white12PercentTransparent">#1AFFFFFF</color>
     <color name="recycler_view_divider">#c9c9c9</color>
     <color name="machines_list_item_selected_background">#eeeeee</color>
+    <color name="could_not_retreive">#cacaca</color>
 </resources>

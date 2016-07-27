@@ -10,7 +10,7 @@ import java.util.List;
 public class MachineStatusDataResponse extends ErrorBaseResponse {
 
     @SerializedName("allMachinesData")
-    private List<AllMachinesData> mAllMachinesData = new ArrayList<AllMachinesData>();
+    private List<AllMachinesData> mAllMachinesData = new ArrayList<>();
 
     public MachineStatus getMachineStatus() {
         return new MachineStatus( mAllMachinesData);

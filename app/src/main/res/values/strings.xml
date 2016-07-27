@@ -71,7 +71,8 @@
     <string name="operator_id">Operator Id</string>
     <string name="operator_name">Operator name</string>
     <string name="operator_sign_in">Operator Sign In</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
 
 
     <array name="operators_spinner_array">

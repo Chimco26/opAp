@@ -308,7 +308,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             public void onGetShiftLogFailed(ErrorObjectInterface reason) {
                 mNoData = true;
                 dismissProgressDialog();
-                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, (com.operators.infra.ErrorObjectInterface) reason);
+//                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback);
             }
         });
     }
