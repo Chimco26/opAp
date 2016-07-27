@@ -20,12 +20,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-xxxhdpi-v4\\abc_btn_switch_to_on_mtrl_00001.9.png"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_36dp.png",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_36dp.png"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\drawable-xxxhdpi-v4\\abc_ic_star_black_16dp.png",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-xxxhdpi-v4\\abc_ic_star_black_16dp.png"
+    },
+    {
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_36dp.png",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-xxxhdpi-v4\\abc_ic_star_half_black_36dp.png"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\drawable-xxxhdpi-v4\\abc_ic_search_api_mtrl_alpha.png",

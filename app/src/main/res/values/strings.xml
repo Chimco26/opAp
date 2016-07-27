@@ -50,7 +50,7 @@
     <string name="no_notifications">No Notifications</string>
     <string name="no_data">No Data</string>
     <string name="jobs_actions">Job</string>
-    <string name="job_id">Job id</string>
+    <string name="job_id">Job ID</string>
     <string name="product_name">Product Name</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Planned Start</string>
@@ -60,7 +60,7 @@
     <string name="product_id">Product id</string>
     <string name="erp_id">ERP id</string>
     <string name="quantity">Quantity</string>
-    <string name="activate_new_job">Activate new job</string>
+    <string name="activate_new_job">Activate</string>
     <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
     <string name="product">Product</string>
     <string name="id">ID -</string>
