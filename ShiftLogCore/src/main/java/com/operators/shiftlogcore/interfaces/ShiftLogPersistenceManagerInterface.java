@@ -1,6 +1,6 @@
 package com.operators.shiftlogcore.interfaces;
 
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ public interface ShiftLogPersistenceManagerInterface {
 
     int getRequestTimeout();
 
-    void saveShiftLogs(ArrayList<ShiftLog> shiftLogs);
+    void saveShiftLogs(ArrayList<Event> events);
 
     void setTotalRetries(int totalRetries);
 

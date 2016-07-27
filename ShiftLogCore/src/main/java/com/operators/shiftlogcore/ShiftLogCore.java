@@ -3,7 +3,7 @@ package com.operators.shiftlogcore;
 import com.operators.shiftlogcore.interfaces.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftloginfra.ErrorObjectInterface;
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 
@@ -14,7 +14,7 @@ public class ShiftLogCore {
     private static ShiftLogCore msInstance;
     private ShiftLogPersistenceManagerInterface mShiftLogPersistenceManagerInterface;
     private ShiftLogNetworkBridgeInterface mShiftLogNetworkBridgeInterface;
-//    private ArrayList<ShiftLog> mShiftLogs;
+//    private ArrayList<Event> mShiftLogs;
 
     public static ShiftLogCore getInstance() {
         if (msInstance == null) {
@@ -25,19 +25,19 @@ public class ShiftLogCore {
 
     public void getShiftLogs(String siteUrl, final String sessionId, int machineId, String startingFrom, final ShiftLogUICallback shiftLogUICallback) {
 
-        mShiftLogNetworkBridgeInterface.getShiftLog(siteUrl, sessionId, machineId, startingFrom, new ShiftLogCoreCallback<ShiftLog>() {
+        mShiftLogNetworkBridgeInterface.getShiftLog(siteUrl, sessionId, machineId, startingFrom, new ShiftLogCoreCallback<Event>() {
             @Override
-            public void onShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
+            public void onShiftLogSucceeded(ArrayList<Event> events) {
 
-                for (ShiftLog shiftLog : shiftLogs) {
-//                    shiftLog.setDialogShown(false);
-                    shiftLog.setTimeOfAdded(System.currentTimeMillis());
+                for (Event event : events) {
+//                    event.setDialogShown(false);
+                    event.setTimeOfAdded(System.currentTimeMillis());
                 }
 //                if (mShiftLogs == null) {
 //                    mShiftLogs = new ArrayList<>();
 //                }
-//                mShiftLogs.addAll(shiftLogs);
-                shiftLogUICallback.onGetShiftLogSucceeded(shiftLogs);
+//                mShiftLogs.addAll(events);
+                shiftLogUICallback.onGetShiftLogSucceeded(events);
             }
 
             @Override
@@ -48,7 +48,7 @@ public class ShiftLogCore {
     }
 
 
-//    public void setShiftLogDialogStatus(ArrayDeque<ShiftLog> shiftLogs) {
+//    public void setShiftLogDialogStatus(ArrayDeque<Event> shiftLogs) {
 //        mShiftLogs.clear();
 //        mShiftLogs.addAll(shiftLogs);
 //    }

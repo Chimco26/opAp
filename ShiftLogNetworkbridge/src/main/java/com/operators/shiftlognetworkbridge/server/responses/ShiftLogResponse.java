@@ -2,15 +2,15 @@ package com.operators.shiftlognetworkbridge.server.responses;
 
 
 import com.google.gson.annotations.SerializedName;
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 
 import java.util.ArrayList;
 
 public class ShiftLogResponse extends ErrorBaseResponse {
     @SerializedName("events")
-    private ArrayList<ShiftLog> mShiftLogs;
+    private ArrayList<Event> mEvents;
 
-    public ArrayList<ShiftLog> getShiftLogs() {
-        return mShiftLogs;
+    public ArrayList<Event> getShiftLogs() {
+        return mEvents;
     }
 }

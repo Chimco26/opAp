@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.shiftlogcore.interfaces.ShiftLogPersistenceManagerInterface;
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -17,10 +17,6 @@ import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
-import com.operatorsapp.utils.SecurePreferences;
-import com.zemingo.logrecorder.ZLogger;
-
-import java.io.SequenceInputStream;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface {
 
@@ -172,14 +168,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     }
 
     @Override
-    public void saveShiftLogs(ArrayList<ShiftLog> shiftLogs) {
-        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(shiftLogs));
+    public void saveShiftLogs(ArrayList<Event> events) {
+        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(events));
     }
 
     @Override
-    public ArrayList<ShiftLog> getShiftLogs() {
+    public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS);
-        Type listType = new TypeToken<ArrayList<ShiftLog>>() {
+        Type listType = new TypeToken<ArrayList<Event>>() {
         }.getType();
 
         return mGson.fromJson(shiftLogsJsonString, listType);

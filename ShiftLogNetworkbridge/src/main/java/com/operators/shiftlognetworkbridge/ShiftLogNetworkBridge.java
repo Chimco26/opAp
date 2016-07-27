@@ -2,7 +2,7 @@ package com.operators.shiftlognetworkbridge;
 
 import android.util.Log;
 
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
@@ -38,11 +38,11 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
 
             @Override
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response) {
-                ArrayList<ShiftLog> shiftLogs = response.body().getShiftLogs();
+                ArrayList<Event> events = response.body().getShiftLogs();
                 if (response.body().getErrorResponse() == null) {
-                    if (shiftLogs != null && shiftLogs.size() > 0) {
-                        ZLogger.d(LOG_TAG, "onRequestSucceed(), " + shiftLogs.size() + " shiftLogs");
-                        shiftLogCoreCallback.onShiftLogSucceeded(shiftLogs);
+                    if (events != null && events.size() > 0) {
+                        ZLogger.d(LOG_TAG, "onRequestSucceed(), " + events.size() + " events");
+                        shiftLogCoreCallback.onShiftLogSucceeded(events);
                     } else {
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");

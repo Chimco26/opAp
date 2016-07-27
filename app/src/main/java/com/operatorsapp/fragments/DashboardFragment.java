@@ -34,7 +34,7 @@ import android.widget.TextView;
 import com.operators.machinestatusinfra.MachineStatus;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftloginfra.ErrorObjectInterface;
-import com.operators.shiftloginfra.ShiftLog;
+import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
@@ -70,8 +70,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private LinearLayout mNoDataView;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
-    private ArrayDeque<ShiftLog> mShiftLogsQueue = new ArrayDeque<>();
-    private ArrayList<ShiftLog> mShiftLogsList = new ArrayList<>();
+    private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
+    private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
 
     private TextView mProductNameTextView;
@@ -232,24 +232,24 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
-        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "", new ShiftLogUICallback<ShiftLog>() {
+        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98", new ShiftLogUICallback<Event>() {
             @Override
-            public void onGetShiftLogSucceeded(ArrayList<ShiftLog> shiftLogs) {
+            public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 dismissProgressDialog();
-                if (shiftLogs != null && shiftLogs.size() > 0) {
-                    mShiftLogsQueue.clear();
-                    mShiftLogsList.clear();
+                if (events != null && events.size() > 0) {
+                    mEventsQueue.clear();
+                    mEventsList.clear();
 
                     mNoDataView.setVisibility(View.GONE);
                     mNoNotificationsText.setVisibility(View.GONE);
-                    mShiftLogsQueue.addAll(shiftLogs);
-                    mShiftLogsList.addAll(shiftLogs);
+                    mEventsQueue.addAll(events);
+                    mEventsList.addAll(events);
 
-                    mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
+                    mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, true);
                     mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                    ShiftLog shiftLog = mShiftLogsQueue.pop();
-                    DialogFragment dialogFragment = DialogFragment.newInstance(shiftLog.getTitle(), shiftLog.getSubtitle(), shiftLog.getStartTime(), shiftLog.getEndTime());
+                    Event event = mEventsQueue.pop();
+                    DialogFragment dialogFragment = DialogFragment.newInstance(event.getTitle(), event.getSubtitleL(), event.getTime(), event.getEndTime());
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -387,9 +387,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
-        if (mShiftLogsQueue.peek() != null && (System.currentTimeMillis() - mShiftLogsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
-            ShiftLog shiftLog = mShiftLogsQueue.pop();
-            DialogFragment dialogFragment = DialogFragment.newInstance(shiftLog.getTitle(), shiftLog.getSubtitle(), shiftLog.getStartTime(), shiftLog.getEndTime());
+        if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
+            Event event = mEventsQueue.pop();
+            DialogFragment dialogFragment = DialogFragment.newInstance(event.getTitle(), event.getSubtitleL(), event.getStartTime(), event.getEndTime());
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -398,7 +398,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     @Override
     public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
-        mShiftLogsQueue.clear();
+        mEventsQueue.clear();
         dialog.dismiss();
     }
 

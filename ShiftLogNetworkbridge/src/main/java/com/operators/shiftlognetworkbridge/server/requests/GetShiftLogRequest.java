@@ -12,7 +12,7 @@ public class GetShiftLogRequest {
 
     public GetShiftLogRequest(String sessionID, int machineId, String startingFrom) {
         mSessionID = sessionID;
-        mSessionID = sessionID;
+        mMachineID = machineId;
         mStartingFrom = startingFrom;
     }
 }

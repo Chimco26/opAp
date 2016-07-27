@@ -73,49 +73,152 @@ public class RetrofitMockClient implements Interceptor {
                 case "GetMachineShiftLog":
                     responseString = "{\n" +
                             "  \"error\": null,\n" +
-                            "    \"events\": [\n" +
-                            "      {\n" +
-                            "        \"timestamp\": \"16:24\",\n" +
-                            "\t  \"type\": 2, \n" +
-                            "\t  \"title\": \"Machine Stopped\",\n" +
-                            "        \"subtitle\": \"Stopped at: 05.11.1984\",\n" +
-                            "        \"priority\": 1,\n" +
-                            "  \"startTime\": \"\",\n" +
-                            "  \"endTime\": \"\",\n" +
-                            "  \"duration\": 5\n" +
-                            "      },\n" +
-                            "      {\n" +
-                            "        \"timestamp\": \"16:02\",\n" +
-                            "\t  \"type\": 1,\n" +
-                            "\t  \"title\": \"Place Platform\",\n" +
-                            "        \"subtitle\": \"Please replace the platform for Machine\",\n" +
-                            "        \"priority\": 0,\n" +
-                            "  \"startTime\": \"10:22\",\n" +
-                            "  \"endTime\": \"23:45\",\n" +
-                            "  \"duration\": 7\n" +
-                            "      },\n" +
-                            "       {\n" +
-                            "        \"timestamp\": \"16:50\",\n" +
-                            "\t  \"type\": 1, \n" +
-                            "\t  \"title\": \"Place Platform\",\n" +
-                            "        \"subtitle\": \"Stopped at all\",\n" +
-                            "        \"priority\": 1,\n" +
-                            "  \"startTime\": \"02:55\",\n" +
-                            "  \"endTime\": \"06:11\",\n" +
-                            "  \"duration\": 5\n" +
-                            "      },\n" +
-                            "      {\n" +
-                            "        \"timestamp\": \"16:31\",\n" +
-                            "\t  \"type\": 2,\n" +
-                            "\t  \"title\": \"Machine Stopped\",\n" +
-                            "        \"subtitle\": \"Please check it\",\n" +
-                            "        \"priority\": 0,\n" +
-                            "  \"startTime\": \"\",\n" +
-                            "  \"endTime\": \"\",\n" +
-                            "  \"duration\": 7\n" +
-                            "      }\n" +
-                            "      ] \n" +
-                            "  }";
+                            "  \"events\": [\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 1,\n" +
+                            "      \"EventDuration\": 577,\n" +
+                            "      \"EventEndTime\": \"13/10/2015 16:39:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 291,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"13/10/2015 07:02:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 3,\n" +
+                            "      \"EventEndTime\": \"14/10/2015 11:12:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 365,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"14/10/2015 11:09:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 379,\n" +
+                            "      \"EventEndTime\": \"14/10/2015 19:03:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 376,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"14/10/2015 12:44:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 718,\n" +
+                            "      \"EventEndTime\": \"15/10/2015 07:01:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 388,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"14/10/2015 19:03:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 1,\n" +
+                            "      \"priority\": 1,\n" +
+                            "      \"EventDuration\": 0,\n" +
+                            "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
+                            "      \"EventGroupID\": 20,\n" +
+                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventID\": 1020,\n" +
+                            "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
+                            "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
+                            "      \"EventTime\": \"12/07/2016\n17:36:00\",\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 1,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 0,\n" +
+                            "      \"EventEndTime\": \"12/07/2016\n17:55:00\",\n" +
+                            "      \"EventGroupID\": 20,\n" +
+                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventID\": 1044,\n" +
+                            "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
+                            "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
+                            "      \"EventTime\": \"12/07/2016\n17:55:00\",\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 145,\n" +
+                            "      \"EventEndTime\": \"12/10/2015 11:55:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 233,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"12/10/2015 09:30:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 24,\n" +
+                            "      \"EventEndTime\": \"12/10/2015 13:44:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 248,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"12/10/2015 13:20:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 236,\n" +
+                            "      \"EventEndTime\": \"12/10/2015 19:04:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 249,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"12/10/2015 15:08:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 2,\n" +
+                            "      \"EventDuration\": 718,\n" +
+                            "      \"EventEndTime\": \"13/10/2015 07:02:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 262,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"12/10/2015 19:04:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"type\": 2,\n" +
+                            "      \"priority\": 1,\n" +
+                            "      \"EventDuration\": 464,\n" +
+                            "      \"EventEndTime\": \"15/10/2015 14:45:00\",\n" +
+                            "      \"EventGroupID\": 6,\n" +
+                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventID\": 407,\n" +
+                            "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
+                            "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
+                            "      \"EventTime\": \"15/10/2015 07:01:00\",\n" +
+                            "      \"EventTitle\": \"HAAS998: \"\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}";
                     break;
                 case "GetMachineData":
                     responseString = "{\"error\":null,\"machineStatus\":{\n" +
