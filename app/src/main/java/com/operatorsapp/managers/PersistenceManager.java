@@ -185,16 +185,4 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         return mGson.fromJson(shiftLogsJsonString, listType);
     }
 
-    public void saveSignedOperators(List<Operator> operators) {
-        SecurePreferences.getInstance().setString(PREF_OPERATORS_LIST, mGson.toJson(operators));
-        Log.d(LOG_TAG, "Operator saved");
-    }
-
-    public List<Operator> getSignedOperators() {
-        String operatorsjsonstring = SecurePreferences.getInstance().getString(PREF_OPERATORS_LIST);
-        Type listType = new TypeToken<ArrayList<Operator>>() {
-        }.getType();
-
-        return mGson.fromJson(operatorsjsonstring, listType);
-    }
 }

@@ -14,11 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/arrow_back"
-            android:background="@drawable/ic_action_back"/>
+            android:padding="10dp"
+            android:background="@drawable/btn_x"/>
 
         <TextView
             android:id="@+id/new_job_title"

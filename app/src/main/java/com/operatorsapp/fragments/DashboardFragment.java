@@ -50,7 +50,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
-import com.operatorsapp.managers.SignedInOperatorsManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.view.EmeraldSpinner;
 
@@ -84,6 +83,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             R.drawable.ic_indicator_copy_4 // no data
     };
 
+
+    private String [] mOperatorsSpinnerArray = {"Sign in"} ;
+
     private TextView mProductNameTextView;
     private TextView mProductIdTextView;
     private TextView mJobIdTextView;
@@ -93,8 +95,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
 
-    private List<Operator> mSignedOperatorsList;
-    private SignedInOperatorsManager mSignedInOperatorsManager;
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
     private Operator mSelectedOperator;
 
@@ -123,9 +123,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         final int openWidth = width / 2;
         final int closeWidth = width / 4;
         final int middleWidth = width * 3 / 8;
-
-        mSignedOperatorsList = new ArrayList<>();
-        mSignedInOperatorsManager = new SignedInOperatorsManager();
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
         mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
@@ -364,14 +361,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getActivity().getString(R.string.screen_title));
-            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            SpannableString spannableString = new SpannableString(getActivity().getString(R.string.screen_title));
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, spannableString.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
             final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
-            title.setText(s);
+            title.setText(spannableString);
             title.setVisibility(View.GONE);
 
 
@@ -396,10 +393,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
             });
 
+            if(PersistenceManager.getInstance().getOperatorName()!=null){
+                mOperatorsSpinnerArray[0] = "Switch user";
+            }
 
             EmeraldSpinner operatorsSpinner = (EmeraldSpinner) view.findViewById(R.id.toolbar_operator_spinner);
-            mSignedOperatorsList = mSignedInOperatorsManager.getOperators();
-            final ArrayAdapter<Operator> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mSignedOperatorsList);
+            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_job_item,mOperatorsSpinnerArray );
             operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
             operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -411,8 +410,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
                     }
                     else {
-                        mSelectedOperator = new Operator(mSignedOperatorsList.get(position).getOperatorId(), mSignedOperatorsList.get(position).getOperatorName());
-                        mOperatorCore.setOperatorForMachine(mSignedOperatorsList.get(position).getOperatorId());
+
                     }
                 }
 

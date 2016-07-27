@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.app.operatorinfra.ErrorObjectInterface;
@@ -48,7 +49,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
         mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
-        mOnCroutonRequestListener = (OnCroutonRequestListener)getActivity();
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+        mOperatorCore.registerListener(mOperatorForMachineUICallbackListener );
     }
 
 
@@ -72,11 +74,13 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         mOperatorIdEditText = (EditText) view.findViewById(R.id.operator_id_edit_text);
         mSignInButton = (Button) view.findViewById(R.id.button_operator_signIn);
+    }
 
-        mOperatorCore.registerListener(new OperatorForMachineUICallbackListener() {
-            @Override
-            public void onOperatorDataReceived(Operator operator) {
-              removePhoneKeypad();
+    OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
+        @Override
+        public void onOperatorDataReceived(Operator operator) {
+            removePhoneKeypad();
+            if (operator != null) {
                 Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
                 SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
@@ -88,26 +92,30 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 selectedOperatorFragment.setArguments(bundle);
                 mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
             }
-
-            @Override
-            public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
-                Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            else {
+                Log.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
-                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
             }
+        }
 
-            @Override
-            public void onSetOperatorSuccess() {
+        @Override
+        public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+            Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            removePhoneKeypad();
+            ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
+        }
 
-            }
+        @Override
+        public void onSetOperatorSuccess() {
 
-            @Override
-            public void onSetOperatorFailed(ErrorObjectInterface reason) {
+        }
 
-            }
-        });
+        @Override
+        public void onSetOperatorFailed(ErrorObjectInterface reason) {
 
-    }
+        }
+    };
 
     @Override
     public void onPause() {
@@ -134,7 +142,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.button_cancel);
+            ImageButton buttonClose = (ImageButton) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

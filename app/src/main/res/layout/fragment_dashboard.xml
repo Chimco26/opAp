@@ -98,7 +98,8 @@
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/C2"
+        android:gravity="center_vertical"
+        android:background="@drawable/rectangle_11_copy_2"
         android:orientation="vertical">
 
         <LinearLayout
@@ -125,8 +126,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="product_name"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/status_bar"
                 android:textStyle="bold" />
 
 
@@ -147,7 +148,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:background="@color/C20" />
@@ -170,7 +171,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:background="@color/C20" />

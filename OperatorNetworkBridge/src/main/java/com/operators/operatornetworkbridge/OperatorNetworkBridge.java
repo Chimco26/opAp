@@ -13,7 +13,9 @@ import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachine
 import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
 import com.operators.operatornetworkbridge.server.responses.OperatorDataResponse;
 import com.operators.operatornetworkbridge.server.responses.SetOperatorForMachineResponse;
+
 import java.util.concurrent.TimeUnit;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,19 +33,32 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     }
 
     @Override
-    public void getOperator(String siteUrl, String sessionId, String operatorId, final GetOperatorByIdCallback getOperatorByIdCallback, int totalRetries, int specificRequestTimeout) {
+    public void getOperator(String siteUrl, String sessionId, final String operatorId, final GetOperatorByIdCallback getOperatorByIdCallback, int totalRetries, int specificRequestTimeout) {
         GetOperatorByIdRequest getOperatorByIdRequest = new GetOperatorByIdRequest(sessionId, operatorId);
         Call<OperatorDataResponse> call = mGetOperatorByIdNetworkManagerInterface.getOperatorByIdRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getOperator(getOperatorByIdRequest);
         call.enqueue(new Callback<OperatorDataResponse>() {
             @Override
             public void onResponse(Call<OperatorDataResponse> call, Response<OperatorDataResponse> response) {
                 if (response.isSuccessful()) {
-                    Operator operator = response.body().getOperator();
-                    getOperatorByIdCallback.onGetOperatorSucceeded(operator);
+                    Operator operator = null;
+                    if (response.body() != null) {
+                        operator = response.body().getOperator();
+                        getOperatorByIdCallback.onGetOperatorSucceeded(operator);
+                    }
+                    else {
+                        Log.w(LOG_TAG, "Response is null");
+                    }
                 }
                 else {
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                    if (response.body() != null) {
+
+                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                    }
+                    else {
+                        Log.w(LOG_TAG, "Response body is null");
+
+                    }
                 }
             }
 
@@ -66,8 +81,10 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     setOperatorForMachineCallback.onSetOperatorForMachineSuccess();
                 }
                 else {
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
+                    if (response.body() != null) {
+                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
+                    }
                 }
             }
 

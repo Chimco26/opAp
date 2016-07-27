@@ -6,13 +6,13 @@ import android.util.Log;
 
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
+import com.operators.machinestatuscore.polling.EmeraldJobBase;
 import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
 import com.operators.machinestatusinfra.ErrorObjectInterface;
 import com.operators.machinestatusinfra.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.MachineStatus;
 import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
-import com.operators.polling.EmeraldJobBase;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.concurrent.TimeUnit;
@@ -27,15 +27,13 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     private TimeToEndCounter mTimeToEndCounter;
     private MachineStatusUICallback mMachineStatusUICallback;
     private EmeraldJobBase mJob;
-    private Context mContext;
 
     public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, MachineStatusPersistenceManagerInterface machineStatusPersistenceManagerInterface) {
         mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridgeInterface;
         mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManagerInterface;
     }
 
-    public void registerListener(Context context, MachineStatusUICallback machineStatusUICallback) {
-        mContext = context; // TODO THIS IS A LEAK. not to be confused with a leek: https://www.youtube.com/watch?v=1wnE4vF9CQ4
+    public void registerListener(MachineStatusUICallback machineStatusUICallback) {
         mMachineStatusUICallback = machineStatusUICallback;
     }
 
@@ -43,12 +41,16 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback = null;
         }
+    }
+
+    public void stopTimer() {
         if (mTimeToEndCounter != null) {
             mTimeToEndCounter.stopTimer();
         }
     }
 
     public void startPolling() {
+        mJob = null;
         mJob = new EmeraldJobBase() {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
@@ -66,52 +68,60 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     }
 
     public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
-        mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
-            @Override
-            public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
-                if (machineStatus != null) {
+        if (mMachineStatusPersistenceManagerInterface != null) {
+            mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
+                @Override
+                public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
+                    int timeToEndInSeconds = 0;
+                    if (machineStatus != null) {
+                        if (machineStatus.getAllMachinesData() != null) {
+                            if (machineStatus.getAllMachinesData().get(0) != null) {
+                                timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
+                            }
+                        }
+                        startTimer(timeToEndInSeconds);
 
-                    int timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
-                    startTimer(timeToEndInSeconds);
+                        if (mMachineStatusUICallback != null) {
+                            mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                        }
+                        else {
+                            Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
+                        }
 
+                    }
+                    else {
+                        Log.e(LOG_TAG, "machineStatus is null");
+                    }
+                    onJobFinishedListener.onJobFinished();
+                }
+
+                @Override
+                public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
                     if (mMachineStatusUICallback != null) {
-                        mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                        if (reason != null) {
+                            mMachineStatusUICallback.onStatusReceiveFailed(reason);
+                        }
                     }
                     else {
                         Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                     }
-
+                    onJobFinishedListener.onJobFinished();
                 }
-                else {
-                    Log.e(LOG_TAG, "machineStatus is null");
-                }
-                onJobFinishedListener.onJobFinished();
-            }
-
-            @Override
-            public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
-                if (mMachineStatusUICallback != null) {
-                    mMachineStatusUICallback.onStatusReceiveFailed(reason);
-                }
-                else {
-                    Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
-                }
-                onJobFinishedListener.onJobFinished();
-            }
-        }, mMachineStatusPersistenceManagerInterface.getTotalRetries(), mMachineStatusPersistenceManagerInterface.getRequestTimeout());
+            }, mMachineStatusPersistenceManagerInterface.getTotalRetries(), mMachineStatusPersistenceManagerInterface.getRequestTimeout());
+        }
     }
 
     private void startTimer(int timeInSeconds) {
         if (mTimeToEndCounter == null) {
             mTimeToEndCounter = new TimeToEndCounter(this);
         }
-        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds, mContext);
+        mTimeToEndCounter.calculateTimeToEnd(timeInSeconds);
     }
 
     @Override
-    public void onTimeToEndChanged(String formattedTimeToEnd) {
+    public void onTimeToEndChanged(long millisUntilFinished) {
         if (mMachineStatusUICallback != null) {
-            mMachineStatusUICallback.onTimerChanged(formattedTimeToEnd);
+            mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
         }
         else {
             Log.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");

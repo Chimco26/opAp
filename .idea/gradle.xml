@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/GetMachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -17,6 +16,7 @@
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
             <option value="$PROJECT_DIR$/MachineStatusInfra" />
+            <option value="$PROJECT_DIR$/MachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
@@ -31,7 +31,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/GetMachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -39,6 +38,7 @@
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
             <option value="$PROJECT_DIR$/MachineStatusInfra" />
+            <option value="$PROJECT_DIR$/MachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />

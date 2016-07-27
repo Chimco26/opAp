@@ -15,16 +15,15 @@ import com.operatorsapp.view.RoundedImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OperatorSpinnerAdapter extends ArrayAdapter<Operator> {
+public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
 
     private Activity mContext;
-    private List<Operator> mOperatorList;
+    private String[] mSpinnerItems = null;
 
-    public OperatorSpinnerAdapter(Activity context, int resource, List<Operator> operators) {
+    public OperatorSpinnerAdapter(Activity context, int resource, String[] operators) {
         super(context, resource, operators);
-        mOperatorList = new ArrayList<>();
+        mSpinnerItems = operators;
         mContext = context;
-        mOperatorList = operators;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<Operator> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
         }
-        String item = mOperatorList.get(position).getOperatorName();
+        String item = mSpinnerItems[position];
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setTextColor(Color.WHITE);
@@ -52,7 +51,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<Operator> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
         }
-        String item = mOperatorList.get(position).getOperatorName();
+        String item = mSpinnerItems[position];
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setTextColor(Color.BLACK);
