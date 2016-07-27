@@ -1,15 +1,18 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operatorsapp.R;
 import com.operators.shiftloginfra.ShiftLog;
+import com.operatorsapp.R;
 
 import java.util.ArrayList;
 
@@ -21,6 +24,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     private ArrayList<ShiftLog> mShiftLogs;
     private boolean mClosedState;
 
+    private final int PARAMETER = 1;
+    private final int STOPPED = 2;
+
     public ShiftLogAdapter(Context context, ArrayList<ShiftLog> shiftLogs, boolean closedState) {
         mShiftLogs = shiftLogs;
         mContext = context;
@@ -31,60 +37,224 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         mClosedState = closedState;
     }
 
-    private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
+    private class ShiftLogStoppedViewHolder extends RecyclerView.ViewHolder {
 
         private AutofitTextView mTitle;
         private ImageView mIcon;
         private TextView mSubtitle;
         private TextView mTime;
+        private View mDivider;
+        private TextView mPlease;
+        private View mBottomDivider;
+        private boolean mClicked;
 
-        public ShiftLogViewHolder(View itemView) {
+        public ShiftLogStoppedViewHolder(View itemView) {
             super(itemView);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mSubtitle = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
+            mDivider = itemView.findViewById(R.id.shift_log_divider);
+            mPlease = (TextView) itemView.findViewById(R.id.shift_log_please);
+            mBottomDivider = itemView.findViewById(R.id.shift_log_bottom_divider);
+        }
+    }
+
+    private class ShiftLogParameterViewHolder extends RecyclerView.ViewHolder {
+
+        private AutofitTextView mTitle;
+        private ImageView mIcon;
+        private TextView mSubtitleStart;
+        private TextView mSubtitleEnd;
+        private TextView mTime;
+        private View mDivider;
+        private TextView mPlease;
+        private LinearLayout mSubtitle;
+        private View mBottomDivider;
+        private boolean mClicked;
+
+        public ShiftLogParameterViewHolder(View itemView) {
+            super(itemView);
+            mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
+            mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
+            mSubtitleStart = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_start);
+            mSubtitleEnd = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_end);
+            mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
+            mDivider = itemView.findViewById(R.id.shift_log_divider);
+            mPlease = (TextView) itemView.findViewById(R.id.shift_log_please);
+            mSubtitle = (LinearLayout) itemView.findViewById(R.id.shift_log_item_subtitle);
+            mBottomDivider = itemView.findViewById(R.id.shift_log_bottom_divider);
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ShiftLogViewHolder(inflater.inflate(R.layout.shift_log_item, parent, false));
+        switch (viewType) {
+            case STOPPED: {
+                return new ShiftLogStoppedViewHolder(inflater.inflate(R.layout.shift_log_stopped_cardview, parent, false));
+            }
+            case PARAMETER: {
+                return new ShiftLogParameterViewHolder(inflater.inflate(R.layout.shift_log_parameter_cardview, parent, false));
+            }
+        }
+        return new ShiftLogStoppedViewHolder(inflater.inflate(R.layout.shift_log_stopped_cardview, parent, false));
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ShiftLog shiftLog = mShiftLogs.get(position);
-        final ShiftLogViewHolder shiftLogViewHolder = (ShiftLogViewHolder) holder;
 
-        if (shiftLog.getPriority() == 1) {
-//            holder.itemView.setBackgroundResource(R.color.C3T);
-        } else {
-//            holder.itemView.setBackgroundResource(R.color.white);
-        }
-        shiftLogViewHolder.mTitle.setText(shiftLog.getTitle());
-//        shiftLogViewHolder.mIcon.setImageResource();
-        shiftLogViewHolder.mSubtitle.setText(shiftLog.getSubtitle());
-        if (mClosedState) {
-            shiftLogViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
-        } else {
-            shiftLogViewHolder.mSubtitle.setVisibility(View.VISIBLE);
-        }
+        int type = getItemViewType(position);
+
+        if (type == STOPPED) {
+            final ShiftLogStoppedViewHolder shiftLogStoppedViewHolder = (ShiftLogStoppedViewHolder) holder;
+
+            if (!shiftLogStoppedViewHolder.mClicked) {
+                if (shiftLog.getPriority() == 1) {
+                    shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
+                    shiftLogStoppedViewHolder.mTitle.setTextColor(Color.RED);
+                    shiftLogStoppedViewHolder.mTime.setTextColor(Color.RED);
+                } else {
+                    shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_blue);
+                    shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                }
+            } else {
+                shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
+                shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+            }
+            shiftLogStoppedViewHolder.mTitle.setText(shiftLog.getTitle());
+            shiftLogStoppedViewHolder.mSubtitle.setText(shiftLog.getSubtitle());
+            if (mClosedState) {
+                shiftLogStoppedViewHolder.mDivider.setVisibility(View.GONE);
+                shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
+                shiftLogStoppedViewHolder.mPlease.setVisibility(View.GONE);
+
+                final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
+                mBottomDividerLayoutParams.width = 105;
+                shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
+            } else {
+                shiftLogStoppedViewHolder.mDivider.setVisibility(View.VISIBLE);
+                shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.VISIBLE);
+                shiftLogStoppedViewHolder.mPlease.setVisibility(View.VISIBLE);
+
+                final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
+                mBottomDividerLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
+            }
 //        int minutes = (int) ((shiftLog.getTimestamp() / (1000 * 60)) % 60);
 //        int hours = (int) ((shiftLog.getTimestamp() / (1000 * 60 * 60)) % 24);
-        shiftLogViewHolder.mTime.setText(shiftLog.getTimestamp()/*hours + ":" + minutes*/);
+            shiftLogStoppedViewHolder.mTime.setText(shiftLog.getTimestamp()/*hours + ":" + minutes*/);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!shiftLogStoppedViewHolder.mClicked) {
+                        shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
+                        shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogStoppedViewHolder.mClicked = true;
+                    } else {
+                        if (shiftLog.getPriority() == 1) {
+                            shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
+                            shiftLogStoppedViewHolder.mTitle.setTextColor(Color.RED);
+                            shiftLogStoppedViewHolder.mTime.setTextColor(Color.RED);
+                        } else {
+                            shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_blue);
+                            shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                            shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        }
+                        shiftLogStoppedViewHolder.mClicked = false;
+                    }
+                }
+            });
+        } else if (type == PARAMETER) {
+            final ShiftLogParameterViewHolder shiftLogParameterViewHolder = (ShiftLogParameterViewHolder) holder;
+
+            if (!shiftLogParameterViewHolder.mClicked) {
+                if (shiftLog.getPriority() == 1) {
+                    shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_red);
+                    shiftLogParameterViewHolder.mTitle.setTextColor(Color.RED);
+                    shiftLogParameterViewHolder.mTime.setTextColor(Color.RED);
+                } else {
+                    shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_blue);
+                    shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                }
+            } else {
+                shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_grey);
+                shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+            }
+            shiftLogParameterViewHolder.mTitle.setText(shiftLog.getTitle());
+
+            shiftLogParameterViewHolder.mSubtitleStart.setText(new StringBuilder("Start " + shiftLog.getStartTime()));
+            shiftLogParameterViewHolder.mSubtitleEnd.setText(new StringBuilder("End " + shiftLog.getEndTime()));
+            if (mClosedState) {
+                shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
+                shiftLogParameterViewHolder.mSubtitleStart.setVisibility(View.INVISIBLE);
+                shiftLogParameterViewHolder.mSubtitleEnd.setVisibility(View.INVISIBLE);
+                shiftLogParameterViewHolder.mPlease.setVisibility(View.GONE);
+                shiftLogParameterViewHolder.mSubtitle.setVisibility(View.GONE);
+
+                final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
+                mBottomDividerLayoutParams.width = 105;
+                shiftLogParameterViewHolder.mBottomDivider.requestLayout();
+            } else {
+                shiftLogParameterViewHolder.mDivider.setVisibility(View.VISIBLE);
+                shiftLogParameterViewHolder.mSubtitleStart.setVisibility(View.VISIBLE);
+                shiftLogParameterViewHolder.mSubtitleEnd.setVisibility(View.VISIBLE);
+                shiftLogParameterViewHolder.mPlease.setVisibility(View.VISIBLE);
+                shiftLogParameterViewHolder.mSubtitle.setVisibility(View.VISIBLE);
+
+                final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
+                mBottomDividerLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                shiftLogParameterViewHolder.mBottomDivider.requestLayout();
 
             }
-        });
+//        int minutes = (int) ((shiftLog.getTimestamp() / (1000 * 60)) % 60);
+//        int hours = (int) ((shiftLog.getTimestamp() / (1000 * 60 * 60)) % 24);
+            shiftLogParameterViewHolder.mTime.setText(shiftLog.getTimestamp()/*hours + ":" + minutes*/);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!shiftLogParameterViewHolder.mClicked) {
+                        shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_grey);
+                        shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogParameterViewHolder.mClicked = true;
+                    } else {
+                        if (shiftLog.getPriority() == 1) {
+                            shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_red);
+                            shiftLogParameterViewHolder.mTitle.setTextColor(Color.RED);
+                            shiftLogParameterViewHolder.mTime.setTextColor(Color.RED);
+                        } else {
+                            shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_blue);
+                            shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                            shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        }
+                        shiftLogParameterViewHolder.mClicked = false;
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return mShiftLogs.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        ShiftLog shiftLog = mShiftLogs.get(position);
+        if (shiftLog.getType() == 1) {
+            return PARAMETER;
+        }
+        return STOPPED;
     }
 }

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/button_cancel"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:id="@+id/button_cancel"
-            android:background="@drawable/btn_x"/>
+            android:background="@drawable/btn_x" />
 
         <TextView
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_height="wrap_content"
-            android:text="@string/operator_sign_in"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/white"/>
+            android:text="@string/operator_sign_in"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
     </LinearLayout>
     <!--add linearLayout-->
 

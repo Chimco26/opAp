@@ -27,13 +27,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.operators.machinestatusinfra.MachineStatus;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.ShiftLog;
-import com.operators.machinestatusinfra.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
@@ -42,11 +43,12 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
-import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
-import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.utils.ResizeWidthAnimation;
+import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -62,15 +64,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
-    private LinearLayout mLeftLayout, mRightLayout;
+    private LinearLayout mLeftLayout;
+    private RelativeLayout mRightLayout;
     private TextView mNoNotificationsText;
     private LinearLayout mNoDataView;
-    private ImageView mLeftButton;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
     private ArrayDeque<ShiftLog> mShiftLogsQueue = new ArrayDeque<>();
     private ArrayList<ShiftLog> mShiftLogsList = new ArrayList<>();
-    private View mDividerView;
     private boolean mNoData;
 
     private TextView mProductNameTextView;
@@ -103,9 +104,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        final int openWidth = width / 2;
-        final int closeWidth = width / 4;
-        final int middleWidth = width * 3 / 8;
+        final int openWidth = (int) (width * 0.448)/*/2*/;
+        final int closeWidth = (int) (width * 0.173) /*/ 4*/;
+        final int middleWidth = (int) (width * 0.31) /*3 / 8*/;
 
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
         mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
@@ -122,7 +123,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mLeftLayoutParams.width = closeWidth;
         mLeftLayout.requestLayout();
 
-        mRightLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_rightLayout);
+        mRightLayout = (RelativeLayout) view.findViewById(R.id.fragment_dashboard_rightLayout);
         final ViewGroup.MarginLayoutParams mRightLayoutParams = (ViewGroup.MarginLayoutParams) mRightLayout.getLayoutParams();
         mRightLayoutParams.setMarginStart(closeWidth);
         mRightLayout.setLayoutParams(mRightLayoutParams);
@@ -130,7 +131,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
-        mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
+        ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
         mLeftButton.setOnClickListener(new View.OnClickListener() {
             boolean isOpen;
 
@@ -151,7 +152,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             public void onAnimationEnd(Animation animation) {
                                 toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                                 //set subTitle visible in adapter
-                                mShiftLogAdapter.changeState(false);
+//                                mShiftLogAdapter.changeState(false);
                                 mShiftLogAdapter.notifyDataSetChanged();
                             }
 
@@ -189,7 +190,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
 
-        mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
+        View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -205,7 +206,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 mLeftLayout.requestLayout();
                                 mDownX = (int) event.getRawX();
                                 //set subTitle invisible in adapter
-                                mShiftLogAdapter.changeState(currentX < middleWidth);
+//                                mShiftLogAdapter.changeState(currentX < middleWidth);
+                                mShiftLogAdapter.changeState(true);
                                 mShiftLogAdapter.notifyDataSetChanged();
                             }
                         }
@@ -246,26 +248,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mShiftLogsList, true);
                     mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                    DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+                    ShiftLog shiftLog = mShiftLogsQueue.pop();
+                    DialogFragment dialogFragment = DialogFragment.newInstance(shiftLog.getTitle(), shiftLog.getSubtitle(), shiftLog.getStartTime(), shiftLog.getEndTime());
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                    dialogFragment.setCancelable(false);
                     dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-//                mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsQueue);
-//                }
-
-//                for (int i = 0; i < shiftLogs.size(); i++) {
-//                    if (!shiftLogs.get(i).isDialogShown()) {
-//                        if ((System.currentTimeMillis() - shiftLogs.get(i).getTimeOfAdded()) < (30 * 1000)) {
-//                            DialogFragment dialogFragment = DialogFragment.newInstance(shiftLogs.get(i).getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
-//                            dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-//                            shiftLogs.get(i).setDialogShown(true);
-//                            mShiftLogsQueue.addAll(shiftLogs);
-//                            mDialogsShiftLogListener.getShiftLogCore().setShiftLogDialogStatus(mShiftLogsQueue);
-//                            break;
-//                        } else {
-//                            shiftLogs.get(i).setDialogShown(true);
-//                        }
-//                    }
-//                }
                 } else {
                     mNoData = true;
                 }
@@ -276,6 +263,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             public void onGetShiftLogFailed(ErrorObjectInterface reason) {
                 mNoData = true;
                 dismissProgressDialog();
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, (com.operators.infra.ErrorObjectInterface) reason);
             }
         });
     }
@@ -393,15 +381,17 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             actionBar.setCustomView(view);
-//            actionBar.setIcon(R.drawable.logo);
         }
     }
 
     @Override
     public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
-        if ((System.currentTimeMillis() - mShiftLogsQueue.peek().getTimeOfAdded()) < (30 * 1000)) {
-            DialogFragment dialogFragment = DialogFragment.newInstance(mShiftLogsQueue.pop().getSubtitle(), R.string.login_dialog_dismiss, R.string.login_dialog_dismiss_all);
+        if (mShiftLogsQueue.peek() != null && (System.currentTimeMillis() - mShiftLogsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
+            ShiftLog shiftLog = mShiftLogsQueue.pop();
+            DialogFragment dialogFragment = DialogFragment.newInstance(shiftLog.getTitle(), shiftLog.getSubtitle(), shiftLog.getStartTime(), shiftLog.getEndTime());
+            dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+            dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
         }
     }
@@ -428,7 +418,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(machineStatus.getProductName() + ",");
+        mProductNameTextView.setText(new StringBuilder(machineStatus.getProductName() + ","));
         mProductIdTextView.setText(String.valueOf(machineStatus.getProductId()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getJobId())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getShiftId()));

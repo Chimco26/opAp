@@ -75,23 +75,43 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null,\n" +
                             "    \"events\": [\n" +
                             "      {\n" +
-                            "        \"timestamp\": \"7:35\",\n" +
+                            "        \"timestamp\": \"16:24\",\n" +
                             "\t  \"type\": 2, \n" +
-                            "\t  \"title\": \"Machine 7 Stopped\",\n" +
+                            "\t  \"title\": \"Machine Stopped\",\n" +
                             "        \"subtitle\": \"Stopped at: 05.11.1984\",\n" +
                             "        \"priority\": 1,\n" +
-                            "  \"startTime\": \"7:35\",\n" +
-                            "  \"endTime\": \"8:56\",\n" +
+                            "  \"startTime\": \"\",\n" +
+                            "  \"endTime\": \"\",\n" +
                             "  \"duration\": 5\n" +
                             "      },\n" +
                             "      {\n" +
-                            "        \"timestamp\": \"8:56\",\n" +
+                            "        \"timestamp\": \"16:02\",\n" +
                             "\t  \"type\": 1,\n" +
                             "\t  \"title\": \"Place Platform\",\n" +
-                            "        \"subtitle\": \"please replace the platform for Machine\",\n" +
+                            "        \"subtitle\": \"Please replace the platform for Machine\",\n" +
                             "        \"priority\": 0,\n" +
                             "  \"startTime\": \"10:22\",\n" +
                             "  \"endTime\": \"23:45\",\n" +
+                            "  \"duration\": 7\n" +
+                            "      },\n" +
+                            "       {\n" +
+                            "        \"timestamp\": \"16:50\",\n" +
+                            "\t  \"type\": 1, \n" +
+                            "\t  \"title\": \"Place Platform\",\n" +
+                            "        \"subtitle\": \"Stopped at all\",\n" +
+                            "        \"priority\": 1,\n" +
+                            "  \"startTime\": \"02:55\",\n" +
+                            "  \"endTime\": \"06:11\",\n" +
+                            "  \"duration\": 5\n" +
+                            "      },\n" +
+                            "      {\n" +
+                            "        \"timestamp\": \"16:31\",\n" +
+                            "\t  \"type\": 2,\n" +
+                            "\t  \"title\": \"Machine Stopped\",\n" +
+                            "        \"subtitle\": \"Please check it\",\n" +
+                            "        \"priority\": 0,\n" +
+                            "  \"startTime\": \"\",\n" +
+                            "  \"endTime\": \"\",\n" +
                             "  \"duration\": 7\n" +
                             "      }\n" +
                             "      ] \n" +
