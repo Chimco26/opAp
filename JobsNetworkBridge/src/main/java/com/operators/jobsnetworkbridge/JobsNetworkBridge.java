@@ -51,6 +51,8 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                     }
                     else{
                         Log.w(LOG_TAG,"response.body() is null");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
+                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 }
             }

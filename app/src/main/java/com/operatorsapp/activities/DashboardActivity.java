@@ -138,7 +138,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         });
 
-
         mMachineStatusCore.startPolling();
     }
 
