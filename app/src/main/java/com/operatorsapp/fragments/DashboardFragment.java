@@ -271,7 +271,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
-        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl()+"99", PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
+        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 dismissProgressDialog();
