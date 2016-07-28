@@ -7,11 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/job_item_border"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -25,9 +23,10 @@
             <TextView
                 android:id="@+id/text_view_job_id"
                 android:layout_width="0dp"
+                android:layout_marginLeft="30dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.5"
+                android:gravity="left"
                 android:text="@string/job_id"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"/>
@@ -36,8 +35,8 @@
                 android:id="@+id/adapter_text_view_product_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.7"
+                android:gravity="left"
                 android:text="@string/product_name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"/>
@@ -46,8 +45,8 @@
                 android:id="@+id/adapter_text_view_ERP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.4"
+                android:gravity="left"
                 android:text="@string/erp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"/>
@@ -56,8 +55,8 @@
                 android:id="@+id/adapter_text_planned_start"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.6"
+                android:gravity="left"
                 android:text="@string/planned_start"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"/>
@@ -66,12 +65,22 @@
                 android:id="@+id/adapter_text_view_number_of_units"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/number_of_units"
+                android:layout_weight="0.8"
+                android:gravity="left"
+                android:text="@string/quantity"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"/>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/ic_chevron_normal"/>
+
         </LinearLayout>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_gray" />
 </LinearLayout>

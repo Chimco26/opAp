@@ -9,10 +9,17 @@ import java.util.List;
 
 public class MachineStatusDataResponse extends ErrorBaseResponse {
 
+    @SerializedName("DepartmentMachinePC")
+    private List<Object> mDepartmentMachinePC;
+    @SerializedName("DepartmentOeePee")
+    private List<Object> mDepartmentOeePee;
+
+    @SerializedName("MissingMachineIds")
+    private Object mMissingMachineIds;
     @SerializedName("allMachinesData")
-    private List<AllMachinesData> mAllMachinesData = new ArrayList<AllMachinesData>();
+    private List<AllMachinesData> mAllMachinesData = new ArrayList<>();
 
     public MachineStatus getMachineStatus() {
-        return new MachineStatus( mAllMachinesData);
+        return new MachineStatus(  mDepartmentMachinePC,mDepartmentOeePee,mMissingMachineIds,mAllMachinesData);
     }
 }

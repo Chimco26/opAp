@@ -45,8 +45,15 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                     getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
                 }
                 else {
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                    if(response.body()!=null){
+                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                    }
+                    else{
+                        Log.w(LOG_TAG,"response.body() is null");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
+                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                    }
                 }
             }
 

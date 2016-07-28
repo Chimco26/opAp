@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_height="wrap_content"
         android:text="@string/new_job"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="30dp"
         android:textColor="@color/white"/>
 </LinearLayout>
     <!--add linearLayout-->

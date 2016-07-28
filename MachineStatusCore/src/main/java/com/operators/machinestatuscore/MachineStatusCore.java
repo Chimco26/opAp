@@ -69,25 +69,28 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
 
     public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
         if (mMachineStatusPersistenceManagerInterface != null) {
+            String s = mMachineStatusPersistenceManagerInterface.getSessionId();
             mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
                 @Override
                 public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
                     int timeToEndInSeconds = 0;
                     if (machineStatus != null) {
                         if (machineStatus.getAllMachinesData() != null) {
-                            if (machineStatus.getAllMachinesData().get(0) != null) {
+                            if (machineStatus.getAllMachinesData().size()>0) {
                                 timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
+                                startTimer(timeToEndInSeconds);
                             }
                         }
-                        startTimer(timeToEndInSeconds);
-
                         if (mMachineStatusUICallback != null) {
-                            mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                            if(machineStatus.getAllMachinesData().size()>0){
+                                mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
+                            }else {
+                                Log.w(LOG_TAG, "All Machine Data Is 0!!");
+                            }
                         }
                         else {
                             Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                         }
-
                     }
                     else {
                         Log.e(LOG_TAG, "machineStatus is null");

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/JobsCore/JobsCore.iml" filepath="$PROJECT_DIR$/JobsCore/JobsCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsInfra/JobsInfra.iml" filepath="$PROJECT_DIR$/JobsInfra/JobsInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" filepath="$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeaderMES-operators.iml" filepath="$PROJECT_DIR$/LeaderMES-operators.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" filepath="$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" />
