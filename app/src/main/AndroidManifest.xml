@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:windowSoftInputMode="adjustNothing"
             android:name=".activities.DashboardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"></activity>

@@ -249,7 +249,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"NoProgressCount\": 0,\n" +
                             "      \"Row_Counter\": 7,\n" +
                             "      \"ShiftID\": 258,\n" +
-                            "      \"shiftEndingIn\": 60000\n" +
+                            "      \"shiftEndingIn\": 60002\n" +
                             "    }\n" +
                             "  ],\n" +
                             "  \"error\": null\n" +
@@ -287,7 +287,7 @@ public class RetrofitMockClient implements Interceptor {
                     responseString = "{\n" +
                             "  \"Operator\": {\n" +
                             "    \"OperatorID\": 2222,\n" +
-                            "    \"OperatorName\": \"דוד ארביטמן\"\n" +
+                            "    \"OperatorName\": \"Sergey \"\n" +
                             "  },\n" +
                             "  \"error\": null\n" +
                             "}";

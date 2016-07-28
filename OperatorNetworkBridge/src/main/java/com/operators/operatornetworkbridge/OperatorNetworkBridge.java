@@ -43,7 +43,13 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     Operator operator = null;
                     if (response.body() != null) {
                         operator = response.body().getOperator();
-                        getOperatorByIdCallback.onGetOperatorSucceeded(operator);
+                        if (operator == null) {
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "General Error");
+                            getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                        }
+                        else {
+                            getOperatorByIdCallback.onGetOperatorSucceeded(operator);
+                        }
                     }
                     else {
                         Log.w(LOG_TAG, "Response is null");

@@ -1,38 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="top|center_horizontal"
-              android:id="@+id/operator_screen"
-              android:orientation="vertical"
-            >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/operator_screen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/C2"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/bg_factory"
+        >
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:weightSum="1">
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/operator_id_edit_text"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/operator_id">
-            <requestFocus />
-        </EditText>
-
-
-        <Button
-            android:id="@+id/button_operator_signIn"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:text="@string/common_signin_button_text"/>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Enter With\nYour ID "
+            android:textSize="30dp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@color/C20"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/operator_id_edit_text"
+                style="@style/FontStyle_T6"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background_selector"
+                android:hint="@string/operator_id"
+                android:singleLine="true"/>
+
+            <Button
+                android:id="@+id/button_operator_signIn"
+                android:layout_width="128dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/buttons_selector"
+                android:text="@string/common_signin_button_text"
+                android:textAllCaps="true"
+                android:textColor="@drawable/button_text_color_selector"
+                android:textSize="22dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 
-
-</LinearLayout>
+</RelativeLayout>

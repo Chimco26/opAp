@@ -19,11 +19,13 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
 
     private Activity mContext;
     private String[] mSpinnerItems = null;
+    private String mCurrentOperatorName;
 
-    public OperatorSpinnerAdapter(Activity context, int resource, String[] operators) {
+    public OperatorSpinnerAdapter(Activity context, int resource, String[] operators, String currentOperator) {
         super(context, resource, operators);
         mSpinnerItems = operators;
         mContext = context;
+        mCurrentOperatorName = currentOperator;
     }
 
     @Override
@@ -32,14 +34,18 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
-        }
-        String item = mSpinnerItems[position];
-        if (item != null) {
-            TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
-            name.setTextColor(Color.WHITE);
-            name.setText(item);
+            TextView textView = (TextView)row.findViewById(R.id.spinner_operator_item_name);
+            textView.setText(mCurrentOperatorName);
 
         }
+
+//        String item = mSpinnerItems[position];
+//        if (item != null) {
+//            TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
+//            name.setTextColor(Color.WHITE);
+//            name.setText(item);
+//
+//        }
 
         return row;
     }
