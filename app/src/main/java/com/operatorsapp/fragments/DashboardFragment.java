@@ -80,13 +80,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
-    private int[] mIndicatorsArray = {
-            R.drawable.ic_indicator, // exceeding
-            R.drawable.ic_indicator_copy, // working
-            R.drawable.ic_indicator_copy_2, // setup
-            R.drawable.ic_indicator_copy_3, // stopped
-            R.drawable.ic_indicator_copy_4 // no data
-    };
 
     private String[] mOperatorsSpinnerArray = {"Sign in"};
 
@@ -179,7 +172,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             }
                         });
                         isOpen = true;
-                    } else {
+                    }
+                    else {
                         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
                         anim.setDuration(ANIM_DURATION_MILLIS);
                         mLeftLayout.startAnimation(anim);
@@ -230,7 +224,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         if (!mNoData) {
                             if (mLeftLayoutParams.width < middleWidth) {
                                 toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
-                            } else {
+                            }
+                            else {
                                 toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                             }
                         }
@@ -292,7 +287,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-                } else {
+                }
+                else {
                     mNoData = true;
                 }
             }
@@ -341,7 +337,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
     }
@@ -465,18 +462,37 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
-        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusID()));
-
-        if (machineStatus.getAllMachinesData().get(0).getMachineStatusID() > mIndicatorsArray.length) {
-            Log.w(LOG_TAG, "Incorrect status id");
-        } else {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), mIndicatorsArray[machineStatus.getAllMachinesData().get(0).getMachineStatusID() - 1]));
-        }
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusEname()));
+        statusAggregation(machineStatus);
     }
 
     @Override
     public void onTimerChanged(String timeToEndInHours) {
         mTimerTextView.setText(timeToEndInHours);
+    }
+
+    private void statusAggregation(MachineStatus machineStatus) {
+        int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
+        if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
+        }
+        else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
+        }
+        else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+        }
+        else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
+        }
+        else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
+        }
+        else {
+            Log.w(LOG_TAG, "Undefined parameter");
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+        }
+
     }
 
 }

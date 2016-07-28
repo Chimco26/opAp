@@ -34,19 +34,14 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
-            TextView textView = (TextView)row.findViewById(R.id.spinner_operator_item_name);
-            textView.setText(mCurrentOperatorName);
-
+            TextView spinnerTitle = (TextView) row.findViewById(R.id.spinner_operator_item_name);
+            if (mCurrentOperatorName == null || mCurrentOperatorName.equals("")) {
+                spinnerTitle.setText(mSpinnerItems[0]);
+            }
+            else {
+                spinnerTitle.setText(mCurrentOperatorName);
+            }
         }
-
-//        String item = mSpinnerItems[position];
-//        if (item != null) {
-//            TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
-//            name.setTextColor(Color.WHITE);
-//            name.setText(item);
-//
-//        }
-
         return row;
     }
 
@@ -62,9 +57,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setTextColor(Color.BLACK);
             name.setText(item);
-
         }
-
         return row;
     }
 

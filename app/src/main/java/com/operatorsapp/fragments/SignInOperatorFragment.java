@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +53,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         mOnGoToScreenListener = (GoToScreenListener) getActivity();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-        mOperatorCore.registerListener(mOperatorForMachineUICallbackListener );
+        mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
     }
 
 
@@ -74,6 +77,29 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         mOperatorIdEditText = (EditText) view.findViewById(R.id.operator_id_edit_text);
         mSignInButton = (Button) view.findViewById(R.id.button_operator_signIn);
+        mOperatorIdEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
+                if(count>0){
+                    mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+                    mSignInButton.setClickable(true);
+                }else {
+                    mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+                    mSignInButton.setClickable(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
@@ -97,6 +123,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
             }
+
         }
 
         @Override

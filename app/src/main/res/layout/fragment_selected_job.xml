@@ -180,7 +180,7 @@
                 android:id="@+id/button_cancel"
                 android:layout_width="126dp"
                 android:layout_height="28dp"
-                android:textSize="22dp"
+                android:textSize="20dp"
                 android:textAllCaps="true"
                 android:layout_marginRight="5dp"
                 android:textColor="@drawable/button_cancel_text_selector"
@@ -190,7 +190,7 @@
             <Button
                 android:id="@+id/button_activate_new_job"
                 android:layout_width="128dp"
-                android:textSize="22dp"
+                android:textSize="20dp"
                 android:layout_height="28dp"
                 android:textColor="@drawable/button_text_color_selector"
                 android:background="@drawable/buttons_selector"
