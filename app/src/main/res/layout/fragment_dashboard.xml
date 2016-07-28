@@ -2,104 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <RelativeLayout
-        android:id="@+id/fragment_dashboard_rightLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="end">
-
-        <LinearLayout
-            android:id="@+id/fragment_dashboard_no_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/ic_cloud" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/no_data"
-                android:textColor="@color/no_data_gray"
-                android:textSize="50sp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/fragment_dashboard_leftLayout"
-        android:layout_width="270dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/status_layout"
-        android:layout_gravity="left"
-        android:background="@drawable/combined_shape"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/fragment_dashboard_no_notif"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            android:text="@string/no_notifications"
-            android:textColor="@color/no_data_gray"
-            android:textSize="35sp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_dashboard_shift_log"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/fragment_dashboard_divider"
-        android:layout_width="45dp"
-        android:layout_height="match_parent"
-        android:layout_alignEnd="@id/fragment_dashboard_leftLayout"
-        android:layout_marginEnd="-25dp"
-        android:background="@android:color/transparent"
-        android:clickable="true" />
-
-    <!--<ImageView-->
-    <!--android:id="@+id/fragment_dashboard_arrow_left"-->
-    <!--android:layout_width="45dp"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_alignEnd="@id/fragment_dashboard_leftLayout"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:paddingBottom="5dp"-->
-    <!--android:paddingEnd="5dp"-->
-    <!--android:src="@drawable/double_left_arrow"-->
-    <!--android:visibility="invisible" />-->
-
-
-    <ImageView
-        android:id="@+id/fragment_dashboard_left_btn"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignEnd="@id/fragment_dashboard_leftLayout"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="-30dp"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/left_panel_button_selector" />
-
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:background="@drawable/rectangle_11_copy_2"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <LinearLayout
@@ -125,8 +33,8 @@
                 android:id="@+id/text_view_product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="product_name"
                 android:singleLine="true"
+                android:text="product_name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
@@ -197,12 +105,98 @@
         </LinearLayout>
 
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/fragment_dashboard_layouts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/status_layout">
+
+        <RelativeLayout
+            android:id="@+id/fragment_dashboard_rightLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/status_layout"
+            android:layout_gravity="end">
+
+            <LinearLayout
+                android:id="@+id/fragment_dashboard_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/ic_cloud" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_data"
+                    android:textColor="@color/no_data_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_dashboard_leftLayout"
+            android:layout_width="270dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/status_layout"
+            android:layout_gravity="left"
+            android:background="@drawable/combined_shape"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fragment_dashboard_no_notif"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:text="@string/no_notifications"
+                android:textColor="@color/no_data_gray"
+                android:textSize="35sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_dashboard_shift_log"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/fragment_dashboard_divider"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@id/fragment_dashboard_leftLayout"
+            android:layout_marginEnd="-25dp"
+            android:background="@android:color/transparent"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/fragment_dashboard_left_btn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignEnd="@id/fragment_dashboard_leftLayout"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="-30dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/left_panel_button_selector" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/timer_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fragment_dashboard_leftLayout"
+        android:layout_above="@+id/fragment_dashboard_layouts"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@id/status_layout"
         android:layout_marginRight="40dp"

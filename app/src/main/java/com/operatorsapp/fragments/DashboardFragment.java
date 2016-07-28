@@ -64,6 +64,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
+
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private OperatorCore mOperatorCore;
@@ -87,7 +88,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             R.drawable.ic_indicator_copy_4 // no data
     };
 
-
     private String[] mOperatorsSpinnerArray = {"Sign in"};
 
     private TextView mProductNameTextView;
@@ -101,7 +101,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
     private Operator mSelectedOperator;
-
 
     private MachineStatus mCurrentMachineStatus;
 
@@ -171,8 +170,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             @Override
                             public void onAnimationEnd(Animation animation) {
                                 toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
-                                //set subTitle visible in adapter
-//                                mShiftLogAdapter.changeState(false);
                                 mShiftLogAdapter.notifyDataSetChanged();
                             }
 
@@ -189,7 +186,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         anim.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
-                                //set subTitle invisible in adapter
                                 mShiftLogAdapter.changeState(true);
                                 mShiftLogAdapter.notifyDataSetChanged();
                             }
@@ -225,8 +221,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 mLeftLayout.getLayoutParams().width = currentX;
                                 mLeftLayout.requestLayout();
                                 mDownX = (int) event.getRawX();
-                                //set subTitle invisible in adapter
-//                                mShiftLogAdapter.changeState(currentX < middleWidth);
                                 mShiftLogAdapter.changeState(true);
                                 mShiftLogAdapter.notifyDataSetChanged();
                             }
@@ -277,7 +271,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
-        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98", new ShiftLogUICallback<Event>() {
+        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl()+"99", PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 dismissProgressDialog();
@@ -301,14 +295,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 } else {
                     mNoData = true;
                 }
-
             }
 
             @Override
-            public void onGetShiftLogFailed(ErrorObjectInterface reason) {
+            public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
                 mNoData = true;
                 dismissProgressDialog();
-                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, (com.operators.infra.ErrorObjectInterface) reason);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, null);
+                    }
+                });
             }
         });
     }
@@ -353,11 +351,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onDetach();
         mCroutonCallback = null;
         mDialogsShiftLogListener = null;
+        mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
     }
-
 
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -377,13 +375,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             title.setText(spannableString);
             title.setVisibility(View.GONE);
 
-
             final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
             final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
             jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             jobsSpinner.setAdapter(jobsSpinnerAdapter);
             jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-
 
             jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 

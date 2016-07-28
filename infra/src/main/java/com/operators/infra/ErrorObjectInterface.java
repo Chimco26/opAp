@@ -1,10 +1,8 @@
 package com.operators.infra;
 
-public interface ErrorObjectInterface
-{
+public interface ErrorObjectInterface {
 
-    enum ErrorCode
-    {
+    enum ErrorCode {
         Unknown,
         Retrofit,
         SessionInvalid,
