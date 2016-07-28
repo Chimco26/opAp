@@ -69,6 +69,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
 
     public void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
         if (mMachineStatusPersistenceManagerInterface != null) {
+            String s = mMachineStatusPersistenceManagerInterface.getSessionId();
             mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
                 @Override
                 public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
@@ -80,7 +81,6 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                                 startTimer(timeToEndInSeconds);
                             }
                         }
-
                         if (mMachineStatusUICallback != null) {
                             if(machineStatus.getAllMachinesData().size()>0){
                                 mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
@@ -91,7 +91,6 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                         else {
                             Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                         }
-
                     }
                     else {
                         Log.e(LOG_TAG, "machineStatus is null");

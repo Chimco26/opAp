@@ -41,6 +41,7 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.Locale;
@@ -130,10 +131,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-
-
             @Override
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
+//TODO show crouton
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
             }
         });
