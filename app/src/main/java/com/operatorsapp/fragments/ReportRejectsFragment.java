@@ -9,26 +9,40 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
+
 
 /**
  * Created by Sergey on 31/07/2016.
  */
-public class ReportRejectsFragment extends Fragment {
+public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
 
+    public static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private Spinner mRejectReasonSpinner;
     private Spinner mCauseSpinner;
+    private TextView mCancelButton;
+    private Button mNextButton;
+    boolean mIsFirstReasonSpinnerSelection = true;
+    boolean mIsReasonSelected;
+    private GoToScreenListener mGoToScreenListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mGoToScreenListener = (GoToScreenListener) getActivity();
+
     }
 
     @Nullable
@@ -48,6 +62,25 @@ public class ReportRejectsFragment extends Fragment {
         mRejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
         mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
+        mRejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mIsFirstReasonSpinnerSelection) {
+                    mIsFirstReasonSpinnerSelection = false;
+                    mIsReasonSelected = false;
+
+                }
+                else {
+                    mIsReasonSelected = true;
+                    mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
         mCauseSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
         ArrayAdapter<String> causeSpinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.reject_reasons_cause_array));
@@ -56,7 +89,26 @@ public class ReportRejectsFragment extends Fragment {
         mCauseSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
 
+        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+        mNextButton = (Button) view.findViewById(R.id.button_next);
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCancelButton.setOnClickListener(null);
+        mNextButton.setOnClickListener(null);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCancelButton.setOnClickListener(this);
+        mNextButton.setOnClickListener(this);
+
     }
 
     private void setActionBar() {
@@ -80,6 +132,29 @@ public class ReportRejectsFragment extends Fragment {
                 }
             });
             actionBar.setCustomView(view);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_cancel: {
+                getFragmentManager().popBackStack();
+                break;
+            }
+            case R.id.button_next: {
+                if (!mIsReasonSelected) {
+                    Log.i(LOG_TAG, "reason not Selected");
+
+                }
+                else {
+                    Log.i(LOG_TAG, "reason Selected");
+                    ReportRejectSelectParametersFragment reportRejectSelectParametersFragment = new ReportRejectSelectParametersFragment();
+
+                    mGoToScreenListener.goToFragment(reportRejectSelectParametersFragment, true);
+                }
+                break;
+            }
         }
     }
 }
