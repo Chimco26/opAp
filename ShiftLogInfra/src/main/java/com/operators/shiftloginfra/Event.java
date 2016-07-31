@@ -113,6 +113,10 @@ public class Event {
         this.mTimeOfAdded = timeOfAdded;
     }
 
+    public int getEventID() {
+        return mEventID;
+    }
+
     public boolean isTreated() {
         return mTreated;
     }

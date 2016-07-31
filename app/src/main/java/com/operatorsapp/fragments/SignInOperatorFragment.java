@@ -27,7 +27,9 @@ import com.google.gson.Gson;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.utils.ShowCrouton;
@@ -86,10 +88,10 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
-                if(count>0){
+                if (count > 0) {
                     mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                     mSignInButton.setClickable(true);
-                }else {
+                } else {
                     mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
                     mSignInButton.setClickable(false);
                 }
@@ -117,8 +119,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
                 selectedOperatorFragment.setArguments(bundle);
                 mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
-            }
-            else {
+            } else {
                 Log.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
@@ -129,8 +130,26 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         @Override
         public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
             Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
-            removePhoneKeypad();
-            ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                ((DashboardActivity) getActivity()).doSilentLogin(mOnCroutonRequestListener, new SilentLoginCallback() {
+                    @Override
+                    public void onSilentLoginSucceeded() {
+                        String id = mOperatorIdEditText.getText().toString();
+                        Log.i(LOG_TAG, "Operator id: " + id);
+                        mOperatorCore.getOperatorById(id);
+                    }
+
+                    @Override
+                    public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+//todo log
+                        Log.e(LOG_TAG, "ERROR");
+
+                    }
+                });
+            } else {
+                removePhoneKeypad();
+                ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
+            }
         }
 
         @Override

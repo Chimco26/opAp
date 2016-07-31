@@ -289,56 +289,77 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
         mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
-            @Override
-            public void onGetShiftLogSucceeded(ArrayList<Event> events) {
-                dismissProgressDialog();
-                if (events != null && events.size() > 0) {
-                    //todo remove clear
-                    mEventsQueue.clear();
-                    mEventsList.clear();
-
-                    mNoDataView.setVisibility(View.GONE);
-                    mNoNotificationsText.setVisibility(View.GONE);
-                    mEventsQueue.addAll(events);
-                    mEventsList.addAll(events);
-
-                    mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, true);
-                    mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-
-                    ArrayList widgets = new ArrayList();
-                    widgets.add("1");
-                    widgets.add("2");
-                    widgets.add("1");
-                    widgets.add("2");
-                    widgets.add("1");
-                    widgets.add("2");
-                    mWidgetAdapter = new WidgetAdapter(getActivity(), widgets);
-                    mWidgetRecycler.setAdapter(mWidgetAdapter);
-
-                    Event event = mEventsQueue.pop();
-                    DialogFragment dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-                    dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                    dialogFragment.setCancelable(false);
-                    dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-                } else {
-                    mNoData = true;
-                }
-            }
-
-            @Override
-            public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
-                mNoData = true;
-                dismissProgressDialog();
-                getActivity().runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, null);
+                    public void onGetShiftLogSucceeded(ArrayList<Event> events) {
+                        dismissProgressDialog();
+                        if (events != null && events.size() > 0) {
+
+                            mNoData = false;
+                            //todo remove
+                            if (mEventsList.size() == 0) {
+                                mEventsQueue.addAll(events);
+                                mEventsList.addAll(events);
+                            } else {
+
+                                for (int i = 0; i < events.size(); i++) {
+                                    if (!isExists(events.get(i))) {
+                                        mEventsList.add(events.get(i));
+                                    }
+
+                                }
+                            }
+                            mNoDataView.setVisibility(View.GONE);
+                            mNoNotificationsText.setVisibility(View.GONE);
+
+                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, true);
+                            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+                            ArrayList widgets = new ArrayList();
+                            widgets.add("1");
+                            widgets.add("2");
+                            widgets.add("1");
+                            widgets.add("2");
+                            widgets.add("1");
+                            widgets.add("2");
+                            mWidgetAdapter = new WidgetAdapter(getActivity(), widgets);
+                            mWidgetRecycler.setAdapter(mWidgetAdapter);
+                            if (mEventsQueue.size() > 0) {
+                                Event event = mEventsQueue.pop();
+                                DialogFragment dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                                dialogFragment.setCancelable(false);
+                                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                            }
+                        } else {
+                            mNoData = true;
+                            clearStatusLayout();
+                        }
                     }
-                });
-            }
-        });
+
+                    @Override
+                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
+                        mNoData = true;
+                        dismissProgressDialog();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, null);
+                            }
+                        });
+                    }
+                }
+
+        );
     }
 
+    private boolean isExists(Event event) {
+        for (int i = 0; i < mEventsList.size(); i++) {
+            if (mEventsList.get(i).getEventID() == event.getEventID()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void onResume() {
@@ -481,10 +502,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         });
     }
 
+    @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         Log.i(LOG_TAG, "onDeviceStatusChanged()");
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
+    }
+
+    @Override
+    public void onDataFailure(com.operators.machinestatusinfra.ErrorObjectInterface reason) {
+        clearStatusLayout();
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
@@ -495,6 +522,17 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
         mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusEname()));
         statusAggregation(machineStatus);
+    }
+
+    private void clearStatusLayout() {
+        mProductNameTextView.setText("");
+        mProductIdTextView.setText("");
+        mJobIdTextView.setText("");
+        mShiftIdTextView.setText("");
+        mMachineIdStatusBarTextView.setText("");
+        mMachineStatusStatusBarTextView.setText("");
+        mTimerTextView.setText("");
+        mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
     }
 
     @Override
