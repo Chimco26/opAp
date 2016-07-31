@@ -74,7 +74,6 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null,\n" +
                             "  \"events\": [\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 1,\n" +
                             "      \"EventDuration\": 577,\n" +
                             "      \"EventEndTime\": \"13/10/2015 16:39:00\",\n" +
@@ -87,7 +86,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 3,\n" +
                             "      \"EventEndTime\": \"14/10/2015 11:12:00\",\n" +
@@ -100,7 +98,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 379,\n" +
                             "      \"EventEndTime\": \"14/10/2015 19:03:00\",\n" +
@@ -113,7 +110,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 718,\n" +
                             "      \"EventEndTime\": \"15/10/2015 07:01:00\",\n" +
@@ -126,7 +122,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 1,\n" +
                             "      \"priority\": 1,\n" +
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
@@ -139,7 +134,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 1,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:55:00\",\n" +
@@ -152,7 +146,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 145,\n" +
                             "      \"EventEndTime\": \"12/10/2015 11:55:00\",\n" +
@@ -165,7 +158,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 24,\n" +
                             "      \"EventEndTime\": \"12/10/2015 13:44:00\",\n" +
@@ -178,7 +170,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 236,\n" +
                             "      \"EventEndTime\": \"12/10/2015 19:04:00\",\n" +
@@ -191,7 +182,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 718,\n" +
                             "      \"EventEndTime\": \"13/10/2015 07:02:00\",\n" +
@@ -204,7 +194,6 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventTitle\": \"HAAS998: \"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"type\": 2,\n" +
                             "      \"priority\": 1,\n" +
                             "      \"EventDuration\": 464,\n" +
                             "      \"EventEndTime\": \"15/10/2015 14:45:00\",\n" +

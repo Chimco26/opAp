@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Event {
 
-    @SerializedName("type")
-    private int mType;
     @SerializedName("priority")
     private int mPriority;
     @SerializedName("EventTime")
@@ -65,14 +63,6 @@ public class Event {
         this.mEventSubTitleLname = subtitleE;
     }
 
-    public int getType() {
-        return mType;
-    }
-
-    public void setType(int type) {
-        this.mType = type;
-    }
-
     public String getTime() {
         return mEventTime;
     }
@@ -119,5 +109,29 @@ public class Event {
 
     public void setTreated(boolean treated) {
         this.mTreated = treated;
+    }
+
+    public int getEventGroupID() {
+        return mEventGroupID;
+    }
+
+    public void setEventGroupID(int eventGroupID) {
+        this.mEventGroupID = eventGroupID;
+    }
+
+    public String getEventGroupLname() {
+        return mEventGroupLname;
+    }
+
+    public void setEventGroupLname(String eventGroupLname) {
+        this.mEventGroupLname = eventGroupLname;
+    }
+
+    public int getEventID() {
+        return mEventID;
+    }
+
+    public void setEventID(int eventID) {
+        this.mEventID = eventID;
     }
 }

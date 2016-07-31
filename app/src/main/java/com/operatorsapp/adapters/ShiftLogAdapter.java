@@ -251,10 +251,22 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Event event = mEvents.get(position);
-        if (event.getType() == 1) {
-            return PARAMETER;
-        }
-        return STOPPED;
-    }
+        int type;
+        switch (event.getEventGroupID()) {
+            case 20:
+                type = PARAMETER;
+                break;
 
+            case 6:
+                type = STOPPED;
+                break;
+
+            default:
+                type = PARAMETER;
+                break;
+        }
+
+        return type;
+
+    }
 }
