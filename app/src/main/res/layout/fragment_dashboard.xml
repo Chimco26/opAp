@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
@@ -105,6 +106,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/fragment_dashboard_layouts"
         android:layout_width="match_parent"
@@ -115,7 +117,6 @@
             android:id="@+id/fragment_dashboard_rightLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/status_layout"
             android:layout_gravity="end">
 
             <LinearLayout
@@ -141,6 +142,11 @@
                     android:textColor="@color/no_data_gray"
                     android:textSize="50sp" />
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_dashboard_widgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <LinearLayout

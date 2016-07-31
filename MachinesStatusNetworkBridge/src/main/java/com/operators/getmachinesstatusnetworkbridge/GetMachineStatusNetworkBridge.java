@@ -43,6 +43,9 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     }else {
                         MachineStatus machineStatus = response.body().getMachineStatus();
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
+
+
+
                     }
                 } else {
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());

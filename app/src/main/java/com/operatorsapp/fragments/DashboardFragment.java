@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -44,6 +45,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
+import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -55,6 +57,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.view.GridSpacingItemDecoration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -71,12 +74,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private OnCroutonRequestListener mCroutonCallback;
     private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
+    private RecyclerView mWidgetRecycler;
+    private GridLayoutManager mGridLayoutManager;
+    private GridSpacingItemDecoration mGridSpacingItemDecoration;
     private LinearLayout mLeftLayout;
     private RelativeLayout mRightLayout;
     private TextView mNoNotificationsText;
     private LinearLayout mNoDataView;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
+    private WidgetAdapter mWidgetAdapter;
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
@@ -137,6 +144,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
+        mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
+        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        mWidgetRecycler.setLayoutManager(mGridLayoutManager);
+        mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
+        mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
         mLeftLayoutParams.width = closeWidth;
@@ -171,6 +184,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             public void onAnimationEnd(Animation animation) {
                                 toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
                                 mShiftLogAdapter.notifyDataSetChanged();
+                                mGridLayoutManager.setSpanCount(2);
+                                mWidgetAdapter.notifyDataSetChanged();
+//                                mGridSpacingItemDecoration.setSpanCount(2);
                             }
 
                             @Override
@@ -193,6 +209,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             @Override
                             public void onAnimationEnd(Animation animation) {
                                 toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
+                                mGridLayoutManager.setSpanCount(3);
+                                mWidgetAdapter.notifyDataSetChanged();
+//                                mGridSpacingItemDecoration.setSpanCount(3);
                             }
 
                             @Override
@@ -230,8 +249,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         if (!mNoData) {
                             if (mLeftLayoutParams.width < middleWidth) {
                                 toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
+                                mGridLayoutManager.setSpanCount(3);
+//                                mGridSpacingItemDecoration.setSpanCount(3);
+                                mWidgetAdapter.notifyDataSetChanged();
                             } else {
                                 toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
+                                mGridLayoutManager.setSpanCount(2);
+//                                mGridSpacingItemDecoration.setSpanCount(2);
+                                mWidgetAdapter.notifyDataSetChanged();
                             }
                         }
                         break;
@@ -276,6 +301,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 dismissProgressDialog();
                 if (events != null && events.size() > 0) {
+                    //todo remove clear
                     mEventsQueue.clear();
                     mEventsList.clear();
 
@@ -287,8 +313,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, true);
                     mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
+                    ArrayList widgets = new ArrayList();
+                    widgets.add("1");
+                    widgets.add("2");
+                    widgets.add("1");
+                    widgets.add("2");
+                    widgets.add("1");
+                    widgets.add("2");
+                    mWidgetAdapter = new WidgetAdapter(getActivity(), widgets);
+                    mWidgetRecycler.setAdapter(mWidgetAdapter);
+
                     Event event = mEventsQueue.pop();
-                    DialogFragment dialogFragment = DialogFragment.newInstance(event.getTitle(), event.getSubtitleL(), event.getTime(), event.getEndTime());
+                    DialogFragment dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -431,7 +467,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         dialog.dismiss();
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             Event event = mEventsQueue.pop();
-            DialogFragment dialogFragment = DialogFragment.newInstance(event.getTitle(), event.getSubtitleL(), event.getStartTime(), event.getEndTime());
+            DialogFragment dialogFragment = DialogFragment.newInstance(event.getStartTime(), event.getEndTime(), event.getDuration());
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);

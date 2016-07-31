@@ -256,4 +256,5 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         }
         return STOPPED;
     }
+
 }

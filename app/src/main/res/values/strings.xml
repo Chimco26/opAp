@@ -74,6 +74,11 @@
     <string name="operator_sign_in">Operator Sign In</string>
     <string name="cancel">Cancel</string>
     <string name="retry">Retry</string>
+    <string name="end">End</string>
+    <string name="start">Start</string>
+    <string name="duration">Duration</string>
+    <string name="report">REPORT</string>
+    <string name="stop_event">Stop Event</string>
 
 
     <array name="operators_spinner_array">
