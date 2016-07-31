@@ -103,6 +103,10 @@ public class Event {
         this.mTimeOfAdded = timeOfAdded;
     }
 
+    public int getEventID() {
+        return mEventID;
+    }
+
     public boolean isTreated() {
         return mTreated;
     }
@@ -125,10 +129,6 @@ public class Event {
 
     public void setEventGroupLname(String eventGroupLname) {
         this.mEventGroupLname = eventGroupLname;
-    }
-
-    public int getEventID() {
-        return mEventID;
     }
 
     public void setEventID(int eventID) {

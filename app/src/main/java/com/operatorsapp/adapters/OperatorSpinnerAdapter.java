@@ -35,8 +35,11 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
             TextView spinnerTitle = (TextView) row.findViewById(R.id.spinner_operator_item_name);
-            if (mCurrentOperatorName == null || mCurrentOperatorName.equals("")) {
+            if (mCurrentOperatorName == null  ) {
                 spinnerTitle.setText(mSpinnerItems[0]);
+            }
+            else if(mCurrentOperatorName.equals("")){
+                spinnerTitle.setText("--");
             }
             else {
                 spinnerTitle.setText(mCurrentOperatorName);

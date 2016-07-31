@@ -16,10 +16,13 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
+import com.operators.infra.Machine;
 import com.operators.jobscore.JobsCore;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsnetworkbridge.JobsNetworkBridge;
+import com.operators.logincore.LoginCore;
+import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatusinfra.ErrorObjectInterface;
@@ -29,7 +32,9 @@ import com.operators.operatornetworkbridge.OperatorNetworkBridge;
 import com.operators.shiftlogcore.ShiftLogCore;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.DashboardFragment;
+import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
@@ -40,10 +45,13 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -83,13 +91,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void updateAndroidSecurityProvider(Activity callingActivity) {
         try {
             ProviderInstaller.installIfNeeded(this);
-        }
-        catch (GooglePlayServicesRepairableException e) {
+        } catch (GooglePlayServicesRepairableException e) {
             // Thrown when Google Play Services is not installed, up-to-date, or enabled
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
-        }
-        catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesNotAvailableException e) {
             ZLogger.e("SecurityException", "Google Play Services not available.");
         }
     }
@@ -110,8 +116,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
-                }
-                else {
+                } else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
@@ -125,8 +130,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                     mDashboardUICallbackListener.onTimerChanged(countDownTimer);
-                }
-                else {
+                } else {
                     Log.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
             }
@@ -135,6 +139,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
 //TODO show crouton
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
+                mDashboardUICallbackListener.onDataFailure(reason);
+                mMachineStatusCore.stopTimer();
+                mMachineStatusCore.stopPolling();
             }
         });
 
@@ -176,8 +183,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
         }
     }
@@ -205,8 +211,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 Log.i(LOG_TAG, "onJobListReceived()");
                 if (jobListForMachine.getJobs().size() != 0) {
                     mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
-                }
-                else {
+                } else {
                     mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
                 }
 
@@ -272,8 +277,59 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         mMachineStatusCore.stopPolling();
         mMachineStatusCore.startPolling();
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+    }
+
+    // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
+    public void doSilentLogin(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
+        ProgressDialogManager.show(this);
+        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(),
+                PersistenceManager.getInstance().getUserName(),
+                PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
+                    @Override
+                    public void onLoginSucceeded(ArrayList<Machine> machines) {
+                        ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                        dismissProgressDialog();
+                        silentLoginCallback.onSilentLoginSucceeded();
+                    }
+
+                    @Override
+                    public void onLoginFailed(final com.operators.infra.ErrorObjectInterface reason) {
+                        dismissProgressDialog();
+                        silentLoginCallback.onSilentLoginFailed(reason);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Fragment fragment = getCurrentFragment();
+                                if (fragment instanceof SignInOperatorFragment) {
+                                    ShowCrouton.operatorLoadingErrorCrouton(onCroutonRequestListener, "credentials mismatch");
+                                }
+                            }
+                        });
+                    }
+                });
+    }
+
+    private void dismissProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ProgressDialogManager.dismiss();
+            }
+        });
+    }
+
+    private Fragment getCurrentFragment() {
+        try {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            int fragmentBackStackSize = fragments.size();
+            return fragments.get(fragmentBackStackSize - 1);
+        } catch (NullPointerException ex) {
+            ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
+            return null;
+        }
     }
 }

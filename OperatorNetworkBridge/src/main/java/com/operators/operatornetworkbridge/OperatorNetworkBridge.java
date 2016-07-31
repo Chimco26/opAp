@@ -44,24 +44,20 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     if (response.body() != null) {
                         operator = response.body().getOperator();
                         if (operator == null) {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "General Error");
+                            ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                             getOperatorByIdCallback.onGetOperatorFailed(errorObject);
-                        }
-                        else {
+                        } else {
                             getOperatorByIdCallback.onGetOperatorSucceeded(operator);
                         }
-                    }
-                    else {
+                    } else {
                         Log.w(LOG_TAG, "Response is null");
                     }
-                }
-                else {
+                } else {
                     if (response.body() != null) {
 
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getOperatorByIdCallback.onGetOperatorFailed(errorObject);
-                    }
-                    else {
+                    } else {
                         Log.w(LOG_TAG, "Response body is null");
 
                     }
@@ -85,8 +81,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             public void onResponse(Call<SetOperatorForMachineResponse> call, Response<SetOperatorForMachineResponse> response) {
                 if (response.isSuccessful()) {
                     setOperatorForMachineCallback.onSetOperatorForMachineSuccess();
-                }
-                else {
+                } else {
                     if (response.body() != null) {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
