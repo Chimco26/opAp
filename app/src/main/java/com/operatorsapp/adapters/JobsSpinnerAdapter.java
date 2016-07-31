@@ -14,25 +14,21 @@ import com.operatorsapp.R;
 /**
  * Created by User on 17/07/2016.
  */
-public class JobsSpinnerAdapter extends ArrayAdapter<String>
-{
+public class JobsSpinnerAdapter extends ArrayAdapter<String> {
     private Activity mContext;
     private String[] mSpinnerItems = null;
     TextView mRowName;
 
-    public JobsSpinnerAdapter(Activity context, int resource, String[] spinnerItems)
-    {
+    public JobsSpinnerAdapter(Activity context, int resource, String[] spinnerItems) {
         super(context, resource, spinnerItems);
         this.mContext = context;
         this.mSpinnerItems = spinnerItems;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        if (row == null)
-        {
+        if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
         }
@@ -40,28 +36,23 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent)
-    {
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        if (row == null)
-        {
+        if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
         }
 
         String item = mSpinnerItems[position];
-        if (item != null)
-        {
+        if (item != null) {
             mRowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
             mRowName.setText(item);
-            if (position == 0)
-            {
+            if (position <= 1) {
                 mRowName.setTextColor(Color.BLACK);
                 mRowName.setText(item);
                 row.setClickable(false);
             }
-            else if (position > 0)
-            {
+            else if (position > 1) {
                 mRowName.setTextColor(Color.GRAY);
                 mRowName.setText(item);
                 row.setClickable(true);
