@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/arrow_back"
             android:padding="10dp"
-            android:background="@drawable/btn_x"/>
+            android:background="@drawable/btn_back"/>
 
         <TextView
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_height="wrap_content"
-            android:text="Operator details"
+            android:text="@string/operator_sign_in_action_bar"
             android:layout_marginLeft="10dp"
             android:textColor="@color/white"/>
     </LinearLayout>

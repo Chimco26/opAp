@@ -27,7 +27,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     private static final String SELECTED_JOB = "selected_job";
 
     private Job mJob;
-    private Button mCancelButton;
+    private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
 
@@ -50,7 +50,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
 
         setActionBar();
 
-        mCancelButton = (Button) view.findViewById(R.id.button_cancel);
+        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
         mActivateNewJobButton = (Button)view.findViewById(R.id.button_activate_new_job);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.job_id_text_view);
         TextView plannedStartTextView = (TextView) view.findViewById(R.id.planned_start_text_view);

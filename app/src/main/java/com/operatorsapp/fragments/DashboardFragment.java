@@ -76,7 +76,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private RecyclerView mShiftLogRecycler;
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
-    private GridSpacingItemDecoration mGridSpacingItemDecoration;
     private LinearLayout mLeftLayout;
     private RelativeLayout mRightLayout;
     private TextView mNoNotificationsText;
@@ -87,13 +86,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
-    private int[] mIndicatorsArray = {
-            R.drawable.ic_indicator, // exceeding
-            R.drawable.ic_indicator_copy, // working
-            R.drawable.ic_indicator_copy_2, // setup
-            R.drawable.ic_indicator_copy_3, // stopped
-            R.drawable.ic_indicator_copy_4 // no data
-    };
 
     private String[] mOperatorsSpinnerArray = {"Sign in"};
 
@@ -147,7 +139,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
+        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
@@ -436,7 +428,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
 
             EmeraldSpinner operatorsSpinner = (EmeraldSpinner) view.findViewById(R.id.toolbar_operator_spinner);
-            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mOperatorsSpinnerArray);
+            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, PersistenceManager.getInstance().getOperatorName());
             operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
             operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -496,23 +488,37 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + ",");
+        mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
         mProductIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
-        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusID()));
-
-        if (machineStatus.getAllMachinesData().get(0).getMachineStatusID() > mIndicatorsArray.length) {
-            Log.w(LOG_TAG, "Incorrect status id");
-        } else {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), mIndicatorsArray[machineStatus.getAllMachinesData().get(0).getMachineStatusID() - 1]));
-        }
+        mMachineStatusStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineStatusEname()));
+        statusAggregation(machineStatus);
     }
 
     @Override
     public void onTimerChanged(String timeToEndInHours) {
         mTimerTextView.setText(timeToEndInHours);
+    }
+
+    private void statusAggregation(MachineStatus machineStatus) {
+        int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
+        if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
+        } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
+        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
+        } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
+        } else {
+            Log.w(LOG_TAG, "Undefined parameter");
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+        }
+
     }
 
 }
