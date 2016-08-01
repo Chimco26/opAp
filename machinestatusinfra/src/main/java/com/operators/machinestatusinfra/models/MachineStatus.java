@@ -1,6 +1,7 @@
-package com.operators.machinestatusinfra;
+package com.operators.machinestatusinfra.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.operators.machinestatusinfra.models.AllMachinesData;
 
 import java.util.List;
 

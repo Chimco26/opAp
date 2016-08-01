@@ -1,4 +1,6 @@
-package com.operators.machinestatusinfra;
+package com.operators.machinestatusinfra.interfaces;
+
+import com.operators.machinestatusinfra.models.MachineStatus;
 
 public interface GetMachineStatusCallback<T>
 {

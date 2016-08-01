@@ -1,6 +1,5 @@
 package com.operators.machinestatuscore;
 
-import android.content.Context;
 import android.util.Log;
 
 
@@ -8,11 +7,11 @@ import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
 import com.operators.machinestatuscore.polling.EmeraldJobBase;
 import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
-import com.operators.machinestatusinfra.ErrorObjectInterface;
-import com.operators.machinestatusinfra.GetMachineStatusCallback;
-import com.operators.machinestatusinfra.GetMachineStatusNetworkBridgeInterface;
-import com.operators.machinestatusinfra.MachineStatus;
-import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
+import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
+import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
+import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
+import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.concurrent.TimeUnit;

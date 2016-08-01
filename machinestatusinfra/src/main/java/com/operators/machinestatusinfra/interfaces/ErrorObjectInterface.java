@@ -1,4 +1,4 @@
-package com.operators.machinestatusinfra;
+package com.operators.machinestatusinfra.interfaces;
 
 public interface ErrorObjectInterface
 {

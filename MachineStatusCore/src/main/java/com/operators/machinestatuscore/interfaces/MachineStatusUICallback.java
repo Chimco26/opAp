@@ -1,8 +1,8 @@
 package com.operators.machinestatuscore.interfaces;
 
 
-import com.operators.machinestatusinfra.ErrorObjectInterface;
-import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
+import com.operators.machinestatusinfra.models.MachineStatus;
 
 public interface MachineStatusUICallback {
     void onStatusReceivedSuccessfully(MachineStatus machineStatus);

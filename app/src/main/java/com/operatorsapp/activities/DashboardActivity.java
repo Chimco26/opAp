@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
-import com.app.operatorinfra.Operator;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -25,8 +24,8 @@ import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
-import com.operators.machinestatusinfra.ErrorObjectInterface;
-import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatornetworkbridge.OperatorNetworkBridge;
 import com.operators.shiftlogcore.ShiftLogCore;

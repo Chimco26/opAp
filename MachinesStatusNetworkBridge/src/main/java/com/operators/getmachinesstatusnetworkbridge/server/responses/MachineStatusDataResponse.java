@@ -1,8 +1,8 @@
 package com.operators.getmachinesstatusnetworkbridge.server.responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.operators.machinestatusinfra.AllMachinesData;
-import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.machinestatusinfra.models.AllMachinesData;
+import com.operators.machinestatusinfra.models.MachineStatus;
 
 import java.util.ArrayList;
 import java.util.List;

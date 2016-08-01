@@ -1,6 +1,7 @@
-package com.operators.machinestatusinfra;
+package com.operators.machinestatusinfra.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.operators.machinestatusinfra.models.BaseWidget;
 
 import java.util.List;
 
@@ -47,31 +48,16 @@ public class TimeWidget extends BaseWidget {
         return mHighLimit;
     }
 
-    public void setHighLimit(int highLimit) {
-        this.mHighLimit = highLimit;
-    }
-
     public int getLowLimit() {
         return mLowLimit;
-    }
-
-    public void setLowLimit(int lowLimit) {
-        this.mLowLimit = lowLimit;
     }
 
     public List<HistoricData> getMachineParamHistoricData() {
         return mMachineParamHistoricData;
     }
 
-    public void setMachineParamHistoricData(List<HistoricData> machineParamHistoricData) {
-        this.mMachineParamHistoricData = machineParamHistoricData;
-    }
-
     public int getStandardValue() {
         return mStandardValue;
     }
 
-    public void setStandardValue(int standardValue) {
-        this.mStandardValue = standardValue;
-    }
 }

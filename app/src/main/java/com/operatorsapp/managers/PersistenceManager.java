@@ -1,9 +1,7 @@
 package com.operatorsapp.managers;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
@@ -14,12 +12,11 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
-import com.operators.machinestatusinfra.MachineStatusPersistenceManagerInterface;
+import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface {
 

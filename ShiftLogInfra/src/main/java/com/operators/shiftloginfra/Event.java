@@ -35,64 +35,32 @@ public class Event {
         return mPriority;
     }
 
-    public void setPriority(int priority) {
-        this.mPriority = priority;
-    }
-
     public String getTitle() {
         return mEventTitle;
-    }
-
-    public void setTitle(String title) {
-        this.mEventTitle = title;
     }
 
     public String getSubtitleE() {
         return mEventSubTitleEname;
     }
 
-    public void setSubtitleE(String subtitleE) {
-        this.mEventSubTitleEname = subtitleE;
-    }
-
     public String getSubtitleL() {
         return mEventSubTitleLname;
-    }
-
-    public void setSubtitleL(String subtitleE) {
-        this.mEventSubTitleLname = subtitleE;
     }
 
     public String getTime() {
         return mEventTime;
     }
 
-    public void setTime(String time) {
-        this.mEventTime = time;
-    }
-
     public String getStartTime() {
         return mEventEndTime /*mEventStartTime*/;
-    }
-
-    public void setStartTime(String startTime) {
-        this.mEventStartTime = startTime;
     }
 
     public String getEndTime() {
         return mEventEndTime;
     }
 
-    public void setEndTime(String endTime) {
-        this.mEventEndTime = endTime;
-    }
-
     public int getDuration() {
         return mEventDuration;
-    }
-
-    public void setDuration(int duration) {
-        this.mEventDuration = duration;
     }
 
     public long getTimeOfAdded() {
@@ -101,10 +69,6 @@ public class Event {
 
     public void setTimeOfAdded(long timeOfAdded) {
         this.mTimeOfAdded = timeOfAdded;
-    }
-
-    public int getEventID() {
-        return mEventID;
     }
 
     public boolean isTreated() {
@@ -119,19 +83,12 @@ public class Event {
         return mEventGroupID;
     }
 
-    public void setEventGroupID(int eventGroupID) {
-        this.mEventGroupID = eventGroupID;
-    }
-
     public String getEventGroupLname() {
         return mEventGroupLname;
     }
 
-    public void setEventGroupLname(String eventGroupLname) {
-        this.mEventGroupLname = eventGroupLname;
+    public int getEventID() {
+        return mEventID;
     }
 
-    public void setEventID(int eventID) {
-        this.mEventID = eventID;
-    }
 }

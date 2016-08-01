@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
-import com.operators.machinestatusinfra.MachineStatus;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
@@ -510,7 +510,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDataFailure(com.operators.machinestatusinfra.ErrorObjectInterface reason) {
+    public void onDataFailure(com.operators.machinestatusinfra.interfaces.ErrorObjectInterface reason) {
         clearStatusLayout();
     }
 

@@ -1,4 +1,4 @@
-package com.operators.machinestatusinfra;
+package com.operators.machinestatusinfra.models;
 
 
 import com.google.gson.annotations.SerializedName;
