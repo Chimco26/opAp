@@ -49,6 +49,7 @@ import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.DashboardChartCallbackListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
@@ -58,11 +59,12 @@ import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.LineChartTime;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, DashboardChartCallbackListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -315,13 +317,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
                             ArrayList widgets = new ArrayList();
+                            widgets.add("0");
+                            widgets.add("1");
+                            widgets.add("3");
+                            widgets.add("0");
                             widgets.add("1");
                             widgets.add("2");
-                            widgets.add("1");
-                            widgets.add("2");
-                            widgets.add("1");
-                            widgets.add("2");
-                            mWidgetAdapter = new WidgetAdapter(getActivity(), widgets);
+                            mWidgetAdapter = new WidgetAdapter(getActivity(), widgets, DashboardFragment.this);
                             mWidgetRecycler.setAdapter(mWidgetAdapter);
                             if (mEventsQueue.size() > 0) {
                                 Event event = mEventsQueue.pop();
@@ -559,4 +561,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     }
 
+    @Override
+    public void onChartStart() {
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.lineChart_time, new LineChartTime()).commit();
+    }
 }

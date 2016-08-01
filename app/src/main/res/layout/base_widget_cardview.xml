@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:layout_width="345dp"
+    android:layout_height="230dp"
+    android:background="@drawable/combined_shape"
+    android:orientation="vertical">
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/base_widget_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Change material"
+        android:textColor="@android:color/black"
+        android:textSize="25sp"
+        autofit:minTextSize="14sp" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/base_widget_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="More info"
+        android:textSize="20sp"
+        autofit:minTextSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/divider_gray" />
+
+    <TextView
+        android:id="@+id/base_widget_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="33,850"
+        android:textColor="@color/C16"
+        android:textSize="68dp" />
+
+    <TextView
+        android:id="@+id/base_widget_change_material"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:text="Change material"
+        android:textSize="20sp" />
+</LinearLayout>

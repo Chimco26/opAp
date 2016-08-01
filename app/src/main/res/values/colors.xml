@@ -24,6 +24,8 @@
     <color name="C20">#909090</color>
     <color name="divider_gray">#d0d0d0</color>
     <color name="no_data_gray">#898989</color>
+    <color name="chart_background">#66ffffff</color>
+    <color name="oval_background">#e5e5e5</color>
     <color name="default_gray">#878787</color>
     <color name="status_bar">#00033a</color>
     <color name="white">#ffffff</color>
@@ -41,4 +43,5 @@
     <color name="recycler_view_divider">#c9c9c9</color>
     <color name="machines_list_item_selected_background">#eeeeee</color>
     <color name="could_not_retreive">#cacaca</color>
+    e5e5e5
 </resources>
