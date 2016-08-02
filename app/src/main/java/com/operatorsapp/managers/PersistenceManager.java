@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.shiftlogcore.interfaces.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.utils.SecurePreferences;
@@ -18,7 +19,7 @@ import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
-public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface {
+public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface, JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
