@@ -74,7 +74,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
-            android:background="@drawable/oval" />
+            android:background="@drawable/capsule_oval" />
 
         <View
             android:layout_width="2dp"
@@ -91,6 +91,14 @@
             android:layout_marginEnd="30dp"
             android:layout_marginTop="30dp"
             android:background="@color/C13" />
+
+        <com.operatorsapp.view.RangeView
+            android:id="@+id/range_view"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"/>
     </RelativeLayout>
 
     <LinearLayout

@@ -126,7 +126,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                 shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
             }
-            shiftLogStoppedViewHolder.mTitle.setText(event.getTitle());
+            shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogStoppedViewHolder.mStart.setText(event.getStartTime());
             shiftLogStoppedViewHolder.mEnd.setText(event.getEndTime());
             shiftLogStoppedViewHolder.mDuration.setText(String.valueOf(event.getDuration()));
@@ -188,10 +188,10 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                 shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
             }
-            shiftLogParameterViewHolder.mTitle.setText(event.getTitle());
-            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder("Standard " + event.getStartTime()));
-            shiftLogParameterViewHolder.mMin.setText(new StringBuilder("Min " + event.getStartTime()));
-            shiftLogParameterViewHolder.mMax.setText(new StringBuilder("Max " + event.getEndTime()));
+            shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
+//            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder("Standard " + event.getStartTime()));
+//            shiftLogParameterViewHolder.mMin.setText(new StringBuilder("Min " + event.getStartTime()));
+//            shiftLogParameterViewHolder.mMax.setText(new StringBuilder("Max " + event.getEndTime()));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogParameterViewHolder.mStandard.setVisibility(View.INVISIBLE);
