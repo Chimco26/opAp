@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.operators.machinestatusinfra.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 
@@ -30,6 +32,10 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
 
     public static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
+    private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
+    public static final String REJECT_REASON = "reject_reason";
+    public static final String REJECT_CAUSE = "reject_cause";
+    private MachineStatus mMachineStatus;
     private Spinner mRejectReasonSpinner;
     private Spinner mCauseSpinner;
     private TextView mCancelButton;
@@ -37,6 +43,13 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     boolean mIsFirstReasonSpinnerSelection = true;
     boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
+
+    private TextView mProductNameTextView;
+    private TextView mProductIdTextView;
+    private TextView mJobIdTextView;
+
+    private String mSelectedReason;
+    private String mSelectedCause;
 
     @Override
     public void onAttach(Context context) {
@@ -49,12 +62,26 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_report_rejects, container, false);
+
+        Bundle bundle = this.getArguments();
+        Gson gson = new Gson();
+        mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);
         setActionBar();
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        mProductNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
+        mProductIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
+        mJobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
+
+        mProductNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
+        mProductIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+        mJobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+
         mRejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
         ArrayAdapter<String> reasonSpinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.reject_reasons_array));
@@ -72,6 +99,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 }
                 else {
                     mIsReasonSelected = true;
+                    mSelectedReason = mRejectReasonSpinner.getItemAtPosition(position).toString();
                     mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                 }
             }
@@ -88,7 +116,17 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mCauseSpinner.setAdapter(causeSpinnerArrayAdapter);
         mCauseSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
+        mCauseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedCause = mCauseSpinner.getItemAtPosition(position).toString();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
         mNextButton = (Button) view.findViewById(R.id.button_next);
 
@@ -145,11 +183,19 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             case R.id.button_next: {
                 if (!mIsReasonSelected) {
                     Log.i(LOG_TAG, "reason not Selected");
-
                 }
                 else {
                     Log.i(LOG_TAG, "reason Selected");
                     ReportRejectSelectParametersFragment reportRejectSelectParametersFragment = new ReportRejectSelectParametersFragment();
+
+                    Bundle bundle = new Bundle();
+                    Gson gson = new Gson();
+                    String jobString = gson.toJson(mMachineStatus, MachineStatus.class);
+                    bundle.putString(CURRENT_MACHINE_STATUS, jobString);
+                    bundle.putString(REJECT_REASON, mSelectedReason);
+                    bundle.putString(REJECT_CAUSE, mSelectedCause);
+
+                    reportRejectSelectParametersFragment.setArguments(bundle);
 
                     mGoToScreenListener.goToFragment(reportRejectSelectParametersFragment, true);
                 }

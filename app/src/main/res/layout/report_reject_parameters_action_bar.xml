@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/close_image"
             android:padding="10dp"
-            android:background="@drawable/btn_x"/>
+            android:background="@drawable/btn_back"/>
 
         <TextView
             android:id="@+id/new_job_title"
@@ -29,6 +29,25 @@
             android:text="@string/report_rejects"
             android:layout_marginLeft="30dp"
             android:textColor="@color/white"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/reject_reason"
+            android:textColor="@color/white"
+            android:id="@+id/reason_text_view"/>
+
+
     </LinearLayout>
+    <!--add linearLayout-->
+
 
 </RelativeLayout>

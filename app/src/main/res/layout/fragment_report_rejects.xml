@@ -27,6 +27,7 @@
             android:id="@+id/report_rejects_product_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:layout_alignTop="@+id/textView"
             android:layout_toEndOf="@+id/textView"
             android:text="@string/product_name"

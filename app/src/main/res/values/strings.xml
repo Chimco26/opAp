@@ -86,6 +86,8 @@
     <string name="reject_reason">Reject reason</string>
     <string name="cause">Cause</string>
     <string name="next">Next</string>
+    <string name="units">Units</string>
+    <string name="weight">Weight</string>
 
 
     <array name="operators_spinner_array">
