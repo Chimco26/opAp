@@ -9,44 +9,50 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
+            <option value="$PROJECT_DIR$/MachineStatusInfra" />
             <option value="$PROJECT_DIR$/MachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/machinestatusinfra" />
+            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
             <option value="$PROJECT_DIR$/LoginCore" />
             <option value="$PROJECT_DIR$/LoginNetworkBridge" />
             <option value="$PROJECT_DIR$/MachineStatusCore" />
+            <option value="$PROJECT_DIR$/MachineStatusInfra" />
             <option value="$PROJECT_DIR$/MachinesStatusNetworkBridge" />
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/machinestatusinfra" />
+            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
       </GradleProjectSettings>

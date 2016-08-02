@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\ZemingoProjects\operatorsApp\MachineStatusCore\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\ZemingoProjects\operatorsApp\MachineStatusCore\src\release\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="C:\Users\User\Desktop\LeaderMES-operators\MachineStatusCore\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\User\Desktop\LeaderMES-operators\MachineStatusCore\src\release\shaders"/></dataSet></merger>
