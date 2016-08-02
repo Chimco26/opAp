@@ -203,7 +203,6 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
-
                 String id = mOperatorIdEditText.getText().toString();
                 Log.i(LOG_TAG, "Operator id: " + id);
                 mOperatorCore.getOperatorById(id);

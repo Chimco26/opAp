@@ -34,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
@@ -69,6 +70,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
+    private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
@@ -339,6 +341,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
 
                     @Override
+
                     public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
                         mNoData = true;
                         dismissProgressDialog();
@@ -436,8 +439,25 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+
+                    switch (position) {
+                        case 0: {
+                            Log.d(LOG_TAG, "New Job");
+                            mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                            break;
+                        }
+                        case 1: {
+                            Log.d(LOG_TAG, "Report Rejects");
+                            ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
+                            Bundle bundle = new Bundle();
+                            Gson gson = new Gson();
+                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
+                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
+
+                            reportRejectsFragment.setArguments(bundle);
+                            mOnGoToScreenListener.goToFragment(reportRejectsFragment, true);
+                            break;
+                        }
                     }
                 }
 
