@@ -43,5 +43,5 @@
     <color name="recycler_view_divider">#c9c9c9</color>
     <color name="machines_list_item_selected_background">#eeeeee</color>
     <color name="could_not_retreive">#cacaca</color>
-    e5e5e5
+    <color name="color_jobs_row">#de000000</color>
 </resources>

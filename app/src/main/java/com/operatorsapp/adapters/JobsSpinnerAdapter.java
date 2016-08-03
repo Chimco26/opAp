@@ -1,8 +1,10 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
         this.mSpinnerItems = spinnerItems;
     }
 
-    @Override
+   @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
@@ -35,6 +37,10 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
         {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
+            TextView rowName = (TextView)row.findViewById(R.id.spinner_job_item_name);
+            rowName.setTextAppearance(getContext(),R.style.FontStyle_T9);
+            rowName.setTextSize(20);
+
         }
         return row;
     }
@@ -54,6 +60,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
         {
             mRowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
             mRowName.setText(item);
+            mRowName.setTextSize(17);
             if (position == 0)
             {
                 mRowName.setTextColor(Color.BLACK);

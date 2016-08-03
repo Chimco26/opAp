@@ -130,7 +130,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventID\": 1020,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
-                            "      \"EventTime\": \"12/07/2016\n17:36:00\",\n" +
+                            "      \"EventTime\": \"12/07/2016 17:36:00\",\n" +
                             "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
                             "    },\n" +
                             "    {\n" +
@@ -142,7 +142,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventID\": 1044,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
-                            "      \"EventTime\": \"12/07/2016\n17:55:00\",\n" +
+                            "      \"EventTime\": \"12/07/2016 17:55:00\",\n" +
                             "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
                             "    },\n" +
                             "    {\n" +
@@ -238,7 +238,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"NoProgressCount\": 0,\n" +
                             "      \"Row_Counter\": 7,\n" +
                             "      \"ShiftID\": 258,\n" +
-                            "      \"shiftEndingIn\": 60002\n" +
+                            "      \"shiftEndingIn\": 6510002\n" +
                             "    }\n" +
                             "  ],\n" +
                             "  \"error\": null\n" +

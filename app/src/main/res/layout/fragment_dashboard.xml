@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -17,44 +18,35 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="30dp"
+            android:layout_marginRight="130dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_view_product_name_title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:text="@string/product"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/status_bar"
-                android:textStyle="bold" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_view_product_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="product_name"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/product"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/status_bar"
+                    android:textStyle="bold" />
 
-
-            <TextView
-                android:id="@+id/text_view_product_id_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/id"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/text_view_product_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/product_id"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/text_view_product_name_and_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Plastic bottles, ID - TGdf 86-38-06"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <View
                 android:layout_width="1dp"
@@ -62,22 +54,28 @@
                 android:layout_marginLeft="20dp"
                 android:background="@color/C20" />
 
-            <TextView
-                android:id="@+id/text_view_job_id_title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="@string/job"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/status_bar" />
+                android:layout_weight="0.5"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_view_job_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="job_id"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/job"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/status_bar" />
+
+                <TextView
+                    android:id="@+id/text_view_job_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="0789\66\38-06"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
 
             <View
                 android:layout_width="1dp"
@@ -85,23 +83,28 @@
                 android:layout_marginLeft="20dp"
                 android:background="@color/C20" />
 
-            <TextView
-                android:id="@+id/text_view_shift_id_title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="@string/shift"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/status_bar" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_view_shift_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/shift"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/shift"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/status_bar" />
 
+                <TextView
+                    android:id="@+id/text_view_shift_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="0789\66\38-06"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -135,20 +138,21 @@
                     android:background="@drawable/ic_cloud" />
 
                 <TextView
+                    style="@style/FontStyle_T7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/no_data"
-                    android:textColor="@color/no_data_gray"
+                    android:textColor="@color/divider_gray"
                     android:textSize="50sp" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
                 android:id="@+id/fragment_dashboard_widgets"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -159,16 +163,19 @@
             android:background="@drawable/combined_shape"
             android:orientation="horizontal">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
+                style="@style/FontStyle_T7"
                 android:id="@+id/fragment_dashboard_no_notif"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:text="@string/no_notifications"
-                android:textColor="@color/no_data_gray"
-                android:textSize="30sp" />
+                android:textColor="@color/divider_gray"
+                android:textSize="30sp"
+                app:minTextSize="15dp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_dashboard_shift_log"

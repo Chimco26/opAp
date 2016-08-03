@@ -50,7 +50,7 @@
     <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
     <string name="no_notifications">No Notifications</string>
     <string name="no_data">No Data</string>
-    <string name="jobs_actions">Job</string>
+    <string name="jobs_actions">Job actions</string>
     <string name="job_id">Job ID</string>
     <string name="product_name">Product Name</string>
     <string name="erp">ERP</string>

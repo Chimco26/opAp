@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
+import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogAdapter extends RecyclerView.Adapter {
 
+    private static final int SEPARATOR_WIDTH = 95;
     private Context mContext;
     private ArrayList<Event> mEvents;
     private boolean mClosedState;
@@ -42,11 +44,14 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         private AutofitTextView mTitle;
         private ImageView mIcon;
         private TextView mStart;
+        private TextView mStartDate;
         private TextView mDuration;
         private TextView mEnd;
+        private TextView mEndDate;
         private TextView mTime;
         private View mDivider;
         private View mBottomDivider;
+        private LinearLayout mSubtitle;
 
         public ShiftLogStoppedViewHolder(View itemView) {
             super(itemView);
@@ -54,10 +59,13 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
             mStart = (TextView) itemView.findViewById(R.id.shift_log_item_start);
+            mStartDate = (TextView) itemView.findViewById(R.id.shift_log_item_start_date);
             mDuration = (TextView) itemView.findViewById(R.id.shift_log_item_duration);
             mEnd = (TextView) itemView.findViewById(R.id.shift_log_item_end);
+            mEndDate = (TextView) itemView.findViewById(R.id.shift_log_item_end_date);
             mDivider = itemView.findViewById(R.id.shift_log_divider);
             mBottomDivider = itemView.findViewById(R.id.shift_log_bottom_divider);
+            mSubtitle = (LinearLayout) itemView.findViewById(R.id.shift_log_item_subtitle);
         }
     }
 
@@ -126,26 +134,28 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                 shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
             }
+            shiftLogStoppedViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
-            shiftLogStoppedViewHolder.mStart.setText(event.getStartTime());
-            shiftLogStoppedViewHolder.mEnd.setText(event.getEndTime());
+            shiftLogStoppedViewHolder.mStart.setText(TimeUtils.getTimeFromString(event.getStartTime()));
+            shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getStartTime()));
+            shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEndTime()));
+            shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEndTime()));
             shiftLogStoppedViewHolder.mDuration.setText(String.valueOf(event.getDuration()));
             if (mClosedState) {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.GONE);
+                shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = 105;
+                mBottomDividerLayoutParams.width = SEPARATOR_WIDTH;
                 shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.VISIBLE);
+                shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.VISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
                 mBottomDividerLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
             }
-//        int minutes = (int) ((event.getTimestamp() / (1000 * 60)) % 60);
-//        int hours = (int) ((event.getTimestamp() / (1000 * 60 * 60)) % 24);
-            shiftLogStoppedViewHolder.mTime.setText(event.getTime()/*hours + ":" + minutes*/);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -189,22 +199,19 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
+            shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
 //            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder("Standard " + event.getStartTime()));
 //            shiftLogParameterViewHolder.mMin.setText(new StringBuilder("Min " + event.getStartTime()));
 //            shiftLogParameterViewHolder.mMax.setText(new StringBuilder("Max " + event.getEndTime()));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
-                shiftLogParameterViewHolder.mStandard.setVisibility(View.INVISIBLE);
-                shiftLogParameterViewHolder.mMax.setVisibility(View.INVISIBLE);
-                shiftLogParameterViewHolder.mSubtitle.setVisibility(View.GONE);
+                shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = 105;
+                mBottomDividerLayoutParams.width = SEPARATOR_WIDTH;
                 shiftLogParameterViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.VISIBLE);
-                shiftLogParameterViewHolder.mStandard.setVisibility(View.VISIBLE);
-                shiftLogParameterViewHolder.mMax.setVisibility(View.VISIBLE);
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.VISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
@@ -212,9 +219,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mBottomDivider.requestLayout();
 
             }
-//        int minutes = (int) ((event.getTimestamp() / (1000 * 60)) % 60);
-//        int hours = (int) ((event.getTimestamp() / (1000 * 60 * 60)) % 24);
-            shiftLogParameterViewHolder.mTime.setText(event.getTime()/*hours + ":" + minutes*/);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

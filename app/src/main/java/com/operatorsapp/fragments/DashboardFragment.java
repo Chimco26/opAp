@@ -89,10 +89,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
 
-    private String[] mOperatorsSpinnerArray = {"Sign in"};
+    private String[] mOperatorsSpinnerArray = {"Operator Sign in"};
 
     private TextView mProductNameTextView;
-    private TextView mProductIdTextView;
+    //    private TextView mProductIdTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
     private TextView mTimerTextView;
@@ -128,8 +128,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         final int closeWidth = (int) (width * 0.173) /*/ 4*/;
         final int middleWidth = (int) (width * 0.31) /*3 / 8*/;
 
-        mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name);
-        mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
+        mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name_and_id);
+//        mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
@@ -260,7 +260,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         });
 
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
-        getShiftLogs();
+//        getShiftLogs();
         setActionBar();
     }
 
@@ -288,9 +288,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     };
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mDialogsShiftLogListener.getShiftLogCore().stopPolling();
+    }
+
     private void getShiftLogs() {
         ProgressDialogManager.show(getActivity());
-        mDialogsShiftLogListener.getShiftLogCore().getShiftLogs(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
+        mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
                     @Override
                     public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                         dismissProgressDialog();
@@ -326,8 +332,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             mWidgetAdapter = new WidgetAdapter(getActivity(), widgets, DashboardFragment.this);
                             mWidgetRecycler.setAdapter(mWidgetAdapter);
                             if (mEventsQueue.size() > 0) {
+                                DialogFragment dialogFragment = null;
                                 Event event = mEventsQueue.pop();
-                                DialogFragment dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                                if (event.getEventGroupID() == 6) {
+                                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                                } else if (event.getEventGroupID() == 20) {
+                                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
+                                }
                                 dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                                 dialogFragment.setCancelable(false);
                                 dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -369,6 +380,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
         }
+        getShiftLogs();
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
@@ -481,8 +493,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
+            DialogFragment dialogFragment = null;
             Event event = mEventsQueue.pop();
-            DialogFragment dialogFragment = DialogFragment.newInstance(event.getStartTime(), event.getEndTime(), event.getDuration());
+            if (event.getEventGroupID() == 6) {
+                dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+            } else if (event.getEventGroupID() == 20) {
+                dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
+            }
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -517,8 +534,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-        mProductIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+        mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + "," + " ID - " + String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
+//        mProductIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
@@ -528,7 +545,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void clearStatusLayout() {
         mProductNameTextView.setText("");
-        mProductIdTextView.setText("");
+//        mProductIdTextView.setText("");
         mJobIdTextView.setText("");
         mShiftIdTextView.setText("");
         mMachineIdStatusBarTextView.setText("");

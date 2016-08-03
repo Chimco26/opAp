@@ -1,15 +1,6 @@
 package com.operatorsapp.adapters;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,12 +98,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                rangeViewHolder.mRangeView.updatePath(140);
+                rangeViewHolder.mRangeView.updateX(140);
                 break;
 
         }
-
-
     }
 
     @Override
@@ -122,7 +111,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        String s = mWidgets.get(position);
         int type;
         switch (mWidgets.get(position)) {
             case "0":

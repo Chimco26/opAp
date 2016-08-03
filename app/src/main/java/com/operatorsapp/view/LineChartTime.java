@@ -125,7 +125,7 @@ public class LineChartTime extends BaseChart {
 
     }
 
-    private void setData(int count, float range) {
+    private void setData(int count, float range/*int x, int y*/) {
 
         long now = System.currentTimeMillis();
         long hourMillis = 3600000L;
@@ -136,7 +136,6 @@ public class LineChartTime extends BaseChart {
         float to = now + (count / 2) * hourMillis;
 
         for (float x = from; x < to; x += hourMillis) {
-
             float y = getRandom(range, 50);
             values.add(new Entry(x, y)); // add one entry per hour
         }
@@ -144,7 +143,7 @@ public class LineChartTime extends BaseChart {
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(AxisDependency.LEFT);
-        set1.setColor(/*ColorTemplate.getHoloBlue()*/ContextCompat.getColor(getActivity(), R.color.C16));
+        set1.setColor(ContextCompat.getColor(getActivity(), R.color.C16));
         set1.setValueTextColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(3f);
         set1.setDrawCircles(false);
