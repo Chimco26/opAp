@@ -2,8 +2,11 @@ package com.operatorsapp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +24,20 @@ import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogAdapter extends RecyclerView.Adapter {
 
-    private static final int SEPARATOR_WIDTH = 95;
     private Context mContext;
     private ArrayList<Event> mEvents;
     private boolean mClosedState;
+    private int mPanelWidth;
 
     private final int PARAMETER = 1;
     private final int STOPPED = 2;
 
-    public ShiftLogAdapter(Context context, ArrayList<Event> events, boolean closedState) {
+
+    public ShiftLogAdapter(Context context, ArrayList<Event> events, boolean closedState, int panelWidth) {
         mEvents = events;
         mContext = context;
         mClosedState = closedState;
+        mPanelWidth = panelWidth;
     }
 
     public void changeState(boolean closedState) {
@@ -127,12 +132,14 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 } else {
                     shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_blue);
                     shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                    shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                    shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
                 shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
                 shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
             }
             shiftLogStoppedViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
@@ -146,7 +153,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = SEPARATOR_WIDTH;
+                mBottomDividerLayoutParams.width = (int) (mPanelWidth * 0.4);
                 shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.VISIBLE);
@@ -164,7 +171,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                     if (!event.isTreated()) {
                         shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
                         shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                        shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                        shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
                         event.setTreated(true);
                     } else {
                         if (event.getPriority() == 1) {
@@ -174,8 +182,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         } else {
                             shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_blue);
                             shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                            shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                            shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         }
+                        shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
                 }
@@ -191,12 +200,14 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 } else {
                     shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_blue);
                     shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                    shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                    shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
                 shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_grey);
                 shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
@@ -208,7 +219,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = SEPARATOR_WIDTH;
+                mBottomDividerLayoutParams.width = (int) (mPanelWidth * 0.4);
                 shiftLogParameterViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.VISIBLE);
@@ -226,7 +237,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                     if (!event.isTreated()) {
                         shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_grey);
                         shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                        shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                        shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
                         event.setTreated(true);
                     } else {
                         if (event.getPriority() == 1) {
@@ -236,8 +248,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         } else {
                             shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_blue);
                             shiftLogParameterViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                            shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                            shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         }
+                        shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
                 }

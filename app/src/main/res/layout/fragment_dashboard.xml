@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -43,9 +43,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+                    android:textColor="@color/default_gray_status"
                     android:text="Plastic bottles, ID - TGdf 86-38-06"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold" />
+                 />
             </LinearLayout>
 
             <View
@@ -74,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="0789\66\38-06"
+                    android:textColor="@color/default_gray_status"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
 
@@ -103,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="0789\66\38-06"
+                    android:textColor="@color/default_gray_status"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
 
@@ -222,6 +225,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
+            android:textColor="@color/default_gray_status"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
