@@ -109,16 +109,23 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         public void onOperatorDataReceived(Operator operator) {
             removePhoneKeypad();
             if (operator != null) {
-                Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
+                if(operator.getOperatorName().equals("")){
+                    Log.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
+                    removePhoneKeypad();
+                    ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
+                }else {
+                    Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
-                SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
-                Bundle bundle = new Bundle();
-                Gson gson = new Gson();
-                String jobString = gson.toJson(operator, Operator.class);
-                bundle.putString(SELECTED_OPERATOR, jobString);
+                    SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
+                    Bundle bundle = new Bundle();
+                    Gson gson = new Gson();
+                    String jobString = gson.toJson(operator, Operator.class);
+                    bundle.putString(SELECTED_OPERATOR, jobString);
 
-                selectedOperatorFragment.setArguments(bundle);
-                mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
+                    selectedOperatorFragment.setArguments(bundle);
+                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
+                }
+
             } else {
                 Log.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
@@ -188,7 +195,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
 
-            ImageButton buttonClose = (ImageButton) view.findViewById(R.id.close_image);
+            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

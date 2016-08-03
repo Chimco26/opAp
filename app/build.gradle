@@ -61,7 +61,7 @@ dependencies {
     compile project(':OperatorCore')
     compile project(':OperatorInfra')
     compile project(':OperatorNetworkBridge')
+    compile project(':ReportFieldsForMachineNetworkBridge')
     compile project(':ReportFieldsForMachineCore')
     compile project(':ReportFieldsForMachineInfra')
-    compile project(':ReportFieldsForMachineNetworkBridge')
 }

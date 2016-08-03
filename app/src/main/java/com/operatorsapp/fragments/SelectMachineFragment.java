@@ -135,7 +135,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             actionBar.setDisplayUseLogoEnabled(true);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
             // rootView null
-            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
+            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
             ImageView backButton = (ImageView) view.findViewById(R.id.action_bar_back_btn);
             backButton.setVisibility(View.VISIBLE);
             backButton.setOnClickListener(new View.OnClickListener() {

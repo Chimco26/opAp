@@ -33,9 +33,10 @@
 
                 <TextView
                     android:id="@+id/shift_log_item_time"
+                    style="@style/FontStyle_T9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="13dp"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -45,8 +46,8 @@
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/shift_log_item_title"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginBottom="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="7dp"
                 android:maxLines="2"
@@ -66,6 +67,7 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
@@ -87,6 +89,7 @@
                     android:text="Cycle time" />
 
                 <TextView
+                    style="@style/FontStyle_T31"
                     android:id="@+id/shift_log_item_cycle_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,7 +100,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/shift_log_item_subtitle"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"

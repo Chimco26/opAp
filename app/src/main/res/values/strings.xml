@@ -17,15 +17,6 @@
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
-    <!-- <string name="login_dialog_keep_editing">Keep Editing</string>
-     <string name="login_dialog_alias_already_exists_with_the_same_url">already exists with the same URL:\nReplace</string>
-     <string name="login_dialog_alias_already_exists_with_the_same_url_add">already exists with the same URL:\nAdd</string>
-     <string name="login_dialog_replace">Replace</string>
-     <string name="login_dialog_add">Add</string>
-     <string name="login_dialog_cancel">Cancel</string>
-     <string name="login_dialog_discard">Discard</string>
-     <string name="login_dialog_save">Save</string>
-     <string name="login_dialog_message">Are you sure you want to\ndiscard changes?</string>-->
     <string name="login_dialog_dismiss">DISMISS</string>
     <string name="login_dialog_dismiss_all">DISMISS FOR SHIFT</string>
     <string name="network_error">Network Error</string>
@@ -50,7 +41,7 @@
     <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
     <string name="no_notifications">No Notifications</string>
     <string name="no_data">No Data</string>
-    <string name="jobs_actions">Job</string>
+    <string name="jobs_actions">Job actions</string>
     <string name="job_id">Job ID</string>
     <string name="product_name">Product Name</string>
     <string name="erp">ERP</string>
@@ -59,7 +50,7 @@
     <string name="new_job">New Job</string>
     <string name="new_job_details">New job details</string>
     <string name="product_id">Product id</string>
-    <string name="erp_id">ERP id</string>
+    <string name="erp_id">ERP ID</string>
     <string name="quantity">Quantity</string>
     <string name="activate_new_job">Activate</string>
     <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
@@ -88,7 +79,7 @@
     <string name="next">Next</string>
     <string name="units">Units</string>
     <string name="weight">Weight</string>
-
+    <string name="material_weight_alarm">Material Weight Alarm</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

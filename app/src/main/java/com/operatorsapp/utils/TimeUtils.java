@@ -1,5 +1,10 @@
 package com.operatorsapp.utils;
 
+import android.net.ParseException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TimeUtils {
     public static final int ONE_MINUTE_IN_SECONDS = 60;
     public static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
@@ -24,5 +29,37 @@ public class TimeUtils {
             }
         }
 
+    }
+
+    public static String getTimeFromString(String time) {
+
+        String out = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+        try {
+            Date date = dateFormat.parse(time);
+            out = dateFormat2.format(date);
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return out;
+    }
+
+    public static String getDateFromString(String time) {
+
+        String out = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            Date date = dateFormat.parse(time);
+            out = dateFormat2.format(date);
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return out;
     }
 }
