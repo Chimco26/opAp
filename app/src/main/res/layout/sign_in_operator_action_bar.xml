@@ -14,18 +14,21 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/close_image"
-            android:padding="10dp"
-            android:background="@drawable/btn_x"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingEnd="20dp"
+            android:src="@drawable/btn_x"/>
 
         <TextView
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="20dp"
             android:text="@string/operator_sign_in_action_bar"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />

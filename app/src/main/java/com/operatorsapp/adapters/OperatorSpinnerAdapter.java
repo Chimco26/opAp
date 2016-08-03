@@ -45,7 +45,6 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
                 spinnerTitle.setText(mCurrentOperatorName);
             }
             TextView rowName = (TextView)row.findViewById(R.id.spinner_operator_item_name);
-            rowName.setTextAppearance(getContext(),R.style.FontStyle_T9);
             rowName.setTextSize(20);
         }
         return row;
@@ -61,8 +60,9 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         String item = mSpinnerItems[position];
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
-            name.setTextColor(Color.BLACK);
             name.setText(item);
+            name.setTextAppearance(getContext(),R.style.FontStyle_T10);
+            name.setTextColor(Color.BLACK);
             name.setTextSize(17);
         }
         return row;

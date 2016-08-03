@@ -38,7 +38,6 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
             TextView rowName = (TextView)row.findViewById(R.id.spinner_job_item_name);
-            rowName.setTextAppearance(getContext(),R.style.FontStyle_T9);
             rowName.setTextSize(20);
 
         }
@@ -60,6 +59,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String>
         {
             mRowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
             mRowName.setText(item);
+            mRowName.setTextAppearance(getContext(),R.style.FontStyle_T10);
             mRowName.setTextSize(17);
             if (position == 0)
             {
