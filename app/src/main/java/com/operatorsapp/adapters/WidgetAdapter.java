@@ -70,38 +70,40 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case BASE: {
-                return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
+                return new BaseViewHolder(inflater.inflate(R.layout.test_widget_cardview, parent, false));
+//                return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
             }
             case RANGE: {
-                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
+//                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
             }
             case PROJECTION: {
-                return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
+//                return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
             }
             case TIME: {
-                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
+//                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
             }
         }
-        return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
+//        return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
+        return new BaseViewHolder(inflater.inflate(R.layout.test_widget_cardview, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final String s = mWidgets.get(position);
 
-        int type = getItemViewType(position);
-
-        switch (type) {
-            case TIME:
-                mDashboardChartCallbackListener.onChartStart();
-                break;
-
-            case RANGE:
-                final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                rangeViewHolder.mRangeView.updateX(140);
-                break;
-
-        }
+//        int type = getItemViewType(position);
+//
+//        switch (type) {
+//            case TIME:
+//                mDashboardChartCallbackListener.onChartStart();
+//                break;
+//
+//            case RANGE:
+//                final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
+//                rangeViewHolder.mRangeView.updateX(140);
+//                break;
+//
+//        }
     }
 
     @Override

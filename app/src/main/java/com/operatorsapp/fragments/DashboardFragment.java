@@ -88,6 +88,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mEventsList = new ArrayList<>();
     private boolean mNoData;
+    private boolean mIsOpen = false;
 
     private String[] mOperatorsSpinnerArray = {"Operator Sign in"};
 
@@ -159,12 +160,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
         mLeftButton.setOnClickListener(new View.OnClickListener() {
-            boolean isOpen;
 
             @Override
             public void onClick(View v) {
                 if (!mNoData) {
-                    if (!isOpen) {
+                    if (!mIsOpen) {
                         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, openWidth);
                         anim.setDuration(ANIM_DURATION_MILLIS);
                         mLeftLayout.startAnimation(anim);
@@ -188,7 +188,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                             }
                         });
-                        isOpen = true;
+                        mIsOpen = true;
                     } else {
                         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, closeWidth);
                         anim.setDuration(ANIM_DURATION_MILLIS);
@@ -213,7 +213,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                             }
                         });
-                        isOpen = false;
+                        mIsOpen = false;
                     }
                 }
             }
@@ -242,12 +242,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     case MotionEvent.ACTION_UP:
                         if (!mNoData) {
                             if (mLeftLayoutParams.width < middleWidth) {
-                                toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, false);
+                                mIsOpen = false;
+                                toggleWoopList(mLeftLayoutParams, closeWidth, mRightLayoutParams, mIsOpen);
                                 mGridLayoutManager.setSpanCount(3);
 //                                mGridSpacingItemDecoration.setSpanCount(3);
                                 mWidgetAdapter.notifyDataSetChanged();
                             } else {
-                                toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, true);
+                                mIsOpen = true;
+                                toggleWoopList(mLeftLayoutParams, openWidth, mRightLayoutParams, mIsOpen);
                                 mGridLayoutManager.setSpanCount(2);
 //                                mGridSpacingItemDecoration.setSpanCount(2);
                                 mWidgetAdapter.notifyDataSetChanged();
@@ -319,7 +321,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             mNoDataView.setVisibility(View.GONE);
                             mNoNotificationsText.setVisibility(View.GONE);
 
-                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, true);
+                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen);
                             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
                             ArrayList widgets = new ArrayList();
