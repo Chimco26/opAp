@@ -46,6 +46,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -60,7 +61,8 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener, ReportFieldsFragmentCallbackListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -173,6 +175,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine) {
             if (reportFieldsForMachine != null) {
+                Log.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
                 mReportFieldsForMachine = reportFieldsForMachine;
             }
             else {
@@ -373,5 +376,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public ReportFieldsForMachine getReportForMachine() {
+        if (mReportFieldsForMachine != null) {
+
+            return mReportFieldsForMachine;
+        }
+        Log.w(LOG_TAG, "mReportFieldsForMachine is null");
+        return null;
     }
 }

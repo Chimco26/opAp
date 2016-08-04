@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -22,8 +21,12 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
+import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 
 
 /**
@@ -44,18 +47,22 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
 
+
     private TextView mProductNameTextView;
     private TextView mProductIdTextView;
     private TextView mJobIdTextView;
 
     private String mSelectedReason;
     private String mSelectedCause;
+    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
+    private ReportFieldsForMachine mReportFieldsForMachine;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mGoToScreenListener = (GoToScreenListener) getActivity();
-
+        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
     }
 
     @Nullable
@@ -73,7 +80,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        super.onViewCreated(view, savedInstanceState);
         mProductNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
         mProductIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
         mJobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
@@ -84,7 +91,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
         mRejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
-        ArrayAdapter<String> reasonSpinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.reject_reasons_array));
+        final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
         reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
         mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -99,7 +106,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 }
                 else {
                     mIsReasonSelected = true;
-                    mSelectedReason = mRejectReasonSpinner.getItemAtPosition(position).toString();
+                    mSelectedReason = mReportFieldsForMachine.getRejectReasons().get(position).getName();
+                    reasonSpinnerArrayAdapter.setTitle(position);
                     mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                 }
             }
@@ -111,7 +119,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
 
         mCauseSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
-        ArrayAdapter<String> causeSpinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.reject_reasons_cause_array));
+        final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
         causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCauseSpinner.setAdapter(causeSpinnerArrayAdapter);
         mCauseSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -119,7 +127,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mCauseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedCause = mCauseSpinner.getItemAtPosition(position).toString();
+                mSelectedCause = mReportFieldsForMachine.getRejectCauses().get(position).getName();
+                causeSpinnerArrayAdapter.setTitle(position);
             }
 
             @Override
@@ -128,9 +137,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             }
         });
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_next);
+        mNextButton = (Button) view.findViewById(R.id.button_report);
 
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -180,7 +188,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
+            case R.id.button_report: {
                 if (!mIsReasonSelected) {
                     Log.i(LOG_TAG, "reason not Selected");
                 }

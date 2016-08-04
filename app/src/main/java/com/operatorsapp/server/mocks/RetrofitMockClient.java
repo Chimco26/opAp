@@ -286,7 +286,64 @@ public class RetrofitMockClient implements Interceptor {
                     responseString = "{\"error\":null}";
                     break;
                 case "getReportfieldsForMachine":
-                    responseString ="";
+                    responseString ="{\n" +
+                            "  \"error\": null,\n" +
+                            "  \"stopReasons\": \n" +
+                            "  [\n" +
+                            "    {\n" +
+                            "      \"Id\":1,\n" +
+                            "      \"Name\":\"some reason 1\",\n" +
+                            "      \"subReasons\":\n" +
+                            "      [\n" +
+                            "        {\n" +
+                            "          \"Id\":1,\n" +
+                            "          \"Name\":\"some sub reason 1\"\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"Id\":2,\n" +
+                            "          \"Name\":\"some sub reason 2\"\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"Id\":2,\n" +
+                            "      \"Name\":\"some reason 2\",\n" +
+                            "      \"subReasons\":\n" +
+                            "      [\n" +
+                            "        {\n" +
+                            "          \"Id\":1,\n" +
+                            "          \"Name\":\"some sub reason 1\"\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"Id\":2,\n" +
+                            "          \"Name\":\"some sub reason 2\"\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    }\n" +
+                            "  ],\n" +
+                            "  \"rejectReasons\":\n" +
+                            "  [\n" +
+                            "    {\n" +
+                            "      \"Id\":1,\n" +
+                            "      \"Name\":\"some reason 1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"Id\":2,\n" +
+                            "      \"Name\":\"some reason 2\"\n" +
+                            "    }    \n" +
+                            "  ],\n" +
+                            "  \"rejectCauses\":\n" +
+                            "  [\n" +
+                            "    {\n" +
+                            "      \"Id\":1,\n" +
+                            "      \"Name\":\"some cause 1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"Id\":2,\n" +
+                            "      \"Name\":\"some cause 2\"\n" +
+                            "    }    \n" +
+                            "  ]\n" +
+                            "}\n";
                     break;
                 default:
                     responseString = "{\n" +

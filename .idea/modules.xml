@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/infra/Infra.iml" filepath="$PROJECT_DIR$/infra/Infra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsCore/JobsCore.iml" filepath="$PROJECT_DIR$/JobsCore/JobsCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsInfra/JobsInfra.iml" filepath="$PROJECT_DIR$/JobsInfra/JobsInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" filepath="$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" />
@@ -11,16 +11,13 @@
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" filepath="$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/machinestatusinfra/MachineStatusInfra.iml" filepath="$PROJECT_DIR$/machinestatusinfra/MachineStatusInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" filepath="$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachinesStatusNetworkBridge/MachinesStatusNetworkBridge.iml" filepath="$PROJECT_DIR$/MachinesStatusNetworkBridge/MachinesStatusNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorCore/OperatorCore.iml" filepath="$PROJECT_DIR$/OperatorCore/OperatorCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" filepath="$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" filepath="$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogInfra/ShiftLogInfra.iml" filepath="$PROJECT_DIR$/ShiftLogInfra/ShiftLogInfra.iml" />

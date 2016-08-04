@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical">
 
@@ -117,7 +117,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="20dp"
                     android:text="Your Text\nShould be\nHere"
-                    android:textSize="30sp"/>
+                    android:textSize="40sp"/>
             </LinearLayout>
 
 
@@ -137,30 +137,30 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_weight="1"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_weight="0.97"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="7dp"
                         android:text="@string/reject_reason"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="20dp"
                         android:textColor="@color/status_bar"/>
 
                     <RelativeLayout
-                        android:layout_width="301dp"
-                        android:layout_height="41dp"
+                        android:layout_width="351dp"
+                        android:layout_height="51dp"
                         android:layout_marginBottom="30dp"
                         android:background="@drawable/edit_text_background_selector">
 
                         <Spinner
                             android:id="@+id/reject_reason_spinner"
-                            android:layout_width="299dp"
-                            android:layout_height="39dp"
+                            android:layout_width="349dp"
+                            android:layout_height="49dp"
                             android:dropDownVerticalOffset="40dp"
                             >
                         </Spinner>
@@ -169,20 +169,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="7dp"
                         android:text="@string/cause"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/status_bar"/>
+                        android:textSize="20dp"                           android:textColor="@color/status_bar"
+                        android:layout_marginTop="20dp"/>
 
                     <RelativeLayout
-                        android:layout_width="301dp"
-                        android:layout_height="41dp"
+                        android:layout_width="351dp"
+                        android:layout_height="51dp"
                         android:background="@drawable/edit_text_background_selector">
 
                         <Spinner
                             android:id="@+id/cause_spinner"
-                            android:layout_width="299dp"
-                            android:layout_height="39dp"
+                            android:layout_width="349dp"
+                            android:layout_height="41dp"
                             android:dropDownVerticalOffset="40dp"
                             >
                         </Spinner>
@@ -201,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="30dp"
-                        android:layout_marginRight="40dp"
+                        android:layout_marginRight="50dp"
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:weightSum="1">
@@ -219,14 +219,14 @@
                             />
 
                         <Button
-                            android:id="@+id/button_next"
-                            android:layout_width="128dp"
-                            android:layout_height="28dp"
-                            android:layout_weight="0.17"
+                            android:id="@+id/button_report"
+                            android:layout_width="104dp"
+                            android:layout_height="wrap_content"
                             android:background="@drawable/button_bg_disabled"
                             android:text="@string/next"
                             android:textColor="@drawable/button_text_color_selector"
-                            android:textSize="20dp"/>
+                            android:textSize="20dp"
+                            android:layout_weight="0.13"/>
                     </LinearLayout>
 
                 </LinearLayout>

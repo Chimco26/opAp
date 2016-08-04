@@ -1,5 +1,7 @@
 package com.operators.reportfieldsformachinenetworkbridge;
 
+import android.util.Log;
+
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
@@ -38,6 +40,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                     else {
+                        Log.i(LOG_TAG,"getReportFieldsForMachine onResponse Success");
                         callback.onGetReportFieldsForMachineSuccess(response.body().getReportFieldsForMachine());
                     }
                 }
