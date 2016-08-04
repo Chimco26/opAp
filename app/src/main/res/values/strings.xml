@@ -80,6 +80,7 @@
     <string name="units">Units</string>
     <string name="weight">Weight</string>
     <string name="material_weight_alarm">Material Weight Alarm</string>
+    <string name="dashes">- -</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

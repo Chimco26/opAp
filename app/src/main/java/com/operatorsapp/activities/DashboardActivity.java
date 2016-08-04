@@ -252,7 +252,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
                 Log.i(LOG_TAG, "onJobListReceived()");
-                if (jobListForMachine.getJobs().size() != 0) {
+                if (jobListForMachine!= null) {
                     mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
                 }
                 else {

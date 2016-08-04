@@ -16,9 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.operators.jobsinfra.ErrorObjectInterface;
+import com.operators.jobsinfra.Header;
 import com.operators.jobsinfra.Job;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operatorsapp.R;
@@ -31,6 +32,7 @@ import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -43,11 +45,18 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     private Button mRetryButton;
     private RecyclerView.LayoutManager mLayoutManager;
     private JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
-    private List<Job> mJobList;
+    private List<Header> mHeaderList;
+    private List<HashMap<String, Object>> mJobsDataList;
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
+
+    private TextView mFirstHeader;
+    private TextView mSecondHeader;
+    private TextView mThirdHeader;
+    private TextView mFourthHeader;
+    private TextView mFifthHeader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +110,13 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
         mErrorFrameLayout = (FrameLayout) view.findViewById(R.id.error_job_frame_layout);
+
+        mFirstHeader = (TextView) view.findViewById(R.id.first_header_text_view);
+        mSecondHeader = (TextView) view.findViewById(R.id.second_header_text_view);
+        mThirdHeader = (TextView) view.findViewById(R.id.third_header_text_view);
+        mFourthHeader = (TextView) view.findViewById(R.id.fourth_header_text_view);
+        mFifthHeader = (TextView) view.findViewById(R.id.fifth_header_text_view);
+
         mRetryButton = (Button) view.findViewById(R.id.button_retry);
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
@@ -133,17 +149,18 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onJobSelected(int position) {
-
-        Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + mJobList.get(position).getJobId());
-        SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
-        Bundle bundle = new Bundle();
-        Gson gson = new Gson();
-        Job job = mJobList.get(position);
-        String jobString = gson.toJson(job, Job.class);
-        bundle.putString(SELECTED_JOB, jobString);
-
-        selectedJobFragment.setArguments(bundle);
-        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
+        //TODO
+//
+//        Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + mHeaderList.get(position).getJobId());
+//        SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
+//        Bundle bundle = new Bundle();
+//        Gson gson = new Gson();
+//        Job job = mHeaderList.get(position);
+//        String jobString = gson.toJson(job, Job.class);
+//        bundle.putString(SELECTED_JOB, jobString);
+//
+//        selectedJobFragment.setArguments(bundle);
+//        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
     }
 
     @Override
@@ -158,9 +175,70 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     public void onJobReceived(JobListForMachine jobListForMachine) {
         dismissProgressDialog();
         mErrorFrameLayout.setVisibility(View.GONE);
-        mJobList = jobListForMachine.getJobs();
-        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mJobList);
+        mHeaderList = jobListForMachine.getHeaders();
+        mJobsDataList = jobListForMachine.getData();
+        jobListForMachine.getData();
+        initHeaders();
+        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
+    }
+
+    private void initHeaders() {
+        int size = mHeaderList.size();
+        if (size > 0) {
+
+            switch (size) {
+                case 1: {
+
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(R.string.dashes);
+                    mThirdHeader.setText(R.string.dashes);
+                    mFourthHeader.setText(R.string.dashes);
+                    mFifthHeader.setText(R.string.dashes);
+                    break;
+                }
+                case 2: {
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
+                    mThirdHeader.setText(R.string.dashes);
+                    mFourthHeader.setText(R.string.dashes);
+                    mFifthHeader.setText(R.string.dashes);
+                    break;
+                }
+                case 3: {
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
+                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
+                    mFourthHeader.setText(R.string.dashes);
+                    mFifthHeader.setText(R.string.dashes);
+                    break;
+                }
+                case 4: {
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
+                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
+                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
+                    mFifthHeader.setText(R.string.dashes);
+                    break;
+                }
+                case 5: {
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
+                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
+                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
+                    mFifthHeader.setText(mHeaderList.get(4).getFieldName());
+                    break;
+                }
+                default: {
+                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
+                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
+                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
+                    mFifthHeader.setText(mHeaderList.get(4).getFieldName());
+                }
+            }
+        }
+
     }
 
     @Override

@@ -2,26 +2,32 @@ package com.operatorsapp.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operators.jobsinfra.Job;
+import com.operators.jobsinfra.Header;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
+import com.operatorsapp.utils.TimeUtils;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerViewAdapter.ViewHolder> {
-    private List<Job> mJobsList;
+    private List<Header> mHeaderList;
+    private List<HashMap<String, Object>> mJobsList;
     private OnJobSelectedCallbackListener mOnJobSelectedCallbackListener;
 
-    public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Job> jobsList) {
+    public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Header> headerList, List<HashMap<String, Object>> jobsDataList) {
         mOnJobSelectedCallbackListener = onJobSelectedCallbackListener;
-        mJobsList = jobsList;
+        mHeaderList = headerList;
+        mJobsList = jobsDataList;
+
     }
 
     @Override
@@ -33,8 +39,8 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
     @Override
     public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
-        final int jobId = mJobsList.get(position).getJobId();
 
+        // todo MOVE TO CREATE
         holder.mJobRowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,11 +48,47 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
             }
         });
 
-        holder.mJobIdTextView.setText(String.valueOf(jobId));
-        holder.mProductNameTextView.setText(mJobsList.get(position).getProductName());
-        holder.mERPTextView.setText(String.valueOf(mJobsList.get(position).getErp()));
-        holder.mPlannedStartTextView.setText(mJobsList.get(position).getPlannedStart());
-        holder.mNumberOfUnits.setText(String.valueOf(mJobsList.get(position).getNumberOfUnits()));
+        String[] fieldValues = new String[5];
+        if (mHeaderList.size() > 0) {
+
+            for (int i = 0; i < 5; i++) {
+                if (i < mHeaderList.size()) {
+                    if (mJobsList == null || mJobsList.get(position) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName()) || mJobsList.get(position).get(mHeaderList.get(i).getFieldName()) == null || TextUtils.isEmpty(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString())) {
+                        fieldValues[i] = "- -";
+                    }
+                    else {
+                        switch (mHeaderList.get(i).getDisplayType()){
+                            case "date": {
+                                fieldValues[i] = TimeUtils.getDateForJob(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString());
+                                break;
+                            }
+                            case "num": {
+                                fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                break;
+                            }
+                            case "text": {
+                                fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                break;
+                            }
+                        }
+                    }
+                }
+                else {
+                    fieldValues[i] = "- -";
+                }
+            }
+
+            initRowsHeader(holder, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4]);
+
+        }
+    }
+
+    private void initRowsHeader(ViewHolder holder, String text1, String text2, String text3, String text4, String text5) {
+        holder.mFirstTextView.setText(text1);
+        holder.mSecondTextView.setText(text2);
+        holder.mThirdTextView.setText(text3);
+        holder.mFourthTextView.setText(text4);
+        holder.mFifthTextView.setText(text5);
     }
 
     @Override
@@ -56,20 +98,20 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout mJobRowLayout;
-        private TextView mJobIdTextView;
-        private TextView mProductNameTextView;
-        private TextView mERPTextView;
-        private TextView mPlannedStartTextView;
-        private TextView mNumberOfUnits;
+        private TextView mFirstTextView;
+        private TextView mSecondTextView;
+        private TextView mThirdTextView;
+        private TextView mFourthTextView;
+        private TextView mFifthTextView;
 
         public ViewHolder(View view) {
             super(view);
             mJobRowLayout = (LinearLayout) view.findViewById(R.id.job_row_layout);
-            mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
-            mProductNameTextView = (TextView) view.findViewById(R.id.adapter_text_view_product_name);
-            mERPTextView = (TextView) view.findViewById(R.id.adapter_text_view_ERP);
-            mPlannedStartTextView = (TextView) view.findViewById(R.id.adapter_text_planned_start);
-            mNumberOfUnits = (TextView) view.findViewById(R.id.adapter_text_view_number_of_units);
+            mFirstTextView = (TextView) view.findViewById(R.id.text_view_job_id);
+            mSecondTextView = (TextView) view.findViewById(R.id.adapter_text_view_product_name);
+            mThirdTextView = (TextView) view.findViewById(R.id.adapter_text_view_ERP);
+            mFourthTextView = (TextView) view.findViewById(R.id.adapter_text_planned_start);
+            mFifthTextView = (TextView) view.findViewById(R.id.adapter_text_view_number_of_units);
         }
     }
 }

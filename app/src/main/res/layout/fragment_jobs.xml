@@ -71,57 +71,57 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_view_job_id"
+                android:id="@+id/first_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="0.5"
                 android:gravity="left"
-                android:text="@string/job_id"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/status_bar"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_product_name"
+                android:id="@+id/second_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
                 android:gravity="left"
-                android:text="@string/product_name"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/status_bar"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_ERP"
+                android:id="@+id/third_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
+                android:layout_weight="0.8"
                 android:gravity="left"
-                android:text="@string/erp"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/status_bar"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_planned_start"
+                android:id="@+id/fourth_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
                 android:gravity="left"
-                android:text="@string/planned_start"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/status_bar"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_number_of_units"
+                android:id="@+id/fifth_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:gravity="left"
-                android:text="@string/quantity"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/status_bar"
                 android:textStyle="bold" />

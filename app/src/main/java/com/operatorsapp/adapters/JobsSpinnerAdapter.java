@@ -55,11 +55,11 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String> {
             if (position <= 1) {
                 mRowName.setTextAppearance(getContext(), R.style.FontStyle_T10);
                 mRowName.setTextSize(17);
-                if (position == 0) {
+                if (position < 2 ) {
                     mRowName.setTextColor(Color.BLACK);
                     mRowName.setText(item);
                     row.setClickable(false);
-                } else if (position > 1) {
+                } else if (position > 2) {
                     mRowName.setTextColor(Color.GRAY);
                     mRowName.setText(item);
                     row.setClickable(true);

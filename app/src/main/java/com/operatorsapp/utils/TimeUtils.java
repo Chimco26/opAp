@@ -62,4 +62,20 @@ public class TimeUtils {
 
         return out;
     }
+
+    public static String getDateForJob(String time) {
+
+        String out = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date date = dateFormat.parse(time);
+            out = dateFormat2.format(date);
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return out;
+    }
 }
