@@ -2,6 +2,7 @@ package com.operators.jobsnetworkbridge;
 
 import android.util.Log;
 
+import com.operators.jobsinfra.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobListForMachine;
@@ -42,15 +43,24 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 if (response.isSuccessful()) {
 
                     JobListForMachine jobListForMachine = response.body().getJobListForMachine();
-                    getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
+                    if (jobListForMachine.getData() != null) {
+                        if (jobListForMachine.getData().size() > 0) {
+
+                            getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
+                        }
+                        else {
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "General Error");
+                            getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                        }
+                    }
                 }
                 else {
-                    if(response.body()!=null){
+                    if (response.body() != null) {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
-                    else{
-                        Log.w(LOG_TAG,"response.body() is null");
+                    else {
+                        Log.w(LOG_TAG, "response.body() is null");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }

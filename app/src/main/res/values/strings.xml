@@ -81,6 +81,7 @@
     <string name="weight">Weight</string>
     <string name="material_weight_alarm">Material Weight Alarm</string>
     <string name="dashes">- -</string>
+    <string name="no_reasons">"No reasons in list"</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

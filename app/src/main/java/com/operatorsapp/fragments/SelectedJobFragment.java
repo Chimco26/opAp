@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.operators.jobsinfra.Job;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
@@ -24,12 +22,18 @@ import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
-    private static final String SELECTED_JOB = "selected_job";
 
-    private Job mJob;
+    private static final String SELECTED_JOB_TITLES = "selected_job_titles";
+    private static final String SELECTED_JOB_DATA_ARRAY = "selected_job_data_array";
+    private static final String SELECTED_JOB_ID = "selected_job_id";
+
+
+    private int mJobId;
     private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
+    private String[] mFieldsValues = new String[5];
+    private String[] mJobData = new String[5];
 
 
     @Override
@@ -45,13 +49,14 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         final View view = inflater.inflate(R.layout.fragment_selected_job, container, false);
 
         Bundle bundle = this.getArguments();
-        Gson gson = new Gson();
-        mJob = gson.fromJson(bundle.getString(SELECTED_JOB), Job.class);
 
+        mFieldsValues = bundle.getStringArray(SELECTED_JOB_TITLES);
+        mJobData = bundle.getStringArray(SELECTED_JOB_DATA_ARRAY);
+        mJobId = bundle.getInt(SELECTED_JOB_ID);
         setActionBar();
 
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mActivateNewJobButton = (Button)view.findViewById(R.id.button_activate_new_job);
+        mActivateNewJobButton = (Button) view.findViewById(R.id.button_activate_new_job);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.job_id_text_view);
         TextView plannedStartTextView = (TextView) view.findViewById(R.id.planned_start_text_view);
         TextView productNameTextView = (TextView) view.findViewById(R.id.product_name_text_view);
@@ -59,15 +64,26 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity_text_view);
 
 
-        jobIdTextView.setText(String.valueOf(mJob.getJobId()));
-        productNameTextView.setText(mJob.getProductName());
-        productERP.setText(String.valueOf(mJob.getErp()));
-        quantityTextView.setText(String.valueOf(mJob.getNumberOfUnits()));
-        plannedStartTextView.setText(mJob.getPlannedStart());
+        jobIdTextView.setText(mJobData[0]);
+        plannedStartTextView.setText(mJobData[1]);
+        productNameTextView.setText(mJobData[2]);
+        productERP.setText(mJobData[3]);
+        quantityTextView.setText(mJobData[4]);
+
+
+        TextView jobIdTitle = (TextView) view.findViewById(R.id.first_field_text_view);
+        jobIdTitle.setText(mFieldsValues[0]);
+        TextView secondField = (TextView) view.findViewById(R.id.second_field_text_view);
+        secondField.setText(mFieldsValues[1]);
+        TextView thirdField = (TextView) view.findViewById(R.id.third_field_text_view);
+        thirdField.setText(mFieldsValues[2]);
+        TextView fourthField = (TextView) view.findViewById(R.id.fourth_field_text_view);
+        fourthField.setText(mFieldsValues[3]);
+        TextView fifthField = (TextView) view.findViewById(R.id.fifth_field_text_view);
+        fifthField.setText(mFieldsValues[4]);
 
         return view;
     }
-
 
     @Override
     public void onResume() {
@@ -104,9 +120,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
                     getFragmentManager().popBackStack();
                 }
             });
-
             actionBar.setCustomView(view);
-//            actionBar.setIcon(R.drawable.logo);
         }
     }
 
@@ -118,11 +132,10 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
                 break;
             }
             case R.id.button_activate_new_job: {
-                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mJob.getJobId());
+                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mJobId);
                 break;
             }
         }
-
     }
 
     @Override

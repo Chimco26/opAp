@@ -26,7 +26,9 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.utils.ShowCrouton;
 
 
 /**
@@ -46,6 +48,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     boolean mIsFirstReasonSpinnerSelection = true;
     boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
 
 
     private TextView mProductNameTextView;
@@ -63,6 +66,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mGoToScreenListener = (GoToScreenListener) getActivity();
         mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Nullable
@@ -81,6 +85,10 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(mReportFieldsForMachine.getRejectCauses().size()==0 || mReportFieldsForMachine.getRejectReasons().size() == 0){
+            ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
+        }
         mProductNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
         mProductIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
         mJobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
@@ -211,4 +219,6 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             }
         }
     }
+
+
 }

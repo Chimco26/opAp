@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.operators.jobsinfra.Header;
-import com.operators.jobsinfra.Job;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -29,6 +29,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 
@@ -39,7 +40,10 @@ import java.util.List;
 public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
 
-    public static final String SELECTED_JOB = "selected_job";
+
+    private static final String SELECTED_JOB_TITLES = "selected_job_titles";
+    private static final String SELECTED_JOB_DATA_ARRAY = "selected_job_data_array";
+    private static final String SELECTED_JOB_ID = "selected_job_id";
     private RecyclerView mJobsRecyclerView;
     private FrameLayout mErrorFrameLayout;
     private Button mRetryButton;
@@ -57,6 +61,8 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     private TextView mThirdHeader;
     private TextView mFourthHeader;
     private TextView mFifthHeader;
+
+    private String[] mFieldsValues = new String[5];
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,6 +127,8 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
+
+
     }
 
     private void setActionBar() {
@@ -148,19 +156,15 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     @Override
-    public void onJobSelected(int position) {
-        //TODO
-//
-//        Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + mHeaderList.get(position).getJobId());
-//        SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
-//        Bundle bundle = new Bundle();
-//        Gson gson = new Gson();
-//        Job job = mHeaderList.get(position);
-//        String jobString = gson.toJson(job, Job.class);
-//        bundle.putString(SELECTED_JOB, jobString);
-//
-//        selectedJobFragment.setArguments(bundle);
-//        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
+    public void onJobSelected(String[] jobDataArray, int jobId) {
+        SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(SELECTED_JOB_TITLES, mFieldsValues);
+        bundle.putStringArray(SELECTED_JOB_DATA_ARRAY, jobDataArray);
+        bundle.putInt(SELECTED_JOB_ID, jobId);
+
+        selectedJobFragment.setArguments(bundle);
+        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
     }
 
     @Override
@@ -181,62 +185,42 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         initHeaders();
         mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
+
+        Log.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
+
+    }
+
+    private void initTitles(String text1, String text2, String text3, String text4, String text5) {
+        mFirstHeader.setText(mHeaderList.get(0).getFieldName());
+        mFirstHeader.setText(text1);
+        mSecondHeader.setText(text2);
+        mThirdHeader.setText(text3);
+        mFourthHeader.setText(text4);
+        mFifthHeader.setText(text5);
     }
 
     private void initHeaders() {
-        int size = mHeaderList.size();
-        if (size > 0) {
+        if (mHeaderList != null) {
+            if (mHeaderList.size() > 0) {
 
-            switch (size) {
-                case 1: {
-
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(R.string.dashes);
-                    mThirdHeader.setText(R.string.dashes);
-                    mFourthHeader.setText(R.string.dashes);
-                    mFifthHeader.setText(R.string.dashes);
-                    break;
+                for (int i = 0; i < 5; i++) {
+                    if (i < mHeaderList.size()) {
+                        if (mHeaderList.get(i).getFieldName() == null || mHeaderList.get(i) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName())) {
+                            mFieldsValues[i] = "- -";
+                        }
+                        else {
+                            mFieldsValues[i] = mHeaderList.get(i).getFieldName();
+                        }
+                    }
+                    else {
+                        mFieldsValues[i] = "- -";
+                    }
                 }
-                case 2: {
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
-                    mThirdHeader.setText(R.string.dashes);
-                    mFourthHeader.setText(R.string.dashes);
-                    mFifthHeader.setText(R.string.dashes);
-                    break;
-                }
-                case 3: {
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
-                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
-                    mFourthHeader.setText(R.string.dashes);
-                    mFifthHeader.setText(R.string.dashes);
-                    break;
-                }
-                case 4: {
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
-                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
-                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
-                    mFifthHeader.setText(R.string.dashes);
-                    break;
-                }
-                case 5: {
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
-                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
-                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
-                    mFifthHeader.setText(mHeaderList.get(4).getFieldName());
-                    break;
-                }
-                default: {
-                    mFirstHeader.setText(mHeaderList.get(0).getFieldName());
-                    mSecondHeader.setText(mHeaderList.get(1).getFieldName());
-                    mThirdHeader.setText(mHeaderList.get(2).getFieldName());
-                    mFourthHeader.setText(mHeaderList.get(3).getFieldName());
-                    mFifthHeader.setText(mHeaderList.get(4).getFieldName());
-                }
+                initTitles(mFieldsValues[0], mFieldsValues[1], mFieldsValues[2], mFieldsValues[3], mFieldsValues[4]);
             }
+        }
+        else {
+            Log.w(LOG_TAG, "mHeaderList is null");
         }
 
     }

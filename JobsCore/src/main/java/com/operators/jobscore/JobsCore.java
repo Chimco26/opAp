@@ -37,7 +37,7 @@ public class JobsCore {
                         if (mJobsForMachineUICallbackListener != null) {
                             if (jobListForMachine != null) {
                                 mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
-                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() jobListForMachine is null ");
+                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
                             }
                         }
                         else {

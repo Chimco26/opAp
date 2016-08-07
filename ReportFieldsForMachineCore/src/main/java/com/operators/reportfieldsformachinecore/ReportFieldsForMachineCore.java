@@ -57,7 +57,7 @@ public class ReportFieldsForMachineCore {
         }
     }
 
-    public void getReportFieldForMachine(final JobBase.OnJobFinishedListener onJobFinishedListener) {
+    private void getReportFieldForMachine(final JobBase.OnJobFinishedListener onJobFinishedListener) {
         if (mReportFieldsForMachinePersistenceManagerInterface != null) {
             mReportFieldsForMachineNetworkBridgeInterface.getReportFieldsForMachine(mReportFieldsForMachinePersistenceManagerInterface.getSiteUrl(), mReportFieldsForMachinePersistenceManagerInterface.getSessionId(),
                     mReportFieldsForMachinePersistenceManagerInterface.getMachineId(), new GetReportFieldsForMachineCallback() {
@@ -75,7 +75,12 @@ public class ReportFieldsForMachineCore {
                                 Log.e(LOG_TAG, "reportFieldsForMachine is null");
 
                             }
-                            onJobFinishedListener.onJobFinished();
+                            if (onJobFinishedListener != null) {
+                                onJobFinishedListener.onJobFinished();
+                            }
+                            else {
+                                Log.w(LOG_TAG,"onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
+                            }
                         }
 
                         @Override

@@ -252,13 +252,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
                 Log.i(LOG_TAG, "onJobListReceived()");
-                if (jobListForMachine!= null) {
-                    mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                if (jobListForMachine != null) {
+                    if (jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null) {
+                        mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                    }
+                    else {
+                        mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                    }
                 }
                 else {
                     mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
-                }
 
+                }
             }
 
             @Override
@@ -274,7 +279,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
                 mMachineStatusCore.startPolling();
+                //TODO here get fields
+//                mReportFieldsForMachineCore.getReportFieldForMachine();
             }
+
 
             @Override
             public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
