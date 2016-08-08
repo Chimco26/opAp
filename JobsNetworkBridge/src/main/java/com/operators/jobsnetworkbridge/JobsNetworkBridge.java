@@ -27,9 +27,9 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
     private GetJobsListForMachineNetworkManagerInterface mGetJobsListForMachineNetworkManagerInterface;
     private StartJobForMachineNetworkManagerInterface mStartJobForMachineNetworkManagerInterface;
 
-    public void inject(GetJobsListForMachineNetworkManagerInterface getJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface startJobForMachineNetworkManagerInterface) {
-        mGetJobsListForMachineNetworkManagerInterface = getJobsListForMachineNetworkManagerInterface;
-        mStartJobForMachineNetworkManagerInterface = startJobForMachineNetworkManagerInterface;
+    public void inject(GetJobsListForMachineNetworkManagerInterface getJobsListForMachineNetworkManager, StartJobForMachineNetworkManagerInterface startJobForMachineNetworkManager) {
+        mGetJobsListForMachineNetworkManagerInterface = getJobsListForMachineNetworkManager;
+        mStartJobForMachineNetworkManagerInterface = startJobForMachineNetworkManager;
         Log.i(LOG_TAG, "JobsNetworkBridge inject()");
     }
 

@@ -285,8 +285,12 @@ public class RetrofitMockClient implements Interceptor {
                     Log.i(LOG_TAG, "SetOperatorForMachine request received");
                     responseString = "{\"error\":null}";
                     break;
+                case "ReportReject":
+                    Log.i(LOG_TAG, "ReportReject request received");
+                    responseString = "{\"error\":null}";
+                    break;
                 case "getReportfieldsForMachine":
-                    responseString ="{\n" +
+                    responseString = "{\n" +
                             "  \"error\": null,\n" +
                             "  \"stopReasons\": \n" +
                             "  [\n" +
@@ -480,7 +484,8 @@ public class RetrofitMockClient implements Interceptor {
             }
 
             response = getResponse(chain, responseString);
-        } else {
+        }
+        else {
             response = chain.proceed(chain.request());
         }
         return response;

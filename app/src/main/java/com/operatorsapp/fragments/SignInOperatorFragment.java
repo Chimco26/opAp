@@ -148,8 +148,6 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
                     @Override
                     public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
-//todo log
-                        Log.e(LOG_TAG, "ERROR");
 
                     }
                 });

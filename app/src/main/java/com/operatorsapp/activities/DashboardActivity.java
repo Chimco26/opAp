@@ -96,8 +96,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
-
-
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -254,22 +252,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 Log.i(LOG_TAG, "onJobListReceived()");
                 if (jobListForMachine != null) {
                     if (jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null) {
-                        mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                        mDashboardActivityToJobsFragmentCallback.onJobsListReceived(jobListForMachine);
                     }
                     else {
-                        mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                        mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                     }
                 }
                 else {
-                    mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
-
+                    mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                 }
             }
 
             @Override
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onJobListReceiveFailed()");
-                mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
 
             @Override
@@ -278,9 +275,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
+                // TODO CLEAR ALL MODELS OF CURRENT DATA (NO LONGER RELEVANT FOR NEW JOB).
+                // YOSSIs models as well!
                 mMachineStatusCore.startPolling();
-                //TODO here get fields
-//                mReportFieldsForMachineCore.getReportFieldForMachine();
             }
 
 
@@ -394,5 +391,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         Log.w(LOG_TAG, "mReportFieldsForMachine is null");
         return null;
+    }
+
+    @Override
+    public void updateReportRejectFields() {
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.startPolling();
     }
 }

@@ -8,8 +8,8 @@ import com.operators.jobsinfra.JobListForMachine;
  */
 public interface DashboardActivityToJobsFragmentCallback {
 
-    void onJobReceived(JobListForMachine jobListForMachine);
+    void onJobsListReceived(JobListForMachine jobListForMachine);
 
-    void onJobReceiveFailed();
+    void onJobsListReceiveFailed();
 
 }

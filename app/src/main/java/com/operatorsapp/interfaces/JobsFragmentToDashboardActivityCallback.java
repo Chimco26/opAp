@@ -15,4 +15,6 @@ public interface JobsFragmentToDashboardActivityCallback {
     void initJobsCore();
 
     void unregisterListeners();
+
+    void updateReportRejectFields();
 }

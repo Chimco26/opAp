@@ -23,8 +23,8 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     private static final String LOG_TAG = GetMachineStatusNetworkBridge.class.getSimpleName();
     private GetMachineStatusNetworkManagerInterface mGetMachineStatusNetworkManagerInterface;
 
-    public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManagerInterface) {
-        mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManagerInterface;
+    public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManager) {
+        mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManager;
         Log.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 

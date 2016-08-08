@@ -36,27 +36,21 @@ import com.operatorsapp.utils.ShowCrouton;
  */
 public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
 
-    public static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
+    private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
-    public static final String REJECT_REASON = "reject_reason";
-    public static final String REJECT_CAUSE = "reject_cause";
+    private static final String REJECT_REASON = "reject_reason";
+    private static final String REJECT_CAUSE = "reject_cause";
+    private static final String REJECT_REASON_TITLE = "reject_reason_title";
     private MachineStatus mMachineStatus;
-    private Spinner mRejectReasonSpinner;
-    private Spinner mCauseSpinner;
     private TextView mCancelButton;
     private Button mNextButton;
-    boolean mIsFirstReasonSpinnerSelection = true;
-    boolean mIsReasonSelected;
+    private boolean mIsFirstReasonSpinnerSelection = true;
+    private boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
-
-
-    private TextView mProductNameTextView;
-    private TextView mProductIdTextView;
-    private TextView mJobIdTextView;
-
-    private String mSelectedReason;
-    private String mSelectedCause;
+    private int mSelectedReasonId;
+    private int mSelectedCauseId;
+    private String mSelectedReasonName;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
 
@@ -72,39 +66,41 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_report_rejects, container, false);
+        final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
 
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
         mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);
         setActionBar();
-
-        return rootView;
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(mReportFieldsForMachine.getRejectCauses().size()==0 || mReportFieldsForMachine.getRejectReasons().size() == 0){
+        if (mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
         }
-        mProductNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
-        mProductIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
-        mJobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
 
-        mProductNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-        mProductIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
-        mJobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+        TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
+        TextView productIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
+        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
 
-        mRejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
+        if (mMachineStatus.getAllMachinesData() != null) {
+            productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
+            productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+            jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+        }
+
+        Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
         final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
         reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mRejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-        mRejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
+        rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-        mRejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mIsFirstReasonSpinnerSelection) {
@@ -114,7 +110,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 }
                 else {
                     mIsReasonSelected = true;
-                    mSelectedReason = mReportFieldsForMachine.getRejectReasons().get(position).getName();
+                    mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
+                    mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
                     reasonSpinnerArrayAdapter.setTitle(position);
                     mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                 }
@@ -126,16 +123,16 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         });
 
 
-        mCauseSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
+        Spinner causeSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
         final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
         causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCauseSpinner.setAdapter(causeSpinnerArrayAdapter);
-        mCauseSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        causeSpinner.setAdapter(causeSpinnerArrayAdapter);
+        causeSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-        mCauseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        causeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedCause = mReportFieldsForMachine.getRejectCauses().get(position).getName();
+                mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
                 causeSpinnerArrayAdapter.setTitle(position);
             }
 
@@ -208,8 +205,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                     Gson gson = new Gson();
                     String jobString = gson.toJson(mMachineStatus, MachineStatus.class);
                     bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-                    bundle.putString(REJECT_REASON, mSelectedReason);
-                    bundle.putString(REJECT_CAUSE, mSelectedCause);
+                    bundle.putInt(REJECT_REASON, mSelectedReasonId);
+                    bundle.putInt(REJECT_CAUSE, mSelectedCauseId);
+                    bundle.putString(REJECT_REASON_TITLE,mSelectedReasonName);
 
                     reportRejectSelectParametersFragment.setArguments(bundle);
 

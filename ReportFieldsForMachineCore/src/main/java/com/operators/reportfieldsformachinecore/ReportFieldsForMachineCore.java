@@ -25,7 +25,6 @@ public class ReportFieldsForMachineCore {
     private ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback;
     private EmeraldJobBase mJob;
 
-
     public ReportFieldsForMachineCore(ReportFieldsForMachineNetworkBridgeInterface reportFieldsForMachineNetworkBridgeInterface, ReportFieldsForMachinePersistenceManagerInterface reportFieldsForMachinePersistenceManagerInterface) {
         mReportFieldsForMachineNetworkBridgeInterface = reportFieldsForMachineNetworkBridgeInterface;
         mReportFieldsForMachinePersistenceManagerInterface = reportFieldsForMachinePersistenceManagerInterface;
@@ -73,13 +72,12 @@ public class ReportFieldsForMachineCore {
                             }
                             else {
                                 Log.e(LOG_TAG, "reportFieldsForMachine is null");
-
                             }
                             if (onJobFinishedListener != null) {
                                 onJobFinishedListener.onJobFinished();
                             }
                             else {
-                                Log.w(LOG_TAG,"onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
+                                Log.w(LOG_TAG, "onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
                             }
                         }
 
@@ -93,8 +91,9 @@ public class ReportFieldsForMachineCore {
                             else {
                                 Log.w(LOG_TAG, "getReportFieldForMachine() mReportFieldsForMachineUICallback is null");
                             }
-                            onJobFinishedListener.onJobFinished();
-
+                            if (onJobFinishedListener != null) {
+                                onJobFinishedListener.onJobFinished();
+                            }
                         }
                     }, mReportFieldsForMachinePersistenceManagerInterface.getTotalRetries(), mReportFieldsForMachinePersistenceManagerInterface.getRequestTimeout());
         }

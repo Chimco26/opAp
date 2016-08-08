@@ -81,7 +81,8 @@
     <string name="weight">Weight</string>
     <string name="material_weight_alarm">Material Weight Alarm</string>
     <string name="dashes">- -</string>
-    <string name="no_reasons">"No reasons in list"</string>
+    <string name="no_reasons">Report error</string>
+    <string name="report_stop_event_reason">Report Stop Event Reason</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>
@@ -92,7 +93,8 @@
     <array name="jobs_spinner_array">
         <item>New Job</item>
         <item>Report Rejects</item>
-        <item>Split Job</item>
+        <item>Report Stop Reason</item>
+        <item>Report Cycle Units</item>
         <item>Report Production</item>
     </array>
 

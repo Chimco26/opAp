@@ -15,26 +15,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.model.CurrentJob;
 
 public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
-
-    private static final String SELECTED_JOB_TITLES = "selected_job_titles";
-    private static final String SELECTED_JOB_DATA_ARRAY = "selected_job_data_array";
-    private static final String SELECTED_JOB_ID = "selected_job_id";
-
-
-    private int mJobId;
+    private static final String SELECTED_JOB = "selected_job";
     private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
-    private String[] mFieldsValues = new String[5];
-    private String[] mJobData = new String[5];
-
+    private CurrentJob mCurrentJob;
 
     @Override
     public void onAttach(Context context) {
@@ -49,40 +43,46 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         final View view = inflater.inflate(R.layout.fragment_selected_job, container, false);
 
         Bundle bundle = this.getArguments();
-
-        mFieldsValues = bundle.getStringArray(SELECTED_JOB_TITLES);
-        mJobData = bundle.getStringArray(SELECTED_JOB_DATA_ARRAY);
-        mJobId = bundle.getInt(SELECTED_JOB_ID);
+        Gson gson = new Gson();
+        mCurrentJob = gson.fromJson(bundle.getString(SELECTED_JOB), CurrentJob.class);
+        String[] headersArray = mCurrentJob.getHeaders();
         setActionBar();
 
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+
         mActivateNewJobButton = (Button) view.findViewById(R.id.button_activate_new_job);
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.job_id_text_view);
-        TextView plannedStartTextView = (TextView) view.findViewById(R.id.planned_start_text_view);
-        TextView productNameTextView = (TextView) view.findViewById(R.id.product_name_text_view);
-        TextView productERP = (TextView) view.findViewById(R.id.erp_id_text_view);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity_text_view);
-
-
-        jobIdTextView.setText(mJobData[0]);
-        plannedStartTextView.setText(mJobData[1]);
-        productNameTextView.setText(mJobData[2]);
-        productERP.setText(mJobData[3]);
-        quantityTextView.setText(mJobData[4]);
-
-
-        TextView jobIdTitle = (TextView) view.findViewById(R.id.first_field_text_view);
-        jobIdTitle.setText(mFieldsValues[0]);
-        TextView secondField = (TextView) view.findViewById(R.id.second_field_text_view);
-        secondField.setText(mFieldsValues[1]);
-        TextView thirdField = (TextView) view.findViewById(R.id.third_field_text_view);
-        thirdField.setText(mFieldsValues[2]);
-        TextView fourthField = (TextView) view.findViewById(R.id.fourth_field_text_view);
-        fourthField.setText(mFieldsValues[3]);
-        TextView fifthField = (TextView) view.findViewById(R.id.fifth_field_text_view);
-        fifthField.setText(mFieldsValues[4]);
+        setTitles(view);
+        setValues(view, headersArray);
 
         return view;
+    }
+
+    private void setTitles(View view) {
+        TextView firstTitle = (TextView) view.findViewById(R.id.first_title_text_view);
+        TextView secondTitle = (TextView) view.findViewById(R.id.second_title_text_view);
+        TextView thirdTitle = (TextView) view.findViewById(R.id.third_title_text_view);
+        TextView fourthTitle = (TextView) view.findViewById(R.id.fourth_title_text_view);
+        TextView fifthTitle = (TextView) view.findViewById(R.id.fifth_title_text_view);
+
+        firstTitle.setText(mCurrentJob.getFirstField());
+        secondTitle.setText(mCurrentJob.getSecondField());
+        thirdTitle.setText(mCurrentJob.getThirdField());
+        fourthTitle.setText(mCurrentJob.getFourthField());
+        fifthTitle.setText(mCurrentJob.getFifthField());
+    }
+
+    private void setValues(View view, String[] headersArray) {
+        TextView jobIdTitle = (TextView) view.findViewById(R.id.first_field_text_view);
+        TextView secondField = (TextView) view.findViewById(R.id.second_field_text_view);
+        TextView thirdField = (TextView) view.findViewById(R.id.third_field_text_view);
+        TextView fourthField = (TextView) view.findViewById(R.id.fourth_field_text_view);
+        TextView fifthField = (TextView) view.findViewById(R.id.fifth_field_text_view);
+
+        jobIdTitle.setText(headersArray[0]);
+        secondField.setText(headersArray[1]);
+        thirdField.setText(headersArray[2]);
+        fourthField.setText(headersArray[3]);
+        fifthField.setText(headersArray[4]);
     }
 
     @Override
@@ -117,7 +117,8 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
             arrowBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    //TODO refactor
+                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
             actionBar.setCustomView(view);
@@ -128,11 +129,12 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack();
+                //TODO check
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
             case R.id.button_activate_new_job: {
-                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mJobId);
+                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mCurrentJob.getJobId());
                 break;
             }
         }

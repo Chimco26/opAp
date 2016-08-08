@@ -25,7 +25,4 @@ public class StopReasons {
         return name;
     }
 
-    public List<SubReasons> getSubReasons() {
-        return subReasons;
-    }
 }

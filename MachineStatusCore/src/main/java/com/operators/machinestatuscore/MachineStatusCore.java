@@ -27,9 +27,9 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     private MachineStatusUICallback mMachineStatusUICallback;
     private EmeraldJobBase mJob;
 
-    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridgeInterface, MachineStatusPersistenceManagerInterface machineStatusPersistenceManagerInterface) {
-        mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridgeInterface;
-        mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManagerInterface;
+    public MachineStatusCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge, MachineStatusPersistenceManagerInterface machineStatusPersistenceManager) {
+        mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridge;
+        mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManager;
     }
 
     public void registerListener(MachineStatusUICallback machineStatusUICallback) {

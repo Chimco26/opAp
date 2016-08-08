@@ -28,7 +28,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
-                android:id="@+id/job_id_text_view"
+                android:id="@+id/first_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -64,7 +64,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/planned_start_text_view"
+                android:id="@+id/second_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,7 +98,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
-                android:id="@+id/product_name_text_view"
+                android:id="@+id/third_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -132,7 +132,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
-                android:id="@+id/erp_id_text_view"
+                android:id="@+id/fourth_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -166,7 +166,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
-                android:id="@+id/quantity_text_view"
+                android:id="@+id/fifth_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

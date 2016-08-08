@@ -50,21 +50,11 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String> {
 
         String item = mSpinnerItems[position];
         if (item != null) {
-            mRowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
+           mRowName= (TextView) row.findViewById(R.id.spinner_job_item_name);
             mRowName.setText(item);
-            if (position <= 1) {
-                mRowName.setTextAppearance(getContext(), R.style.FontStyle_T10);
-                mRowName.setTextSize(17);
-                if (position < 2 ) {
-                    mRowName.setTextColor(Color.BLACK);
-                    mRowName.setText(item);
-                    row.setClickable(false);
-                } else if (position > 2) {
-                    mRowName.setTextColor(Color.GRAY);
-                    mRowName.setText(item);
-                    row.setClickable(true);
-                }
-            }
+            mRowName.setTextAppearance(getContext(),R.style.FontStyle_T10);
+            mRowName.setTextColor(Color.BLACK);
+            mRowName.setTextSize(17);
         }
         return row;
 

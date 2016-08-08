@@ -14,17 +14,21 @@ import android.widget.TextView;
 import com.operators.jobsinfra.Header;
 import com.operatorsapp.R;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
+import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerViewAdapter.ViewHolder> {
     private List<Header> mHeaderList;
     private List<HashMap<String, Object>> mJobsList;
+    private List<CurrentJob> mCurrentJobs = new ArrayList<>();
     private OnJobSelectedCallbackListener mOnJobSelectedCallbackListener;
-    private int mJobId;
+
+    private CurrentJob mCurrentJob;
 
     public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Header> headerList, List<HashMap<String, Object>> jobsDataList) {
         mOnJobSelectedCallbackListener = onJobSelectedCallbackListener;
@@ -37,6 +41,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     public JobsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.job_recycler_item, parent, false);
+
         return new ViewHolder(v);
     }
 
@@ -44,31 +49,35 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
 
         BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get("ID").toString());
-        mJobId = bigDecimal.intValue();
+        int jobId = bigDecimal.intValue();
 //         todo MOVE TO CREATE
         holder.mJobRowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String jobData[] = new String[5];
-                jobData[0] = holder.mFirstTextView.getText().toString();
-                jobData[1] = holder.mSecondTextView.getText().toString();
-                jobData[2] = holder.mThirdTextView.getText().toString();
-                jobData[3] = holder.mFourthTextView.getText().toString();
-                jobData[4] = holder.mFifthTextView.getText().toString();
-                mOnJobSelectedCallbackListener.onJobSelected(jobData, mJobId);
+//                String jobData[] = new String[5];
+//                jobData[0] = holder.mFirstTextView.getText().toString();
+//                jobData[1] = holder.mSecondTextView.getText().toString();
+//                jobData[2] = holder.mThirdTextView.getText().toString();
+//                jobData[3] = holder.mFourthTextView.getText().toString();
+//                jobData[4] = holder.mFifthTextView.getText().toString();
+
+                mOnJobSelectedCallbackListener.onJobSelected(mCurrentJobs.get(position));
             }
         });
 
 
         String[] fieldValues = new String[5];
+        String[] headers = new String[5];
         if (mHeaderList.size() > 0) {
 
             for (int i = 0; i < 5; i++) {
                 if (i < mHeaderList.size()) {
                     if (mJobsList == null || mJobsList.get(position) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName()) || mJobsList.get(position).get(mHeaderList.get(i).getFieldName()) == null || TextUtils.isEmpty(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString())) {
                         fieldValues[i] = "- -";
+                        headers[i] = "- -";
                     }
                     else {
+                        headers[i] = mHeaderList.get(i).getFieldName();
                         switch (mHeaderList.get(i).getDisplayType()) {
                             case "date": {
                                 fieldValues[i] = TimeUtils.getDateForJob(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString());
@@ -87,10 +96,14 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                 }
                 else {
                     fieldValues[i] = "- -";
+                    headers[i] = "- -";
                 }
             }
 
+//            mCurrentJob = new CurrentJob(headers, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4], jobId);
+            mCurrentJobs.add(new CurrentJob(headers, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4], jobId));
             initRowsHeader(holder, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4]);
+
 
         }
     }

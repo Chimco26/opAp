@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
 import com.operators.jobsinfra.Header;
 import com.operators.jobsinfra.JobListForMachine;
@@ -31,6 +32,7 @@ import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.HashMap;
@@ -39,11 +41,7 @@ import java.util.List;
 
 public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
-
-
-    private static final String SELECTED_JOB_TITLES = "selected_job_titles";
-    private static final String SELECTED_JOB_DATA_ARRAY = "selected_job_data_array";
-    private static final String SELECTED_JOB_ID = "selected_job_id";
+    private static final String SELECTED_JOB = "selected_job";
     private RecyclerView mJobsRecyclerView;
     private FrameLayout mErrorFrameLayout;
     private Button mRetryButton;
@@ -113,6 +111,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ProgressDialogManager.show(getActivity());
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
         mErrorFrameLayout = (FrameLayout) view.findViewById(R.id.error_job_frame_layout);
@@ -127,7 +126,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
-
+        mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
 
     }
 
@@ -156,27 +155,26 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     @Override
-    public void onJobSelected(String[] jobDataArray, int jobId) {
+    public void onJobSelected(CurrentJob currentJob) {
         SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
         Bundle bundle = new Bundle();
-        bundle.putStringArray(SELECTED_JOB_TITLES, mFieldsValues);
-        bundle.putStringArray(SELECTED_JOB_DATA_ARRAY, jobDataArray);
-        bundle.putInt(SELECTED_JOB_ID, jobId);
-
+        Gson gson = new Gson();
+        String jobString = gson.toJson(currentJob, CurrentJob.class);
+        bundle.putString(SELECTED_JOB, jobString);
         selectedJobFragment.setArguments(bundle);
         mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
     }
 
     @Override
-    public void onJobReceiveFailed() {
+    public void onJobsListReceiveFailed() {
         dismissProgressDialog();
-        Log.i(LOG_TAG, "onJobReceiveFailed()");
+        Log.i(LOG_TAG, "onJobsListReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
 
     @Override
-    public void onJobReceived(JobListForMachine jobListForMachine) {
+    public void onJobsListReceived(JobListForMachine jobListForMachine) {
         dismissProgressDialog();
         mErrorFrameLayout.setVisibility(View.GONE);
         mHeaderList = jobListForMachine.getHeaders();
@@ -191,7 +189,6 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     private void initTitles(String text1, String text2, String text3, String text4, String text5) {
-        mFirstHeader.setText(mHeaderList.get(0).getFieldName());
         mFirstHeader.setText(text1);
         mSecondHeader.setText(text2);
         mThirdHeader.setText(text3);

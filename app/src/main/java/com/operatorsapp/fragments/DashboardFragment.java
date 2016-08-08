@@ -202,7 +202,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mGridLayoutManager.setSpanCount(3);
 //                                mGridSpacingItemDecoration.setSpanCount(3);
                                     mWidgetAdapter.notifyDataSetChanged();
-                                } else {
+                                }
+                                else {
                                     mIsOpen = true;
                                     toggleWoopList(mLeftLayoutParams, mOpenWidth, mRightLayoutParams, mIsOpen);
                                     mGridLayoutManager.setSpanCount(2);
@@ -210,7 +211,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
 
-                            } else {
+                            }
+                            else {
                                 onButtonClick(mLeftLayoutParams, mRightLayoutParams);
                             }
                         }
@@ -305,7 +307,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
                 });
                 mIsOpen = true;
-            } else {
+            }
+            else {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mCloseWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
@@ -379,7 +382,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             if (mEventsList.size() == 0) {
                                 mEventsQueue.addAll(events);
                                 mEventsList.addAll(events);
-                            } else {
+                            }
+                            else {
 
                                 for (int i = 0; i < events.size(); i++) {
                                     if (!isExists(events.get(i))) {
@@ -408,7 +412,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 Event event = mEventsQueue.pop();
                                 if (event.getEventGroupID() == 6) {
                                     dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-                                } else if (event.getEventGroupID() == 20) {
+                                }
+                                else if (event.getEventGroupID() == 20) {
                                     dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
                                 }
                                 dialogFragment.setTargetFragment(DashboardFragment.this, 0);
@@ -416,7 +421,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                                 mIsOpenDialog = true;
                             }
-                        } else {
+                        }
+                        else {
                             mNoData = true;
                             clearStatusLayout();
                         }
@@ -478,7 +484,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
     }
@@ -530,7 +537,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             break;
                         }
                         case 1: {
-                            Log.d(LOG_TAG, "Report Rejects");
+                            Log.d(LOG_TAG, "Report Rejects selected");
                             ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
                             Bundle bundle = new Bundle();
                             Gson gson = new Gson();
@@ -539,6 +546,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                             reportRejectsFragment.setArguments(bundle);
                             mOnGoToScreenListener.goToFragment(reportRejectsFragment, true);
+                            break;
+                        }
+                        case 2: {
+                            ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
+                            mOnGoToScreenListener.goToFragment(reportStopReasonFragment,true);
                             break;
                         }
                     }
@@ -588,13 +600,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             Event event = mEventsQueue.pop();
             if (event.getEventGroupID() == 6) {
                 dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-            } else if (event.getEventGroupID() == 20) {
+            }
+            else if (event.getEventGroupID() == 20) {
                 dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
             }
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
+        }
+        else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
             mIsOpenDialog = false;
         }
     }
@@ -629,7 +643,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void initStatusLayout(MachineStatus machineStatus) {
         mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + "," + " ID - " + String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
-//        mProductIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID()));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
@@ -639,7 +652,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void clearStatusLayout() {
         mProductNameTextView.setText("");
-//        mProductIdTextView.setText("");
         mJobIdTextView.setText("");
         mShiftIdTextView.setText("");
         mMachineIdStatusBarTextView.setText("");
@@ -657,15 +669,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
-        } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
-        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
-        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
-        } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
-        } else {
+        }
+        else {
             Log.w(LOG_TAG, "Undefined parameter");
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
         }

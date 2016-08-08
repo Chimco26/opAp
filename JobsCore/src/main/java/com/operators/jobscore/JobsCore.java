@@ -16,9 +16,9 @@ public class JobsCore {
     private JobsPersistenceManagerInterface mJobsPersistenceManagerInterface;
     private JobsForMachineUICallbackListener mJobsForMachineUICallbackListener;
 
-    public JobsCore(JobsListForMachineNetworkBridgeInterface jobsListForMachineNetworkBridgeInterface, JobsPersistenceManagerInterface jobsPersistenceManagerInterface) {
-        mJobsListForMachineNetworkBridgeInterface = jobsListForMachineNetworkBridgeInterface;
-        mJobsPersistenceManagerInterface = jobsPersistenceManagerInterface;
+    public JobsCore(JobsListForMachineNetworkBridgeInterface jobsListForMachineNetworkBridge, JobsPersistenceManagerInterface jobsPersistenceManager) {
+        mJobsListForMachineNetworkBridgeInterface = jobsListForMachineNetworkBridge;
+        mJobsPersistenceManagerInterface = jobsPersistenceManager;
     }
 
     public void registerListener(JobsForMachineUICallbackListener jobsForMachineUICallbackListener) {
