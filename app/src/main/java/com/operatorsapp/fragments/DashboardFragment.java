@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,6 +35,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.github.mikephil.charting.data.Entry;
+import com.operators.loginnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
@@ -60,11 +64,13 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.LineChartTime;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, DashboardChartCallbackListener {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -369,6 +375,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
                     @Override
                     public void onGetShiftLogSucceeded(ArrayList<Event> events) {
+                        ZLogger.e(LOG_TAG, "onGetShiftLogSucceeded");
                         dismissProgressDialog();
                         if (events != null && events.size() > 0) {
 
@@ -392,15 +399,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
                             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                            ArrayList widgets = new ArrayList();
-                            widgets.add("0");
-                            widgets.add("1");
-                            widgets.add("3");
-                            widgets.add("0");
-                            widgets.add("1");
-                            widgets.add("2");
-                            mWidgetAdapter = new WidgetAdapter(getActivity(), widgets, DashboardFragment.this);
-                            mWidgetRecycler.setAdapter(mWidgetAdapter);
+                            //todo call machine data
+
                             if (!mIsOpenDialog && mEventsQueue.size() > 0) {
                                 DialogFragment dialogFragment = null;
                                 Event event = mEventsQueue.pop();
@@ -421,18 +421,36 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
 
                     @Override
-                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
-                        mNoData = true;
+                    public void onGetShiftLogFailed(ErrorObjectInterface reason) {
+                        ZLogger.e(LOG_TAG, "onGetShiftLogFailed");
+                        if (mEventsList == null || mEventsList.size() == 0) {
+                            mNoData = true;
+                        }
                         dismissProgressDialog();
+                        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, null);
+                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
                             }
                         });
+// do silentLogin if Credentials mismatch
+                        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
+                                @Override
+                                public void onSilentLoginSucceeded() {
+                                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
+                                    getShiftLogs();
+                                }
+
+                                @Override
+                                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
+                                }
+                            });
+                        }*/
                     }
                 }
-
         );
     }
 
@@ -571,6 +589,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             } else if (event.getEventGroupID() == 20) {
                 dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
             }
+            assert dialogFragment != null;
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
@@ -603,8 +622,19 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDataFailure(com.operators.machinestatusinfra.interfaces.ErrorObjectInterface reason) {
+    public void onMachineDataReceived(List<Widget> widgetList) {
+        if (mWidgetAdapter != null) {
+            mWidgetAdapter.setNewData(widgetList);
+        } else {
+            mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList);
+            mWidgetRecycler.setAdapter(mWidgetAdapter);
+        }
+    }
+
+    @Override
+    public void onDataFailure(com.operators.infra.ErrorObjectInterface reason) {
         clearStatusLayout();
+        //todo clear data from widgets
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
@@ -650,10 +680,5 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
         }
 
-    }
-
-    @Override
-    public void onChartStart() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.lineChart_time, new LineChartTime()).commit();
     }
 }

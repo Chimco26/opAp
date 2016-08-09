@@ -75,23 +75,21 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                     int timeToEndInSeconds = 0;
                     if (machineStatus != null) {
                         if (machineStatus.getAllMachinesData() != null) {
-                            if (machineStatus.getAllMachinesData().size()>0) {
+                            if (machineStatus.getAllMachinesData().size() > 0) {
                                 timeToEndInSeconds = machineStatus.getAllMachinesData().get(0).getShiftEndingIn();
                                 startTimer(timeToEndInSeconds);
                             }
                         }
                         if (mMachineStatusUICallback != null) {
-                            if(machineStatus.getAllMachinesData().size()>0){
+                            if (machineStatus.getAllMachinesData().size() > 0) {
                                 mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
-                            }else {
+                            } else {
                                 Log.w(LOG_TAG, "All Machine Data Is 0!!");
                             }
-                        }
-                        else {
+                        } else {
                             Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                         }
-                    }
-                    else {
+                    } else {
                         Log.e(LOG_TAG, "machineStatus is null");
                     }
                     onJobFinishedListener.onJobFinished();
@@ -103,8 +101,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                         if (reason != null) {
                             mMachineStatusUICallback.onStatusReceiveFailed(reason);
                         }
-                    }
-                    else {
+                    } else {
                         Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                     }
                     onJobFinishedListener.onJobFinished();
@@ -124,8 +121,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
     public void onTimeToEndChanged(long millisUntilFinished) {
         if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
-        }
-        else {
+        } else {
             Log.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
         }
     }

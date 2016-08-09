@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.app.operatorinfra.ErrorObjectInterface;
@@ -138,7 +137,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
             Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-                ((DashboardActivity) getActivity()).doSilentLogin(mOnCroutonRequestListener, new SilentLoginCallback() {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
                         String id = mOperatorIdEditText.getText().toString();

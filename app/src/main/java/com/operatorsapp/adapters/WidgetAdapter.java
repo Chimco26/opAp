@@ -1,37 +1,46 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import com.github.mikephil.charting.data.Entry;
+import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardChartCallbackListener;
+import com.operatorsapp.view.LineChartTime;
 import com.operatorsapp.view.RangeView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WidgetAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private ArrayList<String> mWidgets;
-    private DashboardChartCallbackListener mDashboardChartCallbackListener;
-
-    private final int BASE = 0;
+    private List<Widget> mWidgets;
+    private final int NUMERIC = 0;
     private final int RANGE = 1;
     private final int PROJECTION = 2;
     private final int TIME = 3;
 
-    public WidgetAdapter(Context context, ArrayList<String> widgets, DashboardChartCallbackListener dashboardChartCallbackListener) {
+    public WidgetAdapter(Context context, List<Widget> widgets) {
         mWidgets = widgets;
         mContext = context;
-        mDashboardChartCallbackListener = dashboardChartCallbackListener;
     }
 
-    private class BaseViewHolder extends RecyclerView.ViewHolder {
+    public void setNewData(List<Widget> widgets) {
+        mWidgets = widgets;
+        notifyDataSetChanged();
+    }
 
-        public BaseViewHolder(View itemView) {
+    private class NumericViewHolder extends RecyclerView.ViewHolder {
+
+        public NumericViewHolder(View itemView) {
             super(itemView);
 
         }
@@ -59,9 +68,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     private class TimeViewHolder extends RecyclerView.ViewHolder {
 
+        private LineChartTime mChart;
+
         public TimeViewHolder(View itemView) {
             super(itemView);
 
+            mChart = (LineChartTime) itemView.findViewById(R.id.lineChart_time);
         }
     }
 
@@ -69,8 +81,8 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
-            case BASE: {
-                return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
+            case NUMERIC: {
+                return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
             }
             case RANGE: {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
@@ -82,23 +94,34 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
             }
         }
-        return new BaseViewHolder(inflater.inflate(R.layout.base_widget_cardview, parent, false));
+        return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final String s = mWidgets.get(position);
-
         int type = getItemViewType(position);
-
+        Widget widget = mWidgets.get(position);
         switch (type) {
+            case NUMERIC:
+
+                break;
             case TIME:
-                mDashboardChartCallbackListener.onChartStart();
+                final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
+                if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
+                    ArrayList<Entry> values = new ArrayList<>();
+                    for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
+                        Entry entry = new Entry();
+                        entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
+                        entry.setY(widget.getMachineParamHistoricData().get(i).getValue());
+                        values.add(entry);
+                    }
+                    timeViewHolder.mChart.setData(values);
+                }
                 break;
 
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                rangeViewHolder.mRangeView.updateX(140);
+                rangeViewHolder.mRangeView.updateX(Integer.parseInt(widget.getCurrentValue()));
                 break;
 
         }
@@ -112,21 +135,21 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         int type;
-        switch (mWidgets.get(position)) {
-            case "0":
-                type = BASE;
+        switch (mWidgets.get(position).getFieldType()) {
+            case 0:
+                type = NUMERIC;
                 break;
-            case "1":
+            case 1:
                 type = RANGE;
                 break;
-            case "2":
+            case 2:
                 type = PROJECTION;
                 break;
-            case "3":
+            case 3:
                 type = TIME;
                 break;
             default:
-                type = BASE;
+                type = NUMERIC;
                 break;
         }
         return type;

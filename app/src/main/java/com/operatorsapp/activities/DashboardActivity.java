@@ -22,6 +22,11 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
+import com.operators.loginnetworkbridge.server.ErrorObject;
+import com.operators.machinedatacore.MachineDataCore;
+import com.operators.machinedatacore.interfaces.MachineDataUICallback;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinedatanetworkbridge.GetMachineDataNetworkBridge;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
@@ -44,7 +49,6 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
@@ -66,6 +70,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
     private DashboardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
+    private MachineDataCore mMachineDataCore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
         mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
+
+        GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
+        getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
+        mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
 
@@ -105,11 +114,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineStatusCore.stopPolling();
         mMachineStatusCore.unregisterListener();
         mMachineStatusCore.stopTimer();
+
+        mMachineDataCore.unregisterListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        machineStatusStartPolling();
+        machineDataStartPolling();
+    }
+
+    private void machineStatusStartPolling() {
         mMachineStatusCore.registerListener(new MachineStatusUICallback() {
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
@@ -138,13 +154,39 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
 //TODO show crouton
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
-                mDashboardUICallbackListener.onDataFailure(reason);
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                mDashboardUICallbackListener.onDataFailure(errorObject);
                 mMachineStatusCore.stopTimer();
                 mMachineStatusCore.stopPolling();
             }
         });
 
         mMachineStatusCore.startPolling();
+    }
+
+    private void machineDataStartPolling() {
+        mMachineDataCore.registerListener(new MachineDataUICallback() {
+
+            @Override
+            public void onDataReceivedSuccessfully(List<Widget> widgetList) {
+                if (mDashboardUICallbackListener != null) {
+                    mDashboardUICallbackListener.onMachineDataReceived(widgetList);
+                } else {
+                    Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
+                }
+            }
+
+            @Override
+            public void onDataReceiveFailed(com.operators.machinedatainfra.interfaces.ErrorObjectInterface reason) {
+//TODO show crouton
+                ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                mDashboardUICallbackListener.onDataFailure(errorObject);
+                mMachineDataCore.stopPolling();
+            }
+        });
+
+        mMachineDataCore.startPolling();
     }
 
     @Override
@@ -283,21 +325,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
-    public void doSilentLogin(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
-        ProgressDialogManager.show(this);
-        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(),
+    public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
+        LoginCore.getInstance().silentLoginFromDashBoard(PersistenceManager.getInstance().getSiteUrl(),
                 PersistenceManager.getInstance().getUserName(),
                 PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
                     @Override
                     public void onLoginSucceeded(ArrayList<Machine> machines) {
                         ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                        dismissProgressDialog();
                         silentLoginCallback.onSilentLoginSucceeded();
                     }
 
                     @Override
                     public void onLoginFailed(final com.operators.infra.ErrorObjectInterface reason) {
-                        dismissProgressDialog();
                         silentLoginCallback.onSilentLoginFailed(reason);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -312,14 +351,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 });
     }
 
-    private void dismissProgressDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ProgressDialogManager.dismiss();
-            }
-        });
-    }
 
     private Fragment getCurrentFragment() {
         try {
@@ -331,4 +362,5 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             return null;
         }
     }
+
 }

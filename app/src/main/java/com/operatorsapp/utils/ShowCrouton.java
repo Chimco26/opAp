@@ -33,7 +33,7 @@ public class ShowCrouton {
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.credentials_error);
                 final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + credentialsError);
                 spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             } else {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);

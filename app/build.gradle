@@ -38,6 +38,18 @@ dependencies {
     compile project(':ShiftLogInfra')
     compile project(':ShiftLogNetworkbridge')
     //noinspection GradleCompatible
+    compile project(':MachinesStatusNetworkBridge')
+    compile project(':MachineStatusCore')
+    compile project(':MachineStatusInfra')
+    compile project(':JobsInfra')
+    compile project(':JobsNetworkBridge')
+    compile project(':JobsCore')
+    compile project(':OperatorCore')
+    compile project(':OperatorInfra')
+    compile project(':OperatorNetworkBridge')
+    compile project(':MachineDataCore')
+    compile project(':MachineDataInfra')
+    compile project(':MachineDataNetworkBridge')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
@@ -51,14 +63,5 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.google.android.gms:play-services-plus:9.2.0'
     compile 'com.android.support:support-v4:23.4.0'
-    compile project(':MachinesStatusNetworkBridge')
-    compile project(':MachineStatusCore')
-    compile project(':MachineStatusInfra')
     compile 'com.android.support:cardview-v7:24.0.0'
-    compile project(':JobsInfra')
-    compile project(':JobsNetworkBridge')
-    compile project(':JobsCore')
-    compile project(':OperatorCore')
-    compile project(':OperatorInfra')
-    compile project(':OperatorNetworkBridge')
 }

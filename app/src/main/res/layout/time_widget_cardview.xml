@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="345dp"
     android:layout_height="230dp"
     android:background="@drawable/combined_shape"
@@ -65,7 +66,8 @@
         android:layout_marginTop="80dp"
         android:background="@color/divider_gray" />
 
-    <FrameLayout
+
+    <com.operatorsapp.view.LineChartTime
         android:id="@+id/lineChart_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,5 +75,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"  />
+
 </RelativeLayout>

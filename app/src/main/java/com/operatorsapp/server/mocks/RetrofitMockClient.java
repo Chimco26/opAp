@@ -208,6 +208,143 @@ public class RetrofitMockClient implements Interceptor {
                             "  ]\n" +
                             "}";
                     break;
+                case "GetMachineData":
+                    responseString = "{\n" +
+                            "  \"MachineID\": 9,\n" +
+                            "  \"MachineParams\": [\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"2\",\n" +
+                            "      \"FieldEName\": \"CycleTime\",\n" +
+                            "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
+                            "      \"FieldName\": \"CycleTime\",\n" +
+                            "      \"HighLimit\": 1100,\n" +
+                            "      \"ID\": 1,\n" +
+                            "      \"LowLimit\": 900,\n" +
+                            "      \"MachineParamHistoricData\": [{\n" +
+                            "            \"Time\": 1470639600000,\n" +
+                            "            \"Value\": 70\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470643200000,\n" +
+                            "            \"Value\": 90\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470646800000,\n" +
+                            "            \"Value\": 20\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470650400000,\n" +
+                            "            \"Value\": 82\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470654000000,\n" +
+                            "            \"Value\": 12\n" +
+                            "      \t}],\n" +
+                            "      \"StandardValue\": 2,\n" +
+                            "      \"fieldType\": 3,\n" +
+                            "      \"isOutOfRange\": null\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"2\",\n" +
+                            "      \"FieldEName\": \"CycleTime\",\n" +
+                            "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
+                            "      \"FieldName\": \"CycleTime\",\n" +
+                            "      \"HighLimit\": 1100,\n" +
+                            "      \"ID\": 1,\n" +
+                            "      \"LowLimit\": 900,\n" +
+                            "      \"MachineParamHistoricData\": [{\n" +
+                            "            \"Time\": 1470639600000,\n" +
+                            "            \"Value\": 50\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470643200000,\n" +
+                            "            \"Value\": 10\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470646800000,\n" +
+                            "            \"Value\": 80\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470650400000,\n" +
+                            "            \"Value\": 36\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470654000000,\n" +
+                            "            \"Value\": 12\n" +
+                            "      \t}],\n" +
+                            "      \"StandardValue\": 2,\n" +
+                            "      \"fieldType\": 3,\n" +
+                            "      \"isOutOfRange\": null\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"2.04\",\n" +
+                            "      \"FieldEName\": \"AverageCycle\",\n" +
+                            "      \"FieldLName\": \"זמן מחזור ממוצע (שנ)\",\n" +
+                            "      \"FieldName\": \"AverageCycle\",\n" +
+                            "      \"HighLimit\": null,\n" +
+                            "      \"ID\": 2,\n" +
+                            "      \"LowLimit\": null,\n" +
+                            "      \"MachineParamHistoricData\": [],\n" +
+                            "      \"StandardValue\": null,\n" +
+                            "      \"fieldType\": 0,\n" +
+                            "      \"isOutOfRange\": null\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"39\",\n" +
+                            "      \"FieldEName\": \"TotalCycles\",\n" +
+                            "      \"FieldLName\": \"מספר מחזורים\",\n" +
+                            "      \"FieldName\": \"TotalCycles\",\n" +
+                            "      \"HighLimit\": null,\n" +
+                            "      \"ID\": 8,\n" +
+                            "      \"LowLimit\": null,\n" +
+                            "      \"MachineParamHistoricData\": [],\n" +
+                            "      \"StandardValue\": null,\n" +
+                            "      \"fieldType\": 0,\n" +
+                            "      \"isOutOfRange\": null\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"739\",\n" +
+                            "      \"FieldEName\": \"Time Left Hr\",\n" +
+                            "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
+                            "      \"FieldName\": \"TimeLeftHr\",\n" +
+                            "      \"HighLimit\": 142560,\n" +
+                            "      \"ID\": 12,\n" +
+                            "      \"LowLimit\": 16,\n" +
+                            "      \"MachineParamHistoricData\": [],\n" +
+                            "      \"StandardValue\": null,\n" +
+                            "      \"fieldType\": 1,\n" +
+                            "      \"isOutOfRange\": false\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"230\",\n" +
+                            "      \"FieldEName\": \"CavitiesPC\",\n" +
+                            "      \"FieldLName\": \"CavitiesPC\",\n" +
+                            "      \"FieldName\": \"CavitiesPC\",\n" +
+                            "      \"HighLimit\": 27.5,\n" +
+                            "      \"ID\": 31,\n" +
+                            "      \"LowLimit\": 22.5,\n" +
+                            "      \"MachineParamHistoricData\": [],\n" +
+                            "      \"StandardValue\": 230,\n" +
+                            "      \"fieldType\": 1,\n" +
+                            "      \"isOutOfRange\": true\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"CurrentValue\": \"27\",\n" +
+                            "      \"FieldEName\": \"NoProgressCount\",\n" +
+                            "      \"FieldLName\": \"NoProgressCount\",\n" +
+                            "      \"FieldName\": \"NoProgressCount\",\n" +
+                            "      \"HighLimit\": 1100,\n" +
+                            "      \"ID\": 3583,\n" +
+                            "      \"LowLimit\": 900,\n" +
+                            "      \"MachineParamHistoricData\": [],\n" +
+                            "      \"StandardValue\": 27,\n" +
+                            "      \"fieldType\": 1,\n" +
+                            "      \"isOutOfRange\": true\n" +
+                            "    }\n" +
+                            "  ],\n" +
+                            "  \"error\": null\n" +
+                            "}";
+                    break;
                 case "GetCurrentMachineStatus":
                     responseString = "{\n" +
                             "  \"DepartmentMachinePC\": [],\n" +

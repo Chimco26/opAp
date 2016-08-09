@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <me.grantland.widget.AutofitTextView
-        android:id="@+id/base_widget_title"
+        android:id="@+id/numeric_widget_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -21,7 +21,7 @@
         autofit:minTextSize="14sp" />
 
     <me.grantland.widget.AutofitTextView
-        android:layout_below="@id/base_widget_title"
+        android:layout_below="@id/numeric_widget_title"
         android:id="@+id/base_widget_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
 
     <TextView
         android:layout_below="@id/divider"
-        android:id="@+id/base_widget_value"
+        android:id="@+id/numeric_widget_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -56,7 +56,7 @@
         android:textSize="68dp" />
 
     <TextView
-        android:layout_below="@id/base_widget_value"
+        android:layout_below="@id/numeric_widget_value"
         android:id="@+id/base_widget_change_material"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -10,7 +10,6 @@ import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
-import com.operators.infra.PersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class LoginCore {
             @Override
             public void onLoginSucceeded(String sessionId) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
-                saveMachine(sessionId, siteUrl, username, password);
+                saveSessionData(sessionId, siteUrl, username, password);
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
@@ -67,8 +66,25 @@ public class LoginCore {
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
     }
 
+    public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
+        final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
+        mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, new LoginCoreCallback() {
+            @Override
+            public void onLoginSucceeded(String sessionId) {
+                ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
+                saveSessionData(sessionId, siteUrl, username, password);
+            }
 
-    public void saveMachine(String sessionId, String siteUrl, String username, String password) {
+            @Override
+            public void onLoginFailed(ErrorObjectInterface reason) {
+                ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
+                loginUICallback.onLoginFailed(reason);
+            }
+        }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
+    }
+
+
+    public void saveSessionData(String sessionId, String siteUrl, String username, String password) {
         mLoginPersistenceManagerInterface.setSessionId(sessionId);
         mLoginPersistenceManagerInterface.setSiteUrl(siteUrl);
         mLoginPersistenceManagerInterface.setUsername(username);

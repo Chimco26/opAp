@@ -10,8 +10,11 @@
       <module fileurl="file://$PROJECT_DIR$/LeaderMES-operators.iml" filepath="$PROJECT_DIR$/LeaderMES-operators.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginCore/LoginCore.iml" filepath="$PROJECT_DIR$/LoginCore/LoginCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" filepath="$PROJECT_DIR$/LoginNetworkBridge/LoginNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineDataCore/MachineDataCore.iml" filepath="$PROJECT_DIR$/MachineDataCore/MachineDataCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineDataInfra/MachineDataInfra.iml" filepath="$PROJECT_DIR$/MachineDataInfra/MachineDataInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineDataNetworkBridge/MachineDataNetworkBridge.iml" filepath="$PROJECT_DIR$/MachineDataNetworkBridge/MachineDataNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" filepath="$PROJECT_DIR$/MachineStatusCore/MachineStatusCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/machinestatusinfra/MachineStatusInfra.iml" filepath="$PROJECT_DIR$/machinestatusinfra/MachineStatusInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" filepath="$PROJECT_DIR$/MachineStatusInfra/MachineStatusInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/MachinesStatusNetworkBridge/MachinesStatusNetworkBridge.iml" filepath="$PROJECT_DIR$/MachinesStatusNetworkBridge/MachinesStatusNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorCore/OperatorCore.iml" filepath="$PROJECT_DIR$/OperatorCore/OperatorCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
