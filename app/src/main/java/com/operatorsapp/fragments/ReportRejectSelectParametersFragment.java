@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.reportrejectcore.ReportRejectCallbackListener;
+import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
 import com.operators.reportrejectinfra.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
@@ -97,11 +97,13 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mUnitsEditText.setFocusableInTouchMode(true);
         mUnitsEditText.requestFocus();
 
-
-        productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-        productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
-        jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
-
+        if (mMachineStatus != null) {
+            if (mMachineStatus.getAllMachinesData() != null) {
+                productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
+                productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+                jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+            }
+        }
         mUnitsEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,10 +195,11 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     }
 
     private void sendReport() {
+
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-       // reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+        reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
-        mReportRejectCore.registerListener(mReportRejectCallbackListener);
+        mReportRejectCore.registerListener(mReportCallbackListener);
         Double weight = null;
         if (!mWeightEditText.getText().toString().equals("")) {
             weight = Double.parseDouble(mWeightEditText.getText().toString());
@@ -204,18 +207,18 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, Double.parseDouble(mUnitsEditText.getText().toString()), weight);
     }
 
-    ReportRejectCallbackListener mReportRejectCallbackListener = new ReportRejectCallbackListener() {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportRejectSuccess() {
-            Log.i(LOG_TAG, "sendReportRejectSuccess()");
+        public void sendReportSuccess() {
+            Log.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             //TODO check
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         @Override
-        public void sendReportRejectFailure(ErrorObjectInterface reason) {
-            Log.w(LOG_TAG, "sendReportRejectFailure()");
+        public void sendReportFailure(ErrorObjectInterface reason) {
+            Log.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 ((DashboardActivity) getActivity()).doSilentLogin(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override

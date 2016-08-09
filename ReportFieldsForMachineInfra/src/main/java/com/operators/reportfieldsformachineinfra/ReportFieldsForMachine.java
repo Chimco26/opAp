@@ -25,6 +25,7 @@ public class ReportFieldsForMachine {
     public List<StopReasons> getStopReasons() {
         return stopReasons;
     }
+
     public List<RejectReasons> getRejectReasons() {
         return rejectReasons;
     }

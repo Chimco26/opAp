@@ -87,10 +87,12 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
 
-        if (mMachineStatus.getAllMachinesData() != null) {
-            productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-            productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
-            jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+        if (mMachineStatus != null) {
+            if (mMachineStatus.getAllMachinesData() != null) {
+                productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
+                productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
+                jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
+            }
         }
 
         Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
@@ -207,7 +209,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                     bundle.putString(CURRENT_MACHINE_STATUS, jobString);
                     bundle.putInt(REJECT_REASON, mSelectedReasonId);
                     bundle.putInt(REJECT_CAUSE, mSelectedCauseId);
-                    bundle.putString(REJECT_REASON_TITLE,mSelectedReasonName);
+                    bundle.putString(REJECT_REASON_TITLE, mSelectedReasonName);
 
                     reportRejectSelectParametersFragment.setArguments(bundle);
 

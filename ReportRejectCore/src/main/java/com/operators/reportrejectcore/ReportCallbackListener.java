@@ -5,9 +5,9 @@ import com.operators.reportrejectinfra.ErrorObjectInterface;
 /**
  * Created by Sergey on 08/08/2016.
  */
-public interface ReportRejectCallbackListener {
+public interface ReportCallbackListener {
 
-    void sendReportRejectSuccess();
+    void sendReportSuccess();
 
-    void sendReportRejectFailure(ErrorObjectInterface reason);
+    void sendReportFailure(ErrorObjectInterface reason);
 }

@@ -553,7 +553,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         }
                         case 2: {
                             ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
-                            mOnGoToScreenListener.goToFragment(reportStopReasonFragment,true);
+                            Bundle bundle = new Bundle();
+                            Gson gson = new Gson();
+                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
+                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
+
+                            reportStopReasonFragment.setArguments(bundle);
+                            mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
                             break;
                         }
                     }
