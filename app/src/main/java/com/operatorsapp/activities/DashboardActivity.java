@@ -127,7 +127,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineStatusCore.unregisterListener();
         mMachineStatusCore.stopTimer();
 
+        mMachineDataCore.stopPolling();
         mMachineDataCore.unregisterListener();
+
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.unregisterListener();
     }
@@ -137,6 +139,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onResume();
         machineStatusStartPolling();
         machineDataStartPolling();
+
+        mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
+        mReportFieldsForMachineCore.startPolling();
     }
 
     private void machineStatusStartPolling() {
@@ -176,17 +181,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mMachineStatusCore.startPolling();
 
-
-        mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
-        mReportFieldsForMachineCore.startPolling();
-
     }
 
     private void machineDataStartPolling() {
         mMachineDataCore.registerListener(new MachineDataUICallback() {
 
             @Override
-            public void onDataReceivedSuccessfully(List<Widget> widgetList) {
+            public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onMachineDataReceived(widgetList);
                 } else {
@@ -312,6 +313,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 // TODO CLEAR ALL MODELS OF CURRENT DATA (NO LONGER RELEVANT FOR NEW JOB).
                 // YOSSIs models as well!
                 mMachineStatusCore.startPolling();
+
+                mMachineDataCore.stopPolling();
+                mMachineDataCore.startPolling();
             }
 
 
@@ -362,6 +366,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mMachineStatusCore.stopPolling();
         mMachineStatusCore.startPolling();
+
+        mMachineDataCore.stopPolling();
+        mMachineDataCore.startPolling();
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }

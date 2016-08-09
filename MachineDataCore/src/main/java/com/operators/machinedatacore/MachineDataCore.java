@@ -11,6 +11,7 @@ import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerIn
 import com.operators.machinedatainfra.models.Widget;
 import com.zemingo.pollingmachanaim.JobBase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -63,7 +64,7 @@ public class MachineDataCore {
         if (mMachineDataPersistenceManagerInterface != null) {
             mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), null, new GetMachineDataCallback<Widget>() {
                         @Override
-                        public void onGetMachineDataSucceeded(List<Widget> widgetList) {
+                        public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
                             if (widgetList != null && widgetList.size() > 0) {
                                 if (mMachineDataUICallback != null) {
                                     mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
