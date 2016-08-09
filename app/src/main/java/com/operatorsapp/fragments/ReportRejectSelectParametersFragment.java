@@ -194,7 +194,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
 
     private void sendReport() {
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-        reportRejectNetworkBridge.inject(NetworkManager.getInstance());
+       // reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportRejectCallbackListener);
         Double weight = null;
