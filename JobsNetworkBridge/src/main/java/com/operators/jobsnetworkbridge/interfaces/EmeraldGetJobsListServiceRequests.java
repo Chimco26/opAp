@@ -9,6 +9,6 @@ import retrofit2.http.POST;
 
 
 public interface EmeraldGetJobsListServiceRequests {
-    @POST("/LeaderMESApi/GetJobsListForMachine")
+    @POST("/LeaderMESApi/GetJobsListForMachineGeneric")
     Call<JobsListForMachineResponse> getJobsForMachine(@Body GetJobsListForMachineDataRequest getJobsListForMachineDataRequest);
 }

@@ -33,6 +33,10 @@ import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatornetworkbridge.OperatorNetworkBridge;
+import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
+import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.shiftlogcore.ShiftLogCore;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -47,6 +51,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -60,7 +65,8 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener, ReportFieldsFragmentCallbackListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -71,6 +77,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
     private MachineDataCore mMachineDataCore;
+    private ReportFieldsForMachineCore mReportFieldsForMachineCore;
+    private ReportFieldsForMachine mReportFieldsForMachine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +100,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
+        ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
+        reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
+        mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -116,6 +128,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineStatusCore.stopTimer();
 
         mMachineDataCore.unregisterListener();
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.unregisterListener();
     }
 
     @Override
@@ -152,7 +166,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
-//TODO show crouton
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 mDashboardUICallbackListener.onDataFailure(errorObject);
@@ -162,6 +175,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         });
 
         mMachineStatusCore.startPolling();
+
+
+        mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
+        mReportFieldsForMachineCore.startPolling();
+
     }
 
     private void machineDataStartPolling() {
@@ -188,6 +206,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mMachineDataCore.startPolling();
     }
+
+    ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback = new ReportFieldsForMachineUICallback() {
+        @Override
+        public void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine) {
+            if (reportFieldsForMachine != null) {
+                Log.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
+                mReportFieldsForMachine = reportFieldsForMachine;
+            } else {
+                Log.w(LOG_TAG, "reportFieldsForMachine is null");
+            }
+        }
+
+        @Override
+        public void onReportFieldsReceivedSFailure(com.operators.reportfieldsformachineinfra.ErrorObjectInterface reason) {
+            ZLogger.i(LOG_TAG, "onReportFieldsReceivedSFailure() reason: " + reason.getDetailedDescription());
+
+        }
+    };
 
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
@@ -250,18 +286,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine) {
                 Log.i(LOG_TAG, "onJobListReceived()");
-                if (jobListForMachine.getJobs().size() != 0) {
-                    mDashboardActivityToJobsFragmentCallback.onJobReceived(jobListForMachine);
+                if (jobListForMachine != null) {
+                    if (jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null) {
+                        mDashboardActivityToJobsFragmentCallback.onJobsListReceived(jobListForMachine);
+                    } else {
+                        mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
+                    }
                 } else {
-                    mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                    mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                 }
-
             }
 
             @Override
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onJobListReceiveFailed()");
-                mDashboardActivityToJobsFragmentCallback.onJobReceiveFailed();
+                mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
 
             @Override
@@ -270,8 +309,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
+                // TODO CLEAR ALL MODELS OF CURRENT DATA (NO LONGER RELEVANT FOR NEW JOB).
+                // YOSSIs models as well!
                 mMachineStatusCore.startPolling();
             }
+
 
             @Override
             public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
@@ -363,4 +405,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
+    @Override
+    public ReportFieldsForMachine getReportForMachine() {
+        if (mReportFieldsForMachine != null) {
+
+            return mReportFieldsForMachine;
+        }
+        Log.w(LOG_TAG, "mReportFieldsForMachine is null");
+        return null;
+    }
+
+    @Override
+    public void updateReportRejectFields() {
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.startPolling();
+    }
 }

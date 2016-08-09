@@ -16,21 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.operators.jobsinfra.Job;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.model.CurrentJob;
 
 public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
-
-    private Job mJob;
     private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
-
+    private CurrentJob mCurrentJob;
 
     @Override
     public void onAttach(Context context) {
@@ -46,28 +44,46 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
 
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
-        mJob = gson.fromJson(bundle.getString(SELECTED_JOB), Job.class);
-
+        mCurrentJob = gson.fromJson(bundle.getString(SELECTED_JOB), CurrentJob.class);
+        String[] headersArray = mCurrentJob.getHeaders();
         setActionBar();
 
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mActivateNewJobButton = (Button)view.findViewById(R.id.button_activate_new_job);
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.job_id_text_view);
-        TextView plannedStartTextView = (TextView) view.findViewById(R.id.planned_start_text_view);
-        TextView productNameTextView = (TextView) view.findViewById(R.id.product_name_text_view);
-        TextView productERP = (TextView) view.findViewById(R.id.erp_id_text_view);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity_text_view);
 
-
-        jobIdTextView.setText(String.valueOf(mJob.getJobId()));
-        productNameTextView.setText(mJob.getProductName());
-        productERP.setText(String.valueOf(mJob.getErp()));
-        quantityTextView.setText(String.valueOf(mJob.getNumberOfUnits()));
-        plannedStartTextView.setText(mJob.getPlannedStart());
+        mActivateNewJobButton = (Button) view.findViewById(R.id.button_activate_new_job);
+        setTitles(view);
+        setValues(view, headersArray);
 
         return view;
     }
 
+    private void setTitles(View view) {
+        TextView firstTitle = (TextView) view.findViewById(R.id.first_title_text_view);
+        TextView secondTitle = (TextView) view.findViewById(R.id.second_title_text_view);
+        TextView thirdTitle = (TextView) view.findViewById(R.id.third_title_text_view);
+        TextView fourthTitle = (TextView) view.findViewById(R.id.fourth_title_text_view);
+        TextView fifthTitle = (TextView) view.findViewById(R.id.fifth_title_text_view);
+
+        firstTitle.setText(mCurrentJob.getFirstField());
+        secondTitle.setText(mCurrentJob.getSecondField());
+        thirdTitle.setText(mCurrentJob.getThirdField());
+        fourthTitle.setText(mCurrentJob.getFourthField());
+        fifthTitle.setText(mCurrentJob.getFifthField());
+    }
+
+    private void setValues(View view, String[] headersArray) {
+        TextView jobIdTitle = (TextView) view.findViewById(R.id.first_field_text_view);
+        TextView secondField = (TextView) view.findViewById(R.id.second_field_text_view);
+        TextView thirdField = (TextView) view.findViewById(R.id.third_field_text_view);
+        TextView fourthField = (TextView) view.findViewById(R.id.fourth_field_text_view);
+        TextView fifthField = (TextView) view.findViewById(R.id.fifth_field_text_view);
+
+        jobIdTitle.setText(headersArray[0]);
+        secondField.setText(headersArray[1]);
+        thirdField.setText(headersArray[2]);
+        fourthField.setText(headersArray[3]);
+        fifthField.setText(headersArray[4]);
+    }
 
     @Override
     public void onResume() {
@@ -101,12 +117,11 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
             arrowBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    //TODO refactor
+                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
-
             actionBar.setCustomView(view);
-//            actionBar.setIcon(R.drawable.logo);
         }
     }
 
@@ -114,15 +129,15 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack();
+                //TODO check
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
             case R.id.button_activate_new_job: {
-                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mJob.getJobId());
+                mJobsFragmentToDashboardActivityCallback.startJobForMachine(mCurrentJob.getJobId());
                 break;
             }
         }
-
     }
 
     @Override

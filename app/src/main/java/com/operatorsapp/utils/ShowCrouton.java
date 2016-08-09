@@ -58,6 +58,7 @@ public class ShowCrouton {
         }
     }
 
+
     private static void showJobsCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
         if (onCroutonRequestListener != null) {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.error_job_frame_layout, credentialsError);
@@ -81,6 +82,19 @@ public class ShowCrouton {
     private static void showOperatorsCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
         if (onCroutonRequestListener != null) {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.operator_screen, credentialsError);
+        }
+    }
+
+    public static void reportRejectCrouton(OnCroutonRequestListener onCroutonRequestListener) {
+        String error_text = OperatorApplication.getAppContext().getString((R.string.no_reasons)).concat(" ");
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(error_text);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, error_text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        showReportCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
+    }
+
+    private static void showReportCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
+        if (onCroutonRequestListener != null) {
+            onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.report_reject_screen, credentialsError);
         }
     }
 }

@@ -76,16 +76,16 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_lines.xml"
+    },
+    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_button_bar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_screen_simple.xml"
-    },
-    {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_lines.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_checkbox.xml",

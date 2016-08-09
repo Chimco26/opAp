@@ -11,6 +11,7 @@ public interface ErrorObjectInterface
         Credentials_mismatch,
         Url_not_correct,
         Get_jobs_list_failed,
+        Jobs_list_Is_Empty,
         Start_job_for_machine_failed
     }
 

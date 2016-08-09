@@ -16,7 +16,8 @@
         <LinearLayout
             android:id="@+id/job_row_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
@@ -28,7 +29,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="0.5"
                 android:gravity="left"
-                android:text="@string/job_id"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/color_jobs_row" />
 
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
                 android:gravity="left"
-                android:text="@string/product_name"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/color_jobs_row" />
 
@@ -46,9 +47,9 @@
                 android:id="@+id/adapter_text_view_ERP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
+                android:layout_weight="0.8"
                 android:gravity="left"
-                android:text="@string/erp"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/color_jobs_row" />
 
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
                 android:gravity="left"
-                android:text="@string/planned_start"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/color_jobs_row" />
 
@@ -68,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:gravity="left"
-                android:text="@string/quantity"
+                android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/color_jobs_row" />
 

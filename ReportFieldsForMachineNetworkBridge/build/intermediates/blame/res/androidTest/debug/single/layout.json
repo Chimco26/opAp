@@ -52,12 +52,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_big_media.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_time.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_part_time.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_time.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_part_time.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_search_view.xml",

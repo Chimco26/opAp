@@ -23,15 +23,16 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     private static final String LOG_TAG = GetMachineStatusNetworkBridge.class.getSimpleName();
     private GetMachineStatusNetworkManagerInterface mGetMachineStatusNetworkManagerInterface;
 
-    public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManagerInterface) {
-        mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManagerInterface;
+    public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManager) {
+        mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManager;
         Log.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
     public void getMachineStatus(String siteUrl, String sessionId, int machineId, final GetMachineStatusCallback getMachineStatusCallback, int totalRetries, int specificRequestTimeout) {
         GetMachineStatusDataRequest getMachineStatusDataRequest = new GetMachineStatusDataRequest(sessionId, machineId);
-        Call<MachineStatusDataResponse> call = mGetMachineStatusNetworkManagerInterface.getMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineStatus(getMachineStatusDataRequest);
+        Call<MachineStatusDataResponse> call = mGetMachineStatusNetworkManagerInterface.getMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS)
+                .getMachineStatus(getMachineStatusDataRequest);
         call.enqueue(new Callback<MachineStatusDataResponse>() {
             @Override
             public void onResponse(Call<MachineStatusDataResponse> call, Response<MachineStatusDataResponse> response) {
@@ -42,8 +43,6 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     } else {
                         MachineStatus machineStatus = response.body().getMachineStatus();
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
-
-
                     }
                 } else {
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());

@@ -24,6 +24,12 @@
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportRejectCore" />
+            <option value="$PROJECT_DIR$/ReportRejectInfra" />
+            <option value="$PROJECT_DIR$/ReportRejectNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
@@ -49,6 +55,12 @@
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
+            <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportRejectCore" />
+            <option value="$PROJECT_DIR$/ReportRejectInfra" />
+            <option value="$PROJECT_DIR$/ReportRejectNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />

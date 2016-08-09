@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
-import com.operators.jobsinfra.ErrorObjectInterface;
-import com.operators.jobsinfra.Job;
+import com.operators.jobsinfra.Header;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -28,26 +30,37 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.utils.ShowCrouton;
 
+import java.util.HashMap;
 import java.util.List;
 
 
 public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
-
-    public static final String SELECTED_JOB = "selected_job";
+    private static final String SELECTED_JOB = "selected_job";
     private RecyclerView mJobsRecyclerView;
     private FrameLayout mErrorFrameLayout;
     private Button mRetryButton;
     private RecyclerView.LayoutManager mLayoutManager;
     private JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
-    private List<Job> mJobList;
+    private List<Header> mHeaderList;
+    private List<HashMap<String, Object>> mJobsDataList;
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
+
+    private TextView mFirstHeader;
+    private TextView mSecondHeader;
+    private TextView mThirdHeader;
+    private TextView mFourthHeader;
+    private TextView mFifthHeader;
+
+    private String[] mFieldsValues = new String[5];
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,13 +111,23 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ProgressDialogManager.show(getActivity());
         super.onViewCreated(view, savedInstanceState);
         mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
         mErrorFrameLayout = (FrameLayout) view.findViewById(R.id.error_job_frame_layout);
+
+        mFirstHeader = (TextView) view.findViewById(R.id.first_header_text_view);
+        mSecondHeader = (TextView) view.findViewById(R.id.second_header_text_view);
+        mThirdHeader = (TextView) view.findViewById(R.id.third_header_text_view);
+        mFourthHeader = (TextView) view.findViewById(R.id.fourth_header_text_view);
+        mFifthHeader = (TextView) view.findViewById(R.id.fifth_header_text_view);
+
         mRetryButton = (Button) view.findViewById(R.id.button_retry);
         mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
+        mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
+
     }
 
     private void setActionBar() {
@@ -132,35 +155,71 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     }
 
     @Override
-    public void onJobSelected(int position) {
-
-        Log.i(LOG_TAG, "onJobSelected(), Selected Job ID: " + mJobList.get(position).getJobId());
+    public void onJobSelected(CurrentJob currentJob) {
         SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
         Bundle bundle = new Bundle();
         Gson gson = new Gson();
-        Job job = mJobList.get(position);
-        String jobString = gson.toJson(job, Job.class);
+        String jobString = gson.toJson(currentJob, CurrentJob.class);
         bundle.putString(SELECTED_JOB, jobString);
-
         selectedJobFragment.setArguments(bundle);
         mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
     }
 
     @Override
-    public void onJobReceiveFailed() {
+    public void onJobsListReceiveFailed() {
         dismissProgressDialog();
-        Log.i(LOG_TAG, "onJobReceiveFailed()");
+        Log.i(LOG_TAG, "onJobsListReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
 
     @Override
-    public void onJobReceived(JobListForMachine jobListForMachine) {
+    public void onJobsListReceived(JobListForMachine jobListForMachine) {
         dismissProgressDialog();
         mErrorFrameLayout.setVisibility(View.GONE);
-        mJobList = jobListForMachine.getJobs();
-        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mJobList);
+        mHeaderList = jobListForMachine.getHeaders();
+        mJobsDataList = jobListForMachine.getData();
+        jobListForMachine.getData();
+        initHeaders();
+        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
+
+        Log.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
+
+    }
+
+    private void initTitles(String text1, String text2, String text3, String text4, String text5) {
+        mFirstHeader.setText(text1);
+        mSecondHeader.setText(text2);
+        mThirdHeader.setText(text3);
+        mFourthHeader.setText(text4);
+        mFifthHeader.setText(text5);
+    }
+
+    private void initHeaders() {
+        if (mHeaderList != null) {
+            if (mHeaderList.size() > 0) {
+
+                for (int i = 0; i < 5; i++) {
+                    if (i < mHeaderList.size()) {
+                        if (mHeaderList.get(i).getFieldName() == null || mHeaderList.get(i) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName())) {
+                            mFieldsValues[i] = "- -";
+                        }
+                        else {
+                            mFieldsValues[i] = mHeaderList.get(i).getFieldName();
+                        }
+                    }
+                    else {
+                        mFieldsValues[i] = "- -";
+                    }
+                }
+                initTitles(mFieldsValues[0], mFieldsValues[1], mFieldsValues[2], mFieldsValues[3], mFieldsValues[4]);
+            }
+        }
+        else {
+            Log.w(LOG_TAG, "mHeaderList is null");
+        }
+
     }
 
     @Override

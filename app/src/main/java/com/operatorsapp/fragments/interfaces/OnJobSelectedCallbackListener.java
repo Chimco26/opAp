@@ -1,6 +1,8 @@
 package com.operatorsapp.fragments.interfaces;
 
 
+import com.operatorsapp.model.CurrentJob;
+
 public interface OnJobSelectedCallbackListener {
-    void onJobSelected(int position);
+    void onJobSelected(CurrentJob currentJob);
 }
