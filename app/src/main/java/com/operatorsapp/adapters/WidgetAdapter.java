@@ -1,19 +1,17 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.data.Entry;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.DashboardChartCallbackListener;
-import com.operatorsapp.view.LineChartTime;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.RangeView;
 
 import java.util.ArrayList;
@@ -27,10 +25,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     private final int RANGE = 1;
     private final int PROJECTION = 2;
     private final int TIME = 3;
+    private GoToScreenListener mGoToScreenListener;
 
-    public WidgetAdapter(Context context, List<Widget> widgets) {
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener) {
         mWidgets = widgets;
         mContext = context;
+        mGoToScreenListener = goToScreenListener;
     }
 
     public void setNewData(List<Widget> widgets) {
@@ -68,12 +68,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     private class TimeViewHolder extends RecyclerView.ViewHolder {
 
-        private LineChartTime mChart;
+        private LineChartTimeSmall mChart;
 
         public TimeViewHolder(View itemView) {
             super(itemView);
 
-            mChart = (LineChartTime) itemView.findViewById(R.id.lineChart_time);
+            mChart = (LineChartTimeSmall) itemView.findViewById(R.id.lineChart_time);
         }
     }
 
@@ -107,8 +107,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 break;
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
+                final ArrayList<Entry> values = new ArrayList<>();
                 if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-                    ArrayList<Entry> values = new ArrayList<>();
+
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
                         Entry entry = new Entry();
                         entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
@@ -117,6 +118,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     }
                     timeViewHolder.mChart.setData(values);
                 }
+                timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mGoToScreenListener.goToFragment(ChartFragment.newInstance(values), true);
+                    }
+                });
                 break;
 
             case RANGE:

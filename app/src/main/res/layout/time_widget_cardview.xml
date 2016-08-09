@@ -67,7 +67,7 @@
         android:background="@color/divider_gray" />
 
 
-    <com.operatorsapp.view.LineChartTime
+    <com.operatorsapp.view.LineChartTimeSmall
         android:id="@+id/lineChart_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

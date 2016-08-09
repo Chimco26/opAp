@@ -43,10 +43,10 @@ public class OperatorApplication extends Application
         loginNetworkBridge.inject(NetworkManager.getInstance());
         LoginCore.getInstance().inject(PersistenceManager.getInstance(), loginNetworkBridge, getMachinesNetworkBridge);
 
-        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
-        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
-
-        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
+//        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+//        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
+//
+//        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
 
 

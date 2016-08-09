@@ -126,6 +126,7 @@
             android:layout_gravity="end">
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/fragment_dashboard_no_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -167,6 +168,7 @@
             android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView
+                android:visibility="gone"
                 style="@style/FontStyle_T7"
                 android:id="@+id/fragment_dashboard_no_notif"
                 android:layout_width="match_parent"

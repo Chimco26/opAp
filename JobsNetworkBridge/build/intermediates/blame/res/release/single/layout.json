@@ -8,20 +8,20 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_lines.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_layout.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_list_menu_item_layout.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_view_list_nav_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_lines.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_expanded_menu_layout.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media_narrow.xml",

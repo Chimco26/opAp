@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class LineChartTime extends FrameLayout {
+public class LineChartTimeSmall extends FrameLayout {
     private static final String VALUES = "values";
     private LineChart mChart;
     private ArrayList<Entry> mValues;
@@ -42,19 +42,19 @@ public class LineChartTime extends FrameLayout {
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
 
-    public LineChartTime(Context context) {
+    public LineChartTimeSmall(Context context) {
         super(context);
         mContext = context;
         init(context);
     }
 
-    public LineChartTime(Context context, AttributeSet attrs) {
+    public LineChartTimeSmall(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         init(context);
     }
 
-    public LineChartTime(Context context, AttributeSet attrs, int defStyle) {
+    public LineChartTimeSmall(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
         init(context);

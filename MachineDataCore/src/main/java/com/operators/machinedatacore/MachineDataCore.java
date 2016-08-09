@@ -65,12 +65,10 @@ public class MachineDataCore {
             mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), null, new GetMachineDataCallback<Widget>() {
                         @Override
                         public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
-                            if (widgetList != null && widgetList.size() > 0) {
-                                if (mMachineDataUICallback != null) {
-                                    mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
-                                } else {
-                                    Log.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
-                                }
+                            if (mMachineDataUICallback != null) {
+                                mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
+                            } else {
+                                Log.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
                             }
                             onJobFinishedListener.onJobFinished();
                         }

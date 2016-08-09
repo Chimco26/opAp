@@ -38,6 +38,9 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.shiftlogcore.ShiftLogCore;
+import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
+import com.operators.shiftloginfra.Event;
+import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
@@ -66,7 +69,7 @@ import java.util.concurrent.TimeUnit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
-        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, DialogsShiftLogListener, ReportFieldsFragmentCallbackListener {
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -77,6 +80,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
     private MachineDataCore mMachineDataCore;
+    private ShiftLogCore mShiftLogCore;
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
 
@@ -98,6 +102,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
         getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
         mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
+
+        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
+        mShiftLogCore = new ShiftLogCore(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
@@ -130,6 +138,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineDataCore.stopPolling();
         mMachineDataCore.unregisterListener();
 
+        mShiftLogCore.stopPolling();
+        mShiftLogCore.unregisterListener();
+
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.unregisterListener();
     }
@@ -139,6 +150,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onResume();
         machineStatusStartPolling();
         machineDataStartPolling();
+        shiftLogStartPolling();
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
         mReportFieldsForMachineCore.startPolling();
@@ -208,6 +220,31 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineDataCore.startPolling();
     }
 
+    private void shiftLogStartPolling() {
+        mShiftLogCore.registerListener(new ShiftLogUICallback() {
+
+            @Override
+            public void onGetShiftLogSucceeded(ArrayList<Event> events) {
+                if (mDashboardUICallbackListener != null) {
+                    mDashboardUICallbackListener.onShiftLogDataReceived(events);
+                } else {
+                    Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
+                }
+            }
+
+            @Override
+            public void onGetShiftLogFailed(com.operators.shiftloginfra.ErrorObjectInterface reason) {
+//TODO show crouton
+                ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
+                mDashboardUICallbackListener.onDataFailure(errorObject);
+                mShiftLogCore.stopPolling();
+            }
+        });
+
+        mShiftLogCore.startPolling();
+    }
+
     ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback = new ReportFieldsForMachineUICallback() {
         @Override
         public void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine) {
@@ -247,11 +284,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-    @Override
-    public ShiftLogCore getShiftLogCore() {
-        return ShiftLogCore.getInstance();
-    }
+//
+//    @Override
+//    public ShiftLogCore getShiftLogCore() {
+//        return ShiftLogCore.getInstance();
+//    }
 
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
         mDashboardUICallbackListener = dashboardUICallbackListener;
@@ -310,12 +347,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mMachineStatusCore.stopPolling();
-                // TODO CLEAR ALL MODELS OF CURRENT DATA (NO LONGER RELEVANT FOR NEW JOB).
-                // YOSSIs models as well!
                 mMachineStatusCore.startPolling();
 
                 mMachineDataCore.stopPolling();
                 mMachineDataCore.startPolling();
+
+                mShiftLogCore.stopPolling();
+                mShiftLogCore.startPolling();
             }
 
 
@@ -369,6 +407,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mMachineDataCore.stopPolling();
         mMachineDataCore.startPolling();
+
+        mShiftLogCore.stopPolling();
+        mShiftLogCore.startPolling();
+
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }

@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,15 +34,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
-import com.github.mikephil.charting.data.Entry;
 import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operators.machinedatainfra.models.Widget;
 import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
-import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
-import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -52,9 +48,7 @@ import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
-import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.interfaces.DashboardChartCallbackListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
@@ -64,12 +58,9 @@ import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
-import com.operatorsapp.view.LineChartTime;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
 
@@ -82,7 +73,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private OperatorCore mOperatorCore;
     private OnCroutonRequestListener mCroutonCallback;
-    private DialogsShiftLogListener mDialogsShiftLogListener;
+    //    private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
@@ -133,6 +124,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mIsOpen = false;
         // get screen parameters
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -151,14 +144,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
         GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-//        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets);
-//        mWidgetRecycler.setAdapter(mWidgetAdapter);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener);
+        mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
@@ -173,7 +168,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
-        final ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
+//        final ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 //        mLeftButton.setOnClickListener(new View.OnClickListener() {
 //
 //            @Override
@@ -367,94 +362,94 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     };
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mDialogsShiftLogListener.getShiftLogCore().stopPolling();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        mDialogsShiftLogListener.getShiftLogCore().stopPolling();
+//    }
 
-    private void getShiftLogs() {
-        if (mEventsList == null || mEventsList.size() == 0) {
-            ProgressDialogManager.show(getActivity());
-        }
-        mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
-                    @Override
-                    public void onGetShiftLogSucceeded(ArrayList<Event> events) {
-                        ZLogger.e(LOG_TAG, "onGetShiftLogSucceeded");
-                        dismissProgressDialog();
-                        if (events != null && events.size() > 0) {
-
-                            mNoData = false;
-                            //todo remove
-                            if (mEventsList.size() == 0) {
-                                mEventsQueue.addAll(events);
-                                mEventsList.addAll(events);
-                            } else {
-
-                                for (int i = 0; i < events.size(); i++) {
-                                    if (!isExists(events.get(i))) {
-                                        mEventsList.add(events.get(i));
-                                    }
-
-                                }
-                            }
-                            mNoDataView.setVisibility(View.GONE);
-                            mNoNotificationsText.setVisibility(View.GONE);
-
-                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
-                            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-
-                            //todo call machine data
-
-                            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
-                                DialogFragment dialogFragment = null;
-                                Event event = mEventsQueue.pop();
-                                if (event.getEventGroupID() == 6) {
-                                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-                                } else if (event.getEventGroupID() == 20) {
-                                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
-                                }
-                                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                                dialogFragment.setCancelable(false);
-                                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-                                mIsOpenDialog = true;
-                            }
-                        } else {
-                            mNoData = true;
-                            clearStatusLayout();
-                        }
-                    }
-
-                    @Override
-                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
-                        mNoData = true;
-                        dismissProgressDialog();
-                        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
-                            }
-                        });
-// do silentLogin if Credentials mismatch
-                        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-                            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
-                                @Override
-                                public void onSilentLoginSucceeded() {
-                                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
-                                    getShiftLogs();
-                                }
-
-                                @Override
-                                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
-                                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
-                                }
-                            });
-                        }*/
-                    }
-                }
-        );
-    }
+//    private void getShiftLogs() {
+//        if (mEventsList == null || mEventsList.size() == 0) {
+//            ProgressDialogManager.show(getActivity());
+//        }
+//        mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback() {
+//                    @Override
+//                    public void onGetShiftLogSucceeded(ArrayList<Event> events) {
+//                        ZLogger.e(LOG_TAG, "onGetShiftLogSucceeded");
+//                        dismissProgressDialog();
+//                        if (events != null && events.size() > 0) {
+//
+//                            mNoData = false;
+//                            //todo remove
+//                            if (mEventsList.size() == 0) {
+//                                mEventsQueue.addAll(events);
+//                                mEventsList.addAll(events);
+//                            } else {
+//
+//                                for (int i = 0; i < events.size(); i++) {
+//                                    if (!isExists(events.get(i))) {
+//                                        mEventsList.add(events.get(i));
+//                                    }
+//
+//                                }
+//                            }
+//                            mNoDataView.setVisibility(View.GONE);
+//                            mNoNotificationsText.setVisibility(View.GONE);
+//
+//                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
+//                            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+//
+//                            //todo call machine data
+//
+//                            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
+//                                DialogFragment dialogFragment = null;
+//                                Event event = mEventsQueue.pop();
+//                                if (event.getEventGroupID() == 6) {
+//                                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+//                                } else if (event.getEventGroupID() == 20) {
+//                                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
+//                                }
+//                                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+//                                dialogFragment.setCancelable(false);
+//                                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+//                                mIsOpenDialog = true;
+//                            }
+//                        } else {
+//                            mNoData = true;
+//                            clearStatusLayout();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
+//                        mNoData = true;
+//                        dismissProgressDialog();
+//                        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
+//                            }
+//                        });
+//// do silentLogin if Credentials mismatch
+//                        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+//                            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
+//                                @Override
+//                                public void onSilentLoginSucceeded() {
+//                                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
+//                                    getShiftLogs();
+//                                }
+//
+//                                @Override
+//                                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+//                                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
+//                                }
+//                            });
+//                        }*/
+//                    }
+//                }
+//        );
+//    }
 
     private boolean isExists(Event event) {
         for (int i = 0; i < mEventsList.size(); i++) {
@@ -471,7 +466,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
         }
-        getShiftLogs();
+//        getShiftLogs();
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
@@ -489,7 +484,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onAttach(context);
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
-            mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
+//            mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
@@ -504,7 +499,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDetach() {
         super.onDetach();
         mCroutonCallback = null;
-        mDialogsShiftLogListener = null;
+//        mDialogsShiftLogListener = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
@@ -648,18 +643,95 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
         mWidgets = widgetList;
-        if (mWidgetAdapter != null) {
-            mWidgetAdapter.setNewData(widgetList);
+        if (widgetList != null && widgetList.size() > 0) {
+            mNoDataView.setVisibility(View.GONE);
+            if (mWidgetAdapter != null) {
+                mWidgetAdapter.setNewData(widgetList);
+            } else {
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener);
+                mWidgetRecycler.setAdapter(mWidgetAdapter);
+            }
         } else {
-            mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList);
-            mWidgetRecycler.setAdapter(mWidgetAdapter);
+            mNoDataView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+        if (events != null && events.size() > 0) {
+
+            mNoData = false;
+            //todo remove
+            if (mEventsList.size() == 0) {
+                mEventsQueue.addAll(events);
+                mEventsList.addAll(events);
+            } else {
+
+                for (int i = 0; i < events.size(); i++) {
+                    if (!isExists(events.get(i))) {
+                        mEventsList.add(events.get(i));
+                    }
+
+                }
+            }
+            mNoNotificationsText.setVisibility(View.GONE);
+
+            if (mShiftLogAdapter != null) {
+                mShiftLogAdapter.notifyDataSetChanged();
+            } else {
+                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+            }
+
+            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
+                DialogFragment dialogFragment = null;
+                Event event = mEventsQueue.pop();
+                if (event.getEventGroupID() == 6) {
+                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                } else if (event.getEventGroupID() == 20) {
+                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
+                }
+                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                dialogFragment.setCancelable(false);
+                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                mIsOpenDialog = true;
+            }
+        } else {
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onDataFailure(com.operators.infra.ErrorObjectInterface reason) {
         clearStatusLayout();
+
+        mNoData = true;
+        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
+            }
+        });
+// do silentLogin if Credentials mismatch
+        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
+                @Override
+                public void onSilentLoginSucceeded() {
+                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
+                    getShiftLogs();
+                }
+
+                @Override
+                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
+                }
+            });
+        }*/
         //todo clear data from widgets
+        // todo clear data from shiftLog
+
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {

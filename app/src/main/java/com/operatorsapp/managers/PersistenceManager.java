@@ -8,7 +8,7 @@ import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportRejectPersistenceManagerInterface;
-import com.operators.shiftlogcore.interfaces.ShiftLogPersistenceManagerInterface;
+import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
