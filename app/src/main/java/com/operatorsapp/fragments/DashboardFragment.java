@@ -73,7 +73,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private OperatorCore mOperatorCore;
     private OnCroutonRequestListener mCroutonCallback;
-    //    private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
@@ -93,11 +92,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private int mOpenWidth;
     private boolean mIsInTouch = false;
     private ArrayList<Widget> mWidgets = new ArrayList<>();
-
     private String[] mOperatorsSpinnerArray = {"Operator Sign in"};
-
     private TextView mProductNameTextView;
-    //    private TextView mProductIdTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
     private TextView mTimerTextView;
@@ -131,12 +127,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        mOpenWidth = (int) (width * 0.448)/*/2*/;
-        mCloseWidth = (int) (width * 0.173) /*/ 4*/;
-        final int middleWidth = (int) (width * 0.31) /*3 / 8*/;
+        mOpenWidth = (int) (width * 0.448);
+        mCloseWidth = (int) (width * 0.173);
+        final int middleWidth = (int) (width * 0.31);
 
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name_and_id);
-//        mProductIdTextView = (TextView) view.findViewById(R.id.text_view_product_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
@@ -168,15 +163,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
-//        final ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
-//        mLeftButton.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -204,13 +190,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mIsOpen = false;
                                     toggleWoopList(mLeftLayoutParams, mCloseWidth, mRightLayoutParams, mIsOpen);
                                     mGridLayoutManager.setSpanCount(3);
-//                                mGridSpacingItemDecoration.setSpanCount(3);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 } else {
                                     mIsOpen = true;
                                     toggleWoopList(mLeftLayoutParams, mOpenWidth, mRightLayoutParams, mIsOpen);
                                     mGridLayoutManager.setSpanCount(2);
-//                                mGridSpacingItemDecoration.setSpanCount(2);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
 
@@ -224,61 +208,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
 
-       /* mLeftButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mDownX = (int) event.getRawX();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (!mNoData) {
-                            mIsInTouch = true;
-                            int currentX = mLeftLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
-                            if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
-                                mLeftLayout.getLayoutParams().width = currentX;
-                                mLeftLayout.requestLayout();
-                                mDownX = (int) event.getRawX();
-                                mShiftLogAdapter.changeState(true);
-                                mShiftLogAdapter.notifyDataSetChanged();
-
-                            }
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (!mNoData) {
-                            if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
-                                if (mLeftLayoutParams.width < middleWidth) {
-                                    mIsOpen = false;
-                                    toggleWoopList(mLeftLayoutParams, mCloseWidth, mRightLayoutParams, mIsOpen);
-                                    mGridLayoutManager.setSpanCount(3);
-//                                mGridSpacingItemDecoration.setSpanCount(3);
-                                    mWidgetAdapter.notifyDataSetChanged();
-                                } else {
-                                    mIsOpen = true;
-                                    toggleWoopList(mLeftLayoutParams, mOpenWidth, mRightLayoutParams, mIsOpen);
-                                    mGridLayoutManager.setSpanCount(2);
-//                                mGridSpacingItemDecoration.setSpanCount(2);
-                                    mWidgetAdapter.notifyDataSetChanged();
-                                }
-                                if (mLeftLayoutParams.width == mCloseWidth || mLeftLayoutParams.width == mOpenWidth) {
-                                    mIsInTouch = false;
-                                } else {
-                                    mIsInTouch = true;
-                                }
-
-                            } else {
-                                onButtonClick(mLeftLayoutParams, mRightLayoutParams);
-                            }
-                        }
-                        break;
-                }
-                return false;
-            }
-        });*/
 
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
-//        getShiftLogs();
         setActionBar();
     }
 
@@ -300,7 +231,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         mShiftLogAdapter.notifyDataSetChanged();
                         mGridLayoutManager.setSpanCount(2);
                         mWidgetAdapter.notifyDataSetChanged();
-//                                mGridSpacingItemDecoration.setSpanCount(2);
                     }
 
                     @Override
@@ -325,7 +255,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         toggleWoopList(mLeftLayoutParams, mCloseWidth, mRightLayoutParams, false);
                         mGridLayoutManager.setSpanCount(3);
                         mWidgetAdapter.notifyDataSetChanged();
-//                                mGridSpacingItemDecoration.setSpanCount(3);
                     }
 
                     @Override
@@ -361,8 +290,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
 
     };
-
-
 
     private boolean isExists(Event event) {
         for (int i = 0; i < mEventsList.size(); i++) {
@@ -545,15 +472,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         //todo
     }
 
-    private void dismissProgressDialog() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ProgressDialogManager.dismiss();
-            }
-        });
-    }
-
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         Log.i(LOG_TAG, "onDeviceStatusChanged()");
@@ -582,7 +500,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (events != null && events.size() > 0) {
 
             mNoData = false;
-            //todo remove
             if (mEventsList.size() == 0) {
                 mEventsQueue.addAll(events);
                 mEventsList.addAll(events);

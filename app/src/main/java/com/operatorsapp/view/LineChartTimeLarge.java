@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LineChartTimeLarge extends FrameLayout {
-    private static final String VALUES = "values";
     private LineChart mChart;
     private Context mContext;
     protected Typeface mTfRegular;

@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,19 +22,14 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.github.mikephil.charting.formatter.FormattedStringCache;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class LineChartTimeSmall extends FrameLayout {
-    private static final String VALUES = "values";
     private LineChart mChart;
-    private ArrayList<Entry> mValues;
     private Context mContext;
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
@@ -60,9 +52,8 @@ public class LineChartTimeSmall extends FrameLayout {
         init(context);
     }
 
-    public void init(Context context/*, ArrayList<Entry> values*/) {
+    public void init(Context context) {
         mContext = context;
-//        mValues = values;
 
         View view = LayoutInflater.from(context).inflate(R.layout.activity_linechart_time, this, false);
 
@@ -90,24 +81,7 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
         mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
 
-        mChart.zoom(3,1,3,1);
-
-
-        // add data
-//        setData(4, 30);
-//        mValues = new ArrayList<>();
-//        mValues.add(new Entry(1, 76));
-//        mValues.add(new Entry(2, 53));
-//        mValues.add(new Entry(3, 50));
-//        mValues.add(new Entry(4, 56));
-//        mValues.add(new Entry(6, 78));
-//        mValues.add(new Entry(7, 22));
-//        mValues.add(new Entry(8, 35));
-//        mValues.add(new Entry(9, 42));
-//        mValues.add(new Entry(10, 0));
-
-//        setData(mValues);
-//        mChart.invalidate();
+        mChart.zoom(3, 1, 3, 1);
 
         setAxis(context);
 
@@ -150,7 +124,6 @@ public class LineChartTimeSmall extends FrameLayout {
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setTypeface(mTfLight);
-//        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
@@ -169,68 +142,8 @@ public class LineChartTimeSmall extends FrameLayout {
         rightAxis.setEnabled(false);
     }
 
-//    public static LineChartTime newInstance(ArrayList<Entry> values) {
-//        Gson gson = new Gson();
-//        String machinesListString = gson.toJson(values);
-//        Bundle args = new Bundle();
-//        args.putString(VALUES, machinesListString);
-//
-//        LineChartTime fragment = new LineChartTime();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        if (getArguments() != null) {
-//            Gson gson = new Gson();
-//            Type listType = new TypeToken<ArrayList<Entry>>() {
-//            }.getType();
-//            mValues = gson.fromJson(getArguments().getString(VALUES), listType);
-//        }
-//    }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        return inflater.inflate(R.layout.activity_linechart_time, container, false);
-//    }
-
-//    @SuppressLint("NewApi")
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//
-//
-//    }
-
-    public void setData(/*int count, float range*/ArrayList<Entry> values) {
-
-//        long now = System.currentTimeMillis();
-//        long hourMillis = 3600000L;
-
-//        ArrayList<Entry> values = new ArrayList<>();
-
-//        float from = now - (count / 2) * hourMillis;
-//        float to = now + (count / 2) * hourMillis;
-
-//        for (float x = from; x < to; x += hourMillis) {
-        // float y = getRandom(range, 50);
-//            values.add(new Entry(x, y)); // add one entry per hour
-//        }
-        /*mValues.add(new Entry(1, 76));
-        mValues.add(new Entry(2, 53));
-        mValues.add(new Entry(3, 50));
-        mValues.add(new Entry(4, 56));
-        mValues.add(new Entry(6, 78));
-        mValues.add(new Entry(7, 22));
-        mValues.add(new Entry(8, 35));
-        mValues.add(new Entry(9, 42));
-        mValues.add(new Entry(10, 0));*/
+    public void setData(ArrayList<Entry> values) {
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -251,7 +164,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // set data
         mChart.setData(data);
-        mChart.moveViewToX(values.get(values.size()-1).getX());
+        mChart.moveViewToX(values.get(values.size() - 1).getX());
         mChart.invalidate();
     }
 }

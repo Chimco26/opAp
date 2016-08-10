@@ -211,7 +211,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onDataReceiveFailed(com.operators.machinedatainfra.interfaces.ErrorObjectInterface reason) {
-//TODO show crouton
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 mDashboardUICallbackListener.onDataFailure(errorObject);
@@ -236,7 +235,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftLogFailed(com.operators.shiftloginfra.ErrorObjectInterface reason) {
-//TODO show crouton
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 mDashboardUICallbackListener.onDataFailure(errorObject);
@@ -286,11 +284,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-//
-//    @Override
-//    public ShiftLogCore getShiftLogCore() {
-//        return ShiftLogCore.getInstance();
-//    }
 
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
         mDashboardUICallbackListener = dashboardUICallbackListener;
