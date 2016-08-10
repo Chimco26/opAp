@@ -74,40 +74,39 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
         int imageId = R.drawable.stop_general_selector;
         switch (stopReasonId) {
             case 1: {
-                imageId = R.drawable.stop_settings_selector;
-                break;
-            }
-            case 2: {
-                imageId = R.drawable.stop_machinestop_selector;
-                break;
-            }
-            case 3: {
                 imageId = R.drawable.stop_oparations_selector;
                 break;
             }
-            case 4: {
-                imageId = R.drawable.stop_planning_selector;
-                break;
-            }
-            case 5: {
-                imageId = R.drawable.stop_qa_selector;
-                break;
-            }
-            case 6: {
-                imageId = R.drawable.stop_materials_selector;
-                break;
-            }
-            case 7: {
-                imageId = R.drawable.stop_malfunction_selector;
-                break;
-            }
-            case 8: {
+            case 2: {
                 imageId = R.drawable.stop_maitenance_selector;
                 break;
             }
-            case 9: {
-                imageId = R.drawable.stop_general_selector;
+            case 3: {
+                imageId = R.drawable.stop_qa_selector;
                 break;
+            }
+            case 4: {
+                imageId = R.drawable.stop_malfunction_selector;
+                //imageId = R.drawable.stop_planning_selector;
+                break;
+            }
+            case 6: {
+                imageId = R.drawable.stop_machinestop_selector;
+                break;
+            }
+            case 7: {
+                imageId = R.drawable.stop_materials_selector;
+                break;
+            }
+
+            case 10: {
+                imageId = R.drawable.stop_settings_selector;
+
+                break;
+            }
+            default:{
+                imageId = R.drawable.stop_general_selector;
+
             }
         }
         return imageId;

@@ -97,4 +97,16 @@ public class ShowCrouton {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.report_reject_screen, credentialsError);
         }
     }
+    public static void reportStopCrouton(OnCroutonRequestListener onCroutonRequestListener) {
+        String error_text = OperatorApplication.getAppContext().getString((R.string.no_reasons)).concat(" ");
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(error_text);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, error_text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        showStopCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
+    }
+
+    private static void showStopCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
+        if (onCroutonRequestListener != null) {
+            onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.report_stop_screen, credentialsError);
+        }
+    }
 }

@@ -239,6 +239,11 @@
         <item name="android:textColor">@color/C1</item>
     </style>
 
+
+    <style name="FontStyle_T36" parent="BreeSerifRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/green_subreason</item>
+    </style>
     <style name="FontStyle_TCriticalMachineMore" parent="DroidSans">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/C16</item>

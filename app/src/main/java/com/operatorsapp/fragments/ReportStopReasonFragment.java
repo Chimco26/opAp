@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +19,19 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
-import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.view.GridSpacingItemDecoration;
-
-import java.util.List;
 
 /**
  * Created by Sergey on 08/08/2016.
  */
 public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener {
+    private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -63,6 +60,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason, container, false);
+
+        if (mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
+            Log.i(LOG_TAG, "No Reasons in list");
+//            ShowCrouton.reportStopCrouton(mOnCroutonRequestListener); //TODO Check place
+        }
         setActionBar();
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
@@ -133,10 +135,9 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     @Override
     public void onStopReasonSelected(int position) {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
-
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
-        bundle.putInt(CURRENT_JOB_ID,mMachineStatus.getAllMachinesData().get(0).getCurrentJobID());
+        bundle.putInt(CURRENT_JOB_ID, mMachineStatus.getAllMachinesData().get(0).getCurrentJobID());
         selectedStopReasonFragment.setArguments(bundle);
         mGoToScreenListener.goToFragment(selectedStopReasonFragment, true);
 

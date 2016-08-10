@@ -67,7 +67,6 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
-
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
         mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);

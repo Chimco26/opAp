@@ -265,7 +265,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
-                Log.i(LOG_TAG, "onJobListReceiveFailed()");
+                Log.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
 

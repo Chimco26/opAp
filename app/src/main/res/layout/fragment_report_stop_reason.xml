@@ -3,14 +3,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:id="@+id/report_reject_screen"
+              android:id="@+id/report_stop_screen"
+
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@drawable/rectangle_11_copy_2"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        >
 
 
         <TextView

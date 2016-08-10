@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class StopReasons {
 
-    @SerializedName("Id")
+    @SerializedName("ID")
     private int id;
-    @SerializedName("Name")
+    @SerializedName("EName")
     private String name;
-    @SerializedName("subReasons")
+    @SerializedName("SubReason")
     private List<SubReasons> subReasons = new ArrayList<SubReasons>();
 
     public int getId() {
