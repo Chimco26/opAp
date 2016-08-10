@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -95,6 +96,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         jobIdTextView.setText((String.valueOf(mCurrentJobId)));
 
         mButtonNext = (Button) view.findViewById(R.id.button_next);
+
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
@@ -153,6 +155,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
     @Override
     public void onSubReasonSelected(int subReasonId) {
+        mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
         Log.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
         mSelectedSubreasonId = subReasonId;
         mStopReasonsAdapter.notifyDataSetChanged();
@@ -162,7 +165,9 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_next: {
-                sendReport();
+                if (mSelectedSubreasonId != -1) {
+                    sendReport();
+                }
                 break;
             }
             case R.id.button_cancel: {

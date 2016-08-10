@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/report_stop_screen"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:id="@+id/report_stop_screen"
 
     >
 
@@ -14,48 +14,53 @@
         android:gravity="center_vertical"
         >
 
-
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/product"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/status_bar"/>
+            android:id="@+id/linearLayout4">
 
-        <TextView
-            android:id="@+id/report_rejects_product_name_text_view"
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+
+                android:text="April 27, 14:03"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:layout_alignTop="@+id/textView"
-            android:layout_toEndOf="@+id/textView"
-            android:text="@string/product_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:orientation="horizontal"
+            android:layout_alignTop="@+id/linearLayout4"
+            android:layout_toEndOf="@+id/linearLayout4"
+            android:layout_marginStart="55dp">
 
-        <TextView
-            android:id="@+id/id_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/report_rejects_product_name_text_view"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/report_rejects_product_name_text_view"
-            android:text="@string/id"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/product"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/status_bar"/>
 
-        <TextView
-            android:id="@+id/report_rejects_product_id_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/id_title"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/id_title"
-            android:text="@string/product_id"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/report_rejects_product_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textView"
+                android:layout_toEndOf="@+id/textView"
+                android:singleLine="true"
+                android:text="@string/product_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/report_rejects_job_id__text_view"
@@ -130,15 +135,15 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="3"
             android:gravity="center_vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/stop_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
         </RelativeLayout>
 

@@ -61,10 +61,6 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason, container, false);
 
-        if (mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
-            Log.i(LOG_TAG, "No Reasons in list");
-//            ShowCrouton.reportStopCrouton(mOnCroutonRequestListener); //TODO Check place
-        }
         setActionBar();
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
@@ -83,11 +79,18 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
             }
         }
-        mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        int spacing = 30;
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
-        initStopReasons();
+
+        if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
+            Log.i(LOG_TAG, "No Reasons in list");
+//            ShowCrouton.reportStopCrouton(mOnCroutonRequestListener); //TODO Check place
+        }
+        else {
+            mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            int spacing = 40;
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+            initStopReasons();
+        }
 
     }
 

@@ -126,6 +126,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onResume() {
         super.onResume();
+
+
         mMachineStatusCore.registerListener(new MachineStatusUICallback() {
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
@@ -135,6 +137,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
+                mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
+                mReportFieldsForMachineCore.startPolling();
             }
 
             @Override
@@ -164,8 +168,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mMachineStatusCore.startPolling();
 
 
-        mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
-        mReportFieldsForMachineCore.startPolling();
+
 
     }
 

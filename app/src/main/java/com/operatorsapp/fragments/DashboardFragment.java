@@ -364,6 +364,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onPause() {
         super.onPause();
+        Log.e("TEST", "ONPAUSE");
 
         mDialogsShiftLogListener.getShiftLogCore().stopPolling();
     }
@@ -462,6 +463,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             initStatusLayout(mCurrentMachineStatus);
         }
         getShiftLogs();
+        Log.e("TEST", "ONRESUME");
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {

@@ -60,9 +60,8 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
             holder.mReasonImage.setBackground(mContext.getResources().getDrawable(R.drawable.btn_pressed));
             holder.mImageTitle.setTextColor(Color.WHITE);
         }else {
-            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(R.drawable.btnletters_normal));
-            holder.mImageTitle.setTextColor(mContext.getResources().getColor(R.color.green_subreason));
-
+            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(R.drawable.stop_sub_selector));
+            holder.mImageTitle.setTextColor(mContext.getResources().getColorStateList(R.color.button_stop_text_selector));
         }
 
         holder.mStopTitle.setText(mSubReasonsList.get(position).getName());

@@ -3,7 +3,9 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:gravity="center"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingBottom="50dp"
+              android:paddingTop="20dp">
 
     <ImageView
         android:id="@+id/grid_reason_image_view"
@@ -13,8 +15,12 @@
 
     <TextView
         android:id="@+id/stop_reason_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text=""/>
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="- -"
+        android:textColor="@color/color_jobs_row"
+        android:textSize="20dp"/>
 </LinearLayout>
