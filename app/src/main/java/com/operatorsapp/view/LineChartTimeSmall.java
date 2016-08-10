@@ -120,6 +120,7 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
+        xAxis.setLabelCount(5);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);

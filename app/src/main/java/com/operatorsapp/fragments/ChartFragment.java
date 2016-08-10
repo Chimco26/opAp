@@ -2,6 +2,7 @@ package com.operatorsapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,8 +25,12 @@ import com.operatorsapp.view.LineChartTimeLarge;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+@SuppressLint("ValidFragment")
 public class ChartFragment extends Fragment {
     private static final String VALUES = "values";
+    private static final String MIN = "mib";
+    private static final String STANDARD = "standard";
+    private static final String MAX = "max";
 
     private TextView mInfo;
     private TextView mMin;
@@ -33,16 +38,27 @@ public class ChartFragment extends Fragment {
     private TextView mMax;
     private LineChartTimeLarge mChart;
     private ArrayList<Entry> mValues;
+    private Context mContext;
+    private float mMinVal;
+    private float mStandardVal;
+    private float mMaxVal;
 
-    public static ChartFragment newInstance(ArrayList<Entry> values) {
+    public static ChartFragment newInstance(Context context, ArrayList<Entry> values, float min, float standard, float max) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
         Bundle args = new Bundle();
         args.putString(VALUES, valuesString);
+        args.putFloat(MIN, min);
+        args.putFloat(STANDARD, standard);
+        args.putFloat(MAX, max);
 
-        ChartFragment fragment = new ChartFragment();
+        ChartFragment fragment = new ChartFragment(context);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public ChartFragment(Context context) {
+        mContext = context;
     }
 
     @Override
@@ -54,6 +70,9 @@ public class ChartFragment extends Fragment {
             Type listType = new TypeToken<ArrayList<Entry>>() {
             }.getType();
             mValues = gson.fromJson(getArguments().getString(VALUES), listType);
+            mMinVal = getArguments().getFloat(MIN);
+            mStandardVal = getArguments().getFloat(STANDARD);
+            mMaxVal = getArguments().getFloat(MAX);
         }
     }
 
@@ -70,11 +89,15 @@ public class ChartFragment extends Fragment {
 
         mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
         mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
+        mMin.setText(String.valueOf(mMinVal));
         mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
+        mStandard.setText(String.valueOf(mStandardVal));
         mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
+        mMax.setText(String.valueOf(mMaxVal));
         mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
         mChart.setData(mValues);
+        mChart.setAxis(mContext, mMinVal, mStandardVal, mMaxVal);
 
         setActionBar();
     }

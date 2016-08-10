@@ -46,11 +46,12 @@
         </LinearLayout>
 
         <TextView
+            style="@style/FontStyle_T11"
             android:id="@+id/range_widget_current_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:text="17"
             android:textColor="@color/C16"
             android:textSize="58dp" />
@@ -66,7 +67,7 @@
         android:background="@color/divider_gray" />
 
     <RelativeLayout
-        android:id="@+id/capsule_layout"
+        android:id="@+id/range_widget_capsule_layout"
         android:layout_below="@id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -86,7 +87,7 @@
             android:layout_alignStart="@id/range_widget_oval"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
-            android:background="@color/C13" />
+            android:background="@color/divider_gray" />
 
         <View
             android:layout_width="2dp"
@@ -94,10 +95,10 @@
             android:layout_alignEnd="@id/range_widget_oval"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="30dp"
-            android:background="@color/C13" />
+            android:background="@color/divider_gray" />
 
         <com.operatorsapp.view.RangeView
-            android:id="@+id/range_view"
+            android:id="@+id/range_widget_range_view"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginEnd="20dp"
@@ -106,7 +107,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/capsule_layout"
+        android:layout_below="@id/range_widget_capsule_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
@@ -115,6 +116,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/range_widget_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -122,6 +124,7 @@
             android:text="15" />
 
         <TextView
+            android:id="@+id/range_widget_standard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -130,6 +133,7 @@
             android:text="19" />
 
         <TextView
+            android:id="@+id/range_widget_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

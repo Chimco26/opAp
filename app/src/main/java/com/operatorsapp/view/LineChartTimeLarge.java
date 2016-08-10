@@ -31,7 +31,6 @@ import java.util.Date;
 public class LineChartTimeLarge extends FrameLayout {
     private static final String VALUES = "values";
     private LineChart mChart;
-    private ArrayList<Entry> mValues;
     private Context mContext;
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
@@ -54,9 +53,8 @@ public class LineChartTimeLarge extends FrameLayout {
         init(context);
     }
 
-    public void init(Context context/*, ArrayList<Entry> values*/) {
+    public void init(Context context) {
         mContext = context;
-//        mValues = values;
 
         View view = LayoutInflater.from(context).inflate(R.layout.activity_linechart_time, this, false);
 
@@ -84,28 +82,12 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
         mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
 
-        // add data
-//        setData(4, 30);
-//        mValues = new ArrayList<>();
-//        mValues.add(new Entry(1, 76));
-//        mValues.add(new Entry(2, 53));
-//        mValues.add(new Entry(3, 50));
-//        mValues.add(new Entry(4, 56));
-//        mValues.add(new Entry(6, 78));
-//        mValues.add(new Entry(7, 22));
-//        mValues.add(new Entry(8, 35));
-//        mValues.add(new Entry(9, 42));
-//        mValues.add(new Entry(10, 0));
-
-//        setData(mValues);
-//        mChart.invalidate();
-
-        setAxis(context);
+        setAxis(context, -10, -10, -10);
 
         addView(view);
     }
 
-    private void setAxis(Context context) {
+    public void setAxis(Context context, float min, float standard, float max) {
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
         l.setEnabled(false);
@@ -114,6 +96,7 @@ public class LineChartTimeLarge extends FrameLayout {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
+        xAxis.setLabelCount(11);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
@@ -140,7 +123,6 @@ public class LineChartTimeLarge extends FrameLayout {
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setTypeface(mTfLight);
-//        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
@@ -155,24 +137,24 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine1.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine1);
 
-        LimitLine limitLine2 = new LimitLine(70f, "Standard");
+        LimitLine limitLine2 = new LimitLine(standard, "Standard");
         limitLine2.setLineColor(ContextCompat.getColor(context, R.color.C16));
         limitLine2.setTextSize(18);
-        limitLine2.setTextColor(ContextCompat.getColor(context, R.color.line_chart));
+        limitLine2.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine2.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine2);
 
-        LimitLine limitLine3 = new LimitLine(30f, "Min.");
-        limitLine3.setLineColor(ContextCompat.getColor(context, R.color.line_chart));
+        LimitLine limitLine3 = new LimitLine(min, "Min.");
+        limitLine3.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setTextSize(18);
-        limitLine3.setTextColor(ContextCompat.getColor(context, R.color.line_chart));
+        limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine3);
 
-        LimitLine limitLine4 = new LimitLine(110f, "Max.");
-        limitLine4.setLineColor(ContextCompat.getColor(context, R.color.line_chart));
+        LimitLine limitLine4 = new LimitLine(max, "Max.");
+        limitLine4.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setTextSize(18);
-        limitLine4.setTextColor(ContextCompat.getColor(context, R.color.line_chart));
+        limitLine4.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine4);
 
@@ -180,68 +162,9 @@ public class LineChartTimeLarge extends FrameLayout {
         rightAxis.setEnabled(false);
     }
 
-//    public static LineChartTime newInstance(ArrayList<Entry> values) {
-//        Gson gson = new Gson();
-//        String machinesListString = gson.toJson(values);
-//        Bundle args = new Bundle();
-//        args.putString(VALUES, machinesListString);
-//
-//        LineChartTime fragment = new LineChartTime();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        if (getArguments() != null) {
-//            Gson gson = new Gson();
-//            Type listType = new TypeToken<ArrayList<Entry>>() {
-//            }.getType();
-//            mValues = gson.fromJson(getArguments().getString(VALUES), listType);
-//        }
-//    }
+    public void setData(ArrayList<Entry> values) {
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        return inflater.inflate(R.layout.activity_linechart_time, container, false);
-//    }
-
-//    @SuppressLint("NewApi")
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//
-//
-//    }
-
-    public void setData(/*int count, float range*/ArrayList<Entry> values) {
-
-//        long now = System.currentTimeMillis();
-//        long hourMillis = 3600000L;
-
-//        ArrayList<Entry> values = new ArrayList<>();
-
-//        float from = now - (count / 2) * hourMillis;
-//        float to = now + (count / 2) * hourMillis;
-
-//        for (float x = from; x < to; x += hourMillis) {
-        // float y = getRandom(range, 50);
-//            values.add(new Entry(x, y)); // add one entry per hour
-//        }
-        /*mValues.add(new Entry(1, 76));
-        mValues.add(new Entry(2, 53));
-        mValues.add(new Entry(3, 50));
-        mValues.add(new Entry(4, 56));
-        mValues.add(new Entry(6, 78));
-        mValues.add(new Entry(7, 22));
-        mValues.add(new Entry(8, 35));
-        mValues.add(new Entry(9, 42));
-        mValues.add(new Entry(10, 0));*/
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);

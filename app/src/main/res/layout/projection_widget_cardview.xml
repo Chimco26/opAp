@@ -53,15 +53,17 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/FontStyle_T11"
                 android:id="@+id/projection_widget_current_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:text="1.7"
                 android:textColor="@color/C16"
                 android:textSize="58dp" />
 
             <TextView
+                style="@style/FontStyle_T11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -102,7 +104,7 @@
             android:layout_alignEnd="@id/range_widget_oval"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="30dp"
-            android:background="@color/C13" />
+            android:background="@color/divider_gray" />
 
         <com.operatorsapp.view.ProjectionView
             android:id="@+id/range_view"

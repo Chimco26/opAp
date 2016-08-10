@@ -221,31 +221,51 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"ID\": 1,\n" +
                             "      \"LowLimit\": 900,\n" +
                             "      \"MachineParamHistoricData\": [{\n" +
-                            "            \"Time\": 1470639600000,\n" +
+                            "            \"Time\": 1470801600000,\n" +
                             "            \"Value\": 70\n" +
                             "      \t},\n" +
                             "      \t{\n" +
-                            "            \"Time\": 1470643200000,\n" +
+                            "            \"Time\": 1470805200000,\n" +
                             "            \"Value\": 90\n" +
                             "      \t},\n" +
                             "      \t{\n" +
-                            "            \"Time\": 1470646800000,\n" +
+                            "            \"Time\": 1470808800000,\n" +
                             "            \"Value\": 20\n" +
                             "      \t},\n" +
                             "      \t{\n" +
-                            "            \"Time\": 1470650400000,\n" +
+                            "            \"Time\": 1470812400000,\n" +
                             "            \"Value\": 82\n" +
                             "      \t},\n" +
                             "      \t{\n" +
-                            "            \"Time\": 1470654000000,\n" +
-                            "            \"Value\": 12\n" +
+                            "            \"Time\": 1470816000000,\n" +
+                            "            \"Value\": 30\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470819600000,\n" +
+                            "            \"Value\": 60\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470823200000,\n" +
+                            "            \"Value\": 30\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470826800000,\n" +
+                            "            \"Value\": 20\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470830400000,\n" +
+                            "            \"Value\": 40\n" +
+                            "      \t},\n" +
+                            "      \t{\n" +
+                            "            \"Time\": 1470834000000,\n" +
+                            "            \"Value\": 50\n" +
                             "      \t}],\n" +
-                            "      \"StandardValue\": 2,\n" +
+                            "      \"StandardValue\": 12,\n" +
                             "      \"fieldType\": 3,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"2\",\n" +
+                            "      \"CurrentValue\": \"8\",\n" +
                             "      \"FieldEName\": \"CycleTime\",\n" +
                             "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
                             "      \"FieldName\": \"CycleTime\",\n" +
@@ -272,7 +292,7 @@ public class RetrofitMockClient implements Interceptor {
                             "            \"Time\": 1470654000000,\n" +
                             "            \"Value\": 12\n" +
                             "      \t}],\n" +
-                            "      \"StandardValue\": 2,\n" +
+                            "      \"StandardValue\": 5,\n" +
                             "      \"fieldType\": 3,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
@@ -285,7 +305,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"ID\": 2,\n" +
                             "      \"LowLimit\": null,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"StandardValue\": null,\n" +
+                            "      \"StandardValue\": 30,\n" +
                             "      \"fieldType\": 0,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
@@ -298,48 +318,48 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"ID\": 8,\n" +
                             "      \"LowLimit\": null,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"StandardValue\": null,\n" +
+                            "      \"StandardValue\": 59,\n" +
                             "      \"fieldType\": 0,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"739\",\n" +
+                            "      \"CurrentValue\": \"2\",\n" +
                             "      \"FieldEName\": \"Time Left Hr\",\n" +
                             "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
                             "      \"FieldName\": \"TimeLeftHr\",\n" +
-                            "      \"HighLimit\": 142560,\n" +
+                            "      \"HighLimit\": 35,\n" +
                             "      \"ID\": 12,\n" +
                             "      \"LowLimit\": 16,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"StandardValue\": null,\n" +
+                            "      \"StandardValue\": 25,\n" +
                             "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": false\n" +
+                            "      \"isOutOfRange\": true\n" +
                             "    },\n" +
                             "    {\n" +
                             "      \"CurrentValue\": \"230\",\n" +
                             "      \"FieldEName\": \"CavitiesPC\",\n" +
                             "      \"FieldLName\": \"CavitiesPC\",\n" +
                             "      \"FieldName\": \"CavitiesPC\",\n" +
-                            "      \"HighLimit\": 27.5,\n" +
+                            "      \"HighLimit\": 220.8,\n" +
                             "      \"ID\": 31,\n" +
                             "      \"LowLimit\": 22.5,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"StandardValue\": 230,\n" +
+                            "      \"StandardValue\": 110,\n" +
                             "      \"fieldType\": 1,\n" +
                             "      \"isOutOfRange\": true\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"27\",\n" +
+                            "      \"CurrentValue\": \"25\",\n" +
                             "      \"FieldEName\": \"NoProgressCount\",\n" +
                             "      \"FieldLName\": \"NoProgressCount\",\n" +
                             "      \"FieldName\": \"NoProgressCount\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
+                            "      \"HighLimit\": 35,\n" +
                             "      \"ID\": 3583,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                            "      \"LowLimit\": 25,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"StandardValue\": 27,\n" +
+                            "      \"StandardValue\": 30,\n" +
                             "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": true\n" +
+                            "      \"isOutOfRange\": false\n" +
                             "    }\n" +
                             "  ],\n" +
                             "  \"error\": null\n" +

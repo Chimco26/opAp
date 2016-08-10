@@ -15,7 +15,9 @@ import com.operatorsapp.R;
 
 public class RangeView extends View {
 
-    private Bitmap mDataLine;
+    private Bitmap mDataLineBlue;
+    private Bitmap mDataLineRed;
+    private Bitmap mCurrentLine;
     private Paint mPaint;
     private int mX;
 
@@ -33,14 +35,24 @@ public class RangeView extends View {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void init(Context context) {
-        mDataLine = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval));
+        mDataLineBlue = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
+        mDataLineRed = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_red));
+        mCurrentLine = mDataLineBlue;
         mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(mDataLine, mX, 0, mPaint);
+        canvas.drawBitmap(mCurrentLine, mX, 0, mPaint);
+    }
+
+    public void setCurrentLine(boolean red) {
+        if (red) {
+            mCurrentLine = mDataLineRed;
+        } else {
+            mCurrentLine = mDataLineBlue;
+        }
     }
 
     public void forceRedraw() {
