@@ -68,7 +68,7 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart.setNoDataTextDescription("You need to provide data for the chart.");
 
         // enable touch gestures
-        mChart.setTouchEnabled(false);
+        mChart.setTouchEnabled(true);
 
         mChart.setDragDecelerationFrictionCoef(0.9f);
 
@@ -81,6 +81,9 @@ public class LineChartTimeLarge extends FrameLayout {
         // set an alternative background color
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
         mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
+
+//        mChart.zoomIn();
+        mChart.zoom(2,1,2,1);
 
         setAxis(context, -10, -10, -10);
 
@@ -185,6 +188,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         // set data
         mChart.setData(data);
+        mChart.moveViewToX(values.get(values.size()-1).getX());
         mChart.invalidate();
     }
 }

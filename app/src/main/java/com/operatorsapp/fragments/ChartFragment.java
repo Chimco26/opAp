@@ -89,11 +89,11 @@ public class ChartFragment extends Fragment {
 
         mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
         mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-        mMin.setText(String.valueOf(mMinVal));
+        mMin.setText(new StringBuilder("Min. " + String.valueOf((int) mMinVal)));
         mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-        mStandard.setText(String.valueOf(mStandardVal));
+        mStandard.setText(new StringBuilder("Standard " + String.valueOf((int) mStandardVal)));
         mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-        mMax.setText(String.valueOf(mMaxVal));
+        mMax.setText(new StringBuilder("Max. " + String.valueOf((int) mMaxVal)));
         mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
         mChart.setData(mValues);

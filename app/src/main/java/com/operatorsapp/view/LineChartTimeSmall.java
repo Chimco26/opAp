@@ -90,6 +90,9 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
         mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
 
+        mChart.zoom(3,1,3,1);
+
+
         // add data
 //        setData(4, 30);
 //        mValues = new ArrayList<>();
@@ -248,6 +251,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // set data
         mChart.setData(data);
+        mChart.moveViewToX(values.get(values.size()-1).getX());
         mChart.invalidate();
     }
 }

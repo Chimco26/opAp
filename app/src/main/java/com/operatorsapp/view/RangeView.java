@@ -19,7 +19,7 @@ public class RangeView extends View {
     private Bitmap mDataLineRed;
     private Bitmap mCurrentLine;
     private Paint mPaint;
-    private int mX;
+    private float mX;
 
     public RangeView(Context context) {
         super(context);
@@ -64,7 +64,7 @@ public class RangeView extends View {
         });
     }
 
-    public void updateX(int x) {
+    public void updateX(float x) {
         mX = x;
         forceRedraw();
     }

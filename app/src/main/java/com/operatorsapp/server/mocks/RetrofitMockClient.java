@@ -217,9 +217,9 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"FieldEName\": \"CycleTime\",\n" +
                             "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
                             "      \"FieldName\": \"CycleTime\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
+                            "      \"HighLimit\": 110,\n" +
                             "      \"ID\": 1,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                            "      \"LowLimit\": 30,\n" +
                             "      \"MachineParamHistoricData\": [{\n" +
                             "            \"Time\": 1470801600000,\n" +
                             "            \"Value\": 70\n" +
@@ -260,7 +260,7 @@ public class RetrofitMockClient implements Interceptor {
                             "            \"Time\": 1470834000000,\n" +
                             "            \"Value\": 50\n" +
                             "      \t}],\n" +
-                            "      \"StandardValue\": 12,\n" +
+                            "      \"StandardValue\": 70,\n" +
                             "      \"fieldType\": 3,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
@@ -269,9 +269,9 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"FieldEName\": \"CycleTime\",\n" +
                             "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
                             "      \"FieldName\": \"CycleTime\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
+                            "      \"HighLimit\": 110,\n" +
                             "      \"ID\": 1,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                            "      \"LowLimit\": 30,\n" +
                             "      \"MachineParamHistoricData\": [{\n" +
                             "            \"Time\": 1470639600000,\n" +
                             "            \"Value\": 50\n" +
@@ -292,7 +292,7 @@ public class RetrofitMockClient implements Interceptor {
                             "            \"Time\": 1470654000000,\n" +
                             "            \"Value\": 12\n" +
                             "      \t}],\n" +
-                            "      \"StandardValue\": 5,\n" +
+                            "      \"StandardValue\": 70,\n" +
                             "      \"fieldType\": 3,\n" +
                             "      \"isOutOfRange\": null\n" +
                             "    },\n" +
@@ -349,7 +349,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"isOutOfRange\": true\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"25\",\n" +
+                            "      \"CurrentValue\": \"26\",\n" +
                             "      \"FieldEName\": \"NoProgressCount\",\n" +
                             "      \"FieldLName\": \"NoProgressCount\",\n" +
                             "      \"FieldName\": \"NoProgressCount\",\n" +
