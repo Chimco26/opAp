@@ -20,7 +20,9 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersisten
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -35,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface,
-        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface {
+        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -212,5 +214,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
         return retrofit.create(EmeraldSendReportReject.class);
+    }
+
+    @Override
+    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl) {
+        return reportStopRetroFitServiceRequests(siteUrl, -1, null);
+
+    }
+
+    @Override
+    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldSendStopReport.class);
     }
 }

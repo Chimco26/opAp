@@ -362,94 +362,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     };
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        mDialogsShiftLogListener.getShiftLogCore().stopPolling();
-//    }
 
-//    private void getShiftLogs() {
-//        if (mEventsList == null || mEventsList.size() == 0) {
-//            ProgressDialogManager.show(getActivity());
-//        }
-//        mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback() {
-//                    @Override
-//                    public void onGetShiftLogSucceeded(ArrayList<Event> events) {
-//                        ZLogger.e(LOG_TAG, "onGetShiftLogSucceeded");
-//                        dismissProgressDialog();
-//                        if (events != null && events.size() > 0) {
-//
-//                            mNoData = false;
-//                            //todo remove
-//                            if (mEventsList.size() == 0) {
-//                                mEventsQueue.addAll(events);
-//                                mEventsList.addAll(events);
-//                            } else {
-//
-//                                for (int i = 0; i < events.size(); i++) {
-//                                    if (!isExists(events.get(i))) {
-//                                        mEventsList.add(events.get(i));
-//                                    }
-//
-//                                }
-//                            }
-//                            mNoDataView.setVisibility(View.GONE);
-//                            mNoNotificationsText.setVisibility(View.GONE);
-//
-//                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
-//                            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-//
-//                            //todo call machine data
-//
-//                            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
-//                                DialogFragment dialogFragment = null;
-//                                Event event = mEventsQueue.pop();
-//                                if (event.getEventGroupID() == 6) {
-//                                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-//                                } else if (event.getEventGroupID() == 20) {
-//                                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
-//                                }
-//                                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-//                                dialogFragment.setCancelable(false);
-//                                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-//                                mIsOpenDialog = true;
-//                            }
-//                        } else {
-//                            mNoData = true;
-//                            clearStatusLayout();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
-//                        mNoData = true;
-//                        dismissProgressDialog();
-//                        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
-//                        getActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
-//                            }
-//                        });
-//// do silentLogin if Credentials mismatch
-//                        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-//                            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
-//                                @Override
-//                                public void onSilentLoginSucceeded() {
-//                                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
-//                                    getShiftLogs();
-//                                }
-//
-//                                @Override
-//                                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
-//                                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
-//                                }
-//                            });
-//                        }*/
-//                    }
-//                }
-//        );
-//    }
 
     private boolean isExists(Event event) {
         for (int i = 0; i < mEventsList.size(); i++) {
@@ -466,7 +379,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
         }
-//        getShiftLogs();
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
@@ -484,7 +396,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onAttach(context);
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
-//            mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
@@ -499,7 +410,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDetach() {
         super.onDetach();
         mCroutonCallback = null;
-//        mDialogsShiftLogListener = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
@@ -555,6 +465,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         }
                         case 2: {
                             ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
+                            Bundle bundle = new Bundle();
+                            Gson gson = new Gson();
+                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
+                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
+
+                            reportStopReasonFragment.setArguments(bundle);
                             mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
                             break;
                         }
@@ -598,7 +514,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
+    public void onDismissClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             DialogFragment dialogFragment = null;
@@ -618,10 +534,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
+    public void onDismissAllClick(DialogInterface dialog, int requestCode) {
         mEventsQueue.clear();
         dialog.dismiss();
         mIsOpenDialog = false;
+    }
+
+    @Override
+    public void onReportClick() {
+        //todo
     }
 
     private void dismissProgressDialog() {

@@ -13,11 +13,11 @@ import java.util.List;
  * Created by Sergey on 02/08/2016.
  */
 public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
-    @SerializedName("stopReasons")
+    @SerializedName("StopReason")
     private List<StopReasons> stopReasons = new ArrayList<StopReasons>();
-    @SerializedName("rejectReasons")
+    @SerializedName("RejectReason")
     private List<RejectReasons> rejectReasons = new ArrayList<RejectReasons>();
-    @SerializedName("rejectCauses")
+    @SerializedName("RejectCauses")
     private List<RejectCauses> rejectCauses = new ArrayList<RejectCauses>();
 
     public ReportFieldsForMachine getReportFieldsForMachine() {

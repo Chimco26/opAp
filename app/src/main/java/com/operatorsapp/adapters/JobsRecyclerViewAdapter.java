@@ -23,12 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerViewAdapter.ViewHolder> {
+    private static final String ID = "ID";
     private List<Header> mHeaderList;
     private List<HashMap<String, Object>> mJobsList;
     private List<CurrentJob> mCurrentJobs = new ArrayList<>();
     private OnJobSelectedCallbackListener mOnJobSelectedCallbackListener;
-
-    private CurrentJob mCurrentJob;
 
     public JobsRecyclerViewAdapter(OnJobSelectedCallbackListener onJobSelectedCallbackListener, List<Header> headerList, List<HashMap<String, Object>> jobsDataList) {
         mOnJobSelectedCallbackListener = onJobSelectedCallbackListener;
@@ -48,19 +47,12 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     @Override
     public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
 
-        BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get("ID").toString());
+        BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get(ID).toString());
         int jobId = bigDecimal.intValue();
 //         todo MOVE TO CREATE
         holder.mJobRowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String jobData[] = new String[5];
-//                jobData[0] = holder.mFirstTextView.getText().toString();
-//                jobData[1] = holder.mSecondTextView.getText().toString();
-//                jobData[2] = holder.mThirdTextView.getText().toString();
-//                jobData[3] = holder.mFourthTextView.getText().toString();
-//                jobData[4] = holder.mFifthTextView.getText().toString();
-
                 mOnJobSelectedCallbackListener.onJobSelected(mCurrentJobs.get(position));
             }
         });
@@ -100,11 +92,8 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                 }
             }
 
-//            mCurrentJob = new CurrentJob(headers, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4], jobId);
             mCurrentJobs.add(new CurrentJob(headers, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4], jobId));
             initRowsHeader(holder, fieldValues[0], fieldValues[1], fieldValues[2], fieldValues[3], fieldValues[4]);
-
-
         }
     }
 

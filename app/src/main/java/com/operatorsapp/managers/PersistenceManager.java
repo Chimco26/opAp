@@ -7,8 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
-import com.operators.reportrejectinfra.ReportRejectPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
+import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
@@ -22,7 +22,7 @@ import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
-        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportRejectPersistenceManagerInterface,  MachineDataPersistenceManagerInterface {
+        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface,  MachineDataPersistenceManagerInterface {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 

@@ -12,7 +12,7 @@ import retrofit2.http.POST;
  * Created by Sergey on 02/08/2016.
  */
 public interface EmeraldGetReportFieldsForMachineRequest {
-    @POST("/LeaderMESApi/getReportfieldsForMachine")
+    @POST("/LeaderMESApi/GetReportFieldsForMachine")
     Call<GetReportFieldsForMachineResponse> getReportFieldsForMachine(@Body GetReportFieldsForMachineRequest getReportFieldsForMachineRequest);
 
 }

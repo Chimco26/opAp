@@ -446,7 +446,12 @@ public class RetrofitMockClient implements Interceptor {
                     Log.i(LOG_TAG, "ReportReject request received");
                     responseString = "{\"error\":null}";
                     break;
-                case "getReportfieldsForMachine":
+                case "ReportStop": {
+                    Log.i(LOG_TAG, "ReportReject request received");
+                    responseString = "{\"error\":null}";
+                    break;
+                }
+                case "GetReportFieldsForMachine":
                     responseString = "{\n" +
                             "  \"error\": null,\n" +
                             "  \"stopReasons\": \n" +

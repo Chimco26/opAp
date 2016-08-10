@@ -52,12 +52,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_list_menu_item_checkbox.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_screen_simple.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_media.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_screen_simple.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_material.xml",

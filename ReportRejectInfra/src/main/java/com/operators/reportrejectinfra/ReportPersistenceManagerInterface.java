@@ -3,7 +3,7 @@ package com.operators.reportrejectinfra;
 /**
  * Created by Sergey on 08/08/2016.
  */
-public interface ReportRejectPersistenceManagerInterface {
+public interface ReportPersistenceManagerInterface {
     String getSiteUrl();
 
     String getSessionId();

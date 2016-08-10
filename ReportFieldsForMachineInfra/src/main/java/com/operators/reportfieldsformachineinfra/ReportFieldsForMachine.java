@@ -9,11 +9,11 @@ import java.util.List;
  * Created by Sergey on 02/08/2016.
  */
 public class ReportFieldsForMachine {
-    @SerializedName("stopReasons")
+    @SerializedName("StopReason")
     private List<StopReasons> stopReasons = new ArrayList<StopReasons>();
-    @SerializedName("rejectReasons")
+    @SerializedName("RejectReason")
     private List<RejectReasons> rejectReasons = new ArrayList<RejectReasons>();
-    @SerializedName("rejectCauses")
+    @SerializedName("RejectCauses")
     private List<RejectCauses> rejectCauses = new ArrayList<RejectCauses>();
 
     public ReportFieldsForMachine(List<StopReasons> stopReasons, List<RejectReasons> rejectReasons, List<RejectCauses> rejectCauses) {
@@ -25,6 +25,7 @@ public class ReportFieldsForMachine {
     public List<StopReasons> getStopReasons() {
         return stopReasons;
     }
+
     public List<RejectReasons> getRejectReasons() {
         return rejectReasons;
     }

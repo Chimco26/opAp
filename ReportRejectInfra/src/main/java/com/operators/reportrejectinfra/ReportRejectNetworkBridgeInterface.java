@@ -8,4 +8,7 @@ import java.lang.annotation.Documented;
 public interface ReportRejectNetworkBridgeInterface {
     void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int RejectCauseId, double units, Double weight,
                           SendReportRejectCallback callback, int totalRetries, int specificRequestTimeout);
+
+    void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId,
+                        SendReportStopCallback callback, int totalRetries, int specificRequestTimeout);
 }

@@ -165,6 +165,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
+                mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
+                mReportFieldsForMachineCore.startPolling();
             }
 
             @Override
@@ -337,7 +339,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
-                Log.i(LOG_TAG, "onJobListReceiveFailed()");
+                Log.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
 

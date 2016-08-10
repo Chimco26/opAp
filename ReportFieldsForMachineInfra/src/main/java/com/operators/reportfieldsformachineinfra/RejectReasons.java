@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RejectReasons {
 
-    @SerializedName("Id")
+    @SerializedName("ID")
     private int id;
-    @SerializedName("Name")
+    @SerializedName("EName")
     private String name;
 
     public int getId() {
