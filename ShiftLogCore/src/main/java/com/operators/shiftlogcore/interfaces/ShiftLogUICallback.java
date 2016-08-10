@@ -6,7 +6,7 @@ import com.operators.shiftloginfra.Event;
 
 import java.util.ArrayList;
 
-public interface ShiftLogUICallback<T> {
+public interface ShiftLogUICallback {
 
     void onGetShiftLogSucceeded(ArrayList<Event> events);
 

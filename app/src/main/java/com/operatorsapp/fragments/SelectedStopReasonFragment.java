@@ -199,7 +199,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         public void sendReportFailure(ErrorObjectInterface reason) {
             Log.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-                ((DashboardActivity) getActivity()).doSilentLogin(mOnCroutonRequestListener, new SilentLoginCallback() {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
                         sendReport();

@@ -34,12 +34,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.operators.loginnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
 import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
-import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
-import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -48,9 +48,7 @@ import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
-import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.interfaces.DashboardChartCallbackListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
@@ -60,12 +58,11 @@ import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
-import com.operatorsapp.view.LineChartTime;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, DashboardChartCallbackListener {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -76,7 +73,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private OperatorCore mOperatorCore;
     private OnCroutonRequestListener mCroutonCallback;
-    private DialogsShiftLogListener mDialogsShiftLogListener;
+    //    private DialogsShiftLogListener mDialogsShiftLogListener;
     private RecyclerView mShiftLogRecycler;
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
@@ -95,6 +92,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private int mCloseWidth;
     private int mOpenWidth;
     private boolean mIsInTouch = false;
+    private ArrayList<Widget> mWidgets = new ArrayList<>();
 
     private String[] mOperatorsSpinnerArray = {"Operator Sign in"};
 
@@ -126,6 +124,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mIsOpen = false;
         // get screen parameters
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -144,12 +144,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
         GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener);
+        mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mLeftLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_leftLayout);
         final ViewGroup.LayoutParams mLeftLayoutParams = mLeftLayout.getLayoutParams();
@@ -164,7 +168,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
-        final ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
+//        final ImageView mLeftButton = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 //        mLeftButton.setOnClickListener(new View.OnClickListener() {
 //
 //            @Override
@@ -202,8 +206,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mGridLayoutManager.setSpanCount(3);
 //                                mGridSpacingItemDecoration.setSpanCount(3);
                                     mWidgetAdapter.notifyDataSetChanged();
-                                }
-                                else {
+                                } else {
                                     mIsOpen = true;
                                     toggleWoopList(mLeftLayoutParams, mOpenWidth, mRightLayoutParams, mIsOpen);
                                     mGridLayoutManager.setSpanCount(2);
@@ -211,8 +214,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
 
-                            }
-                            else {
+                            } else {
                                 onButtonClick(mLeftLayoutParams, mRightLayoutParams);
                             }
                         }
@@ -307,8 +309,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
                 });
                 mIsOpen = true;
-            }
-            else {
+            } else {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mLeftLayout, mCloseWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mLeftLayout.startAnimation(anim);
@@ -361,91 +362,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     };
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("TEST", "ONPAUSE");
 
-        mDialogsShiftLogListener.getShiftLogCore().stopPolling();
-    }
-
-    private void getShiftLogs() {
-        if (mEventsList == null || mEventsList.size() == 0) {
-            ProgressDialogManager.show(getActivity());
-        }
-        mDialogsShiftLogListener.getShiftLogCore().startPolling(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getMachineId(), "1.5.98"/*todo*/, new ShiftLogUICallback<Event>() {
-                    @Override
-                    public void onGetShiftLogSucceeded(ArrayList<Event> events) {
-                        dismissProgressDialog();
-                        if (events != null && events.size() > 0) {
-
-                            mNoData = false;
-                            //todo remove
-                            if (mEventsList.size() == 0) {
-                                mEventsQueue.addAll(events);
-                                mEventsList.addAll(events);
-                            }
-                            else {
-
-                                for (int i = 0; i < events.size(); i++) {
-                                    if (!isExists(events.get(i))) {
-                                        mEventsList.add(events.get(i));
-                                    }
-
-                                }
-                            }
-                            mNoDataView.setVisibility(View.GONE);
-                            mNoNotificationsText.setVisibility(View.GONE);
-
-                            mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
-                            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-
-                            ArrayList widgets = new ArrayList();
-                            widgets.add("0");
-                            widgets.add("1");
-                            widgets.add("3");
-                            widgets.add("0");
-                            widgets.add("1");
-                            widgets.add("2");
-                            mWidgetAdapter = new WidgetAdapter(getActivity(), widgets, DashboardFragment.this);
-                            mWidgetRecycler.setAdapter(mWidgetAdapter);
-                            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
-                                DialogFragment dialogFragment = null;
-                                Event event = mEventsQueue.pop();
-                                if (event.getEventGroupID() == 6) {
-                                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-                                }
-                                else if (event.getEventGroupID() == 20) {
-                                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
-                                }
-                                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                                dialogFragment.setCancelable(false);
-                                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-                                mIsOpenDialog = true;
-                            }
-                        }
-                        else {
-                            mNoData = true;
-                            clearStatusLayout();
-                        }
-                    }
-
-                    @Override
-
-                    public void onGetShiftLogFailed(final ErrorObjectInterface reason) {
-                        mNoData = true;
-                        dismissProgressDialog();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, null);
-                            }
-                        });
-                    }
-                }
-
-        );
-    }
 
     private boolean isExists(Event event) {
         for (int i = 0; i < mEventsList.size(); i++) {
@@ -462,8 +379,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
         }
-        getShiftLogs();
-        Log.e("TEST", "ONRESUME");
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
@@ -481,14 +396,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onAttach(context);
         try {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
-            mDialogsShiftLogListener = (DialogsShiftLogListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
     }
@@ -497,7 +410,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDetach() {
         super.onDetach();
         mCroutonCallback = null;
-        mDialogsShiftLogListener = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
@@ -602,31 +514,35 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onPositiveButtonClick(DialogInterface dialog, int requestCode) {
+    public void onDismissClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             DialogFragment dialogFragment = null;
             Event event = mEventsQueue.pop();
             if (event.getEventGroupID() == 6) {
                 dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
-            }
-            else if (event.getEventGroupID() == 20) {
+            } else if (event.getEventGroupID() == 20) {
                 dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
             }
+            assert dialogFragment != null;
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        }
-        else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
+        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
             mIsOpenDialog = false;
         }
     }
 
     @Override
-    public void onNegativeButtonClick(DialogInterface dialog, int requestCode) {
+    public void onDismissAllClick(DialogInterface dialog, int requestCode) {
         mEventsQueue.clear();
         dialog.dismiss();
         mIsOpenDialog = false;
+    }
+
+    @Override
+    public void onReportClick() {
+        //todo
     }
 
     private void dismissProgressDialog() {
@@ -646,8 +562,97 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDataFailure(com.operators.machinestatusinfra.interfaces.ErrorObjectInterface reason) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+        mWidgets = widgetList;
+        if (widgetList != null && widgetList.size() > 0) {
+            mNoDataView.setVisibility(View.GONE);
+            if (mWidgetAdapter != null) {
+                mWidgetAdapter.setNewData(widgetList);
+            } else {
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener);
+                mWidgetRecycler.setAdapter(mWidgetAdapter);
+            }
+        } else {
+            mNoDataView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+        if (events != null && events.size() > 0) {
+
+            mNoData = false;
+            //todo remove
+            if (mEventsList.size() == 0) {
+                mEventsQueue.addAll(events);
+                mEventsList.addAll(events);
+            } else {
+
+                for (int i = 0; i < events.size(); i++) {
+                    if (!isExists(events.get(i))) {
+                        mEventsList.add(events.get(i));
+                    }
+
+                }
+            }
+            mNoNotificationsText.setVisibility(View.GONE);
+
+            if (mShiftLogAdapter != null) {
+                mShiftLogAdapter.notifyDataSetChanged();
+            } else {
+                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+            }
+
+            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
+                DialogFragment dialogFragment = null;
+                Event event = mEventsQueue.pop();
+                if (event.getEventGroupID() == 6) {
+                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                } else if (event.getEventGroupID() == 20) {
+                    dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
+                }
+                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                dialogFragment.setCancelable(false);
+                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                mIsOpenDialog = true;
+            }
+        } else {
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDataFailure(com.operators.infra.ErrorObjectInterface reason) {
         clearStatusLayout();
+
+        mNoData = true;
+        final ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Credentials_mismatch, "Credentials mismatch");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, errorObject);
+            }
+        });
+// do silentLogin if Credentials mismatch
+        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
+                @Override
+                public void onSilentLoginSucceeded() {
+                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
+                    getShiftLogs();
+                }
+
+                @Override
+                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
+                }
+            });
+        }*/
+        //todo clear data from widgets
+        // todo clear data from shiftLog
+
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
@@ -678,28 +683,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
-        }
-        else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
+        } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
-        }
-        else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
-        }
-        else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
-        }
-        else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
+        } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
-        }
-        else {
+        } else {
             Log.w(LOG_TAG, "Undefined parameter");
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
         }
 
-    }
-
-    @Override
-    public void onChartStart() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.lineChart_time, new LineChartTime()).commit();
     }
 }

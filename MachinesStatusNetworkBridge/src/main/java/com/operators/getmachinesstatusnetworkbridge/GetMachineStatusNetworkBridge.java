@@ -37,10 +37,10 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             @Override
             public void onResponse(Call<MachineStatusDataResponse> call, Response<MachineStatusDataResponse> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().getMachineStatus().getAllMachinesData().size() == 0){
+                    if (response.body().getMachineStatus().getAllMachinesData().size() == 0) {
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
                         getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
-                    }else {
+                    } else {
                         MachineStatus machineStatus = response.body().getMachineStatus();
                         getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                     }

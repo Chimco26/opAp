@@ -10,6 +10,8 @@ import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkMa
 import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
+import com.operators.machinedatanetworkbridge.interfaces.EmeraldGetMachinesDataServiceRequest;
+import com.operators.machinedatanetworkbridge.interfaces.GetMachineDataNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.EmeraldGetOperatorById;
 import com.operators.operatornetworkbridge.interfaces.EmeraldSetOperatorForMachine;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
@@ -35,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface,
-        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, ReportStopNetworkManagerInterface {
+        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -69,8 +71,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
-        }
-        else {
+        } else {
             Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
@@ -102,6 +103,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
         return retrofit.create(EmeraldShiftLogServiceRequests.class);
     }
 
+    @Override
+    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl) {
+        return getMachineDataRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return retrofit.create(EmeraldGetMachinesDataServiceRequest.class);
+    }
+
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         OkHttpClient okHttpClient;
         if (timeout >= 0 && timeUnit != null) {
@@ -113,8 +125,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                     .readTimeout(timeout, timeUnit)
 //                    .sslSocketFactory(sslContext.getSocketFactory())
                     .build();
-        }
-        else {
+        } else {
             okHttpClient = new OkHttpClient.Builder()
                     //add mock
                     .addInterceptor(new RetrofitMockClient())

@@ -46,5 +46,6 @@
     <color name="machines_list_item_selected_background">#eeeeee</color>
     <color name="could_not_retreive">#cacaca</color>
     <color name="color_jobs_row">#de000000</color>
+    <color name="red_line">#d0021b</color>
     <color name="green_subreason">#4cb986</color>
 </resources>

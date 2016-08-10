@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 
 public class DialogFragment extends android.support.v4.app.DialogFragment {
@@ -115,7 +114,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onPositiveButtonClick(getDialog(), getTargetRequestCode());
+                        mListener.onDismissClick(getDialog(), getTargetRequestCode());
                     }
                 }
             });
@@ -126,7 +125,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 public void onClick(View v) {
                     //todo current method
                     if (mListener != null) {
-                        mListener.onNegativeButtonClick(getDialog(), getTargetRequestCode());
+                        mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
                     }
                 }
             });
@@ -150,7 +149,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onPositiveButtonClick(getDialog(), getTargetRequestCode());
+                        mListener.onDismissClick(getDialog(), getTargetRequestCode());
                     }
                 }
             });
@@ -160,7 +159,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onNegativeButtonClick(getDialog(), getTargetRequestCode());
+                        mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
                     }
                 }
             });
@@ -189,8 +188,10 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     }
 
     public interface OnDialogButtonsListener {
-        void onPositiveButtonClick(DialogInterface dialog, int requestCode);
+        void onDismissClick(DialogInterface dialog, int requestCode);
 
-        void onNegativeButtonClick(DialogInterface dialog, int requestCode);
+        void onDismissAllClick(DialogInterface dialog, int requestCode);
+
+        void onReportClick();
     }
 }

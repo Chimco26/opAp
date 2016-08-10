@@ -1,9 +1,13 @@
 package com.operatorsapp.interfaces;
 
-import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
-import com.operators.machinestatusinfra.models.MachineStatus;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import com.github.mikephil.charting.data.Entry;
+
+import java.util.ArrayList;
 
 public interface DashboardChartCallbackListener {
 
-    void onChartStart();
+    void onChartStart(View container, ArrayList<Entry> values);
 }

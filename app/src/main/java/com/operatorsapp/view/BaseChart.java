@@ -5,9 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-
-import com.operatorsapp.R;
 
 /**
  * Baseclass of all Activities of the Demo Application.
