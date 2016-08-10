@@ -75,8 +75,7 @@ public class MachineDataCore {
 
                         @Override
                         public void onGetMachineDataFailed(ErrorObjectInterface reason) {
-//todo
-                            Log.w(LOG_TAG, "getMachineData() onGetMachineDataFailed");
+                            Log.w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
                             onJobFinishedListener.onJobFinished();
                             if (mMachineDataUICallback != null) {
                                 mMachineDataUICallback.onDataReceiveFailed(reason);

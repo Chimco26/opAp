@@ -25,7 +25,10 @@ import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+
+import java.security.PrivateKey;
 
 /**
  * Created by Sergey on 08/08/2016.
@@ -36,6 +39,12 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOB_ID = "current_job_id";
+    private static final String END_TIME = "end_time";
+    private static final String START_TIME = "start_time";
+    private static final String DURATION = "duration";
+    private String mStart;
+    private String mEnd;
+    private int mDuration;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -46,6 +55,10 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
+
+    private TextView mTimeTextView;
+    private TextView mProductTextView;
+    private TextView mDurationTextView;
 
     @Override
     public void onAttach(Context context) {
@@ -65,6 +78,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
         mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);
+
+        mStart = bundle.getString(START_TIME);
+        mEnd = bundle.getString(END_TIME);
+        mDuration = bundle.getInt(DURATION);
+        Log.i(LOG_TAG, "STart " + mStart + " end " + mEnd + " duration " + mDuration);
         return view;
     }
 
@@ -91,6 +109,20 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
             initStopReasons();
         }
+
+        mTimeTextView = (TextView) view.findViewById(R.id.date_text_view);
+        mProductTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
+        mDurationTextView = (TextView) view.findViewById(R.id.duration_text_view);
+
+        if (mStart == null || mEnd == null) {
+            mProductTextView.setText("- -");
+        }
+        else {
+            mProductTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+        }
+
+        mDurationTextView.setText(mDuration + "min");
+
 
     }
 
@@ -141,6 +173,9 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
         bundle.putInt(CURRENT_JOB_ID, mMachineStatus.getAllMachinesData().get(0).getCurrentJobID());
+        bundle.putString(END_TIME, mEnd);
+        bundle.putString(START_TIME, mStart);
+        bundle.putInt(DURATION, mDuration);
         selectedStopReasonFragment.setArguments(bundle);
         mGoToScreenListener.goToFragment(selectedStopReasonFragment, true);
 

@@ -82,6 +82,9 @@ public class Widget {
     }
 
     public int getStandardValue() {
+        if(mStandardValue == null){
+            mStandardValue = 0;
+        }
         return mStandardValue;
     }
 
