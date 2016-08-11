@@ -578,6 +578,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         if (callType == CallType.ShiftLog) {
             mNoData = true;
+            if (mEventsList == null ||mEventsList.size() == 0) {
+                mNoNotificationsText.setVisibility(View.VISIBLE);
+            }
+        }
+        if (callType == CallType.MachineData) {
+            if (mWidgets == null || mWidgets.size() == 0) {
+                mNoDataView.setVisibility(View.VISIBLE);
+            }
         }
         getActivity().runOnUiThread(new Runnable() {
             @Override

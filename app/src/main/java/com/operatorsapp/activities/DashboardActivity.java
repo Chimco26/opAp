@@ -187,7 +187,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
                 mMachineStatusCore.stopTimer();
                 mMachineStatusCore.stopPolling();
-                mMachineStatusCore.startPolling();
+//                mMachineStatusCore.startPolling();
             }
         });
 
@@ -212,7 +212,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
                 mMachineDataCore.stopPolling();
-                mMachineDataCore.startPolling();
+//                mMachineDataCore.startPolling();
             }
         });
 
@@ -236,7 +236,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
                 mShiftLogCore.stopPolling();
-                mShiftLogCore.startPolling();
+//                mShiftLogCore.startPolling();
             }
         });
 
