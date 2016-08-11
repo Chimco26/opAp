@@ -165,6 +165,7 @@ public class LineChartTimeSmall extends FrameLayout {
         // set data
         mChart.setData(data);
         mChart.moveViewToX(values.get(values.size() - 1).getX());
+        mChart.animateX(300);
         mChart.invalidate();
     }
 }

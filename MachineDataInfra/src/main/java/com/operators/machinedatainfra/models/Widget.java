@@ -27,7 +27,7 @@ public class Widget {
     private Float mLowLimit;
 
     @SerializedName("StandardValue")
-    private Integer mStandardValue;
+    private Float mStandardValue;
 
     @SerializedName("isOutOfRange")
     private boolean mIsOutOfRange;
@@ -81,7 +81,10 @@ public class Widget {
         return mLowLimit;
     }
 
-    public int getStandardValue() {
+    public float getStandardValue() {
+        if (mStandardValue == null) {
+            mStandardValue = 0f;
+        }
         return mStandardValue;
     }
 

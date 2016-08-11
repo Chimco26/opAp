@@ -67,8 +67,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private AutofitTextView mSubtitle;
         private TextView mValue;
         private View mCapsule;
-        private RangeView mRangeViewRed;
         private RangeView mRangeViewBlue;
+        private TextView mCurrentValue;
+        private RangeView mRangeViewRed;
         private TextView mMin;
         private TextView mStandard;
         private TextView mMax;
@@ -81,6 +82,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
             mCapsule = itemView.findViewById(R.id.range_widget_oval);
             mRangeViewBlue = (RangeView) itemView.findViewById(R.id.range_widget_range_view_blue);
+            mCurrentValue = (TextView) itemView.findViewById(R.id.range_widget_current_value_in_chart);
             mRangeViewRed = (RangeView) itemView.findViewById(R.id.range_widget_range_view_red);
             mMin = (TextView) itemView.findViewById(R.id.range_widget_min);
             mStandard = (TextView) itemView.findViewById(R.id.range_widget_standard);
@@ -149,7 +151,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
                 timeViewHolder.mTitle.setText(widget.getFieldName());
-                timeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + widget.getStandardValue()));
+                timeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int)widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
@@ -160,10 +162,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                         entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
                         entry.setY(widget.getMachineParamHistoricData().get(i).getValue());
 //                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - TEN_HOURS)) {
-                            tenHoursValues.add(entry);
+                        tenHoursValues.add(entry);
 //                        }
 //                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - FOUR_HOURS)) {
-                            fourHoursValues.add(entry);
+                        fourHoursValues.add(entry);
 //                        }
                     }
                     timeViewHolder.mChart.setData(fourHoursValues);
@@ -179,8 +181,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
                 rangeViewHolder.mTitle.setText(widget.getFieldName());
-                rangeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + widget.getStandardValue()));
+                rangeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int) widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
+                rangeViewHolder.mCurrentValue.setText(widget.getCurrentValue());
                 if (widget.isOutOfRange()) {
                     rangeViewHolder.mValue.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
                 } else {
@@ -194,27 +197,33 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     public void run() {
                         if (widget.isOutOfRange() && Integer.parseInt(widget.getCurrentValue()) > widget.getHighLimit()) {
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
+                            rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
                             rangeViewHolder.mRangeViewRed.updateX(rangeViewHolder.mCapsule.getWidth() / 100f * 91f/*max location*/);
                         } else if (widget.isOutOfRange() && Integer.parseInt(widget.getCurrentValue()) < widget.getLowLimit()) {
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
+                            rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
                             rangeViewHolder.mRangeViewRed.updateX(rangeViewHolder.mCapsule.getWidth() / 100f * 5f/*min location*/);
                         } else {
                             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
+                            rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
                             float rangeValue = (widget.getHighLimit() - widget.getLowLimit());
                             float transValue = (Integer.parseInt(widget.getCurrentValue()) - widget.getLowLimit());
                             if (rangeValue > 0) {
                                 final float convertValue = transValue / rangeValue;
                                 rangeViewHolder.mRangeViewBlue.updateX(((rangeViewHolder.mRangeViewBlue.getWidth()) * convertValue) - 5/* half of the line*/);
+                                final ViewGroup.MarginLayoutParams mRightLayoutParams = (ViewGroup.MarginLayoutParams) rangeViewHolder.mCurrentValue.getLayoutParams();
+                                mRightLayoutParams.setMarginStart((int) ((((rangeViewHolder.mRangeViewBlue.getWidth()) * convertValue) - 5) + 44.5/*margin left*/));
+                                rangeViewHolder.mCurrentValue.setLayoutParams(mRightLayoutParams);
                             }
                         }
                     }
                 });
-                rangeViewHolder.mMin.setText(String.valueOf(widget.getLowLimit()));
-                rangeViewHolder.mStandard.setText(String.valueOf(widget.getStandardValue()));
-                rangeViewHolder.mMax.setText(String.valueOf(widget.getHighLimit()));
+                rangeViewHolder.mMin.setText(String.valueOf((int) widget.getLowLimit()));
+                rangeViewHolder.mStandard.setText(String.valueOf((int) widget.getStandardValue()));
+                rangeViewHolder.mMax.setText(String.valueOf((int) widget.getHighLimit()));
                 break;
 
         }
