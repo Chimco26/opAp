@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectinfra.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -236,7 +235,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
                     }
 
                     @Override
-                    public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         Log.w(LOG_TAG, "Failed silent login");
                         ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
                     }

@@ -1,6 +1,5 @@
 package com.operatorsapp.interfaces;
 
-import com.operators.jobsinfra.ErrorObjectInterface;
 import com.operators.jobsinfra.JobListForMachine;
 
 /**

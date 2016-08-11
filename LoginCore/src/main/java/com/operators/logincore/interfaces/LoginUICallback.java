@@ -1,7 +1,7 @@
 package com.operators.logincore.interfaces;
 
 
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 import java.util.ArrayList;
 

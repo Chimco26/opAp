@@ -58,7 +58,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
             @Override
             public void onFailure(Call<GetReportFieldsForMachineResponse> call, Throwable t) {
                 if (callback != null) {
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_report_fields_failed, "General Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_report_fields_failed, "Response Error");
                     callback.onGetReportFieldsForMachineFailed(errorObject);
                 }
                 else {

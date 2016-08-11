@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile(name: 'pollingmachanaim-release', ext: 'aar')
     compile project(':ShiftLogInfra')
+    compile project(':ErrorObjectInterface')
 }

@@ -2,9 +2,9 @@ package com.operators.reportfieldsformachinecore;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachinecore.polling.EmeraldJobBase;
-import com.operators.reportfieldsformachineinfra.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;

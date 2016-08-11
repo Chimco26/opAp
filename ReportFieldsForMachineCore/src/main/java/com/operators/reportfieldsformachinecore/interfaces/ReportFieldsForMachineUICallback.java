@@ -1,6 +1,6 @@
 package com.operators.reportfieldsformachinecore.interfaces;
 
-import com.operators.reportfieldsformachineinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 
 /**

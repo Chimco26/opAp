@@ -14,6 +14,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.infra.Machine;
 import com.operators.jobscore.JobsCore;
@@ -29,7 +30,6 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.GetMachineDataNetworkBridge;
 import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
-import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatornetworkbridge.OperatorNetworkBridge;
@@ -46,10 +46,10 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
-import com.operatorsapp.fragments.interfaces.DialogsShiftLogListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
+import com.operatorsapp.interfaces.DashboardChartCallbackListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -149,8 +149,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onResume() {
         super.onResume();
         machineStatusStartPolling();
-        machineDataStartPolling();
-        shiftLogStartPolling();
+
+
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
         mReportFieldsForMachineCore.startPolling();
@@ -165,8 +165,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
-                mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
-                mReportFieldsForMachineCore.startPolling();
+                shiftLogStartPolling();
             }
 
             @Override
@@ -186,10 +185,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
-                mDashboardUICallbackListener.onDataFailure(errorObject);
+                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
                 mMachineStatusCore.stopTimer();
                 mMachineStatusCore.stopPolling();
+//                mMachineStatusCore.startPolling();
             }
         });
 
@@ -210,11 +209,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
 
             @Override
-            public void onDataReceiveFailed(com.operators.machinedatainfra.interfaces.ErrorObjectInterface reason) {
+            public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
-                mDashboardUICallbackListener.onDataFailure(errorObject);
+                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
                 mMachineDataCore.stopPolling();
+//                mMachineDataCore.startPolling();
             }
         });
 
@@ -231,14 +230,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
+                machineDataStartPolling();
             }
 
             @Override
-            public void onGetShiftLogFailed(com.operators.shiftloginfra.ErrorObjectInterface reason) {
+            public void onGetShiftLogFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
-                mDashboardUICallbackListener.onDataFailure(errorObject);
+                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
                 mShiftLogCore.stopPolling();
+//                mShiftLogCore.startPolling();
             }
         });
 
@@ -257,9 +257,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         @Override
-        public void onReportFieldsReceivedSFailure(com.operators.reportfieldsformachineinfra.ErrorObjectInterface reason) {
+        public void onReportFieldsReceivedSFailure(ErrorObjectInterface reason) {
             ZLogger.i(LOG_TAG, "onReportFieldsReceivedSFailure() reason: " + reason.getDetailedDescription());
-
+            mReportFieldsForMachineCore.stopPolling();
         }
     };
 
@@ -331,7 +331,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
 
             @Override
-            public void onJobListReceiveFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
+            public void onJobListReceiveFailed(ErrorObjectInterface reason) {
                 Log.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
@@ -353,7 +353,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
             @Override
-            public void onStartJobFailed(com.operators.jobsinfra.ErrorObjectInterface reason) {
+            public void onStartJobFailed(ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
             }
@@ -422,7 +422,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
 
                     @Override
-                    public void onLoginFailed(final com.operators.infra.ErrorObjectInterface reason) {
+                    public void onLoginFailed(ErrorObjectInterface reason) {
                         silentLoginCallback.onSilentLoginFailed(reason);
                         runOnUiThread(new Runnable() {
                             @Override

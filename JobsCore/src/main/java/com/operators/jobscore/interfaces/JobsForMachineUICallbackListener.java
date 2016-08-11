@@ -1,8 +1,6 @@
 package com.operators.jobscore.interfaces;
 
-import android.annotation.SuppressLint;
-
-import com.operators.jobsinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobsinfra.JobListForMachine;
 
 /**

@@ -1,6 +1,6 @@
 package com.operators.loginnetworkbridge.server;
 
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

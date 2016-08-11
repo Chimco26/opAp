@@ -76,4 +76,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:9.2.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:cardview-v7:24.0.0'
+    compile project(':ErrorObjectInterface')
 }

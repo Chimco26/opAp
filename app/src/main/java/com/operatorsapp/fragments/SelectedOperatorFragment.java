@@ -15,10 +15,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.operatorinfra.ErrorObjectInterface;
 import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;

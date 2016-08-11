@@ -3,7 +3,7 @@ package com.operators.machinedatanetworkbridge;
 
 import android.util.Log;
 
-import com.operators.machinedatainfra.interfaces.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.models.Widget;
@@ -44,7 +44,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                         getMachineDataCallback.onGetMachineDataSucceeded(response.body().getMachineParams());
                     } else {
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, response.body().getErrorResponse().getErrorDesc());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
                         getMachineDataCallback.onGetMachineDataFailed(errorObject);
                     }
                 } else {
@@ -56,7 +56,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
 
             @Override
             public void onFailure(Call<MachineDataDataResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, t.getMessage());
                 getMachineDataCallback.onGetMachineDataFailed(errorObject);
             }
         });
@@ -71,6 +71,8 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
         switch (errorCode) {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;
+            case 500:
+                return ErrorObject.ErrorCode.Error_rest;
         }
         return ErrorObject.ErrorCode.Unknown;
     }

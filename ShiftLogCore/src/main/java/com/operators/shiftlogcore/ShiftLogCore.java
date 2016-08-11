@@ -2,11 +2,11 @@ package com.operators.shiftlogcore;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftlogcore.polling.EmeraldJobBase;
-import com.operators.shiftloginfra.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.zemingo.pollingmachanaim.JobBase;
@@ -120,7 +120,7 @@ public class ShiftLogCore {
                 if (mShiftLogUICallback != null) {
                     mShiftLogUICallback.onGetShiftLogSucceeded(events);
                 } else {
-                    Log.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
+                    Log.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                 }
                 onJobFinishedListener.onJobFinished();
             }

@@ -54,7 +54,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
             @Override
             public void onFailure(Call<SendReportStopResponse> call, Throwable t) {
                 if (callback != null) {
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "General Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "Send_Report_Failed Error");
                     callback.onSendStopReportFailed(errorObject);
                 }
                 else {

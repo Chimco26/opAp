@@ -66,7 +66,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<OperatorDataResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "Get_operator_failed Error");
                 getOperatorByIdCallback.onGetOperatorFailed(errorObject);
             }
         });
@@ -91,7 +91,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<SetOperatorForMachineResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Set_operator_for_machine_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Set_operator_for_machine_failed, "Set_operator_for_machine_failed Error");
                 setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
             }
         });

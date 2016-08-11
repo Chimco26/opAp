@@ -2,6 +2,7 @@ package com.operators.shiftlognetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
@@ -49,7 +50,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                         shiftLogCoreCallback.onShiftLogFailed(errorObject);
                     }
                 } else {
-                    ZLogger.d(LOG_TAG, "onRequest(), getMachines failed");
+                    ZLogger.d(LOG_TAG, "onRequest(), getShiftLog failed");
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
@@ -79,6 +80,8 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
         switch (errorCode) {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;
+            case 0:
+                return  ErrorObject.ErrorCode.No_data;
         }
         return ErrorObject.ErrorCode.Unknown;
     }

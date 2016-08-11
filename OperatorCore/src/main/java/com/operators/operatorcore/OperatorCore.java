@@ -2,12 +2,12 @@ package com.operators.operatorcore;
 
 import android.util.Log;
 
-import com.app.operatorinfra.ErrorObjectInterface;
 import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 
 public class OperatorCore {

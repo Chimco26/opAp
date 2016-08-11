@@ -52,7 +52,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
 
             @Override
             public void onFailure(Call<MachineStatusDataResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "Get_machines_failed Error");
                 getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
             }
         });
