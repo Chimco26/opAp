@@ -128,6 +128,10 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
         mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
 
+
+        Log.i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
+
+
     }
 
     private void setActionBar() {

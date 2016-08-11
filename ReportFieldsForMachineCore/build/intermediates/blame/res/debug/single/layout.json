@@ -56,12 +56,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_toolbar.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_dialog_title_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_dialog_title_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_dialog_title_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_dialog_title_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_up_container.xml",

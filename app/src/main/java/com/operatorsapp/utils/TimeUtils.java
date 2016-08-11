@@ -1,9 +1,11 @@
 package com.operatorsapp.utils;
 
 import android.net.ParseException;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeUtils {
     public static final int ONE_MINUTE_IN_SECONDS = 60;
@@ -14,16 +16,20 @@ public class TimeUtils {
 
         if (timeInSeconds < ONE_MINUTE_IN_SECONDS) {
             return 1 + " m";
-        } else if (timeInSeconds < ONE_HOUR_IN_SECONDS) {
+        }
+        else if (timeInSeconds < ONE_HOUR_IN_SECONDS) {
             return (timeInSeconds / ONE_MINUTE_IN_SECONDS) + " m";
-        } else if (timeInSeconds < ONE_DAY_IN_SECONDS) {
+        }
+        else if (timeInSeconds < ONE_DAY_IN_SECONDS) {
             int minutes = (int) ((timeInSeconds - ((timeInSeconds / ONE_HOUR_IN_SECONDS) * ONE_HOUR_IN_SECONDS)) / ONE_MINUTE_IN_SECONDS);
             return timeInSeconds / ONE_HOUR_IN_SECONDS + ":" + minutes + " h";
-        } else {
+        }
+        else {
             int day = (int) (timeInSeconds / ONE_DAY_IN_SECONDS);
             if (day >= 99) {
                 return 99 + "+ d";
-            } else {
+            }
+            else {
                 return day + " d";
 
             }
@@ -39,8 +45,10 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
-        } catch (java.text.ParseException e) {
+        }
+        catch (ParseException e) {
+        }
+        catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
@@ -55,8 +63,10 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
-        } catch (java.text.ParseException e) {
+        }
+        catch (ParseException e) {
+        }
+        catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
@@ -71,11 +81,22 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
-        } catch (java.text.ParseException e) {
+        }
+        catch (ParseException e) {
+        }
+        catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
         return out;
     }
+
+
+    public static String secondsToTimeFormat(int seconds) {
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int sec = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, sec);
+    }
+
 }

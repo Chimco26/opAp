@@ -452,64 +452,376 @@ public class RetrofitMockClient implements Interceptor {
                     break;
                 }
                 case "GetReportFieldsForMachine":
-                    responseString = "{\n" +
-                            "  \"error\": null,\n" +
-                            "  \"stopReasons\": \n" +
-                            "  [\n" +
+                    responseString ="{\n" +
+                            "  \"RejectCauses\": [\n" +
                             "    {\n" +
-                            "      \"Id\":1,\n" +
-                            "      \"Name\":\"some reason 1\",\n" +
-                            "      \"subReasons\":\n" +
-                            "      [\n" +
+                            "      \"EName\": \"Injection\",\n" +
+                            "      \"ID\": 1,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Machine Tuning\",\n" +
+                            "      \"ID\": 110,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    }\n" +
+                            "  ],\n" +
+                            "  \"RejectReason\": [\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Injection\",\n" +
+                            "      \"ID\": 1,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Color\",\n" +
+                            "      \"ID\": 2,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Quantity Adjust.\",\n" +
+                            "      \"ID\": 3,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Black Points\",\n" +
+                            "      \"ID\": 110,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Lack of Material\",\n" +
+                            "      \"ID\": 120,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Material Error\",\n" +
+                            "      \"ID\": 130,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Oil on Product\",\n" +
+                            "      \"ID\": 140,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Flash\",\n" +
+                            "      \"ID\": 520,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Visual\",\n" +
+                            "      \"ID\": 530,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"testing\",\n" +
+                            "      \"ID\": 560,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Rework\",\n" +
+                            "      \"ID\": 570,\n" +
+                            "      \"SubReason\": []\n" +
+                            "    }\n" +
+                            "  ],\n" +
+                            "  \"StopReason\": [\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Operation\",\n" +
+                            "      \"ID\": 1,\n" +
+                            "      \"SubReason\": [\n" +
                             "        {\n" +
-                            "          \"Id\":1,\n" +
-                            "          \"Name\":\"some sub reason 1\"\n" +
+                            "          \"EName\": \"No Communication\",\n" +
+                            "          \"ID\": 18,\n" +
+                            "          \"SubReason\": []\n" +
                             "        },\n" +
                             "        {\n" +
-                            "          \"Id\":2,\n" +
-                            "          \"Name\":\"some sub reason 2\"\n" +
+                            "          \"EName\": \"Start\",\n" +
+                            "          \"ID\": 54,\n" +
+                            "          \"SubReason\": []\n" +
                             "        }\n" +
                             "      ]\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"Id\":2,\n" +
-                            "      \"Name\":\"some reason 2\",\n" +
-                            "      \"subReasons\":\n" +
-                            "      [\n" +
+                            "      \"EName\": \"Maintenance\",\n" +
+                            "      \"ID\": 2,\n" +
+                            "      \"SubReason\": [\n" +
                             "        {\n" +
-                            "          \"Id\":1,\n" +
-                            "          \"Name\":\"some sub reason 1\"\n" +
+                            "          \"EName\": \"Periodic Maintenance\",\n" +
+                            "          \"ID\": 7,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"QA\",\n" +
+                            "      \"ID\": 3,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Disqualification\",\n" +
+                            "          \"ID\": 10,\n" +
+                            "          \"SubReason\": []\n" +
                             "        },\n" +
                             "        {\n" +
-                            "          \"Id\":2,\n" +
-                            "          \"Name\":\"some sub reason 2\"\n" +
+                            "          \"EName\": \"Sample\",\n" +
+                            "          \"ID\": 13,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"No Quality Authorization\",\n" +
+                            "          \"ID\": 50,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Malfunction\",\n" +
+                            "      \"ID\": 4,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Cycle Time\",\n" +
+                            "          \"ID\": 14,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Broken Part\",\n" +
+                            "          \"ID\": 16,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Over Heating\",\n" +
+                            "          \"ID\": 17,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Oil Leak\",\n" +
+                            "          \"ID\": 29,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Oil Temperature\",\n" +
+                            "          \"ID\": 30,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Cylinder Temp\",\n" +
+                            "          \"ID\": 31,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Broken Ring\",\n" +
+                            "          \"ID\": 32,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Electricity Error\",\n" +
+                            "          \"ID\": 33,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Dirty Cilinder\",\n" +
+                            "          \"ID\": 34,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Machine Stop\",\n" +
+                            "      \"ID\": 6,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Unreported Stop \",\n" +
+                            "          \"ID\": 0,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Stop - General\",\n" +
+                            "          \"ID\": 2,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Offline InActiveTime Unreported\",\n" +
+                            "          \"ID\": 318,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Offline DownTime Unreported\",\n" +
+                            "          \"ID\": 319,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Material\",\n" +
+                            "      \"ID\": 7,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Material (%)\",\n" +
+                            "          \"ID\": 15,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"No Material\",\n" +
+                            "          \"ID\": 22,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Material - Iron Found\",\n" +
+                            "          \"ID\": 44,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Material - Error\",\n" +
+                            "          \"ID\": 45,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Material - Shading Problem\",\n" +
+                            "          \"ID\": 46,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Material - Black Points\",\n" +
+                            "          \"ID\": 47,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Labor\",\n" +
+                            "      \"ID\": 8,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Lack of Personal\",\n" +
+                            "          \"ID\": 51,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Mold\",\n" +
+                            "      \"ID\": 9,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Heating\",\n" +
+                            "          \"ID\": 21,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Broken Pin\",\n" +
+                            "          \"ID\": 23,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold Protection\",\n" +
+                            "          \"ID\": 24,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold - Insert Change\",\n" +
+                            "          \"ID\": 36,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold - Download/Assembly\",\n" +
+                            "          \"ID\": 40,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold - Assignment\",\n" +
+                            "          \"ID\": 41,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold - Water Leak\",\n" +
+                            "          \"ID\": 42,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Mold - Heaters Change\",\n" +
+                            "          \"ID\": 48,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Setup\",\n" +
+                            "      \"ID\": 10,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Setup\",\n" +
+                            "          \"ID\": 100,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Expected Stops\",\n" +
+                            "      \"ID\": 12,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Holiday\",\n" +
+                            "          \"ID\": 53,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Lack of Order\",\n" +
+                            "          \"ID\": 310,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"weekend\",\n" +
+                            "          \"ID\": 314,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        }\n" +
+                            "      ]\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"EName\": \"Alarms\",\n" +
+                            "      \"ID\": 20,\n" +
+                            "      \"SubReason\": [\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Alarms\",\n" +
+                            "          \"ID\": 300,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Alarms Activated\",\n" +
+                            "          \"ID\": 301,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Alarms Disabled\",\n" +
+                            "          \"ID\": 302,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Cycle Time Alarm\",\n" +
+                            "          \"ID\": 303,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Color Save PC Alarm\",\n" +
+                            "          \"ID\": 304,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Total Distance Alarm\",\n" +
+                            "          \"ID\": 305,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"Product Weight Alarm\",\n" +
+                            "          \"ID\": 306,\n" +
+                            "          \"SubReason\": []\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "          \"EName\": \"SetPoint Changed\",\n" +
+                            "          \"ID\": 307,\n" +
+                            "          \"SubReason\": []\n" +
                             "        }\n" +
                             "      ]\n" +
                             "    }\n" +
                             "  ],\n" +
-                            "  \"rejectReasons\":\n" +
-                            "  [\n" +
-                            "    {\n" +
-                            "      \"Id\":1,\n" +
-                            "      \"Name\":\"some reason 1\"\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"Id\":2,\n" +
-                            "      \"Name\":\"some reason 2\"\n" +
-                            "    }    \n" +
-                            "  ],\n" +
-                            "  \"rejectCauses\":\n" +
-                            "  [\n" +
-                            "    {\n" +
-                            "      \"Id\":1,\n" +
-                            "      \"Name\":\"some cause 1\"\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"Id\":2,\n" +
-                            "      \"Name\":\"some cause 2\"\n" +
-                            "    }    \n" +
-                            "  ]\n" +
-                            "}\n";
+                            "  \"error\": null\n" +
+                            "}";
                     break;
                 case "GetJobsListForMachineGeneric":
                     responseString = "{\n" +

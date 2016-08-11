@@ -16,12 +16,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_tint_switch_track.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\abc_search_url_text.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_search_url_text.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\abc_tint_seek_thumb.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_tint_seek_thumb.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\abc_search_url_text.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_search_url_text.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\abc_tint_switch_thumb.xml",

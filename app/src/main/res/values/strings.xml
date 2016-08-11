@@ -84,6 +84,9 @@
     <string name="dashes">- -</string>
     <string name="no_reasons">No reports are available</string>
     <string name="report_stop_event_reason">Report Stop Event Reason</string>
+    <string name="report_stop_reason">Report Stop\nReason</string>
+    <string name="report_reject_nreason">Report Reject\nReason</string>
+    <string name="stop">"Stop "</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

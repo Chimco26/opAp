@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
@@ -37,8 +36,6 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 
-import java.util.List;
-
 /**
  * Created by Sergey on 09/08/2016.
  */
@@ -50,13 +47,15 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private static final String END_TIME = "end_time";
     private static final String START_TIME = "start_time";
     private static final String DURATION = "duration";
+    private static final String STOP_REPORT_EVENT_ID = "stop_report_event_id";
+
     private static final int NUMBER_OF_COLUMNS = 5;
 
     private int mSelectedPosition;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mCurrentJobId;
-    private List<SubReasons> mSubReasonsList;
+
     private int mSelectedSubreasonId = -1;
     private int mSelectedReason;
 
@@ -72,8 +71,8 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private String mStart;
     private String mEnd;
     private int mDuration;
-
-    private TextView mTimeTextView;
+    private int mEventId;
+    private TextView mEventIdTextView;
     private TextView mProductTextView;
     private TextView mDurationTextView;
 
@@ -94,10 +93,10 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mSelectedPosition = bundle.getInt(SELECTED_STOP_REASON_POSITION);
         mCurrentJobId = bundle.getInt(CURRENT_JOB_ID);
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
-
         mStart = bundle.getString(START_TIME);
         mEnd = bundle.getString(END_TIME);
         mDuration = bundle.getInt(DURATION);
+        mEventId = bundle.getInt(STOP_REPORT_EVENT_ID);
         setActionBar();
         return view;
     }
@@ -113,7 +112,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
-        mTimeTextView = (TextView) view.findViewById(R.id.date_text_view);
+        mEventIdTextView = (TextView) view.findViewById(R.id.date_text_view);
         mProductTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
         mDurationTextView = (TextView) view.findViewById(R.id.duration_text_view);
 
@@ -124,14 +123,15 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             mProductTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
-        mDurationTextView.setText(mDuration + "min");
+        mDurationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
+
+        mEventIdTextView.setText(String.valueOf(mEventId));
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
         mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(mLayoutManager);
         int spacing = 30;
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
-
 
 
         initSubReasons();
@@ -169,7 +169,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.action_bar_report_stop, null);
+            View view = inflater.inflate(R.layout.action_bar_report_stop_selected, null);
 
             ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +178,9 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
                     getFragmentManager().popBackStack();
                 }
             });
+
+            TextView reasonTextView = (TextView) view.findViewById(R.id.stop_reason_selected_title);
+            reasonTextView.setText(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getName());
             actionBar.setCustomView(view);
         }
     }

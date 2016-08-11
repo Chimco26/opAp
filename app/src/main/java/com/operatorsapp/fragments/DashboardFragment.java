@@ -73,6 +73,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final String END_TIME = "end_time";
     private static final String START_TIME = "start_time";
     private static final String DURATION = "duration";
+    private static final String STOP_REPORT_EVENT_ID = "stop_report_event_id";
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
@@ -451,11 +452,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             DialogFragment dialogFragment = null;
             Event event = mEventsQueue.pop();
+
             if (event.getEventGroupID() == 6) {
                 if (event.getEndTime() == null || event.getStartTime() == null || event.getEndTime().equals("") || event.getStartTime().equals("")) {
-                    openStopReportScreen(null, null, event.getDuration());
+                    openStopReportScreen(event.getEventID(), null, null, event.getDuration());
                 } else {
-                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                    dialogFragment = DialogFragment.newInstance(event.getEventID(), event.getTime(), event.getEndTime(), event.getDuration());
                 }
             } else if (event.getEventGroupID() == 20) {
                 dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
@@ -477,16 +479,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onReportClick(String start, String end, int duration) {
-        openStopReportScreen(start, end, duration);
+    public void onReportClick(int eventId, String start, String end, int duration) {
+        openStopReportScreen(eventId, start, end, duration);
     }
 
     @Override
-    public void onStopClicked(String startTime, String endTime, int duration) {
-        openStopReportScreen(startTime, endTime, duration);
+    public void onStopClicked(int eventId, String startTime, String endTime, int duration) {
+        openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
-    private void openStopReportScreen(String start, String end, int duration) {
+    private void openStopReportScreen(int eventId, String start, String end, int duration) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
         Bundle bundle = new Bundle();
         Gson gson = new Gson();
@@ -495,6 +497,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         bundle.putString(END_TIME, end);
         bundle.putString(START_TIME, start);
         bundle.putInt(DURATION, duration);
+        bundle.putInt(STOP_REPORT_EVENT_ID, eventId);
         reportStopReasonFragment.setArguments(bundle);
         mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
     }
@@ -556,7 +559,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 DialogFragment dialogFragment = null;
                 Event event = mEventsQueue.pop();
                 if (event.getEventGroupID() == 6) {
-                    dialogFragment = DialogFragment.newInstance(event.getTime(), event.getEndTime(), event.getDuration());
+                    dialogFragment = DialogFragment.newInstance(event.getEventID(), event.getTime(), event.getEndTime(), event.getDuration());
                 } else if (event.getEventGroupID() == 20) {
                     dialogFragment = DialogFragment.newInstance(16, 10, 8, 12);
                 }
@@ -578,7 +581,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         if (callType == CallType.ShiftLog) {
             mNoData = true;
-            if (mEventsList == null ||mEventsList.size() == 0) {
+            if (mEventsList == null || mEventsList.size() == 0) {
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
         }

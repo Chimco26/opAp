@@ -80,12 +80,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_template_big_media_narrow.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_toolbar.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple.xml",
@@ -132,12 +132,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_radio.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_list_menu_item_radio.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_radio.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_list_menu_item_radio.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_expanded_menu_layout.xml",

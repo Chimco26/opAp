@@ -178,7 +178,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                         shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
-                        mOnStopClickListener.onStopClicked(event.getStartTime(),event.getEndTime(),event.getDuration());
+                        mOnStopClickListener.onStopClicked(event.getEventID(),event.getStartTime(),event.getEndTime(),event.getDuration());
 
                         event.setTreated(true);
                     }

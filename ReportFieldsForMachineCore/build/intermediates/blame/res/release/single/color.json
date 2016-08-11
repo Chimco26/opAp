@@ -56,12 +56,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_tint_btn_checkable.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_light.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\switch_thumb_material_light.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_default.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_tint_default.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\color\\switch_thumb_material_light.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\switch_thumb_material_light.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\color\\abc_tint_switch_track.xml",
