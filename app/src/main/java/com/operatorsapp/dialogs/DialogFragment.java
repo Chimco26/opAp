@@ -26,10 +26,12 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     private final static String DIALOG_MIN = "AlertDialogFragment.DIALOG_MIN";
     private final static String DIALOG_MAX = "AlertDialogFragment.DIALOG_MAX";
     private final static String DIALOG_TYPE = "AlertDialogFragment.DIALOG_TYPE";
+    private static final String EVENT_ID = "AlertDialogFragment.event_id";
     private OnDialogButtonsListener mListener;
     private String mStart;
     private String mEnd;
     private int mDuration;
+    private int mEventId;
     private int mWeight;
     private int mStandard;
     private int mMin;
@@ -37,9 +39,10 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     private boolean mIsStopDialog;
 
 
-    public static DialogFragment newInstance(String start, String end, int duration) {
+    public static DialogFragment newInstance(int eventId, String start, String end, int duration) {
         DialogFragment dialogFragment = new DialogFragment();
         Bundle args = new Bundle();
+        args.putInt(EVENT_ID, eventId);
         args.putBoolean(DIALOG_TYPE, true);
         args.putString(DIALOG_START, start);
         args.putString(DIALOG_END, end);
@@ -72,6 +75,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             mStandard = getArguments().getInt(DIALOG_STANDARD);
             mMin = getArguments().getInt(DIALOG_MIN);
             mMax = getArguments().getInt(DIALOG_MAX);
+            mEventId = getArguments().getInt(EVENT_ID);
         }
     }
 
@@ -126,7 +130,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 public void onClick(View v) {
                     //todo current method
                     if (mListener != null) {
-                        mListener.onReportClick(mStart, mEnd, mDuration);
+                        mListener.onReportClick(mEventId,mStart, mEnd, mDuration);
 //     mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
                     }
                 }
@@ -196,6 +200,6 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
 
         void onDismissAllClick(DialogInterface dialog, int requestCode);
 
-        void onReportClick(String start, String end, int duration);
+        void onReportClick(int eventId,String start, String end, int duration);
     }
 }

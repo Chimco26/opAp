@@ -28,8 +28,6 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 
-import java.security.PrivateKey;
-
 /**
  * Created by Sergey on 08/08/2016.
  */
@@ -42,6 +40,9 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private static final String END_TIME = "end_time";
     private static final String START_TIME = "start_time";
     private static final String DURATION = "duration";
+    private static final String STOP_REPORT_EVENT_ID = "stop_report_event_id";
+
+    private int mEventId;
     private String mStart;
     private String mEnd;
     private int mDuration;
@@ -56,7 +57,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
 
-    private TextView mTimeTextView;
+    private TextView mEventIdTextView;
     private TextView mProductTextView;
     private TextView mDurationTextView;
 
@@ -82,6 +83,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         mStart = bundle.getString(START_TIME);
         mEnd = bundle.getString(END_TIME);
         mDuration = bundle.getInt(DURATION);
+        mEventId = bundle.getInt(STOP_REPORT_EVENT_ID);
         Log.i(LOG_TAG, "STart " + mStart + " end " + mEnd + " duration " + mDuration);
         return view;
     }
@@ -110,7 +112,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             initStopReasons();
         }
 
-        mTimeTextView = (TextView) view.findViewById(R.id.date_text_view);
+        mEventIdTextView = (TextView) view.findViewById(R.id.date_text_view);
         mProductTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
         mDurationTextView = (TextView) view.findViewById(R.id.duration_text_view);
 
@@ -118,10 +120,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             mProductTextView.setText("- -");
         }
         else {
-            mProductTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+            mProductTextView.setText(getActivity().getString(R.string.stop) + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
-        mDurationTextView.setText(mDuration + "min");
+        mDurationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
+        mEventIdTextView.setText(String.valueOf(mEventId));
 
 
     }
@@ -176,6 +179,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         bundle.putString(END_TIME, mEnd);
         bundle.putString(START_TIME, mStart);
         bundle.putInt(DURATION, mDuration);
+        bundle.putInt(STOP_REPORT_EVENT_ID, mEventId);
         selectedStopReasonFragment.setArguments(bundle);
         mGoToScreenListener.goToFragment(selectedStopReasonFragment, true);
 

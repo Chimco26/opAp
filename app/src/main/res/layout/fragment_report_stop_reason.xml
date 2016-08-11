@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="0.2"
-                android:gravity="left"
+                android:gravity="center"
                 android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/default_gray_status"
@@ -122,7 +122,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/C11"
+            android:background="@color/reports_background"
             android:gravity="center_vertical">
 
             <LinearLayout
@@ -134,26 +134,27 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="120dp"
                     android:layout_marginLeft="30dp"
-                    android:background="@drawable/ic_hand_blue"
+                    android:background="@drawable/ichand"
                     />
 
                 <View
-                    android:layout_width="50dp"
+                    android:layout_width="60dp"
                     android:layout_height="1dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/divider_gray"/>
 
-                <TextView
+                 <TextView
                     android:id="@+id/textView2"
+                    style="@style/FontStyle_T120"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="20dp"
-                    android:text="Your Text\nShould be\nHere"
+                    android:text="@string/report_stop_reason"
                     android:textSize="40sp"/>
             </LinearLayout>
 

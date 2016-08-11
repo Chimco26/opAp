@@ -48,4 +48,5 @@
     <color name="color_jobs_row">#de000000</color>
     <color name="red_line">#d0021b</color>
     <color name="green_subreason">#4cb986</color>
+    <color name="reports_background">#f4f4f4</color>
 </resources>
