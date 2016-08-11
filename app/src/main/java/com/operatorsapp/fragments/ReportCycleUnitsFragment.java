@@ -18,7 +18,7 @@ import com.operatorsapp.R;
 /**
  * Created by Sergey on 11/08/2016.
  */
-public class ReportCycleUnitsFragment extends Fragment {
+public class ReportCycleUnitsFragment extends Fragment implements View.OnClickListener {
 
 
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -29,6 +29,12 @@ public class ReportCycleUnitsFragment extends Fragment {
 
     private TextView mProductTitleTextView;
     private TextView mProductIdTextView;
+
+    private ImageView mPlusButton;
+    private ImageView mMinusButton;
+    private TextView mUnitsCounterTextView;
+
+    private int mUnitsCounter;
 
     public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
@@ -64,8 +70,18 @@ public class ReportCycleUnitsFragment extends Fragment {
         mProductTitleTextView.setText(mCurrentProductName);
         mProductIdTextView.setText(String.valueOf(mCurrentProductId));
 
+        mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
+        mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
+        mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPlusButton.setOnClickListener(this);
+        mMinusButton.setOnClickListener(this);
     }
 
     @Override
@@ -96,5 +112,27 @@ public class ReportCycleUnitsFragment extends Fragment {
             });
             actionBar.setCustomView(view);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_plus: {
+
+                break;
+            }
+            case R.id.button_minus: {
+
+                break;
+            }
+        }
+    }
+
+    private void increase() {
+
+    }
+
+    private void decrease() {
+
     }
 }
