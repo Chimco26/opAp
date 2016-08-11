@@ -24,6 +24,8 @@ public class ReportCycleUnitsFragment extends Fragment {
     private String mCurrentProductName;
     private int mCurrentProductId;
 
+
+
     public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
         Bundle bundle = new Bundle();
