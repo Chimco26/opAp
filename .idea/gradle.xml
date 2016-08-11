@@ -10,7 +10,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ErrorObjectInterface" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -35,6 +34,7 @@
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
         <option name="myModules">
@@ -42,7 +42,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ErrorObjectInterface" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
-            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -67,6 +66,7 @@
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
       </GradleProjectSettings>

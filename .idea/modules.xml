@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" />
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/infra/Infra.iml" filepath="$PROJECT_DIR$/infra/Infra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsCore/JobsCore.iml" filepath="$PROJECT_DIR$/JobsCore/JobsCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsInfra/JobsInfra.iml" filepath="$PROJECT_DIR$/JobsInfra/JobsInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" filepath="$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" />
