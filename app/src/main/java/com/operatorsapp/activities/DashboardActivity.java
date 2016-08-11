@@ -149,8 +149,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onResume() {
         super.onResume();
         machineStatusStartPolling();
-
-
+        shiftLogStartPolling();
+        machineDataStartPolling();
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
         mReportFieldsForMachineCore.startPolling();
@@ -165,7 +165,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
-                shiftLogStartPolling();
             }
 
             @Override
@@ -230,7 +229,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
-                machineDataStartPolling();
             }
 
             @Override
