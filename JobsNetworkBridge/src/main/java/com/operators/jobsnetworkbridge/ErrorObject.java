@@ -1,7 +1,7 @@
 package com.operators.jobsnetworkbridge;
 
 
-import com.operators.jobsinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

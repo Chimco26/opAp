@@ -2,7 +2,7 @@ package com.operators.logincore;
 
 import android.util.Base64;
 
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;

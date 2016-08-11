@@ -2,7 +2,7 @@ package com.operators.reportrejectcore;
 
 import android.util.Log;
 
-import com.operators.reportrejectinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.reportrejectinfra.SendReportRejectCallback;

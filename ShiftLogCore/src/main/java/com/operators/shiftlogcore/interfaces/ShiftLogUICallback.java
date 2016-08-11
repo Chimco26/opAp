@@ -1,7 +1,7 @@
 package com.operators.shiftlogcore.interfaces;
 
 
-import com.operators.shiftloginfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 
 import java.util.ArrayList;

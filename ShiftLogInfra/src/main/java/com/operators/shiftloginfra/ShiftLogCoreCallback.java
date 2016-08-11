@@ -1,6 +1,8 @@
 package com.operators.shiftloginfra;
 
 
+import com.operators.errorobject.ErrorObjectInterface;
+
 import java.util.ArrayList;
 
 public interface ShiftLogCoreCallback<T> {

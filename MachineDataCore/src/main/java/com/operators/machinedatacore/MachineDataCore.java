@@ -2,9 +2,9 @@ package com.operators.machinedatacore;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatacore.interfaces.MachineDataUICallback;
 import com.operators.machinedatacore.polling.EmeraldJobBase;
-import com.operators.machinedatainfra.interfaces.ErrorObjectInterface;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
@@ -12,7 +12,6 @@ import com.operators.machinedatainfra.models.Widget;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MachineDataCore {

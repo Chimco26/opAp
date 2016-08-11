@@ -1,7 +1,7 @@
 package com.operators.machinedatanetworkbridge.server;
 
 
-import com.operators.machinedatainfra.interfaces.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

@@ -28,4 +28,5 @@ dependencies {
     compile(name: 'logrecorder', ext: 'aar')
     compile project(':Infra')
     compile project(':MachineDataInfra')
+    compile project(':ErrorObjectInterface')
 }

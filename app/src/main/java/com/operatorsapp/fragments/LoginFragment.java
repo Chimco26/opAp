@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;

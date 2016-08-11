@@ -3,7 +3,7 @@ package com.operators.loginnetworkbridge;
 
 import android.util.Log;
 
-import com.operators.infra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;

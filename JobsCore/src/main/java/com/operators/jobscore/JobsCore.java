@@ -2,8 +2,8 @@ package com.operators.jobscore;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
-import com.operators.jobsinfra.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;

@@ -6,7 +6,6 @@ import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
 import com.operators.getmachinesnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
-import com.operators.infra.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.Machine;

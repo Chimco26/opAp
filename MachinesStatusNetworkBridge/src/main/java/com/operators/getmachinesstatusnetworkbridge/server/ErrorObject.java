@@ -1,7 +1,7 @@
 package com.operators.getmachinesstatusnetworkbridge.server;
 
 
-import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

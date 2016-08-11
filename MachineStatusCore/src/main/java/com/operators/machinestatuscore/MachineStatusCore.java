@@ -3,11 +3,11 @@ package com.operators.machinestatuscore;
 import android.util.Log;
 
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinestatuscore.interfaces.MachineStatusUICallback;
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
 import com.operators.machinestatuscore.polling.EmeraldJobBase;
 import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
-import com.operators.machinestatusinfra.interfaces.ErrorObjectInterface;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -96,6 +96,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
 
                 @Override
                 public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
+                    Log.w(LOG_TAG, "getMachineStatus() onGetMachineStatusFailed");
                     if (mMachineStatusUICallback != null) {
                         if (reason != null) {
                             mMachineStatusUICallback.onStatusReceiveFailed(reason);

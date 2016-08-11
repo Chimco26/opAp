@@ -1,6 +1,6 @@
 package com.operators.reportrejectcore;
 
-import com.operators.reportrejectinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 /**
  * Created by Sergey on 08/08/2016.

@@ -1,6 +1,6 @@
 package com.operators.shiftlognetworkbridge.server;
 
-import com.operators.shiftloginfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorObjectInterface.ErrorCode mError;

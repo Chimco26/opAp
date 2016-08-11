@@ -1,5 +1,6 @@
 package com.operators.machinedatainfra.interfaces;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 
 import java.util.ArrayList;

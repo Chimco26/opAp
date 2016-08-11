@@ -2,7 +2,6 @@ package com.operators.jobsnetworkbridge;
 
 import android.util.Log;
 
-import com.operators.jobsinfra.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobListForMachine;
@@ -49,7 +48,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                             getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
                         }
                         else {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "General Error");
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "Jobs_list_Is_Empty Error");
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
                     }
@@ -61,7 +60,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                     }
                     else {
                         Log.w(LOG_TAG, "response.body() is null");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 }
@@ -69,7 +68,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
 
             @Override
             public void onFailure(Call<JobsListForMachineResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
                 getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
             }
         });

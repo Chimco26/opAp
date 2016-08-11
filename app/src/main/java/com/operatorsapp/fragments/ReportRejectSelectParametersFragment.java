@@ -21,10 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectinfra.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -227,7 +227,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
                     }
 
                     @Override
-                    public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         Log.w(LOG_TAG, "Failed silent login");
                         ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
                     }

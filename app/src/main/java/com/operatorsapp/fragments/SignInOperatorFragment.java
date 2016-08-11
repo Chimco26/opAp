@@ -20,9 +20,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.app.operatorinfra.ErrorObjectInterface;
 import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
@@ -146,7 +146,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     }
 
                     @Override
-                    public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
 
                     }
                 });

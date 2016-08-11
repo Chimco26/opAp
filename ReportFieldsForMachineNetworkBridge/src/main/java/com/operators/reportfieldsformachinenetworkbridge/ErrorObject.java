@@ -1,7 +1,7 @@
 package com.operators.reportfieldsformachinenetworkbridge;
 
 
-import com.operators.reportfieldsformachineinfra.ErrorObjectInterface;
+import com.operators.errorobject.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;
