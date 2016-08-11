@@ -93,7 +93,6 @@
     <array name="jobs_spinner_array">
         <item>New Job</item>
         <item>Report Rejects</item>
-        <item>Report Stop Reason</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>
     </array>

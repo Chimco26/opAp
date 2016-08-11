@@ -35,6 +35,7 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 
 import java.util.List;
@@ -47,6 +48,9 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     public static final String LOG_TAG = SelectedStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOB_ID = "current_job_id";
+    private static final String END_TIME = "end_time";
+    private static final String START_TIME = "start_time";
+    private static final String DURATION = "duration";
     private static final int NUMBER_OF_COLUMNS = 5;
 
     private int mSelectedPosition;
@@ -66,6 +70,13 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
     private Button mButtonNext;
     private TextView mButtonCancel;
+    private String mStart;
+    private String mEnd;
+    private int mDuration;
+
+    private TextView mTimeTextView;
+    private TextView mProductTextView;
+    private TextView mDurationTextView;
 
     @Override
     public void onAttach(Context context) {
@@ -84,6 +95,10 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mSelectedPosition = bundle.getInt(SELECTED_STOP_REASON_POSITION);
         mCurrentJobId = bundle.getInt(CURRENT_JOB_ID);
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
+
+        mStart = bundle.getString(START_TIME);
+        mEnd = bundle.getString(END_TIME);
+        mDuration = bundle.getInt(DURATION);
         setActionBar();
         return view;
     }
@@ -99,11 +114,26 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
+        mTimeTextView = (TextView) view.findViewById(R.id.date_text_view);
+        mProductTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
+        mDurationTextView = (TextView) view.findViewById(R.id.duration_text_view);
+
+        if (mStart == null || mEnd == null) {
+            mProductTextView.setText("- -");
+        }
+        else {
+            mProductTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+        }
+
+        mDurationTextView.setText(mDuration + "min");
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
         mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(mLayoutManager);
         int spacing = 30;
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+
+
 
         initSubReasons();
     }

@@ -173,7 +173,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit()), true);
+                        if (tenHoursValues.size() > 0) {
+                            mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit()), true);
+                        }
                     }
                 });
                 break;

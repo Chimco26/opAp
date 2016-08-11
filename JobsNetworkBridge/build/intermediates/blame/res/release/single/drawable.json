@@ -44,12 +44,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_btn_colored_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_dialog_material_background_dark.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_dialog_material_background_dark.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable\\abc_btn_colored_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_borderless_material.xml",

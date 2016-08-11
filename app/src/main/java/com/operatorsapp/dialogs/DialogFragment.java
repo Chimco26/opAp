@@ -36,6 +36,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     private int mMax;
     private boolean mIsStopDialog;
 
+
     public static DialogFragment newInstance(String start, String end, int duration) {
         DialogFragment dialogFragment = new DialogFragment();
         Bundle args = new Bundle();
@@ -125,11 +126,13 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 public void onClick(View v) {
                     //todo current method
                     if (mListener != null) {
-                        mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
+                        mListener.onReportClick(mStart, mEnd, mDuration);
+//     mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
                     }
                 }
             });
-        } else {
+        }
+        else {
             view = inflater.inflate(R.layout.parameter_dialog, null);
 
             TextView weight = (TextView) view.findViewById(R.id.dialog_weight);
@@ -176,7 +179,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
         super.onAttach(context);
         try {
             mListener = (OnDialogButtonsListener) getTargetFragment();
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement OnDialogButtonsListener");
         }
     }
@@ -192,6 +196,6 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
 
         void onDismissAllClick(DialogInterface dialog, int requestCode);
 
-        void onReportClick();
+        void onReportClick(String start, String end, int duration);
     }
 }

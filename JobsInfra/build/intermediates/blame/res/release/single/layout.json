@@ -12,16 +12,16 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_part_chronometer.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view_list_item.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_dialog_title_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_dialog_title_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_template_lines.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_dialog_title_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_dialog_title_material.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view_list_item.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_activity_chooser_view_list_item.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_layout.xml",
@@ -48,12 +48,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_search_dropdown_item_icons_2line.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_search_dropdown_item_icons_2line.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_radio.xml",

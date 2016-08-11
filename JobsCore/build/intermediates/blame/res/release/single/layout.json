@@ -28,16 +28,16 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\notification_media_action.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_radio.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_list_menu_item_radio.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_select_dialog_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_select_dialog_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_button_bar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_select_dialog_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_select_dialog_material.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_radio.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\layout\\abc_list_menu_item_radio.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
