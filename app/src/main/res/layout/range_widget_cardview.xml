@@ -131,6 +131,14 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp" />
+
+        <ImageView
+            android:id="@+id/range_widget_red_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_below="@id/range_widget_range_view_red"
+            android:src="@drawable/ic_exclamation_mark"/>
     </RelativeLayout>
 
     <LinearLayout

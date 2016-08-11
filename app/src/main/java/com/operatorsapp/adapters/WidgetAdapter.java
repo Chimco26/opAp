@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -70,6 +71,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private RangeView mRangeViewBlue;
         private TextView mCurrentValue;
         private RangeView mRangeViewRed;
+        private ImageView mRedMark;
         private TextView mMin;
         private TextView mStandard;
         private TextView mMax;
@@ -84,6 +86,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             mRangeViewBlue = (RangeView) itemView.findViewById(R.id.range_widget_range_view_blue);
             mCurrentValue = (TextView) itemView.findViewById(R.id.range_widget_current_value_in_chart);
             mRangeViewRed = (RangeView) itemView.findViewById(R.id.range_widget_range_view_red);
+            mRedMark = (ImageView) itemView.findViewById(R.id.range_widget_red_mark);
             mMin = (TextView) itemView.findViewById(R.id.range_widget_min);
             mStandard = (TextView) itemView.findViewById(R.id.range_widget_standard);
             mMax = (TextView) itemView.findViewById(R.id.range_widget_max);
@@ -151,7 +154,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
                 timeViewHolder.mTitle.setText(widget.getFieldName());
-                timeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int)widget.getStandardValue()));
+                timeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int) widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
@@ -201,14 +204,23 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
                             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
+                            rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
                             rangeViewHolder.mRangeViewRed.updateX(rangeViewHolder.mCapsule.getWidth() / 100f * 91f/*max location*/);
+                            final ViewGroup.MarginLayoutParams mRightLayoutParams = (ViewGroup.MarginLayoutParams) rangeViewHolder.mRedMark.getLayoutParams();
+                            mRightLayoutParams.setMarginStart((int) (rangeViewHolder.mCapsule.getWidth() / 100f * 91f)/*max location*/ + 24);
+                            rangeViewHolder.mRedMark.setLayoutParams(mRightLayoutParams);
                         } else if (widget.isOutOfRange() && Integer.parseInt(widget.getCurrentValue()) < widget.getLowLimit()) {
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
                             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
+                            rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
                             rangeViewHolder.mRangeViewRed.updateX(rangeViewHolder.mCapsule.getWidth() / 100f * 5f/*min location*/);
+                            final ViewGroup.MarginLayoutParams mRightLayoutParams = (ViewGroup.MarginLayoutParams) rangeViewHolder.mRedMark.getLayoutParams();
+                            mRightLayoutParams.setMarginStart((int) (rangeViewHolder.mCapsule.getWidth() / 100f * 5f/*min location*/ + 24));
+                            rangeViewHolder.mRedMark.setLayoutParams(mRightLayoutParams);
                         } else {
                             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
+                            rangeViewHolder.mRedMark.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
                             rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
                             float rangeValue = (widget.getHighLimit() - widget.getLowLimit());
