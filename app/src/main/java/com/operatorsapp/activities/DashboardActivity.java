@@ -119,11 +119,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void updateAndroidSecurityProvider(Activity callingActivity) {
         try {
             ProviderInstaller.installIfNeeded(this);
-        } catch (GooglePlayServicesRepairableException e) {
+        }
+        catch (GooglePlayServicesRepairableException e) {
             // Thrown when Google Play Services is not installed, up-to-date, or enabled
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
-        } catch (GooglePlayServicesNotAvailableException e) {
+        }
+        catch (GooglePlayServicesNotAvailableException e) {
             ZLogger.e("SecurityException", "Google Play Services not available.");
         }
     }
@@ -162,7 +164,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
@@ -178,7 +181,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                     mDashboardUICallbackListener.onTimerChanged(countDownTimer);
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
             }
@@ -204,14 +208,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onMachineDataReceived(widgetList);
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
 
             @Override
             public void onDataReceiveFailed(com.operators.machinedatainfra.interfaces.ErrorObjectInterface reason) {
-                ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+                ZLogger.i(LOG_TAG, "onDataReceivedFailed) reason: " + reason.getDetailedDescription());
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 mDashboardUICallbackListener.onDataFailure(errorObject);
                 mMachineDataCore.stopPolling();
@@ -228,7 +233,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onShiftLogDataReceived(events);
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
@@ -251,7 +257,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (reportFieldsForMachine != null) {
                 Log.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
                 mReportFieldsForMachine = reportFieldsForMachine;
-            } else {
+            }
+            else {
                 Log.w(LOG_TAG, "reportFieldsForMachine is null");
             }
         }
@@ -293,7 +300,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
-        } else {
+        }
+        else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
         }
     }
@@ -322,10 +330,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (jobListForMachine != null) {
                     if (jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null) {
                         mDashboardActivityToJobsFragmentCallback.onJobsListReceived(jobListForMachine);
-                    } else {
+                    }
+                    else {
                         mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                     }
-                } else {
+                }
+                else {
                     mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                 }
             }
@@ -443,7 +453,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             int fragmentBackStackSize = fragments.size();
             return fragments.get(fragmentBackStackSize - 1);
-        } catch (NullPointerException ex) {
+        }
+        catch (NullPointerException ex) {
             ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
             return null;
         }
