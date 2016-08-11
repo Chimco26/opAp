@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_layout.xml"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_dialog_title_material.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_search_view.xml",

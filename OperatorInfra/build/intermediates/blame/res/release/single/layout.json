@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_activity_chooser_view.xml"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_activity_chooser_view.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_content_include.xml",

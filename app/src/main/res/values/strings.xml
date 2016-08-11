@@ -87,6 +87,8 @@
     <string name="report_stop_reason">Report Stop\nReason</string>
     <string name="report_reject_nreason">Report Reject\nReason</string>
     <string name="stop">"Stop "</string>
+    <string name="report_cycle_nunits">Report Cycle\nUnits</string>
+    <string name="report_cycle_units">Report Cycle Units</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

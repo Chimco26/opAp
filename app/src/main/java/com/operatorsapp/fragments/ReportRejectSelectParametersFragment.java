@@ -85,7 +85,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         inputMethodManager.showSoftInput(mUnitsEditText, InputMethodManager.SHOW_IMPLICIT);
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
-        TextView productIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
+        TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_selected_job_id_text_view);
 
         mReportButton = (Button) view.findViewById(R.id.button_report);

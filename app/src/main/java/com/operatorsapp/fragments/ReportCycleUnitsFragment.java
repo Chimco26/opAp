@@ -1,15 +1,18 @@
 package com.operatorsapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 
 /**
@@ -24,7 +27,8 @@ public class ReportCycleUnitsFragment extends Fragment {
     private String mCurrentProductName;
     private int mCurrentProductId;
 
-
+    private TextView mProductTitleTextView;
+    private TextView mProductIdTextView;
 
     public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
@@ -46,10 +50,20 @@ public class ReportCycleUnitsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
+
         if (getArguments() != null) {
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
         }
+
+        setActionBar();
+
+        mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
+        mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
+
+        mProductTitleTextView.setText(mCurrentProductName);
+        mProductIdTextView.setText(String.valueOf(mCurrentProductId));
+
 
         return view;
     }
@@ -60,4 +74,27 @@ public class ReportCycleUnitsFragment extends Fragment {
     }
 
 
+    private void setActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(true);
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            // rootView null
+            @SuppressLint("InflateParams")
+            View view = inflater.inflate(R.layout.report_cycle_unit_action_bar, null);
+
+            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            buttonClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().popBackStack();
+                }
+            });
+            actionBar.setCustomView(view);
+        }
+    }
 }

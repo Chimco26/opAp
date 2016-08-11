@@ -20,16 +20,16 @@
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_dialog_material_background.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_thumb_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_seekbar_thumb_material.xml"
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_check_material.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_btn_check_material.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_search_api_material.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_search_api_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_check_material.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_btn_check_material.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\MachineStatusInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_seekbar_thumb_material.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\MachineStatusInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_radio_material.xml",

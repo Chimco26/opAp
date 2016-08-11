@@ -78,12 +78,12 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
+        if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
         }
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
-        TextView productIdTextView = (TextView) view.findViewById(R.id.report_rejects_product_id_text_view);
+        TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
 
         if (mMachineStatus != null) {

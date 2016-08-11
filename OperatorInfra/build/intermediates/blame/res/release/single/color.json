@@ -8,12 +8,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_tint_seek_thumb.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_light.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_secondary_text_material_light.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\color\\abc_search_url_text.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_search_url_text.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\color\\abc_secondary_text_material_light.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\OperatorInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\color\\abc_secondary_text_material_light.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\OperatorInfra\\build\\intermediates\\res\\merged\\release\\color\\abc_primary_text_disable_only_material_dark.xml",

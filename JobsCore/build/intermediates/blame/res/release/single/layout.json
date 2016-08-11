@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_dialog_title_material.xml",
@@ -28,16 +28,16 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_action.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_item_layout.xml"
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_cancel_action.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_cancel_action.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_select_dialog_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_cancel_action.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_cancel_action.xml"
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_menu_item_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\JobsCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_item_layout.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\JobsCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_toolbar.xml",
