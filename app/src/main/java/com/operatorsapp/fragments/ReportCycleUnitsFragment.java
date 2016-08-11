@@ -118,11 +118,11 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_plus: {
-
+                increase();
                 break;
             }
             case R.id.button_minus: {
-
+                decrease();
                 break;
             }
         }
