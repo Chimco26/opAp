@@ -19,4 +19,10 @@ public class RejectReasons {
     public String getName() {
         return name;
     }
+
+    public RejectReasons(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
+

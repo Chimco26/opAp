@@ -89,6 +89,9 @@
     <string name="stop">"Stop "</string>
     <string name="report_cycle_nunits">Report Cycle\nUnits</string>
     <string name="report_cycle_units">Report Cycle Units</string>
+    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
+    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="package_type">Package Type</string>
 
     <array name="operators_spinner_array">
         <item>Sign In</item>

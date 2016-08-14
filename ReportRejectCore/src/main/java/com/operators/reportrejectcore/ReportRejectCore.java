@@ -5,6 +5,7 @@ import android.util.Log;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
+import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
 import com.operators.reportrejectinfra.SendReportStopCallback;
 
@@ -86,5 +87,61 @@ public class ReportRejectCore {
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
         }
 
+    }
+
+    public void sendCycleUnitsReport(double unitsPerCycle, Integer jobId) {
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendReportCycleUnits(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), unitsPerCycle, jobId, new SendReportCallback() {
+                        @Override
+                        public void onSendReportSuccess() {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess();
+                            }
+                            else {
+                                Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            }
+                            else {
+                                Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
+    }
+
+    public void sendInventoryReport(int packageTypeId, int units, Integer jobId) {
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendReportInventory(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, jobId, new SendReportCallback() {
+                        @Override
+                        public void onSendReportSuccess() {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess();
+                            }
+                            else {
+                                Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendReportFailed(ErrorObjectInterface reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            }
+                            else {
+                                Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
     }
 }

@@ -429,6 +429,9 @@ public class RetrofitMockClient implements Interceptor {
                     Log.i(LOG_TAG, "StartJobForMachine request received");
                     responseString = "{\"error\":null}";
                     break;
+                case "ReportInventory":
+                    responseString = "{\"error\":null}";
+                    break;
                 case "GetOperatorById":
                     responseString = "{\n" +
                             "  \"Operator\": {\n" +
@@ -440,6 +443,9 @@ public class RetrofitMockClient implements Interceptor {
                     break;
                 case "SetOperatorForMachine":
                     Log.i(LOG_TAG, "SetOperatorForMachine request received");
+                    responseString = "{\"error\":null}";
+                    break;
+                case "ReportCycleUnits":
                     responseString = "{\"error\":null}";
                     break;
                 case "ReportReject":
@@ -820,79 +826,17 @@ public class RetrofitMockClient implements Interceptor {
                             "      ]\n" +
                             "    }\n" +
                             "  ],\n" +
-                            "  \"error\": null\n" +
-                            "}";
-                    break;
-                case "GetJobsListForMachineGeneric":
-                    responseString = "{\n" +
-                            "  \"error\": null,\n" +
-                            "  \"Jobs\": [],\n" +
-                            "  \"Headers\": [\n" +
+                            "  \"PackageTypes\": [\n" +
                             "    {\n" +
-                            "      \"FieldName\": \"ID\",\n" +
-                            "      \"DisplayEName\": \"ID\",\n" +
-                            "      \"FormID\": null,\n" +
-                            "      \"linkitem\": \"Job\",\n" +
-                            "      \"DisplayType\": \"num\"\n" +
+                            "      \"EName\": \"Test1 Mock\",\n" +
+                            "      \"ID\": 1\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"FieldName\": \"ERPJobID\",\n" +
-                            "      \"DisplayEName\": \"ERP Job ID\",\n" +
-                            "      \"FormID\": null,\n" +
-                            "      \"linkitem\": null,\n" +
-                            "      \"DisplayType\": \"text\"\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"FieldName\": \"EndTimeTarget\",\n" +
-                            "      \"DisplayEName\": \"End Time Target\",\n" +
-                            "      \"FormID\": null,\n" +
-                            "      \"linkitem\": \"\",\n" +
-                            "      \"DisplayType\": \"date\"\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"FieldName\": \"EndTime\",\n" +
-                            "      \"DisplayEName\": \"End Time Actual\",\n" +
-                            "      \"FormID\": null,\n" +
-                            "      \"linkitem\": \"\",\n" +
-                            "      \"DisplayType\": \"date\"\n" +
+                            "      \"EName\": \"Test2 Mock\",\n" +
+                            "      \"ID\": 110\n" +
                             "    }\n" +
                             "  ],\n" +
-                            "  \"Data\": [\n" +
-                            "    {\n" +
-                            "      \"ID\": 346,\n" +
-                            "      \"ERPJobID\": null,\n" +
-                            "      \"ProductCatalogID\": \"0998plan-2016-03-28 12:41:44 PM-124\",\n" +
-                            "      \"ProductID\": \"0998plan124\",\n" +
-                            "      \"MoldID\": \"0998\",\n" +
-                            "      \"UnitsTarget\": 100,\n" +
-                            "      \"UnitsProduced\": 0,\n" +
-                            "      \"UnitsProducedOK\": 0,\n" +
-                            "      \"UnitsProducedLeft\": 100,\n" +
-                            "      \"Status\": \"10 - Active\",\n" +
-                            "      \"StartTimeTarget\": \"2015-10-21T22:22:00\",\n" +
-                            "      \"EndTimeTarget\": \"2015-10-23T03:38:00\",\n" +
-                            "      \"EndTime\": null,\n" +
-                            "      \"TimeLeftHrHour\": 27.78,\n" +
-                            "      \"MachineJobOrder\": 10000\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"ID\": 344,\n" +
-                            "      \"ERPJobID\": \"O12-ERP B802-33.1\",\n" +
-                            "      \"ProductCatalogID\": \"B802-33-4220-2016-03-28 12:41:44 PM-124\",\n" +
-                            "      \"ProductID\": \"5373802 B 33124\",\n" +
-                            "      \"MoldID\": \"MILLING FIXTURE\",\n" +
-                            "      \"UnitsTarget\": 5,\n" +
-                            "      \"UnitsProduced\": 1,\n" +
-                            "      \"UnitsProducedOK\": 1,\n" +
-                            "      \"UnitsProducedLeft\": 4,\n" +
-                            "      \"Status\": \"10 - Active\",\n" +
-                            "      \"StartTimeTarget\": \"2015-10-19T19:00:00\",\n" +
-                            "      \"EndTimeTarget\": \"2016-06-26T19:07:17\",\n" +
-                            "      \"EndTime\": \"2015-10-15T15:17:06\",\n" +
-                            "      \"TimeLeftHrHour\": 3.48,\n" +
-                            "      \"MachineJobOrder\": 1\n" +
-                            "    }\n" +
-                            "  ]\n" +
+                            "  \"error\": null\n" +
                             "}";
                     break;
                 default:

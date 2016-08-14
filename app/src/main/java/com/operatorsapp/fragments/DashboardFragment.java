@@ -50,6 +50,7 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.fragments.interfaces.ReportInventoryFragment;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -401,8 +402,25 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             break;
                         }
                         case 2: {
-                            mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
-                                    mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--",
+                                        0), true);
+                            }
+                            else {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--",
+                                        0), true);
+                            }
+                            else {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
                             break;
                         }
                     }

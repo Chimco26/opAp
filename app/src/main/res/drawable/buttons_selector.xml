@@ -3,6 +3,8 @@
 
     <item android:drawable="@drawable/button_bg" android:state_selected="true"></item>
     <item android:drawable="@drawable/button_bg" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/button_bg_pressed"></item>
+    <item android:drawable="@drawable/button_bg_pressed" android:state_enabled="true"></item>
+    <item android:drawable="@drawable/button_bg_disabled" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/button_bg"></item>
 
 </selector>
