@@ -84,7 +84,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
+        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
 
         if (mMachineStatus != null) {
             if (mMachineStatus.getAllMachinesData() != null) {

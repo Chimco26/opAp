@@ -93,7 +93,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.stop_recycler_view);
 
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
+        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
         if (mMachineStatus != null) {
             if (mMachineStatus.getAllMachinesData() != null) {
                 jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));

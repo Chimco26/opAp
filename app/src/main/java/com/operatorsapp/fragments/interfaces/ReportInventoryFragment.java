@@ -19,12 +19,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
+import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
+import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
@@ -41,7 +46,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private String mCurrentProductName;
     private int mCurrentProductId;
-
     private ReportRejectCore mReportRejectCore;
     private TextView mProductTitleTextView;
     private TextView mProductIdTextView;
@@ -57,6 +61,10 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     private Integer mJobId = null;
     private int mSelectedPackageTypeId;
     private String mSelectedPackageTypeName;
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Spinner mJobsSpinner;
+
 
     public static ReportInventoryFragment newInstance(String currentProductName, int currentProductId) {
         ReportInventoryFragment reportInventoryFragment = new ReportInventoryFragment();
@@ -83,6 +91,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
         }
+        getActiveJobs();
     }
 
     @Nullable
@@ -109,6 +118,8 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         mButtonReport = (Button) view.findViewById(R.id.button_report);
         mButtonReport.setEnabled(true);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
+
+        mJobsSpinner = (Spinner)view.findViewById(R.id.report_job_spinner);
 
         Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.package_type_spinner);
 
@@ -234,4 +245,48 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             Log.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
         }
     };
+
+    private void getActiveJobs() {
+        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
+        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
+        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+    }
+
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+        @Override
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+            if (activeJobsListForMachine != null) {
+                mActiveJobsListForMachine = activeJobsListForMachine;
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                initJobsSpinner();
+                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+
+            }
+            else {
+                mJobId = null;
+                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            }
+        }
+
+        @Override
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+            mJobId = null;
+            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mActiveJobsListForMachineCore.unregisterListener();
+    }
+
+    private void initJobsSpinner(){
+        ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(),R.layout.base_spinner_item,mActiveJobsListForMachine.getActiveJobs());
+        activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+        mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+    }
 }

@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
-import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operatorsapp.R;
 
 import java.util.List;
@@ -17,15 +17,15 @@ import java.util.List;
 /**
  * Created by Sergey on 04/08/2016.
  */
-public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
+public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
     private Activity mContext;
-    private List<PackageTypes> mSpinnerItems;
+    private List<ActiveJob> mSpinnerItems;
     TextView mRowName;
     View mView;
 
-    public RejectInventorySpinnerAdapter(Activity context, int resource, List<PackageTypes> packageTypesList) {
-        super(context, resource, packageTypesList);
-        mSpinnerItems = packageTypesList;
+    public ActiveJobsSpinnerAdapter(Activity context, int resource, List<ActiveJob> activeJobs) {
+        super(context, resource, activeJobs);
+        mSpinnerItems = activeJobs;
         mContext = context;
     }
 
@@ -38,7 +38,7 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            mRowName.setText(mSpinnerItems.get(0).getName());
+            mRowName.setText(mSpinnerItems.get(0).getJobName());
             mRowName.setTextSize(20);
         }
         return row;
@@ -51,7 +51,7 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position).getName();
+        String item = mSpinnerItems.get(position).getJobName();
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
@@ -65,7 +65,7 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position).getName());
+        mRowName.setText(mSpinnerItems.get(position).getJobName());
         mRowName.setTextSize(20);
     }
 }

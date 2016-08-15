@@ -839,6 +839,31 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}";
                     break;
+                case "GetActiveJobsListForMachine":{
+                    responseString = "{\n" +
+                            "  \"error\":null,\n" +
+                            "  \"Jobs\":\n" +
+                            "  [\n" +
+                            "    {\n" +
+                            "      \"JobID\": 29,\n" +
+                            "      \"JobName\": \"some name1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"JobID\": 31,\n" +
+                            "      \"JobName\": \"some name2\"\n" +
+                            "    },\n" +
+                            "\t{\n" +
+                            "      \"JobID\": 23,\n" +
+                            "      \"JobName\": \"some name3\"\n" +
+                            "    },\n" +
+                            "\t{\n" +
+                            "      \"JobID\": 28,\n" +
+                            "      \"JobName\": \"some name4\"\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}";
+                    break;
+                }
                 default:
                     responseString = "{\n" +
                             "  \"error\": null,\n" +

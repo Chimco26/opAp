@@ -105,7 +105,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
+        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
         jobIdTextView.setText((String.valueOf(mCurrentJobId)));
 
         mButtonNext = (Button) view.findViewById(R.id.button_next);

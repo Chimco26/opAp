@@ -92,15 +92,15 @@
                 android:id="@+id/job_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/report_rejects_job_id__text_view"
+                android:layout_alignTop="@+id/report_job_spinner"
                 android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/report_rejects_job_id__text_view"
+                android:layout_toStartOf="@+id/report_job_spinner"
                 android:text="@string/job"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/status_bar"/>
 
             <TextView
-                android:id="@+id/report_rejects_job_id__text_view"
+                android:id="@+id/report_job_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
