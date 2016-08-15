@@ -15,19 +15,21 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:text="@string/product"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/status_bar"/>
 
         <TextView
             android:id="@+id/report_cycle_u_product_name_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_alignTop="@+id/textView"
             android:layout_toEndOf="@+id/textView"
             android:singleLine="true"
@@ -37,17 +39,19 @@
         <TextView
             android:id="@+id/id_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignTop="@+id/report_cycle_u_product_name_text_view"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/report_cycle_u_product_name_text_view"
             android:text="@string/id"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
             android:id="@+id/report_cycle_id_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_alignTop="@+id/id_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/id_title"
@@ -57,20 +61,21 @@
         <Spinner
             android:id="@+id/report_job_spinner"
             android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/report_cycle_id_text_view"
             android:layout_marginEnd="30dp"
+            android:dropDownVerticalOffset="55dp"
             />
 
         <TextView
             android:id="@+id/job_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignTop="@+id/report_job_spinner"
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/report_job_spinner"
             android:text="@string/job"
+            android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/status_bar"/>
 
@@ -212,7 +217,7 @@
                             android:id="@+id/package_type_spinner"
                             android:layout_width="349dp"
                             android:layout_height="41dp"
-                            android:dropDownVerticalOffset="43dp"
+                            android:dropDownVerticalOffset="45dp"
                             >
                         </Spinner>
                     </RelativeLayout>

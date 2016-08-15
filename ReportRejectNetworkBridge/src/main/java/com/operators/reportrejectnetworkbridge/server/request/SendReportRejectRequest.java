@@ -22,8 +22,10 @@ public class SendReportRejectRequest {
     private double mUnits;
     @SerializedName("Weight")
     private Double mWeight;
+    @SerializedName("JobId")
+    private Integer mJobId;
 
-    public SendReportRejectRequest(String sessionId, String machineId, String operatorId, int rejectReasonId, double units, @Nullable Integer rejectCauseId, @Nullable Double weight) {
+    public SendReportRejectRequest(String sessionId, String machineId, String operatorId, int rejectReasonId, double units, @Nullable Integer rejectCauseId, @Nullable Double weight, @Nullable Integer jobId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;
@@ -31,5 +33,6 @@ public class SendReportRejectRequest {
         mRejectCauseId = rejectCauseId;
         mUnits = units;
         mWeight = weight;
+        mJobId = jobId;
     }
 }

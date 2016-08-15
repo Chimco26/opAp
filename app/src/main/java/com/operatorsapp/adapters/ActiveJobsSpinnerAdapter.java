@@ -37,8 +37,8 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            mRowName.setText(mSpinnerItems.get(0).getJobName());
+            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
+            mRowName.setText(String.valueOf(mSpinnerItems.get(0).getJobID()));
             mRowName.setTextSize(20);
         }
         return row;
@@ -51,21 +51,19 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position).getJobName();
-        if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
-            name.setText(item);
-            name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+            name.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
+            name.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
             name.setTextSize(17);
-        }
+
         return row;
     }
 
     public void setTitle(int position) {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position).getJobName());
+        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
+        mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
         mRowName.setTextSize(20);
     }
 }

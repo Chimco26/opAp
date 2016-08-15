@@ -20,14 +20,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
+import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
+import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
 
@@ -37,11 +45,8 @@ import com.operatorsapp.utils.ShowCrouton;
 public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
-    private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
-    private static final String REJECT_REASON = "reject_reason";
-    private static final String REJECT_CAUSE = "reject_cause";
-    private static final String REJECT_REASON_TITLE = "reject_reason_title";
-    private MachineStatus mMachineStatus;
+    private static final String CURRENT_PRODUCT_NAME = "current_product_name";
+    private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
     private Button mNextButton;
     private boolean mIsFirstReasonSpinnerSelection = true;
@@ -53,6 +58,21 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private String mSelectedReasonName;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
+    private String mCurrentProductName;
+    private int mCurrentProductId;
+    private Integer mJobId = null;
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Spinner mJobsSpinner;
+
+    public static ReportRejectsFragment newInstance(String currentProductName, int currentProductId) {
+        ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
+        bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        reportRejectsFragment.setArguments(bundle);
+        return reportRejectsFragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -63,13 +83,20 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
+            mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+        }
+          getActiveJobs();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
-        Bundle bundle = this.getArguments();
-        Gson gson = new Gson();
-        mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);
         setActionBar();
         return view;
     }
@@ -82,17 +109,15 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
         }
 
-        TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
+        TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
 
-        if (mMachineStatus != null) {
-            if (mMachineStatus.getAllMachinesData() != null) {
-                productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-                productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
-                jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
-            }
-        }
+
+        productNameTextView.setText(new StringBuilder(mCurrentProductName + ","));
+        productIdTextView.setText(String.valueOf(mCurrentProductId));
+
+        mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
+
 
         Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
@@ -200,24 +225,60 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 }
                 else {
                     Log.i(LOG_TAG, "reason Selected");
-                    ReportRejectSelectParametersFragment reportRejectSelectParametersFragment = new ReportRejectSelectParametersFragment();
-
-                    Bundle bundle = new Bundle();
-                    Gson gson = new Gson();
-                    String jobString = gson.toJson(mMachineStatus, MachineStatus.class);
-                    bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-                    bundle.putInt(REJECT_REASON, mSelectedReasonId);
-                    bundle.putInt(REJECT_CAUSE, mSelectedCauseId);
-                    bundle.putString(REJECT_REASON_TITLE, mSelectedReasonName);
-
-                    reportRejectSelectParametersFragment.setArguments(bundle);
-
-                    mGoToScreenListener.goToFragment(reportRejectSelectParametersFragment, true);
+                    mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId,mSelectedCauseId,mSelectedReasonName,mJobId,mCurrentProductName,mCurrentProductId), true);
                 }
                 break;
             }
         }
     }
 
+    private void getActiveJobs() {
+        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
+        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
+        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+    }
+
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+        @Override
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+            if (activeJobsListForMachine != null) {
+                mActiveJobsListForMachine = activeJobsListForMachine;
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                initJobsSpinner();
+                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+            }
+            else {
+                mJobId = null;
+                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            }
+        }
+
+        @Override
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+            mJobId = null;
+            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+        }
+    };
+
+    private void initJobsSpinner() {
+        final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+        activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+        mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                activeJobsSpinnerAdapter.setTitle(position);
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
 }

@@ -32,11 +32,11 @@ public class ReportRejectCore {
         mReportCallbackListener = null;
     }
 
-    public void sendReportReject(int rejectReasonId, int rejectReasonCause, double units, Double weight) {
+    public void sendReportReject(int rejectReasonId, int rejectReasonCause, double units, Double weight, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportReject(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, rejectReasonCause, units, weight, new SendReportRejectCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, rejectReasonCause, units, weight, jobId, new SendReportRejectCallback() {
                         @Override
                         public void onSendReportSuccess() {
                             if (mReportCallbackListener != null) {
@@ -60,11 +60,11 @@ public class ReportRejectCore {
         }
     }
 
-    public void sendStopReport(int stopReasonId, int stopSubReasonId) {
+    public void sendStopReport(int stopReasonId, int stopSubReasonId, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, new SendReportStopCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, jobId, new SendReportStopCallback() {
                         @Override
                         public void onSendStopReportSuccess() {
                             if (mReportCallbackListener != null) {

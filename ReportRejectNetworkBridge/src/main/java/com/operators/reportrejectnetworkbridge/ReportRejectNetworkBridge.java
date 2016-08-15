@@ -50,8 +50,8 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
 
     @Override
-    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, final SendReportStopCallback callback, int totalRetries, int specificRequestTimeout) {
-        SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId);
+    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId,Integer jobId, final SendReportStopCallback callback, int totalRetries, int specificRequestTimeout) {
+        SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId);
         Call<SendReportStopResponse> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendStopReport(sendReportStopRequest);
         call.enqueue(new Callback<SendReportStopResponse>() {
             @Override
@@ -85,8 +85,8 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
 
     @Override
-    public void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int rejectCauseId, double units, Double weight, final SendReportRejectCallback callback, int totalRetries, int specificRequestTimeout) {
-        SendReportRejectRequest sendReportRejectRequest = new SendReportRejectRequest(sessionId, machineId, operatorId, rejectReasonId, units, rejectCauseId, weight);
+    public void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int rejectCauseId, double units, Double weight, Integer jobId,final SendReportRejectCallback callback, int totalRetries, int specificRequestTimeout) {
+        SendReportRejectRequest sendReportRejectRequest = new SendReportRejectRequest(sessionId, machineId, operatorId, rejectReasonId, units, rejectCauseId, weight, jobId);
         Call<SendReportRejectResponse> call = mReportRejectNetworkManagerInterface.reportRejectRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportReject(sendReportRejectRequest);
         call.enqueue(new Callback<SendReportRejectResponse>() {
             @Override

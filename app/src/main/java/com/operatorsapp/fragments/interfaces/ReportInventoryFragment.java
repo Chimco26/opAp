@@ -36,6 +36,8 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
+import java.io.File;
+
 /**
  * Created by Sergey on 14/08/2016.
  */
@@ -119,7 +121,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         mButtonReport.setEnabled(true);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
-        mJobsSpinner = (Spinner)view.findViewById(R.id.report_job_spinner);
+        mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
         Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.package_type_spinner);
 
@@ -226,7 +228,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         reportRejectNetworkBridge.injectInventory(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        Log.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName);
+        Log.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
         mReportRejectCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
     }
@@ -262,7 +264,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-
             }
             else {
                 mJobId = null;
@@ -283,10 +284,22 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         mActiveJobsListForMachineCore.unregisterListener();
     }
 
-    private void initJobsSpinner(){
-        ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(),R.layout.base_spinner_item,mActiveJobsListForMachine.getActiveJobs());
+    private void initJobsSpinner() {
+        final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mActiveJobsListForMachine.getActiveJobs());
         activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
         mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                activeJobsSpinnerAdapter.setTitle(position);
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 }

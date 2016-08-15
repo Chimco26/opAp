@@ -40,21 +40,39 @@ import com.operatorsapp.utils.ShowCrouton;
 public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener {
 
     private static final String LOG_TAG = ReportRejectSelectParametersFragment.class.getSimpleName();
-    private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
     private static final String REJECT_REASON = "reject_reason";
     private static final String REJECT_CAUSE = "reject_cause";
     private static final String REJECT_REASON_TITLE = "reject_reason_title";
-    private MachineStatus mMachineStatus;
+    private static final String SELECTED_JOB_ID = "selected_job_id";
+    private static final String CURRENT_PRODUCT_NAME = "current_product_name";
+    private static final String CURRENT_PRODUCT_ID = "current_product_id";
+
     private int mSelectedReasonId;
     private int mSelectedCauseId;
     private String mSelectedReasonName;
+    private Integer mJobId = null;
     private EditText mUnitsEditText;
     private EditText mWeightEditText;
     private Button mReportButton;
     private TextView mCancelButton;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportRejectCore mReportRejectCore;
+    private String mCurrentProductName;
+    private int mCurrentProductId;
 
+
+    public static ReportRejectSelectParametersFragment newInstance(int selectedReasonId, int selectedCauseId, String selectedReasonName, Integer jobId, String currentProductName, int currentProductId) {
+        ReportRejectSelectParametersFragment reportRejectSelectParametersFragment = new ReportRejectSelectParametersFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(REJECT_REASON, selectedReasonId);
+        bundle.putInt(REJECT_CAUSE, selectedCauseId);
+        bundle.putString(REJECT_REASON_TITLE, selectedReasonName);
+        bundle.putInt(SELECTED_JOB_ID, jobId);
+        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
+        bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        reportRejectSelectParametersFragment.setArguments(bundle);
+        return reportRejectSelectParametersFragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -62,17 +80,24 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mSelectedReasonId = getArguments().getInt(REJECT_REASON);
+            mSelectedCauseId = getArguments().getInt(REJECT_CAUSE);
+            mSelectedReasonName = getArguments().getString(REJECT_REASON_TITLE);
+            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
+            mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+            mJobId = getArguments().getInt(SELECTED_JOB_ID);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_rejects_selected_parameters, container, false);
 
-        Bundle bundle = this.getArguments();
-        Gson gson = new Gson();
-        mMachineStatus = gson.fromJson(bundle.getString(CURRENT_MACHINE_STATUS), MachineStatus.class);
-        mSelectedReasonId = bundle.getInt(REJECT_REASON);
-        mSelectedCauseId = bundle.getInt(REJECT_CAUSE);
-        mSelectedReasonName = bundle.getString(REJECT_REASON_TITLE);
         setActionBar();
         return view;
     }
@@ -97,13 +122,24 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mUnitsEditText.setFocusableInTouchMode(true);
         mUnitsEditText.requestFocus();
 
-        if (mMachineStatus != null) {
-            if (mMachineStatus.getAllMachinesData() != null) {
-                productNameTextView.setText(new StringBuilder(mMachineStatus.getAllMachinesData().get(0).getCurrentProductName() + ","));
-                productIdTextView.setText(String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentProductID()));
-                jobIdTextView.setText((String.valueOf(mMachineStatus.getAllMachinesData().get(0).getCurrentJobID())));
-            }
+        if (mCurrentProductName != null) {
+            productNameTextView.setText(mCurrentProductName + ",");
         }
+        else {
+            productNameTextView.setText(getActivity().getString(R.string.dashes));
+        }
+
+        productIdTextView.setText(String.valueOf(mCurrentProductId));
+
+        if (mJobId != null) {
+            jobIdTextView.setText(String.valueOf(mJobId));
+        }
+        else {
+            jobIdTextView.setText(getActivity().getString(R.string.dashes));
+
+        }
+
+
         mUnitsEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -182,7 +218,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_report: {
-                Log.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString());
+                Log.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 sendReport();
                 break;
             }
@@ -204,7 +240,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         if (!mWeightEditText.getText().toString().equals("")) {
             weight = Double.parseDouble(mWeightEditText.getText().toString());
         }
-        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, Double.parseDouble(mUnitsEditText.getText().toString()), weight);
+        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, Double.parseDouble(mUnitsEditText.getText().toString()), weight, mJobId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {

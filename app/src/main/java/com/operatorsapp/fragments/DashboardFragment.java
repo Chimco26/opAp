@@ -390,15 +390,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             break;
                         }
                         case 1: {
-                            Log.d(LOG_TAG, "Report Rejects selected");
-                            ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
-                            Bundle bundle = new Bundle();
-                            Gson gson = new Gson();
-                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
-                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-
-                            reportRejectsFragment.setArguments(bundle);
-                            mOnGoToScreenListener.goToFragment(reportRejectsFragment, true);
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--",
+                                        0), true);
+                            }
+                            else {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
                             break;
                         }
                         case 2: {
@@ -508,17 +507,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void openStopReportScreen(int eventId, String start, String end, int duration) {
-        ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
-        Bundle bundle = new Bundle();
-        Gson gson = new Gson();
-        String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
-        bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-        bundle.putString(END_TIME, end);
-        bundle.putString(START_TIME, start);
-        bundle.putInt(DURATION, duration);
-        bundle.putInt(STOP_REPORT_EVENT_ID, eventId);
-        reportStopReasonFragment.setArguments(bundle);
-        mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
+        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end,duration, eventId), true);
     }
 
     @Override
