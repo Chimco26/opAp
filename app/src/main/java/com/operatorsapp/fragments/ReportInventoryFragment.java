@@ -1,4 +1,4 @@
-package com.operatorsapp.fragments.interfaces;
+package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,12 +32,11 @@ import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
-
-import java.io.File;
 
 /**
  * Created by Sergey on 14/08/2016.
@@ -49,13 +49,12 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     private String mCurrentProductName;
     private int mCurrentProductId;
     private ReportRejectCore mReportRejectCore;
-    private TextView mProductTitleTextView;
-    private TextView mProductIdTextView;
     private ImageView mPlusButton;
     private ImageView mMinusButton;
     private TextView mUnitsCounterTextView;
     private Button mButtonReport;
     private TextView mButtonCancel;
+    private ProgressBar mActiveJobsProgressBar;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -93,7 +92,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
         }
-        getActiveJobs();
     }
 
     @Nullable
@@ -101,16 +99,18 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
         setActionBar();
+        mActiveJobsProgressBar = (ProgressBar)view.findViewById(R.id.active_jobs_progressBar);
+        getActiveJobs();
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
             ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
         }
 
-        mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
-        mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
+        TextView productTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
+        TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        mProductTitleTextView.setText(mCurrentProductName);
-        mProductIdTextView.setText(String.valueOf(mCurrentProductId));
+        productTitleTextView.setText(mCurrentProductName);
+        productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
@@ -269,12 +269,14 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
+            mActiveJobsProgressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            mActiveJobsProgressBar.setVisibility(View.GONE);
         }
     };
 
@@ -285,6 +287,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     }
 
     private void initJobsSpinner() {
+        mJobsSpinner.setVisibility(View.VISIBLE);
         final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mActiveJobsListForMachine.getActiveJobs());
         activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
