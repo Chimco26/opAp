@@ -131,6 +131,12 @@
             android:gravity="center"
             app:theme="@style/ToolbarTheme"
             tools:ignore="MissingPrefix" />
+        <ImageView
+            android:id="@+id/settings_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_settings_copy"/>
     </LinearLayout>
 
 

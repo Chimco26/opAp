@@ -72,12 +72,12 @@
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_edit_text_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_tick_mark_material.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_go_search_api_material.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_clear_material.xml",

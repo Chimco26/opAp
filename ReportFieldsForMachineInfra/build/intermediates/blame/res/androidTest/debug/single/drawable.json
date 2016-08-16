@@ -20,12 +20,12 @@
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_switch_thumb_material.xml"
     },
     {
-        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_list_selector_holo_light.xml",
-        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_list_selector_holo_light.xml"
-    },
-    {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_textfield_search_material.xml",
         "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
         "merged": "C:\\Users\\User\\Desktop\\LeaderMES-operators\\ReportFieldsForMachineInfra\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",

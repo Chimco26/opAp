@@ -282,7 +282,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onHideConnectivityCroutonRequest() {
-
+        if (mCroutonCreator != null) {
+            mCroutonCreator.hideConnectivityCrouton();
+        }
     }
 
     @Override

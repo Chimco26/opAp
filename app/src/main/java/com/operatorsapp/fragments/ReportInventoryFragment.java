@@ -99,13 +99,29 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
         setActionBar();
-        mActiveJobsProgressBar = (ProgressBar)view.findViewById(R.id.active_jobs_progressBar);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
+        mButtonReport = (Button) view.findViewById(R.id.button_report);
+        mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
+        mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
-            ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
+            ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.fragment_report_inventory);
+            mButtonReport.setEnabled(false);
+            mMinusButton.setEnabled(false);
+            mPlusButton.setEnabled(false);
         }
-
+        else {
+            mButtonReport.setEnabled(true);
+            mMinusButton.setEnabled(true);
+            mPlusButton.setEnabled(true);
+        }
         TextView productTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
@@ -114,39 +130,34 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
 
         mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-        mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
-        mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
-        mButtonReport = (Button) view.findViewById(R.id.button_report);
-        mButtonReport.setEnabled(true);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
         Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.package_type_spinner);
+        if (mReportFieldsForMachine != null) {
+            final RejectInventorySpinnerAdapter reasonSpinnerArrayAdapter = new RejectInventorySpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
+            reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
+            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-        final RejectInventorySpinnerAdapter reasonSpinnerArrayAdapter = new RejectInventorySpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
-        reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-        rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    reasonSpinnerArrayAdapter.setTitle(position);
+                    mSelectedPackageTypeName = mReportFieldsForMachine.getPackageTypes().get(position).getName();
+                    mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
+                }
 
-        rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                reasonSpinnerArrayAdapter.setTitle(position);
-                mSelectedPackageTypeName = mReportFieldsForMachine.getPackageTypes().get(position).getName();
-                mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
 
-            }
-        });
-
-        return view;
     }
-
 
     @Override
     public void onResume() {
@@ -155,6 +166,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         mMinusButton.setOnClickListener(this);
         mButtonReport.setOnClickListener(this);
         mButtonCancel.setOnClickListener(this);
+
     }
 
 
@@ -222,8 +234,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     }
 
     private void sendReport() {
-//TODO id, name, units
-
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.injectInventory(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
@@ -269,21 +279,26 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
-            mActiveJobsProgressBar.setVisibility(View.GONE);
+            disableProgressBar();
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            mActiveJobsProgressBar.setVisibility(View.GONE);
+            disableProgressBar();
         }
     };
+
+    private void disableProgressBar() {
+        mActiveJobsProgressBar.setVisibility(View.GONE);
+    }
 
     @Override
     public void onPause() {
         super.onPause();
         mActiveJobsListForMachineCore.unregisterListener();
+        mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
     private void initJobsSpinner() {

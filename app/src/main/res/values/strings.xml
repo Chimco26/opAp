@@ -92,11 +92,16 @@
     <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
     <string name="report_inventory_item_production">Report Inventory Item Production</string>
     <string name="package_type">Package Type</string>
+    <string name="settings">Setting</string>
+    <string name="operator_app_settings">Operator\nApp\nSettings</string>
+    <string name="language">Language</string>
+    <string name="factory_sign_in">Factory sign in</string>
+    <string name="change">Change</string>
 
-    <array name="operators_spinner_array">
-        <item>Sign In</item>
-        <item>Sergey</item>
-        <item>Yossi</item>
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Australian Aboriginal</item>
     </array>
 
     <array name="jobs_spinner_array">
@@ -106,19 +111,8 @@
         <item>Report Production</item>
     </array>
 
-    <array name="reject_reasons_array">
-        <item>Shape deformation</item>
-        <item>Another reason 1</item>
-        <item>Another reason 2</item>
-        <item>Another reason 3</item>
-    </array>
 
-    <array name="reject_reasons_cause_array">
-        <item>Raw material problem</item>
-        <item>Cause 1</item>
-        <item>Cause 2</item>
-        <item>Cause 3</item>
-    </array>
+
 
 
 </resources>

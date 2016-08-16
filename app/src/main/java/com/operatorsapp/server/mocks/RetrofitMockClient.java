@@ -566,7 +566,7 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}";
                     break;
-                case "GetJobsListForMachineGeneric":
+                case "getJobsListForMachineGeneric":
 //                case "getJobsListForMachine":
                     responseString = "{\n" +
                             "  \"error\": null,\n" +

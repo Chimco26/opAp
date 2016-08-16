@@ -41,6 +41,14 @@
         <item name="fontPath">fonts/DroidSans-Bold.ttf</item>
     </style>
 
+    <style name="RobotoMedium">
+        <item name="fontPath">fonts/Roboto-Medium.ttf</item>
+    </style>
+
+    <style name="Roboto_Action_Bar_Title" parent="RobotoMedium">
+        <item name="android:textSize">27sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="FontStyle_T1" parent="DroidSansBold">
         <item name="android:textSize">21sp</item>
