@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/report_inventory_screen"
-              android:orientation="vertical">
+    android:id="@+id/report_inventory_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,48 +15,48 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
-            android:text="@string/product"
-            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
             android:gravity="center_vertical"
+            android:text="@string/product"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/status_bar"/>
+            android:textColor="@color/status_bar" />
 
         <TextView
             android:id="@+id/report_cycle_u_product_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_alignTop="@+id/textView"
             android:layout_toEndOf="@+id/textView"
+            android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@string/product_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/id_title"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignTop="@+id/report_cycle_u_product_name_text_view"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/report_cycle_u_product_name_text_view"
-            android:text="@string/id"
-            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:text="@string/id"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/report_cycle_id_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_alignTop="@+id/id_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/id_title"
+            android:gravity="center_vertical"
             android:text="@string/product_id"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/report_job_spinner"
@@ -64,8 +64,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
-            android:dropDownVerticalOffset="55dp"
-            />
+            android:dropDownVerticalOffset="55dp" />
 
         <TextView
             android:id="@+id/job_title"
@@ -74,10 +73,10 @@
             android:layout_alignTop="@+id/report_job_spinner"
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/report_job_spinner"
-            android:text="@string/job"
             android:gravity="center_vertical"
+            android:text="@string/job"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/status_bar"/>
+            android:textColor="@color/status_bar" />
 
     </RelativeLayout>
 
@@ -97,8 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
 
                 <ImageView
@@ -106,15 +104,14 @@
                     android:layout_width="120dp"
                     android:layout_height="105dp"
                     android:layout_marginLeft="30dp"
-                    android:background="@drawable/icrepeat"
-                    />
+                    android:background="@drawable/icrepeat" />
 
                 <View
                     android:layout_width="60dp"
                     android:layout_height="1dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="30dp"
-                    android:background="@color/divider_gray"/>
+                    android:background="@color/divider_gray" />
 
                 <TextView
                     style="@style/FontStyle_T120"
@@ -123,7 +120,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="20dp"
                     android:text="@string/report_inventory_nitem_production"
-                    android:textSize="40sp"/>
+                    android:textSize="40sp" />
             </LinearLayout>
 
 
@@ -154,59 +151,60 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="7dp"
                         android:text="@string/units"
-                        android:textSize="20dp"
-                        android:textColor="@color/status_bar"/>
+                        android:textColor="@color/status_bar"
+                        android:textSize="20dp" />
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="351dp"
                         android:layout_height="51dp"
                         android:layout_marginBottom="30dp"
-                        android:background="@drawable/edit_text_background_selector">
+                        android:gravity="center"
+                        android:background="@color/divider_gray">
 
                         <LinearLayout
                             android:layout_width="349dp"
                             android:layout_height="49dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:background="@android:color/white">
 
                             <ImageView
                                 android:id="@+id/button_minus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.2"
-                                android:src="@drawable/ic_indicator_exceeding"/>
+                                android:layout_width="49dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/button_plus_selector" />
 
                             <TextView
                                 android:id="@+id/units_text_view"
                                 style="@style/FontStyle_T6"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="2"
+                                android:layout_weight="1"
                                 android:background="@android:color/transparent"
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="1"
                                 android:textColor="@color/status_bar"
-                                android:textSize="20dp"/>
+                                android:textSize="20dp" />
 
                             <ImageView
                                 android:id="@+id/button_plus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.2"
-                                android:src="@drawable/ic_indicator_working"/>
+                                android:layout_width="49dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/button_plus_selector" />
 
 
                         </LinearLayout>
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="7dp"
+                        android:layout_marginTop="20dp"
                         android:text="@string/package_type"
-                        android:textSize="20dp"                           android:textColor="@color/status_bar"
-                        android:layout_marginTop="20dp"/>
+                        android:textColor="@color/status_bar"
+                        android:textSize="20dp" />
 
                     <RelativeLayout
                         android:layout_width="351dp"
@@ -217,9 +215,7 @@
                             android:id="@+id/package_type_spinner"
                             android:layout_width="349dp"
                             android:layout_height="41dp"
-                            android:dropDownVerticalOffset="45dp"
-                            >
-                        </Spinner>
+                            android:dropDownVerticalOffset="45dp"/>
                     </RelativeLayout>
 
                 </LinearLayout>
@@ -245,22 +241,21 @@
                             android:layout_width="126dp"
                             android:layout_height="28dp"
                             android:layout_marginRight="5dp"
+                            android:gravity="center"
                             android:text="@string/cancel"
                             android:textAllCaps="true"
-                            android:gravity="center"
                             android:textColor="@drawable/button_cancel_text_selector"
-                            android:textSize="20dp"
-                            />
+                            android:textSize="20dp" />
 
                         <Button
                             android:id="@+id/button_report"
                             android:layout_width="104dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/report"
+                            android:layout_weight="0.13"
                             android:background="@drawable/buttons_selector"
+                            android:text="@string/report"
                             android:textColor="@drawable/button_text_color_selector"
-                            android:textSize="20dp"
-                            android:layout_weight="0.13"/>
+                            android:textSize="20dp" />
                     </LinearLayout>
 
                 </LinearLayout>
