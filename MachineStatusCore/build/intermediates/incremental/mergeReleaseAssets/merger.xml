@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\ZemingoProjects\operatorsApp\MachineStatusCore\src\main\assets"/><source path="C:\ZemingoProjects\operatorsApp\MachineStatusCore\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="C:\ZemingoProjects\operatorsApp\MachineStatusCore\src\release\assets"/></dataSet></merger>
