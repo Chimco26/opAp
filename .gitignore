@@ -1299,3 +1299,6 @@ MachineDataCore/build/
 MachineDataNetworkBridge/build/
 MachineDataInfra/build/
 ErrorObjectInterface/build/
+ActiveJobsListForMachineCore/build/
+ActiveJobsListForMachineNetworkBridge/build/
+ActiveJobsListForMachineInfra/build/
