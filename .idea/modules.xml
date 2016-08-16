@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" />
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />

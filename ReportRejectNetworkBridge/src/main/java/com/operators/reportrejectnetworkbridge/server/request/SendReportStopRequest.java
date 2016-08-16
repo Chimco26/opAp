@@ -1,5 +1,7 @@
 package com.operators.reportrejectnetworkbridge.server.request;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -16,13 +18,18 @@ public class SendReportStopRequest {
     private int mStopReasonId;
     @SerializedName("StopSubReasonID")
     private int mStopSubReasonId;
+    @SerializedName("JobId")
+    private Integer mJobId;
 
 
-    public SendReportStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId) {
+
+
+    public SendReportStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;
         mStopReasonId = stopReasonId;
         mStopSubReasonId = stopSubReasonId;
+        mJobId = jobId;
     }
 }

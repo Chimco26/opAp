@@ -15,11 +15,14 @@ public class ReportFieldsForMachine {
     private List<RejectReasons> rejectReasons = new ArrayList<RejectReasons>();
     @SerializedName("RejectCauses")
     private List<RejectCauses> rejectCauses = new ArrayList<RejectCauses>();
+    @SerializedName("PackageTypes")
+    private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
 
-    public ReportFieldsForMachine(List<StopReasons> stopReasons, List<RejectReasons> rejectReasons, List<RejectCauses> rejectCauses) {
+    public ReportFieldsForMachine(List<StopReasons> stopReasons, List<RejectReasons> rejectReasons, List<RejectCauses> rejectCauses, List<PackageTypes> packageTypes) {
         this.stopReasons = stopReasons;
         this.rejectReasons = rejectReasons;
         this.rejectCauses = rejectCauses;
+        this.packageTypes = packageTypes;
     }
 
     public List<StopReasons> getStopReasons() {
@@ -32,5 +35,9 @@ public class ReportFieldsForMachine {
 
     public List<RejectCauses> getRejectCauses() {
         return rejectCauses;
+    }
+
+    public List<PackageTypes> getPackageTypes() {
+        return packageTypes;
     }
 }
