@@ -113,10 +113,10 @@ public class TimeUtils {
     }
 
 
-    public static String secondsToTimeFormat(int seconds) {
-        int hours = seconds / 3600;
-        int minutes = (seconds % 3600) / 60;
-        int sec = seconds % 60;
+    public static String secondsToTimeFormat(long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long sec = seconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, sec);
     }
 

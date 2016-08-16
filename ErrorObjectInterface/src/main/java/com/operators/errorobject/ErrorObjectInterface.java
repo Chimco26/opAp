@@ -18,6 +18,7 @@ public interface ErrorObjectInterface {
         Set_operator_for_machine_failed,
         Get_report_fields_failed,
         Send_Report_Failed,
+        Get_active_jobs_for_machine_failed,
         Error_rest
     }
 

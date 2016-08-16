@@ -49,6 +49,7 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.fragments.interfaces.ReportInventoryFragment;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -179,10 +180,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     case MotionEvent.ACTION_MOVE:
                         if (!mNoData) {
                             int currentX;
-                            if(PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
-                                currentX  = mShiftLogLayout.getLayoutParams().width - (int) event.getRawX() + mDownX;
+                            if (PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
+                                currentX = mShiftLogLayout.getLayoutParams().width - (int) event.getRawX() + mDownX;
                             } else {
-                                currentX  = mShiftLogLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
+                                currentX = mShiftLogLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
                             }
                             if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
                                 mShiftLogLayout.getLayoutParams().width = currentX;
@@ -223,7 +224,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         setActionBar();
     }
 
-    private void onButtonClick(final ViewGroup.LayoutParams mLeftLayoutParams, final ViewGroup.MarginLayoutParams mRightLayoutParams) {
+    private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
         if (!mNoData && !mIsInTouch) {
             if (!mIsOpen) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
@@ -237,7 +238,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(mLeftLayoutParams, mOpenWidth, mRightLayoutParams, true);
+                        toggleWoopList(leftLayoutParams, mOpenWidth, rightLayoutParams, true);
                         mShiftLogAdapter.notifyDataSetChanged();
                         mGridLayoutManager.setSpanCount(2);
                         mWidgetAdapter.notifyDataSetChanged();
@@ -262,7 +263,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(mLeftLayoutParams, mCloseWidth, mRightLayoutParams, false);
+                        toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
                         mGridLayoutManager.setSpanCount(3);
                         mWidgetAdapter.notifyDataSetChanged();
                     }
@@ -389,26 +390,33 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             break;
                         }
                         case 1: {
-                            Log.d(LOG_TAG, "Report Rejects selected");
-                            ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
-                            Bundle bundle = new Bundle();
-                            Gson gson = new Gson();
-                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
-                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-
-                            reportRejectsFragment.setArguments(bundle);
-                            mOnGoToScreenListener.goToFragment(reportRejectsFragment, true);
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--",
+                                        0), true);
+                            } else {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
                             break;
                         }
                         case 2: {
-//                            ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
-//                            Bundle bundle = new Bundle();
-//                            Gson gson = new Gson();
-//                            String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
-//                            bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-//
-//                            reportStopReasonFragment.setArguments(bundle);
-//                            mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--",
+                                        0), true);
+                            } else {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--",
+                                        0), true);
+                            } else {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
+                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
                             break;
                         }
                     }
@@ -464,16 +472,19 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     dialogFragment = DialogFragment.newInstance(event, true);
                 }
             } else if (event.getEventGroupID() == 20) {
-                //todo real data
                 dialogFragment = DialogFragment.newInstance(event, false);
             }
+
             assert dialogFragment != null;
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
+        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0)
+
+        {
             mIsOpenDialog = false;
         }
+
     }
 
     @Override
@@ -494,17 +505,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
-        ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
-        Bundle bundle = new Bundle();
-        Gson gson = new Gson();
-        String jobString = gson.toJson(mCurrentMachineStatus, MachineStatus.class);
-        bundle.putString(CURRENT_MACHINE_STATUS, jobString);
-        bundle.putString(END_TIME, end);
-        bundle.putString(START_TIME, start);
-        bundle.putLong(DURATION, duration);
-        bundle.putInt(STOP_REPORT_EVENT_ID, eventId);
-        reportStopReasonFragment.setArguments(bundle);
-        mOnGoToScreenListener.goToFragment(reportStopReasonFragment, true);
+        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
     }
 
     @Override
@@ -576,8 +577,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         } else {
             if (mEventsList == null || mEventsList.size() == 0) {
                 mNoData = true;
+                mNoNotificationsText.setVisibility(View.VISIBLE);
             }
-            mNoNotificationsText.setVisibility(View.VISIBLE);
         }
     }
 

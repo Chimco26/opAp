@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
@@ -22,7 +23,7 @@ import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
-        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface,  MachineDataPersistenceManagerInterface {
+        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface,  MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface{
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 

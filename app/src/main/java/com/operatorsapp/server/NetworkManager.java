@@ -1,5 +1,7 @@
 package com.operatorsapp.server;
 
+import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
+import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachinesStatusServiceRequest;
@@ -19,8 +21,12 @@ import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetwo
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
+import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
@@ -29,6 +35,8 @@ import com.operatorsapp.server.mocks.RetrofitMockClient;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -37,10 +45,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface,
-        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface {
+        SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface,
+        ReportStopNetworkManagerInterface, ReportCycleUnitsNetworkManagerInterface, ReportInventoryNetworkManagerInterface, ActiveJobsListForMachineNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
+    private Retrofit mRetrofit;
 
     public static NetworkManager initInstance() {
         if (msInstance == null) {
@@ -71,10 +81,11 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
-        } else {
-            Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        }
+        else {
+            mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
-            EmeraldLoginServiceRequests emeraldLoginServiceRequests = retrofit.create(EmeraldLoginServiceRequests.class);
+            EmeraldLoginServiceRequests emeraldLoginServiceRequests = mRetrofit.create(EmeraldLoginServiceRequests.class);
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldLoginServiceRequests);
             return emeraldLoginServiceRequests;
         }
@@ -87,8 +98,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetMachinesServiceRequests.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetMachinesServiceRequests.class);
 
     }
 
@@ -99,8 +110,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldShiftLogServiceRequests.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldShiftLogServiceRequests.class);
     }
 
     @Override
@@ -110,32 +121,36 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetMachinesDataServiceRequest.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetMachinesDataServiceRequest.class);
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
-        OkHttpClient okHttpClient;
-        if (timeout >= 0 && timeUnit != null) {
-            okHttpClient = new OkHttpClient.Builder()
-                    //add mock
-                    .addInterceptor(new RetrofitMockClient())
-                    .connectTimeout(timeout, timeUnit)
-                    .writeTimeout(timeout, timeUnit)
-                    .readTimeout(timeout, timeUnit)
+        if (mRetrofit == null) {
+            OkHttpClient okHttpClient;
+            if (timeout >= 0 && timeUnit != null) {
+                okHttpClient = new OkHttpClient.Builder()
+                        //add mock
+                        .addInterceptor(new RetrofitMockClient())
+                        .connectTimeout(timeout, timeUnit)
+                        .writeTimeout(timeout, timeUnit)
+                        .readTimeout(timeout, timeUnit)
 //                    .sslSocketFactory(sslContext.getSocketFactory())
-                    .build();
-        } else {
-            okHttpClient = new OkHttpClient.Builder()
-                    //add mock
-                    .addInterceptor(new RetrofitMockClient())
+                        .build();
+            }
+            else {
+                okHttpClient = new OkHttpClient.Builder()
+                        //add mock
+                        .addInterceptor(new RetrofitMockClient())
+                        .build();
+            }
+            mRetrofit = new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(siteUrl)
+                    .client(okHttpClient)
                     .build();
         }
-        return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(siteUrl)
-                .client(okHttpClient)
-                .build();
+        return mRetrofit;
     }
 
     @Override
@@ -145,8 +160,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
     }
 
     @Override
@@ -156,8 +171,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetJobsListServiceRequests.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetJobsListServiceRequests.class);
     }
 
     @Override
@@ -167,8 +182,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldStartJobServiceRequests.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldStartJobServiceRequests.class);
     }
 
     @Override
@@ -178,8 +193,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetOperatorById.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetOperatorById.class);
     }
 
     @Override
@@ -189,8 +204,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldSetOperatorForMachine.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldSetOperatorForMachine.class);
     }
 
     @Override
@@ -200,8 +215,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetReportFieldsForMachineRequest getReportFieldsForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldGetReportFieldsForMachineRequest.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetReportFieldsForMachineRequest.class);
     }
 
     @Override
@@ -212,8 +227,8 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldSendReportReject.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldSendReportReject.class);
     }
 
     @Override
@@ -224,7 +239,40 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
-        Retrofit retrofit = getRetrofit(siteUrl, timeout, timeUnit);
-        return retrofit.create(EmeraldSendStopReport.class);
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldSendStopReport.class);
+    }
+
+    @Override
+    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl) {
+        return reportCycleUnitsRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+    }
+
+    @Override
+    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl) {
+        return reportInventoryRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldSendReportInventory.class);
+    }
+
+    @Override
+    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        return getActiveJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldGetActiveJobsListForMachineServiceRequests.class);
     }
 }

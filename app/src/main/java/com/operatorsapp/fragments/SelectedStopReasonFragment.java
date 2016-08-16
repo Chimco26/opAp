@@ -47,20 +47,18 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private static final String END_TIME = "end_time";
     private static final String START_TIME = "start_time";
     private static final String DURATION = "duration";
-    private static final String STOP_REPORT_EVENT_ID = "stop_report_event_id";
+    private static final String EVENT_ID = "stop_report_event_id";
 
     private static final int NUMBER_OF_COLUMNS = 5;
 
     private int mSelectedPosition;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mCurrentJobId;
+    private int mJobId;
 
     private int mSelectedSubreasonId = -1;
     private int mSelectedReason;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private StopSubReasonAdapter mStopReasonsAdapter;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportRejectCore mReportRejectCore;
@@ -70,33 +68,48 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private TextView mButtonCancel;
     private String mStart;
     private String mEnd;
-    private int mDuration;
+    private long mDuration;
     private int mEventId;
-    private TextView mEventIdTextView;
-    private TextView mProductTextView;
-    private TextView mDurationTextView;
+
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, int jobId, String start, String end, long duration, int eventId){
+        SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);
+        bundle.putInt(CURRENT_JOB_ID, jobId);
+        bundle.putString(END_TIME, end);
+        bundle.putString(START_TIME, start);
+        bundle.putLong(DURATION, duration);
+        bundle.putInt(EVENT_ID, eventId);
+        selectedStopReasonFragment.setArguments(bundle);
+        return selectedStopReasonFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments()!=null){
+            mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
+            mJobId = getArguments().getInt(CURRENT_JOB_ID);
+            mStart = getArguments().getString(START_TIME);
+            mEnd = getArguments().getString(END_TIME);
+            mDuration = getArguments().getLong(DURATION);
+            mEventId = getArguments().getInt(EVENT_ID);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_stop_report, container, false);
-        Bundle bundle = this.getArguments();
-        mSelectedPosition = bundle.getInt(SELECTED_STOP_REASON_POSITION);
-        mCurrentJobId = bundle.getInt(CURRENT_JOB_ID);
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
-        mStart = bundle.getString(START_TIME);
-        mEnd = bundle.getString(END_TIME);
-        mDuration = bundle.getInt(DURATION);
-        mEventId = bundle.getInt(STOP_REPORT_EVENT_ID);
         setActionBar();
         return view;
     }
@@ -105,35 +118,32 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_job_id__text_view);
-        jobIdTextView.setText((String.valueOf(mCurrentJobId)));
+        TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
+        jobIdTextView.setText((String.valueOf(mJobId)));
 
         mButtonNext = (Button) view.findViewById(R.id.button_next);
-
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
-        mEventIdTextView = (TextView) view.findViewById(R.id.date_text_view);
-        mProductTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
-        mDurationTextView = (TextView) view.findViewById(R.id.duration_text_view);
+        TextView eventIdTextView = (TextView) view.findViewById(R.id.date_text_view);
+        TextView productTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
+        TextView durationTextView = (TextView) view.findViewById(R.id.duration_text_view);
 
         if (mStart == null || mEnd == null) {
-            mProductTextView.setText("- -");
+            productTextView.setText("- -");
         }
         else {
-            mProductTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+            productTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
-        mDurationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
+        durationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
 
-        mEventIdTextView.setText(String.valueOf(mEventId));
+        eventIdTextView.setText(String.valueOf(mEventId));
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
-        mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+        mRecyclerView.setLayoutManager(layoutManager);
         int spacing = 30;
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
-
-
         initSubReasons();
     }
 
@@ -175,7 +185,9 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    //getFragmentManager().popBackStack();
+                    //TODO check
+                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
 
@@ -210,12 +222,11 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     private void sendReport() {
-
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId);
+        mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mJobId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {

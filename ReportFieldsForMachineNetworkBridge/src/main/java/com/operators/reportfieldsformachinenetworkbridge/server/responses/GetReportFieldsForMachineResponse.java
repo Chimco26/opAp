@@ -1,6 +1,7 @@
 package com.operators.reportfieldsformachinenetworkbridge.server.responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.RejectCauses;
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -19,8 +20,11 @@ public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
     private List<RejectReasons> rejectReasons = new ArrayList<RejectReasons>();
     @SerializedName("RejectCauses")
     private List<RejectCauses> rejectCauses = new ArrayList<RejectCauses>();
+    @SerializedName("PackageTypes")
+    private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
+
 
     public ReportFieldsForMachine getReportFieldsForMachine() {
-        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses);
+        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses,packageTypes);
     }
 }
