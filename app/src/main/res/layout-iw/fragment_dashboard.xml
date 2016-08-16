@@ -157,10 +157,11 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:layout_alignEnd="@id/fragment_dashboard_widgets_layout"
             android:id="@+id/fragment_dashboard_shiftlog"
             android:layout_width="270dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:background="@drawable/combined_shape"
             android:orientation="horizontal">
 
@@ -190,8 +191,8 @@
             android:id="@+id/fragment_dashboard_divider"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
-            android:layout_marginEnd="-25dp"
+            android:layout_alignStart="@id/fragment_dashboard_shiftlog"
+            android:layout_marginStart="-25dp"
             android:background="@android:color/transparent"
             android:clickable="true" />
 
@@ -199,9 +200,9 @@
             android:id="@+id/fragment_dashboard_left_btn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
+            android:layout_alignStart="@id/fragment_dashboard_shiftlog"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="-30dp"
+            android:layout_marginStart="-30dp"
             android:paddingEnd="12dp"
             android:paddingStart="12dp"
             android:scaleType="fitXY"
