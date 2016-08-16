@@ -36,6 +36,7 @@
     <color name="T5_color">#66ffffff</color>
     <color name="C16">#0080ff</color>
     <color name="T12_color">#1683fb</color>
+    <color name="dismiss_dialog">#007cff</color>
     <color name="C17">#b78491</color>
     <color name="C18">#849c8e</color>
     <color name="C19">#f7f7f7</color>
@@ -49,4 +50,6 @@
     <color name="red_line">#d0021b</color>
     <color name="green_subreason">#4cb986</color>
     <color name="reports_background">#f4f4f4</color>
+    <color name="dialog_text_gray">#8a000000</color>
+    <color name="projection_gray">#acacac</color>
 </resources>

@@ -82,4 +82,8 @@ public class RangeView extends View {
 
         return bitmap;
     }
+
+    public float getX() {
+        return mX;
+    }
 }

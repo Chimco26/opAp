@@ -3,11 +3,9 @@
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="345dp"
     android:layout_height="230dp"
-    android:background="@drawable/combined_shape"
-    android:orientation="vertical">
+    android:background="@drawable/combined_shape">
 
     <LinearLayout
-        android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -53,8 +51,8 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/FontStyle_T11"
                 android:id="@+id/projection_widget_current_value"
+                style="@style/FontStyle_T11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
@@ -85,12 +83,12 @@
 
     <RelativeLayout
         android:id="@+id/capsule_layout"
-        android:layout_below="@id/divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider">
 
         <View
-            android:id="@+id/range_widget_oval"
+            android:id="@+id/projection_widget_oval"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
@@ -98,54 +96,81 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/capsule_oval" />
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="60dp"
-            android:layout_alignEnd="@id/range_widget_oval"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/divider_gray" />
-
         <com.operatorsapp.view.ProjectionView
-            android:id="@+id/range_view"
+            android:id="@+id/projection_widget_projectionView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="30dp" />
+
+        <com.operatorsapp.view.ProjectionView
+            android:id="@+id/projection_widget_projectionView_left"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/projection_widget_projectionView"
+            android:layout_marginEnd="43dp"
+            android:layout_marginStart="43dp">
+
+            <TextView
+                android:id="@+id/projection_widget_current_value_in_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:text="15"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@id/projection_widget_oval"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/divider_gray" />
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/capsule_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="43dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginEnd="43dp"
+        android:layout_marginStart="43dp"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/projection_widget_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="15" />
+            android:text="15"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/projection_widget_standard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="18sp"
-            android:text="19" />
+            android:text="19"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/projection_widget_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:textSize="18sp"
-            android:text="22" />
+            android:text="22"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </RelativeLayout>

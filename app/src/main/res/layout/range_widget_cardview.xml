@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/range_widget_parent_layout"
     android:layout_width="345dp"
     android:layout_height="230dp"
     android:background="@drawable/combined_shape"
@@ -113,16 +114,21 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp" />
 
-        <TextView
-            android:id="@+id/range_widget_current_value_in_chart"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_blue"
             android:layout_marginEnd="43dp"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="-4dp"
-            android:text="15"
-            android:textSize="18sp" />
+            android:layout_marginStart="43dp">
+
+            <TextView
+                android:id="@+id/range_widget_current_value_in_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:text="15"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <com.operatorsapp.view.RangeView
             android:id="@+id/range_widget_range_view_red"
@@ -132,13 +138,19 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp" />
 
-        <ImageView
-            android:id="@+id/range_widget_red_mark"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="23dp"
             android:layout_below="@id/range_widget_range_view_red"
-            android:src="@drawable/ic_exclamation_mark"/>
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp">
+
+            <ImageView
+                android:id="@+id/range_widget_red_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_exclamation_mark" />
+        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout

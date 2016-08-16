@@ -30,6 +30,7 @@
             android:layout_marginTop="43dp"
             android:layout_weight="0.35"
             android:text="@string/enter_machine_id_name"
+            android:paddingEnd="-40dp"
             android:textSize="40sp" />
 
 
@@ -37,6 +38,7 @@
             android:layout_width="2dp"
             android:layout_height="150dp"
             android:layout_marginEnd="54dp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="45dp"
             android:background="@android:color/darker_gray" />
 
@@ -60,6 +62,7 @@
                 android:dropDownVerticalOffset="2dp"
                 android:hint="@string/machine_id_name"
                 android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:singleLine="true"
                 android:textColorHint="@color/C2"
                 tools:ignore="NestedWeights,RtlSymmetry">

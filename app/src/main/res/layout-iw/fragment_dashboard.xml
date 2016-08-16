@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="130dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="130dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -32,7 +32,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:text="@string/product"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/status_bar"
@@ -45,13 +45,13 @@
                     android:singleLine="true"
                     android:textColor="@color/default_gray_status"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                 />
+                    />
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:background="@color/C20" />
 
             <LinearLayout
@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     android:text="@string/job"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/status_bar" />
@@ -72,7 +72,7 @@
                     android:id="@+id/text_view_job_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:textColor="@color/default_gray_status"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
@@ -80,7 +80,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:background="@color/C20" />
 
             <LinearLayout
@@ -92,7 +92,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     android:text="@string/shift"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/status_bar" />
@@ -101,7 +101,7 @@
                     android:id="@+id/text_view_shift_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:textColor="@color/default_gray_status"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
@@ -152,12 +152,12 @@
                 android:id="@+id/fragment_dashboard_widgets"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="15dp" />
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_alignEnd="@id/fragment_dashboard_widgets_layout"
             android:id="@+id/fragment_dashboard_shiftlog"
             android:layout_width="270dp"
             android:layout_height="match_parent"
@@ -191,8 +191,8 @@
             android:id="@+id/fragment_dashboard_divider"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:layout_alignStart="@id/fragment_dashboard_shiftlog"
-            android:layout_marginStart="-25dp"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
+            android:layout_marginEnd="-25dp"
             android:background="@android:color/transparent"
             android:clickable="true" />
 
@@ -200,9 +200,9 @@
             android:id="@+id/fragment_dashboard_left_btn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_alignStart="@id/fragment_dashboard_shiftlog"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
             android:layout_centerVertical="true"
-            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="-30dp"
             android:paddingEnd="12dp"
             android:paddingStart="12dp"
             android:scaleType="fitXY"
@@ -215,8 +215,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fragment_dashboard_layouts"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@id/status_layout"
-        android:layout_marginRight="40dp"
+        android:layout_alignEnd="@id/status_layout"
+        android:layout_marginEnd="40dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -224,7 +224,7 @@
             android:id="@+id/text_view_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
             android:textColor="@color/default_gray_status"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -232,7 +232,7 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/ic_clock_blue" />
     </LinearLayout>
 </RelativeLayout>

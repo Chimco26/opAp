@@ -3,6 +3,7 @@ package com.operatorsapp.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,6 +15,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.operatorsapp.R;
@@ -21,6 +23,7 @@ import com.operatorsapp.R;
 /**
  * Created by Admin on 02-Aug-16.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ProjectionView extends View {
     private static final int CURSOR_SIZE = 50;
     private static final int SCREEN_MARGIN = 50;
@@ -29,9 +32,11 @@ public class ProjectionView extends View {
     private Context mContext;
     private Bitmap mCurrentQuantity;
     private Bitmap mExpectedQuantity;
+    private Bitmap mLeftView;
     private Paint mPaint;
-    private int mCurrentWidth;
-    private int mExpectedWidth;
+    private float mCurrentWidth;
+    private float mExpectedWidth;
+    private Canvas mCanvas;
 
     public ProjectionView(Context context) {
         super(context);
@@ -45,10 +50,10 @@ public class ProjectionView extends View {
         init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void init(Context context) {
-        mCurrentQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_current_quantity_oval));
-        mExpectedQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_expected_quantity_oval));
+//        mCurrentQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_current_quantity_oval));
+//        mExpectedQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_expected_quantity_oval));
+        mLeftView = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
         mPaint = new Paint();
         mContext = context;
     }
@@ -56,8 +61,32 @@ public class ProjectionView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(mExpectedQuantity, 0, 0, mPaint);
-        canvas.drawBitmap(mCurrentQuantity, 0, 0, mPaint);
+        mCanvas = canvas;
+        if (mExpectedQuantity != null) {
+            canvas.drawBitmap(mExpectedQuantity, 0, 0, mPaint);
+        }
+        if (mCurrentQuantity != null) {
+            canvas.drawBitmap(mCurrentQuantity, 0, 0, mPaint);
+        }
+        if (mLeftView != null) {
+            canvas.drawBitmap(mLeftView, 0, 0, mPaint);
+        }
+    }
+
+    public void setIsLeftView(boolean isLeft) {
+        if (isLeft) {
+            mCurrentQuantity = null;
+            mExpectedQuantity = null;
+        } else {
+            mCurrentQuantity = drawableToBitmap(mContext.getDrawable(R.drawable.data_current_quantity_oval));
+            mExpectedQuantity = drawableToBitmap(mContext.getDrawable(R.drawable.data_expected_quantity_oval));
+        }
+    }
+
+    public void hideViews() {
+        mLeftView = null;
+        mCurrentQuantity = null;
+        mExpectedQuantity = null;
     }
 
     public void forceRedraw() {
@@ -71,20 +100,32 @@ public class ProjectionView extends View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void updateWidth(int currentWidth, int expectedWidth) {
+    public void updateWidth(float projectionWidth, float targetWidth) {
 //        mCurrentWidth = currentWidth;
 //        mExpectedWidth = expectedWidth;
 
+        mCurrentQuantity = Bitmap.createScaledBitmap(mCurrentQuantity, (int) projectionWidth, mCurrentQuantity.getHeight(), false);
 
-        ShapeDrawable shapeDrawable1 = (ShapeDrawable) mContext.getDrawable(R.drawable.data_current_quantity_oval);
-        Shape a = new OvalShape();
-        a.resize(currentWidth, 0);
-        shapeDrawable1.setShape(a);
+//        Drawable d = mContext.getDrawable(R.drawable.data_current_quantity_oval);
+//        d.setBounds(0,0, (int) projectionWidth, 0);
+//        mCurrentQuantity = drawableToBitmap(d);
 
-        ShapeDrawable shapeDrawable2 = (ShapeDrawable) mContext.getDrawable(R.drawable.data_expected_quantity_oval);
-        Shape b = new OvalShape();
-        a.resize(expectedWidth, 0);
-        shapeDrawable2.setShape(b);
+//        mCurrentQuantity.setWidth((int) projectionWidth);
+
+//        Drawable dr = mContext.getDrawable(R.drawable.data_current_quantity_oval);
+//        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+//        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, (int) projectionWidth, 0, true));
+//        mCurrentQuantity = drawableToBitmap(d);
+
+//        ShapeDrawable shapeDrawable1 = (ShapeDrawable) mContext.getDrawable(R.drawable.data_current_quantity_oval);
+//        Shape a = new OvalShape();
+//        a.resize(projectionWidth, 0);
+//        shapeDrawable1.setShape(a);
+//
+//        ShapeDrawable shapeDrawable2 = (ShapeDrawable) mContext.getDrawable(R.drawable.data_expected_quantity_oval);
+//        Shape b = new OvalShape();
+//        b.resize(targetWidth, 0);
+//        shapeDrawable2.setShape(b);
 
 
         // todo if... change color

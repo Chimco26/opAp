@@ -19,7 +19,7 @@ public class Event {
     @SerializedName("EventEndTime")
     private String mEventEndTime;
     @SerializedName("EventDuration")
-    private int mEventDuration;
+    private long mEventDuration;
     @SerializedName("EventGroupID")
     private int mEventGroupID;
     @SerializedName("EventGroupLname")
@@ -59,7 +59,7 @@ public class Event {
         return mEventEndTime;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return mEventDuration;
     }
 

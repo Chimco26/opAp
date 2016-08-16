@@ -52,6 +52,15 @@ public class Widget {
 
     }
 
+    @SerializedName("ID")
+    private long mID;
+
+    @SerializedName("Projection")
+    private int mProjection;
+
+    @SerializedName("Target")
+    private int mTarget;
+
 
     public String getCurrentValue() {
         return mCurrentValue;
@@ -94,5 +103,17 @@ public class Widget {
 
     public List<HistoricData> getMachineParamHistoricData() {
         return mMachineParamHistoricData;
+    }
+
+    public long getID() {
+        return mID;
+    }
+
+    public int getProjection() {
+        return mProjection;
+    }
+
+    public int getTarget() {
+        return mTarget;
     }
 }

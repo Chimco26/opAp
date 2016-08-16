@@ -18,6 +18,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.utils.ChangeLang;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        ChangeLang.changeHebrew(this);
+        ChangeLang.changeEnglish(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -3,13 +3,13 @@
     android:shape="rectangle" >
 
     <corners
-        android:bottomLeftRadius="30dp"
+        android:bottomLeftRadius="00dp"
         android:bottomRightRadius="0dp"
         android:radius="60dp"
-        android:topLeftRadius="30dp"
+        android:topLeftRadius="00dp"
         android:topRightRadius="0dp" />
 
-    <solid android:color="@color/C16" />
+    <solid android:color="@color/dismiss_dialog" />
 
     <padding
         android:bottom="0dp"

@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
     public static final int ONE_MINUTE_IN_SECONDS = 60;
@@ -35,6 +36,26 @@ public class TimeUtils {
             }
         }
 
+    }
+
+    public static String getDurationTime(long millis) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("Duration must be greater than zero!");
+        }
+
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        if (days > 0) {
+            return String.format(Locale.getDefault(), "%02d:%02d:%02d", days, hours, minutes) + " Days";
+        } else {
+            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " Hours";
+        }
     }
 
     public static String getTimeFromString(String time) {

@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -19,11 +20,15 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.utils.TimeUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogAdapter extends RecyclerView.Adapter {
+
+    public static final int DAY_MILLIS = 86400000;
 
     private Context mContext;
     private ArrayList<Event> mEvents;
@@ -151,7 +156,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getStartTime()));
             shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEndTime()));
             shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEndTime()));
-            shiftLogStoppedViewHolder.mDuration.setText(String.valueOf(event.getDuration()));
+            shiftLogStoppedViewHolder.mDuration.setText(TimeUtils.getDurationTime(event.getDuration()));
             if (mClosedState) {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
@@ -223,9 +228,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
-//            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder("Standard " + event.getStartTime()));
-//            shiftLogParameterViewHolder.mMin.setText(new StringBuilder("Min " + event.getStartTime()));
-//            shiftLogParameterViewHolder.mMax.setText(new StringBuilder("Max " + event.getEndTime()));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);

@@ -39,6 +39,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
     public static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
+    public static final String PREF_FORCE_LOCAL = "pref.force_locale";
 
 
     private static PersistenceManager msInstance;
@@ -184,6 +185,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         }.getType();
 
         return mGson.fromJson(shiftLogsJsonString, listType);
+    }
+
+    public String getCurrentLang() {
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL);
+    }
+
+    public void setCurrentLang(String lang) {
+        SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL, lang);
     }
 
 }
