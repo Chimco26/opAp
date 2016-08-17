@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -58,24 +59,25 @@
             android:textSize="58dp" />
     </LinearLayout>
 
-    <View
+    <!--<View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="80dp"
-        android:background="@color/divider_gray" />
+        android:background="@color/divider_gray" />-->
 
 
     <com.operatorsapp.view.LineChartTimeSmall
         android:id="@+id/lineChart_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/divider"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"  />
+        android:layout_marginTop="80dp"  />
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_below="@id/divider"-->
 
 </RelativeLayout>

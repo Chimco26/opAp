@@ -24,11 +24,11 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="Current quantity"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"
-                autofit:minTextSize="14sp" />
+                autofit:minTextSize="18sp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/projection_widget_subtitle"
@@ -38,10 +38,10 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="Total required 2k"
                 android:textSize="20sp"
-                autofit:minTextSize="12sp" />
+                autofit:minTextSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,19 +56,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:text="1.7"
-                android:textColor="@color/C16"
+                android:text="1.7k"
+                android:textColor="@color/dismiss_dialog"
                 android:textSize="58dp" />
 
-            <TextView
+          <!--  <TextView
                 style="@style/FontStyle_T11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:text="k"
-                android:textColor="@color/C16"
-                android:textSize="20sp" />
+                android:textColor="@color/dismiss_dialog"
+                android:textSize="20sp" />-->
         </LinearLayout>
     </LinearLayout>
 
@@ -87,6 +87,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/divider">
 
+        <TextView
+            android:id="@+id/projection_widget_gray_value_in_right_chart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_marginTop="7dp"
+            android:textColor="@color/projection_gray"
+            android:layout_marginEnd="30dp"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp">
+
+            <TextView
+                android:id="@+id/projection_widget_gray_value_in_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:textColor="@color/projection_gray"
+                android:textSize="18sp" />
+        </LinearLayout>
+
         <View
             android:id="@+id/projection_widget_oval"
             android:layout_width="match_parent"
@@ -96,43 +123,66 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/capsule_oval" />
 
+        <com.operatorsapp.view.ProjectionViewLeft
+            android:id="@+id/projection_widget_projectionView_left"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp" />
+
         <com.operatorsapp.view.ProjectionView
             android:id="@+id/projection_widget_projectionView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="49dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp" />
 
-        <com.operatorsapp.view.ProjectionView
-            android:id="@+id/projection_widget_projectionView_left"
+        <com.operatorsapp.view.ProjectionViewRight
+            android:id="@+id/projection_widget_projectionView_right"
+            android:layout_width="30dp"
+            android:layout_alignEnd="@id/projection_widget_oval"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp" />
+
+        <com.operatorsapp.view.RangeView
+            android:id="@+id/projection_widget_range_view"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/projection_widget_projectionView"
-            android:layout_marginEnd="43dp"
-            android:layout_marginStart="43dp">
+            android:layout_marginEnd="35dp"
+            android:layout_marginStart="40dp">
 
             <TextView
                 android:id="@+id/projection_widget_current_value_in_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-4dp"
-                android:text="15"
+                android:textColor="@color/dismiss_dialog"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <View
+            android:id="@+id/projection_widget_right_divider"
             android:layout_width="2dp"
             android:layout_height="60dp"
             android:layout_alignEnd="@id/projection_widget_oval"
             android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/divider_gray" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_alignStart="@id/projection_widget_oval"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
             android:background="@color/divider_gray" />
     </RelativeLayout>
@@ -142,7 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginEnd="43dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginStart="43dp"
         android:orientation="horizontal">
 

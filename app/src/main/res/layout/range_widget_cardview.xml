@@ -110,16 +110,16 @@
             android:id="@+id/range_widget_range_view_blue"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginEnd="49dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_blue"
-            android:layout_marginEnd="43dp"
-            android:layout_marginStart="43dp">
+            android:layout_marginEnd="35dp"
+            android:layout_marginStart="40dp">
 
             <TextView
                 android:id="@+id/range_widget_current_value_in_chart"

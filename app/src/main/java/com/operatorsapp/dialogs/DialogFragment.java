@@ -84,7 +84,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             view = inflater.inflate(R.layout.stop_dialog, null);
 
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
-            title.setText(mEvent.getTitle() + " Stop");
+            title.setText(mEvent.getTitle());
 
             TextView start = (TextView) view.findViewById(R.id.dialog_start);
             if (mEvent.getStartTime() != null && !mEvent.getStartTime().equals("")) {
@@ -158,7 +158,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onDismissAllClick(getDialog(), getTargetRequestCode());
+                        mListener.onDismissAllClick(getDialog(), mEvent.getEventID(), getTargetRequestCode());
                     }
                 }
             });
@@ -189,7 +189,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     public interface OnDialogButtonsListener {
         void onDismissClick(DialogInterface dialog, int requestCode);
 
-        void onDismissAllClick(DialogInterface dialog, int requestCode);
+        void onDismissAllClick(DialogInterface dialog, int eventId, int requestCode);
 
         void onReportClick(int eventId, String start, String end, long duration);
     }

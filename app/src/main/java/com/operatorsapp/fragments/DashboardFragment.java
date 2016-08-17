@@ -370,7 +370,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
             final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
             title.setText(spannableString);
-            title.setVisibility(View.GONE);
+            title.setVisibility(View.VISIBLE);
 
             final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
             final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
@@ -461,6 +461,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onDismissClick(DialogInterface dialog, int requestCode) {
         dialog.dismiss();
+        openNextDialog();
+
+    }
+
+    private void openNextDialog() {
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             DialogFragment dialogFragment = null;
             Event event = mEventsQueue.pop();
@@ -479,19 +484,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             dialogFragment.setTargetFragment(DashboardFragment.this, 0);
             dialogFragment.setCancelable(false);
             dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0)
-
-        {
+        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
             mIsOpenDialog = false;
         }
-
     }
 
     @Override
-    public void onDismissAllClick(DialogInterface dialog, int requestCode) {
-        mEventsQueue.clear();
+    public void onDismissAllClick(DialogInterface dialog, int eventId, int requestCode) {
         dialog.dismiss();
-        mIsOpenDialog = false;
+        for (Event event : mEventsQueue) {
+            if (event.getEventID() == eventId) {
+                mEventsQueue.remove(event);
+            }
+        }
+        openNextDialog();
     }
 
     @Override
@@ -571,7 +577,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
                 dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                 dialogFragment.setCancelable(false);
-                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+               // dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 mIsOpenDialog = true;
             }
         } else {

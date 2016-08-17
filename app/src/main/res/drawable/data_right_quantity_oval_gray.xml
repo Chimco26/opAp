@@ -3,13 +3,13 @@
     android:shape="rectangle" >
 
     <corners
-        android:bottomLeftRadius="00dp"
-        android:bottomRightRadius="0dp"
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="30dp"
         android:radius="60dp"
         android:topLeftRadius="0dp"
-        android:topRightRadius="0dp" />
+        android:topRightRadius="30dp" />
 
-    <solid android:color="@color/dismiss_dialog" />
+    <solid android:color="@color/projection_gray" />
 
     <padding
         android:bottom="0dp"
@@ -19,5 +19,5 @@
 
     <size
         android:height="50dp"
-        android:width="90dp" />
+        android:width="30dp" />
 </shape>

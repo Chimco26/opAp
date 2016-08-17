@@ -78,7 +78,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 102960000,\n" +
                             "      \"EventEndTime\": \"13/10/2015 16:39:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 291,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -90,7 +90,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 4032000,\n" +
                             "      \"EventEndTime\": \"14/10/2015 11:12:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 365,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -102,7 +102,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 1296000,\n" +
                             "      \"EventEndTime\": \"14/10/2015 19:03:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 376,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -114,7 +114,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 3168000,\n" +
                             "      \"EventEndTime\": \"15/10/2015 07:01:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 388,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -126,19 +126,31 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
                             "      \"EventGroupID\": 20,\n" +
-                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
                             "      \"EventID\": 1020,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
                             "      \"EventTime\": \"12/07/2016 17:36:00\",\n" +
-                            "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\n1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"priority\": 1,\n" +
+                            "      \"EventDuration\": 0,\n" +
+                            "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
+                            "      \"EventGroupID\": 20,\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
+                            "      \"EventID\": 1020,\n" +
+                            "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
+                            "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
+                            "      \"EventTime\": \"12/07/2016 17:36:00\",\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\n2\"\n" +
                             "    },\n" +
                             "    {\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:55:00\",\n" +
                             "      \"EventGroupID\": 20,\n" +
-                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
                             "      \"EventID\": 1044,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
@@ -150,7 +162,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 145,\n" +
                             "      \"EventEndTime\": \"12/10/2015 11:55:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 233,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -162,7 +174,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 24,\n" +
                             "      \"EventEndTime\": \"12/10/2015 13:44:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 248,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -174,7 +186,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 236,\n" +
                             "      \"EventEndTime\": \"12/10/2015 19:04:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 249,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -186,7 +198,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 718,\n" +
                             "      \"EventEndTime\": \"13/10/2015 07:02:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 262,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -198,7 +210,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 464,\n" +
                             "      \"EventEndTime\": \"15/10/2015 14:45:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 407,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -471,24 +483,24 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"FieldEName\": \"Time Left Hr\",\n" +
                             "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
                             "      \"FieldName\": \"TimeLeftHr\",\n" +
-                            "      \"HighLimit\": 142560,\n" +
+                            "      \"HighLimit\": 1500,\n" +
                             "      \"ID\": 12,\n" +
-                            "      \"LowLimit\": 16,\n" +
+                            "      \"LowLimit\": 0,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
                             "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
+                            "      \"StandardValue\": 500,\n" +
                             "      \"Target\": null,\n" +
                             "      \"fieldType\": 1,\n" +
                             "      \"isOutOfRange\": false\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"230\",\n" +
+                            "      \"CurrentValue\": \"235\",\n" +
                             "      \"FieldEName\": \"CavitiesPC\",\n" +
                             "      \"FieldLName\": \"CavitiesPC\",\n" +
                             "      \"FieldName\": \"CavitiesPC\",\n" +
-                            "      \"HighLimit\": 27.5,\n" +
+                            "      \"HighLimit\": 230,\n" +
                             "      \"ID\": 31,\n" +
-                            "      \"LowLimit\": 22.5,\n" +
+                            "      \"LowLimit\": 0,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
                             "      \"Projection\": null,\n" +
                             "      \"StandardValue\": 230,\n" +
@@ -503,16 +515,16 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"FieldName\": \"NoProgressCount\",\n" +
                             "      \"HighLimit\": 1100,\n" +
                             "      \"ID\": 3583,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                            "      \"LowLimit\": 600,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
                             "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 532,\n" +
+                            "      \"StandardValue\": 800,\n" +
                             "      \"Target\": null,\n" +
                             "      \"fieldType\": 1,\n" +
                             "      \"isOutOfRange\": true\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"CurrentValue\": \"150\",\n" +
+                            "      \"CurrentValue\": \"100\",\n" +
                             "      \"FieldEName\": \"PEE Projection Testing\",\n" +
                             "      \"FieldLName\": \"PEE Projection Testing\",\n" +
                             "      \"FieldName\": \"PEE Projection Testing\",\n" +
@@ -520,7 +532,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"ID\": 999999999,\n" +
                             "      \"LowLimit\": 0,\n" +
                             "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": 250,\n" +
+                            "      \"Projection\": 500,\n" +
                             "      \"StandardValue\": 1500,\n" +
                             "      \"Target\": 2000,\n" +
                             "      \"fieldType\": 2,\n" +

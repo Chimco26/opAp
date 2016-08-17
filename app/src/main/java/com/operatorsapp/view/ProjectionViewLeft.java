@@ -13,48 +13,43 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
-public class RangeView extends View {
+/**
+ * Created by Admin on 02-Aug-16.
+ */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+public class ProjectionViewLeft extends View {
 
-    private Bitmap mDataLineBlue;
-    private Bitmap mDataLineRed;
-    private Bitmap mCurrentLine;
+    private Bitmap mLeftView;
     private Paint mPaint;
-    private float mX;
 
-    public RangeView(Context context) {
+    public ProjectionViewLeft(Context context) {
         super(context);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
-    public RangeView(Context context, AttributeSet attrs) {
+    public ProjectionViewLeft(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void init(Context context) {
-        mDataLineBlue = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
-        mDataLineRed = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_red));
-        mCurrentLine = mDataLineBlue;
+        mLeftView = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
         mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCurrentLine != null) {
-            canvas.drawBitmap(mCurrentLine, mX, 0, mPaint);
+        if (mLeftView != null) {
+            canvas.drawBitmap(mLeftView, 0, 0, mPaint);
         }
     }
 
-    public void setCurrentLine(boolean red) {
-        if (red) {
-            mCurrentLine = mDataLineRed;
-        } else {
-            mCurrentLine = mDataLineBlue;
-        }
+    public void hideView() {
+        mLeftView = null;
+        forceRedraw();
     }
 
     public void forceRedraw() {
@@ -66,31 +61,25 @@ public class RangeView extends View {
         });
     }
 
-    public void updateX(float x) {
-        mX = x;
-        forceRedraw();
-    }
-
-    public void hideView() {
-        mCurrentLine = null;
-        forceRedraw();
-    }
-
     public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
-
         return bitmap;
-    }
-
-    public float getX() {
-        return mX;
     }
 }

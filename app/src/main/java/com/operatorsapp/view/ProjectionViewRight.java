@@ -13,48 +13,50 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
-/**
- * Created by Admin on 02-Aug-16.
- */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class ProjectionView extends View {
+public class ProjectionViewRight extends View {
 
-    private Bitmap mCurrentQuantity;
-    private Bitmap mProjectionQuantity;
+    private Bitmap mRightViewBlue;
+    private Bitmap mRightViewGray;
+    private Bitmap mCurrentView;
     private Paint mPaint;
 
-    public ProjectionView(Context context) {
+    public ProjectionViewRight(Context context) {
         super(context);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
-    public ProjectionView(Context context, AttributeSet attrs) {
+    public ProjectionViewRight(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
     private void init(Context context) {
-        mProjectionQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_projection_quantity_oval));
-        mCurrentQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_current_quantity_oval));
+        mRightViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_blue));
+        mRightViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_gray));
         mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mProjectionQuantity != null) {
-            canvas.drawBitmap(mProjectionQuantity, 0, 0, mPaint);
-        }
-        if (mCurrentQuantity != null) {
-            canvas.drawBitmap(mCurrentQuantity, 0, 0, mPaint);
+        if (mCurrentView != null) {
+            canvas.drawBitmap(mCurrentView, 0, 0, mPaint);
         }
     }
 
-    public void hideViews() {
-        mCurrentQuantity = null;
-        mProjectionQuantity = null;
+    public void setCurrentView(boolean blue) {
+        if (blue) {
+            mCurrentView = mRightViewBlue;
+        } else {
+            mCurrentView = mRightViewGray;
+        }
+    }
+
+    public void hideView() {
+        mCurrentView = null;
         forceRedraw();
     }
 
@@ -62,22 +64,9 @@ public class ProjectionView extends View {
         post(new Runnable() {
             @Override
             public void run() {
-
                 invalidate();
             }
         });
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void updateWidth(float currentWidth, float projectionWidth) {
-        if (mProjectionQuantity != null) {
-            mCurrentQuantity = Bitmap.createScaledBitmap(mCurrentQuantity, (int) currentWidth, mCurrentQuantity.getHeight(), false);
-        }
-        if (mCurrentQuantity != null) {
-            mProjectionQuantity = Bitmap.createScaledBitmap(mProjectionQuantity, (int) projectionWidth, mProjectionQuantity.getHeight(), false);
-        }
-
-        forceRedraw();
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {

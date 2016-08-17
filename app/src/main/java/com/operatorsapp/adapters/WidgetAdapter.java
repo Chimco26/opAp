@@ -16,10 +16,13 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
+import com.operatorsapp.view.ProjectionViewLeft;
+import com.operatorsapp.view.ProjectionViewRight;
 import com.operatorsapp.view.RangeView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -101,9 +104,14 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private AutofitTextView mSubtitle;
         private TextView mValue;
         private View mCapsule;
+        private View mRightDivider;
         private ProjectionView mProjectionView;
-        private ProjectionView mProjectionViewLeft;
-        private TextView mCurrentValue;
+        private RangeView mRangeView;
+        private ProjectionViewLeft mProjectionViewLeft;
+        private ProjectionViewRight mProjectionViewRight;
+        private TextView mCurrentValueInChart;
+        private TextView mGrayValueInChart;
+        private TextView mGrayValueInRightChart;
         private TextView mMin;
         private TextView mStandard;
         private TextView mMax;
@@ -115,9 +123,14 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.projection_widget_current_value);
             mCapsule = itemView.findViewById(R.id.projection_widget_oval);
+            mRightDivider = itemView.findViewById(R.id.projection_widget_right_divider);
             mProjectionView = (ProjectionView) itemView.findViewById(R.id.projection_widget_projectionView);
-            mProjectionViewLeft = (ProjectionView) itemView.findViewById(R.id.projection_widget_projectionView_left);
-            mCurrentValue = (TextView) itemView.findViewById(R.id.projection_widget_current_value_in_chart);
+            mRangeView = (RangeView) itemView.findViewById(R.id.projection_widget_range_view);
+            mProjectionViewLeft = (ProjectionViewLeft) itemView.findViewById(R.id.projection_widget_projectionView_left);
+            mProjectionViewRight = (ProjectionViewRight) itemView.findViewById(R.id.projection_widget_projectionView_right);
+            mCurrentValueInChart = (TextView) itemView.findViewById(R.id.projection_widget_current_value_in_chart);
+            mGrayValueInChart = (TextView) itemView.findViewById(R.id.projection_widget_gray_value_in_chart);
+            mGrayValueInRightChart = (TextView) itemView.findViewById(R.id.projection_widget_gray_value_in_right_chart);
             mMin = (TextView) itemView.findViewById(R.id.projection_widget_min);
             mStandard = (TextView) itemView.findViewById(R.id.projection_widget_standard);
             mMax = (TextView) itemView.findViewById(R.id.projection_widget_max);
@@ -241,11 +254,11 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                             rangeViewHolder.mRedMark.setVisibility(View.GONE);
                             rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
                             rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
-                            float rangeValue = (widget.getHighLimit() - widget.getLowLimit());
-                            float transValue = (Integer.parseInt(widget.getCurrentValue()) - widget.getLowLimit());
-                            if (rangeValue > 0) {
-                                final float convertValue = transValue / rangeValue;
-                                rangeViewHolder.mRangeViewBlue.updateX(((rangeViewHolder.mRangeViewBlue.getWidth()) * convertValue) - 5/* half of the line*/);
+                            float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
+                            float currentValue = (Integer.parseInt(widget.getCurrentValue()) - widget.getLowLimit());
+                            if (scaleValue > 0) {
+                                final float convertCurrentValue = currentValue / scaleValue;
+                                rangeViewHolder.mRangeViewBlue.updateX(((rangeViewHolder.mRangeViewBlue.getWidth()) * convertCurrentValue) - 5/* half of the line*/);
                                 rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
                             }
                         }
@@ -259,30 +272,68 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case PROJECTION:
                 final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
                 projectionViewHolder.mTitle.setText(widget.getFieldName());
-                projectionViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int) widget.getStandardValue()));
-                projectionViewHolder.mValue.setText(String.valueOf(Float.parseFloat(widget.getCurrentValue()) / 1000));
-                projectionViewHolder.mCurrentValue.setText(widget.getCurrentValue());
+                projectionViewHolder.mSubtitle.setText(new StringBuilder("Standard " + valueInK((int) widget.getStandardValue())));
+                projectionViewHolder.mValue.setText(valueInK(Integer.parseInt(widget.getCurrentValue())));
+                projectionViewHolder.mRangeView.setCurrentLine(false);
+                if (Integer.parseInt(widget.getCurrentValue()) >= widget.getTarget()) {
+                    projectionViewHolder.mProjectionViewRight.setCurrentView(true);
+                } else if (widget.getProjection() >= widget.getTarget()) {
+                    projectionViewHolder.mProjectionViewRight.setCurrentView(false);
+                    projectionViewHolder.mGrayValueInRightChart.setText(valueInK(widget.getProjection()));
+                } else {
+                    projectionViewHolder.mProjectionViewRight.hideView();
+                    projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
+                }
+                if (Integer.parseInt(widget.getCurrentValue()) <= widget.getLowLimit()) {
+                    projectionViewHolder.mRangeView.hideView();
+                    projectionViewHolder.mProjectionView.hideViews();
+                    projectionViewHolder.mProjectionViewLeft.hideView();
+                    projectionViewHolder.mGrayValueInRightChart.setText("");
+                    projectionViewHolder.mGrayValueInChart.setText("");
+                } else {
+                    projectionViewHolder.mCurrentValueInChart.setText(valueInK(Integer.parseInt(widget.getCurrentValue())));
+                }
+                if (widget.getTarget() - Integer.parseInt(widget.getCurrentValue()) < 6) {
+                    projectionViewHolder.mRightDivider.setVisibility(View.GONE);
+                } else {
+                    projectionViewHolder.mRightDivider.setVisibility(View.VISIBLE);
+                }
                 projectionViewHolder.mCapsule.post(new Runnable() {
                     @Override
                     public void run() {
-                        projectionViewHolder.mProjectionViewLeft.setIsLeftView(true);
-                        projectionViewHolder.mProjectionView.setIsLeftView(false);
-                        float rangeValue = (widget.getHighLimit() - widget.getLowLimit());
+                        float scaleValue = (widget.getTarget() - widget.getLowLimit());
+                        float currentValue = (Integer.parseInt(widget.getCurrentValue()) - widget.getLowLimit());
                         float projectionValue = (widget.getProjection() - widget.getLowLimit());
-                        float targetValue = (widget.getTarget() - widget.getLowLimit());
-                        if (rangeValue > 0) {
-                            final float convertProjection = projectionValue / rangeValue;
-                            final float convertTarget = targetValue / rangeValue;
-                            projectionViewHolder.mProjectionView.updateWidth(((projectionViewHolder.mProjectionView.getWidth()) * convertProjection) - 5/* half of the line*/, ((projectionViewHolder.mProjectionView.getWidth()) * convertTarget) - 30/*left margin*/ - 5/* half of the line*/);
-                            projectionViewHolder.mCurrentValue.setX(projectionViewHolder.mProjectionView.getX());
+                        if (scaleValue > 0) {
+                            final float convertCurrentValue = currentValue / scaleValue;
+                            final float convertProjectionValue = projectionValue / scaleValue;
+                            projectionViewHolder.mRangeView.updateX(projectionViewHolder.mProjectionView.getWidth() * convertCurrentValue - 5/* half of the line*/);
+                            projectionViewHolder.mProjectionView.updateWidth((projectionViewHolder.mProjectionView.getWidth() * convertCurrentValue), (projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue));
+                            projectionViewHolder.mCurrentValueInChart.setX(projectionViewHolder.mProjectionView.getWidth() * convertCurrentValue - 5/* half of the line*/);
+                            projectionViewHolder.mGrayValueInChart.setX(projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue - 5/* half of the line*/);
                         }
                     }
                 });
-                projectionViewHolder.mMin.setText(String.valueOf((int) widget.getLowLimit()));
-                projectionViewHolder.mStandard.setText(String.valueOf((int) widget.getStandardValue()));
-                projectionViewHolder.mMax.setText(String.valueOf((int) widget.getHighLimit()));
+                projectionViewHolder.mMin.setText(valueInK((int) widget.getLowLimit()));
+                projectionViewHolder.mStandard.setText(valueInK((int) widget.getStandardValue()));
+                projectionViewHolder.mMax.setText(valueInK(widget.getTarget()));
                 break;
 
+        }
+    }
+
+    private String valueInK(int value) {
+        String valueString = String.valueOf(value);
+        if (value >= 1000) {
+            if (value % 1000 == 0) {
+                valueString = String.valueOf(value / 1000);
+            } else {
+                float valueFloat = (float) value / 1000;
+                valueString = String.valueOf(valueFloat);
+            }
+            return valueString + "k";
+        } else {
+            return valueString;
         }
     }
 

@@ -181,7 +181,7 @@ public class LoginFragment extends Fragment {
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
-            // rootView null
+            /* rootView null*/
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
             ((TextView) view.findViewById(R.id.title)).setText(s);
             actionBar.setCustomView(view);

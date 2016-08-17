@@ -189,7 +189,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     }
 
     public String getCurrentLang() {
-        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL);
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, "en");
     }
 
     public void setCurrentLang(String lang) {
