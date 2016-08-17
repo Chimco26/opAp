@@ -7,11 +7,13 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +27,15 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
-import com.operatorsapp.interfaces.ClearDataInterface;
+import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
+import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.managers.ProgressDialogManager;
 
 /**
  * Created by Sergey on 16/08/2016.
  */
-public class SettingsFragment extends Fragment implements View.OnClickListener {
+public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
@@ -46,13 +49,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private String mSelectedLanguageName;
     private Button mButtonChange;
     private GoToScreenListener mGoToScreenListener;
-    private ClearDataInterface mClearDataInterface;
+    private SettingsInterface mSettingsInterface;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mGoToScreenListener = (GoToScreenListener) getActivity();
-        mClearDataInterface = (ClearDataInterface) getActivity();
+        mSettingsInterface = (SettingsInterface) getActivity();
     }
 
     @Override
@@ -68,7 +71,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         return view;
     }
-private boolean mIsFirst = true;
+
+    private boolean mIsFirst = true;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -82,10 +86,11 @@ private boolean mIsFirst = true;
         mLanguagesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(mIsFirst){
+                if (mIsFirst) {
 //                    spinnerArrayAdapter.setTitle(PersistenceManager.getInstance().getCurrentLanguageName());
                     mIsFirst = false;
-                }else {
+                }
+                else {
                     mSelectedLanguageCode = getResources().getStringArray(R.array.language_codes_array)[position];
                     mSelectedLanguageName = getResources().getStringArray(R.array.languages_spinner_array)[position];
                     spinnerArrayAdapter.setTitle(position);
@@ -110,6 +115,7 @@ private boolean mIsFirst = true;
 
         mRefreshStatusTextView = (TextView) view.findViewById(R.id.refresh_status_text_view);
         mRefreshStatusTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_checkmark, 0);
+        mRefreshStatusTextView.setVisibility(View.GONE);
 
         mAdvancedSettingsButton = (TextView) view.findViewById(R.id.advanced_settings_button);
 
@@ -184,21 +190,51 @@ private boolean mIsFirst = true;
                 else {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
-                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(myIntent);
-                    getActivity().finish();
-                    startActivity(myIntent);
+                   mSettingsInterface.refreshApplication();
                 }
                 break;
             }
             case R.id.refresh_button: {
-
+                ProgressDialogManager.show(getActivity());
+                mSettingsInterface.refreshReportFields(this);
                 break;
             }
             case R.id.button_change: {
-                mClearDataInterface.clearAppData();
+                mSettingsInterface.clearAppData();
                 break;
             }
         }
+    }
+
+    @Override
+    public void onReportUpdatedSuccess() {
+        Log.i(LOG_TAG, "onReportUpdatedSuccess()");
+        mRefreshStatusTextView.setVisibility(View.VISIBLE);
+        dismissProgressDialog();
+
+    }
+
+    @Override
+    public void onReportUpdateFailure() {
+        Log.i(LOG_TAG, "onReportUpdateFailure()");
+        dismissProgressDialog();
+    }
+
+    private void dismissProgressDialog() {
+
+        //TODO remove handler, only for test
+        Handler mHandler = new Handler();
+
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ProgressDialogManager.dismiss();
+                    }
+                });
+            }
+        }, 2000);
+
     }
 }

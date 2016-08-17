@@ -231,7 +231,7 @@ public class SecurePreferences {
         return value;
     }
 
-    private void clear() {
+    public void clear() {
         preferences.edit().clear().commit();
     }
 

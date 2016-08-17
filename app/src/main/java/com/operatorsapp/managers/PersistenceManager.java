@@ -207,4 +207,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     public void setCurrentLanguageName(String languageName) {
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL_NAME, languageName);
     }
+
+    public void clear(){
+        SecurePreferences.getInstance().clear();
+    }
 }
