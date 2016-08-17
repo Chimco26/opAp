@@ -39,13 +39,13 @@ public class ChangeLang {
         }.execute();
     }
 
-    public static void changeEnglish(final Context context) {
+    public static void changeLanguage(final Context context) {
 
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
-                String app_locale = "en";
+                String app_locale = PersistenceManager.getInstance().getCurrentLang();
                 Locale locale = new Locale(app_locale);
                 Locale.setDefault(locale);
 
@@ -57,7 +57,7 @@ public class ChangeLang {
                 Bidi bidi = new Bidi(app_locale,
                         Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
                 bidi.isLeftToRight();
-                YourGlobalClass.updateLanguage(context, "en");
+                YourGlobalClass.updateLanguage(context, app_locale);
 
                 return null;
             }
@@ -85,11 +85,13 @@ public class ChangeLang {
                 tmp_locale = Locale.getDefault().toString().substring(0, 2);
                 manager.setCurrentLang(tmp_locale);
 
-            } else if (lang != null) {
+            }
+            else if (lang != null) {
                 cfg.locale = new Locale(lang);
                 manager.setCurrentLang(lang);
 
-            } else if (!TextUtils.isEmpty(language)) {
+            }
+            else if (!TextUtils.isEmpty(language)) {
                 cfg.locale = new Locale(language);
             }
             ctx.getResources().updateConfiguration(cfg, null);

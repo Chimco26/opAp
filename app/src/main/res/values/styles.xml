@@ -212,6 +212,11 @@
         <item name="android:textColor">@color/C1</item>
     </style>
 
+    <style name="FontStyle_Button" parent="DroidSansBold">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+
     <style name="FontStyle_T29" parent="DroidSansBold">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/C6</item>

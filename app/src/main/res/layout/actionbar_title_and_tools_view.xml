@@ -29,7 +29,7 @@
             android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_toRightOf="@+id/job_status_indicator"
             android:orientation="vertical">
 
@@ -42,7 +42,7 @@
                     style="@style/FontStyle_T7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="13dp"
+                    android:layout_marginEnd="13dp"
                     android:text="@string/machine_id"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/white"
@@ -78,8 +78,8 @@
                     style="@style/FontStyle_T6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:text="@string/machine_status"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white" />
@@ -89,7 +89,7 @@
                     style="@style/FontStyle_T6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -100,7 +100,7 @@
 
     <LinearLayout
         android:id="@+id/spinner_layout"
-        android:layout_width="400dp"
+        android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/linearLayout2"
         android:layout_alignParentEnd="true"

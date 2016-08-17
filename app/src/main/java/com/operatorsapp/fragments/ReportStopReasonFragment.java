@@ -88,6 +88,15 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mGoToScreenListener = (GoToScreenListener) getActivity();
+        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -98,15 +107,6 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             Log.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
         }
 //        getActiveJobs();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mGoToScreenListener = (GoToScreenListener) getActivity();
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
-        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Nullable

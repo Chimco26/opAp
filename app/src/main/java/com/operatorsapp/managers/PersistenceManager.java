@@ -41,6 +41,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
     public static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
     public static final String PREF_FORCE_LOCAL = "pref.force_locale";
+    public static final String PREF_FORCE_LOCAL_NAME = "pref.force_locale.name";
+    private static final String DEFAULT_LANGUAGE_VALUE = "en";
+    public static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
 
 
     private static PersistenceManager msInstance;
@@ -189,11 +192,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     }
 
     public String getCurrentLang() {
-        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL);
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, DEFAULT_LANGUAGE_VALUE);
     }
 
     public void setCurrentLang(String lang) {
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL, lang);
     }
 
+
+    public String getCurrentLanguageName() {
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL_NAME, DEFAULT_LANGUAGE_NAME_VALUE);
+    }
+
+    public void setCurrentLanguageName(String languageName) {
+        SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL_NAME, languageName);
+    }
 }

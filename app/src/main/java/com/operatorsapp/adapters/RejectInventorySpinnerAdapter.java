@@ -20,8 +20,8 @@ import java.util.List;
 public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
     private Activity mContext;
     private List<PackageTypes> mSpinnerItems;
-    TextView mRowName;
-    View mView;
+    private TextView mRowName;
+    private View mView;
 
     public RejectInventorySpinnerAdapter(Activity context, int resource, List<PackageTypes> packageTypesList) {
         super(context, resource, packageTypesList);

@@ -585,7 +585,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
                 dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                 dialogFragment.setCancelable(false);
-                dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+              //TODO  dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 mIsOpenDialog = true;
             }
         }

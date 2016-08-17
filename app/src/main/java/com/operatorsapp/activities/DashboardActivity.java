@@ -47,6 +47,7 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.ClearDataInterface;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.DashboardChartCallbackListener;
@@ -69,7 +70,7 @@ import java.util.concurrent.TimeUnit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
-        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener {
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, ClearDataInterface {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -474,5 +475,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void updateReportRejectFields() {
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.startPolling();
+    }
+
+    @Override
+    public void clearAppData() {
+        Log.i(LOG_TAG, "clearAppData() command received from settings screen");
     }
 }

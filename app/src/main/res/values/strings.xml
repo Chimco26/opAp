@@ -97,6 +97,11 @@
     <string name="language">Language</string>
     <string name="factory_sign_in">Factory sign in</string>
     <string name="change">Change</string>
+    <string name="advanced_settings">Advanced Setting</string>
+    <string name="refresh_reporting_data">Refresh Reporting Data</string>
+    <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
+    <string name="polling_frequency">Polling frequency</string>
+    <string name="request_timeout">Request timeout</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -104,6 +109,11 @@
         <item>Australian Aboriginal</item>
     </array>
 
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>au</item>
+    </array>
     <array name="jobs_spinner_array">
         <item>New Job</item>
         <item>Report Rejects</item>
