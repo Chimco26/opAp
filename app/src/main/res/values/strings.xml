@@ -102,6 +102,8 @@
     <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
     <string name="polling_frequency">Polling frequency</string>
     <string name="request_timeout">Request timeout</string>
+    <string name="days">" Days "</string>
+    <string name="hours">" Hours"</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

@@ -23,7 +23,7 @@ import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
-        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface,  MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface{
+        JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
 
     private static final String LOG_TAG = PersistenceManager.class.getSimpleName();
 
@@ -195,11 +195,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     }
 
     public String getCurrentLang() {
-<<<<<<< HEAD
-        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, "en");
-=======
         return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, DEFAULT_LANGUAGE_VALUE);
->>>>>>> sergey6
     }
 
     public void setCurrentLang(String lang) {
@@ -215,7 +211,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL_NAME, languageName);
     }
 
-    public void clear(){
+    public void clear() {
         SecurePreferences.getInstance().clear();
     }
 

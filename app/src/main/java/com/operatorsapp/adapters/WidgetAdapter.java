@@ -274,8 +274,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case PROJECTION:
                 final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
                 projectionViewHolder.mRangeView.setCurrentLine(false);
-                projectionViewHolder.mCurrentValueInChart.setText(valueInK(Integer.parseInt(widget.getCurrentValue())));
-                if (Integer.parseInt(widget.getCurrentValue()) >= widget.getTarget()) {
+                final float currentFloat = Float.parseFloat(widget.getCurrentValue());
+                projectionViewHolder.mCurrentValueInChart.setText(valueInK((int) currentFloat));
+                if (Float.parseFloat(widget.getCurrentValue()) >= widget.getTarget()) {
                     projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
                     projectionViewHolder.mCurrentValueInChart.setText("");
@@ -289,7 +290,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     projectionViewHolder.mProjectionViewEnd.hideView();
                     projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
                 }
-                if (Integer.parseInt(widget.getCurrentValue()) <= widget.getLowLimit()) {
+                if (Float.parseFloat(widget.getCurrentValue()) <= widget.getLowLimit()) {
                     projectionViewHolder.mRangeView.hideView();
                     projectionViewHolder.mProjectionView.hideViews();
                     projectionViewHolder.mProjectionViewStart.hideView();
@@ -302,9 +303,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     public void run() {
                         projectionViewHolder.mTitle.setText(widget.getFieldName());
                         projectionViewHolder.mSubtitle.setText(new StringBuilder("Standard " + valueInK((int) widget.getStandardValue())));
-                        projectionViewHolder.mValue.setText(valueInK(Integer.parseInt(widget.getCurrentValue())));
+                        projectionViewHolder.mValue.setText(valueInK((int) currentFloat));
                         float scaleValue = (widget.getTarget() - widget.getLowLimit());
-                        float currentValue = (Integer.parseInt(widget.getCurrentValue()) - widget.getLowLimit());
+                        float currentValue = (Float.parseFloat(widget.getCurrentValue()) - widget.getLowLimit());
                         float projectionValue = (widget.getProjection() - widget.getLowLimit());
                         if (scaleValue > 0) {
                             final float convertCurrentValue = currentValue / scaleValue;
@@ -337,6 +338,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             } else {
                 float valueFloat = (float) value / 1000;
                 valueString = String.valueOf(valueFloat);
+            }
+            if (valueString.length() >= 4) {
+                valueString = valueString.substring(0, 4);
             }
             return valueString + "k";
         } else {

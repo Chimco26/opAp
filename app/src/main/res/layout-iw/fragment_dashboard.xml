@@ -206,7 +206,7 @@
             android:paddingEnd="12dp"
             android:paddingStart="12dp"
             android:scaleType="fitXY"
-            android:src="@drawable/left_panel_button_selector" />
+            android:src="@drawable/right_panel_button_selector" />
     </RelativeLayout>
 
     <LinearLayout

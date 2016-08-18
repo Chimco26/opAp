@@ -21,7 +21,7 @@
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/time_widget_title"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
@@ -31,7 +31,7 @@
                 android:text="Cycle time"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"
-                autofit:minTextSize="14sp" />
+                autofit:minTextSize="20sp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/time_widget_subtitle"
@@ -44,7 +44,7 @@
                 android:singleLine="true"
                 android:text="Standard 20-60"
                 android:textSize="20sp"
-                autofit:minTextSize="12sp" />
+                autofit:minTextSize="14sp" />
         </LinearLayout>
 
         <TextView
@@ -59,14 +59,14 @@
             android:textSize="58dp" />
     </LinearLayout>
 
-    <!--<View
+    <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="80dp"
-        android:background="@color/divider_gray" />-->
+        android:background="@color/divider_gray" />
 
 
     <com.operatorsapp.view.LineChartTimeSmall
@@ -74,10 +74,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"  />
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:layout_below="@id/divider"-->
+        android:layout_marginStart="20dp"/>
+    <!--android:layout_marginTop="80dp"-->
 
 </RelativeLayout>

@@ -1,7 +1,10 @@
 package com.operatorsapp.utils;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.net.ParseException;
-import android.util.Log;
+
+import com.operatorsapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +37,7 @@ public class TimeUtils {
 
     }
 
-    public static String getDurationTime(long millis) {
+    public static String getDurationTime(Context context, long millis) {
         if (millis < 0) {
             throw new IllegalArgumentException("Duration must be greater than zero!");
         }
@@ -44,16 +47,17 @@ public class TimeUtils {
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
         millis -= TimeUnit.HOURS.toMillis(hours);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+//        millis -= TimeUnit.MINUTES.toMillis(minutes);
+//        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         if (days > 0) {
-            return days + " Days " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " Hours";
+            return days + context.getString(R.string.days) + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + context.getString(R.string.hours);
         } else {
-            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " Hours";
+            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + context.getString(R.string.hours);
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getTimeFromString(String time) {
 
         String out = null;
@@ -62,7 +66,7 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
+        } catch (ParseException ignored) {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -70,6 +74,7 @@ public class TimeUtils {
         return out;
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getDateFromString(String time) {
 
         String out = null;
@@ -78,7 +83,7 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
+        } catch (ParseException ignored) {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -86,6 +91,7 @@ public class TimeUtils {
         return out;
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getDateForJob(String time) {
 
         String out = null;
@@ -94,7 +100,7 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        } catch (ParseException e) {
+        } catch (ParseException ignored) {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }

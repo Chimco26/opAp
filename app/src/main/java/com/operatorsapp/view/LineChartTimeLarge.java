@@ -79,7 +79,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         // set an alternative background color
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
-        mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
+        mChart.setViewPortOffsets(100f, 30f, 0f, 70f);
 
 //        mChart.zoomIn();
         mChart.zoom(2,1,2,1);
@@ -95,7 +95,7 @@ public class LineChartTimeLarge extends FrameLayout {
         l.setEnabled(false);
 
         XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
         xAxis.setLabelCount(11);
@@ -123,15 +123,15 @@ public class LineChartTimeLarge extends FrameLayout {
         });
 
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisLineColor(ContextCompat.getColor(context, R.color.chart_background));
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
-        leftAxis.setLabelCount(16);
-        leftAxis.setAxisMaxValue(150f);
-        leftAxis.setYOffset(-9f);
+        leftAxis.setLabelCount(15);
+        leftAxis.setAxisMaxValue(140f);
+        leftAxis.setYOffset(0f);
         leftAxis.setTextSize(18f);
         leftAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
 
@@ -166,7 +166,7 @@ public class LineChartTimeLarge extends FrameLayout {
     }
 
 
-    public void setData(ArrayList<Entry> values) {
+    public void setData(final ArrayList<Entry> values) {
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
@@ -196,8 +196,14 @@ public class LineChartTimeLarge extends FrameLayout {
 
         // set data
         mChart.setData(data);
-        mChart.moveViewToX(values.get(values.size()-1).getX());
         mChart.animateX(300);
-        mChart.invalidate();
+
+        mChart.post(new Runnable() {
+            @Override
+            public void run() {
+                mChart.moveViewToX(values.get(values.size()-1).getX());
+                mChart.invalidate();
+            }
+        });
     }
 }

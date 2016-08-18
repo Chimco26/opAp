@@ -30,7 +30,7 @@
                 android:text="Cycle weight"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"
-                autofit:minTextSize="14sp" />
+                autofit:minTextSize="20sp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/range_widget_subtitle"
@@ -43,7 +43,7 @@
                 android:singleLine="true"
                 android:text="Standard 19"
                 android:textSize="20sp"
-                autofit:minTextSize="12sp" />
+                autofit:minTextSize="14sp" />
         </LinearLayout>
 
         <TextView

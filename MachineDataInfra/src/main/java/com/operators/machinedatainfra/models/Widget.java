@@ -83,10 +83,16 @@ public class Widget {
     }
 
     public float getHighLimit() {
+        if (mHighLimit == null) {
+            mHighLimit = 0f;
+        }
         return mHighLimit;
     }
 
     public float getLowLimit() {
+        if (mLowLimit == null) {
+            mLowLimit = 0f;
+        }
         return mLowLimit;
     }
 

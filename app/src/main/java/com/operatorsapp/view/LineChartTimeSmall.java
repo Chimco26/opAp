@@ -3,6 +3,7 @@ package com.operatorsapp.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -21,9 +22,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.github.mikephil.charting.formatter.FormattedStringCache;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.operatorsapp.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,7 +83,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // set an alternative background color
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
-        mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
+        mChart.setViewPortOffsets(55f, 17f, 0f, 50f);
 
         mChart.zoom(3, 1, 3, 1);
 
@@ -94,7 +98,7 @@ public class LineChartTimeSmall extends FrameLayout {
         l.setEnabled(false);
 
         XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
         xAxis.setLabelCount(5);
@@ -122,15 +126,15 @@ public class LineChartTimeSmall extends FrameLayout {
         });
 
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisLineColor(ContextCompat.getColor(context, R.color.chart_background));
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
-        leftAxis.setLabelCount(6);
-        leftAxis.setAxisMaxValue(100f);
-        leftAxis.setYOffset(-9f);
+        leftAxis.setLabelCount(5);
+        leftAxis.setAxisMaxValue(80f);
+        leftAxis.setYOffset(0f);
         leftAxis.setTextSize(18f);
         leftAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
 
@@ -144,7 +148,7 @@ public class LineChartTimeSmall extends FrameLayout {
     }
 
 
-    public void setData(ArrayList<Entry> values) {
+    public void setData(final ArrayList<Entry> values) {
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -172,8 +176,14 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // set data
         mChart.setData(data);
-        mChart.moveViewToX(values.get(values.size() - 1).getX());
         mChart.animateX(300);
-        mChart.invalidate();
+
+        mChart.post(new Runnable() {
+            @Override
+            public void run() {
+                mChart.moveViewToX(values.get(values.size() - 1).getX());
+                mChart.invalidate();
+            }
+        });
     }
 }

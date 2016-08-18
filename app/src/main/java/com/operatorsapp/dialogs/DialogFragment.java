@@ -96,7 +96,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             }
 
             TextView duration = (TextView) view.findViewById(R.id.dialog_duration);
-            duration.setText(TimeUtils.getDurationTime(mEvent.getDuration()));
+            duration.setText(TimeUtils.getDurationTime(getActivity(), mEvent.getDuration()));
 
             TextView dismiss = (TextView) view.findViewById(R.id.dialog_dismiss);
             dismiss.setOnClickListener(new View.OnClickListener() {
