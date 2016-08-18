@@ -75,7 +75,6 @@
                     android:inputType="textUri"
                     android:paddingStart="14dp"
                     android:singleLine="true"
-                    android:text="https://apidev.my.leadermes.com"
                     android:textColorHint="@color/T4_color"
                     tools:ignore="NestedWeights,RtlSymmetry" />
 

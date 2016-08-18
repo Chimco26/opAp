@@ -18,8 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MachineStatusCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = MachineStatusCore.class.getSimpleName();
-    private static final int MILLISECONDS_TO_SECONDS = 1000;
-    private static final int INTERVAL_DELAY = 60;
+
     private static final int START_DELAY = 0;
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
     private MachineStatusPersistenceManagerInterface mMachineStatusPersistenceManagerInterface;
@@ -57,7 +56,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
             }
         };
 
-        mJob.startJob(START_DELAY, INTERVAL_DELAY, TimeUnit.SECONDS);
+        mJob.startJob(START_DELAY, mMachineStatusPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
     }
 
     public void stopPolling() {

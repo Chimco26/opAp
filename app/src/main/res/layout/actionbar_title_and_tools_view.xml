@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/linearLayout"
-                    android:text="Machine Id/Name"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/white"
                     android:textSize="35dp" />
@@ -152,6 +151,6 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_settings_copy"/>
+            android:src="@drawable/button_settings_selector"/>
     </LinearLayout>
 </RelativeLayout>

@@ -1110,28 +1110,91 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}";
                     break;
-                case "GetActiveJobsListForMachine": {
+                case "GetActiveJoshListForMachine": {
                     responseString = "{\n" +
-                            "  \"error\":null,\n" +
-                            "  \"Jobs\":\n" +
-                            "  [\n" +
+                            "  \"Joshs\": [\n" +
                             "    {\n" +
-                            "      \"JobID\": 29,\n" +
-                            "      \"JobName\": \"some name1\"\n" +
+                            "      \"joshID\": 1216,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1216; Job:177; Product:0393plan124 74; Mold:1\"\n" +
                             "    },\n" +
                             "    {\n" +
-                            "      \"JobID\": 31,\n" +
-                            "      \"JobName\": \"some name2\"\n" +
+                            "      \"joshID\": 1214,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1214; Job:177; Product:0393plan124 74; Mold:1\"\n" +
                             "    },\n" +
-                            "\t{\n" +
-                            "      \"JobID\": 23,\n" +
-                            "      \"JobName\": \"some name3\"\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1213,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1213; Job:177; Product:0393plan124 74; Mold:1\"\n" +
                             "    },\n" +
-                            "\t{\n" +
-                            "      \"JobID\": 28,\n" +
-                            "      \"JobName\": \"some name4\"\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1212,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1212; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1211,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1211; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1210,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1210; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1209,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1209; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1208,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1208; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1207,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1207; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1206,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1206; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1205,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1205; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1204,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1204; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1203,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1203; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1202,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1202; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1201,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1201; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1200,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1200; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1199,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1199; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1198,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1198; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1197,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1197; Job:177; Product:0393plan124 74; Mold:1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"joshID\": 1088,\n" +
+                            "      \"joshName\": \"0393 - ROSLER; Josh:1088; Job:177; Product:0393plan124 74; Mold:1\"\n" +
                             "    }\n" +
-                            "  ]\n" +
+                            "  ],\n" +
+                            "  \"error\": null\n" +
                             "}";
                     break;
                 }
@@ -1198,7 +1261,8 @@ public class RetrofitMockClient implements Interceptor {
             }
 
             response = getResponse(chain, responseString);
-        } else
+        }
+        else
 
         {
             response = chain.proceed(chain.request());

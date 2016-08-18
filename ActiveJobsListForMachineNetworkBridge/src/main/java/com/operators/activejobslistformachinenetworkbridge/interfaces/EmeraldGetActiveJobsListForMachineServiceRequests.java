@@ -11,6 +11,6 @@ import retrofit2.http.POST;
  * Created by Sergey on 14/08/2016.
  */
 public interface EmeraldGetActiveJobsListForMachineServiceRequests {
-    @POST("/LeaderMESApi/GetActiveJobsListForMachine")
+    @POST("/LeaderMESApi/GetActiveJoshListForMachine")
     Call<ActiveJobsListForMachineResponse> getActiveJobsForMachine(@Body GetActiveJobsListForMachineRequest getActiveJobsListForMachineRequest);
 }

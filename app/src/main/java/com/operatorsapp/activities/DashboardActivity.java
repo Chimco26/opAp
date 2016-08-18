@@ -497,62 +497,64 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void clearData() {
         //Persistence storage clear
+        String tmpUrl = PersistenceManager.getInstance().getSiteUrl();
         PersistenceManager.getInstance().clear();
-        Log.i(LOG_TAG,"PersistenceManager cleared");
+        PersistenceManager.getInstance().setSiteUrl(tmpUrl);
+        Log.i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachineCore.stopPolling();
             mReportFieldsForMachineCore.unregisterListener();
-            Log.i(LOG_TAG,"mReportFieldsForMachineCore cleared");
+            Log.i(LOG_TAG, "mReportFieldsForMachineCore cleared");
         }
         if (mMachineStatusCore != null) {
             mMachineStatusCore.stopPolling();
             mMachineStatusCore.unregisterListener();
-            Log.i(LOG_TAG,"mMachineStatusCore cleared");
+            Log.i(LOG_TAG, "mMachineStatusCore cleared");
         }
         if (mShiftLogCore != null) {
             mShiftLogCore.stopPolling();
             mShiftLogCore.unregisterListener();
-            Log.i(LOG_TAG,"mShiftLogCore cleared");
+            Log.i(LOG_TAG, "mShiftLogCore cleared");
         }
         if (mJobsCore != null) {
             mJobsCore.unregisterListener();
-            Log.i(LOG_TAG,"mJobsCore cleared");
+            Log.i(LOG_TAG, "mJobsCore cleared");
         }
         if (mMachineDataCore != null) {
             mMachineDataCore.stopPolling();
             mMachineDataCore.unregisterListener();
-            Log.i(LOG_TAG,"mMachineDataCore cleared");
+            Log.i(LOG_TAG, "mMachineDataCore cleared");
         }
         //Objects clear
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachine = null;
-            Log.i(LOG_TAG,"mReportFieldsForMachine cleared");
+            Log.i(LOG_TAG, "mReportFieldsForMachine cleared");
         }
         //Interfaces clear
         if (mOnReportFieldsUpdatedCallbackListener != null) {
             mOnReportFieldsUpdatedCallbackListener = null;
-            Log.i(LOG_TAG,"mOnReportFieldsUpdatedCallbackListener cleared");
+            Log.i(LOG_TAG, "mOnReportFieldsUpdatedCallbackListener cleared");
         }
         if (mDashboardActivityToJobsFragmentCallback != null) {
             mDashboardActivityToJobsFragmentCallback = null;
-            Log.i(LOG_TAG,"mDashboardActivityToJobsFragmentCallback cleared");
+            Log.i(LOG_TAG, "mDashboardActivityToJobsFragmentCallback cleared");
         }
         if (mDashboardActivityToSelectedJobFragmentCallback != null) {
             mDashboardActivityToSelectedJobFragmentCallback = null;
-            Log.i(LOG_TAG,"mDashboardActivityToSelectedJobFragmentCallback cleared");
+            Log.i(LOG_TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
         }
         if (mDashboardUICallbackListener != null) {
             mDashboardUICallbackListener = null;
-            Log.i(LOG_TAG,"mDashboardUICallbackListener cleared");
+            Log.i(LOG_TAG, "mDashboardUICallbackListener cleared");
         }
         if (mReportFieldsForMachineUICallback != null) {
             mReportFieldsForMachineUICallback = null;
-            Log.i(LOG_TAG,"mReportFieldsForMachineUICallback cleared");
+            Log.i(LOG_TAG, "mReportFieldsForMachineUICallback cleared");
         }
         if (mCroutonCreator != null) {
             mCroutonCreator = null;
-            Log.i(LOG_TAG,"mCroutonCreator cleared");
+            Log.i(LOG_TAG, "mCroutonCreator cleared");
 
         }
     }
@@ -573,8 +575,22 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void refreshApp() {
         Intent myIntent = new Intent(this, MainActivity.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);
         finish();
         startActivity(myIntent);
+    }
+
+    @Override
+    public void onRefreshPollingRequest() {
+        Log.i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
+
+        mMachineStatusCore.stopPolling();
+        mShiftLogCore.stopPolling();
+        mMachineDataCore.stopPolling();
+
+        mMachineStatusCore.startPolling();
+        mShiftLogCore.startPolling();
+        mMachineDataCore.startPolling();
     }
 }

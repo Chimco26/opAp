@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class MachineDataCore {
     private static final String LOG_TAG = MachineDataCore.class.getSimpleName();
     private static final int MILLISECONDS_TO_SECONDS = 1000;
-    private static final int INTERVAL_DELAY = 60;
+
     private static final int START_DELAY = 0;
     private EmeraldJobBase mJob;
 
@@ -50,7 +50,7 @@ public class MachineDataCore {
             }
         };
 
-        mJob.startJob(START_DELAY, INTERVAL_DELAY, TimeUnit.SECONDS);
+        mJob.startJob(START_DELAY, mMachineDataPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
     }
 
     public void stopPolling() {

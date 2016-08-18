@@ -102,6 +102,9 @@
     <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
     <string name="polling_frequency">Polling frequency</string>
     <string name="request_timeout">Request timeout</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
+    <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
+    <string name="refreshed">refreshed</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
