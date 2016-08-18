@@ -112,9 +112,29 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         switch (v.getId()) {
             case R.id.button_save: {
 
-
                 break;
             }
+        }
+    }
+
+    private void checkDataAndSave() {
+        int pollingFrequency = Integer.parseInt(mPollingFrequencyEditText.getText().toString());
+        if (pollingFrequency != PersistenceManager.getInstance().getPollingFrequency()) {
+            PersistenceManager.getInstance().setPolingFrequency(pollingFrequency);
+        }
+
+        int requestTimeout = Integer.parseInt(mRequestTimeoutEditText.getText().toString());
+        if (requestTimeout != PersistenceManager.getInstance().getRequestTimeout()) {
+            PersistenceManager.getInstance().setRequestTimeOut(requestTimeout);
+        }
+
+        if (!mSelectedLanguage.equals(PersistenceManager.getInstance().getCurrentLang())) {
+            PersistenceManager.getInstance().setCurrentLang(mSelectedLanguage);
+            //// TODO: 18/08/2016 refresh 
+        }
+        else {
+            //TODO check
+            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
 }
