@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListene
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 
@@ -71,6 +73,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private Spinner mJobsSpinner;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private ProgressBar mActiveJobsProgressBar;
 
     public static ReportStopReasonFragment newInstance(String start, String end, long duration, int eventId) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
@@ -85,6 +88,15 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mGoToScreenListener = (GoToScreenListener) getActivity();
+        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -97,20 +109,12 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 //        getActiveJobs();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mGoToScreenListener = (GoToScreenListener) getActivity();
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
-        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason, container, false);
         setActionBar();
+        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;
     }
 
@@ -121,9 +125,8 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             Log.i(LOG_TAG, "No Reasons in list");
-//            ShowCrouton.reportStopCrouton(mOnCroutonRequestListener); //TODO Check place
+            ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_stop_screen);
         }
-
         else {
             mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -150,17 +153,15 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
     }
 
-
     private void initStopReasons() {
-        if (mReportFieldsForMachine != null) {
             mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
             mRecyclerView.setAdapter(mStopReasonsAdapter);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
     @Override
@@ -199,6 +200,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     }
 
     private void initJobsSpinner() {
+        mJobsSpinner.setVisibility(View.VISIBLE);
         final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mActiveJobsListForMachine.getActiveJobs());
         activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
@@ -238,12 +240,18 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
+            disableProgressBar();
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            disableProgressBar();
         }
     };
+
+    private void disableProgressBar() {
+        mActiveJobsProgressBar.setVisibility(View.GONE);
+    }
 }

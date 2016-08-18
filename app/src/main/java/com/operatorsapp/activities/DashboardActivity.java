@@ -3,6 +3,7 @@ package com.operatorsapp.activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,6 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
-import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operators.machinedatacore.MachineDataCore;
 import com.operators.machinedatacore.interfaces.MachineDataUICallback;
 import com.operators.machinedatainfra.models.Widget;
@@ -47,9 +47,10 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
+import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
-import com.operatorsapp.interfaces.DashboardChartCallbackListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -69,7 +70,7 @@ import java.util.concurrent.TimeUnit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
-        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener {
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
@@ -83,6 +84,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ShiftLogCore mShiftLogCore;
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
+    private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,15 +257,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (reportFieldsForMachine != null) {
                 Log.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
                 mReportFieldsForMachine = reportFieldsForMachine;
+                if (mOnReportFieldsUpdatedCallbackListener != null) {
+                    mOnReportFieldsUpdatedCallbackListener.onReportUpdatedSuccess();
+                }
             }
             else {
                 Log.w(LOG_TAG, "reportFieldsForMachine is null");
+                if (mOnReportFieldsUpdatedCallbackListener != null) {
+                    mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
+                }
             }
         }
 
         @Override
         public void onReportFieldsReceivedSFailure(ErrorObjectInterface reason) {
             ZLogger.i(LOG_TAG, "onReportFieldsReceivedSFailure() reason: " + reason.getDetailedDescription());
+            if (mOnReportFieldsUpdatedCallbackListener != null) {
+                mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
+            }
             mReportFieldsForMachineCore.stopPolling();
         }
     };
@@ -282,7 +293,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onHideConnectivityCroutonRequest() {
-
+        if (mCroutonCreator != null) {
+            mCroutonCreator.hideConnectivityCrouton();
+        }
     }
 
     @Override
@@ -472,5 +485,96 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void updateReportRejectFields() {
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.startPolling();
+    }
+
+    @Override
+    public void onClearAppDataRequest() {
+        Log.i(LOG_TAG, "onClearAppDataRequest() command received from settings screen");
+        clearData();
+        refreshApp();
+    }
+
+
+    private void clearData() {
+        //Persistence storage clear
+        PersistenceManager.getInstance().clear();
+        Log.i(LOG_TAG,"PersistenceManager cleared");
+        //Cores clear
+        if (mReportFieldsForMachineCore != null) {
+            mReportFieldsForMachineCore.stopPolling();
+            mReportFieldsForMachineCore.unregisterListener();
+            Log.i(LOG_TAG,"mReportFieldsForMachineCore cleared");
+        }
+        if (mMachineStatusCore != null) {
+            mMachineStatusCore.stopPolling();
+            mMachineStatusCore.unregisterListener();
+            Log.i(LOG_TAG,"mMachineStatusCore cleared");
+        }
+        if (mShiftLogCore != null) {
+            mShiftLogCore.stopPolling();
+            mShiftLogCore.unregisterListener();
+            Log.i(LOG_TAG,"mShiftLogCore cleared");
+        }
+        if (mJobsCore != null) {
+            mJobsCore.unregisterListener();
+            Log.i(LOG_TAG,"mJobsCore cleared");
+        }
+        if (mMachineDataCore != null) {
+            mMachineDataCore.stopPolling();
+            mMachineDataCore.unregisterListener();
+            Log.i(LOG_TAG,"mMachineDataCore cleared");
+        }
+        //Objects clear
+        if (mReportFieldsForMachineCore != null) {
+            mReportFieldsForMachine = null;
+            Log.i(LOG_TAG,"mReportFieldsForMachine cleared");
+        }
+        //Interfaces clear
+        if (mOnReportFieldsUpdatedCallbackListener != null) {
+            mOnReportFieldsUpdatedCallbackListener = null;
+            Log.i(LOG_TAG,"mOnReportFieldsUpdatedCallbackListener cleared");
+        }
+        if (mDashboardActivityToJobsFragmentCallback != null) {
+            mDashboardActivityToJobsFragmentCallback = null;
+            Log.i(LOG_TAG,"mDashboardActivityToJobsFragmentCallback cleared");
+        }
+        if (mDashboardActivityToSelectedJobFragmentCallback != null) {
+            mDashboardActivityToSelectedJobFragmentCallback = null;
+            Log.i(LOG_TAG,"mDashboardActivityToSelectedJobFragmentCallback cleared");
+        }
+        if (mDashboardUICallbackListener != null) {
+            mDashboardUICallbackListener = null;
+            Log.i(LOG_TAG,"mDashboardUICallbackListener cleared");
+        }
+        if (mReportFieldsForMachineUICallback != null) {
+            mReportFieldsForMachineUICallback = null;
+            Log.i(LOG_TAG,"mReportFieldsForMachineUICallback cleared");
+        }
+        if (mCroutonCreator != null) {
+            mCroutonCreator = null;
+            Log.i(LOG_TAG,"mCroutonCreator cleared");
+
+        }
+    }
+
+    @Override
+    public void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener) {
+        mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
+        mReportFieldsForMachineCore.stopPolling();
+        mReportFieldsForMachineCore.startPolling();
+        Log.i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
+    }
+
+    @Override
+    public void onRefreshApplicationRequest() {
+        Log.i(LOG_TAG, "onRefreshApplicationRequest() command received from settings screen");
+        refreshApp();
+    }
+
+    private void refreshApp() {
+        Intent myIntent = new Intent(this, MainActivity.class);
+        startActivity(myIntent);
+        finish();
+        startActivity(myIntent);
     }
 }

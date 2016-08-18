@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -65,6 +66,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
+    private ProgressBar mActiveJobsProgressBar;
 
     public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
@@ -91,6 +93,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
+        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
+        getActiveJobs();
 
         if (getArguments() != null) {
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
@@ -271,6 +275,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
         mActiveJobsListForMachineCore.getActiveJobsListForMachine();
     }
+
     private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
         @Override
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
@@ -284,16 +289,26 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
+            disableProgressBar();
+
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            disableProgressBar();
+
         }
     };
 
+    private void disableProgressBar() {
+        mActiveJobsProgressBar.setVisibility(View.GONE);
+    }
+
+
     private void initJobsSpinner() {
+        mJobsSpinner.setVisibility(View.VISIBLE);
         final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mActiveJobsListForMachine.getActiveJobs());
         activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);

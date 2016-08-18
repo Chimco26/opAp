@@ -5,7 +5,6 @@ public interface MachineStatusPersistenceManagerInterface {
     String getSiteUrl();
 
 
-
     String getSessionId();
 
     int getTotalRetries();
@@ -14,6 +13,9 @@ public interface MachineStatusPersistenceManagerInterface {
 
     int getMachineId();
 
+    int getPollingFrequency();
+
+    void setPolingFrequency(int polingFrequency);
 
     void setSiteUrl(String siteUrl);
 

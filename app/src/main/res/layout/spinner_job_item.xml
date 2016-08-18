@@ -6,6 +6,7 @@
 
     <TextView
         android:id="@+id/spinner_job_item_name"
+        android:singleLine="true"
         style="@style/FontStyle_T9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

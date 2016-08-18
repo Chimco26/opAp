@@ -183,6 +183,14 @@ public class SecurePreferences {
         return Integer.parseInt(intValue);
     }
 
+    public int getInt(String key,int defaultValue){
+        int value = getInt(key);
+        if(value == -1){
+            return defaultValue;
+        }
+        return value;
+    }
+
     public void setFloat(String key, float value) {
         setString(key, String.valueOf(value));
     }
@@ -231,7 +239,7 @@ public class SecurePreferences {
         return value;
     }
 
-    private void clear() {
+    public void clear() {
         preferences.edit().clear().commit();
     }
 

@@ -36,7 +36,6 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
-import com.google.gson.Gson;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
@@ -49,13 +48,11 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.fragments.interfaces.ReportInventoryFragment;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
@@ -69,11 +66,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
-    private static final String CURRENT_MACHINE_STATUS = "current_machine_status";
-    private static final String END_TIME = "end_time";
-    private static final String START_TIME = "start_time";
-    private static final String DURATION = "duration";
-    private static final String STOP_REPORT_EVENT_ID = "stop_report_event_id";
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
@@ -108,8 +100,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ImageView mStatusIndicatorImageView;
 
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
-    private Operator mSelectedOperator;
-
     private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance() {
@@ -291,8 +281,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         @Override
         public void onSetOperatorSuccess() {
-            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
+//            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+//            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
         }
 
         @Override
@@ -454,6 +444,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
             mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
             mStatusIndicatorImageView = (ImageView) view.findViewById(R.id.job_indicator);
+
+            ImageView settingsButton = (ImageView) view.findViewById(R.id.settings_button);
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnGoToScreenListener.goToFragment(new SettingsFragment(), true);
+                }
+            });
             actionBar.setCustomView(view);
         }
     }
@@ -577,7 +575,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
                 dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                 dialogFragment.setCancelable(false);
-               // dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                //TODO  dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 mIsOpenDialog = true;
             }
         } else {

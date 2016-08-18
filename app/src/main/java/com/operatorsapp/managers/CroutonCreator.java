@@ -77,6 +77,8 @@ public class CroutonCreator {
     public void hideConnectivityCrouton() {
         if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
             mCurrentCrouton.getCrouton().hide();
+        }else if(!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR)){
+            mCurrentCrouton.getCrouton().hide();
         }
     }
 

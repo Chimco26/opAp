@@ -39,8 +39,14 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
-    public static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
-    public static final String PREF_FORCE_LOCAL = "pref.force_locale";
+    private static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
+    private static final String PREF_FORCE_LOCAL = "pref.force_locale";
+    private static final String PREF_FORCE_LOCAL_NAME = "pref.force_locale.name";
+    private static final String PREF_POLLING_FREQUENCY = "pref.polling.frequency";
+    private static final String DEFAULT_LANGUAGE_VALUE = "en";
+    private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
+    private static final int DEFAULT_POLLING_VALUE = 60;
+    private static final int DEFAULT_TIMEOUT_VALUE = 17;
 
 
     private static PersistenceManager msInstance;
@@ -166,7 +172,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public int getRequestTimeout() {
-        return SecurePreferences.getInstance().getInt(PREF_REQUEST_TIMEOUT);
+        return SecurePreferences.getInstance().getInt(PREF_REQUEST_TIMEOUT, DEFAULT_TIMEOUT_VALUE);
     }
 
     @Override
@@ -189,11 +195,37 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     }
 
     public String getCurrentLang() {
+<<<<<<< HEAD
         return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, "en");
+=======
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, DEFAULT_LANGUAGE_VALUE);
+>>>>>>> sergey6
     }
 
     public void setCurrentLang(String lang) {
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL, lang);
     }
 
+
+    public String getCurrentLanguageName() {
+        return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL_NAME, DEFAULT_LANGUAGE_NAME_VALUE);
+    }
+
+    public void setCurrentLanguageName(String languageName) {
+        SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL_NAME, languageName);
+    }
+
+    public void clear(){
+        SecurePreferences.getInstance().clear();
+    }
+
+    @Override
+    public int getPollingFrequency() {
+        return SecurePreferences.getInstance().getInt(PREF_POLLING_FREQUENCY, DEFAULT_POLLING_VALUE);
+    }
+
+    @Override
+    public void setPolingFrequency(int polingFrequency) {
+        SecurePreferences.getInstance().setInt(PREF_POLLING_FREQUENCY, polingFrequency);
+    }
 }
