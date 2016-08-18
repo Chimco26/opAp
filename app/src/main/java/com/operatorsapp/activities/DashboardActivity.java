@@ -488,42 +488,86 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void clearAppData() {
-        Log.i(LOG_TAG, "clearAppData() command received from settings screen");
+    public void onClearAppDataRequest() {
+        Log.i(LOG_TAG, "onClearAppDataRequest() command received from settings screen");
         clearData();
         refreshApp();
     }
 
 
     private void clearData() {
+        //Persistence storage clear
         PersistenceManager.getInstance().clear();
+        Log.i(LOG_TAG,"PersistenceManager cleared");
+        //Cores clear
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachineCore.stopPolling();
             mReportFieldsForMachineCore.unregisterListener();
+            Log.i(LOG_TAG,"mReportFieldsForMachineCore cleared");
         }
         if (mMachineStatusCore != null) {
             mMachineStatusCore.stopPolling();
             mMachineStatusCore.unregisterListener();
+            Log.i(LOG_TAG,"mMachineStatusCore cleared");
         }
         if (mShiftLogCore != null) {
             mShiftLogCore.stopPolling();
             mShiftLogCore.unregisterListener();
+            Log.i(LOG_TAG,"mShiftLogCore cleared");
         }
         if (mJobsCore != null) {
             mJobsCore.unregisterListener();
+            Log.i(LOG_TAG,"mJobsCore cleared");
+        }
+        if (mMachineDataCore != null) {
+            mMachineDataCore.stopPolling();
+            mMachineDataCore.unregisterListener();
+            Log.i(LOG_TAG,"mMachineDataCore cleared");
+        }
+        //Objects clear
+        if (mReportFieldsForMachineCore != null) {
+            mReportFieldsForMachine = null;
+            Log.i(LOG_TAG,"mReportFieldsForMachine cleared");
+        }
+        //Interfaces clear
+        if (mOnReportFieldsUpdatedCallbackListener != null) {
+            mOnReportFieldsUpdatedCallbackListener = null;
+            Log.i(LOG_TAG,"mOnReportFieldsUpdatedCallbackListener cleared");
+        }
+        if (mDashboardActivityToJobsFragmentCallback != null) {
+            mDashboardActivityToJobsFragmentCallback = null;
+            Log.i(LOG_TAG,"mDashboardActivityToJobsFragmentCallback cleared");
+        }
+        if (mDashboardActivityToSelectedJobFragmentCallback != null) {
+            mDashboardActivityToSelectedJobFragmentCallback = null;
+            Log.i(LOG_TAG,"mDashboardActivityToSelectedJobFragmentCallback cleared");
+        }
+        if (mDashboardUICallbackListener != null) {
+            mDashboardUICallbackListener = null;
+            Log.i(LOG_TAG,"mDashboardUICallbackListener cleared");
+        }
+        if (mReportFieldsForMachineUICallback != null) {
+            mReportFieldsForMachineUICallback = null;
+            Log.i(LOG_TAG,"mReportFieldsForMachineUICallback cleared");
+        }
+        if (mCroutonCreator != null) {
+            mCroutonCreator = null;
+            Log.i(LOG_TAG,"mCroutonCreator cleared");
+
         }
     }
 
     @Override
-    public void refreshReportFields(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener) {
+    public void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener) {
         mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.startPolling();
-        Log.i(LOG_TAG, "refreshReportFields() command received from settings screen");
+        Log.i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
     }
 
     @Override
-    public void refreshApplication() {
+    public void onRefreshApplicationRequest() {
+        Log.i(LOG_TAG, "onRefreshApplicationRequest() command received from settings screen");
         refreshApp();
     }
 

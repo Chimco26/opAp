@@ -12,6 +12,9 @@ public interface MachineDataPersistenceManagerInterface {
 
     int getMachineId();
 
+    int getPollingFrequency();
+
+    void setPolingFrequency(int polingFrequency);
 
     void setSiteUrl(String siteUrl);
 

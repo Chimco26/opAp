@@ -2,7 +2,6 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -24,7 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
-import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
@@ -190,17 +188,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 else {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
-                   mSettingsInterface.refreshApplication();
+                   mSettingsInterface.onRefreshApplicationRequest();
                 }
                 break;
             }
             case R.id.refresh_button: {
                 ProgressDialogManager.show(getActivity());
-                mSettingsInterface.refreshReportFields(this);
+                mSettingsInterface.onRefreshReportFieldsRequest(this);
                 break;
             }
             case R.id.button_change: {
-                mSettingsInterface.clearAppData();
+                mSettingsInterface.onClearAppDataRequest();
                 break;
             }
         }
@@ -222,19 +220,19 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     private void dismissProgressDialog() {
 
-        //TODO remove handler, only for test
-        Handler mHandler = new Handler();
+//        //TODO remove handler, only for test
+//        Handler mHandler = new Handler();
 
-        mHandler.postDelayed(new Runnable() {
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+//        mHandler.postDelayed(new Runnable() {
+//            public void run() {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
                         ProgressDialogManager.dismiss();
-                    }
-                });
-            }
-        }, 2000);
+//                    }
+//                });
+//            }
+//        }, 2000);
 
     }
 }

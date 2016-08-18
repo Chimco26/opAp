@@ -16,6 +16,10 @@ public interface ShiftLogPersistenceManagerInterface {
     int getRequestTimeout();
     int getMachineId();
 
+    int getPollingFrequency();
+
+    void setPolingFrequency(int polingFrequency);
+
     void setSiteUrl(String siteUrl);
 
     void setSessionId(String sessionId);

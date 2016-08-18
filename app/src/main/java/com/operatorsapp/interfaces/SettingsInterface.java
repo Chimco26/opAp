@@ -6,7 +6,7 @@ import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListen
  * Created by Sergey on 17/08/2016.
  */
 public interface SettingsInterface {
-    void clearAppData();
-    void refreshReportFields(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener);
-    void refreshApplication();
+    void onClearAppDataRequest();
+    void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener);
+    void onRefreshApplicationRequest();
 }

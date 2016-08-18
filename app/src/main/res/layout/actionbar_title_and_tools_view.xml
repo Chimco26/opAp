@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
-
-    <TextView
-        android:id="@+id/toolbar_title"
-        style="@style/FontStyle_T11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:paddingStart="15dp"
-        tools:text="App Title" />
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/toolbar_title"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -29,7 +18,7 @@
             android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/job_status_indicator"
             android:orientation="vertical">
 
@@ -42,7 +31,7 @@
                     style="@style/FontStyle_T7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="13dp"
+                    android:layout_marginRight="13dp"
                     android:text="@string/machine_id"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/white"
@@ -78,8 +67,8 @@
                     style="@style/FontStyle_T6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:text="@string/machine_status"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white" />
@@ -89,7 +78,7 @@
                     style="@style/FontStyle_T6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -97,6 +86,33 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/linearLayout2"
+        android:layout_marginStart="150dp"
+        android:layout_alignBottom="@+id/linearLayout2">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:src="@drawable/logo"/>
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/FontStyle_T11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="35dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="15dp"
+            tools:text="App Title" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/spinner_layout"
@@ -138,6 +154,4 @@
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_settings_copy"/>
     </LinearLayout>
-
-
 </RelativeLayout>

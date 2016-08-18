@@ -365,7 +365,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
             final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
             title.setText(spannableString);
-            title.setVisibility(View.GONE);
+            title.setVisibility(View.VISIBLE);
 
             final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
             final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
