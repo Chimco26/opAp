@@ -126,12 +126,12 @@
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="120dp"
-                    android:layout_height="105dp"
+                    android:layout_height="120dp"
                     android:layout_marginLeft="30dp"
-                    android:background="@drawable/icrepeat"/>
+                    android:background="@drawable/ic_cardbox"/>
 
                 <View
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="1dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="30dp"

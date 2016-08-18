@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ActiveJob {
 
-    @SerializedName("JobID")
+    @SerializedName("joshID")
     private Integer jobID;
-    @SerializedName("JobName")
+    @SerializedName("joshName")
     private String jobName;
 
     public Integer getJobID() {

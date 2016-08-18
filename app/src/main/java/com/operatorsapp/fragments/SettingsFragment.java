@@ -85,13 +85,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mIsFirst) {
-//                    spinnerArrayAdapter.setTitle(PersistenceManager.getInstance().getCurrentLanguageName());
                     mIsFirst = false;
+                    for (int i = 0; i < getResources().getStringArray(R.array.language_codes_array).length; i++) {
+                        if (getResources().getStringArray(R.array.language_codes_array)[i].equals(PersistenceManager.getInstance().getCurrentLang())) {
+
+                            mLanguagesSpinner.setSelection(i);
+                        }
+                    }
                 }
                 else {
                     mSelectedLanguageCode = getResources().getStringArray(R.array.language_codes_array)[position];
                     mSelectedLanguageName = getResources().getStringArray(R.array.languages_spinner_array)[position];
-                    spinnerArrayAdapter.setTitle(position);
                 }
             }
 
@@ -100,7 +104,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
             }
         });
-
 
         mFactoryUrlTextView = (TextView) view.findViewById(R.id.url_text_view);
         String siteUrl = PersistenceManager.getInstance().getSiteUrl();
@@ -188,7 +191,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 else {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
-                   mSettingsInterface.onRefreshApplicationRequest();
+                    mSettingsInterface.onRefreshApplicationRequest();
                 }
                 break;
             }
@@ -228,7 +231,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 //                getActivity().runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
-                        ProgressDialogManager.dismiss();
+        ProgressDialogManager.dismiss();
 //                    }
 //                });
 //            }

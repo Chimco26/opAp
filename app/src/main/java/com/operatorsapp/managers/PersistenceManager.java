@@ -46,7 +46,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
     private static final int DEFAULT_POLLING_VALUE = 60;
-    private static final int DEFAULT_TIMEOUT_VALUE = 17;
+    private static final int DEFAULT_TIMEOUT_VALUE = 20;
 
 
     private static PersistenceManager msInstance;
@@ -73,7 +73,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public String getSiteUrl() {
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL);
+        //TODO  url remove for production, need to be empty string
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL,"https://apidev.my.leadermes.com");
     }
 
     @Override

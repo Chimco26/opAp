@@ -9,4 +9,5 @@ public interface SettingsInterface {
     void onClearAppDataRequest();
     void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener);
     void onRefreshApplicationRequest();
+    void onRefreshPollingRequest();
 }

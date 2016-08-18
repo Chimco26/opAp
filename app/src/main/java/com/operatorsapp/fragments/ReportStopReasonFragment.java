@@ -102,7 +102,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         if (getArguments() != null) {
             mStart = getArguments().getString(START_TIME);
             mEnd = getArguments().getString(END_TIME);
-            mDuration = getArguments().getInt(DURATION);
+            mDuration = getArguments().getLong(DURATION);
             mEventId = getArguments().getInt(EVENT_ID);
             Log.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
         }
@@ -126,8 +126,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             Log.i(LOG_TAG, "No Reasons in list");
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_stop_screen);
-        }
-        else {
+        } else {
             mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
             mRecyclerView.setLayoutManager(mLayoutManager);
             int spacing = 40;
@@ -141,12 +140,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
         if (mStart == null || mEnd == null) {
             productTextView.setText("- -");
-        }
-        else {
+        } else {
             productTextView.setText(getActivity().getString(R.string.stop) + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
-        durationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
+        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
         eventIdTextView.setText(String.valueOf(mEventId));
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
@@ -154,8 +152,8 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     }
 
     private void initStopReasons() {
-            mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
-            mRecyclerView.setAdapter(mStopReasonsAdapter);
+        mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
+        mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
 
     @Override
@@ -235,8 +233,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }

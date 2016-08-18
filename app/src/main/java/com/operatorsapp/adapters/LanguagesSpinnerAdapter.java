@@ -20,6 +20,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     private String[] mSpinnerItems = null;
     private TextView mRowName;
     private View mView;
+    private boolean mIsFirst = true;
 
     public LanguagesSpinnerAdapter(Activity context, int resource, String[] spinnerItems) {
         super(context, resource, spinnerItems);
@@ -36,7 +37,14 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
-            mRowName.setText(PersistenceManager.getInstance().getCurrentLanguageName());
+            if (mIsFirst) {
+                setTitle(PersistenceManager.getInstance().getCurrentLanguageName());
+                mIsFirst = false;
+            }
+            else {
+                setTitle(position);
+            }
+
 
         }
         return row;
@@ -48,6 +56,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
+            mView = row;
         }
 
         String item = mSpinnerItems[position];
@@ -61,13 +70,14 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     }
 
     public void setTitle(int position) {
-        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
+//        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
         mRowName.setText(mSpinnerItems[position]);
         mRowName.setTextSize(20);
     }
-    public void setTitle(String language){
-        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
+
+    public void setTitle(String language) {
+//        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
         mRowName.setText(language);
         mRowName.setTextSize(20);

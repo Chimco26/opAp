@@ -58,7 +58,6 @@ public class LoginFragment extends Fragment {
         setHasOptionsMenu(true);
         // For now, It is necessary Settings screen
         PersistenceManager.getInstance().setTotalRetries(3);
-        PersistenceManager.getInstance().setRequestTimeOut(17);
     }
 
     @Override
@@ -77,6 +76,7 @@ public class LoginFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
         mSiteUrl = (EditText) rootView.findViewById(R.id.factory_url);
+        mSiteUrl.setText(PersistenceManager.getInstance().getSiteUrl());
         mUserName = (EditText) rootView.findViewById(R.id.user_name);
         mPassword = (EditText) rootView.findViewById(R.id.password);
         mLoginBtnBackground = (ImageView) rootView.findViewById(R.id.loginBtn_background);

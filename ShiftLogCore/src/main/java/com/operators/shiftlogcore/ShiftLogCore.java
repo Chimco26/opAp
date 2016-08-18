@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ShiftLogCore {
     public static final String LOG_TAG = ShiftLogCore.class.getSimpleName();
-    private static final int INTERVAL_DELAY = 60;
     private static final int START_DELAY = 0;
 
     private static ShiftLogCore msInstance;
@@ -77,7 +76,7 @@ public class ShiftLogCore {
             }
         };
 
-        mJob.startJob(START_DELAY, INTERVAL_DELAY, TimeUnit.SECONDS);
+        mJob.startJob(START_DELAY, mShiftLogPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
     }
 
     public void stopPolling() {
@@ -119,7 +118,8 @@ public class ShiftLogCore {
             public void onShiftLogSucceeded(ArrayList<Event> events) {
                 if (mShiftLogUICallback != null) {
                     mShiftLogUICallback.onGetShiftLogSucceeded(events);
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                 }
                 onJobFinishedListener.onJobFinished();

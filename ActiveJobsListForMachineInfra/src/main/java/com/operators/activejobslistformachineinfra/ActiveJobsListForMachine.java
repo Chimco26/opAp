@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Sergey on 14/08/2016.
  */
 public class ActiveJobsListForMachine {
-    @SerializedName("Jobs")
+    @SerializedName("Joshs")
     private List<ActiveJob> jobs = new ArrayList<ActiveJob>();
 
     public ActiveJobsListForMachine(List<ActiveJob> jobs) {
