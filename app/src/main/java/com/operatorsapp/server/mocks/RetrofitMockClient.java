@@ -78,7 +78,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 102960000,\n" +
                             "      \"EventEndTime\": \"13/10/2015 16:39:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 291,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -90,7 +90,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 4032000,\n" +
                             "      \"EventEndTime\": \"14/10/2015 11:12:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 365,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -102,7 +102,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 1296000,\n" +
                             "      \"EventEndTime\": \"14/10/2015 19:03:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 376,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -114,7 +114,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 3168000,\n" +
                             "      \"EventEndTime\": \"15/10/2015 07:01:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 388,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -126,19 +126,31 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
                             "      \"EventGroupID\": 20,\n" +
-                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
                             "      \"EventID\": 1020,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
                             "      \"EventTime\": \"12/07/2016 17:36:00\",\n" +
-                            "      \"EventTitle\": \"0998: Alarms Active on:\nNoProgressCount\"\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\n1\"\n" +
+                            "    },\n" +
+                            "    {\n" +
+                            "      \"priority\": 1,\n" +
+                            "      \"EventDuration\": 0,\n" +
+                            "      \"EventEndTime\": \"12/07/2016\n17:36:00\",\n" +
+                            "      \"EventGroupID\": 20,\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
+                            "      \"EventID\": 1020,\n" +
+                            "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
+                            "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
+                            "      \"EventTime\": \"12/07/2016 17:36:00\",\n" +
+                            "      \"EventTitle\": \"0998: Alarms Active on:\n2\"\n" +
                             "    },\n" +
                             "    {\n" +
                             "      \"priority\": 2,\n" +
                             "      \"EventDuration\": 0,\n" +
                             "      \"EventEndTime\": \"12/07/2016\n17:55:00\",\n" +
                             "      \"EventGroupID\": 20,\n" +
-                            "      \"EventGroupLname\": \"Alarms\",\n" +
+                            "      \"EventGroupLname\": \"Material weight Low\",\n" +
                             "      \"EventID\": 1044,\n" +
                             "      \"EventSubTitleEname\": \"Alarms Activated\",\n" +
                             "      \"EventSubTitleLname\": \"Alarms Activated\",\n" +
@@ -150,7 +162,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 145,\n" +
                             "      \"EventEndTime\": \"12/10/2015 11:55:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 233,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -162,7 +174,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 24,\n" +
                             "      \"EventEndTime\": \"12/10/2015 13:44:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 248,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -174,7 +186,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 236,\n" +
                             "      \"EventEndTime\": \"12/10/2015 19:04:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 249,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -186,7 +198,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 718,\n" +
                             "      \"EventEndTime\": \"13/10/2015 07:02:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 262,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -198,7 +210,7 @@ public class RetrofitMockClient implements Interceptor {
                             "      \"EventDuration\": 464,\n" +
                             "      \"EventEndTime\": \"15/10/2015 14:45:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
-                            "      \"EventGroupLname\": \"Machine Stop\",\n" +
+                            "      \"EventGroupLname\": \"Machine Stopped\",\n" +
                             "      \"EventID\": 407,\n" +
                             "      \"EventSubTitleEname\": \"Unreported Stop \",\n" +
                             "      \"EventSubTitleLname\": \"עצירה לא מדווח\",\n" +
@@ -380,16 +392,16 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}*/
                             "{\n" +
-                            "  \"MachineID\": 9,\n" +
-                            "  \"MachineParams\": [\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"19\",\n" +
-                            "      \"FieldEName\": \"CycleTime\",\n" +
-                            "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
-                            "      \"FieldName\": \"CycleTime\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
-                            "      \"ID\": 1,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                                    "  \"MachineID\": 9,\n" +
+                                    "  \"MachineParams\": [\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"19\",\n" +
+                                    "      \"FieldEName\": \"CycleTime\",\n" +
+                                    "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
+                                    "      \"FieldName\": \"CycleTime\",\n" +
+                                    "      \"HighLimit\": 1100,\n" +
+                                    "      \"ID\": 1,\n" +
+                                    "      \"LowLimit\": 900,\n" +
                                     "      \"MachineParamHistoricData\": [{\n" +
                                     "            \"Time\": 1470801600000,\n" +
                                     "            \"Value\": 70\n" +
@@ -430,105 +442,150 @@ public class RetrofitMockClient implements Interceptor {
                                     "            \"Time\": 1470834000000,\n" +
                                     "            \"Value\": 50\n" +
                                     "      \t}],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 19,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 3,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"18.95\",\n" +
-                            "      \"FieldEName\": \"AverageCycle\",\n" +
-                            "      \"FieldLName\": \"זמן מחזור ממוצע (שנ)\",\n" +
-                            "      \"FieldName\": \"AverageCycle\",\n" +
-                            "      \"HighLimit\": null,\n" +
-                            "      \"ID\": 2,\n" +
-                            "      \"LowLimit\": null,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 0,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"58\",\n" +
-                            "      \"FieldEName\": \"TotalCycles\",\n" +
-                            "      \"FieldLName\": \"מספר מחזורים\",\n" +
-                            "      \"FieldName\": \"TotalCycles\",\n" +
-                            "      \"HighLimit\": null,\n" +
-                            "      \"ID\": 8,\n" +
-                            "      \"LowLimit\": null,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 0,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"422\",\n" +
-                            "      \"FieldEName\": \"Time Left Hr\",\n" +
-                            "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
-                            "      \"FieldName\": \"TimeLeftHr\",\n" +
-                            "      \"HighLimit\": 142560,\n" +
-                            "      \"ID\": 12,\n" +
-                            "      \"LowLimit\": 16,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": false\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"230\",\n" +
-                            "      \"FieldEName\": \"CavitiesPC\",\n" +
-                            "      \"FieldLName\": \"CavitiesPC\",\n" +
-                            "      \"FieldName\": \"CavitiesPC\",\n" +
-                            "      \"HighLimit\": 27.5,\n" +
-                            "      \"ID\": 31,\n" +
-                            "      \"LowLimit\": 22.5,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 230,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": true\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"532\",\n" +
-                            "      \"FieldEName\": \"NoProgressCount\",\n" +
-                            "      \"FieldLName\": \"NoProgressCount\",\n" +
-                            "      \"FieldName\": \"NoProgressCount\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
-                            "      \"ID\": 3583,\n" +
-                            "      \"LowLimit\": 900,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 532,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": true\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"150\",\n" +
-                            "      \"FieldEName\": \"PEE Projection Testing\",\n" +
-                            "      \"FieldLName\": \"PEE Projection Testing\",\n" +
-                            "      \"FieldName\": \"PEE Projection Testing\",\n" +
-                            "      \"HighLimit\": 2000,\n" +
-                            "      \"ID\": 999999999,\n" +
-                            "      \"LowLimit\": 0,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": 250,\n" +
-                            "      \"StandardValue\": 1500,\n" +
-                            "      \"Target\": 2000,\n" +
-                            "      \"fieldType\": 2,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    }\n" +
-                            "  ],\n" +
-                            "  \"error\": null\n" +
-                            "}";
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 19,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 3,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"18.95\",\n" +
+                                    "      \"FieldEName\": \"AverageCycle\",\n" +
+                                    "      \"FieldLName\": \"זמן מחזור ממוצע (שנ)\",\n" +
+                                    "      \"FieldName\": \"AverageCycle\",\n" +
+                                    "      \"HighLimit\": null,\n" +
+                                    "      \"ID\": 2,\n" +
+                                    "      \"LowLimit\": null,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": null,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 0,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"58\",\n" +
+                                    "      \"FieldEName\": \"TotalCycles\",\n" +
+                                    "      \"FieldLName\": \"מספר מחזורים\",\n" +
+                                    "      \"FieldName\": \"TotalCycles\",\n" +
+                                    "      \"HighLimit\": null,\n" +
+                                    "      \"ID\": 8,\n" +
+                                    "      \"LowLimit\": null,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": null,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 0,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"10\",\n" +
+                                    "      \"FieldEName\": \"Time Left Hr\",\n" +
+                                    "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
+                                    "      \"FieldName\": \"TimeLeftHr\",\n" +
+                                    "      \"HighLimit\": 1500,\n" +
+                                    "      \"ID\": 12,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 500,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": false\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"235\",\n" +
+                                    "      \"FieldEName\": \"CavitiesPC\",\n" +
+                                    "      \"FieldLName\": \"CavitiesPC\",\n" +
+                                    "      \"FieldName\": \"CavitiesPC\",\n" +
+                                    "      \"HighLimit\": 230,\n" +
+                                    "      \"ID\": 31,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 150,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": true\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"532\",\n" +
+                                    "      \"FieldEName\": \"NoProgressCount\",\n" +
+                                    "      \"FieldLName\": \"NoProgressCount\",\n" +
+                                    "      \"FieldName\": \"NoProgressCount\",\n" +
+                                    "      \"HighLimit\": 1100,\n" +
+                                    "      \"ID\": 3583,\n" +
+                                    "      \"LowLimit\": 600,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 800,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": true\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"720\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 1700,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"2300\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 500,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"1950\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 2300,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"0\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 500,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    }\n" +
+                                    "  ],\n" +
+                                    "  \"error\": null\n" +
+                                    "}";
                     break;
                 case "GetCurrentMachineStatus":
                     responseString = "{\n" +
@@ -1053,7 +1110,7 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}";
                     break;
-                case "GetActiveJobsListForMachine":{
+                case "GetActiveJobsListForMachine": {
                     responseString = "{\n" +
                             "  \"error\":null,\n" +
                             "  \"Jobs\":\n" +

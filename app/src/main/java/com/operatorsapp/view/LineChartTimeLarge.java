@@ -124,6 +124,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setAxisLineColor(ContextCompat.getColor(context, R.color.chart_background));
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
@@ -173,12 +174,20 @@ public class LineChartTimeLarge extends FrameLayout {
         set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setValueTextColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(10f);
-        set1.setDrawCircles(false);
+//        set1.setDrawCircles(false);
         set1.setDrawValues(false);
         set1.setFillAlpha(65);
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
+//        set1.setDrawCircleHole(false);
+
+
+        set1.setCircleRadius(10);
+        set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setDrawCircleHole(true);
+        set1.setDrawCircles(true);
 
         // create a data object with the datasets
         LineData data = new LineData(set1);

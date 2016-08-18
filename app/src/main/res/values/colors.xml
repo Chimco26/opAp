@@ -24,7 +24,7 @@
     <color name="C20">#909090</color>
     <color name="divider_gray">#d0d0d0</color>
     <color name="no_data_gray">#898989</color>
-    <color name="chart_background">#66ffffff</color>
+    <color name="chart_background">#11ffffff</color>
     <color name="oval_background">#e5e5e5</color>
     <color name="default_gray">#878787</color>
     <color name="default_gray_status">#868686</color>

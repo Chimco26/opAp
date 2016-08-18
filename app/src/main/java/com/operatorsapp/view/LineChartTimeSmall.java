@@ -101,7 +101,7 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
-        xAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
+        xAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
         xAxis.setCenterAxisLabels(true);
         xAxis.setGranularity(60000L * 60); // one minute in millis * 60
         xAxis.setValueFormatter(new AxisValueFormatter() {
@@ -123,6 +123,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setAxisLineColor(ContextCompat.getColor(context, R.color.chart_background));
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
@@ -131,7 +132,7 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.setAxisMaxValue(100f);
         leftAxis.setYOffset(-9f);
         leftAxis.setTextSize(18f);
-        leftAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
+        leftAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
 
         LimitLine limitLine = new LimitLine(40f, "");
         limitLine.setLineColor(ContextCompat.getColor(context, R.color.C16));
@@ -150,12 +151,19 @@ public class LineChartTimeSmall extends FrameLayout {
         set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setValueTextColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(3f);
-        set1.setDrawCircles(false);
+//        set1.setDrawCircles(false);
         set1.setDrawValues(false);
         set1.setFillAlpha(65);
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
+//        set1.setDrawCircleHole(false);
+
+        set1.setCircleRadius(3);
+        set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+        set1.setDrawCircleHole(true);
+        set1.setDrawCircles(true);
 
         // create a data object with the datasets
         LineData data = new LineData(set1);

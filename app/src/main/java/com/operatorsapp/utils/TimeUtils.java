@@ -17,20 +17,16 @@ public class TimeUtils {
 
         if (timeInSeconds < ONE_MINUTE_IN_SECONDS) {
             return 1 + " m";
-        }
-        else if (timeInSeconds < ONE_HOUR_IN_SECONDS) {
+        } else if (timeInSeconds < ONE_HOUR_IN_SECONDS) {
             return (timeInSeconds / ONE_MINUTE_IN_SECONDS) + " m";
-        }
-        else if (timeInSeconds < ONE_DAY_IN_SECONDS) {
+        } else if (timeInSeconds < ONE_DAY_IN_SECONDS) {
             int minutes = (int) ((timeInSeconds - ((timeInSeconds / ONE_HOUR_IN_SECONDS) * ONE_HOUR_IN_SECONDS)) / ONE_MINUTE_IN_SECONDS);
             return timeInSeconds / ONE_HOUR_IN_SECONDS + ":" + minutes + " h";
-        }
-        else {
+        } else {
             int day = (int) (timeInSeconds / ONE_DAY_IN_SECONDS);
             if (day >= 99) {
                 return 99 + "+ d";
-            }
-            else {
+            } else {
                 return day + " d";
 
             }
@@ -52,7 +48,7 @@ public class TimeUtils {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         if (days > 0) {
-            return String.format(Locale.getDefault(), "%02d:%02d:%02d", days, hours, minutes) + " Days";
+            return days + " Days " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " Hours";
         } else {
             return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " Hours";
         }
@@ -66,10 +62,8 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        }
-        catch (ParseException e) {
-        }
-        catch (java.text.ParseException e) {
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
@@ -84,10 +78,8 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        }
-        catch (ParseException e) {
-        }
-        catch (java.text.ParseException e) {
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 
@@ -102,10 +94,8 @@ public class TimeUtils {
         try {
             Date date = dateFormat.parse(time);
             out = dateFormat2.format(date);
-        }
-        catch (ParseException e) {
-        }
-        catch (java.text.ParseException e) {
+        } catch (ParseException e) {
+        } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
 

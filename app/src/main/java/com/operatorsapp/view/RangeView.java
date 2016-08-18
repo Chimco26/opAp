@@ -44,7 +44,9 @@ public class RangeView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(mCurrentLine, mX, 0, mPaint);
+        if (mCurrentLine != null) {
+            canvas.drawBitmap(mCurrentLine, mX, 0, mPaint);
+        }
     }
 
     public void setCurrentLine(boolean red) {
@@ -66,6 +68,11 @@ public class RangeView extends View {
 
     public void updateX(float x) {
         mX = x;
+        forceRedraw();
+    }
+
+    public void hideView() {
+        mCurrentLine = null;
         forceRedraw();
     }
 
