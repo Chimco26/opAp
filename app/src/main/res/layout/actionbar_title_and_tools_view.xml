@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent">
 
     <LinearLayout
@@ -87,12 +87,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_toRightOf="@id/linearLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginEnd="410dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/linearLayout2"
+        android:layout_marginStart="150dp"
+        android:layout_alignBottom="@+id/linearLayout2">
 
         <ImageView
             android:layout_width="50dp"
@@ -115,12 +116,12 @@
 
     <LinearLayout
         android:id="@+id/spinner_layout"
-        android:layout_width="400dp"
+        android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/linearLayout2"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
         android:padding="1dp">
 
         <com.operatorsapp.view.EmeraldSpinner
@@ -146,7 +147,11 @@
             android:gravity="center"
             app:theme="@style/ToolbarTheme"
             tools:ignore="MissingPrefix" />
+        <ImageView
+            android:id="@+id/settings_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_settings_copy"/>
     </LinearLayout>
-
-
 </RelativeLayout>

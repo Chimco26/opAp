@@ -392,16 +392,16 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}*/
                             "{\n" +
-                            "  \"MachineID\": 9,\n" +
-                            "  \"MachineParams\": [\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"19\",\n" +
-                            "      \"FieldEName\": \"CycleTime\",\n" +
-                            "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
-                            "      \"FieldName\": \"CycleTime\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
-                            "      \"ID\": 1,\n" +
-                            "      \"LowLimit\": 900,\n" +
+                                    "  \"MachineID\": 9,\n" +
+                                    "  \"MachineParams\": [\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"19\",\n" +
+                                    "      \"FieldEName\": \"CycleTime\",\n" +
+                                    "      \"FieldLName\": \"זמן מחזור (שנ)\",\n" +
+                                    "      \"FieldName\": \"CycleTime\",\n" +
+                                    "      \"HighLimit\": 1100,\n" +
+                                    "      \"ID\": 1,\n" +
+                                    "      \"LowLimit\": 900,\n" +
                                     "      \"MachineParamHistoricData\": [{\n" +
                                     "            \"Time\": 1470801600000,\n" +
                                     "            \"Value\": 70\n" +
@@ -442,105 +442,150 @@ public class RetrofitMockClient implements Interceptor {
                                     "            \"Time\": 1470834000000,\n" +
                                     "            \"Value\": 50\n" +
                                     "      \t}],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 19,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 3,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"18.95\",\n" +
-                            "      \"FieldEName\": \"AverageCycle\",\n" +
-                            "      \"FieldLName\": \"זמן מחזור ממוצע (שנ)\",\n" +
-                            "      \"FieldName\": \"AverageCycle\",\n" +
-                            "      \"HighLimit\": null,\n" +
-                            "      \"ID\": 2,\n" +
-                            "      \"LowLimit\": null,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 0,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"58\",\n" +
-                            "      \"FieldEName\": \"TotalCycles\",\n" +
-                            "      \"FieldLName\": \"מספר מחזורים\",\n" +
-                            "      \"FieldName\": \"TotalCycles\",\n" +
-                            "      \"HighLimit\": null,\n" +
-                            "      \"ID\": 8,\n" +
-                            "      \"LowLimit\": null,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": null,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 0,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"422\",\n" +
-                            "      \"FieldEName\": \"Time Left Hr\",\n" +
-                            "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
-                            "      \"FieldName\": \"TimeLeftHr\",\n" +
-                            "      \"HighLimit\": 1500,\n" +
-                            "      \"ID\": 12,\n" +
-                            "      \"LowLimit\": 0,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 500,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": false\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"235\",\n" +
-                            "      \"FieldEName\": \"CavitiesPC\",\n" +
-                            "      \"FieldLName\": \"CavitiesPC\",\n" +
-                            "      \"FieldName\": \"CavitiesPC\",\n" +
-                            "      \"HighLimit\": 230,\n" +
-                            "      \"ID\": 31,\n" +
-                            "      \"LowLimit\": 0,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 230,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": true\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"532\",\n" +
-                            "      \"FieldEName\": \"NoProgressCount\",\n" +
-                            "      \"FieldLName\": \"NoProgressCount\",\n" +
-                            "      \"FieldName\": \"NoProgressCount\",\n" +
-                            "      \"HighLimit\": 1100,\n" +
-                            "      \"ID\": 3583,\n" +
-                            "      \"LowLimit\": 600,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": null,\n" +
-                            "      \"StandardValue\": 800,\n" +
-                            "      \"Target\": null,\n" +
-                            "      \"fieldType\": 1,\n" +
-                            "      \"isOutOfRange\": true\n" +
-                            "    },\n" +
-                            "    {\n" +
-                            "      \"CurrentValue\": \"100\",\n" +
-                            "      \"FieldEName\": \"PEE Projection Testing\",\n" +
-                            "      \"FieldLName\": \"PEE Projection Testing\",\n" +
-                            "      \"FieldName\": \"PEE Projection Testing\",\n" +
-                            "      \"HighLimit\": 2000,\n" +
-                            "      \"ID\": 999999999,\n" +
-                            "      \"LowLimit\": 0,\n" +
-                            "      \"MachineParamHistoricData\": [],\n" +
-                            "      \"Projection\": 500,\n" +
-                            "      \"StandardValue\": 1500,\n" +
-                            "      \"Target\": 2000,\n" +
-                            "      \"fieldType\": 2,\n" +
-                            "      \"isOutOfRange\": null\n" +
-                            "    }\n" +
-                            "  ],\n" +
-                            "  \"error\": null\n" +
-                            "}";
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 19,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 3,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"18.95\",\n" +
+                                    "      \"FieldEName\": \"AverageCycle\",\n" +
+                                    "      \"FieldLName\": \"זמן מחזור ממוצע (שנ)\",\n" +
+                                    "      \"FieldName\": \"AverageCycle\",\n" +
+                                    "      \"HighLimit\": null,\n" +
+                                    "      \"ID\": 2,\n" +
+                                    "      \"LowLimit\": null,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": null,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 0,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"58\",\n" +
+                                    "      \"FieldEName\": \"TotalCycles\",\n" +
+                                    "      \"FieldLName\": \"מספר מחזורים\",\n" +
+                                    "      \"FieldName\": \"TotalCycles\",\n" +
+                                    "      \"HighLimit\": null,\n" +
+                                    "      \"ID\": 8,\n" +
+                                    "      \"LowLimit\": null,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": null,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 0,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"10\",\n" +
+                                    "      \"FieldEName\": \"Time Left Hr\",\n" +
+                                    "      \"FieldLName\": \"זמן לסיום (דק)\",\n" +
+                                    "      \"FieldName\": \"TimeLeftHr\",\n" +
+                                    "      \"HighLimit\": 1500,\n" +
+                                    "      \"ID\": 12,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 500,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": false\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"235\",\n" +
+                                    "      \"FieldEName\": \"CavitiesPC\",\n" +
+                                    "      \"FieldLName\": \"CavitiesPC\",\n" +
+                                    "      \"FieldName\": \"CavitiesPC\",\n" +
+                                    "      \"HighLimit\": 230,\n" +
+                                    "      \"ID\": 31,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 150,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": true\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"532\",\n" +
+                                    "      \"FieldEName\": \"NoProgressCount\",\n" +
+                                    "      \"FieldLName\": \"NoProgressCount\",\n" +
+                                    "      \"FieldName\": \"NoProgressCount\",\n" +
+                                    "      \"HighLimit\": 1100,\n" +
+                                    "      \"ID\": 3583,\n" +
+                                    "      \"LowLimit\": 600,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": null,\n" +
+                                    "      \"StandardValue\": 800,\n" +
+                                    "      \"Target\": null,\n" +
+                                    "      \"fieldType\": 1,\n" +
+                                    "      \"isOutOfRange\": true\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"720\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 1700,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"2300\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 500,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"1950\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 2300,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"CurrentValue\": \"0\",\n" +
+                                    "      \"FieldEName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldLName\": \"PEE Projection Testing\",\n" +
+                                    "      \"FieldName\": \"PEE Projection Testing\",\n" +
+                                    "      \"HighLimit\": 2000,\n" +
+                                    "      \"ID\": 999999999,\n" +
+                                    "      \"LowLimit\": 0,\n" +
+                                    "      \"MachineParamHistoricData\": [],\n" +
+                                    "      \"Projection\": 500,\n" +
+                                    "      \"StandardValue\": 1500,\n" +
+                                    "      \"Target\": 2000,\n" +
+                                    "      \"fieldType\": 2,\n" +
+                                    "      \"isOutOfRange\": null\n" +
+                                    "    }\n" +
+                                    "  ],\n" +
+                                    "  \"error\": null\n" +
+                                    "}";
                     break;
                 case "GetCurrentMachineStatus":
                     responseString = "{\n" +
@@ -1065,7 +1110,7 @@ public class RetrofitMockClient implements Interceptor {
                             "  \"error\": null\n" +
                             "}";
                     break;
-                case "GetActiveJobsListForMachine":{
+                case "GetActiveJobsListForMachine": {
                     responseString = "{\n" +
                             "  \"error\":null,\n" +
                             "  \"Jobs\":\n" +

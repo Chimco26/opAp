@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ChangeLang.changeHebrew(this);
-        ChangeLang.changeEnglish(this);
+        ChangeLang.changeHebrew(this);
+//        ChangeLang.changeEnglish(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

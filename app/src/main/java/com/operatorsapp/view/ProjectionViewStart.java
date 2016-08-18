@@ -13,50 +13,42 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
+/**
+ * Created by Admin on 02-Aug-16.
+ */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class ProjectionViewRight extends View {
+public class ProjectionViewStart extends View {
 
-    private Bitmap mRightViewBlue;
-    private Bitmap mRightViewGray;
-    private Bitmap mCurrentView;
+    private Bitmap mLeftView;
     private Paint mPaint;
 
-    public ProjectionViewRight(Context context) {
+    public ProjectionViewStart(Context context) {
         super(context);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
-    public ProjectionViewRight(Context context, AttributeSet attrs) {
+    public ProjectionViewStart(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setDrawingCacheEnabled(true);
         init(context);
     }
 
     private void init(Context context) {
-        mRightViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_blue));
-        mRightViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_gray));
+        mLeftView = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
         mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCurrentView != null) {
-            canvas.drawBitmap(mCurrentView, 0, 0, mPaint);
-        }
-    }
-
-    public void setCurrentView(boolean blue) {
-        if (blue) {
-            mCurrentView = mRightViewBlue;
-        } else {
-            mCurrentView = mRightViewGray;
+        if (mLeftView != null) {
+            canvas.drawBitmap(mLeftView, 0, 0, mPaint);
         }
     }
 
     public void hideView() {
-        mCurrentView = null;
+        mLeftView = null;
         forceRedraw();
     }
 
