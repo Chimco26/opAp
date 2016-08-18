@@ -22,7 +22,7 @@
                 android:id="@+id/first_field_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/status_bar" />
@@ -31,7 +31,7 @@
                 android:id="@+id/first_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/status_bar" />
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -102,7 +102,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/product_name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/default_gray" />
@@ -136,7 +136,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/erp_id"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/default_gray" />
@@ -170,7 +170,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/default_gray" />
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:gravity="right"
+            android:gravity="end"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -188,11 +188,11 @@
                 android:id="@+id/button_cancel"
                 android:layout_width="126dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:text="@string/cancel"
                 android:textAllCaps="true"
                 android:textColor="@drawable/button_cancel_text_selector"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/button_activate_new_job"
@@ -202,7 +202,7 @@
                 android:background="@drawable/buttons_selector"
                 android:text="@string/activate_new_job"
                 android:textColor="@drawable/button_text_color_selector"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 

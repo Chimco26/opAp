@@ -107,6 +107,7 @@
     <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
     <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
     <string name="refreshed">refreshed</string>
+    <string name="one">1</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
