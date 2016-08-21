@@ -110,13 +110,11 @@
     <array name="languages_spinner_array">
         <item>English</item>
         <item>Hebrew</item>
-        <item>Australian Aboriginal</item>
     </array>
 
     <array name="language_codes_array">
         <item>en</item>
         <item>iw</item>
-        <item>au</item>
     </array>
     <array name="jobs_spinner_array">
         <item>New Job</item>

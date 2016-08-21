@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -122,11 +123,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         mRefreshButton = (Button) view.findViewById(R.id.refresh_button);
         Drawable drawable = getResources().getDrawable(R.drawable.button_refresh_reportind_data_selector);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 1),
-                (int) (drawable.getIntrinsicHeight() * 1));
-        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() ),
+                (int) (drawable.getIntrinsicHeight() ));
 
-        mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
+        if (ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL) {
+            // for RTL layout
+            mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);
+        } else {
+            mRefreshButton.setCompoundDrawables(sd.getDrawable(),null, null,  null);
+        }
+
 
         mSaveButton = (Button) view.findViewById(R.id.button_save);
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
