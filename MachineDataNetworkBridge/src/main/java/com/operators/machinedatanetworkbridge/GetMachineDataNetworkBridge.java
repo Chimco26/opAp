@@ -25,13 +25,15 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
     private static final String LOG_TAG = GetMachineDataNetworkBridge.class.getSimpleName();
     private GetMachineDataNetworkManagerInterface mGetMachineDataNetworkManagerInterface;
 
+    private int mRetryCount = 0;
+
     public void inject(GetMachineDataNetworkManagerInterface getMachineDataNetworkManagerInterface) {
         mGetMachineDataNetworkManagerInterface = getMachineDataNetworkManagerInterface;
         Log.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
-    public void getMachineData(String siteUrl, String sessionId, int machineId, String startingFrom, final GetMachineDataCallback getMachineDataCallback, int totalRetries, int specificRequestTimeout) {
+    public void getMachineData(String siteUrl, String sessionId, int machineId, String startingFrom, final GetMachineDataCallback getMachineDataCallback, final int totalRetries, int specificRequestTimeout) {
         GetMachineDataDataRequest getMachineDataDataRequest = new GetMachineDataDataRequest(sessionId, machineId, null);
         Call<MachineDataDataResponse> call = mGetMachineDataNetworkManagerInterface.getMachineDataRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineData(getMachineDataDataRequest);
         call.enqueue(new Callback<MachineDataDataResponse>() {
@@ -56,8 +58,15 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
 
             @Override
             public void onFailure(Call<MachineDataDataResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, t.getMessage());
-                getMachineDataCallback.onGetMachineDataFailed(errorObject);
+                if (mRetryCount++ < totalRetries) {
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    call.clone().enqueue(this);
+                } else {
+                    mRetryCount = 0;
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, t.getMessage());
+                    getMachineDataCallback.onGetMachineDataFailed(errorObject);
+                }
             }
         });
     }

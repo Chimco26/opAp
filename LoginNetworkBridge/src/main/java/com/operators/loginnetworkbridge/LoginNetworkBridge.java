@@ -1,8 +1,6 @@
 package com.operators.loginnetworkbridge;
 
 
-import android.util.Log;
-
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
@@ -23,7 +21,7 @@ import retrofit2.Response;
 public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
     private static final String LOG_TAG = LoginNetworkBridge.class.getSimpleName();
 
-    private int retryCount = 0;
+    private int mRetryCount = 0;
     private LoginNetworkManagerInterface mLoginNetworkManagerInterface;
 
     @Override
@@ -52,11 +50,11 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<SessionResponse> call, Throwable t) {
-                if (retryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                if (mRetryCount++ < totalRetries) {
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
-                    retryCount = 0;
+                    mRetryCount = 0;
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     loginCoreCallback.onLoginFailed(errorObject);

@@ -8,6 +8,7 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsinfra.StartJobForMachineCallback;
 import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkManagerInterface;
 import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
+import com.operators.jobsnetworkbridge.server.ErrorObject;
 import com.operators.jobsnetworkbridge.server.requests.GetJobsListForMachineDataRequest;
 import com.operators.jobsnetworkbridge.server.requests.StartJobForMachineRequest;
 import com.operators.jobsnetworkbridge.server.responses.ErrorResponse;
@@ -26,6 +27,8 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
     private GetJobsListForMachineNetworkManagerInterface mGetJobsListForMachineNetworkManagerInterface;
     private StartJobForMachineNetworkManagerInterface mStartJobForMachineNetworkManagerInterface;
 
+    private int mRetryCount = 0;
+
     public void inject(GetJobsListForMachineNetworkManagerInterface getJobsListForMachineNetworkManager, StartJobForMachineNetworkManagerInterface startJobForMachineNetworkManager) {
         mGetJobsListForMachineNetworkManagerInterface = getJobsListForMachineNetworkManager;
         mStartJobForMachineNetworkManagerInterface = startJobForMachineNetworkManager;
@@ -33,7 +36,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
     }
 
     @Override
-    public void getJobsForMachine(String siteUrl, String sessionId, int machineId, final GetJobsListForMachineCallback getJobsListForMachineCallback, int totalRetries, int specificRequestTimeout) {
+    public void getJobsForMachine(String siteUrl, String sessionId, int machineId, final GetJobsListForMachineCallback getJobsListForMachineCallback, final int totalRetries, int specificRequestTimeout) {
         GetJobsListForMachineDataRequest getJobsListForMachineDataRequest = new GetJobsListForMachineDataRequest(sessionId, machineId);
         Call<JobsListForMachineResponse> call = mGetJobsListForMachineNetworkManagerInterface.getJobListForMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getJobsForMachine(getJobsListForMachineDataRequest);
         call.enqueue(new Callback<JobsListForMachineResponse>() {
@@ -68,8 +71,15 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
 
             @Override
             public void onFailure(Call<JobsListForMachineResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
-                getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                if (mRetryCount++ < totalRetries) {
+                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    call.clone().enqueue(this);
+                } else {
+                    mRetryCount = 0;
+                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
+                    getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
+                }
             }
         });
     }

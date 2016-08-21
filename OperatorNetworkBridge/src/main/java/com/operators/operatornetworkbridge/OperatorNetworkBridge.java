@@ -8,6 +8,7 @@ import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
+import com.operators.operatornetworkbridge.server.ErrorObject;
 import com.operators.operatornetworkbridge.server.requests.GetOperatorByIdRequest;
 import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachineRequest;
 import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
@@ -25,6 +26,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     private static final String LOG_TAG = OperatorNetworkBridge.class.getSimpleName();
     private GetOperatorByIdNetworkManagerInterface mGetOperatorByIdNetworkManagerInterface;
     private SetOperatorForMachineNetworkManagerInterface mSetOperatorForMachineNetworkManagerInterface;
+    private int mRetryCount = 0;
 
     public void inject(GetOperatorByIdNetworkManagerInterface getOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface setOperatorForMachineNetworkManagerInterface) {
         mGetOperatorByIdNetworkManagerInterface = getOperatorByIdNetworkManagerInterface;
@@ -33,7 +35,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     }
 
     @Override
-    public void getOperator(String siteUrl, String sessionId, final String operatorId, final GetOperatorByIdCallback getOperatorByIdCallback, int totalRetries, int specificRequestTimeout) {
+    public void getOperator(String siteUrl, String sessionId, final String operatorId, final GetOperatorByIdCallback getOperatorByIdCallback, final int totalRetries, int specificRequestTimeout) {
         GetOperatorByIdRequest getOperatorByIdRequest = new GetOperatorByIdRequest(sessionId, operatorId);
         Call<OperatorDataResponse> call = mGetOperatorByIdNetworkManagerInterface.getOperatorByIdRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getOperator(getOperatorByIdRequest);
         call.enqueue(new Callback<OperatorDataResponse>() {
@@ -66,14 +68,21 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<OperatorDataResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "Get_operator_failed Error");
-                getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                if (mRetryCount++ < totalRetries) {
+                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    call.clone().enqueue(this);
+                } else {
+                    mRetryCount = 0;
+                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "Get_operator_failed Error");
+                    getOperatorByIdCallback.onGetOperatorFailed(errorObject);
+                }
             }
         });
     }
 
     @Override
-    public void setOperatorForMachine(String siteUrl, String sessionId, String machineId, String operatorId, final SetOperatorForMachineCallback setOperatorForMachineCallback, int totalRetries, int specificRequestTimeout) {
+    public void setOperatorForMachine(String siteUrl, String sessionId, String machineId, String operatorId, final SetOperatorForMachineCallback setOperatorForMachineCallback, final int totalRetries, int specificRequestTimeout) {
         SetOperatorForMachineRequest setOperatorForMachineRequest = new SetOperatorForMachineRequest(sessionId, machineId, operatorId);
         Call<SetOperatorForMachineResponse> call = mSetOperatorForMachineNetworkManagerInterface.setOperatorForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).setOperatorForMachine(setOperatorForMachineRequest);
         call.enqueue(new Callback<SetOperatorForMachineResponse>() {
@@ -91,8 +100,15 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
 
             @Override
             public void onFailure(Call<SetOperatorForMachineResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Set_operator_for_machine_failed, "Set_operator_for_machine_failed Error");
-                setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
+                if (mRetryCount++ < totalRetries) {
+                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    call.clone().enqueue(this);
+                } else {
+                    mRetryCount = 0;
+                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Set_operator_for_machine_failed, "Set_operator_for_machine_failed Error");
+                    setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
+                }
             }
         });
     }

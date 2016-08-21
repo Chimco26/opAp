@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge" />
             <option value="$PROJECT_DIR$/ErrorObjectInterface" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
+            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -28,17 +29,16 @@
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportCore" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
-            <option value="$PROJECT_DIR$/ReportRejectCore" />
-            <option value="$PROJECT_DIR$/ReportRejectInfra" />
-            <option value="$PROJECT_DIR$/ReportRejectNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportInfra" />
+            <option value="$PROJECT_DIR$/ReportNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
         <option name="myModules">
@@ -49,6 +49,7 @@
             <option value="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge" />
             <option value="$PROJECT_DIR$/ErrorObjectInterface" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
+            <option value="$PROJECT_DIR$/Infra" />
             <option value="$PROJECT_DIR$/JobsCore" />
             <option value="$PROJECT_DIR$/JobsInfra" />
             <option value="$PROJECT_DIR$/JobsNetworkBridge" />
@@ -63,17 +64,16 @@
             <option value="$PROJECT_DIR$/OperatorCore" />
             <option value="$PROJECT_DIR$/OperatorInfra" />
             <option value="$PROJECT_DIR$/OperatorNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportCore" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineCore" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineInfra" />
             <option value="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge" />
-            <option value="$PROJECT_DIR$/ReportRejectCore" />
-            <option value="$PROJECT_DIR$/ReportRejectInfra" />
-            <option value="$PROJECT_DIR$/ReportRejectNetworkBridge" />
+            <option value="$PROJECT_DIR$/ReportInfra" />
+            <option value="$PROJECT_DIR$/ReportNetworkBridge" />
             <option value="$PROJECT_DIR$/ShiftLogCore" />
             <option value="$PROJECT_DIR$/ShiftLogInfra" />
             <option value="$PROJECT_DIR$/ShiftLogNetworkbridge" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/infra" />
           </set>
         </option>
       </GradleProjectSettings>
