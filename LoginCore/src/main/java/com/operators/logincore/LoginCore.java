@@ -37,7 +37,7 @@ public class LoginCore {
 
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
-            mLoginNetworkBridgeInterface.login(siteUrl, username, mLoginPersistenceManagerInterface.getCurrentLang(), EncryptedPassword, new LoginCoreCallback() {
+            mLoginNetworkBridgeInterface.login(siteUrl, username,EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(String sessionId) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
@@ -68,7 +68,7 @@ public class LoginCore {
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
-        mLoginNetworkBridgeInterface.login(siteUrl, username, mLoginPersistenceManagerInterface.getCurrentLang(), EncryptedPassword, new LoginCoreCallback() {
+        mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(String sessionId) {
                 ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);

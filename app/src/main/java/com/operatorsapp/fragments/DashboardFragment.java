@@ -99,7 +99,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
 
-    private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
     private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance() {
@@ -327,8 +326,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
-            mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
-            mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+            OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
+            mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
