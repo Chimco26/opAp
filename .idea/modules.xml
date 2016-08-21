@@ -8,7 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObject.iml" />
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/infra/Infra.iml" filepath="$PROJECT_DIR$/infra/Infra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsCore/JobsCore.iml" filepath="$PROJECT_DIR$/JobsCore/JobsCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsInfra/JobsInfra.iml" filepath="$PROJECT_DIR$/JobsInfra/JobsInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" filepath="$PROJECT_DIR$/JobsNetworkBridge/JobsNetworkBridge.iml" />
@@ -25,13 +25,10 @@
       <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" filepath="$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportInfra/ReportInfra.iml" filepath="$PROJECT_DIR$/ReportInfra/ReportInfra.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportInfra/ReportInfra.iml" filepath="$PROJECT_DIR$/ReportInfra/ReportInfra.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportInfra/ReportRejectInfra.iml" filepath="$PROJECT_DIR$/ReportInfra/ReportRejectInfra.iml" />

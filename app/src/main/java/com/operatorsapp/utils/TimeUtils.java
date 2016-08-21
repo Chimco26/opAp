@@ -51,9 +51,9 @@ public class TimeUtils {
 //        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         if (days > 0) {
-            return days + context.getString(R.string.days) + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + context.getString(R.string.hours);
+            return days + " " + context.getResources().getQuantityString(R.plurals.days, (int) days) + " " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
         } else {
-            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + context.getString(R.string.hours);
+            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
         }
     }
 

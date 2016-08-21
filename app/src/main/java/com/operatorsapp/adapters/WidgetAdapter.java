@@ -340,7 +340,11 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 valueString = String.valueOf(valueFloat);
             }
             if (valueString.length() >= 4) {
-                valueString = valueString.substring(0, 4);
+                if (valueString.charAt(valueString.length() - 2) == '0') {
+                    valueString = valueString.substring(0, 3);
+                } else {
+                    valueString = valueString.substring(0, 4);
+                }
             }
             return valueString + "k";
         } else {

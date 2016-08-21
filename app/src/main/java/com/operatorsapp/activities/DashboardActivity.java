@@ -499,8 +499,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void clearData() {
         //Persistence storage clear
         String tmpUrl = PersistenceManager.getInstance().getSiteUrl();
+        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
         PersistenceManager.getInstance().clear();
         PersistenceManager.getInstance().setSiteUrl(tmpUrl);
+        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
         Log.i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
