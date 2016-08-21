@@ -162,7 +162,7 @@
             android:layout_width="270dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@drawable/combined_shape"
+            android:background="@drawable/side_menu"
             android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView

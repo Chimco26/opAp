@@ -554,7 +554,7 @@ public class RetrofitMockClient implements Interceptor {
                                     "      \"isOutOfRange\": null\n" +
                                     "    },\n" +
                                     "    {\n" +
-                                    "      \"CurrentValue\": \"1958\",\n" +
+                                    "      \"CurrentValue\": \"1918\",\n" +
                                     "      \"FieldEName\": \"PEE Projection Testing\",\n" +
                                     "      \"FieldLName\": \"PEE Projection Testing\",\n" +
                                     "      \"FieldName\": \"PEE Projection Testing\",\n" +
