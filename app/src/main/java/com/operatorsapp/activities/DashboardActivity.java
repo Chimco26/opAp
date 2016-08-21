@@ -73,6 +73,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
+    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
 
     private DashboardUICallbackListener mDashboardUICallbackListener;
@@ -310,7 +311,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("dashboard_fragment").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
         }
         else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();

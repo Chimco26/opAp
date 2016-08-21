@@ -25,6 +25,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
+    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
@@ -117,8 +118,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
             arrowBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO refactor
-                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
             actionBar.setCustomView(view);
@@ -129,8 +129,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                //TODO check
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
             case R.id.button_activate_new_job: {

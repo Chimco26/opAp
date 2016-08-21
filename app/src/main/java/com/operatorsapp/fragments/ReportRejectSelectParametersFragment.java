@@ -46,6 +46,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     private static final String SELECTED_JOB_ID = "selected_job_id";
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
+    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
 
     private int mSelectedReasonId;
     private int mSelectedCauseId;
@@ -150,11 +151,11 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 0) {
                     mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-                    mReportButton.setClickable(true);
+                    mReportButton.setEnabled(true);
                 }
                 else {
                     mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
-                    mReportButton.setClickable(false);
+                    mReportButton.setEnabled(false);
                 }
             }
 
@@ -202,8 +203,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO check
-                    getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack();
                 }
             });
 
@@ -219,12 +219,13 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         switch (v.getId()) {
             case R.id.button_report: {
                 Log.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
-                sendReport();
+                if (!mUnitsEditText.getText().toString().equals("")) {
+                    sendReport();
+                }
                 break;
             }
             case R.id.button_cancel: {
-                //TODO check
-                getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
         }
@@ -248,8 +249,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         public void sendReportSuccess() {
             Log.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
-            //TODO check
-            getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         @Override

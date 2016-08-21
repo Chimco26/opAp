@@ -25,14 +25,14 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
     private LoginNetworkManagerInterface mLoginNetworkManagerInterface;
 
     @Override
-    public void login(final String siteUrl, final String userName, final String password, final LoginCoreCallback loginCoreCallback, final int totalRetries, int specificRequestTimeout) {
+    public void login(final String siteUrl, final String userName, final String password,String language, final LoginCoreCallback loginCoreCallback, final int totalRetries, int specificRequestTimeout) {
         HttpUrl httpUrl = HttpUrl.parse(siteUrl);
         if (httpUrl == null) {
             loginCoreCallback.onLoginFailed(new ErrorObject(ErrorObjectInterface.ErrorCode.Url_not_correct, "Site URL is not correct"));
             return;
         }
 
-        LoginRequest loginRequest = new LoginRequest(userName, password);
+        LoginRequest loginRequest = new LoginRequest(userName, password, language);
         Call<SessionResponse> call = mLoginNetworkManagerInterface.getLoginRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getUserSessionId(loginRequest);
         call.enqueue(new Callback<SessionResponse>() {
             @Override

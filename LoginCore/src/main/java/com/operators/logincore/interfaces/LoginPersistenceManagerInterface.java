@@ -16,6 +16,7 @@ public interface LoginPersistenceManagerInterface {
 
     int getRequestTimeout();
 
+    String getCurrentLang();
 
     void setSiteUrl(String siteUrl);
 
@@ -28,5 +29,7 @@ public interface LoginPersistenceManagerInterface {
     void setTotalRetries(int totalRetries);
 
     void setRequestTimeOut(int requestTimeOut);
+
+    void setCurrentLang(String lang);
 
 }

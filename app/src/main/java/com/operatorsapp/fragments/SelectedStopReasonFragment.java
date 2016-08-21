@@ -185,9 +185,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //getFragmentManager().popBackStack();
-                    //TODO check
-                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack();
                 }
             });
 

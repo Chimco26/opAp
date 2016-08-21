@@ -15,8 +15,9 @@ public class LoginRequest {
     @SerializedName("Platform")
     private String mPlatform = "mobile";
 
-    public LoginRequest(String userName, String password) {
+    public LoginRequest(String userName, String password, String language) {
         mUserName = userName;
         mPassword = password;
+        mLanguage = language;
     }
 }

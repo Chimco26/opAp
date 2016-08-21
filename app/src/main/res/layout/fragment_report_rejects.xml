@@ -130,7 +130,7 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginStart="30dp"
-                        android:background="@drawable/ic_cardbox"
+                        android:background="@drawable/group_x"
                         />
 
                     <View
@@ -178,7 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="7dp"
                             android:text="@string/reject_reason"
-                            android:textColor="@color/status_bar"
+                            android:textColor="@color/black"
                             android:textSize="20sp"/>
 
                         <RelativeLayout
@@ -202,7 +202,7 @@
                             android:layout_marginBottom="7dp"
                             android:layout_marginTop="20dp"
                             android:text="@string/cause"
-                            android:textColor="@color/status_bar"
+                            android:textColor="@color/black"
                             android:textSize="20sp"/>
 
                         <RelativeLayout
