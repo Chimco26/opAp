@@ -135,7 +135,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             productTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
-        durationTextView.setText(TimeUtils.secondsToTimeFormat(mDuration));
+        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
 
         eventIdTextView.setText(String.valueOf(mEventId));
 
