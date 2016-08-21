@@ -57,13 +57,11 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private int mSelectedReasonId;
     private int mSelectedCauseId;
     private String mSelectedReasonName;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private String mCurrentProductName;
     private int mCurrentProductId;
     private Integer mJobId = null;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
 
@@ -80,8 +78,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     public void onAttach(Context context) {
         super.onAttach(context);
         mGoToScreenListener = (GoToScreenListener) getActivity();
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
@@ -108,15 +106,19 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
-
+        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+        mNextButton = (Button) view.findViewById(R.id.button_report);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_reject_screen);
+            mNextButton.setEnabled(false);
+        }else{
+//            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+            mNextButton.setEnabled(true);
         }
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
-
 
         productNameTextView.setText(new StringBuilder(mCurrentProductName + ","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
@@ -135,18 +137,18 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (mIsFirstReasonSpinnerSelection) {
-                        mIsFirstReasonSpinnerSelection = false;
-                        mIsReasonSelected = false;
-
-                    }
-                    else {
-                        mIsReasonSelected = true;
+//                    if (mIsFirstReasonSpinnerSelection) {
+//                        mIsFirstReasonSpinnerSelection = false;
+//                        mIsReasonSelected = false;
+//
+//                    }
+//                    else {
+//                        mIsReasonSelected = true;
                         mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
                         mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
                         reasonSpinnerArrayAdapter.setTitle(position);
-                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-                    }
+//                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+//                    }
                 }
 
                 @Override
@@ -228,13 +230,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 break;
             }
             case R.id.button_report: {
-                if (!mIsReasonSelected) {
-                    Log.i(LOG_TAG, "reason not Selected");
-                }
-                else {
-                    Log.i(LOG_TAG, "reason Selected");
+
                     mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
-                }
+
                 break;
             }
         }
@@ -243,9 +241,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+        ActiveJobsListForMachineCore activeJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        activeJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        activeJobsListForMachineCore.getActiveJobsListForMachine();
     }
 
     private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
