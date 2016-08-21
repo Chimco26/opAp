@@ -24,10 +24,13 @@
       <module fileurl="file://$PROJECT_DIR$/OperatorCore/OperatorCore.iml" filepath="$PROJECT_DIR$/OperatorCore/OperatorCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" filepath="$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/ReportFieldsForMachineNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReportInfra/ReportInfra.iml" filepath="$PROJECT_DIR$/ReportInfra/ReportInfra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportNetworkBridge/ReportNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportRejectCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportInfra/ReportRejectInfra.iml" filepath="$PROJECT_DIR$/ReportInfra/ReportRejectInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportNetworkBridge/ReportRejectNetworkBridge.iml" filepath="$PROJECT_DIR$/ReportNetworkBridge/ReportRejectNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" filepath="$PROJECT_DIR$/ShiftLogCore/ShiftLogCore.iml" />

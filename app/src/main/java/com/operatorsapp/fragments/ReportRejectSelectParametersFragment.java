@@ -203,7 +203,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
                 @Override
                 public void onClick(View v) {
                     //TODO check
-                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
 
@@ -224,7 +224,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             }
             case R.id.button_cancel: {
                 //TODO check
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
         }
@@ -249,7 +249,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             Log.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             //TODO check
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            getFragmentManager().popBackStack("dashboard_fragment", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         @Override

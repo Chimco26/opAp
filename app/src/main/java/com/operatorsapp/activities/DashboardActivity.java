@@ -310,7 +310,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("dashboard_fragment").commit();
         }
         else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
