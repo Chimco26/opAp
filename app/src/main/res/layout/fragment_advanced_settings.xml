@@ -56,17 +56,19 @@
             android:layout_marginStart="40dp"
             android:layout_weight="3"
             android:gravity="top">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/linearLayout5"
-                android:layout_marginTop="35dp"
-                android:gravity="right"
                 android:layout_marginEnd="75dp"
-                android:layout_alignParentStart="true">
+                android:layout_marginTop="35dp"
+                android:gravity="end">
+
                 <Button
-                    style="@style/FontStyle_Button"
                     android:id="@+id/button_save"
+                    style="@style/FontStyle_Button"
                     android:layout_width="104dp"
                     android:layout_height="36dp"
                     android:background="@drawable/buttons_selector"
@@ -75,48 +77,53 @@
                     android:textSize="20sp"/>
 
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/linearLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:id="@+id/linearLayout5">
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:layout_marginTop="70dp"
                             android:text="@string/polling_frequency"
-                            android:textColor="@color/status_bar"
+                            android:textColor="@color/black"
                             android:textSize="20dp"
                             />
+
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/polling_frequency_edit_text"
-                            android:inputType="number"
                             style="@style/FontStyle_T6"
                             android:layout_width="370dp"
                             android:layout_height="40dp"
                             android:background="@drawable/edit_text_background_selector"
+                            android:inputType="number"
+                            android:maxLength="3"
                             android:paddingStart="5dp"
-                            android:singleLine="true" />
+                            android:singleLine="true"/>
+
                         <TextView
                             android:id="@+id/polling_range_error_text_view"
-                            android:visibility="invisible"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/polling_frequency_range_error"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/polling_frequency_range_error"
+                            android:visibility="invisible"
                             />
                     </LinearLayout>
 
@@ -124,14 +131,15 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -139,31 +147,33 @@
                             android:layout_marginTop="70dp"
                             android:text="@string/request_timeout"
                             android:textColor="@color/status_bar"
-                            android:textSize="20dp"
+                            android:textSize="20sp"
                             />
+
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/request_timeout_edit_text"
-                            style="@style/FontStyle_T6"
-                            android:inputType="number"
                             android:layout_width="370dp"
                             android:layout_height="40dp"
                             android:background="@drawable/edit_text_background_selector"
+                            android:inputType="number"
+                            android:maxLength="3"
                             android:paddingStart="5dp"
-                            android:singleLine="true" />
+                            android:singleLine="true"
+                            android:textColor="@color/black"/>
+
                         <TextView
                             android:id="@+id/timeout_range_error_text_view"
-                            android:layout_marginTop="5dp"
-                            android:visibility="invisible"
-                            android:text="@string/request_timeout_range_error"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/request_timeout_range_error"
+                            android:visibility="invisible"
                             />
 
                     </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
-
 
 
         </RelativeLayout>

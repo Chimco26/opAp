@@ -56,8 +56,6 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        // For now, It is necessary Settings screen
-        PersistenceManager.getInstance().setTotalRetries(3);
     }
 
     @Override

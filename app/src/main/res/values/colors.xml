@@ -52,4 +52,5 @@
     <color name="reports_background">#f4f4f4</color>
     <color name="dialog_text_gray">#8a000000</color>
     <color name="projection_gray">#acacac</color>
+    <color name="black">#000000</color>
 </resources>

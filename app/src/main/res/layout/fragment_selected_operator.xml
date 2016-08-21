@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="40dp"
+            android:textSize="40sp"
             android:gravity="center_vertical"
             android:text="@string/operator_sign_in"/>
 
@@ -62,14 +62,14 @@
              android:layout_height="wrap_content"
              android:text="@string/operator_id"
              android:textColor="@color/status_bar"
-             android:textSize="20dp"/>
+             android:textSize="20sp"/>
 
          <TextView
              android:id="@+id/operator_id_text_view"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="@string/operator_id"
-             android:layout_marginLeft="20dp"
+             android:layout_marginStart="20dp"
              android:textAppearance="?android:attr/textAppearanceMedium" />
      </LinearLayout>
 
@@ -86,14 +86,14 @@
              android:layout_height="wrap_content"
              android:text="@string/operator_name"
              android:textColor="@color/status_bar"
-             android:textSize="20dp"/>
+             android:textSize="20sp"/>
 
          <TextView
              android:id="@+id/operator_name_text_view"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="@string/operator_name"
-             android:layout_marginLeft="20dp"
+             android:layout_marginStart="20dp"
              android:textAppearance="?android:attr/textAppearanceMedium" />
      </LinearLayout>
 
@@ -103,14 +103,14 @@
             <Button
                 android:id="@+id/button_selected_operator_sign_in"
                 android:layout_width="128dp"
-                android:textSize="22dp"
+                android:textSize="22sp"
                 android:textAllCaps="true"
                 android:layout_height="30dp"
                 android:textColor="@drawable/button_text_color_selector"
                 android:background="@drawable/buttons_selector"
                 android:text="@string/common_signin_button_text"
-                android:layout_marginLeft="90dp"
-                android:layout_marginRight="2dp"/>
+                android:layout_marginStart="90dp"
+                android:layout_marginEnd="2dp"/>
         </LinearLayout>
 
     </LinearLayout>
