@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ParseException;
 
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,9 +52,19 @@ public class TimeUtils {
 //        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         if (days > 0) {
-            return days + " " + context.getResources().getQuantityString(R.plurals.days, (int) days) + " " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
+            return /*days + " " +*/ context.getResources().getQuantityString(R.plurals.days, (int) days, (int) days) + " " + String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
         } else {
-            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + context.getResources().getQuantityString(R.plurals.hours, (int) hours);
+            String h;
+            if (hours == 0) {
+                if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
+                    h = "Hour";
+                } else {
+                    h = "שעה";
+                }
+            } else {
+                h = context.getResources().getQuantityString(R.plurals.hours, (int) hours);
+            }
+            return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes) + " " + h;
         }
     }
 

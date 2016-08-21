@@ -10,7 +10,7 @@ public class LoginRequest {
     private String mPassword;
 
     @SerializedName("Lang")
-    private String mLanguage = "heb";
+    private String mLanguage;
 
     @SerializedName("Platform")
     private String mPlatform = "mobile";

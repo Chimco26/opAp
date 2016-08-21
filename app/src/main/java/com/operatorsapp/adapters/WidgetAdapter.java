@@ -333,19 +333,24 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     private String valueInK(int value) {
         String valueString = String.valueOf(value);
         if (value >= 1000) {
+            float valueFloat = (float) value / 1000;
+            if (value % 100 == 0) {
+                valueString = String.format("%.1f", valueFloat);
+//                valueString = String.valueOf(value / 1000);
+            } else {
+                valueString = String.format("%.2f", valueFloat);
+//                valueString = String.valueOf(valueFloat);
+            }
             if (value % 1000 == 0) {
                 valueString = String.valueOf(value / 1000);
-            } else {
-                float valueFloat = (float) value / 1000;
-                valueString = String.valueOf(valueFloat);
             }
-            if (valueString.length() >= 4) {
+            /*if (valueString.length() >= 4) {
                 if (valueString.charAt(valueString.length() - 2) == '0') {
                     valueString = valueString.substring(0, 3);
                 } else {
                     valueString = valueString.substring(0, 4);
                 }
-            }
+            }*/
             return valueString + "k";
         } else {
             return valueString;

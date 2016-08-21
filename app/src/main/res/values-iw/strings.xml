@@ -106,8 +106,8 @@
     <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
     <string name="refreshed">refreshed</string>
     <string name="one">1</string>
-    <string name="end_">End: </string>
-    <string name="start_">Start: </string>
+    <string name="end_">סיום: </string>
+    <string name="start_">התחלה: </string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -128,15 +128,17 @@
     </array>
 
     <plurals name="days">
-        <item quantity="one">%d Day</item>
-        <item quantity="other">%d Days</item>
+        <item quantity="one">%d יום</item>
+        <item quantity="other">%d ימים</item>
+        <item quantity="many">%d ימים</item>
+        <item quantity="two">יומיים</item>
     </plurals>
 
     <plurals name="hours">
-        <item quantity="zero">Hour</item>
-        <item quantity="one">Hour</item>
-        <item quantity="other">Hours</item>
+        <item quantity="one">שעה</item>
+        <item quantity="other">שעות</item>
+        <item quantity="many">שעות</item>
+        <item quantity="two">שעות</item>
     </plurals>
-
 
 </resources>

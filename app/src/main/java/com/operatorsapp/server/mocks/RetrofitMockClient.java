@@ -159,7 +159,7 @@ public class RetrofitMockClient implements Interceptor {
                             "    },\n" +
                             "    {\n" +
                             "      \"priority\": 2,\n" +
-                            "      \"EventDuration\": 145,\n" +
+                            "      \"EventDuration\": 202960000,\n" +
                             "      \"EventEndTime\": \"12/10/2015 11:55:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
                             "      \"EventGroupLname\": \"Machine Stopped\",\n" +
@@ -171,7 +171,7 @@ public class RetrofitMockClient implements Interceptor {
                             "    },\n" +
                             "    {\n" +
                             "      \"priority\": 2,\n" +
-                            "      \"EventDuration\": 24,\n" +
+                            "      \"EventDuration\": 402960000,\n" +
                             "      \"EventEndTime\": \"12/10/2015 13:44:00\",\n" +
                             "      \"EventGroupID\": 6,\n" +
                             "      \"EventGroupLname\": \"Machine Stopped\",\n" +
@@ -554,7 +554,7 @@ public class RetrofitMockClient implements Interceptor {
                                     "      \"isOutOfRange\": null\n" +
                                     "    },\n" +
                                     "    {\n" +
-                                    "      \"CurrentValue\": \"1918\",\n" +
+                                    "      \"CurrentValue\": \"20000\",\n" +
                                     "      \"FieldEName\": \"PEE Projection Testing\",\n" +
                                     "      \"FieldLName\": \"PEE Projection Testing\",\n" +
                                     "      \"FieldName\": \"PEE Projection Testing\",\n" +
