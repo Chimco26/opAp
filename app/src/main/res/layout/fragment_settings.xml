@@ -71,7 +71,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="60dp"
                     android:text="@string/language"
-                    android:textColor="@color/status_bar"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     />
 
@@ -111,7 +111,7 @@
                         android:layout_marginEnd="110dp"
                         android:gravity="bottom"
                         android:text="@string/factory_sign_in"
-                        android:textColor="@color/status_bar"
+                        android:textColor="@color/black"
                         android:textSize="20dp"
                         />
 
