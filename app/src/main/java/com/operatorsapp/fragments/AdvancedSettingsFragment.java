@@ -29,6 +29,7 @@ import com.operatorsapp.managers.PersistenceManager;
 public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener {
 
     private static final String SELECTED_LANGUAGE = "selected_language";
+    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private static final int MIN_POLLING_FREQUENCY_VALUE = 20;
     private static final int MAX_POLLING_FREQUENCY_VALUE = 60;
     private static final int MIN_TIMEOUT_VALUE = 20;
@@ -40,8 +41,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     private Button mButtonSave;
     private TextView mPollingRangeErrorTextView;
     private TextView mTimeoutRangeErrorTextView;
-    private boolean mPollingFrequencyIsValid;
-    private boolean mTimeoutIsValid;
+    private boolean mPollingFrequencyIsValid = true;
+    private boolean mTimeoutIsValid = true;
 
     public static AdvancedSettingsFragment newInstance(String selectedLanguage) {
         AdvancedSettingsFragment advancedSettingsFragment = new AdvancedSettingsFragment();
@@ -219,13 +220,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                     mSettingsInterface.onRefreshApplicationRequest();
                 }
                 else {
-                    //TODO check
-                    getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
             else {
-                //TODO check
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
 

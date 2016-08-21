@@ -123,7 +123,7 @@
                         android:layout_weight="0.03"
                         android:background="@drawable/button_bg_disabled_copy_2"
                         android:text="@string/change"
-                        android:textColor="@color/C16"
+                        android:textColor="@drawable/button_refresh_reporting_data_text_selector"
                         android:textSize="20sp"/>
                 </LinearLayout>
 

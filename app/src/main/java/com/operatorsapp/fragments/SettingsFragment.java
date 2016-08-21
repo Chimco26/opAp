@@ -122,8 +122,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         mRefreshButton = (Button) view.findViewById(R.id.refresh_button);
         Drawable drawable = getResources().getDrawable(R.drawable.button_refresh_reportind_data_selector);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 1.5),
-                (int) (drawable.getIntrinsicHeight() * 1.5));
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 1),
+                (int) (drawable.getIntrinsicHeight() * 1));
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
 
         mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);

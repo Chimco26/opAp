@@ -128,12 +128,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_action.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_action.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_alert_dialog_button_bar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_action.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_action.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportFieldsForMachineCore\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_icon.xml",

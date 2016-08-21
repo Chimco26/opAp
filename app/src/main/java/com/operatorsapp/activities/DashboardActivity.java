@@ -73,6 +73,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
+    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
 
     private DashboardUICallbackListener mDashboardUICallbackListener;
@@ -310,7 +311,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("dashboard_fragment").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
         }
         else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
@@ -498,8 +499,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void clearData() {
         //Persistence storage clear
         String tmpUrl = PersistenceManager.getInstance().getSiteUrl();
+        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
         PersistenceManager.getInstance().clear();
         PersistenceManager.getInstance().setSiteUrl(tmpUrl);
+        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
         Log.i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
