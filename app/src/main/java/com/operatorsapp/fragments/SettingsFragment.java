@@ -2,6 +2,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -30,6 +31,8 @@ import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListen
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
 /**
  * Created by Sergey on 16/08/2016.
@@ -93,8 +96,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                             mLanguagesSpinner.setSelection(i);
                         }
                     }
-                }
-                else {
+                } else {
                     mSelectedLanguageCode = getResources().getStringArray(R.array.language_codes_array)[position];
                     mSelectedLanguageName = getResources().getStringArray(R.array.languages_spinner_array)[position];
                 }
@@ -110,8 +112,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         String siteUrl = PersistenceManager.getInstance().getSiteUrl();
         if (siteUrl != null) {
             mFactoryUrlTextView.setText(PersistenceManager.getInstance().getSiteUrl());
-        }
-        else {
+        } else {
             mFactoryUrlTextView.setText(R.string.dashes);
         }
 
@@ -123,16 +124,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         mRefreshButton = (Button) view.findViewById(R.id.refresh_button);
         Drawable drawable = getResources().getDrawable(R.drawable.button_refresh_reportind_data_selector);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() ),
-                (int) (drawable.getIntrinsicHeight() ));
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth()),
+                (int) (drawable.getIntrinsicHeight()));
 
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
-        if (ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL) {
-            mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);
+        Configuration config = getResources().getConfiguration();
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            mRefreshButton.setCompoundDrawables(sd.getDrawable(), null, null, null);
         } else {
-            mRefreshButton.setCompoundDrawables(sd.getDrawable(),null, null,  null);
-        }
+            mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);
 
+        }
 
         mSaveButton = (Button) view.findViewById(R.id.button_save);
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
@@ -193,8 +195,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             case R.id.button_save: {
                 if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     getFragmentManager().popBackStack();
-                }
-                else {
+                } else {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
                     mSettingsInterface.onRefreshApplicationRequest();
