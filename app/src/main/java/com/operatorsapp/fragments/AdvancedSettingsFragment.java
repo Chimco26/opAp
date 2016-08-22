@@ -132,8 +132,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         if (pollingFrequency >= MIN_POLLING_FREQUENCY_VALUE && pollingFrequency <= MAX_POLLING_FREQUENCY_VALUE) {
             mPollingFrequencyIsValid = true;
             mPollingRangeErrorTextView.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             mPollingFrequencyIsValid = false;
             mPollingRangeErrorTextView.setVisibility(View.VISIBLE);
         }
@@ -143,8 +142,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         if (requestTimeout >= MIN_TIMEOUT_VALUE && requestTimeout <= MAX_TIMEOUT_VALUE) {
             mTimeoutIsValid = true;
             mTimeoutRangeErrorTextView.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             mTimeoutIsValid = false;
             mTimeoutRangeErrorTextView.setVisibility(View.VISIBLE);
         }
@@ -193,7 +191,9 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_save: {
-                checkDataAndSave();
+                if (mPollingFrequencyEditText.getText().toString() != null && !mPollingFrequencyEditText.getText().toString().equals("") && mRequestTimeoutEditText.getText().toString() != null && !mRequestTimeoutEditText.getText().toString().equals("")) {
+                    checkDataAndSave();
+                }
                 break;
             }
         }
@@ -218,12 +218,10 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                 if (!mSelectedLanguage.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguage);
                     mSettingsInterface.onRefreshApplicationRequest();
-                }
-                else {
+                } else {
                     getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-            }
-            else {
+            } else {
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
