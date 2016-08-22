@@ -18,7 +18,6 @@ import com.github.mikephil.charting.data.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.operators.infra.Machine;
 import com.operatorsapp.R;
 import com.operatorsapp.view.LineChartTimeLarge;
 
@@ -89,11 +88,11 @@ public class ChartFragment extends Fragment {
 
         mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
         mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-        mMin.setText(new StringBuilder("Min. " + String.valueOf((int) mMinVal)));
+        mMin.setText(new StringBuilder(mContext.getString(R.string.chart_min_) + mContext.getString(R.string.chart_space)+ String.valueOf((int) mMinVal)));
         mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-        mStandard.setText(new StringBuilder("Standard " + String.valueOf((int) mStandardVal)));
+        mStandard.setText(new StringBuilder(mContext.getString(R.string.chart_standard_)+ mContext.getString(R.string.chart_space)+ String.valueOf((int) mStandardVal)));
         mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-        mMax.setText(new StringBuilder("Max. " + String.valueOf((int) mMaxVal)));
+        mMax.setText(new StringBuilder(mContext.getString(R.string.chart_max_) + mContext.getString(R.string.chart_space)+ String.valueOf((int) mMaxVal)));
         mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
         mChart.setData(mValues);

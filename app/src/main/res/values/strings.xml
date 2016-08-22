@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">operatorsApp</string>
+    <string name="app_name">OperatorsApp</string>
 
     <!-- General -->
     <string name="no_communication">No communication</string>
@@ -108,6 +108,10 @@
     <string name="one">1</string>
     <string name="end_">End: </string>
     <string name="start_">Start: </string>
+    <string name="chart_min_">Min. </string>
+    <string name="chart_standard_">Standard:&#160;</string>
+    <string name="chart_max_">Max. </string>
+    <string name="chart_space"> </string>
 
     <array name="languages_spinner_array">
         <item>English</item>

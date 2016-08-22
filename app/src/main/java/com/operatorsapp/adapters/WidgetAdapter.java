@@ -198,9 +198,9 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
 
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
-                        Entry entry = new Entry();
-                        entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
-                        entry.setY(widget.getMachineParamHistoricData().get(i).getValue());
+                        Entry entry = new Entry((float)widget.getMachineParamHistoricData().get(i).getTime(), widget.getMachineParamHistoricData().get(i).getValue());
+//                        entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
+//                        entry.setY(widget.getMachineParamHistoricData().get(i).getValue());
 //                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - TEN_HOURS)) {
                         tenHoursValues.add(entry);
 //                        }

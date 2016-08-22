@@ -111,6 +111,21 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setValueFormatter(new AxisValueFormatter() {
 
             @SuppressLint("SimpleDateFormat")
+            private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mFormat.format(new Date((long) value));
+            }
+
+            @Override
+            public int getDecimalDigits() {
+                return 0;
+            }
+        });
+        /*xAxis.setValueFormatter(new AxisValueFormatter() {
+
+            @SuppressLint("SimpleDateFormat")
             private FormattedStringCache.Generic<Long, Date> mFormattedStringCache = new FormattedStringCache.Generic<>(new SimpleDateFormat("HH:mm"));
 
             @Override
@@ -123,7 +138,7 @@ public class LineChartTimeSmall extends FrameLayout {
             public int getDecimalDigits() {
                 return 0;
             }
-        });
+        });*/
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
