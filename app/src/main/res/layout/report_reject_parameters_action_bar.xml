@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/close_image"
             android:padding="10dp"
-            android:background="@drawable/btn_back"/>
+            android:background="@drawable/button_back_selector"/>
 
         <TextView
             android:id="@+id/new_job_title"

@@ -191,7 +191,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 break;
             }
             case R.id.button_save: {
-                if (mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
+                if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     getFragmentManager().popBackStack();
                 }
                 else {

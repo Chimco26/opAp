@@ -92,7 +92,7 @@
     <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
     <string name="report_inventory_item_production">Report Inventory Item Production</string>
     <string name="package_type">Package Type</string>
-    <string name="settings">Setting</string>
+    <string name="settings">הגדרות</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
     <string name="language">שפה</string>
     <string name="factory_sign_in">Factory sign in</string>
@@ -110,8 +110,8 @@
     <string name="start_">התחלה: </string>
 
     <array name="languages_spinner_array">
-        <item>אנגלית</item>
-        <item>עברית</item>
+        <item>English</item>
+        <item>Hebrew</item>
     </array>
 
     <array name="language_codes_array">
