@@ -92,7 +92,7 @@
     <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
     <string name="report_inventory_item_production">Report Inventory Item Production</string>
     <string name="package_type">Package Type</string>
-    <string name="settings">Setting</string>
+    <string name="settings">Settings</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
     <string name="language">Language</string>
     <string name="factory_sign_in">Factory sign in</string>
@@ -112,6 +112,7 @@
     <string name="chart_standard_">Standard:&#160;</string>
     <string name="chart_max_">Max. </string>
     <string name="chart_space"> </string>
+    <string name="switch_user">Switch user</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

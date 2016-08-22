@@ -58,8 +58,8 @@
 
                 <ImageView
                     android:id="@+id/job_indicator"
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@drawable/circle_yellow_indicator" />
 
                 <TextView
@@ -115,7 +115,7 @@
 
     <LinearLayout
         android:id="@+id/spinner_layout"
-        android:layout_width="480dp"
+        android:layout_width="520dp"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/linearLayout2"
         android:layout_alignParentEnd="true"

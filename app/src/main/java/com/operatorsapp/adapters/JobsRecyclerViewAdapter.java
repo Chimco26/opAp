@@ -49,7 +49,6 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
         BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get(ID).toString());
         int jobId = bigDecimal.intValue();
-//         todo MOVE TO CREATE
         holder.mJobRowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

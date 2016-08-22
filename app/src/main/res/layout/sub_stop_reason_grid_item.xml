@@ -27,8 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:text="S"
-            android:textSize="55dp"/>
+            android:textSize="55sp"/>
 
     </RelativeLayout>
 
@@ -37,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="- -"
+        android:text="@string/dashes"
         android:textColor="@color/color_jobs_row"
         android:singleLine="true"
         android:layout_marginTop="10dp"

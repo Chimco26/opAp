@@ -128,7 +128,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
         if (ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL) {
-            // for RTL layout
             mRefreshButton.setCompoundDrawables(null, null, sd.getDrawable(), null);
         } else {
             mRefreshButton.setCompoundDrawables(sd.getDrawable(),null, null,  null);
@@ -192,7 +191,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 break;
             }
             case R.id.button_save: {
-                if (mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
+                if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     getFragmentManager().popBackStack();
                 }
                 else {
