@@ -125,8 +125,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
 
         if (mCurrentProductName != null) {
             productNameTextView.setText(mCurrentProductName + ",");
-        }
-        else {
+        } else {
             productNameTextView.setText(getActivity().getString(R.string.dashes));
         }
 
@@ -134,8 +133,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
 
         if (mJobId != null) {
             jobIdTextView.setText(String.valueOf(mJobId));
-        }
-        else {
+        } else {
             jobIdTextView.setText(getActivity().getString(R.string.dashes));
 
         }
@@ -152,8 +150,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
                 if (count > 0) {
                     mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                     mReportButton.setEnabled(true);
-                }
-                else {
+                } else {
                     mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
                     mReportButton.setEnabled(false);
                 }
@@ -162,6 +159,15 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (s != null && !s.toString().equals("")) {
+                    if (Float.parseFloat(s.toString()) > 0) {
+                        mReportButton.setEnabled(true);
+                    } else {
+                        mReportButton.setEnabled(false);
+                    }
+                } else {
+                    mReportButton.setEnabled(false);
+                }
             }
         });
     }
@@ -268,8 +274,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
                         ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
                     }
                 });
-            }
-            else {
+            } else {
 
                 ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
             }

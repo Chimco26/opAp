@@ -132,9 +132,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         if (pollingFrequency >= MIN_POLLING_FREQUENCY_VALUE && pollingFrequency <= MAX_POLLING_FREQUENCY_VALUE) {
             mPollingFrequencyIsValid = true;
             mPollingRangeErrorTextView.setVisibility(View.INVISIBLE);
+            mButtonSave.setEnabled(true);
         } else {
             mPollingFrequencyIsValid = false;
             mPollingRangeErrorTextView.setVisibility(View.VISIBLE);
+            mButtonSave.setEnabled(false);
         }
     }
 
@@ -142,9 +144,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         if (requestTimeout >= MIN_TIMEOUT_VALUE && requestTimeout <= MAX_TIMEOUT_VALUE) {
             mTimeoutIsValid = true;
             mTimeoutRangeErrorTextView.setVisibility(View.INVISIBLE);
+            mButtonSave.setEnabled(true);
         } else {
             mTimeoutIsValid = false;
             mTimeoutRangeErrorTextView.setVisibility(View.VISIBLE);
+            mButtonSave.setEnabled(false);
         }
     }
 

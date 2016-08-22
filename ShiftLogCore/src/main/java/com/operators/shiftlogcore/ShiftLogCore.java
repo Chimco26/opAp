@@ -1,6 +1,7 @@
 package com.operators.shiftlogcore;
 
 import android.util.Log;
+import android.util.TimeUtils;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
@@ -113,13 +114,12 @@ public class ShiftLogCore {
     }*/
 
     public void getShiftLogs(final JobBase.OnJobFinishedListener onJobFinishedListener) {
-        mShiftLogNetworkBridgeInterface.getShiftLog(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), "1.5.98"/*todo*/, new ShiftLogCoreCallback<Event>() {
+        mShiftLogNetworkBridgeInterface.getShiftLog(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom(), new ShiftLogCoreCallback<Event>() {
             @Override
             public void onShiftLogSucceeded(ArrayList<Event> events) {
                 if (mShiftLogUICallback != null) {
                     mShiftLogUICallback.onGetShiftLogSucceeded(events);
-                }
-                else {
+                } else {
                     Log.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                 }
                 onJobFinishedListener.onJobFinished();

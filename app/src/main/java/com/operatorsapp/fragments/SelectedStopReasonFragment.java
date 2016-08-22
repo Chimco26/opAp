@@ -52,6 +52,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private static final String EVENT_ID = "stop_report_event_id";
 
     private static final int NUMBER_OF_COLUMNS = 5;
+    public static final String SAMSUNG = "samsung";
 
     private int mSelectedPosition;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -132,8 +133,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
         if (mStart == null || mEnd == null) {
             productTextView.setText("- -");
-        }
-        else {
+        } else {
             productTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
@@ -144,16 +144,23 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(layoutManager);
-        int spacing = 40;
-        Configuration config = getResources().getConfiguration();
+        int spacing = 0;
+        String strManufacturer = android.os.Build.MANUFACTURER;
 
+        if (strManufacturer.equals(SAMSUNG)) {
+            spacing = 80;
+        } else {
+            spacing = 40;
+        }
+        Configuration config = getResources().getConfiguration();
         if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
-        }
-        else {
+        } else {
 
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
+
+
         initSubReasons();
     }
 
@@ -262,8 +269,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
                         ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
                     }
                 });
-            }
-            else {
+            } else {
 
                 ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
             }

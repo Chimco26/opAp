@@ -33,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LineChartTimeSmall extends FrameLayout {
+
+    public static final String SAMSUNG = "samsung";
+
     private LineChart mChart;
     private Context mContext;
     protected Typeface mTfRegular;
@@ -83,7 +86,13 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // set an alternative background color
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
-        mChart.setViewPortOffsets(55f, 17f, 0f, 50f);
+
+        String strManufacturer = android.os.Build.MANUFACTURER;
+        if (strManufacturer.equals(SAMSUNG)) {
+            mChart.setViewPortOffsets(55f, 17f, 0f, 50f);
+        } else {
+            mChart.setViewPortOffsets(25f, 10f, 0f, 25f);
+        }
 
         mChart.zoom(3, 1, 3, 1);
 

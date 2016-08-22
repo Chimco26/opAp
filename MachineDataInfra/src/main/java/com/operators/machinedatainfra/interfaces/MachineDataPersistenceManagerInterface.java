@@ -6,6 +6,8 @@ public interface MachineDataPersistenceManagerInterface {
 
     String getSessionId();
 
+    String getMachineDataStartingFrom();
+
     int getTotalRetries();
 
     int getRequestTimeout();
@@ -19,6 +21,8 @@ public interface MachineDataPersistenceManagerInterface {
     void setSiteUrl(String siteUrl);
 
     void setSessionId(String sessionId);
+
+    void setMachineDataStartingFrom(String startingFrom);
 
     void setTotalRetries(int totalRetries);
 

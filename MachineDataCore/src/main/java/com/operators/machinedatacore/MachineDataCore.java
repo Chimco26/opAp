@@ -61,7 +61,7 @@ public class MachineDataCore {
 
     public void getMachineData(final JobBase.OnJobFinishedListener onJobFinishedListener) {
         if (mMachineDataPersistenceManagerInterface != null) {
-            mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), null, new GetMachineDataCallback<Widget>() {
+            mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom(), new GetMachineDataCallback<Widget>() {
                         @Override
                         public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
                             if (mMachineDataUICallback != null) {

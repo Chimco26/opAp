@@ -40,9 +40,11 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
     private static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
-    private static final String PREF_FORCE_LOCAL = "pref.force_locale";
-    private static final String PREF_FORCE_LOCAL_NAME = "pref.force_locale.name";
-    private static final String PREF_POLLING_FREQUENCY = "pref.polling.frequency";
+    private static final String PREF_SHIFT_LOG_STARTING_FROM = "pref.PREF_SHIFT_LOG_STARTING_FROM";
+    private static final String PREF_MACHINE_DATA_STARTING_FROM = "pref.PREF_MACHINE_DATA_STARTING_FROM";
+    private static final String PREF_FORCE_LOCAL = "pref.PREF_FORCE_LOCAL";
+    private static final String PREF_FORCE_LOCAL_NAME = "pref.PREF_FORCE_LOCAL_NAME";
+    private static final String PREF_POLLING_FREQUENCY = "pref.PREF_POLLING_FREQUENCY";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
     private static final int DEFAULT_POLLING_VALUE = 60;
@@ -75,7 +77,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getSiteUrl() {
         //TODO  url remove for production, need to be empty string
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL,"https://apidev.my.leadermes.com");
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
     }
 
     @Override
@@ -196,10 +198,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         return mGson.fromJson(shiftLogsJsonString, listType);
     }
 
+    @Override
     public String getCurrentLang() {
         return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL, DEFAULT_LANGUAGE_VALUE);
     }
 
+    @Override
     public void setCurrentLang(String lang) {
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL, lang);
     }
@@ -225,5 +229,25 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void setPolingFrequency(int polingFrequency) {
         SecurePreferences.getInstance().setInt(PREF_POLLING_FREQUENCY, polingFrequency);
+    }
+
+    @Override
+    public String getShiftLogStartingFrom() {
+        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, null);
+    }
+
+    @Override
+    public void setShiftLogStartingFrom(String startingFrom) {
+        SecurePreferences.getInstance().setString(PREF_SHIFT_LOG_STARTING_FROM, startingFrom);
+    }
+
+    @Override
+    public String getMachineDataStartingFrom() {
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, null);
+    }
+
+    @Override
+    public void setMachineDataStartingFrom(String startingFrom) {
+        SecurePreferences.getInstance().setString(PREF_MACHINE_DATA_STARTING_FROM, startingFrom);
     }
 }

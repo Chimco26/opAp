@@ -9,11 +9,14 @@ public interface ShiftLogPersistenceManagerInterface {
 
     String getSessionId();
 
+    String getShiftLogStartingFrom();
+
     ArrayList getShiftLogs();
 
     int getTotalRetries();
 
     int getRequestTimeout();
+
     int getMachineId();
 
     int getPollingFrequency();
@@ -24,11 +27,14 @@ public interface ShiftLogPersistenceManagerInterface {
 
     void setSessionId(String sessionId);
 
+    void setShiftLogStartingFrom(String startingFrom);
+
     void saveShiftLogs(ArrayList<Event> events);
 
     void setTotalRetries(int totalRetries);
 
     void setRequestTimeOut(int requestTimeOut);
+
     void setMachineId(int machineId);
 
 }
