@@ -2,11 +2,13 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,6 +43,9 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.GridSpacingItemDecorationRTL;
+
+import java.util.Locale;
 
 /**
  * Created by Sergey on 08/08/2016.
@@ -126,11 +131,19 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             Log.i(LOG_TAG, "No Reasons in list");
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_stop_screen);
-        } else {
+        }
+        else {
             mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
             mRecyclerView.setLayoutManager(mLayoutManager);
             int spacing = 40;
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+
+            Configuration config = getResources().getConfiguration();
+            if(config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
+            }else {
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+
+            }
             initStopReasons();
         }
 
@@ -140,7 +153,8 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
         if (mStart == null || mEnd == null) {
             productTextView.setText("- -");
-        } else {
+        }
+        else {
             productTextView.setText(getActivity().getString(R.string.stop) + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
         }
 
@@ -233,7 +247,8 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
+            }
+            else {
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }

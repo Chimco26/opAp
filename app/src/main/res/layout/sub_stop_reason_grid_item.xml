@@ -27,8 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:text="S"
-            android:textSize="55dp"/>
+            android:textSize="55sp"/>
 
     </RelativeLayout>
 

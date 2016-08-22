@@ -42,36 +42,36 @@
     <string name="no_notifications">No Notifications</string>
     <string name="no_data">No Data</string>
     <string name="error_rest">Exception in Rest service</string>
-    <string name="jobs_actions">Job actions</string>
+    <string name="jobs_actions">פקודות עבודה</string>
     <string name="job_id">Job ID</string>
     <string name="product_name">Product Name</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Planned Start</string>
     <string name="number_of_units">Number Of Units</string>
-    <string name="new_job">New Job</string>
+    <string name="new_job">עבודה חדשה</string>
     <string name="new_job_details">New job details</string>
     <string name="product_id">Product id</string>
     <string name="erp_id">ERP ID</string>
     <string name="quantity">Quantity</string>
     <string name="activate_new_job">Activate</string>
     <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
-    <string name="product">Product</string>
+    <string name="product">מוצר</string>
     <string name="id">ID -</string>
-    <string name="job">Job</string>
-    <string name="shift">Shift</string>
-    <string name="machine_id">Machine ID</string>
-    <string name="machine_status">Machine status</string>
+    <string name="job">עבודה</string>
+    <string name="shift">משמרת</string>
+    <string name="machine_id">מזהה מכונה</string>
+    <string name="machine_status">מצב מכונה</string>
     <string name="operator_id">Operator Id</string>
     <string name="operator_name">Operator name</string>
 
     <string name="operator_sign_in">Operator\nSign In</string>
-    <string name="operator_sign_in_action_bar">Operator Sign In</string>
-    <string name="cancel">Cancel</string>
+    <string name="operator_sign_in_action_bar">כניסת מפעיל</string>
+    <string name="cancel">ביטול</string>
     <string name="retry">Retry</string>
     <string name="end">End</string>
     <string name="start">Start</string>
-    <string name="duration">Duration</string>
-    <string name="report">REPORT</string>
+    <string name="duration">משך</string>
+    <string name="report">דיווח</string>
     <string name="stop_event">Stop Event</string>
     <string name="enter_with_your_id">Enter With\nYour ID</string>
     <string name="report_rejects">Report Rejects</string>
@@ -94,7 +94,7 @@
     <string name="package_type">Package Type</string>
     <string name="settings">Setting</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
-    <string name="language">Language</string>
+    <string name="language">שפה</string>
     <string name="factory_sign_in">Factory sign in</string>
     <string name="change">Change</string>
     <string name="advanced_settings">Advanced Setting</string>
@@ -110,18 +110,16 @@
     <string name="start_">התחלה: </string>
 
     <array name="languages_spinner_array">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Australian Aboriginal</item>
+        <item>אנגלית</item>
+        <item>עברית</item>
     </array>
 
     <array name="language_codes_array">
         <item>en</item>
         <item>iw</item>
-        <item>au</item>
     </array>
     <array name="jobs_spinner_array">
-        <item>New Job</item>
+        <item>עבודה חדשה</item>
         <item>Report Rejects</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>

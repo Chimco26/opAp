@@ -2,6 +2,7 @@ package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
 /**
  * Created by Sergey on 09/08/2016.
@@ -71,7 +73,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private long mDuration;
     private int mEventId;
 
-    public static SelectedStopReasonFragment newInstance(int selectedPosition, int jobId, String start, String end, long duration, int eventId){
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, int jobId, String start, String end, long duration, int eventId) {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);
@@ -87,7 +89,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
             mJobId = getArguments().getInt(CURRENT_JOB_ID);
             mStart = getArguments().getString(START_TIME);
@@ -142,8 +144,16 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(layoutManager);
-        int spacing = 30;
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+        int spacing = 40;
+        Configuration config = getResources().getConfiguration();
+
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
+        }
+        else {
+
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+        }
         initSubReasons();
     }
 

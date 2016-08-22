@@ -108,6 +108,7 @@
     <string name="one">1</string>
     <string name="end_">End: </string>
     <string name="start_">Start: </string>
+    <string name="switch_user">Switch user</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
