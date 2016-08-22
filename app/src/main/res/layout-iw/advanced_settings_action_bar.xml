@@ -14,40 +14,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/close_image"
-            android:padding="10dp"
-            android:background="@drawable/button_back_selector"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingEnd="20dp"
+            android:src="@drawable/button_back_rtl_selector"/>
 
         <TextView
+            style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_height="wrap_content"
-            android:text="@string/report_rejects"
-            android:layout_marginStart="30dp"
+            android:text="@string/advanced_settings"
+            android:layout_marginLeft="30dp"
             android:textColor="@color/white"/>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/white" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/reject_reason"
-            android:textColor="@color/white"
-            android:id="@+id/reason_text_view"/>
-
-
     </LinearLayout>
-    <!--add linearLayout-->
-
 
 </RelativeLayout>
