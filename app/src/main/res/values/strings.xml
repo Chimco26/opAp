@@ -113,6 +113,7 @@
     <string name="chart_max_">Max. </string>
     <string name="chart_space"> </string>
     <string name="switch_user">Switch user</string>
+    <string name="standard">Standard&#160;</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

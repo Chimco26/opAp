@@ -191,7 +191,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
                 timeViewHolder.mTitle.setText(widget.getFieldName());
-                timeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int) widget.getStandardValue()));
+                timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard) + (int) widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
@@ -223,7 +223,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
                 rangeViewHolder.mTitle.setText(widget.getFieldName());
-                rangeViewHolder.mSubtitle.setText(new StringBuilder("Standard " + (int) widget.getStandardValue()));
+                rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard) + (int) widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
                 rangeViewHolder.mCurrentValue.setText(widget.getCurrentValue());
                 if (widget.isOutOfRange()) {
@@ -302,7 +302,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     @Override
                     public void run() {
                         projectionViewHolder.mTitle.setText(widget.getFieldName());
-                        projectionViewHolder.mSubtitle.setText(new StringBuilder("Standard " + valueInK((int) widget.getStandardValue())));
+                        projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard) + valueInK((int) widget.getStandardValue())));
                         projectionViewHolder.mValue.setText(valueInK((int) currentFloat));
                         float scaleValue = (widget.getTarget() - widget.getLowLimit());
                         float currentValue = (Float.parseFloat(widget.getCurrentValue()) - widget.getLowLimit());

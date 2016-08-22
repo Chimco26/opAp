@@ -93,13 +93,6 @@
         android:layout_toEndOf="@+id/linearLayout2"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_marginTop="12dp"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="top"
-            android:src="@drawable/logo" />
-
         <TextView
             android:id="@+id/toolbar_title"
             style="@style/FontStyle_T11"
@@ -109,9 +102,16 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textSize="35dp"
             tools:text="App Title" />
+
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_gravity="top"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:src="@drawable/logo" />
 
     </LinearLayout>
 
