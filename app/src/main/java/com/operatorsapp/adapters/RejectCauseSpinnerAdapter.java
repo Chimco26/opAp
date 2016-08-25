@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.RejectCauses;
-import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operatorsapp.R;
 
 import java.util.List;

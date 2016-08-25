@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.operators.activejobslistformachineinfra.ActiveJob;
-import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operatorsapp.R;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.base_spinner_item, parent, false);
+            row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
@@ -49,7 +48,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.base_spinner_item, parent, false);
+            row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
         }
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));

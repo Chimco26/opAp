@@ -25,6 +25,7 @@
 
 
         <TextView
+            style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"

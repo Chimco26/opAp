@@ -19,6 +19,7 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/first_field_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/first_title_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,6 +57,7 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/second_field_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -64,6 +67,7 @@
                 android:textSize="20dp" />
 
             <TextView
+                style="@style/Roboto_Regular_Status_Data"
                 android:id="@+id/second_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -89,6 +93,7 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/third_field_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,6 +103,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
+                style="@style/Roboto_Regular_Status_Data"
                 android:id="@+id/third_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -123,6 +129,7 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/fourth_field_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -132,6 +139,7 @@
                 android:textColor="@color/status_bar" />
 
             <TextView
+                style="@style/Roboto_Regular_Status_Data"
                 android:id="@+id/fourth_title_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -157,6 +165,7 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:id="@+id/fifth_field_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -171,6 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
+                style="@style/Roboto_Regular_Status_Data"
                 android:text="@string/dashes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/default_gray" />

@@ -16,6 +16,7 @@
 
 
         <TextView
+            style="@style/Roboto_Regular_Status_Title"
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -29,6 +30,7 @@
             android:textColor="@color/status_bar"/>
 
         <TextView
+            style="@style/Roboto_Regular_Status_Data"
             android:id="@+id/report_cycle_u_product_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -40,6 +42,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
+            style="@style/Roboto_Regular_Status_Data"
             android:id="@+id/id_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -51,6 +54,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
+            style="@style/Roboto_Regular_Status_Data"
             android:id="@+id/report_cycle_id_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -90,6 +94,8 @@
         </FrameLayout>
 
         <TextView
+            style="@style/Roboto_Regular_Status_Title"
+
             android:id="@+id/job_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

@@ -24,6 +24,7 @@
             android:src="@drawable/button_back_rtl_selector"/>
 
         <TextView
+            style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -40,6 +41,7 @@
             android:background="@color/white" />
 
         <TextView
+            style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"

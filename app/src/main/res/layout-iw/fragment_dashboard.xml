@@ -30,6 +30,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
@@ -39,6 +40,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Data"
                     android:id="@+id/text_view_product_name_and_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,6 +63,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -69,6 +72,7 @@
                     android:textColor="@color/status_bar" />
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Data"
                     android:id="@+id/text_view_job_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,6 +94,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -98,6 +103,7 @@
                     android:textColor="@color/status_bar" />
 
                 <TextView
+                    style="@style/Roboto_Regular_Status_Data"
                     android:id="@+id/text_view_shift_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -221,6 +227,7 @@
         android:orientation="horizontal">
 
         <TextView
+            style="@style/Roboto_Regular_Status_Data"
             android:id="@+id/text_view_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
