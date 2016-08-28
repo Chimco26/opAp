@@ -30,6 +30,7 @@ public class ChartFragment extends Fragment {
     private static final String MIN = "mib";
     private static final String STANDARD = "standard";
     private static final String MAX = "max";
+    private static final String X_VALUES = "xValues";
 
     private TextView mInfo;
     private TextView mMin;
@@ -41,8 +42,9 @@ public class ChartFragment extends Fragment {
     private float mMinVal;
     private float mStandardVal;
     private float mMaxVal;
+    private String[] mXValues;
 
-    public static ChartFragment newInstance(Context context, ArrayList<Entry> values, float min, float standard, float max) {
+    public static ChartFragment newInstance(Context context, ArrayList<Entry> values, float min, float standard, float max, String[] xValues) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
         Bundle args = new Bundle();
@@ -50,6 +52,7 @@ public class ChartFragment extends Fragment {
         args.putFloat(MIN, min);
         args.putFloat(STANDARD, standard);
         args.putFloat(MAX, max);
+        args.putStringArray(X_VALUES, xValues);
 
         ChartFragment fragment = new ChartFragment(context);
         fragment.setArguments(args);
@@ -72,6 +75,7 @@ public class ChartFragment extends Fragment {
             mMinVal = getArguments().getFloat(MIN);
             mStandardVal = getArguments().getFloat(STANDARD);
             mMaxVal = getArguments().getFloat(MAX);
+            mXValues = getArguments().getStringArray(X_VALUES);
         }
     }
 
@@ -88,14 +92,14 @@ public class ChartFragment extends Fragment {
 
         mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
         mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-        mMin.setText(new StringBuilder(mContext.getString(R.string.chart_min_) + mContext.getString(R.string.chart_space)+ String.valueOf((int) mMinVal)));
+        mMin.setText(new StringBuilder(mContext.getString(R.string.chart_min_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mMinVal)));
         mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-        mStandard.setText(new StringBuilder(mContext.getString(R.string.chart_standard_)+ mContext.getString(R.string.chart_space)+ String.valueOf((int) mStandardVal)));
+        mStandard.setText(new StringBuilder(mContext.getString(R.string.chart_standard_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mStandardVal)));
         mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-        mMax.setText(new StringBuilder(mContext.getString(R.string.chart_max_) + mContext.getString(R.string.chart_space)+ String.valueOf((int) mMaxVal)));
+        mMax.setText(new StringBuilder(mContext.getString(R.string.chart_max_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mMaxVal)));
         mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
-        mChart.setData(mValues);
+        mChart.setData(mValues, mXValues);
         mChart.setAxis(mContext, mMinVal, mStandardVal, mMaxVal);
 
         setActionBar();

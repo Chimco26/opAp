@@ -36,6 +36,8 @@ public class LineChartTimeLarge extends FrameLayout {
     private Context mContext;
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
+    private String[] mXValues;
+    private String mXVal = "";
 
     public LineChartTimeLarge(Context context) {
         super(context);
@@ -87,11 +89,11 @@ public class LineChartTimeLarge extends FrameLayout {
         if (strManufacturer.equals(SAMSUNG)) {
             mChart.setViewPortOffsets(100f, 30f, 0f, 70f);
         } else {
-            mChart.setViewPortOffsets(30f, 10f, 0f, 30f);
+            mChart.setViewPortOffsets(35f, 10f, 0f, 30f);
         }
 
 //        mChart.zoomIn();
-        mChart.zoom(2, 1, 2, 1);
+        mChart.zoom(1.5f, 1, 1.5f, 1);
 
         setAxis(context, -10, -10, -10);
 
@@ -107,14 +109,14 @@ public class LineChartTimeLarge extends FrameLayout {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
-        xAxis.setLabelCount(11);
+//        xAxis.setLabelCount(12);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setGranularity(60000L * 60); // one minute in millis * 60
-        xAxis.setValueFormatter(new AxisValueFormatter() {
+//        xAxis.setCenterAxisLabels(true);
+//        xAxis.setGranularity(60000L * 60); // one minute in millis * 60
+        /*xAxis.setValueFormatter(new AxisValueFormatter() {
 
             @SuppressLint("SimpleDateFormat")
             private FormattedStringCache.Generic<Long, Date> mFormattedStringCache = new FormattedStringCache.Generic<>(new SimpleDateFormat("HH:mm"));
@@ -123,6 +125,27 @@ public class LineChartTimeLarge extends FrameLayout {
             public String getFormattedValue(float value, AxisBase axis) {
                 Long v = (long) value;
                 return mFormattedStringCache.getFormattedValue(new Date(v), v);
+            }
+
+            @Override
+            public int getDecimalDigits() {
+                return 0;
+            }
+        });*/
+
+        xAxis.setValueFormatter(new AxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if ((int) value % mXValues.length >= 0) {
+                    if (!mXValues[(int) value % mXValues.length].equals(mXVal)) {
+                        mXVal = mXValues[(int) value % mXValues.length];
+                        return mXVal;
+                    } else {
+                        return "";
+                    }
+                } else {
+                    return "";
+                }
             }
 
             @Override
@@ -175,8 +198,8 @@ public class LineChartTimeLarge extends FrameLayout {
     }
 
 
-    public void setData(final ArrayList<Entry> values) {
-
+    public void setData(final ArrayList<Entry> values, String[] xValues) {
+        mXValues = xValues;
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
