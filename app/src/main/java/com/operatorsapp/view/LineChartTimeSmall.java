@@ -31,6 +31,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class LineChartTimeSmall extends FrameLayout {
 
@@ -40,6 +41,8 @@ public class LineChartTimeSmall extends FrameLayout {
     private Context mContext;
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
+    private String[] mXValues;
+    private String mXVal = "";
 
     public LineChartTimeSmall(Context context) {
         super(context);
@@ -110,14 +113,45 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
         xAxis.setTextSize(18f);
-        xAxis.setLabelCount(5);
+//        xAxis.setLabelCount(5);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
         xAxis.setCenterAxisLabels(true);
-        xAxis.setGranularity(60000L * 60); // one minute in millis * 60
+//        xAxis.setGranularity(60000L * 60); // one minute in millis * 60
+//        xAxis.setValueFormatter(new AxisValueFormatter() {
+//            @Override
+//            public String getFormattedValue(float value, AxisBase axis) {
+//                return "" + value;
+//            }
+//
+//            @Override
+//            public int getDecimalDigits() {
+//                return 0;
+//            }
+//        });
         xAxis.setValueFormatter(new AxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if ((int) value % mXValues.length >= 0) {
+                    if (!mXValues[(int) value % mXValues.length].equals(mXVal)) {
+                        mXVal = mXValues[(int) value % mXValues.length];
+                        return mXVal;
+                    } else {
+                        return "";
+                    }
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public int getDecimalDigits() {
+                return 0;
+            }
+        });
+       /* xAxis.setValueFormatter(new AxisValueFormatter() {
 
             @SuppressLint("SimpleDateFormat")
             private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
@@ -131,7 +165,8 @@ public class LineChartTimeSmall extends FrameLayout {
             public int getDecimalDigits() {
                 return 0;
             }
-        });
+        });*/
+
         /*xAxis.setValueFormatter(new AxisValueFormatter() {
 
             @SuppressLint("SimpleDateFormat")
@@ -172,7 +207,8 @@ public class LineChartTimeSmall extends FrameLayout {
     }
 
 
-    public void setData(final ArrayList<Entry> values) {
+    public void setData(final ArrayList<Entry> values, String[] xValues) {
+        mXValues = xValues;
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -185,13 +221,20 @@ public class LineChartTimeSmall extends FrameLayout {
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
 //        set1.setDrawCircleHole(false);
-
         set1.setCircleRadius(3);
         set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
         set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setDrawCircleHole(true);
         set1.setDrawCircles(true);
+
+        set1.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                //rather than diaplaying value show label
+                return entry.getData().toString();
+            }
+        });
 
         // create a data object with the datasets
         LineData data = new LineData(set1);

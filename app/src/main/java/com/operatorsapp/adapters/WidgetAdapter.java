@@ -17,11 +17,13 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
-import com.operatorsapp.view.ProjectionViewStart;
 import com.operatorsapp.view.ProjectionViewEnd;
+import com.operatorsapp.view.ProjectionViewStart;
 import com.operatorsapp.view.RangeView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
@@ -196,11 +198,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
                 if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-
+                    final String[] xValues = new String[widget.getMachineParamHistoricData().size()];
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
-                        Entry entry = new Entry((float)widget.getMachineParamHistoricData().get(i).getTime(), widget.getMachineParamHistoricData().get(i).getValue());
-//                        entry.setX(widget.getMachineParamHistoricData().get(i).getTime());
-//                        entry.setY(widget.getMachineParamHistoricData().get(i).getValue());
+                        xValues[i] = new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));
+                        Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue(), new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())));
 //                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - TEN_HOURS)) {
                         tenHoursValues.add(entry);
 //                        }
@@ -208,16 +209,17 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                         fourHoursValues.add(entry);
 //                        }
                     }
-                    timeViewHolder.mChart.setData(fourHoursValues);
-                }
-                timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (tenHoursValues.size() > 0) {
-                            mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit()), true);
+                    timeViewHolder.mChart.setData(fourHoursValues, xValues);
+
+                    timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (tenHoursValues.size() > 0) {
+                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues), true);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 break;
 
             case RANGE:
