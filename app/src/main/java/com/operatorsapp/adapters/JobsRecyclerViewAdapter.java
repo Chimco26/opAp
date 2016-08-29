@@ -1,14 +1,13 @@
 package com.operatorsapp.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.operators.jobsinfra.Header;
@@ -45,7 +44,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get(ID).toString());
         int jobId = bigDecimal.intValue();

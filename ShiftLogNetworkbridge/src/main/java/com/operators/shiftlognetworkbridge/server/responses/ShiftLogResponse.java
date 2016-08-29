@@ -10,7 +10,7 @@ public class ShiftLogResponse extends ErrorBaseResponse {
     @SerializedName("events")
     private ArrayList<Event> mEvents;
 
-    public ArrayList<Event> getShiftLogs() {
+    public ArrayList<Event> getEvents() {
         return mEvents;
     }
 }

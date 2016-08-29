@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface ShiftLogCoreCallback<T> {
 
-    void onShiftLogSucceeded(ArrayList<Event> events);
+    void onShiftLogSucceeded(ArrayList<T> events);
 
     void onShiftLogFailed(ErrorObjectInterface reason);
 }

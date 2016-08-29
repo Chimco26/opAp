@@ -9,6 +9,7 @@ public interface ErrorObjectInterface {
         SessionInvalid,
         Credentials_mismatch,
         Get_machines_failed,
+        Get_shift_for_machine_failed,
         Url_not_correct,
         Get_machine_status_failed,
         Jobs_list_Is_Empty,
@@ -19,7 +20,8 @@ public interface ErrorObjectInterface {
         Get_report_fields_failed,
         Send_Report_Failed,
         Get_active_jobs_for_machine_failed,
-        Error_rest
+        Error_rest,
+        Fail_to_perform_GetMachineShiftLog
     }
 
     ErrorCode getError();

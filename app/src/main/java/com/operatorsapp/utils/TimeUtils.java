@@ -130,5 +130,17 @@ public class TimeUtils {
         return out;
     }
 
-
+    @SuppressLint("SimpleDateFormat")
+    public static long getLongFromDateString(String date, String format) {
+        //TODO replace format in server
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        long timeInMilliseconds = 0;
+        try {
+            Date mDate = sdf.parse(date);
+            timeInMilliseconds = mDate.getTime();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return timeInMilliseconds;
+    }
 }

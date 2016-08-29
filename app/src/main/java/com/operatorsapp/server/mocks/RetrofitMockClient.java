@@ -34,6 +34,15 @@ public class RetrofitMockClient implements Interceptor {
                 case "JGetUserSessionID":
                     responseString = "{\"JGetUserSessionIDResult\":{\"error\":null,\"session\":[{\"session\":\"42547.7052039699\"}]}}";
                     break;
+                case "GetShiftForMachine":
+                    responseString = "{\n" +
+                            "  \"Duration\": 61359322,\n" +
+                            "  \"EndTime\": null,\n" +
+                            "  \"StartTime\": \"2016-08-28 14:41:00.000\",\n" +
+                            "  \"TimeFormat\": \"yyyy-MM-dd HH:mm:ss.fff\",\n" +
+                            "  \"error\": null\n" +
+                            "}";
+                    break;
                 case "GetMachinesForFactory":
                     responseString = "{\n" +
                             "  \"error\": null,\n" +

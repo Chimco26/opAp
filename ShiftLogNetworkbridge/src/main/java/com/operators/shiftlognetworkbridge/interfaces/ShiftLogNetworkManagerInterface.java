@@ -6,4 +6,8 @@ public interface ShiftLogNetworkManagerInterface {
     EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl);
 
     EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
+
+    EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl);
+
+    EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
 }

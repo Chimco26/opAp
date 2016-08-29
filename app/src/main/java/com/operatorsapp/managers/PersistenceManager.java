@@ -35,6 +35,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
+    private static final String PREF_SHIFT_FOR_MACHINE = "pref.PREF_SHIFT_FOR_MACHINE";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
@@ -77,7 +78,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getSiteUrl() {
         //TODO  url remove for production, need to be empty string
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
+//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
     }
 
     @Override
@@ -249,5 +251,16 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void setMachineDataStartingFrom(String startingFrom) {
         SecurePreferences.getInstance().setString(PREF_MACHINE_DATA_STARTING_FROM, startingFrom);
+    }
+
+    public long getShiftForMachine() {
+        String shiftForMachineString = SecurePreferences.getInstance().getString(PREF_SHIFT_FOR_MACHINE);
+        Type longType = new TypeToken<Long>() {
+        }.getType();
+        return mGson.fromJson(shiftForMachineString, longType);
+    }
+
+    public void setShiftForMachine(long shiftForMachine) {
+        SecurePreferences.getInstance().setString(PREF_SHIFT_FOR_MACHINE, mGson.toJson(shiftForMachine));
     }
 }

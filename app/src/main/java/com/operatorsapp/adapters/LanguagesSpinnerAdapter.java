@@ -1,7 +1,6 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,11 @@ import android.widget.TextView;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 
-/**
- * Created by User on 17/07/2016.
- */
 public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     private Activity mContext;
     private String[] mSpinnerItems = null;
     private TextView mRowName;
-    private View mView;
+//    private View mView;
     private boolean mIsFirst = true;
 
     public LanguagesSpinnerAdapter(Activity context, int resource, String[] spinnerItems) {
@@ -34,7 +30,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
-            mView = row;
+//            mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
             if (mIsFirst) {
@@ -56,7 +52,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
-            mView = row;
+//            mView = row;
         }
 
         String item = mSpinnerItems[position];

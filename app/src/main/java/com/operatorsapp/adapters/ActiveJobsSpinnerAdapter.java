@@ -13,9 +13,6 @@ import com.operatorsapp.R;
 
 import java.util.List;
 
-/**
- * Created by Sergey on 04/08/2016.
- */
 public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
     private Activity mContext;
     private List<ActiveJob> mSpinnerItems;
@@ -50,10 +47,10 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
         }
-            TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
-            name.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
-            name.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
-            name.setTextSize(17);
+        TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
+        name.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
+        name.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
+        name.setTextSize(17);
 
         return row;
     }

@@ -19,7 +19,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -89,9 +88,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
-    private boolean mIsInTouch = false;
     private ArrayList<Widget> mWidgets = new ArrayList<>();
-    private String[] mOperatorsSpinnerArray = {"Operator Sign in"};
+    private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
@@ -188,12 +186,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
                                 if (shiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
-                                    toggleWoopList(shiftLogParams, mCloseWidth, widgetsParams, mIsOpen);
+                                    toggleWoopList(shiftLogParams, mCloseWidth, widgetsParams, false);
                                     mGridLayoutManager.setSpanCount(3);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 } else {
                                     mIsOpen = true;
-                                    toggleWoopList(shiftLogParams, mOpenWidth, widgetsParams, mIsOpen);
+                                    toggleWoopList(shiftLogParams, mOpenWidth, widgetsParams, true);
                                     mGridLayoutManager.setSpanCount(2);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
@@ -214,7 +212,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
-        if (!mNoData && !mIsInTouch) {
+        if (!mNoData) {
             if (!mIsOpen) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
@@ -579,9 +577,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 } else if (event.getEventGroupID() == 20) {
                     dialogFragment = DialogFragment.newInstance(event, false);
                 }
-                dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                dialogFragment.setCancelable(false);
-                //TODO  dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                if (dialogFragment != null) {
+                    dialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                    dialogFragment.setCancelable(false);
+                    dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                }
                 mIsOpenDialog = true;
             }
         } else {
@@ -590,6 +590,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    public void onShiftForMachineEnded() {
+        mEventsList.clear();
+        mEventsQueue.clear();
+        mNoData = true;
+        mNoNotificationsText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -614,29 +622,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
             }
         });
-
-        // do silentLogin if Credentials mismatch
-        /*if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-            ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
-                @Override
-                public void onSilentLoginSucceeded() {
-                    ZLogger.e(LOG_TAG, "onSilentLoginSucceeded");
-                    getShiftLogs();
-                }
-
-                @Override
-                public void onSilentLoginFailed(com.operators.infra.ErrorObjectInterface reason) {
-                    ZLogger.e(LOG_TAG, "onSilentLoginFailed");
-                }
-            });
-        }*/
-        //todo clear data from widgets
-        // todo clear data from shiftLog
-
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
-        mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName() + "," + " ID - " + String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
+        mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName()).append(",").append(" ID - ").append(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
         mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));

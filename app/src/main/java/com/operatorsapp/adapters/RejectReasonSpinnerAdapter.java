@@ -13,9 +13,6 @@ import com.operatorsapp.R;
 
 import java.util.List;
 
-/**
- * Created by Sergey on 04/08/2016.
- */
 public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
     private Activity mContext;
     private List<RejectReasons> mSpinnerItems;

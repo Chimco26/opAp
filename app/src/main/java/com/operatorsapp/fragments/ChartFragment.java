@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
@@ -32,11 +31,6 @@ public class ChartFragment extends Fragment {
     private static final String MAX = "max";
     private static final String X_VALUES = "xValues";
 
-    private TextView mInfo;
-    private TextView mMin;
-    private TextView mStandard;
-    private TextView mMax;
-    private LineChartTimeLarge mChart;
     private ArrayList<Entry> mValues;
     private Context mContext;
     private float mMinVal;
@@ -90,14 +84,14 @@ public class ChartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
-        mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-        mMin.setText(new StringBuilder(mContext.getString(R.string.chart_min_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mMinVal)));
-        mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-        mStandard.setText(new StringBuilder(mContext.getString(R.string.chart_standard_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mStandardVal)));
-        mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-        mMax.setText(new StringBuilder(mContext.getString(R.string.chart_max_) + mContext.getString(R.string.chart_space) + String.valueOf((int) mMaxVal)));
-        mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
+//        TextView mInfo = (TextView) view.findViewById(R.id.fragment_chart_info);
+        TextView mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
+        mMin.setText(new StringBuilder(mContext.getString(R.string.chart_min_)).append(mContext.getString(R.string.chart_space)).append(String.valueOf((int) mMinVal)));
+        TextView mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
+        mStandard.setText(new StringBuilder(mContext.getString(R.string.chart_standard_)).append(mContext.getString(R.string.chart_space)).append(String.valueOf((int) mStandardVal)));
+        TextView mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
+        mMax.setText(new StringBuilder(mContext.getString(R.string.chart_max_)).append(mContext.getString(R.string.chart_space)).append(String.valueOf((int) mMaxVal)));
+        LineChartTimeLarge mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
         mChart.setData(mValues, mXValues);
         mChart.setAxis(mContext, mMinVal, mStandardVal, mMaxVal);
@@ -105,6 +99,7 @@ public class ChartFragment extends Fragment {
         setActionBar();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {

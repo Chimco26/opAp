@@ -1,13 +1,10 @@
 package com.operatorsapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +17,13 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.utils.TimeUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogAdapter extends RecyclerView.Adapter {
 
-    public static final int DAY_MILLIS = 86400000;
+//    public static final int DAY_MILLIS = 86400000;
 
     private Context mContext;
     private ArrayList<Event> mEvents;

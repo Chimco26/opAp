@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +16,6 @@ import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 
 import java.util.List;
 
-/**
- * Created by Sergey on 09/08/2016.
- */
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
     private List<SubReasons> mSubReasonsList;
@@ -53,15 +51,16 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
         return holder;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         if (mSelectedPosition == position) {
-            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(R.drawable.btn_pressed));
+            holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
             holder.mImageTitle.setTextColor(Color.WHITE);
         }else {
-            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(R.drawable.stop_sub_selector));
-            holder.mImageTitle.setTextColor(mContext.getResources().getColorStateList(R.color.button_stop_text_selector));
+            holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.stop_sub_selector));
+            holder.mImageTitle.setTextColor(mContext.getColorStateList(R.color.button_stop_text_selector));
         }
 
         holder.mStopTitle.setText(mSubReasonsList.get(position).getName());

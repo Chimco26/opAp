@@ -4,7 +4,9 @@ package com.operators.machinestatuscore.timecounter;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.Log;
+
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -27,11 +29,30 @@ public class TimeToEndCounter {
 
         mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
             public void onTick(long millisUntilFinished) {
-
-
-                mOnTimeToEndChangedListener.onTimeToEndChanged( millisUntilFinished);
+                mOnTimeToEndChangedListener.onTimeToEndChanged(millisUntilFinished);
             }
 
+            public void onFinish() {
+                mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
+                Log.i(LOG_TAG, "onFinish()");
+            }
+
+        }.start();
+    }
+
+    public void calculateShiftToEnd(final int timeInMilliseconds) {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+
+        mCountDownTimer = new CountDownTimer(timeInMilliseconds, COUNT_DOWN_INTERVAL) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
             public void onFinish() {
                 mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
                 Log.i(LOG_TAG, "onFinish()");

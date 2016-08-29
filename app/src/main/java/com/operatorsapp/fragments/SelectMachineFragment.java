@@ -155,7 +155,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mMachineId = mAutoCompleteAdapter.getItem(position).getId();
         String machineName = mAutoCompleteAdapter.getItem(position).getMachineName() == null ? "" : mAutoCompleteAdapter.getItem(position).getMachineName();
-        mSearchField.setText(new StringBuilder(mMachineId + " - " + machineName));
+        mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(machineName));
         mSearchField.setSelection(mSearchField.length());
 
         canGoNext = true;

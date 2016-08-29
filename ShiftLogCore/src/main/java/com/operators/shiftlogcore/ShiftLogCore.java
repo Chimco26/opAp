@@ -1,9 +1,11 @@
 package com.operators.shiftlogcore;
 
 import android.util.Log;
-import android.util.TimeUtils;
 
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.shiftlogcore.interfaces.ShiftForMachineUICallback;
+import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
+import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
@@ -19,7 +21,7 @@ public class ShiftLogCore {
     public static final String LOG_TAG = ShiftLogCore.class.getSimpleName();
     private static final int START_DELAY = 0;
 
-    private static ShiftLogCore msInstance;
+//    private static ShiftLogCore msInstance;
 
     private ShiftLogPersistenceManagerInterface mShiftLogPersistenceManagerInterface;
     private ShiftLogNetworkBridgeInterface mShiftLogNetworkBridgeInterface;
@@ -137,16 +139,33 @@ public class ShiftLogCore {
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
     }
 
+    public void getShiftForMachine(final ShiftForMachineUICallback shiftForMachineUICallback) {
+        mShiftLogNetworkBridgeInterface.GetShiftForMachine(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), new ShiftForMachineCoreCallback<ShiftForMachineResponse>() {
+            @Override
+            public void onShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
+                shiftForMachineUICallback.onGetShiftForMachineSucceeded(shiftForMachineResponse);
+                Log.w(LOG_TAG, "getShiftForMachine() onShiftForMachineSucceeded");
+            }
+
+            @Override
+            public void onShiftForMachineFailed(ErrorObjectInterface reason) {
+                shiftForMachineUICallback.onGetShiftForMachineFailed(reason);
+                Log.w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getDetailedDescription());
+            }
+
+        }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+    }
+
 
 //    public void setShiftLogDialogStatus(ArrayDeque<Event> shiftLogs) {
 //        mShiftLogs.clear();
 //        mShiftLogs.addAll(shiftLogs);
 //    }
 
-    public void inject(ShiftLogPersistenceManagerInterface shiftLogPersistenceManagerInterface, ShiftLogNetworkBridgeInterface shiftLogNetworkBridgeInterface) {
-        mShiftLogPersistenceManagerInterface = shiftLogPersistenceManagerInterface;
-        mShiftLogNetworkBridgeInterface = shiftLogNetworkBridgeInterface;
-    }
+//    public void inject(ShiftLogPersistenceManagerInterface shiftLogPersistenceManagerInterface, ShiftLogNetworkBridgeInterface shiftLogNetworkBridgeInterface) {
+//        mShiftLogPersistenceManagerInterface = shiftLogPersistenceManagerInterface;
+//        mShiftLogNetworkBridgeInterface = shiftLogNetworkBridgeInterface;
+//    }
 
 
 }

@@ -54,7 +54,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
 
         int machineId = machine.getId();
         String machineName = machine.getMachineName() == null ? "" : machine.getMachineName();
-        holder.text.setText(new StringBuilder(machineId + " - " + machineName));
+        holder.text.setText(new StringBuilder(machineId).append(" - ").append(machineName));
 
         return convertView;
     }

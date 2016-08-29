@@ -4,18 +4,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
-import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
-import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
-import com.operators.shiftlogcore.ShiftLogCore;
-import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
-import com.operators.machinestatuscore.MachineStatusCore;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.squareup.leakcanary.LeakCanary;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

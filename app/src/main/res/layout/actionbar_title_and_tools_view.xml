@@ -94,10 +94,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_marginTop="12dp"
             android:layout_width="70dp"
             android:layout_height="40dp"
             android:layout_gravity="top"
+            android:layout_marginTop="12dp"
             android:src="@drawable/logo" />
 
         <TextView
@@ -122,38 +122,66 @@
         android:layout_alignBottom="@+id/linearLayout2"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|end"
         android:padding="1dp">
 
-        <com.operatorsapp.view.EmeraldSpinner
-            android:id="@+id/toolbar_operator_spinner"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:drawSelectorOnTop="true"
-            android:dropDownVerticalOffset="40dp"
-            android:gravity="center"
-            app:theme="@style/ToolbarTheme"
-            tools:ignore="MissingPrefix" />
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@color/T12_color"
+            android:padding="0.5dp">
 
-        <com.operatorsapp.view.EmeraldSpinner
-            android:id="@+id/toolbar_job_spinner"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/status_bar">
+
+
+                <com.operatorsapp.view.EmeraldSpinner
+                    android:id="@+id/toolbar_operator_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:drawSelectorOnTop="true"
+                    android:dropDownVerticalOffset="40dp"
+                    android:gravity="center"
+                    app:theme="@style/ToolbarTheme"
+                    tools:ignore="MissingPrefix" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@+id/spinner_layout"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="23dp"
-            android:layout_weight="1"
-            android:dropDownVerticalOffset="40dp"
-            android:gravity="center"
-            app:theme="@style/ToolbarTheme"
-            tools:ignore="MissingPrefix" />
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@color/T12_color"
+            android:padding="0.5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/status_bar">
+
+                <com.operatorsapp.view.EmeraldSpinner
+                    android:id="@+id/toolbar_job_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:dropDownVerticalOffset="40dp"
+                    android:gravity="center"
+                    app:theme="@style/ToolbarTheme"
+                    tools:ignore="MissingPrefix" />
+            </LinearLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/settings_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:src="@drawable/button_settings_selector" />
     </LinearLayout>
 </RelativeLayout>

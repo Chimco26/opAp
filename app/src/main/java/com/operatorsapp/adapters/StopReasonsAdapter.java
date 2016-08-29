@@ -1,11 +1,11 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +15,6 @@ import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListene
 
 import java.util.List;
 
-/**
- * Created by Sergey on 09/08/2016.
- */
 public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.ViewHolder> {
 
     private List<StopReasons> mStopItemsList;
@@ -48,10 +45,11 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
         return holder;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mStopTitle.setText(mStopItemsList.get(position).getName());
-        holder.mReasonImage.setBackground(mContext.getResources().getDrawable(getImageForStopReason(mStopItemsList.get(position).getId())));
+        holder.mReasonImage.setBackground(mContext.getDrawable(getImageForStopReason(mStopItemsList.get(position).getId())));
     }
 
     @Override
@@ -71,7 +69,7 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
     }
 
     private int getImageForStopReason(int stopReasonId) {
-        int imageId = R.drawable.stop_general_selector;
+        int imageId /*= R.drawable.stop_general_selector*/;
         switch (stopReasonId) {
             case 1: {
                 imageId = R.drawable.stop_oparations_selector;

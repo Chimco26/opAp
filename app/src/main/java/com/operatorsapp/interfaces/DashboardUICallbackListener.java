@@ -8,11 +8,12 @@ import com.operators.shiftloginfra.Event;
 import java.util.ArrayList;
 
 public interface DashboardUICallbackListener {
-    enum CallType{
+    enum CallType {
         Status,
         MachineData,
         ShiftLog
     }
+
     void onDeviceStatusChanged(MachineStatus machineStatus);
 
     void onMachineDataReceived(ArrayList<Widget> widgetList);
@@ -22,4 +23,6 @@ public interface DashboardUICallbackListener {
     void onTimerChanged(String timeToEndInHours);
 
     void onDataFailure(ErrorObjectInterface reason, CallType callType);
+
+    void onShiftForMachineEnded();
 }

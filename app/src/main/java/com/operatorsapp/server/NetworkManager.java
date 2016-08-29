@@ -29,6 +29,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetwor
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
+import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.server.mocks.RetrofitMockClient;
@@ -125,13 +126,24 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
         return mRetrofit.create(EmeraldGetMachinesDataServiceRequest.class);
     }
 
+    @Override
+    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl) {
+        return getShiftForMachineServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        return mRetrofit.create(EmeraldShiftForMachineServiceRequests.class);
+    }
+
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mRetrofit == null) {
             OkHttpClient okHttpClient;
             if (timeout >= 0 && timeUnit != null) {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-                        .addInterceptor(new RetrofitMockClient())
+//                        .addInterceptor(new RetrofitMockClient())
                         .connectTimeout(timeout, timeUnit)
                         .writeTimeout(timeout, timeUnit)
                         .readTimeout(timeout, timeUnit)
@@ -141,7 +153,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             else {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-                        .addInterceptor(new RetrofitMockClient())
+//                        .addInterceptor(new RetrofitMockClient())
                         .build();
             }
             mRetrofit = new Retrofit.Builder()

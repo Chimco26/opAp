@@ -2,18 +2,14 @@ package com.operatorsapp.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.app.operatorinfra.Operator;
 import com.operatorsapp.R;
-import com.operatorsapp.view.RoundedImageView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
 
@@ -61,7 +57,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setText(item);
-            name.setTextAppearance(getContext(),R.style.FontStyle_T10);
+            TextViewCompat.setTextAppearance(name, R.style.FontStyle_T10);
             name.setTextColor(Color.BLACK);
             name.setTextSize(17);
         }

@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_fragment_crouton_anchor"
+    android:id="@+id/parent_layouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/C2">
@@ -90,7 +90,7 @@
                     android:hint="@string/login_fields_user_name_hint"
                     android:paddingLeft="14dp"
                     android:singleLine="true"
-                    android:text="zemingoApi"
+                    android:text="falcore1"
                     android:textColorHint="@color/T4_color" />
 
 
@@ -111,7 +111,7 @@
                         android:paddingStart="14dp"
                         android:paddingEnd="40dp"
                         android:singleLine="true"
-                        android:text="zemingo123"
+                        android:text="mes123"
                         android:textColorHint="@color/T4_color" />
 
                     <ImageView
