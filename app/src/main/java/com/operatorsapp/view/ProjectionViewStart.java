@@ -13,9 +13,6 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
-/**
- * Created by Admin on 02-Aug-16.
- */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ProjectionViewStart extends View {
 
@@ -62,7 +59,7 @@ public class ProjectionViewStart extends View {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

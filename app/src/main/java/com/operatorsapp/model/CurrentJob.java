@@ -1,8 +1,5 @@
 package com.operatorsapp.model;
 
-/**
- * Created by Sergey on 08/08/2016.
- */
 public class CurrentJob {
     private final String [] mHeaders;
     private final String mFirstField;

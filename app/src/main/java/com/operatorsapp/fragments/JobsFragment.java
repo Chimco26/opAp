@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.operatorinfra.Operator;
 import com.google.gson.Gson;
 import com.operators.jobsinfra.Header;
 import com.operators.jobsinfra.JobListForMachine;
@@ -45,10 +44,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     private RecyclerView mJobsRecyclerView;
     private FrameLayout mErrorFrameLayout;
     private Button mRetryButton;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
     private List<Header> mHeaderList;
-    private List<HashMap<String, Object>> mJobsDataList;
 
     private GoToScreenListener mOnGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
@@ -123,7 +119,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mFifthHeader = (TextView) view.findViewById(R.id.fifth_header_text_view);
 
         mRetryButton = (Button) view.findViewById(R.id.button_retry);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
         mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
@@ -182,10 +178,10 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         dismissProgressDialog();
         mErrorFrameLayout.setVisibility(View.GONE);
         mHeaderList = jobListForMachine.getHeaders();
-        mJobsDataList = jobListForMachine.getData();
+        List<HashMap<String, Object>> mJobsDataList = jobListForMachine.getData();
         jobListForMachine.getData();
         initHeaders();
-        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
+        JobsRecyclerViewAdapter mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
 
         Log.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());

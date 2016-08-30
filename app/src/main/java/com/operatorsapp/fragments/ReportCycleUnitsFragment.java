@@ -37,9 +37,8 @@ import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 
-/**
- * Created by Sergey on 11/08/2016.
- */
+import java.util.Locale;
+
 public class ReportCycleUnitsFragment extends Fragment implements View.OnClickListener {
 
     public static final String LOG_TAG = ReportCycleUnitsFragment.class.getSimpleName();
@@ -47,9 +46,6 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private String mCurrentProductName;
     private int mCurrentProductId;
-
-    private TextView mProductTitleTextView;
-    private TextView mProductIdTextView;
 
     private ImageView mPlusButton;
     private ImageView mMinusButton;
@@ -62,7 +58,6 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private Integer mJobId = null;
 
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
 
@@ -101,8 +96,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
         setActionBar();
 
-        mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
-        mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
+        TextView mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
+        TextView mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
         mProductTitleTextView.setText(mCurrentProductName);
         mProductIdTextView.setText(String.valueOf(mCurrentProductId));
@@ -136,15 +131,13 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                             if (Double.valueOf(s.toString()) > 0) {
                                 mButtonReport.setEnabled(true);
                                 double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-                                mUnitsCounter = Double.valueOf(String.format("%.3f", value));
+                                mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
                             }
-                        }
-                        else {
+                        } else {
                             mButtonReport.setEnabled(false);
                         }
                     }
-                }
-                else {
+                } else {
                     mButtonReport.setEnabled(false);
                 }
             }
@@ -224,7 +217,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private void increase() {
         double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
         value = value + 1;
-        value = Double.valueOf(String.format("%.3f", value));
+        value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
         mUnitsCounter = value;
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
         mMinusButton.setEnabled(true);
@@ -239,11 +232,10 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
             mUnitsCounterTextView.setText("0.0");
             mButtonReport.setEnabled(false);
             mMinusButton.setEnabled(false);
-        }
-        else {
+        } else {
             double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
             value = value - 1;
-            value = Double.valueOf(String.format("%.3f", value));
+            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
             mUnitsCounter = value;
             mButtonReport.setEnabled(true);
             mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
@@ -278,7 +270,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
         mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
         mActiveJobsListForMachineCore.getActiveJobsListForMachine();
     }
@@ -291,8 +283,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }

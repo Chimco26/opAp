@@ -37,10 +37,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-
-/**
- * Created by Sergey on 31/07/2016.
- */
 public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
@@ -48,8 +44,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
     private Button mNextButton;
-    private boolean mIsFirstReasonSpinnerSelection = true;
-    private boolean mIsReasonSelected;
+//    private boolean mIsFirstReasonSpinnerSelection = true;
+//    private boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private int mSelectedReasonId;

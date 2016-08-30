@@ -1,17 +1,17 @@
 package com.operatorsapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,17 +31,11 @@ import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListen
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
-import com.operatorsapp.view.GridSpacingItemDecoration;
-import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
-/**
- * Created by Sergey on 16/08/2016.
- */
 public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
-    private TextView mFactoryUrlTextView;
     private TextView mRefreshStatusTextView;
     private TextView mAdvancedSettingsButton;
     private Button mRefreshButton;
@@ -76,6 +70,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     private boolean mIsFirst = true;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -108,7 +103,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             }
         });
 
-        mFactoryUrlTextView = (TextView) view.findViewById(R.id.url_text_view);
+        TextView mFactoryUrlTextView = (TextView) view.findViewById(R.id.url_text_view);
         String siteUrl = PersistenceManager.getInstance().getSiteUrl();
         if (siteUrl != null) {
             mFactoryUrlTextView.setText(PersistenceManager.getInstance().getSiteUrl());
@@ -123,9 +118,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         mAdvancedSettingsButton = (TextView) view.findViewById(R.id.advanced_settings_button);
 
         mRefreshButton = (Button) view.findViewById(R.id.refresh_button);
-        Drawable drawable = getResources().getDrawable(R.drawable.button_refresh_reportind_data_selector);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth()),
-                (int) (drawable.getIntrinsicHeight()));
+        Drawable drawable = getActivity().getDrawable(R.drawable.button_refresh_reportind_data_selector);
+        if (drawable != null) {
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        }
 
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1, 1);
         Configuration config = getResources().getConfiguration();

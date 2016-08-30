@@ -38,9 +38,6 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
-/**
- * Created by Sergey on 09/08/2016.
- */
 public class SelectedStopReasonFragment extends Fragment implements OnSelectedSubReasonListener, View.OnClickListener {
 
     public static final String LOG_TAG = SelectedStopReasonFragment.class.getSimpleName();
@@ -134,7 +131,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         if (mStart == null || mEnd == null) {
             productTextView.setText("- -");
         } else {
-            productTextView.setText("Stop " + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+            productTextView.setText(new StringBuilder("Stop ").append(TimeUtils.getTimeFromString(mStart)).append(", Resume ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
         durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
@@ -144,7 +141,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(layoutManager);
-        int spacing = 0;
+        int spacing;
         String strManufacturer = android.os.Build.MANUFACTURER;
 
         if (strManufacturer.equals(SAMSUNG)) {

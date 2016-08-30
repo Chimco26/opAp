@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -73,6 +74,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     private class RangeViewHolder extends RecyclerView.ViewHolder {
 
+        private RelativeLayout mParent;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -88,6 +90,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         public RangeViewHolder(View itemView) {
             super(itemView);
 
+            mParent = (RelativeLayout) itemView.findViewById(R.id.range_widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
@@ -335,14 +338,14 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            rangeViewHolder.mRangeViewRed.updateX((float) (rangeViewHolder.mCapsule.getWidth() * 0.91)/*max location*/);
+            rangeViewHolder.mRangeViewRed.updateX((float) (rangeViewHolder.mRangeViewBlue.getWidth() * 1.107)/*max location*/);
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            rangeViewHolder.mRangeViewRed.updateX((float) (rangeViewHolder.mCapsule.getWidth() * 0.05)/*min location*/);
+            rangeViewHolder.mRangeViewRed.updateX((float) (rangeViewHolder.mRangeViewBlue.getWidth() * 0.05)/*min location*/);
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else {
             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
@@ -353,7 +356,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
                 float currentFloatValue = currentValue - widget.getLowLimit();
                 final float convertCurrentValue = currentFloatValue / scaleValue;
-                rangeViewHolder.mRangeViewBlue.updateX(((rangeViewHolder.mRangeViewBlue.getWidth()) * convertCurrentValue) - 5/* half of the line*/);
+                rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue) - 5/* half of the line*/);
                 rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
             }
         }

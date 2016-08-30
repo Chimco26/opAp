@@ -18,7 +18,6 @@ import com.operators.operatornetworkbridge.interfaces.EmeraldGetOperatorById;
 import com.operators.operatornetworkbridge.interfaces.EmeraldSetOperatorForMachine;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
-import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
@@ -36,8 +35,6 @@ import com.operatorsapp.server.mocks.RetrofitMockClient;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -143,7 +140,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             if (timeout >= 0 && timeUnit != null) {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-//                        .addInterceptor(new RetrofitMockClient())
+                        .addInterceptor(new RetrofitMockClient())
                         .connectTimeout(timeout, timeUnit)
                         .writeTimeout(timeout, timeUnit)
                         .readTimeout(timeout, timeUnit)
@@ -153,7 +150,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             else {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-//                        .addInterceptor(new RetrofitMockClient())
+                        .addInterceptor(new RetrofitMockClient())
                         .build();
             }
             mRetrofit = new Retrofit.Builder()

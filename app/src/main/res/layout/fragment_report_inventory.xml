@@ -180,6 +180,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="7dp"
+                        android:text="@string/package_type"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
+
+                    <RelativeLayout
+                        android:layout_width="351dp"
+                        android:layout_height="51dp"
+                        android:background="@drawable/edit_text_background_selector">
+
+                        <Spinner
+                            android:id="@+id/package_type_spinner"
+                            android:layout_width="349dp"
+                            android:layout_height="41dp"
+                            android:dropDownVerticalOffset="45dp"/>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginTop="50dp"
                         android:text="@string/units"
                         android:textColor="@color/black"
                         android:textSize="20sp"/>
@@ -187,7 +208,6 @@
                     <LinearLayout
                         android:layout_width="351dp"
                         android:layout_height="51dp"
-                        android:layout_marginBottom="30dp"
                         android:background="@color/divider_gray"
                         android:gravity="center">
 
@@ -223,27 +243,6 @@
                                 android:src="@drawable/button_plus_selector"/>
                         </LinearLayout>
                     </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/package_type"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"/>
-
-                    <RelativeLayout
-                        android:layout_width="351dp"
-                        android:layout_height="51dp"
-                        android:background="@drawable/edit_text_background_selector">
-
-                        <Spinner
-                            android:id="@+id/package_type_spinner"
-                            android:layout_width="349dp"
-                            android:layout_height="41dp"
-                            android:dropDownVerticalOffset="45dp"/>
-                    </RelativeLayout>
 
                 </LinearLayout>
 

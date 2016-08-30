@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompatBase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -23,9 +22,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 
-/**
- * Created by Sergey on 17/08/2016.
- */
 public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener {
 
     private static final String SELECTED_LANGUAGE = "selected_language";
@@ -195,7 +191,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_save: {
-                if (mPollingFrequencyEditText.getText().toString() != null && !mPollingFrequencyEditText.getText().toString().equals("") && mRequestTimeoutEditText.getText().toString() != null && !mRequestTimeoutEditText.getText().toString().equals("")) {
+                if (mPollingFrequencyEditText.getText() != null && !mPollingFrequencyEditText.getText().toString().equals("") && mRequestTimeoutEditText.getText() != null && !mRequestTimeoutEditText.getText().toString().equals("")) {
                     checkDataAndSave();
                 }
                 break;

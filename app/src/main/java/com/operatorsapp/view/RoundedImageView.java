@@ -1,5 +1,6 @@
 package com.operatorsapp.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,6 +31,7 @@ public class RoundedImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -43,10 +45,10 @@ public class RoundedImageView extends ImageView {
             return;
         }
 
-        Bitmap b = null;
+        Bitmap b;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && drawable instanceof VectorDrawable) {
-            ((VectorDrawable) drawable).draw(canvas);
+            drawable.draw(canvas);
             b = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas();
             c.setBitmap(b);
@@ -57,7 +59,7 @@ public class RoundedImageView extends ImageView {
 
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
-        int w = getWidth(), h = getHeight();
+        int w = getWidth();/*, h = getHeight();*/
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
         canvas.drawBitmap(roundBitmap, 0, 0, null);
@@ -73,7 +75,7 @@ public class RoundedImageView extends ImageView {
                 sbmp.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
-        final int color = 0xffa19774;
+//        final int color = 0xffa19774;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
 

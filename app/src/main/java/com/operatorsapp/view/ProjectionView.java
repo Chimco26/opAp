@@ -13,9 +13,6 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
-/**
- * Created by Admin on 02-Aug-16.
- */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ProjectionView extends View {
 
@@ -74,14 +71,16 @@ public class ProjectionView extends View {
             mCurrentQuantity = Bitmap.createScaledBitmap(mCurrentQuantity, (int) currentWidth, mCurrentQuantity.getHeight(), false);
         }
         if (mCurrentQuantity != null) {
-            mProjectionQuantity = Bitmap.createScaledBitmap(mProjectionQuantity, (int) projectionWidth, mProjectionQuantity.getHeight(), false);
+            if (mProjectionQuantity != null) {
+                mProjectionQuantity = Bitmap.createScaledBitmap(mProjectionQuantity, (int) projectionWidth, mProjectionQuantity.getHeight(), false);
+            }
         }
 
         forceRedraw();
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

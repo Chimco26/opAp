@@ -21,17 +21,12 @@ import com.operatorsapp.R;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class DialogFragment extends android.support.v4.app.DialogFragment {
     private final static String TYPE = "type";
     public final static String DIALOG = "dialog";
     private final static String EVENT = "event";
-    public static final int DAY_MILLIS = 86400000;
+//    public static final int DAY_MILLIS = 86400000;
     private OnDialogButtonsListener mListener;
     private boolean mIsStopDialog;
     private Event mEvent;
@@ -121,7 +116,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             view = inflater.inflate(R.layout.parameter_dialog, null);
 
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
-            title.setText(mEvent.getTitle() + " Alarm");
+            title.setText(new StringBuilder(mEvent.getTitle()).append(" Alarm"));
 
             TextView reason = (TextView) view.findViewById(R.id.dialog_reason);
             //todo

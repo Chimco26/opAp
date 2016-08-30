@@ -38,9 +38,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-/**
- * Created by Sergey on 14/08/2016.
- */
 public class ReportInventoryFragment extends Fragment implements View.OnClickListener {
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
@@ -56,7 +53,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     private TextView mButtonCancel;
     private ProgressBar mActiveJobsProgressBar;
     private OnCroutonRequestListener mOnCroutonRequestListener;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mUnitsCounter = 1;
     private Integer mJobId = null;
@@ -80,7 +76,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     public void onAttach(Context context) {
         super.onAttach(context);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
 
     }

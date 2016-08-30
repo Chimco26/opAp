@@ -20,9 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
@@ -34,9 +32,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-/**
- * Created by Sergey on 31/07/2016.
- */
 public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener {
 
     private static final String LOG_TAG = ReportRejectSelectParametersFragment.class.getSimpleName();
@@ -124,7 +119,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mUnitsEditText.requestFocus();
 
         if (mCurrentProductName != null) {
-            productNameTextView.setText(mCurrentProductName + ",");
+            productNameTextView.setText(new StringBuilder(mCurrentProductName).append(","));
         } else {
             productNameTextView.setText(getActivity().getString(R.string.dashes));
         }

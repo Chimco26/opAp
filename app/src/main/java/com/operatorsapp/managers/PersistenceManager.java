@@ -2,25 +2,24 @@ package com.operatorsapp.managers;
 
 import android.content.Context;
 
+import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
+import com.operators.infra.PersistenceManagerInterface;
+import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
+import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
-import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
+import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import com.app.operatorinfra.OperatorPersistenceManagerInterface;
-import com.operators.infra.PersistenceManagerInterface;
-import com.operators.jobsinfra.JobsPersistenceManagerInterface;
-import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -35,12 +34,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
-    private static final String PREF_SHIFT_FOR_MACHINE = "pref.PREF_SHIFT_FOR_MACHINE";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
-    private static final String PREF_OPERATORS_LIST = "pref.PREF_OPERATORS_LIST";
     private static final String PREF_SHIFT_LOG_STARTING_FROM = "pref.PREF_SHIFT_LOG_STARTING_FROM";
     private static final String PREF_MACHINE_DATA_STARTING_FROM = "pref.PREF_MACHINE_DATA_STARTING_FROM";
     private static final String PREF_FORCE_LOCAL = "pref.PREF_FORCE_LOCAL";
@@ -251,16 +248,5 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void setMachineDataStartingFrom(String startingFrom) {
         SecurePreferences.getInstance().setString(PREF_MACHINE_DATA_STARTING_FROM, startingFrom);
-    }
-
-    public long getShiftForMachine() {
-        String shiftForMachineString = SecurePreferences.getInstance().getString(PREF_SHIFT_FOR_MACHINE);
-        Type longType = new TypeToken<Long>() {
-        }.getType();
-        return mGson.fromJson(shiftForMachineString, longType);
-    }
-
-    public void setShiftForMachine(long shiftForMachine) {
-        SecurePreferences.getInstance().setString(PREF_SHIFT_FOR_MACHINE, mGson.toJson(shiftForMachine));
     }
 }

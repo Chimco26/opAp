@@ -42,14 +42,11 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
-/**
- * Created by Sergey on 08/08/2016.
- */
 public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
-    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
-    private static final String CURRENT_JOB_ID = "current_job_id";
+//    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
+//    private static final String CURRENT_JOB_ID = "current_job_id";
     private static final String END_TIME = "end_time";
     private static final String START_TIME = "start_time";
     private static final String DURATION = "duration";
@@ -62,17 +59,13 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private Integer mJobId = null;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private StopReasonsAdapter mStopReasonsAdapter;
 
     private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
 
     private Spinner mJobsSpinner;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private ProgressBar mActiveJobsProgressBar;
 
     public static ReportStopReasonFragment newInstance(String start, String end, long duration, int eventId) {
@@ -91,7 +84,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     public void onAttach(Context context) {
         super.onAttach(context);
         mGoToScreenListener = (GoToScreenListener) getActivity();
-        mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
@@ -128,7 +121,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_stop_screen);
         }
         else {
-            mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
             mRecyclerView.setLayoutManager(mLayoutManager);
             int spacing = 40;
 
@@ -150,7 +143,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             productTextView.setText("- -");
         }
         else {
-            productTextView.setText(getActivity().getString(R.string.stop) + TimeUtils.getTimeFromString(mStart) + ", Resume " + TimeUtils.getTimeFromString(mEnd));
+            productTextView.setText(new StringBuilder(getActivity().getString(R.string.stop)).append(TimeUtils.getTimeFromString(mStart)).append(", Resume ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
         durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
@@ -161,7 +154,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     }
 
     private void initStopReasons() {
-        mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
 
@@ -229,7 +222,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
         mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
         mActiveJobsListForMachineCore.getActiveJobsListForMachine();
     }

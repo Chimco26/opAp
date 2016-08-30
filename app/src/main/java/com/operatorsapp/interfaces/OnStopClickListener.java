@@ -1,8 +1,5 @@
 package com.operatorsapp.interfaces;
 
-/**
- * Created by Sergey on 10/08/2016.
- */
 public interface OnStopClickListener {
     void onStopClicked(int eventId,String startTime, String endTime, long duration);
 }
