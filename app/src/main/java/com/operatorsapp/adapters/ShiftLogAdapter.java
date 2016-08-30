@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -191,6 +192,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
+                    PersistenceManager.getInstance().saveShiftLogs(mEvents);
                 }
             });
         } else if (type == PARAMETER) {
@@ -254,6 +256,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
+                    PersistenceManager.getInstance().saveShiftLogs(mEvents);
                 }
             });
         }

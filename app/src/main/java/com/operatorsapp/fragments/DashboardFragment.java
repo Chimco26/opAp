@@ -114,6 +114,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mEventsList = PersistenceManager.getInstance().getShiftLogs();
         mIsOpen = false;
         // get screen parameters
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -548,7 +549,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mEventsQueue.addAll(events);
                 mEventsList.addAll(events);
             } else {
-
                 for (int i = 0; i < events.size(); i++) {
                     if (!isExists(events.get(i))) {
                         mEventsList.add(events.get(i));
@@ -556,6 +556,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 }
             }
+            //todo save shiftlogs
+            PersistenceManager.getInstance().saveShiftLogs(mEventsList);
             mNoNotificationsText.setVisibility(View.GONE);
 
             if (mShiftLogAdapter != null) {
@@ -576,7 +578,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 if (dialogFragment != null) {
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
-                    //todo   dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                  dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }
@@ -590,10 +592,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     @Override
     public void onShiftForMachineEnded() {
-        mEventsList.clear();
-        mEventsQueue.clear();
-        mNoData = true;
-        mNoNotificationsText.setVisibility(View.VISIBLE);
+//        mEventsList.clear();
+//        mEventsQueue.clear();
+//        mNoData = true;
+//        mNoNotificationsText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -601,12 +603,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (callType == CallType.Status) {
             clearStatusLayout();
         }
-        if (callType == CallType.ShiftLog) {
+       /* if (callType == CallType.ShiftLog) {
             if (mEventsList == null || mEventsList.size() == 0) {
                 mNoData = true;
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
-        }
+        }*/
         if (callType == CallType.MachineData) {
             if (mWidgets == null || mWidgets.size() == 0) {
                 mNoDataView.setVisibility(View.VISIBLE);

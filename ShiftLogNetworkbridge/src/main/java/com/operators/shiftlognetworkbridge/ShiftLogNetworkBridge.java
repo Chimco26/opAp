@@ -50,12 +50,12 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                         //todo not error
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
-                        shiftLogCoreCallback.onShiftLogFailed(errorObject);
+                  //      shiftLogCoreCallback.onShiftLogFailed(errorObject);
                     }
                 } else {
-                    ZLogger.d(LOG_TAG, "onRequest(), getShiftLog failed");
+                    ZLogger.d(LOG_TAG, "onRequest(), getShiftLog failed" + response.body().getErrorResponse().getErrorDesc() + " " + response.body().getErrorResponse().getErrorCode());
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    shiftLogCoreCallback.onShiftLogFailed(errorObject);
+              //      shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
             }
 

@@ -191,7 +191,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public ArrayList<Event> getShiftLogs() {
-        String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS);
+        String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
         Type listType = new TypeToken<ArrayList<Event>>() {
         }.getType();
 

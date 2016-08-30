@@ -47,12 +47,12 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                     } else {
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
-                        getMachineDataCallback.onGetMachineDataFailed(errorObject);
+//                        getMachineDataCallback.onGetMachineDataFailed(errorObject);
                     }
                 } else {
                     ZLogger.d(LOG_TAG, "onRequest(), getMachineData failed");
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    getMachineDataCallback.onGetMachineDataFailed(errorObject);
+//                    getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
             }
 
