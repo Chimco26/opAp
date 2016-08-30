@@ -140,7 +140,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             if (timeout >= 0 && timeUnit != null) {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-                        .addInterceptor(new RetrofitMockClient())
+//                        .addInterceptor(new RetrofitMockClient())
                         .connectTimeout(timeout, timeUnit)
                         .writeTimeout(timeout, timeUnit)
                         .readTimeout(timeout, timeUnit)
@@ -150,7 +150,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             else {
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
-                        .addInterceptor(new RetrofitMockClient())
+//                        .addInterceptor(new RetrofitMockClient())
                         .build();
             }
             mRetrofit = new Retrofit.Builder()

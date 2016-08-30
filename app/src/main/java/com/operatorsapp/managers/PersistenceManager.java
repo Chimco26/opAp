@@ -16,6 +16,7 @@ import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
+import com.operatorsapp.utils.TimeUtils;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.lang.reflect.Type;
@@ -75,8 +76,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getSiteUrl() {
         //TODO  url remove for production, need to be empty string
-//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
+//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
     }
 
     @Override
@@ -232,7 +233,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public String getShiftLogStartingFrom() {
-        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, null);
+        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 86400000, "yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override
@@ -242,7 +243,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public String getMachineDataStartingFrom() {
-        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, null);
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 86400000, "yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override

@@ -219,12 +219,12 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginFailed(final ErrorObjectInterface reason) {
                 dismissProgressDialog();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-//                    }
-//                });
+                    }
+                });
             }
         });
     }
@@ -247,12 +247,12 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onLoginFailed(final ErrorObjectInterface reason) {
                         dismissProgressDialog();
-//                        getActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
                                 ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-//                            }
-//                        });
+                            }
+                        });
                     }
                 });
     }

@@ -522,8 +522,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
-            long now = System.currentTimeMillis();
-            PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(now, "dd/MM/yyyy hh:mm"));
+            PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
@@ -539,10 +538,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
         if (events != null && events.size() > 0) {
-
-            long now = System.currentTimeMillis();
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(now, "dd/MM/yyyy hh:mm"));
-
+            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoData = false;
             for (Event event : events) {
                 event.setTimeOfAdded(System.currentTimeMillis());
@@ -580,7 +576,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 if (dialogFragment != null) {
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
-                 //todo   dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                    //todo   dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }
@@ -616,12 +612,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mNoDataView.setVisibility(View.VISIBLE);
             }
         }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-            }
-        });
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                }
+            });
+        }
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {

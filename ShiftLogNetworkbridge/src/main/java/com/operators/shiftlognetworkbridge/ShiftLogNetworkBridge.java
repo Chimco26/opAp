@@ -47,6 +47,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                         ZLogger.d(LOG_TAG, "onRequestSucceed(), " + events.size() + " events");
                         shiftLogCoreCallback.onShiftLogSucceeded(events);
                     } else {
+                        //todo not error
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
                         shiftLogCoreCallback.onShiftLogFailed(errorObject);

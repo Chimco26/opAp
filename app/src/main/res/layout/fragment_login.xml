@@ -90,7 +90,6 @@
                     android:hint="@string/login_fields_user_name_hint"
                     android:paddingLeft="14dp"
                     android:singleLine="true"
-                    android:text="falcore1"
                     android:textColorHint="@color/T4_color" />
 
 
@@ -111,7 +110,6 @@
                         android:paddingStart="14dp"
                         android:paddingEnd="40dp"
                         android:singleLine="true"
-                        android:text="mes123"
                         android:textColorHint="@color/T4_color" />
 
                     <ImageView
