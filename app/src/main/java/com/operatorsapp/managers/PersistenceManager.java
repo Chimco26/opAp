@@ -5,11 +5,13 @@ import android.content.Context;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
+import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
@@ -21,6 +23,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -36,6 +39,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
+    private static final String PREF_ARRAY_CHART_HISTORIC_DATA = "pref.PREF_ARRAY_CHART_HISTORIC_DATA";
     private static final String PREF_JOB_ID = "pref.PREF_JOB_ID";
     private static final String PREF_OPERATOR_ID = "pref.PREF_OPERATOR_ID";
     private static final String PREF_OPERATOR_NAME = "pref.PREF_OPERATOR_NAME";
@@ -76,8 +80,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getSiteUrl() {
         //TODO  url remove for production, need to be empty string
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
-//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
+//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
     }
 
     @Override
@@ -196,6 +200,18 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         }.getType();
 
         return mGson.fromJson(shiftLogsJsonString, listType);
+    }
+
+    public void saveChartHistoricData(ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> historicDatas) {
+        SecurePreferences.getInstance().setString(PREF_ARRAY_CHART_HISTORIC_DATA, mGson.toJson(historicDatas));
+    }
+
+    public ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> getChartHistoricData() {
+        String historicDatasString = SecurePreferences.getInstance().getString(PREF_ARRAY_CHART_HISTORIC_DATA, mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>>>() {
+        }.getType();
+
+        return mGson.fromJson(historicDatasString, listType);
     }
 
     @Override

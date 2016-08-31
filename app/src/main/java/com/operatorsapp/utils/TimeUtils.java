@@ -131,6 +131,23 @@ public class TimeUtils {
     }
 
     @SuppressLint("SimpleDateFormat")
+    public static String getDateForChart(String time) {
+
+        String out = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+        try {
+            Date date = dateFormat.parse(time);
+            out = dateFormat2.format(date);
+        } catch (ParseException ignored) {
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return out;
+    }
+
+    @SuppressLint("SimpleDateFormat")
     public static long getLongFromDateString(String date, String format) {
         //TODO replace format in server
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

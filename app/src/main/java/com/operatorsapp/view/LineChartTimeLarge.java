@@ -83,13 +83,14 @@ public class LineChartTimeLarge extends FrameLayout {
 
         String strManufacturer = android.os.Build.MANUFACTURER;
         if (strManufacturer.equals(SAMSUNG)) {
-            mChart.setViewPortOffsets(100f, 30f, 0f, 70f);
+            mChart.setViewPortOffsets(50f/*100f*/, -10f/*30f*/, 0f, 70f);
         } else {
             mChart.setViewPortOffsets(35f, 10f, 0f, 30f);
         }
 
 //        mChart.zoomIn();
-        mChart.zoom(1.5f, 1, 1.5f, 1);
+//        mChart.zoom(1.5f, 1, 1.5f, 1);
+        mChart.zoom(5, 3, 5, 3);
 
         setAxis(context, -10, -10, -10);
 
@@ -173,6 +174,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine2.setTextSize(18);
         limitLine2.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine2.setLineWidth(1f);
+        limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine2);
 
         LimitLine limitLine3 = new LimitLine(min, "Min.");
@@ -180,6 +182,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine3.setTextSize(18);
         limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setLineWidth(1f);
+        limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine3);
 
         LimitLine limitLine4 = new LimitLine(max, "Max.");
@@ -187,6 +190,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine4.setTextSize(18);
         limitLine4.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setLineWidth(1f);
+        limitLine4.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine4);
 
         YAxis rightAxis = mChart.getAxisRight();

@@ -77,7 +77,7 @@
             android:text="Min Value" />
 
         <TextView
-            android:id="@+id/dialog_min"
+            android:id="@+id/dialog_low"
             android:layout_width="match_parent"
             android:textColor="@color/dialog_text_gray"
             android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
             android:text="Max Value" />
 
         <TextView
-            android:id="@+id/dialog_max"
+            android:id="@+id/dialog_high"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/dialog_text_gray"

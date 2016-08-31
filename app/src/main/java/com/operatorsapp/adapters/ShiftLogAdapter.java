@@ -81,9 +81,11 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         private AutofitTextView mTitle;
         private ImageView mIcon;
+        private TextView mSubtitleText;
+        private TextView mSubTitleValue;
         private TextView mStandard;
-        private TextView mMin;
-        private TextView mMax;
+        private TextView mLow;
+        private TextView mHigh;
         private TextView mTime;
         private View mDivider;
         private LinearLayout mSubtitle;
@@ -93,9 +95,11 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             super(itemView);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
+            mSubtitleText = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_text);
+            mSubTitleValue = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_value);
             mStandard = (TextView) itemView.findViewById(R.id.shift_log_item_standard);
-            mMax = (TextView) itemView.findViewById(R.id.shift_log_item_max);
-            mMin = (TextView) itemView.findViewById(R.id.shift_log_item_min);
+            mHigh = (TextView) itemView.findViewById(R.id.shift_log_item_high);
+            mLow = (TextView) itemView.findViewById(R.id.shift_log_item_low);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
             mDivider = itemView.findViewById(R.id.shift_log_divider);
             mSubtitle = (LinearLayout) itemView.findViewById(R.id.shift_log_item_subtitle);
@@ -146,8 +150,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             }
             shiftLogStoppedViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
-            shiftLogStoppedViewHolder.mStart.setText(TimeUtils.getTimeFromString(event.getStartTime()));
-            shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getStartTime()));
+            shiftLogStoppedViewHolder.mStart.setText(TimeUtils.getTimeFromString(event.getTime()));
+            shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getTime()));
             shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEndTime()));
             shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEndTime()));
             shiftLogStoppedViewHolder.mDuration.setText(TimeUtils.getDurationTime(mContext, event.getDuration()));
@@ -176,7 +180,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                         shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
-                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getStartTime(), event.getEndTime(), event.getDuration());
+                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEndTime(), event.getDuration());
 
                         event.setTreated(true);
                     } else {
@@ -217,6 +221,11 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
+            shiftLogParameterViewHolder.mSubtitleText.setText(event.getSubtitleEname());
+            shiftLogParameterViewHolder.mSubTitleValue.setText(String.valueOf(event.getAlarmValue()));
+            shiftLogParameterViewHolder.mLow.setText(String.valueOf(event.getAlarmLValue()));
+            shiftLogParameterViewHolder.mHigh.setText(String.valueOf(event.getAlarmHValue()));
+            shiftLogParameterViewHolder.mStandard.setText(String.valueOf(event.getAlarmStandardValue()));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);

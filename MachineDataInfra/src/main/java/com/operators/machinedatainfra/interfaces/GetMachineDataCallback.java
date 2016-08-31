@@ -4,7 +4,6 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface GetMachineDataCallback<T> {
     void onGetMachineDataSucceeded(ArrayList<Widget> widgets);

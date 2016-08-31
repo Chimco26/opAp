@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -17,15 +16,14 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
 import com.operatorsapp.view.ProjectionViewEnd;
 import com.operatorsapp.view.ProjectionViewStart;
 import com.operatorsapp.view.RangeView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
@@ -74,7 +72,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     private class RangeViewHolder extends RecyclerView.ViewHolder {
 
-        private RelativeLayout mParent;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -90,7 +87,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         public RangeViewHolder(View itemView) {
             super(itemView);
 
-            mParent = (RelativeLayout) itemView.findViewById(R.id.range_widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
@@ -122,7 +118,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mGrayValueInEndChart;
         private LinearLayout mBluePlus;
         private TextView mMin;
-        //        private TextView mStandard;
         private TextView mMax;
 
         public ProjectionViewHolder(View itemView) {
@@ -142,7 +137,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             mGrayValueInEndChart = (TextView) itemView.findViewById(R.id.projection_widget_gray_value_in_end_chart);
             mBluePlus = (LinearLayout) itemView.findViewById(R.id.projection_widget_blue_plus);
             mMin = (TextView) itemView.findViewById(R.id.projection_widget_min);
-//            mStandard = (TextView) itemView.findViewById(R.id.projection_widget_standard);
             mMax = (TextView) itemView.findViewById(R.id.projection_widget_max);
         }
     }
@@ -201,15 +195,15 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
                 timeViewHolder.mTitle.setText(widget.getFieldName());
-                timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append((int) widget.getStandardValue()));
+                timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
                 if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
                     final String[] xValues = new String[widget.getMachineParamHistoricData().size()];
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
-                        xValues[i] = new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));
-                        Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue(), new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())));
+                        xValues[i] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());/*new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));*/
+                        Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue()/*, new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())*/);
 //                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - TEN_HOURS)) {
                         tenHoursValues.add(entry);
 //                        }
@@ -233,7 +227,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
                 rangeViewHolder.mTitle.setText(widget.getFieldName());
-                rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append((int) widget.getStandardValue()));
+                rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
                 rangeViewHolder.mCurrentValue.setText(widget.getCurrentValue());
                 if (widget.isOutOfRange()) {
@@ -256,16 +250,16 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
                     setRangeData(widget, rangeViewHolder);
                 }
-                rangeViewHolder.mMin.setText(String.valueOf((int) widget.getLowLimit()));
-                rangeViewHolder.mStandard.setText(String.valueOf((int) widget.getStandardValue()));
-                rangeViewHolder.mMax.setText(String.valueOf((int) widget.getHighLimit()));
+                rangeViewHolder.mMin.setText(String.valueOf(widget.getLowLimit()));
+                rangeViewHolder.mStandard.setText(String.valueOf(widget.getStandardValue()));
+                rangeViewHolder.mMax.setText(String.valueOf(widget.getHighLimit()));
                 break;
 
             case PROJECTION:
                 final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
                 projectionViewHolder.mRangeView.setCurrentLine(false);
                 float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
-                projectionViewHolder.mCurrentValueInChart.setText(valueInK((int) currentFloat));
+                projectionViewHolder.mCurrentValueInChart.setText(valueInK(currentFloat));
                 if (currentFloat >= widget.getTarget()) {
                     projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
@@ -301,7 +295,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     mProjectionCapsuleWidth = projectionViewHolder.mCapsule.getWidth();
                     setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                 }
-                projectionViewHolder.mMin.setText(valueInK((int) widget.getLowLimit()));
+                projectionViewHolder.mMin.setText(valueInK(widget.getLowLimit()));
 //                projectionViewHolder.mStandard.setText(valueInK((int) widget.getStandardValue()));
                 projectionViewHolder.mMax.setText(valueInK(widget.getTarget()));
                 break;
@@ -311,8 +305,8 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat) {
         projectionViewHolder.mTitle.setText(widget.getFieldName());
-        projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(valueInK((int) widget.getStandardValue())));
-        projectionViewHolder.mValue.setText(valueInK((int) finalCurrentFloat));
+        projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
+        projectionViewHolder.mValue.setText(valueInK(finalCurrentFloat));
         if (widget.getTarget() > widget.getLowLimit()) {
             float scaleValue = (widget.getTarget() - widget.getLowLimit());
             float currentValue = finalCurrentFloat - widget.getLowLimit();
@@ -363,10 +357,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressLint("DefaultLocale")
-    private String valueInK(int value) {
+    private String valueInK(float value) {
         String valueString = String.valueOf(value);
         if (value >= 1000) {
-            float valueFloat = (float) value / 1000;
+            float valueFloat = value / 1000;
             if (value % 100 == 0) {
                 valueString = String.format("%.1f", valueFloat);
 //                valueString = String.valueOf(value / 1000);

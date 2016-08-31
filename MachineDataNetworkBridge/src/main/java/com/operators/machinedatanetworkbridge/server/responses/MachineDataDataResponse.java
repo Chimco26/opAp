@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import com.operators.machinedatainfra.models.Widget;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MachineDataDataResponse extends ErrorBaseResponse {
 

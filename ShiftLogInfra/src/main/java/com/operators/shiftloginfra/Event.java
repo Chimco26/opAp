@@ -26,6 +26,16 @@ public class Event {
     private String mEventGroupLname;
     @SerializedName("EventID")
     private int mEventID;
+    @SerializedName("AlarmDismissed")
+    private boolean mAlarmDismissed;
+    @SerializedName("AlarmHValue")
+    private float mAlarmHValue;
+    @SerializedName("AlarmLValue")
+    private float mAlarmLValue;
+    @SerializedName("AlarmStandardValue")
+    private float mAlarmStandardValue;
+    @SerializedName("AlarmValue")
+    private float mAlarmValue;
 
     private long mTimeOfAdded;
 
@@ -39,20 +49,16 @@ public class Event {
         return mEventTitle;
     }
 
-    public String getSubtitleE() {
+    public String getSubtitleEname() {
         return mEventSubTitleEname;
     }
 
-    public String getSubtitleL() {
+    public String getSubtitleLname() {
         return mEventSubTitleLname;
     }
 
     public String getTime() {
         return mEventTime;
-    }
-
-    public String getStartTime() {
-        return mEventEndTime /*mEventStartTime*/;
     }
 
     public String getEndTime() {
@@ -91,4 +97,23 @@ public class Event {
         return mEventID;
     }
 
+    public boolean isAlarmDismissed() {
+        return mAlarmDismissed;
+    }
+
+    public float getAlarmHValue() {
+        return mAlarmHValue;
+    }
+
+    public float getAlarmLValue() {
+        return mAlarmLValue;
+    }
+
+    public float getAlarmStandardValue() {
+        return mAlarmStandardValue;
+    }
+
+    public float getAlarmValue() {
+        return mAlarmValue;
+    }
 }

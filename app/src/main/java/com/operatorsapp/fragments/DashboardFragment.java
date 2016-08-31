@@ -60,6 +60,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener {
 
@@ -207,6 +208,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
 
+        if (mEventsList.size() > 0) {
+            mNoData = false;
+            mNoNotificationsText.setVisibility(View.GONE);
+        } else {
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+        }
 
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
         setActionBar();
@@ -469,7 +477,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             Event event = mEventsQueue.pop();
 
             if (event.getEventGroupID() == 6) {
-                if (event.getEndTime() == null || event.getStartTime() == null || event.getEndTime().equals("") || event.getStartTime().equals("")) {
+                if (event.getEndTime() == null || event.getTime() == null || event.getEndTime().equals("") || event.getTime().equals("")) {
                     openStopReportScreen(event.getEventID(), null, null, event.getDuration());
                 } else {
                     dialogFragment = DialogFragment.newInstance(event, true);
@@ -523,6 +531,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
+            saveAndRestoreChartData(widgetList);
+
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
             if (mWidgetAdapter != null) {
@@ -534,6 +544,46 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         } else {
             mNoDataView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
+        //restore historic data of chart
+        ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
+        for (Widget widget : widgetList) {
+            // if have chart widget (field type 3)
+            if (widget.getFieldType() == 3) {
+                // if have historic in prefs
+                if (prefsHistoric.size() > 0) {
+                    for (HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric) {
+                        // if get new chart data
+                        if (widget.getMachineParamHistoricData().size() > 0) {
+                            // if is old widget
+                            if (hashMap.containsKey(String.valueOf(widget.getID()))) {
+                                //add new data to prefs
+                                hashMap.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
+                                widget.getMachineParamHistoricData().clear();
+                                //set all data (old + new) to widget
+                                widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                            } else {
+                                // if is new widget,  save to prefs
+                                HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
+                                historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
+                                prefsHistoric.add(historicById);
+                            }
+                        } else {
+                            // if no new data,  set old data to widget
+                            widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                        }
+                    }
+                } else {
+                    // if is the firs chart data,  save to prefs
+                    HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
+                    historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
+                    prefsHistoric.add(historicById);
+                }
+            }
+        }
+        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoric);
     }
 
     @Override
@@ -556,7 +606,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 }
             }
-            //todo save shiftlogs
             PersistenceManager.getInstance().saveShiftLogs(mEventsList);
             mNoNotificationsText.setVisibility(View.GONE);
 
@@ -578,7 +627,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 if (dialogFragment != null) {
                     dialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     dialogFragment.setCancelable(false);
-                  dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                    dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }
@@ -592,10 +641,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     @Override
     public void onShiftForMachineEnded() {
-//        mEventsList.clear();
-//        mEventsQueue.clear();
-//        mNoData = true;
-//        mNoNotificationsText.setVisibility(View.VISIBLE);
+        mEventsList.clear();
+        mEventsQueue.clear();
+        PersistenceManager.getInstance().saveShiftLogs(mEventsList);
+        mNoData = true;
+        mNoNotificationsText.setVisibility(View.VISIBLE);
     }
 
     @Override

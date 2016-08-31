@@ -2,6 +2,7 @@ package com.operators.machinedatainfra.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Widget {
@@ -33,33 +34,31 @@ public class Widget {
     private boolean mIsOutOfRange;
 
     @SerializedName("MachineParamHistoricData")
-    private List<HistoricData> mMachineParamHistoricData;
+    private ArrayList<HistoricData> mMachineParamHistoricData;
 
     public class HistoricData {
+        @SerializedName("CurrentValue")
+        private float mCurrentValue;
         @SerializedName("Time")
-        private Long mTime;
+        private String mTime;
 
-        @SerializedName("Value")
-        private Integer mValue;
+        public float getValue() {
+            return mCurrentValue;
+        }
 
-        public Long getTime() {
+        public String getTime() {
             return mTime;
         }
-
-        public int getValue() {
-            return mValue;
-        }
-
     }
 
     @SerializedName("ID")
     private long mID;
 
     @SerializedName("Projection")
-    private int mProjection;
+    private Float mProjection;
 
     @SerializedName("Target")
-    private int mTarget;
+    private Float mTarget;
 
 
     public String getCurrentValue() {
@@ -78,25 +77,25 @@ public class Widget {
         return mFieldName;
     }
 
-    public int getFieldType() {
+    public Integer getFieldType() {
         return mFieldType;
     }
 
-    public float getHighLimit() {
+    public Float getHighLimit() {
         if (mHighLimit == null) {
             mHighLimit = 0f;
         }
         return mHighLimit;
     }
 
-    public float getLowLimit() {
+    public Float getLowLimit() {
         if (mLowLimit == null) {
             mLowLimit = 0f;
         }
         return mLowLimit;
     }
 
-    public float getStandardValue() {
+    public Float getStandardValue() {
         if (mStandardValue == null) {
             mStandardValue = 0f;
         }
@@ -107,7 +106,7 @@ public class Widget {
         return mIsOutOfRange;
     }
 
-    public List<HistoricData> getMachineParamHistoricData() {
+    public ArrayList<HistoricData> getMachineParamHistoricData() {
         return mMachineParamHistoricData;
     }
 
@@ -115,11 +114,17 @@ public class Widget {
         return mID;
     }
 
-    public int getProjection() {
+    public Float getProjection() {
+        if (mProjection == null) {
+            mProjection = 0f;
+        }
         return mProjection;
     }
 
-    public int getTarget() {
+    public Float getTarget() {
+        if (mTarget == null) {
+            mTarget = 0f;
+        }
         return mTarget;
     }
 }

@@ -82,8 +82,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             title.setText(mEvent.getTitle());
 
             TextView start = (TextView) view.findViewById(R.id.dialog_start);
-            if (mEvent.getStartTime() != null && !mEvent.getStartTime().equals("")) {
-                start.setText(TimeUtils.getTimeFromString(mEvent.getStartTime()));
+            if (mEvent.getTime() != null && !mEvent.getTime().equals("")) {
+                start.setText(TimeUtils.getTimeFromString(mEvent.getTime()));
             }
             TextView end = (TextView) view.findViewById(R.id.dialog_end);
             if (mEvent.getEndTime() != null && !mEvent.getEndTime().equals("")) {
@@ -108,7 +108,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onReportClick(mEvent.getEventID(), mEvent.getStartTime(), mEvent.getEndTime(), mEvent.getDuration());
+                        mListener.onReportClick(mEvent.getEventID(), mEvent.getTime(), mEvent.getEndTime(), mEvent.getDuration());
                     }
                 }
             });
@@ -116,27 +116,22 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             view = inflater.inflate(R.layout.parameter_dialog, null);
 
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
-            title.setText(new StringBuilder(mEvent.getTitle()).append(" Alarm"));
+            title.setText(new StringBuilder(mEvent.getSubtitleLname()).append(" Alarm"));
 
             TextView reason = (TextView) view.findViewById(R.id.dialog_reason);
-            //todo
             reason.setText(mEvent.getTitle());
 
             TextView reasonVal = (TextView) view.findViewById(R.id.dialog_reason_val);
-            //todo
-            reasonVal.setText("--");
+            reasonVal.setText(String.valueOf(mEvent.getAlarmValue()));
 
             TextView standard = (TextView) view.findViewById(R.id.dialog_standard);
-            //todo
-            standard.setText("--");
+            standard.setText(String.valueOf(mEvent.getAlarmStandardValue()));
 
-            TextView min = (TextView) view.findViewById(R.id.dialog_min);
-            //todo
-            min.setText("--");
+            TextView low = (TextView) view.findViewById(R.id.dialog_low);
+            low.setText(String.valueOf(mEvent.getAlarmLValue()));
 
-            TextView max = (TextView) view.findViewById(R.id.dialog_max);
-            //todo
-            max.setText("--");
+            TextView high = (TextView) view.findViewById(R.id.dialog_high);
+            high.setText(String.valueOf(mEvent.getAlarmHValue()));
 
             TextView dismiss = (TextView) view.findViewById(R.id.dialog_dismiss);
             dismiss.setOnClickListener(new View.OnClickListener() {
