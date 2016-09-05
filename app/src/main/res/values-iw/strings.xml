@@ -1,0 +1,148 @@
+<resources>
+    <string name="app_name">operatorsApp</string>
+
+    <!-- General -->
+    <string name="no_communication">No communication</string>
+    <string name="pee_value_null">--</string>
+    <string name="default_empty_field">--</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Login screen -->
+    <string name="link_machine">Link Machine</string>
+    <string name="screen_title">LeaderMES</string>
+    <string name="login_fields_error">All fields need to be filled up</string>
+    <string name="login">Log In</string>
+    <string name="login_screen_save">שמור</string>
+    <string name="login_fields_factory_name_hint">Factory Name</string>
+    <string name="login_fields_factory_url_hint">Factory URL</string>
+    <string name="login_fields_user_name_hint">User Name</string>
+    <string name="login_fields_password_hint">Password</string>
+    <string name="login_dialog_dismiss">DISMISS</string>
+    <string name="login_dialog_dismiss_all">DISMISS FOR SHIFT</string>
+    <string name="network_error">Network Error</string>
+    <string name="credentials_error">Credentials error</string>
+    <string name="url_error">Site URL not correct</string>
+    <string name="could_not_log_in">Could not log in -</string>
+    <string name="could_not_get_data">Could not get data -</string>
+    <string name="could_not_reach_server_error">Error - could not reach server</string>
+    <string name="unrecognized_operator">Unrecognized operator</string>
+
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">Link Machine</string>
+
+    <string name="done">DONE</string>
+    <string name="add_another"></string>
+    <string name="ok">OK</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="go">Go</string>
+    <string name="machine_id_name">Machine ID Name</string>
+    <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
+    <string name="no_notifications">No Notifications</string>
+    <string name="no_data">No Data</string>
+    <string name="error_rest">Exception in Rest service</string>
+    <string name="jobs_actions">פקודות עבודה</string>
+    <string name="job_id">Job ID</string>
+    <string name="product_name">Product Name</string>
+    <string name="erp">ERP</string>
+    <string name="planned_start">Planned Start</string>
+    <string name="number_of_units">Number Of Units</string>
+    <string name="new_job">עבודה חדשה</string>
+    <string name="new_job_details">New job details</string>
+    <string name="product_id">Product id</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">Quantity</string>
+    <string name="activate_new_job">Activate</string>
+    <string name="could_not_retrieve_job_list">Could not retrieve job list</string>
+    <string name="product">מוצר</string>
+    <string name="id">ID -</string>
+    <string name="job">עבודה</string>
+    <string name="shift">משמרת</string>
+    <string name="machine_id">מזהה מכונה</string>
+    <string name="machine_status">מצב מכונה</string>
+    <string name="operator_id">Operator Id</string>
+    <string name="operator_name">Operator name</string>
+
+    <string name="operator_sign_in">Operator\nSign In</string>
+    <string name="operator_sign_in_action_bar">כניסת מפעיל</string>
+    <string name="cancel">ביטול</string>
+    <string name="retry">Retry</string>
+    <string name="end">End</string>
+    <string name="start">Start</string>
+    <string name="duration">משך</string>
+    <string name="report">דיווח</string>
+    <string name="stop_event">Stop Event</string>
+    <string name="enter_with_your_id">Enter With\nYour ID</string>
+    <string name="report_rejects">Report Rejects</string>
+    <string name="reject_reason">Reject reason</string>
+    <string name="cause">Cause</string>
+    <string name="next">Next</string>
+    <string name="units">Units</string>
+    <string name="weight">Weight</string>
+    <string name="material_weight_alarm">Material Weight Alarm</string>
+    <string name="dashes">- -</string>
+    <string name="no_reasons">No reports are available</string>
+    <string name="report_stop_event_reason">Report Stop Event Reason</string>
+    <string name="report_stop_reason">Report Stop\nReason</string>
+    <string name="report_reject_nreason">Report Reject\nReason</string>
+    <string name="stop">"Stop "</string>
+    <string name="report_cycle_nunits">Report Cycle\nUnits</string>
+    <string name="report_cycle_units">Report Cycle Units</string>
+    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
+    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="package_type">Package Type</string>
+    <string name="settings">הגדרות</string>
+    <string name="operator_app_settings">Operator\nApp\nSettings</string>
+    <string name="language">שפה</string>
+    <string name="factory_sign_in">כניסה למפעל</string>
+    <string name="change">שנה</string>
+    <string name="advanced_settings">הגדרות מתקדמות</string>
+    <string name="refresh_reporting_data">רענן נתוני דיווח</string>
+    <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
+    <string name="polling_frequency">Polling frequency</string>
+    <string name="request_timeout">Request timeout</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
+    <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
+    <string name="refreshed">refreshed</string>
+    <string name="one">1</string>
+    <string name="end_">סיום: </string>
+    <string name="start_">התחלה: </string>
+    <string name="chart_min_">מינימום: </string>
+    <string name="chart_standard_">סטנדרט: </string>
+    <string name="chart_max_">מקסימום: </string>
+    <string name="chart_space">&#160;</string>
+    <string name="standard">סטנדרט&#160;</string>
+
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+    </array>
+
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+    </array>
+    <array name="jobs_spinner_array">
+        <item>עבודה חדשה</item>
+        <item>Report Rejects</item>
+        <item>Report Cycle Units</item>
+        <item>Report Production</item>
+    </array>
+
+    <plurals name="days">
+        <item quantity="one">%d יום</item>
+        <item quantity="other">%d ימים</item>
+        <item quantity="many">%d ימים</item>
+        <item quantity="two">יומיים</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="one">שעה</item>
+        <item quantity="other">שעות</item>
+        <item quantity="many">שעות</item>
+        <item quantity="two">שעות</item>
+    </plurals>
+    <string name="switch_user">שנה משתמש</string>
+
+</resources>

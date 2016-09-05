@@ -1,0 +1,164 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layouts"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/C2">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        tools:context="com.leadermes.emerald.fragments.LoginFragment">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/FontStyle_T121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:text="Welcome"
+                android:textSize="50dp" />
+
+            <TextView
+                style="@style/FontStyle_T120"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:text="Log In To \nYour Factory"
+                android:textSize="40dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="54dp"
+            android:layout_marginTop="45dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="43dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:context="com.leadermes.emerald.fragments.LoginFragment">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/factory_url"
+                    style="@style/FontStyle_T6"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="12.2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_background_selector"
+                    android:hint="@string/login_fields_factory_url_hint"
+                    android:inputType="textUri"
+                    android:paddingStart="14dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/T4_color"
+                    tools:ignore="NestedWeights,RtlSymmetry" />
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_name"
+                    style="@style/FontStyle_T6"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="12.2dp"
+                    android:layout_marginTop="12.2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_background_selector"
+                    android:hint="@string/login_fields_user_name_hint"
+                    android:paddingLeft="14dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/T4_color" />
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="12.2dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        style="@style/FontStyle_T6"
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edit_text_background_selector"
+                        android:hint="@string/login_fields_password_hint"
+                        android:inputType="textPassword"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="40dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/T4_color" />
+
+                    <ImageView
+                        android:id="@+id/show_hide_pass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingStart="10dp"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:src="@drawable/icn_password_disabled" />
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/loginBtn"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="27.8dp">
+
+                <ImageView
+                    android:id="@+id/loginBtn_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_bg_disabled" />
+
+                <TextView
+                    style="@style/FontStyle_T9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:text="@string/login"
+                    android:textColor="@color/white"
+                    android:textSize="25dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_factory" />
+</FrameLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/jobs_list_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/error_job_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_cloud" />
+
+            <TextView
+                android:id="@+id/job_list_getting_error_text_view"
+                style="@style/FontStyle_T7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="40dp"
+                android:text="@string/could_not_retrieve_job_list"
+                android:textColor="@color/could_not_retreive"
+                android:textSize="50sp"
+                />
+
+            <Button
+                android:id="@+id/button_retry"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/buttons_selector"
+                android:gravity="center"
+                android:text="@string/retry"
+                android:textAllCaps="false"
+                android:textColor="@drawable/button_text_color_selector"
+                android:textSize="22sp">
+
+            </Button>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/rectangle_11_copy_2"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/first_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_weight="0.5"
+                android:gravity="start"
+                android:text="@string/dashes"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/second_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="start"
+                android:text="@string/dashes"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/third_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:gravity="start"
+                android:text="@string/dashes"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/fourth_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:gravity="start"
+                android:text="@string/dashes"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/fifth_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.1"
+                android:gravity="start"
+                android:text="@string/dashes"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/status_bar"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/job_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

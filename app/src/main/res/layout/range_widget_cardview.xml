@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/range_widget_parent_layout"
+    android:layout_width="345dp"
+    android:layout_height="230dp"
+    android:background="@drawable/combined_shape"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/range_widget_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Cycle weight"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                autofit:minTextSize="20sp" />
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/range_widget_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Standard 19"
+                android:textSize="20sp"
+                autofit:minTextSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/range_widget_current_value"
+            style="@style/FontStyle_T11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="0dp"
+            android:text="17"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/C16"
+            android:textSize="58dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        android:id="@+id/range_widget_capsule_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider">
+
+        <View
+            android:id="@+id/range_widget_scala_size"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="30dp" />
+
+        <View
+            android:id="@+id/range_widget_oval"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/capsule_oval" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_alignStart="@id/range_widget_oval"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/divider_gray" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@id/range_widget_oval"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/divider_gray" />
+
+        <com.operatorsapp.view.RangeView
+            android:id="@+id/range_widget_range_view_blue"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="30dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/range_widget_range_view_blue"
+            android:layout_marginEnd="35dp"
+            android:layout_marginStart="40dp">
+
+            <TextView
+                android:id="@+id/range_widget_current_value_in_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:text="15"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <com.operatorsapp.view.RangeView
+            android:id="@+id/range_widget_range_view_red"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/range_widget_range_view_red"
+            android:layout_marginStart="23dp"
+            android:layout_marginEnd="23dp">
+
+            <ImageView
+                android:id="@+id/range_widget_red_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_exclamation_mark" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginStart="43dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/range_widget_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="15"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/range_widget_standard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="19"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/range_widget_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="22"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
