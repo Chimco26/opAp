@@ -41,6 +41,16 @@ public class Event {
 
     private boolean mTreated;
 
+    private boolean mIsDismiss;
+
+    public boolean isIsDismiss() {
+        return mIsDismiss;
+    }
+
+    public void setIsDismiss(boolean mIsDismiss) {
+        this.mIsDismiss = mIsDismiss;
+    }
+
     public int getPriority() {
         return mPriority;
     }

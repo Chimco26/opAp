@@ -324,8 +324,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         if (mEventsList != null && mEventsList.size() > 0) {
             for (Event event : mEventsQueue) {
-                if (!event.isAlarmDismissed()) {
-                    event.setAlarmDismissed(true);
+                if (!event.isIsDismiss()) {
                     mEventsQueue.add(event);
                 }
             }
@@ -492,7 +491,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private void openNextDialog() {
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             Event event = mEventsQueue.pop();
-            event.setAlarmDismissed(true);
+//            event.setAlarmDismissed(true);
+            event.setIsDismiss(true);
 
             if (event.getEventGroupID() == 6) {
                 if (event.getEndTime() == null || event.getTime() == null || event.getEndTime().equals("") || event.getTime().equals("")) {
@@ -517,7 +517,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         dialog.dismiss();
         for (Event event : mEventsQueue) {
             if (event.getEventID() == eventId) {
-                event.setAlarmDismissed(true);
+//                event.setAlarmDismissed(true);
+                event.setIsDismiss(true);
                 mEventsQueue.remove(event);
             }
         }
@@ -614,16 +615,17 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
 
             if (mEventsList.size() == 0) {
-                for (Event event : mEventsQueue) {
+                mEventsList.addAll(events);
+                mEventsQueue.addAll(events);
+                /*for (Event event : mEventsQueue) {
                     if (!event.isAlarmDismissed()) {
-                        event.setAlarmDismissed(true);
                         mEventsList.add(event);
                         mEventsQueue.add(event);
                     }
-                }
+                }*/
             } else {
                 for (int i = 0; i < events.size(); i++) {
-                    if (!isExists(events.get(i)) && !events.get(i).isAlarmDismissed()) {
+                    if (!isExists(events.get(i)) /*&& !events.get(i).isAlarmDismissed()*/) {
                         mEventsList.add(events.get(i));
                     }
 
