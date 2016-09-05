@@ -104,12 +104,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_multichoice_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_multichoice_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogNetworkbridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_radio.xml",

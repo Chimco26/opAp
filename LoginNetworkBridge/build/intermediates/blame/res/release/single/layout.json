@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_title_item.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_bar_title_item.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_media.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_bar_title_item.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_bar_title_item.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_expanded_menu_layout.xml",

@@ -2,7 +2,7 @@ package com.operatorsapp.fragments.interfaces;
 
 import com.operators.shiftlogcore.ShiftLogCore;
 
-public interface DialogsShiftLogListener {
+interface DialogsShiftLogListener {
 
     ShiftLogCore getShiftLogCore();
 }

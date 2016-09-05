@@ -32,12 +32,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_textfield_search_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_dialog_material_background.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_dialog_material_background.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_ratingbar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_dialog_material_background.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_dialog_material_background.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\abc_btn_radio_material.xml",

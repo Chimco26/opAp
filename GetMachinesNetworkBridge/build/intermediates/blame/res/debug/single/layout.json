@@ -44,12 +44,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_select_dialog_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",

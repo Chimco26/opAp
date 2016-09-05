@@ -96,16 +96,16 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple.xml"
     },
     {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_big_media.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_template_big_media.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_radio.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_list_menu_item_radio.xml"
-    },
-    {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_header_item_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_template_lines.xml",
@@ -116,12 +116,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_singlechoice_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_cancel_action.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_cancel_action.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_checkbox.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\notification_media_cancel_action.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_media_cancel_action.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_simple_overlay_action_mode.xml",

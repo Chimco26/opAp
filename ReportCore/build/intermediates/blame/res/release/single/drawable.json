@@ -112,12 +112,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_edit_text_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_indicator_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_indicator_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_indicator_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_holo_dark.xml",
