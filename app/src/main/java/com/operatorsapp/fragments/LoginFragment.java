@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -115,7 +116,20 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        mLoginButton = (RelativeLayout) rootView.findViewById(R.id.loginBtn);
+
+        setActionBar();
+
+        if (PersistenceManager.getInstance().isSelectedMachine()) {
+            doSilentLogin();
+        }
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLoginButton = (RelativeLayout) view.findViewById(R.id.loginBtn);
         mLoginButton.setEnabled(false);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,13 +140,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        setActionBar();
-
-        if (PersistenceManager.getInstance().isSelectedMachine()) {
-            doSilentLogin();
-        }
-
-        return rootView;
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -202,6 +209,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void tryToLogin() {
+        mNavigationCallback.isTryToLogin(true);
         ProgressDialogManager.show(getActivity());
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString().toLowerCase();
@@ -214,23 +222,22 @@ public class LoginFragment extends Fragment {
                 if (mNavigationCallback != null) {
                     mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
                 }
+                mNavigationCallback.isTryToLogin(false);
             }
 
             @Override
             public void onLoginFailed(final ErrorObjectInterface reason) {
                 dismissProgressDialog();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-                    }
-                });
+                mCroutonCallback.onHideConnectivityCroutonRequest();
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                mNavigationCallback.isTryToLogin(false);
             }
         });
     }
 
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
+        mNavigationCallback.isTryToLogin(true);
         ProgressDialogManager.show(getActivity());
         LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(),
                 PersistenceManager.getInstance().getUserName(),
@@ -242,17 +249,15 @@ public class LoginFragment extends Fragment {
                         if (mNavigationCallback != null) {
                             mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
                         }
+                        mNavigationCallback.isTryToLogin(false);
                     }
 
                     @Override
                     public void onLoginFailed(final ErrorObjectInterface reason) {
                         dismissProgressDialog();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-                            }
-                        });
+                        mCroutonCallback.onHideConnectivityCroutonRequest();
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                        mNavigationCallback.isTryToLogin(false);
                     }
                 });
     }

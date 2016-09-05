@@ -10,4 +10,6 @@ public interface GoToScreenListener {
     void goToFragment(Fragment fragment, boolean addToBackStack);
 
     void goToDashboardActivity(int machine);
+
+    void isTryToLogin(boolean isTryToLogin);
 }

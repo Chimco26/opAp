@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -91,6 +92,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
+    private DashboardFragment mDashboardFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +117,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         shiftLogNetworkBridge.inject(NetworkManager.getInstance());
         mShiftLogCore = new ShiftLogCore(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
+        mDashboardFragment = DashboardFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, DashboardFragment.newInstance()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        if (mDashboardFragment != null) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mDashboardFragment).commit();
+        }
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -229,8 +241,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mShiftLogCore.getShiftForMachine(new ShiftForMachineUICallback() {
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
-                    int durationOfShift = (int) (System.currentTimeMillis() - (TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()));
-//                int durationOfShift = 60000 * 1;
+                int durationOfShift = (int) (System.currentTimeMillis() - (TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()));
+                durationOfShift = 60000;
                 startShiftTimer(durationOfShift);
                 shiftLogStartPolling();
             }
@@ -352,6 +364,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToDashboardActivity(int machine) {
+
+    }
+
+    @Override
+    public void isTryToLogin(boolean isTryToLogin) {
 
     }
 

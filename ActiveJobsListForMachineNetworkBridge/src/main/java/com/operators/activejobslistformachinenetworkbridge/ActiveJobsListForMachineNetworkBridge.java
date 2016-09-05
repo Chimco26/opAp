@@ -41,9 +41,16 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                     if (response.isSuccessful()) {
                         ActiveJobsListForMachine activeJobsListForMachine = response.body().getActiveJobsListForMachine();
                         if (callback != null) {
-                            callback.onGetActiveJobsListForMachineSuccess(activeJobsListForMachine);
+                            if (activeJobsListForMachine != null && activeJobsListForMachine.getActiveJobs().size() > 0) {
+                                callback.onGetActiveJobsListForMachineSuccess(activeJobsListForMachine);
+                            } else {
+                                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
+                                callback.onGetActiveJobsListForMachineFailed(errorObject);
+                            }
                         } else {
                             Log.w(LOG_TAG, "getActiveJobsForMachine() callback is null");
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
+                            callback.onGetActiveJobsListForMachineFailed(errorObject);
                         }
                     } else {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());

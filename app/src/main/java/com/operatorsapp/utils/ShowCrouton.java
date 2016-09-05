@@ -3,6 +3,7 @@ package com.operatorsapp.utils;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
+import android.view.View;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.loginnetworkbridge.server.ErrorObject;

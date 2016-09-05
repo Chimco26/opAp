@@ -98,6 +98,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mMachineIdStatusBarTextView;
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
+    private DialogFragment mDialogFragment;
 
     private MachineStatus mCurrentMachineStatus;
 
@@ -308,10 +309,27 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (mDialogFragment != null) {
+            mDialogFragment.dismiss();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
+        }
+        if (mEventsList != null && mEventsList.size() > 0) {
+            for (Event event : mEventsQueue) {
+                if (!event.isAlarmDismissed()) {
+                    event.setAlarmDismissed(true);
+                    mEventsQueue.add(event);
+                }
+            }
+            openNextDialog();
         }
     }
 
@@ -473,23 +491,22 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void openNextDialog() {
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
-            DialogFragment dialogFragment = null;
             Event event = mEventsQueue.pop();
+            event.setAlarmDismissed(true);
 
             if (event.getEventGroupID() == 6) {
                 if (event.getEndTime() == null || event.getTime() == null || event.getEndTime().equals("") || event.getTime().equals("")) {
                     openStopReportScreen(event.getEventID(), null, null, event.getDuration());
                 } else {
-                    dialogFragment = DialogFragment.newInstance(event, true);
+                    mDialogFragment = DialogFragment.newInstance(event, true);
                 }
             } else if (event.getEventGroupID() == 20) {
-                dialogFragment = DialogFragment.newInstance(event, false);
+                mDialogFragment = DialogFragment.newInstance(event, false);
             }
 
-            assert dialogFragment != null;
-            dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-            dialogFragment.setCancelable(false);
-            dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+            mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
+            mDialogFragment.setCancelable(false);
+            mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
         } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
             mIsOpenDialog = false;
         }
@@ -500,6 +517,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         dialog.dismiss();
         for (Event event : mEventsQueue) {
             if (event.getEventID() == eventId) {
+                event.setAlarmDismissed(true);
                 mEventsQueue.remove(event);
             }
         }
@@ -547,7 +565,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
-        //restore historic data of chart
+        //historic data from prefs
         ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
         for (Widget widget : widgetList) {
             // if have chart widget (field type 3)
@@ -555,7 +573,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 // if have historic in prefs
                 if (prefsHistoric.size() > 0) {
                     for (HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric) {
-                        // if get new chart data
+                        // if get new data
                         if (widget.getMachineParamHistoricData().size() > 0) {
                             // if is old widget
                             if (hashMap.containsKey(String.valueOf(widget.getID()))) {
@@ -596,11 +614,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
 
             if (mEventsList.size() == 0) {
-                mEventsQueue.addAll(events);
-                mEventsList.addAll(events);
+                for (Event event : mEventsQueue) {
+                    if (!event.isAlarmDismissed()) {
+                        event.setAlarmDismissed(true);
+                        mEventsList.add(event);
+                        mEventsQueue.add(event);
+                    }
+                }
             } else {
                 for (int i = 0; i < events.size(); i++) {
-                    if (!isExists(events.get(i))) {
+                    if (!isExists(events.get(i)) && !events.get(i).isAlarmDismissed()) {
                         mEventsList.add(events.get(i));
                     }
 
@@ -617,17 +640,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
 
             if (!mIsOpenDialog && mEventsQueue.size() > 0) {
-                DialogFragment dialogFragment = null;
                 Event event = mEventsQueue.pop();
                 if (event.getEventGroupID() == 6) {
-                    dialogFragment = DialogFragment.newInstance(event, true);
+                    mDialogFragment = DialogFragment.newInstance(event, true);
                 } else if (event.getEventGroupID() == 20) {
-                    dialogFragment = DialogFragment.newInstance(event, false);
+                    mDialogFragment = DialogFragment.newInstance(event, false);
                 }
-                if (dialogFragment != null) {
-                    dialogFragment.setTargetFragment(DashboardFragment.this, 0);
-                    dialogFragment.setCancelable(false);
-                    dialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                if (mDialogFragment != null) {
+                    mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                    mDialogFragment.setCancelable(false);
+                    mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }

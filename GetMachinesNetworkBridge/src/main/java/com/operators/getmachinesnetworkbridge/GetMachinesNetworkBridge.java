@@ -32,7 +32,10 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
         call.enqueue(new Callback<MachinesResponse>() {
             @Override
             public void onResponse(Call<MachinesResponse> call, Response<MachinesResponse> response) {
-                ArrayList<Machine> machines = response.body().getMachines();
+                ArrayList<Machine> machines = null;
+                if (response.body().getMachines() != null) {
+                    machines = response.body().getMachines();
+                }
                 if (response.body().getErrorResponse() == null) {
                     if (machines != null && machines.size() > 0) {
                         ZLogger.d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");

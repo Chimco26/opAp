@@ -53,6 +53,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="-3dp"
         android:text="33,850"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/C16"
         android:textSize="75dp" />
 

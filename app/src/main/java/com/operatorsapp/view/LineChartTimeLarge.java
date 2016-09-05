@@ -83,7 +83,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         String strManufacturer = android.os.Build.MANUFACTURER;
         if (strManufacturer.equals(SAMSUNG)) {
-            mChart.setViewPortOffsets(50f/*100f*/, -10f/*30f*/, 0f, 70f);
+            mChart.setViewPortOffsets(80f/*100f*/, -10f/*30f*/, 0f, 70f);
         } else {
             mChart.setViewPortOffsets(35f, 10f, 0f, 30f);
         }

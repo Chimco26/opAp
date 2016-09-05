@@ -101,6 +101,10 @@ public class Event {
         return mAlarmDismissed;
     }
 
+    public void setAlarmDismissed(boolean mAlarmDismissed) {
+        this.mAlarmDismissed = mAlarmDismissed;
+    }
+
     public float getAlarmHValue() {
         return mAlarmHValue;
     }

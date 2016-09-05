@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private CroutonCreator mCroutonCreator;
+    private boolean mIsTryToLogin;
+    private Fragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +48,31 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        if (mCurrentFragment != null) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mCurrentFragment).commit();
+        }
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mIsTryToLogin) {
+            return;
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         ZLogger.d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+        mCurrentFragment = fragment;
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack("").commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
         } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
         }
     }
 
@@ -102,5 +124,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void isTryToLogin(boolean isTryToLogin) {
+        mIsTryToLogin = isTryToLogin;
     }
 }

@@ -35,9 +35,11 @@ public class JobsCore {
                     @Override
                     public void onGetJobsListForMachineSuccess(JobListForMachine jobListForMachine) {
                         if (mJobsForMachineUICallbackListener != null) {
-                            if (jobListForMachine != null) {
+                            if (jobListForMachine != null && jobListForMachine.getData().size()>0) {
                                 mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
                                 Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
+                            } else{
+                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess(), jobListForMachine null or empty");
                             }
                         }
                         else {

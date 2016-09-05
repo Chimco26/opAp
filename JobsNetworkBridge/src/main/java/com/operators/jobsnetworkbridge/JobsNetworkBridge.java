@@ -43,25 +43,24 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
             @Override
             public void onResponse(Call<JobsListForMachineResponse> call, Response<JobsListForMachineResponse> response) {
                 if (response.isSuccessful()) {
-
                     JobListForMachine jobListForMachine = response.body().getJobListForMachine();
                     if (jobListForMachine.getData() != null) {
                         if (jobListForMachine.getData().size() > 0) {
-
                             getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
-                        }
-                        else {
+                        } else {
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "Jobs_list_Is_Empty Error");
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
+                    } else{
+                        Log.w(LOG_TAG, "jobListForMachine.getData() is null");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
+                        getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
-                }
-                else {
+                } else {
                     if (response.body() != null) {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
-                    }
-                    else {
+                    } else {
                         Log.w(LOG_TAG, "response.body() is null");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
@@ -93,8 +92,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
             public void onResponse(Call<StartJobForMachineResponse> call, Response<StartJobForMachineResponse> response) {
                 if (response.isSuccessful()) {
                     startJobForMachineCallback.onStartJobForMachineSuccess();
-                }
-                else {
+                } else {
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                     startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
                 }

@@ -44,7 +44,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
     private Button mNextButton;
-//    private boolean mIsFirstReasonSpinnerSelection = true;
+    //    private boolean mIsFirstReasonSpinnerSelection = true;
 //    private boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
@@ -106,9 +106,13 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_reject_screen);
             mNextButton.setEnabled(false);
-        }else{
+        } else {
 //            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-            mNextButton.setEnabled(true);
+            if (mJobId == null) {
+                mNextButton.setEnabled(false);
+            } else {
+                mNextButton.setEnabled(true);
+            }
         }
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
@@ -120,7 +124,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
 
-        if (mReportFieldsForMachine!=null) {
+        if (mReportFieldsForMachine != null) {
             Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
             final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
@@ -138,9 +142,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 //                    }
 //                    else {
 //                        mIsReasonSelected = true;
-                        mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                        mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
-                        reasonSpinnerArrayAdapter.setTitle(position);
+                    mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
+                    mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
+                    reasonSpinnerArrayAdapter.setTitle(position);
 //                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
 //                    }
                 }
@@ -225,7 +229,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             }
             case R.id.button_report: {
 
-                    mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
+                mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
 
                 break;
             }
@@ -248,8 +252,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
@@ -260,6 +263,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
         }
     };
