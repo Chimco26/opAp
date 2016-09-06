@@ -241,8 +241,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mShiftLogCore.getShiftForMachine(new ShiftForMachineUICallback() {
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
-                int durationOfShift = (int) (System.currentTimeMillis() - (TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()));
-                durationOfShift = 60000;
+                int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 startShiftTimer(durationOfShift);
                 shiftLogStartPolling();
             }

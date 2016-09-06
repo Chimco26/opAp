@@ -84,8 +84,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         private TextView mSubtitleText;
         private TextView mSubTitleValue;
         private TextView mStandard;
-        private TextView mLow;
-        private TextView mHigh;
+        private TextView mMin;
+        private TextView mMax;
         private TextView mTime;
         private View mDivider;
         private LinearLayout mSubtitle;
@@ -98,8 +98,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             mSubtitleText = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_text);
             mSubTitleValue = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_value);
             mStandard = (TextView) itemView.findViewById(R.id.shift_log_item_standard);
-            mHigh = (TextView) itemView.findViewById(R.id.shift_log_item_high);
-            mLow = (TextView) itemView.findViewById(R.id.shift_log_item_low);
+            mMax = (TextView) itemView.findViewById(R.id.shift_log_item_max);
+            mMin = (TextView) itemView.findViewById(R.id.shift_log_item_min);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
             mDivider = itemView.findViewById(R.id.shift_log_divider);
             mSubtitle = (LinearLayout) itemView.findViewById(R.id.shift_log_item_subtitle);
@@ -223,9 +223,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogParameterViewHolder.mSubtitleText.setText(event.getSubtitleEname());
             shiftLogParameterViewHolder.mSubTitleValue.setText(String.valueOf(event.getAlarmValue()));
-            shiftLogParameterViewHolder.mLow.setText(String.valueOf(event.getAlarmLValue()));
-            shiftLogParameterViewHolder.mHigh.setText(String.valueOf(event.getAlarmHValue()));
-            shiftLogParameterViewHolder.mStandard.setText(String.valueOf(event.getAlarmStandardValue()));
+            shiftLogParameterViewHolder.mMin.setText(new StringBuilder(mContext.getString(R.string.shift_log_min)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmLValue())));
+            shiftLogParameterViewHolder.mMax.setText(new StringBuilder(mContext.getString(R.string.shift_log_max)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmHValue())));
+            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder(mContext.getString(R.string.shift_log_standard)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmStandardValue())));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);

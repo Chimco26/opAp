@@ -323,12 +323,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             initStatusLayout(mCurrentMachineStatus);
         }
         if (mEventsList != null && mEventsList.size() > 0) {
-            for (Event event : mEventsQueue) {
+            for (Event event : mEventsList) {
                 if (!event.isIsDismiss()) {
                     mEventsQueue.add(event);
                 }
             }
             openNextDialog();
+        } else{
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+        }
+        if (mWidgets == null || mWidgets.size() == 0) {
+            mNoDataView.setVisibility(View.VISIBLE);
         }
     }
 

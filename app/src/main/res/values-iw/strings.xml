@@ -111,8 +111,11 @@
     <string name="chart_min_">מינימום: </string>
     <string name="chart_standard_">סטנדרט: </string>
     <string name="chart_max_">מקסימום: </string>
-    <string name="chart_space">&#160;</string>
+    <string name="space">&#160;</string>
     <string name="standard">סטנדרט&#160;</string>
+    <string name="shift_log_min">מינימום</string>
+    <string name="shift_log_max">מקסימום</string>
+    <string name="shift_log_standard">סטנדרט</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

@@ -29,8 +29,8 @@ import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
 public class WidgetAdapter extends RecyclerView.Adapter {
-    //    private static final long FOUR_HOURS = 60000L * 60 * 4;
-//    private static final long TEN_HOURS = 60000L * 60 * 10;
+    private static final long FOUR_HOURS = 60000L * 60 * 4;
+    private static final long TEN_HOURS = 60000L * 60 * 10;
     private Context mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
@@ -204,12 +204,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
                         xValues[i] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());/*new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));*/
                         Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue()/*, new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())*/);
-//                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - TEN_HOURS)) {
-                        tenHoursValues.add(entry);
-//                        }
-//                        if (widget.getMachineParamHistoricData().get(i).getTime() > (System.currentTimeMillis() - FOUR_HOURS)) {
-                        fourHoursValues.add(entry);
-//                        }
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - TEN_HOURS)) {
+                            tenHoursValues.add(entry);
+                        }
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - FOUR_HOURS)) {
+                            fourHoursValues.add(entry);
+                        }
                     }
                     timeViewHolder.mChart.setData(fourHoursValues, xValues);
 
@@ -313,7 +313,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             float projectionValue = (widget.getProjection() - widget.getLowLimit());
             final float convertCurrentValue = currentValue / scaleValue;
             final float convertProjectionValue = projectionValue / scaleValue;
-            projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue - 5/* half of the line*/);
+            projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue/* half of the line*/);
             projectionViewHolder.mProjectionView.updateWidth((mProjectionCapsuleWidth * convertCurrentValue), (projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue));
             projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
             projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
@@ -350,7 +350,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
                 float currentFloatValue = currentValue - widget.getLowLimit();
                 final float convertCurrentValue = currentFloatValue / scaleValue;
-                rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue) - 5/* half of the line*/);
+                rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
                 rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
             }
         }

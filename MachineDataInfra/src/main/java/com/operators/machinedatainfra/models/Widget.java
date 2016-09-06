@@ -62,6 +62,9 @@ public class Widget {
 
 
     public String getCurrentValue() {
+        if(mCurrentValue == null){
+            mCurrentValue = "--";
+        }
         return mCurrentValue;
     }
 

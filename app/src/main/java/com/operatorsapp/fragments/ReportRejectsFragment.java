@@ -54,7 +54,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private ReportFieldsForMachine mReportFieldsForMachine;
     private String mCurrentProductName;
     private int mCurrentProductId;
-    private Integer mJobId = null;
+    private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
@@ -108,11 +108,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             mNextButton.setEnabled(false);
         } else {
 //            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-            if (mJobId == null) {
-                mNextButton.setEnabled(false);
-            } else {
-                mNextButton.setEnabled(true);
-            }
+            mNextButton.setEnabled(true);
         }
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
@@ -253,7 +249,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             } else {
-                mJobId = null;
+                mJobId = 0;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
@@ -261,7 +257,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = null;
+            mJobId = 0;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();

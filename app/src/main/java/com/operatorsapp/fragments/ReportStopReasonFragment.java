@@ -56,7 +56,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
     private String mStart;
     private String mEnd;
     private long mDuration;
-    private Integer mJobId = null;
+    private Integer mJobId = 0;
 
     private RecyclerView mRecyclerView;
 
@@ -237,7 +237,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else {
-                mJobId = null;
+                mJobId = 0;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
@@ -245,7 +245,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = null;
+            mJobId = 0;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             disableProgressBar();
         }

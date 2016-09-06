@@ -81,76 +81,87 @@ public class TimeUtils {
 
     @SuppressLint("SimpleDateFormat")
     public static String getTimeFromString(String time) {
+        if (time != null && !time.equals("")) {
+            String out = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+            try {
+                Date date = dateFormat.parse(time);
+                out = dateFormat2.format(date);
+            } catch (ParseException ignored) {
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
-        String out = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
-        try {
-            Date date = dateFormat.parse(time);
-            out = dateFormat2.format(date);
-        } catch (ParseException ignored) {
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            return out;
+        } else {
+            return "--";
         }
-
-        return out;
     }
 
     @SuppressLint("SimpleDateFormat")
     public static String getDateFromString(String time) {
+        if (time != null && !time.equals("")) {
+            String out = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
+            try {
+                Date date = dateFormat.parse(time);
+                out = dateFormat2.format(date);
+            } catch (ParseException ignored) {
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
-        String out = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
-        try {
-            Date date = dateFormat.parse(time);
-            out = dateFormat2.format(date);
-        } catch (ParseException ignored) {
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            return out;
+        } else {
+            return "--";
         }
-
-        return out;
     }
 
     @SuppressLint("SimpleDateFormat")
     public static String getDateForJob(String time) {
+        if (time != null && !time.equals("")) {
+            String out = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date date = dateFormat.parse(time);
+                out = dateFormat2.format(date);
+            } catch (ParseException ignored) {
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
-        String out = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            Date date = dateFormat.parse(time);
-            out = dateFormat2.format(date);
-        } catch (ParseException ignored) {
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            return out;
+        } else {
+            return "--";
         }
-
-        return out;
     }
 
     @SuppressLint("SimpleDateFormat")
     public static String getDateForChart(String time) {
+        if (time != null && !time.equals("")) {
+            String out = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+            try {
+                Date date = dateFormat.parse(time);
+                out = dateFormat2.format(date);
+            } catch (ParseException ignored) {
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
-        String out = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
-        try {
-            Date date = dateFormat.parse(time);
-            out = dateFormat2.format(date);
-        } catch (ParseException ignored) {
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            return out;
+        } else {
+            return "--";
         }
-
-        return out;
     }
 
     @SuppressLint("SimpleDateFormat")
     public static long getLongFromDateString(String date, String format) {
-        //TODO replace format in server
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         long timeInMilliseconds = 0;
         try {
             Date mDate = sdf.parse(date);

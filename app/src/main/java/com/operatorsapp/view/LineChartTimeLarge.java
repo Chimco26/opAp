@@ -83,14 +83,17 @@ public class LineChartTimeLarge extends FrameLayout {
 
         String strManufacturer = android.os.Build.MANUFACTURER;
         if (strManufacturer.equals(SAMSUNG)) {
-            mChart.setViewPortOffsets(80f/*100f*/, -10f/*30f*/, 0f, 70f);
+            mChart.setExtraOffsets(80f/*100f*/, -10f/*30f*/, 0f, 70f);
         } else {
-            mChart.setViewPortOffsets(35f, 10f, 0f, 30f);
+            mChart.setExtraOffsets(5f, 0f, 0f, 10f);
         }
 
 //        mChart.zoomIn();
 //        mChart.zoom(1.5f, 1, 1.5f, 1);
-        mChart.zoom(5, 3, 5, 3);
+
+        mChart.getViewPortHandler().setMaximumScaleX(4f);
+        mChart.getViewPortHandler().setMaximumScaleY(4f);
+//        mChart.zoom(5, 3, 5, 3);
 
         setAxis(context, -10, -10, -10);
 
@@ -217,9 +220,9 @@ public class LineChartTimeLarge extends FrameLayout {
         set1.setCircleRadius(10);
         set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
         set1.setDrawCircleHole(true);
         set1.setDrawCircles(true);
+
 
         // create a data object with the datasets
         LineData data = new LineData(set1);

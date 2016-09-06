@@ -128,7 +128,7 @@
                     android:background="@color/divider_gray" />
 
                 <TextView
-                    android:id="@+id/shift_log_item_low"
+                    android:id="@+id/shift_log_item_min"
                     android:layout_width="wrap_content"
                     android:maxWidth="100dp"
                     android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                     android:background="@color/divider_gray" />
 
                 <TextView
-                    android:id="@+id/shift_log_item_high"
+                    android:id="@+id/shift_log_item_max"
                     android:layout_width="wrap_content"
                     android:maxWidth="100dp"
                     android:layout_height="wrap_content"

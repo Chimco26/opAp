@@ -53,7 +53,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
     private int mSelectedPosition;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mJobId;
+    private Integer mJobId = 0;
 
     private int mSelectedSubreasonId = -1;
     private int mSelectedReason;
@@ -71,7 +71,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private long mDuration;
     private int mEventId;
 
-    public static SelectedStopReasonFragment newInstance(int selectedPosition, int jobId, String start, String end, long duration, int eventId) {
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId) {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);

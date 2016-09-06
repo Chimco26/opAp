@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.app.operatorinfra.Operator;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
@@ -32,6 +33,7 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SoftKeyboardUtil;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener {
 
@@ -171,6 +173,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public void onPause() {
         super.onPause();
         mSignInButton.setOnClickListener(null);
+        SoftKeyboardUtil.hideKeyboard(this);
     }
 
     @Override
