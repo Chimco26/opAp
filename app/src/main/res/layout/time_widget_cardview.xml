@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="345dp"
-    android:layout_height="230dp"
+                android:layout_width="@dimen/widget_width"
+                android:layout_height="@dimen/widget_height"
     android:background="@drawable/combined_shape"
     android:orientation="vertical">
 

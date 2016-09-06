@@ -10,7 +10,7 @@
         android:id="@+id/fragments_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="110dp" />
+        android:layout_marginTop="@dimen/large_toolbar_height" />
 
     <LinearLayout
         android:layout_width="match_parent"

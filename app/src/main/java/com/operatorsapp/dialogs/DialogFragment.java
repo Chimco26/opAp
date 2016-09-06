@@ -148,7 +148,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onDismissAllClick(getDialog(), mEvent.getEventID(), getTargetRequestCode());
+                        mListener.onDismissAllClick(getDialog(), mEvent.getEventGroupID(), getTargetRequestCode());
                     }
                 }
             });
@@ -179,7 +179,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     public interface OnDialogButtonsListener {
         void onDismissClick(DialogInterface dialog, int requestCode);
 
-        void onDismissAllClick(DialogInterface dialog, int eventId, int requestCode);
+        void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode);
 
         void onReportClick(int eventId, String start, String end, long duration);
     }

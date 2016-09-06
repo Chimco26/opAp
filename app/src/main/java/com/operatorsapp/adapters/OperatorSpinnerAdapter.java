@@ -40,8 +40,6 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
             else {
                 spinnerTitle.setText(mCurrentOperatorName);
             }
-            TextView rowName = (TextView)row.findViewById(R.id.spinner_operator_item_name);
-            rowName.setTextSize(20);
         }
         return row;
     }
@@ -51,15 +49,12 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
+            row = inflater.inflate(R.layout.spinner_operator_dropdown_item, parent, false);
         }
         String item = mSpinnerItems[position];
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setText(item);
-            TextViewCompat.setTextAppearance(name, R.style.FontStyle_T10);
-            name.setTextColor(Color.BLACK);
-            name.setTextSize(17);
         }
         return row;
     }

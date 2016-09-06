@@ -61,6 +61,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener {
 
@@ -519,13 +520,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDismissAllClick(DialogInterface dialog, int eventId, int requestCode) {
+    public void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode) {
         dialog.dismiss();
-        for (Event event : mEventsQueue) {
-            if (event.getEventID() == eventId) {
+        Iterator<Event> iterator = mEventsQueue.iterator();
+        while(iterator.hasNext()) // fixed concurrent modification issue by changing to iterator
+        {
+            Event next = iterator.next();
+            if (next.getEventGroupID() == eventGroupId) {
 //                event.setAlarmDismissed(true);
-                event.setIsDismiss(true);
-                mEventsQueue.remove(event);
+                next.setIsDismiss(true);
+                iterator.remove();
             }
         }
         openNextDialog();

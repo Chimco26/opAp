@@ -153,9 +153,9 @@ public class LoginFragment extends Fragment {
             if (mLoginButton != null) {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
                 if (isAllFieldsAreValid()) {
-                    mLoginBtnBackground.setBackgroundResource(R.drawable.login_button_selector);
+                    mLoginBtnBackground.setImageResource(R.drawable.login_button_selector);
                 } else {
-                    mLoginBtnBackground.setBackgroundResource(R.drawable.button_bg_disabled);
+                    mLoginBtnBackground.setImageResource(R.drawable.button_bg_disabled);
                 }
 
                 if (!TextUtils.isEmpty(mPassword.getText().toString())) {
