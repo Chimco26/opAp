@@ -87,7 +87,7 @@ public class LineChartTimeSmall extends FrameLayout {
         if (strManufacturer.equals(SAMSUNG)) {
             mChart.setViewPortOffsets(50f/*55f*/, 5f/*17f*/, 0f, 50f);
         } else {
-            mChart.setViewPortOffsets(25f, 10f, 0f, 25f);
+            mChart.setViewPortOffsets(25f, 8f, 0f, 25f);
         }
 
 //        mChart.zoom(3, 1, 3, 1);
@@ -106,7 +106,7 @@ public class LineChartTimeSmall extends FrameLayout {
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
-        xAxis.setTextSize(18f);
+        xAxis.setTextSize(14f);
 //        xAxis.setLabelCount(5);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
@@ -185,10 +185,10 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
-        leftAxis.setLabelCount(5);
+        leftAxis.setLabelCount(4);
         leftAxis.setAxisMaxValue(80f);
         leftAxis.setYOffset(0f);
-        leftAxis.setTextSize(18f);
+        leftAxis.setTextSize(14f);
         leftAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
 
         LimitLine limitLine = new LimitLine(40f, "");

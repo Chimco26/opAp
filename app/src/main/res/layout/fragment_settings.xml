@@ -25,26 +25,26 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="105dp"
-                    android:layout_height="105dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="24dp"
                     android:background="@drawable/ic_settings" />
 
                 <View
-                    android:layout_width="60dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_width="69dp"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="22dp"
                     android:background="@color/divider_gray" />
 
                 <TextView
                     style="@style/FontStyle_T120"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="18dp"
                     android:text="@string/operator_app_settings"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
             </LinearLayout>
 
 
@@ -69,10 +69,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="43dp"
                     android:text="@string/language"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
+                    android:textSize="18dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,14 +81,14 @@
                     android:orientation="horizontal">
 
                     <RelativeLayout
-                        android:layout_width="351dp"
-                        android:layout_height="51dp"
+                        android:layout_width="282dp"
+                        android:layout_height="42dp"
                         android:background="@drawable/edit_text_background_selector">
 
                         <Spinner
                             android:id="@+id/languages_spinner"
-                            android:layout_width="349dp"
-                            android:layout_height="49dp"
+                            android:layout_width="280dp"
+                            android:layout_height="40dp"
                             android:dropDownVerticalOffset="45dp"></Spinner>
                     </RelativeLayout>
 
@@ -100,7 +100,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="50dp"
+                            android:layout_marginEnd="37dp"
                             android:gravity="end"
                             android:orientation="horizontal"
                             android:weightSum="1">
@@ -115,17 +115,17 @@
                                 android:text="@string/cancel"
                                 android:textAllCaps="true"
                                 android:textColor="@drawable/button_cancel_text_selector"
-                                android:textSize="20sp" />
+                                android:textSize="18sp" />
 
                             <Button
                                 android:id="@+id/button_save"
                                 style="@style/FontStyle_Button"
-                                android:layout_width="104dp"
-                                android:layout_height="36dp"
+                                android:layout_width="84dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/buttons_selector"
                                 android:text="@string/login_screen_save"
                                 android:textColor="@drawable/button_text_color_selector"
-                                android:textSize="20sp" />
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -133,7 +133,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="35dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -151,7 +151,7 @@
                             android:gravity="bottom"
                             android:text="@string/factory_sign_in"
                             android:textColor="@color/black"
-                            android:textSize="20dp" />
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/url_text_view"
@@ -159,7 +159,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="15dp"
                             android:textColor="@color/C20"
-                            android:textSize="25dp" />
+                            android:textSize="18dp" />
 
 
                     </LinearLayout>
@@ -167,14 +167,14 @@
                     <Button
                         android:id="@+id/button_change"
                         style="@style/FontStyle_Button"
-                        android:layout_width="104dp"
-                        android:layout_height="36dp"
+                        android:layout_width="84dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="50dp"
+                        android:layout_marginEnd="37dp"
                         android:background="@drawable/buttons_selector"
                         android:text="@string/change"
                         android:textColor="@drawable/button_text_color_selector"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -188,7 +188,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="35dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -202,7 +203,7 @@
                             android:text="@string/advanced_settings"
                             android:textAllCaps="true"
                             android:textColor="@drawable/button_cancel_text_selector"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -210,14 +211,14 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="37dp"
                     android:background="@color/divider_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="27dp"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
@@ -233,7 +234,7 @@
                         android:paddingStart="20dp"
                         android:text="@string/refresh_reporting_data"
                         android:textColor="@drawable/button_refresh_reporting_data_text_selector"
-                        android:textSize="20dp" />
+                        android:textSize="18dp" />
 
                     <TextView
                         android:id="@+id/refresh_status_text_view"
@@ -243,7 +244,7 @@
                         android:drawablePadding="5dp"
                         android:text="@string/refreshed"
                         android:textColor="@color/C20"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

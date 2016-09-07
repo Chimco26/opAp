@@ -9,14 +9,14 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="27dp"
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/close_image"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -27,10 +27,10 @@
             style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="25dp"
             android:textColor="@color/white"/>
     </LinearLayout>
 

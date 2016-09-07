@@ -287,12 +287,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     projectionViewHolder.mCapsule.post(new Runnable() {
                         @Override
                         public void run() {
-                            mProjectionCapsuleWidth = projectionViewHolder.mCapsule.getWidth();
+                            mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
                             setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                         }
                     });
                 } else {
-                    mProjectionCapsuleWidth = projectionViewHolder.mCapsule.getWidth();
+                    mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
                     setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                 }
                 projectionViewHolder.mMin.setText(valueInK(widget.getLowLimit()));

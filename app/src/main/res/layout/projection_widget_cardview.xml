@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
-                android:layout_width="@dimen/widget_width"
-                android:layout_height="@dimen/widget_height"
+    android:layout_height="168dp"
+    android:layout_width="260dp"
     android:background="@drawable/combined_shape">
 
     <LinearLayout
@@ -18,59 +18,59 @@
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/projection_widget_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Current quantity"
                 android:textColor="@android:color/black"
-                android:textSize="25sp"
-                autofit:minTextSize="20sp" />
+                android:textSize="18sp"
+                autofit:minTextSize="12sp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/projection_widget_subtitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Total required 2k"
-                android:textSize="20sp"
-                autofit:minTextSize="14sp" />
+                android:textSize="14sp"
+                autofit:minTextSize="8sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
             android:orientation="horizontal">
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/projection_widget_current_value"
                 style="@style/FontStyle_T11"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:text="1.7k"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
                 android:maxLines="1"
-                android:ellipsize="end"
+                android:text="1.7k"
                 android:textColor="@color/dismiss_dialog"
-                android:textSize="58dp" />
+                android:textSize="40sp"
+                autofit:minTextSize="18sp"/>
 
-          <!--  <TextView
-                style="@style/FontStyle_T11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="5dp"
-                android:text="k"
-                android:textColor="@color/dismiss_dialog"
-                android:textSize="20sp" />-->
+            <!--  <TextView
+                  style="@style/FontStyle_T11"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="bottom"
+                  android:layout_marginBottom="5dp"
+                  android:text="k"
+                  android:textColor="@color/dismiss_dialog"
+                  android:textSize="20sp" />-->
         </LinearLayout>
     </LinearLayout>
 
@@ -78,9 +78,9 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="60dp"
         android:background="@color/divider_gray" />
 
     <RelativeLayout
@@ -93,115 +93,143 @@
             android:id="@+id/projection_widget_gray_value_in_end_chart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_marginTop="7dp"
-            android:textColor="@color/projection_gray"
             android:layout_marginEnd="25dp"
+            android:layout_marginTop="7dp"
+            android:gravity="end"
+            android:textColor="@color/projection_gray"
             android:textSize="18sp" />
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp">
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="2dp">
 
             <TextView
                 android:id="@+id/projection_widget_gray_value_in_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
+                android:text="16"
                 android:textColor="@color/projection_gray"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
+        </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:id="@+id/projection_widget_gray_value_in_chart"
+                android:layout_width="78dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="16"
+                android:textColor="@color/projection_gray"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <View
             android:id="@+id/projection_widget_oval"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/capsule_oval" />
 
         <com.operatorsapp.view.ProjectionViewStart
             android:id="@+id/projection_widget_projectionView_start"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp" />
+            android:layout_height="43dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="18dp" />
 
         <com.operatorsapp.view.ProjectionView
             android:id="@+id/projection_widget_projectionView"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginEnd="49dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="30dp" />
+            android:layout_height="43dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="18dp" />
 
         <com.operatorsapp.view.ProjectionViewEnd
             android:id="@+id/projection_widget_projectionView_end"
             android:layout_width="30dp"
+            android:layout_height="43dp"
             android:layout_alignEnd="@id/projection_widget_oval"
-            android:layout_height="60dp"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="18dp" />
 
         <com.operatorsapp.view.RangeView
             android:id="@+id/projection_widget_range_view"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginEnd="44dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="30dp" />
+            android:layout_height="48dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="18dp" />
 
         <LinearLayout
             android:id="@+id/projection_widget_blue_plus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/projection_widget_projectionView"
-            android:layout_marginTop="-10dp"
-            android:gravity="end"
-            android:layout_marginStart="23dp"
-            android:layout_marginEnd="23dp">
+            android:layout_marginEnd="16dp"
+            android:gravity="end">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:src="@drawable/btn_plus" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/projection_widget_projectionView"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="40dp">
+            android:layout_below="@id/projection_widget_range_view">
+
+            <TextView
+                android:id="@+id/projection_widget_current_value_in_chart"
+                android:layout_width="78dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="1"
+                android:textColor="@color/dismiss_dialog"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+      <!--  <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/projection_widget_range_view"
+            android:layout_marginEnd="33dp"
+            android:layout_marginStart="35dp">
 
             <TextView
                 android:id="@+id/projection_widget_current_value_in_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
+                android:text="15"
                 android:textColor="@color/dismiss_dialog"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:textSize="14sp" />
+        </LinearLayout>-->
 
         <View
             android:id="@+id/projection_widget_end_divider"
             android:layout_width="2dp"
-            android:layout_height="60dp"
+            android:layout_height="53dp"
             android:layout_alignEnd="@id/projection_widget_oval"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginTop="18dp"
             android:background="@color/divider_gray" />
 
         <View
             android:layout_width="2dp"
-            android:layout_height="60dp"
+            android:layout_height="53dp"
             android:layout_alignStart="@id/projection_widget_oval"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="18dp"
             android:background="@color/divider_gray" />
     </RelativeLayout>
 
@@ -209,9 +237,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginStart="43dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="34dp"
         android:orientation="horizontal">
 
         <TextView
@@ -220,16 +248,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <!--<TextView-->
-            <!--android:id="@+id/projection_widget_standard"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center"-->
-            <!--android:text="19"-->
-            <!--android:textSize="18sp" />-->
+        <!--android:id="@+id/projection_widget_standard"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="center"-->
+        <!--android:text="19"-->
+        <!--android:textSize="18sp" />-->
 
         <TextView
             android:id="@+id/projection_widget_max"
@@ -237,8 +265,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="22"
-            android:textSize="18sp" />
+            android:text="18"
+            android:textSize="14sp" />
 
     </LinearLayout>
 </RelativeLayout>

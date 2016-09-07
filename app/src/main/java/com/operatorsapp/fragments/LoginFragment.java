@@ -263,11 +263,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void dismissProgressDialog() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ProgressDialogManager.dismiss();
-            }
-        });
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 }

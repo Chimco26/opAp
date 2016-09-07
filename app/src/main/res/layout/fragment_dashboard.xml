@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="48dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -16,10 +16,10 @@
             android:id="@+id/status_bar_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="21dp"
             android:layout_marginRight="130dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/product"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                     android:textColor="@color/status_bar"
                     android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textColor="@color/default_gray_status"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                  />
             </LinearLayout>
 
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="@string/job"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                     android:textColor="@color/status_bar" />
 
                 <TextView
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/default_gray_status"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:text="@string/shift"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                     android:textColor="@color/status_bar" />
 
                 <TextView
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/default_gray_status"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -177,7 +177,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:maxLines="1"
                 android:text="@string/no_notifications"
                 android:textColor="@color/divider_gray"
@@ -202,13 +202,12 @@
 
         <ImageView
             android:id="@+id/fragment_dashboard_left_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="25dp"
+            android:layout_height="35dp"
             android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="-30dp"
-            android:paddingEnd="12dp"
-            android:paddingStart="12dp"
+            android:layout_marginEnd="-23dp"
+            android:paddingEnd="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/left_panel_button_selector" />
     </RelativeLayout>
@@ -220,7 +219,7 @@
         android:layout_above="@+id/parent_layouts"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@id/status_layout"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="30dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -231,7 +230,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:textColor="@color/default_gray_status"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imageView"

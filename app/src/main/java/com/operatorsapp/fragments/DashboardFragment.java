@@ -142,7 +142,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 30, true, 0);
+        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
         mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener);
         mWidgetRecycler.setAdapter(mWidgetAdapter);
