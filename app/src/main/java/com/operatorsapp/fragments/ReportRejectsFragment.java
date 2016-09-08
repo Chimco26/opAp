@@ -101,7 +101,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_report);
+        mNextButton = (Button) view.findViewById(R.id.button_next);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_reject_screen);
@@ -171,7 +171,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             });
         }
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_report);
+        mNextButton = (Button) view.findViewById(R.id.button_next);
 
     }
 
@@ -223,7 +223,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_report: {
+            case R.id.button_next: {
 
                 mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
 

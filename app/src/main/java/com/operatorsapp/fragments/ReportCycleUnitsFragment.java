@@ -107,7 +107,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
         mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
-        mButtonReport = (Button) view.findViewById(R.id.button_report);
+        mButtonReport = (Button) view.findViewById(R.id.button_next);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         mUnitsCounterTextView.addTextChangedListener(new TextWatcher() {
@@ -207,7 +207,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_report: {
+            case R.id.button_next: {
                 sendReport();
                 break;
             }

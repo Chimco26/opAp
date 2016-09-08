@@ -7,27 +7,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="88dp"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="154dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="15dp"
+                android:layout_height="88dp"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
 
                 <ImageView
                     android:id="@+id/shift_log_item_icon"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="24dp"
                     android:src="@drawable/ic_cloud" />
 
 
@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
-                    android:textSize="17sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 
@@ -47,14 +47,14 @@
                 android:id="@+id/shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginBottom="13dp"
                 android:layout_marginEnd="8dp"
-                android:maxLines="1"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="3dp"
                 android:ellipsize="end"
-                android:textSize="17sp"
-                autofit:minTextSize="13sp" />
+                android:maxLines="1"
+                android:textSize="12sp"
+                autofit:minTextSize="8sp" />
 
 
         </LinearLayout>
@@ -72,16 +72,16 @@
             android:id="@+id/shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="26dp"
                 android:gravity="start"
                 android:orientation="horizontal">
 
@@ -89,17 +89,17 @@
                     android:id="@+id/shift_log_item_subtitle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:text="Cycle time" />
+                    android:text="Cycle time"
+                    android:textSize="12sp" />
 
                 <TextView
-                    style="@style/FontStyle_T31"
                     android:id="@+id/shift_log_item_subtitle_value"
+                    style="@style/FontStyle_T31"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:textSize="16sp"
                     android:text="17"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -114,13 +114,13 @@
                 <TextView
                     android:id="@+id/shift_log_item_standard"
                     android:layout_width="wrap_content"
-                    android:maxWidth="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:ellipsize="end"
-                    android:text="סטנדרט: 10"
                     android:maxLines="1"
-                    android:textSize="15sp" />
+                    android:maxWidth="120dp"
+                    android:text="סטנדרט: 10"
+                    android:textSize="10sp" />
 
                 <View
                     android:layout_width="1dp"
@@ -130,14 +130,14 @@
                 <TextView
                     android:id="@+id/shift_log_item_min"
                     android:layout_width="wrap_content"
-                    android:maxWidth="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
-                    android:text="מינ': 8"
                     android:maxLines="1"
-                    android:textSize="15sp" />
+                    android:maxWidth="100dp"
+                    android:text="מינ': 8"
+                    android:textSize="10sp" />
 
                 <View
                     android:layout_width="1dp"
@@ -147,13 +147,13 @@
                 <TextView
                     android:id="@+id/shift_log_item_max"
                     android:layout_width="wrap_content"
-                    android:maxWidth="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
-                    android:text="מקס': 12"
                     android:maxLines="1"
-                    android:textSize="15sp" />
+                    android:maxWidth="100dp"
+                    android:text="מקס': 12"
+                    android:textSize="10sp" />
             </LinearLayout>
 
         </LinearLayout>

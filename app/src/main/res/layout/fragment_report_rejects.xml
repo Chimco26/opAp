@@ -246,7 +246,7 @@
                                 android:textSize="18sp" />
 
                             <Button
-                                android:id="@+id/button_report"
+                                android:id="@+id/button_next"
                                 android:layout_width="84dp"
                                 android:layout_height="28dp"
                                 android:layout_weight="0.13"

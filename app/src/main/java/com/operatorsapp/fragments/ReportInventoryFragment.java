@@ -103,7 +103,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
-        mButtonReport = (Button) view.findViewById(R.id.button_report);
+        mButtonReport = (Button) view.findViewById(R.id.button_next);
         mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
         mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
@@ -205,7 +205,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_report: {
+            case R.id.button_next: {
                 sendReport();
                 break;
             }

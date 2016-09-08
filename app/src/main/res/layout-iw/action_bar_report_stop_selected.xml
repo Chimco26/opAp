@@ -15,19 +15,19 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/close_image"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:paddingEnd="20dp"
+            android:paddingEnd="25dp"
             android:src="@drawable/button_back_rtl_selector"/>
 
         <TextView
             style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
             android:layout_height="wrap_content"
             android:text="@string/report_stop_event_reason"
             android:layout_marginStart="20dp"
@@ -44,7 +44,7 @@
             style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
             android:textColor="@color/white"
             android:id="@+id/stop_reason_selected_title"/>
     </LinearLayout>

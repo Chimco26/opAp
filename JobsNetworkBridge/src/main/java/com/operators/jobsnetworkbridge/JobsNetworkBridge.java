@@ -51,7 +51,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "Jobs_list_Is_Empty Error");
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
-                    } else{
+                    } else {
                         Log.w(LOG_TAG, "jobListForMachine.getData() is null");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
@@ -93,8 +93,13 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 if (response.isSuccessful()) {
                     startJobForMachineCallback.onStartJobForMachineSuccess();
                 } else {
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
+                    if (response.body() != null) {
+                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
+                    } else{
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is empty");
+                        startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
+                    }
                 }
             }
 

@@ -40,11 +40,17 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
+    private boolean mClosedState;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener) {
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
+        mClosedState = closedState;
+    }
+
+    public void changeState(boolean closedState) {
+        mClosedState = closedState;
     }
 
     public void setNewData(List<Widget> widgets) {
@@ -332,14 +338,22 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.91)/*max location*/);
+            if (mClosedState) {
+                rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.84)/*max location*/);
+            } else{
+                //todo
+            }
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.05)/*min location*/);
+            if(mClosedState) {
+                rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.001)/*min location*/);
+            } else {
+                //todo
+            }
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else {
             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);

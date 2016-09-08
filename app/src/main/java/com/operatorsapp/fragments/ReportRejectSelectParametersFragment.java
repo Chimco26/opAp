@@ -109,7 +109,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_selected_job_id_text_view);
 
-        mReportButton = (Button) view.findViewById(R.id.button_report);
+        mReportButton = (Button) view.findViewById(R.id.button_next);
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
 
         mUnitsEditText = (EditText) view.findViewById(R.id.units_edit_text);
@@ -218,7 +218,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_report: {
+            case R.id.button_next: {
                 Log.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if (!mUnitsEditText.getText().toString().equals("")) {
                     sendReport();

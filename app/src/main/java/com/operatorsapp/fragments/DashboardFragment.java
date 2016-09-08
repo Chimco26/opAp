@@ -100,6 +100,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
     private DialogFragment mDialogFragment;
+    private ViewGroup.MarginLayoutParams mWidgetsParams;
+    private ViewGroup.LayoutParams mShiftLogParams;
 
     private MachineStatus mCurrentMachineStatus;
 
@@ -144,18 +146,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
         GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true);
         mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
-        final ViewGroup.LayoutParams shiftLogParams = mShiftLogLayout.getLayoutParams();
-        shiftLogParams.width = mCloseWidth;
+        mShiftLogParams = mShiftLogLayout.getLayoutParams();
+        mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
         mWidgetsLayout = (RelativeLayout) view.findViewById(R.id.fragment_dashboard_widgets_layout);
-        final ViewGroup.MarginLayoutParams widgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
-        widgetsParams.setMarginStart(mCloseWidth);
-        mWidgetsLayout.setLayoutParams(widgetsParams);
+        mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
+        mWidgetsParams.setMarginStart(mCloseWidth);
+        mWidgetsLayout.setLayoutParams(mWidgetsParams);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
@@ -188,20 +190,22 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     case MotionEvent.ACTION_UP:
                         if (!mNoData) {
                             if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
-                                if (shiftLogParams.width < middleWidth) {
+                                if (mShiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
-                                    toggleWoopList(shiftLogParams, mCloseWidth, widgetsParams, false);
+                                    toggleWoopList(mShiftLogParams, mCloseWidth, mWidgetsParams, false);
                                     mGridLayoutManager.setSpanCount(3);
+                                    mWidgetAdapter.changeState(true);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 } else {
                                     mIsOpen = true;
-                                    toggleWoopList(shiftLogParams, mOpenWidth, widgetsParams, true);
+                                    toggleWoopList(mShiftLogParams, mOpenWidth, mWidgetsParams, true);
                                     mGridLayoutManager.setSpanCount(2);
+                                    mWidgetAdapter.changeState(false);
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
 
                             } else {
-                                onButtonClick(shiftLogParams, widgetsParams);
+                                onButtonClick(mShiftLogParams, mWidgetsParams);
                             }
                         }
                         break;
@@ -239,6 +243,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         toggleWoopList(leftLayoutParams, mOpenWidth, rightLayoutParams, true);
                         mShiftLogAdapter.notifyDataSetChanged();
                         mGridLayoutManager.setSpanCount(2);
+                        mWidgetAdapter.changeState(false);
                         mWidgetAdapter.notifyDataSetChanged();
                     }
 
@@ -263,6 +268,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     public void onAnimationEnd(Animation animation) {
                         toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
                         mGridLayoutManager.setSpanCount(3);
+                        mWidgetAdapter.changeState(true);
                         mWidgetAdapter.notifyDataSetChanged();
                     }
 
@@ -330,7 +336,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
             }
             openNextDialog();
-        } else{
+        } else {
             mNoData = true;
             mNoNotificationsText.setVisibility(View.VISIBLE);
         }
@@ -346,7 +352,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetsLayout.setLayoutParams(mRightLayoutParams);
 
         mShiftLogAdapter.changeState(!isOpen);
+        mWidgetAdapter.changeState(!isOpen);
         mShiftLogAdapter.notifyDataSetChanged();
+        mWidgetAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -523,7 +531,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode) {
         dialog.dismiss();
         Iterator<Event> iterator = mEventsQueue.iterator();
-        while(iterator.hasNext()) // fixed concurrent modification issue by changing to iterator
+        while (iterator.hasNext()) // fixed concurrent modification issue by changing to iterator
         {
             Event next = iterator.next();
             if (next.getEventGroupID() == eventGroupId) {
@@ -567,7 +575,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
@@ -661,12 +669,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 if (mDialogFragment != null) {
                     mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     mDialogFragment.setCancelable(false);
-                    mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+                    mDialogFragment.show(getFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }
         } else {
             if (mEventsList == null || mEventsList.size() == 0) {
+                onButtonClick(mShiftLogParams, mWidgetsParams);
                 mNoData = true;
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }

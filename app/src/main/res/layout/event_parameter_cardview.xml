@@ -37,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
-                    android:text="fhfh"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -52,7 +51,6 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="8dp"
-                android:text="khgjhig"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="12sp"

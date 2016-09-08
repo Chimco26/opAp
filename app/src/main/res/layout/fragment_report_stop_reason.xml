@@ -11,7 +11,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="48dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
         >
@@ -33,7 +33,7 @@
                 android:layout_weight="0.2"
                 android:gravity="center"
                 android:text="@string/dashes"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/default_gray_status"
                  />
             <View
@@ -51,7 +51,7 @@
                 android:layout_weight="0.25"
                 android:gravity="center"
                 android:text="@string/product"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/status_bar"/>
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_weight="0.7"
                 android:gravity="start"
                 android:text="@string/dashes"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/default_gray_status"
                 />
             <View
@@ -82,7 +82,7 @@
                 android:singleLine="true"
                 android:text="@string/duration"
                 android:layout_marginEnd="20dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/status_bar"/>
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_weight="1.1"
                 android:gravity="start"
                 android:text="@string/dashes"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/default_gray_status"
                />
 
@@ -106,7 +106,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/report_job_spinner"
                 android:text="@string/job"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/status_bar"/>
 
             <FrameLayout
@@ -122,15 +122,16 @@
                     android:visibility="gone"
                     android:id="@+id/report_job_spinner"
                     android:layout_width="200dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="23dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_alignParentEnd="true"
                     android:dropDownVerticalOffset="55dp"/>
 
                 <ProgressBar
                     android:id="@+id/active_jobs_progressBar"
                     style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:indeterminate="true"
                     android:indeterminateTintMode="src_atop"
@@ -163,17 +164,17 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="80dp"
-                    android:layout_height="120dp"
-                    android:layout_marginStart="30dp"
+                    android:layout_width="56dp"
+                    android:layout_height="78dp"
+                    android:layout_marginStart="20dp"
                     android:background="@drawable/ichand"
                     />
 
                 <View
-                    android:layout_width="75dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_width="69dp"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="17dp"
                     android:background="@color/divider_gray"/>
 
                  <TextView
@@ -181,10 +182,10 @@
                     style="@style/FontStyle_T120"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="18dp"
                     android:text="@string/report_stop_reason"
-                    android:textSize="40sp"/>
+                    android:textSize="30sp"/>
             </LinearLayout>
 
 

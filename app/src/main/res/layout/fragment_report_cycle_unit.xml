@@ -130,8 +130,8 @@
                     android:background="@drawable/icrepeat" />
 
                 <View
-                    android:layout_width="80dp"
-                    android:layout_height="1dp"
+                    android:layout_width="69dp"
+                    android:layout_height="2dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="14dp"
                     android:background="@color/divider_gray" />
@@ -156,9 +156,9 @@
             android:gravity="top">
 
             <LinearLayout
-                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -180,38 +180,44 @@
                         android:textSize="18sp" />
 
                     <LinearLayout
-                        android:layout_width="280dp"
-                        android:layout_height="40dp"
-                        android:background="@android:color/white"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_width="282dp"
+                        android:layout_height="42dp"
+                        android:background="@color/divider_gray"
+                        android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/button_minus"
-                            android:layout_width="38dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/button_minus_selector" />
-
-                        <EditText
-                            android:id="@+id/units_text_view"
-                            style="@style/FontStyle_T6"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:background="@android:color/transparent"
+                        <LinearLayout
+                            android:layout_width="280dp"
+                            android:layout_height="40dp"
+                            android:background="@android:color/white"
                             android:gravity="center"
-                            android:inputType="numberDecimal"
-                            android:text="@string/one"
-                            android:textColor="@color/status_bar"
-                            android:textSize="18sp" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/button_plus"
-                            android:layout_width="38dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/button_plus_selector" />
+                            <ImageView
+                                android:id="@+id/button_minus"
+                                android:layout_width="38dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/button_minus_selector" />
+
+                            <EditText
+                                android:id="@+id/units_text_view"
+                                style="@style/FontStyle_T6"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:text="@string/one"
+                                android:textColor="@color/status_bar"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:id="@+id/button_plus"
+                                android:layout_width="38dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/button_plus_selector" />
+                        </LinearLayout>
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -242,7 +248,7 @@
                             android:textSize="18sp" />
 
                         <Button
-                            android:id="@+id/button_report"
+                            android:id="@+id/button_next"
                             android:layout_width="84dp"
                             android:layout_height="28dp"
                             android:layout_weight="0.13"

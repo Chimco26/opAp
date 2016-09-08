@@ -108,7 +108,7 @@ public class LineChartTimeLarge extends FrameLayout {
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
-        xAxis.setTextSize(18f);
+        xAxis.setTextSize(16f);
 //        xAxis.setLabelCount(12);
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawAxisLine(true);
@@ -164,7 +164,7 @@ public class LineChartTimeLarge extends FrameLayout {
         leftAxis.setLabelCount(15);
         leftAxis.setAxisMaxValue(140f);
         leftAxis.setYOffset(0f);
-        leftAxis.setTextSize(18f);
+        leftAxis.setTextSize(16f);
         leftAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
 
         LimitLine limitLine1 = new LimitLine(0f, "");
@@ -174,7 +174,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         LimitLine limitLine2 = new LimitLine(standard, "Standard");
         limitLine2.setLineColor(ContextCompat.getColor(context, R.color.C16));
-        limitLine2.setTextSize(18);
+        limitLine2.setTextSize(16);
         limitLine2.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine2.setLineWidth(1f);
         limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
@@ -182,7 +182,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         LimitLine limitLine3 = new LimitLine(min, "Min.");
         limitLine3.setLineColor(ContextCompat.getColor(context, R.color.red_line));
-        limitLine3.setTextSize(18);
+        limitLine3.setTextSize(16);
         limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setLineWidth(1f);
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
@@ -190,7 +190,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
         LimitLine limitLine4 = new LimitLine(max, "Max.");
         limitLine4.setLineColor(ContextCompat.getColor(context, R.color.red_line));
-        limitLine4.setTextSize(18);
+        limitLine4.setTextSize(16);
         limitLine4.setTextColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setLineWidth(1f);
         limitLine4.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);

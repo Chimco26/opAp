@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -241,9 +242,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mShiftLogCore.getShiftForMachine(new ShiftForMachineUICallback() {
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
-                int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
-                startShiftTimer(durationOfShift);
-                shiftLogStartPolling();
+                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
+                if (durationOfShift > 0) {
+                    startShiftTimer(durationOfShift);
+                    shiftLogStartPolling();
+                } else {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startShiftTimer(durationOfShift);
+                            shiftLogStartPolling();
+                        }
+                    }, PersistenceManager.getInstance().getPollingFrequency() * 1000);
+                }
             }
 
             @Override
@@ -424,6 +436,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStartJobFailed(ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
             }
         });
     }

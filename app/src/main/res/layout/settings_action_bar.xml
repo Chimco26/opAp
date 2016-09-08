@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/close_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/close_image"
-            android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingEnd="20dp"
-            android:src="@drawable/button_back_selector"/>
+            android:paddingTop="5dp"
+            android:src="@drawable/button_back_selector" />
 
         <TextView
-            style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
+            style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
-            android:textSize="20sp"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
             android:layout_marginStart="25dp"
-            android:textColor="@color/white"/>
+            android:text="@string/settings"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </RelativeLayout>
