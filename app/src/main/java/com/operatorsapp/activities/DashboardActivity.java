@@ -244,18 +244,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 if (durationOfShift > 0) {
-                    startShiftTimer(durationOfShift);
-                    shiftLogStartPolling();
+                //    startShiftTimer(durationOfShift);
+
                 } else {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            startShiftTimer(durationOfShift);
-                            shiftLogStartPolling();
+                     //       startShiftTimer(durationOfShift);
                         }
                     }, PersistenceManager.getInstance().getPollingFrequency() * 1000);
                 }
+                shiftLogStartPolling();
             }
 
             @Override

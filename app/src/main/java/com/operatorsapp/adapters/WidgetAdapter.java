@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -167,21 +169,29 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        RecyclerView.ViewHolder retval = null;
         switch (viewType) {
             case NUMERIC: {
-                return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
+                retval = new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
+                break;
             }
             case RANGE: {
-                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
+                retval = new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
+                break;
             }
             case PROJECTION: {
-                return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
+                retval = new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
+                break;
             }
             case TIME: {
-                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
+                retval = new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
+                break;
             }
         }
-        return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
+
+
+        return retval;
+        //return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -307,6 +317,17 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 break;
 
         }
+        final View itemview= holder.itemView;
+        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
+        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
+                return true;
+            }
+        });
+
+
     }
 
     private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat) {

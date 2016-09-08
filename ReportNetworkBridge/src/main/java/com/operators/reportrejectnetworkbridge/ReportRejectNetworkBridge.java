@@ -51,8 +51,8 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
 
     @Override
-    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
-        SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId);
+    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, int eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+        SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, eventId, jobId);
         final int[] retryCount = {0};
         Call<SendReportStopResponse> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendStopReport(sendReportStopRequest);
         call.enqueue(new Callback<SendReportStopResponse>() {

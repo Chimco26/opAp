@@ -1,112 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="280dp"
+    android:layout_height="248dp"
     android:orientation="vertical"
-    android:padding="30dp">
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp">
 
     <TextView
+        style="@style/RobotoMedium"
+        android:layout_marginTop="21dp"
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stop_event"
         android:textColor="@color/color_jobs_row"
-        android:textSize="30dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
 
         <TextView
+            style="@style/RobotoRegular"
             android:id="@+id/dialog_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="--"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/end"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
 
         <TextView
+            style="@style/RobotoRegular"
             android:id="@+id/dialog_end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="--"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/duration"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
 
         <TextView
+            style="@style/RobotoRegular"
             android:id="@+id/dialog_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="--"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="23dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:gravity="end"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="14dp"
+        android:gravity="end|bottom"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/RobotoMedium"
             android:id="@+id/dialog_dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="25dp"
             android:text="@string/login_dialog_dismiss"
             android:textColor="@android:color/black"
-            android:textSize="23dp" />
+            android:textSize="14sp" />
 
 
         <TextView
+            style="@style/RobotoMedium"
             android:id="@+id/dialog_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/report"
             android:textColor="@color/dismiss_dialog"
-            android:textSize="23dp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>

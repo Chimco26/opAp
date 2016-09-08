@@ -126,8 +126,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
+        Log.d("moo","width is: " + width);
         mOpenWidth = (int) (width * 0.448);
-        mCloseWidth = (int) (width * 0.173);
+        mCloseWidth = (int) (width * 0.171);
         final int middleWidth = (int) (width * 0.31);
 
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name_and_id);
@@ -227,8 +228,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
-        if (!mNoData) {
-            if (!mIsOpen) {
+        if (!mIsOpen) {
+            if (!mNoData) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
@@ -253,33 +254,34 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
                 });
                 mIsOpen = true;
-            } else {
-                final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
-                anim.setDuration(ANIM_DURATION_MILLIS);
-                mShiftLogLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        mShiftLogAdapter.changeState(true);
-                        mShiftLogAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
-                        mGridLayoutManager.setSpanCount(3);
-                        mWidgetAdapter.changeState(true);
-                        mWidgetAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                mIsOpen = false;
             }
+        } else {
+            final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
+            anim.setDuration(ANIM_DURATION_MILLIS);
+            mShiftLogLayout.startAnimation(anim);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mShiftLogAdapter.changeState(true);
+                    mShiftLogAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
+                    mGridLayoutManager.setSpanCount(3);
+                    mWidgetAdapter.changeState(true);
+                    mWidgetAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mIsOpen = false;
         }
+
     }
 
     OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
@@ -331,6 +333,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         if (mEventsList != null && mEventsList.size() > 0) {
             for (Event event : mEventsList) {
+                event.setTimeOfAdded(System.currentTimeMillis());
                 if (!event.isIsDismiss()) {
                     mEventsQueue.add(event);
                 }
@@ -345,7 +348,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
     }
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams,
+                                int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mRightLayoutParams.setMarginStart(newWidth);
         mShiftLogLayout.requestLayout();
@@ -626,7 +630,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
         if (events != null && events.size() > 0) {
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+        //    PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoData = false;
             for (Event event : events) {
                 event.setTimeOfAdded(System.currentTimeMillis());
@@ -675,7 +679,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         } else {
             if (mEventsList == null || mEventsList.size() == 0) {
-                onButtonClick(mShiftLogParams, mWidgetsParams);
                 mNoData = true;
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }

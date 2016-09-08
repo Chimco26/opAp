@@ -238,7 +238,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mJobId);
+        mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {

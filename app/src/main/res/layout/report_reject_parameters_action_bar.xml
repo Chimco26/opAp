@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,8 +13,8 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:id="@+id/close_image"
             android:padding="10dp"
             android:background="@drawable/button_back_selector"/>
@@ -25,7 +23,7 @@
             style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@string/report_rejects"
             android:layout_marginStart="30dp"
@@ -42,7 +40,7 @@
             style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20sp"
             android:text="@string/reject_reason"
             android:textColor="@color/white"
             android:id="@+id/reason_text_view"/>

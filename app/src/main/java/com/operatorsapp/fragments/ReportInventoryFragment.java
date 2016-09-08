@@ -283,6 +283,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             disableProgressBar();
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
         }
     };
 

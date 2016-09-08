@@ -35,7 +35,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
             mRowName.setText(String.valueOf(mSpinnerItems.get(0).getJobID()));
-            mRowName.setTextSize(20);
+            mRowName.setTextSize(16);
         }
         return row;
     }

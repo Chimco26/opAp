@@ -41,8 +41,7 @@ public class ReportRejectCore {
                         public void onSendReportSuccess() {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess();
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -51,8 +50,7 @@ public class ReportRejectCore {
                         public void onSendReportFailed(ErrorObjectInterface reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -60,17 +58,16 @@ public class ReportRejectCore {
         }
     }
 
-    public void sendStopReport(int stopReasonId, int stopSubReasonId, Integer jobId) {
+    public void sendStopReport(int stopReasonId, int stopSubReasonId, int eventId, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, jobId, new SendReportStopCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
                         @Override
                         public void onSendStopReportSuccess() {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess();
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -79,8 +76,7 @@ public class ReportRejectCore {
                         public void onSendStopReportFailed(ErrorObjectInterface reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -98,8 +94,7 @@ public class ReportRejectCore {
                         public void onSendReportSuccess() {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess();
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -108,8 +103,7 @@ public class ReportRejectCore {
                         public void onSendReportFailed(ErrorObjectInterface reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -126,8 +120,7 @@ public class ReportRejectCore {
                         public void onSendReportSuccess() {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess();
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
@@ -136,8 +129,7 @@ public class ReportRejectCore {
                         public void onSendReportFailed(ErrorObjectInterface reason) {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
-                            }
-                            else {
+                            } else {
                                 Log.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }

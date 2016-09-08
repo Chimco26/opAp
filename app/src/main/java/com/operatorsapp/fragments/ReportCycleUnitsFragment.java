@@ -34,8 +34,10 @@ import com.operators.reportrejectcore.ReportRejectCore;
 import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.Locale;
 
@@ -52,6 +54,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private EditText mUnitsCounterTextView;
     private Button mButtonReport;
     private TextView mButtonCancel;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
 
     private double mUnitsCounter = 1;
     private ReportRejectCore mReportRejectCore;
@@ -74,6 +77,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Override
@@ -295,6 +299,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
 
         }

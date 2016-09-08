@@ -67,6 +67,12 @@ public class ProjectionView extends View {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void updateWidth(float currentWidth, float projectionWidth) {
+        if (currentWidth < 1) {
+            currentWidth = 1f;
+        }
+        if (projectionWidth < 1) {
+            projectionWidth = 1f;
+        }
         if (mProjectionQuantity != null) {
             mCurrentQuantity = Bitmap.createScaledBitmap(mCurrentQuantity, (int) currentWidth, mCurrentQuantity.getHeight(), false);
         }

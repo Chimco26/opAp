@@ -3,6 +3,8 @@ package com.operatorsapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +60,9 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
         if (mSelectedPosition == position) {
             holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
             holder.mImageTitle.setTextColor(Color.WHITE);
-        }else {
+        } else {
             holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.stop_sub_selector));
-            holder.mImageTitle.setTextColor(mContext.getColorStateList(R.color.button_stop_text_selector));
+            holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
         }
 
         holder.mStopTitle.setText(mSubReasonsList.get(position).getName());
