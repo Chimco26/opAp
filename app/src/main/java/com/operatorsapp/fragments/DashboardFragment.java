@@ -126,7 +126,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        Log.d("moo","width is: " + width);
+        Log.d("moo", "width is: " + width);
         mOpenWidth = (int) (width * 0.448);
         mCloseWidth = (int) (width * 0.171);
         final int middleWidth = (int) (width * 0.31);
@@ -630,7 +630,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
         if (events != null && events.size() > 0) {
-        //    PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoData = false;
             for (Event event : events) {
                 event.setTimeOfAdded(System.currentTimeMillis());
