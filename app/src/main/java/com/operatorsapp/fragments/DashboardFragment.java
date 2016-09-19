@@ -63,7 +63,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener {
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener
+{
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -102,25 +103,29 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private DialogFragment mDialogFragment;
     private ViewGroup.MarginLayoutParams mWidgetsParams;
     private ViewGroup.LayoutParams mShiftLogParams;
+    private boolean mIsNewShiftLogs;
 
     private MachineStatus mCurrentMachineStatus;
 
-    public static DashboardFragment newInstance() {
+    public static DashboardFragment newInstance()
+    {
         return new DashboardFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         mEventsList = PersistenceManager.getInstance().getShiftLogs();
         mIsOpen = false;
+        mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
         // get screen parameters
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -164,22 +169,30 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
-        mDividerView.setOnTouchListener(new View.OnTouchListener() {
+        mDividerView.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                switch (event.getAction())
+                {
                     case MotionEvent.ACTION_DOWN:
                         mDownX = (int) event.getRawX();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (!mNoData) {
+                        if (!mNoData)
+                        {
                             int currentX;
-                            if (PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
+                            if (PersistenceManager.getInstance().getCurrentLang().equals("iw"))
+                            {
                                 currentX = mShiftLogLayout.getLayoutParams().width - (int) event.getRawX() + mDownX;
-                            } else {
+                            }
+                            else
+                            {
                                 currentX = mShiftLogLayout.getLayoutParams().width + (int) event.getRawX() - mDownX;
                             }
-                            if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
+                            if (currentX >= mCloseWidth && currentX <= mOpenWidth)
+                            {
                                 mShiftLogLayout.getLayoutParams().width = currentX;
                                 mShiftLogLayout.requestLayout();
                                 mDownX = (int) event.getRawX();
@@ -189,15 +202,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (!mNoData) {
-                            if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
-                                if (mShiftLogParams.width < middleWidth) {
+                        if (!mNoData)
+                        {
+                            if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5)
+                            {
+                                if (mShiftLogParams.width < middleWidth)
+                                {
                                     mIsOpen = false;
                                     toggleWoopList(mShiftLogParams, mCloseWidth, mWidgetsParams, false);
                                     mGridLayoutManager.setSpanCount(3);
                                     mWidgetAdapter.changeState(true);
                                     mWidgetAdapter.notifyDataSetChanged();
-                                } else {
+                                }
+                                else
+                                {
                                     mIsOpen = true;
                                     toggleWoopList(mShiftLogParams, mOpenWidth, mWidgetsParams, true);
                                     mGridLayoutManager.setSpanCount(2);
@@ -205,7 +223,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     mWidgetAdapter.notifyDataSetChanged();
                                 }
 
-                            } else {
+                            }
+                            else
+                            {
                                 onButtonClick(mShiftLogParams, mWidgetsParams);
                             }
                         }
@@ -215,10 +235,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         });
 
-        if (mEventsList.size() > 0) {
+        if (mEventsList.size() > 0)
+        {
             mNoData = false;
             mNoNotificationsText.setVisibility(View.GONE);
-        } else {
+        }
+        else
+        {
             mNoData = true;
             mNoNotificationsText.setVisibility(View.VISIBLE);
         }
@@ -227,20 +250,26 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         setActionBar();
     }
 
-    private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
-        if (!mIsOpen) {
-            if (!mNoData) {
+    private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams)
+    {
+        if (!mIsOpen)
+        {
+            if (!mNoData)
+            {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
+                anim.setAnimationListener(new Animation.AnimationListener()
+                {
                     @Override
-                    public void onAnimationStart(Animation animation) {
+                    public void onAnimationStart(Animation animation)
+                    {
 
                     }
 
                     @Override
-                    public void onAnimationEnd(Animation animation) {
+                    public void onAnimationEnd(Animation animation)
+                    {
                         toggleWoopList(leftLayoutParams, mOpenWidth, rightLayoutParams, true);
                         mShiftLogAdapter.notifyDataSetChanged();
                         mGridLayoutManager.setSpanCount(2);
@@ -249,25 +278,31 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animation animation) {
+                    public void onAnimationRepeat(Animation animation)
+                    {
 
                     }
                 });
                 mIsOpen = true;
             }
-        } else {
+        }
+        else
+        {
             final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
             anim.setDuration(ANIM_DURATION_MILLIS);
             mShiftLogLayout.startAnimation(anim);
-            anim.setAnimationListener(new Animation.AnimationListener() {
+            anim.setAnimationListener(new Animation.AnimationListener()
+            {
                 @Override
-                public void onAnimationStart(Animation animation) {
+                public void onAnimationStart(Animation animation)
+                {
                     mShiftLogAdapter.changeState(true);
                     mShiftLogAdapter.notifyDataSetChanged();
                 }
 
                 @Override
-                public void onAnimationEnd(Animation animation) {
+                public void onAnimationEnd(Animation animation)
+                {
                     toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
                     mGridLayoutManager.setSpanCount(3);
                     mWidgetAdapter.changeState(true);
@@ -275,7 +310,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
+                public void onAnimationRepeat(Animation animation)
+                {
 
                 }
             });
@@ -284,33 +320,41 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     }
 
-    OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener() {
+    OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener()
+    {
         @Override
-        public void onOperatorDataReceived(Operator operator) {
+        public void onOperatorDataReceived(Operator operator)
+        {
 
         }
 
         @Override
-        public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
+        public void onOperatorDataReceiveFailure(ErrorObjectInterface reason)
+        {
 
         }
 
         @Override
-        public void onSetOperatorSuccess() {
-//            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-//            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
+        public void onSetOperatorSuccess()
+        {
+            //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+            //            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
         }
 
         @Override
-        public void onSetOperatorFailed(ErrorObjectInterface reason) {
+        public void onSetOperatorFailed(ErrorObjectInterface reason)
+        {
             Log.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
         }
 
     };
 
-    private boolean isExists(Event event) {
-        for (int i = 0; i < mEventsList.size(); i++) {
-            if (mEventsList.get(i).getEventID() == event.getEventID()) {
+    private boolean isExists(Event event)
+    {
+        for (int i = 0; i < mEventsList.size(); i++)
+        {
+            if (mEventsList.get(i).getEventID() == event.getEventID())
+            {
                 return true;
             }
         }
@@ -318,38 +362,68 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
-        if (mDialogFragment != null) {
+        if (mDialogFragment != null)
+        {
             mDialogFragment.dismiss();
+            mIsOpenDialog = false;
         }
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
-        if (mCurrentMachineStatus != null) {
+        if (mCurrentMachineStatus != null)
+        {
             initStatusLayout(mCurrentMachineStatus);
         }
-        if (mEventsList != null && mEventsList.size() > 0) {
-            for (Event event : mEventsList) {
-                event.setTimeOfAdded(System.currentTimeMillis());
-                if (!event.isIsDismiss()) {
+        if (mEventsList != null && mEventsList.size() > 0)
+        {
+            for (Event event : mEventsList)
+            {
+                if (!event.isIsDismiss())
+                {
+                    event.setTimeOfAdded(System.currentTimeMillis());//todo remove
                     mEventsQueue.add(event);
                 }
             }
-            openNextDialog();
-        } else {
+            //            openNextDialog();
+            if (mEventsQueue.size() > 0)
+            {
+                Event event = mEventsQueue.peek();//
+                if (event.getEventGroupID() == 6)
+                {
+                    mDialogFragment = DialogFragment.newInstance(event, true);
+                }
+                else if (event.getEventGroupID() == 20)
+                {
+                    mDialogFragment = DialogFragment.newInstance(event, false);
+                }
+                if (mDialogFragment != null)
+                {
+                    mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
+                    mDialogFragment.setCancelable(false);
+                    mDialogFragment.show(getFragmentManager(), DialogFragment.DIALOG);
+                }
+                mIsOpenDialog = true;
+            }
+        }
+        else
+        {
             mNoData = true;
             mNoNotificationsText.setVisibility(View.VISIBLE);
         }
-        if (mWidgets == null || mWidgets.size() == 0) {
+        if (mWidgets == null || mWidgets.size() == 0)
+        {
             mNoDataView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams,
-                                int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen)
+    {
         mLeftLayoutParams.width = newWidth;
         mRightLayoutParams.setMarginStart(newWidth);
         mShiftLogLayout.requestLayout();
@@ -362,22 +436,26 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        try {
+        try
+        {
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e)
+        {
             throw new ClassCastException("Calling fragment must implement interface");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
@@ -386,9 +464,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mOperatorCore = null;
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -410,44 +490,54 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             jobsSpinner.setAdapter(jobsSpinnerAdapter);
             jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
 
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
 
-                    switch (position) {
-                        case 0: {
+                    switch (position)
+                    {
+                        case 0:
+                        {
                             Log.d(LOG_TAG, "New Job");
                             mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
                             break;
                         }
-                        case 1: {
-                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--",
-                                        0), true);
-                            } else {
-                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
-                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                        case 1:
+                        {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--", 0), true);
+                            }
+                            else
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
                             }
                             break;
                         }
-                        case 2: {
-                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--",
-                                        0), true);
-                            } else {
-                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
-                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                        case 2:
+                        {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--", 0), true);
+                            }
+                            else
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
                             }
                             break;
                         }
-                        case 3: {
-                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--",
-                                        0), true);
-                            } else {
-                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(),
-                                        mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                        case 3:
+                        {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--", 0), true);
+                            }
+                            else
+                            {
+                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
                             }
                             break;
                         }
@@ -455,13 +545,17 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                public void onNothingSelected(AdapterView<?> parent)
+                {
                 }
             });
 
-            if (PersistenceManager.getInstance().getOperatorName() != null) {
+            if (PersistenceManager.getInstance().getOperatorName() != null)
+            {
                 mOperatorsSpinnerArray[0] = getResources().getString(R.string.switch_user);
-            } else {
+            }
+            else
+            {
                 mOperatorsSpinnerArray[0] = getResources().getString(R.string.operator_sign_in_action_bar);
             }
 
@@ -471,16 +565,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
             operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                    if (position == 0)
+                    {
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
                     }
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                public void onNothingSelected(AdapterView<?> parent)
+                {
 
                 }
             });
@@ -490,9 +588,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mStatusIndicatorImageView = (ImageView) view.findViewById(R.id.job_indicator);
 
             ImageView settingsButton = (ImageView) view.findViewById(R.id.settings_button);
-            settingsButton.setOnClickListener(new View.OnClickListener() {
+            settingsButton.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     mOnGoToScreenListener.goToFragment(new SettingsFragment(), true);
                 }
             });
@@ -501,122 +601,170 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDismissClick(DialogInterface dialog, int requestCode) {
+    public void onDismissClick(DialogInterface dialog, int requestCode)
+    {
         dialog.dismiss();
         openNextDialog();
 
     }
 
-    private void openNextDialog() {
-        if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
+    private void openNextDialog()
+    {
+        if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS)
+        {
             Event event = mEventsQueue.pop();
-//            event.setAlarmDismissed(true);
+            //            event.setAlarmDismissed(true);
             event.setIsDismiss(true);
 
-            if (event.getEventGroupID() == 6) {
-                if (event.getEndTime() == null || event.getTime() == null || event.getEndTime().equals("") || event.getTime().equals("")) {
+            if (event.getEventGroupID() == 6)
+            {
+                if (event.getEndTime() == null || event.getTime() == null || event.getEndTime().equals("") || event.getTime().equals(""))
+                {
                     openStopReportScreen(event.getEventID(), null, null, event.getDuration());
-                } else {
+                }
+                else
+                {
                     mDialogFragment = DialogFragment.newInstance(event, true);
                 }
-            } else if (event.getEventGroupID() == 20) {
+            }
+            else if (event.getEventGroupID() == 20)
+            {
                 mDialogFragment = DialogFragment.newInstance(event, false);
             }
 
             mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
             mDialogFragment.setCancelable(false);
             mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
+        }
+        else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0)
+        {
             mIsOpenDialog = false;
         }
+        PersistenceManager.getInstance().saveShiftLogs(mEventsList);
     }
 
     @Override
-    public void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode) {
+    public void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode)
+    {
         dialog.dismiss();
         Iterator<Event> iterator = mEventsQueue.iterator();
-        while (iterator.hasNext()) // fixed concurrent modification issue by changing to iterator
+        while (iterator.hasNext())
         {
             Event next = iterator.next();
-            if (next.getEventGroupID() == eventGroupId) {
-//                event.setAlarmDismissed(true);
+            if (next.getEventGroupID() == eventGroupId)
+            {
+                //                event.setAlarmDismissed(true);
                 next.setIsDismiss(true);
                 iterator.remove();
             }
         }
+        PersistenceManager.getInstance().saveShiftLogs(mEventsList);
         openNextDialog();
     }
 
     @Override
-    public void onReportClick(int eventId, String start, String end, long duration) {
+    public void onReportClick(int eventId, String start, String end, long duration)
+    {
         openStopReportScreen(eventId, start, end, duration);
     }
 
     @Override
-    public void onStopClicked(int eventId, String startTime, String endTime, long duration) {
+    public void onStopClicked(int eventId, String startTime, String endTime, long duration)
+    {
         openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
-    private void openStopReportScreen(int eventId, String start, String end, long duration) {
+    private void openStopReportScreen(int eventId, String start, String end, long duration)
+    {
         mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
     }
 
     @Override
-    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+    public void onDeviceStatusChanged(MachineStatus machineStatus)
+    {
         Log.i(LOG_TAG, "onDeviceStatusChanged()");
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList)
+    {
         mWidgets = widgetList;
-        if (widgetList != null && widgetList.size() > 0) {
+        if (widgetList != null && widgetList.size() > 0)
+        {
             saveAndRestoreChartData(widgetList);
 
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
-            if (mWidgetAdapter != null) {
+            if (mWidgetAdapter != null)
+            {
                 mWidgetAdapter.setNewData(widgetList);
-            } else {
+            }
+            else
+            {
                 mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
-        } else {
+        }
+        else
+        {
             mNoDataView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
+    private void saveAndRestoreChartData(ArrayList<Widget> widgetList)
+    {
         //historic data from prefs
         ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
-        for (Widget widget : widgetList) {
+        for (Widget widget : widgetList)
+        {
             // if have chart widget (field type 3)
-            if (widget.getFieldType() == 3) {
+            if (widget.getFieldType() == 3)
+            {
                 // if have historic in prefs
-                if (prefsHistoric.size() > 0) {
-                    for (HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric) {
+                if (prefsHistoric.size() > 0)
+                {
+                    for (HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric)
+                    {
                         // if get new data
-                        if (widget.getMachineParamHistoricData().size() > 0) {
+                        if (widget.getMachineParamHistoricData().size() > 0)
+                        {
                             // if is old widget
-                            if (hashMap.containsKey(String.valueOf(widget.getID()))) {
+                            if (hashMap.containsKey(String.valueOf(widget.getID())))
+                            {
                                 //add new data to prefs
-                                hashMap.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
-                                widget.getMachineParamHistoricData().clear();
+                                if (widget.getMachineParamHistoricData() != null)
+                                {
+                                    hashMap.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
+                                    widget.getMachineParamHistoricData().clear();
+                                }
                                 //set all data (old + new) to widget
-                                widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
-                            } else {
+                                if (hashMap.get(String.valueOf(widget.getID())) != null)
+                                {
+                                    widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                                }
+                            }
+                            else
+                            {
                                 // if is new widget,  save to prefs
                                 HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
                                 historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
                                 prefsHistoric.add(historicById);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             // if no new data,  set old data to widget
-                            widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                            if (hashMap.get(String.valueOf(widget.getID())) != null)
+                            {
+                                widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                            }
                         }
                     }
-                } else {
+                }
+                else
+                {
                     // if is the firs chart data,  save to prefs
                     HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
                     historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
@@ -628,15 +776,23 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
-        if (events != null && events.size() > 0) {
-                PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+    public void onShiftLogDataReceived(ArrayList<Event> events)
+    {
+        if (events != null && events.size() > 0)
+        {
+            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoData = false;
-            for (Event event : events) {
+            for (Event event : events)
+            {
                 event.setTimeOfAdded(System.currentTimeMillis());
+                if (!mIsNewShiftLogs)
+                {
+                    event.setIsDismiss(true);
+                }
             }
 
-            if (mEventsList.size() == 0) {
+            if (mEventsList.size() == 0)
+            {
                 mEventsList.addAll(events);
                 mEventsQueue.addAll(events);
                 /*for (Event event : mEventsQueue) {
@@ -645,9 +801,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         mEventsQueue.add(event);
                     }
                 }*/
-            } else {
-                for (int i = 0; i < events.size(); i++) {
-                    if (!isExists(events.get(i)) /*&& !events.get(i).isAlarmDismissed()*/) {
+            }
+            else
+            {
+                for (int i = 0; i < events.size(); i++)
+                {
+                    if (!isExists(events.get(i)) /*&& !events.get(i).isAlarmDismissed()*/)
+                    {
                         mEventsList.add(events.get(i));
                     }
 
@@ -656,37 +816,51 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             PersistenceManager.getInstance().saveShiftLogs(mEventsList);
             mNoNotificationsText.setVisibility(View.GONE);
 
-            if (mShiftLogAdapter != null) {
-                mShiftLogAdapter.notifyDataSetChanged();
-            } else {
+            if (mShiftLogAdapter != null)
+            {
+                mShiftLogAdapter.setNewData(mEventsList);
+            }
+            else
+            {
                 mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }
 
-            if (!mIsOpenDialog && mEventsQueue.size() > 0) {
-                Event event = mEventsQueue.pop();
-                if (event.getEventGroupID() == 6) {
+            if (!mIsOpenDialog && mEventsQueue.size() > 0 && mIsNewShiftLogs)
+            {
+                Event event = mEventsQueue.peek();
+                if (event.getEventGroupID() == 6)
+                {
                     mDialogFragment = DialogFragment.newInstance(event, true);
-                } else if (event.getEventGroupID() == 20) {
+                }
+                else if (event.getEventGroupID() == 20)
+                {
                     mDialogFragment = DialogFragment.newInstance(event, false);
                 }
-                if (mDialogFragment != null) {
+                if (mDialogFragment != null)
+                {
                     mDialogFragment.setTargetFragment(DashboardFragment.this, 0);
                     mDialogFragment.setCancelable(false);
                     mDialogFragment.show(getFragmentManager(), DialogFragment.DIALOG);
                 }
                 mIsOpenDialog = true;
             }
-        } else {
-            if (mEventsList == null || mEventsList.size() == 0) {
+        }
+        else
+        {
+            if (mEventsList == null || mEventsList.size() == 0)
+            {
                 mNoData = true;
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
         }
+        mIsNewShiftLogs = true;
+        PersistenceManager.getInstance().setIsNewShiftLogs(true);
     }
 
     @Override
-    public void onShiftForMachineEnded() {
+    public void onShiftForMachineEnded()
+    {
         mEventsList.clear();
         mEventsQueue.clear();
         PersistenceManager.getInstance().saveShiftLogs(mEventsList);
@@ -695,8 +869,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
-        if (callType == CallType.Status) {
+    public void onDataFailure(final ErrorObjectInterface reason, CallType callType)
+    {
+        if (callType == CallType.Status)
+        {
             clearStatusLayout();
         }
        /* if (callType == CallType.ShiftLog) {
@@ -705,22 +881,28 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
         }*/
-        if (callType == CallType.MachineData) {
-            if (mWidgets == null || mWidgets.size() == 0) {
+        if (callType == CallType.MachineData)
+        {
+            if (mWidgets == null || mWidgets.size() == 0)
+            {
                 mNoDataView.setVisibility(View.VISIBLE);
             }
         }
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
                 @Override
-                public void run() {
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                public void run()
+                {
+                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason, R.id.fragment_dashboard_widgets);
                 }
             });
         }
     }
 
-    private void initStatusLayout(MachineStatus machineStatus) {
+    private void initStatusLayout(MachineStatus machineStatus)
+    {
         mProductNameTextView.setText(new StringBuilder(machineStatus.getAllMachinesData().get(0).getCurrentProductName()).append(",").append(" ID - ").append(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
@@ -729,7 +911,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         statusAggregation(machineStatus);
     }
 
-    private void clearStatusLayout() {
+    private void clearStatusLayout()
+    {
         mProductNameTextView.setText("");
         mJobIdTextView.setText("");
         mShiftIdTextView.setText("");
@@ -740,23 +923,36 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onTimerChanged(String timeToEndInHours) {
+    public void onTimerChanged(String timeToEndInHours)
+    {
         mTimerTextView.setText(timeToEndInHours);
     }
 
-    private void statusAggregation(MachineStatus machineStatus) {
+    private void statusAggregation(MachineStatus machineStatus)
+    {
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
-        if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
+        if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId())
+        {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
-        } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.STOPPED.getId())
+        {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
-        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId())
+        {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
-        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId())
+        {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
-        } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
+        }
+        else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId())
+        {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
-        } else {
+        }
+        else
+        {
             Log.w(LOG_TAG, "Undefined parameter");
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
         }

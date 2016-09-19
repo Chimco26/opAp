@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.operators.machinedatainfra.models.Widget;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -19,6 +20,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -41,6 +43,11 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         mClosedState = closedState;
         mPanelWidth = panelWidth;
         mOnStopClickListener = onStopClickListener;
+    }
+
+    public void setNewData(ArrayList<Event> events) {
+        mEvents = events;
+        notifyDataSetChanged();
     }
 
     public void changeState(boolean closedState) {

@@ -106,6 +106,7 @@
                             android:weightSum="1">
 
                             <TextView
+                                android:visibility="invisible"
                                 android:id="@+id/button_cancel"
                                 style="@style/FontStyle_Button"
                                 android:layout_width="126dp"

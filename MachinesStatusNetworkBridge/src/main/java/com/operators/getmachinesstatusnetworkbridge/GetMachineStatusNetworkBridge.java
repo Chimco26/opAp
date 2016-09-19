@@ -40,13 +40,16 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             public void onResponse(Call<MachineStatusDataResponse> call, Response<MachineStatusDataResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getMachineStatus().getAllMachinesData().size() == 0) {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
-                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
+                        Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
+//                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
+//                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     } else {
-                        MachineStatus machineStatus = response.body().getMachineStatus();
-                        getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
+                        Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
                     }
+                    MachineStatus machineStatus = response.body().getMachineStatus();
+                    getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                 } else {
+                    Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }
@@ -59,7 +62,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    Log.d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }

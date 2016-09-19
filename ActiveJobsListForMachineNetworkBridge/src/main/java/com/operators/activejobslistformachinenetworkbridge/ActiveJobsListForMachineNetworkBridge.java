@@ -26,7 +26,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
     private int mRetryCount = 0;
 
     public void inject(ActiveJobsListForMachineNetworkManagerInterface activeJobsListForMachineNetworkManagerInterface) {
-        Log.i(LOG_TAG, "ActiveJobsListForMachineNetworkBridge inject()");
+        Log.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
         mActiveJobsListForMachineNetworkManagerInterface = activeJobsListForMachineNetworkManagerInterface;
     }
 
@@ -48,7 +48,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
-                            Log.w(LOG_TAG, "getActiveJobsForMachine() callback is null");
+                            Log.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
                             callback.onGetActiveJobsListForMachineFailed(errorObject);
                         }

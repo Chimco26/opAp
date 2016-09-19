@@ -31,6 +31,7 @@ import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListen
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.NetworkAvailable;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener {
 
@@ -199,8 +200,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 break;
             }
             case R.id.refresh_button: {
-                ProgressDialogManager.show(getActivity());
-                mSettingsInterface.onRefreshReportFieldsRequest(this);
+                if(NetworkAvailable.isNetworkAvailable(getActivity()))
+                {
+                    ProgressDialogManager.show(getActivity());
+                    mSettingsInterface.onRefreshReportFieldsRequest(this);
+                }
                 break;
             }
             case R.id.button_change: {

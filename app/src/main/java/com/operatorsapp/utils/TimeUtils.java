@@ -84,7 +84,7 @@ public class TimeUtils {
         if (time != null && !time.equals("")) {
             String out = null;
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
             try {
                 Date date = dateFormat.parse(time);
                 out = dateFormat2.format(date);

@@ -169,29 +169,21 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        RecyclerView.ViewHolder retval = null;
         switch (viewType) {
             case NUMERIC: {
-                retval = new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
-                break;
+                return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
             }
             case RANGE: {
-                retval = new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
-                break;
+                return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
             }
             case PROJECTION: {
-                retval = new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
-                break;
+                return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
             }
             case TIME: {
-                retval = new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
-                break;
+                return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
             }
         }
-
-
-        return retval;
-        //return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
+        return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -317,15 +309,15 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 break;
 
         }
-        final View itemview= holder.itemView;
-        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
-        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
-                return true;
-            }
-        });
+//        final View itemview= holder.itemView;
+//        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
+//        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//            @Override
+//            public boolean onPreDraw() {
+//                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
+//                return true;
+//            }
+//        });
 
 
     }
@@ -398,21 +390,12 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             float valueFloat = value / 1000;
             if (value % 100 == 0) {
                 valueString = String.format("%.1f", valueFloat);
-//                valueString = String.valueOf(value / 1000);
             } else {
                 valueString = String.format("%.2f", valueFloat);
-//                valueString = String.valueOf(valueFloat);
             }
             if (value % 1000 == 0) {
                 valueString = String.valueOf(value / 1000);
             }
-            /*if (valueString.length() >= 4) {
-                if (valueString.charAt(valueString.length() - 2) == '0') {
-                    valueString = valueString.substring(0, 3);
-                } else {
-                    valueString = valueString.substring(0, 4);
-                }
-            }*/
             return valueString + "k";
         } else {
             return valueString;
@@ -451,20 +434,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         INT, FLOAT
     }
 
-    /* boolean tryParse(String value, StringParse stringParse) {
-         try {
-             if (stringParse == StringParse.INT) {
-                 Integer.parseInt(value);
-             }
-             if (stringParse == StringParse.FLOAT) {
-                 Float.parseFloat(value);
-             }
-             return true;
-         } catch (NumberFormatException e) {
-             return false;
-         }
-     }
- */
     public float tryParse(String value, StringParse stringParse) {
         try {
             if (stringParse == StringParse.INT) {

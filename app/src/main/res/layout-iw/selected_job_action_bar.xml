@@ -17,7 +17,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:paddingBottom="5dp"
-            android:paddingEnd="20dp"
+            android:paddingEnd="25dp"
             android:paddingTop="5dp"
             android:src="@drawable/button_back_rtl_selector" />
 
@@ -27,9 +27,9 @@
             style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/new_job"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
             android:textColor="@color/white" />
     </LinearLayout>
     <!--add linearLayout-->

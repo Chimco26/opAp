@@ -48,6 +48,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_FORCE_LOCAL = "pref.PREF_FORCE_LOCAL";
     private static final String PREF_FORCE_LOCAL_NAME = "pref.PREF_FORCE_LOCAL_NAME";
     private static final String PREF_POLLING_FREQUENCY = "pref.PREF_POLLING_FREQUENCY";
+    private static final String PREF_NEW_SHIFTLOG = "pref.PREF_NEW_SHIFTLOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
     private static final int DEFAULT_POLLING_VALUE = 60;
@@ -265,5 +266,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void setMachineDataStartingFrom(String startingFrom) {
         SecurePreferences.getInstance().setString(PREF_MACHINE_DATA_STARTING_FROM, startingFrom);
+    }
+
+    public boolean isNewShiftLogs() {
+        return SecurePreferences.getInstance().getBoolean(PREF_NEW_SHIFTLOG, false);
+    }
+
+    public void setIsNewShiftLogs(boolean isNew) {
+        SecurePreferences.getInstance().setBoolean(PREF_NEW_SHIFTLOG, isNew);
     }
 }

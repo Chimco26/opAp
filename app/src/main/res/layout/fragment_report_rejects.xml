@@ -109,6 +109,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/parent_layouts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -192,7 +193,7 @@
                                 android:id="@+id/reject_reason_spinner"
                                 android:layout_width="280dp"
                                 android:layout_height="40dp"
-                                android:dropDownVerticalOffset="55dp"/>
+                                android:dropDownVerticalOffset="45dp"/>
                         </RelativeLayout>
 
                         <TextView

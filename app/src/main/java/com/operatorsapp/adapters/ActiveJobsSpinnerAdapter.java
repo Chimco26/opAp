@@ -13,22 +13,26 @@ import com.operatorsapp.R;
 
 import java.util.List;
 
-public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
+public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
+{
     private Activity mContext;
     private List<ActiveJob> mSpinnerItems;
     TextView mRowName;
     View mView;
 
-    public ActiveJobsSpinnerAdapter(Activity context, int resource, List<ActiveJob> activeJobs) {
+    public ActiveJobsSpinnerAdapter(Activity context, int resource, List<ActiveJob> activeJobs)
+    {
         super(context, resource, activeJobs);
         mSpinnerItems = activeJobs;
         mContext = context;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         View row = convertView;
-        if (row == null) {
+        if (row == null)
+        {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
             mView = row;
@@ -41,9 +45,11 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, ViewGroup parent)
+    {
         View row = convertView;
-        if (row == null) {
+        if (row == null)
+        {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
         }
@@ -55,11 +61,14 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob> {
         return row;
     }
 
-    public void setTitle(int position) {
-
-        mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
-        mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
-        mRowName.setTextSize(20);
+    public void setTitle(int position)
+    {
+        if (mView != null)
+        {
+            mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
+            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
+            mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJobID()));
+            mRowName.setTextSize(20);
+        }
     }
 }

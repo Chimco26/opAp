@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -149,7 +150,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
-
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return view;
     }
 
@@ -299,7 +301,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, R.id.top_layout);
             disableProgressBar();
 
         }

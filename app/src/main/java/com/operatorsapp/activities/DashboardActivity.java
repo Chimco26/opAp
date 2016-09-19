@@ -171,6 +171,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onResume();
         machineStatusStartPolling();
         shiftForMachineTimer();
+//        shiftLogStartPolling();//
         machineDataStartPolling();
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
@@ -245,7 +246,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
-
+                    shiftLogStartPolling();
                 } else {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -255,7 +256,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                     }, PersistenceManager.getInstance().getPollingFrequency() * 1000);
                 }
-                shiftLogStartPolling();
             }
 
             @Override
@@ -436,7 +436,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStartJobFailed(ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, R.id.fragments_container);
             }
         });
     }
