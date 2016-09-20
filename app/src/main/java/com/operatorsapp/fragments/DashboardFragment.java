@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -57,6 +58,7 @@ import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
 
+    private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private OperatorCore mOperatorCore;
@@ -81,6 +84,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private RelativeLayout mWidgetsLayout;
     private TextView mNoNotificationsText;
     private LinearLayout mNoDataView;
+    private LinearLayout mStatusLayout;
     private int mDownX;
     private ShiftLogAdapter mShiftLogAdapter;
     private WidgetAdapter mWidgetAdapter;
@@ -91,6 +95,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
+    private int mWidgetsLayoutWidth;
+    private int mTollBarsHeight;
+    private int mRecyclersHeight;
     private ArrayList<Widget> mWidgets = new ArrayList<>();
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
@@ -131,29 +138,26 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
+        int height = size.y;
         Log.d("moo", "width is: " + width);
-        mOpenWidth = (int) (width * 0.448);
-        mCloseWidth = (int) (width * 0.171);
-        final int middleWidth = (int) (width * 0.31);
+        mOpenWidth = (int) (width * 0.4);
+        mCloseWidth = (int) (width * 0.2);
+        mWidgetsLayoutWidth = (int) (width * 0.8);
+        mTollBarsHeight = (int) (height * 0.25);
+        mRecyclersHeight = (int) (height * 0.75);
+
+        final int middleWidth = (int) (width * 0.3);
+
+        mStatusLayout = (LinearLayout) view.findViewById(R.id.status_layout);
+        ViewGroup.LayoutParams statusBarParams;
+        statusBarParams = mStatusLayout.getLayoutParams();
+        statusBarParams.height = (int) (mTollBarsHeight * 0.35);
+        mStatusLayout.requestLayout();
 
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name_and_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
-
-        mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mShiftLogRecycler.setLayoutManager(linearLayoutManager);
-        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this);
-        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-
-        mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
-        mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true);
-        mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
@@ -164,6 +168,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
         mWidgetsParams.setMarginStart(mCloseWidth);
         mWidgetsLayout.setLayoutParams(mWidgetsParams);
+
+        mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+        mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+        mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
+        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        mWidgetRecycler.setLayoutManager(mGridLayoutManager);
+        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
+        mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mWidgetsLayoutWidth);
+        mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
@@ -197,7 +215,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 mShiftLogLayout.requestLayout();
                                 mDownX = (int) event.getRawX();
                                 mShiftLogAdapter.changeState(true);
-                                mShiftLogAdapter.notifyDataSetChanged();
                             }
                         }
                         break;
@@ -212,7 +229,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     toggleWoopList(mShiftLogParams, mCloseWidth, mWidgetsParams, false);
                                     mGridLayoutManager.setSpanCount(3);
                                     mWidgetAdapter.changeState(true);
-                                    mWidgetAdapter.notifyDataSetChanged();
                                 }
                                 else
                                 {
@@ -220,7 +236,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                     toggleWoopList(mShiftLogParams, mOpenWidth, mWidgetsParams, true);
                                     mGridLayoutManager.setSpanCount(2);
                                     mWidgetAdapter.changeState(false);
-                                    mWidgetAdapter.notifyDataSetChanged();
                                 }
 
                             }
@@ -271,10 +286,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     public void onAnimationEnd(Animation animation)
                     {
                         toggleWoopList(leftLayoutParams, mOpenWidth, rightLayoutParams, true);
-                        mShiftLogAdapter.notifyDataSetChanged();
+                        //                        mShiftLogAdapter.notifyDataSetChanged();
                         mGridLayoutManager.setSpanCount(2);
                         mWidgetAdapter.changeState(false);
-                        mWidgetAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -297,7 +311,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 public void onAnimationStart(Animation animation)
                 {
                     mShiftLogAdapter.changeState(true);
-                    mShiftLogAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -306,7 +319,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
                     mGridLayoutManager.setSpanCount(3);
                     mWidgetAdapter.changeState(true);
-                    mWidgetAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -431,8 +443,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         mShiftLogAdapter.changeState(!isOpen);
         mWidgetAdapter.changeState(!isOpen);
-        mShiftLogAdapter.notifyDataSetChanged();
-        mWidgetAdapter.notifyDataSetChanged();
+
+        ZLogger.d(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
+        ZLogger.d(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
     }
 
     @Override
@@ -464,6 +477,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mOperatorCore = null;
     }
 
+    @SuppressLint("InflateParams")
     private void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -478,13 +492,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, spannableString.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
-            final TextView title = ((TextView) view.findViewById(R.id.toolbar_title));
+
+            mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
+
+            final TextView title = ((TextView) mToolBarView.findViewById(R.id.toolbar_title));
             title.setText(spannableString);
             title.setVisibility(View.VISIBLE);
 
-            final Spinner jobsSpinner = (Spinner) view.findViewById(R.id.toolbar_job_spinner);
+            final Spinner jobsSpinner = (Spinner) mToolBarView.findViewById(R.id.toolbar_job_spinner);
             final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
             jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             jobsSpinner.setAdapter(jobsSpinnerAdapter);
@@ -559,7 +574,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mOperatorsSpinnerArray[0] = getResources().getString(R.string.operator_sign_in_action_bar);
             }
 
-            EmeraldSpinner operatorsSpinner = (EmeraldSpinner) view.findViewById(R.id.toolbar_operator_spinner);
+            EmeraldSpinner operatorsSpinner = (EmeraldSpinner) mToolBarView.findViewById(R.id.toolbar_operator_spinner);
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, PersistenceManager.getInstance().getOperatorName());
             operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
@@ -583,11 +598,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
             });
 
-            mMachineIdStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_id_name);
-            mMachineStatusStatusBarTextView = (TextView) view.findViewById(R.id.text_view_machine_status);
-            mStatusIndicatorImageView = (ImageView) view.findViewById(R.id.job_indicator);
+            mMachineIdStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_id_name);
+            mMachineStatusStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_status);
+            mStatusIndicatorImageView = (ImageView) mToolBarView.findViewById(R.id.job_indicator);
 
-            ImageView settingsButton = (ImageView) view.findViewById(R.id.settings_button);
+            ImageView settingsButton = (ImageView) mToolBarView.findViewById(R.id.settings_button);
             settingsButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -596,8 +611,30 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     mOnGoToScreenListener.goToFragment(new SettingsFragment(), true);
                 }
             });
-            actionBar.setCustomView(view);
+            actionBar.setCustomView(mToolBarView);
+
+            setToolBarHeight(mToolBarView);
         }
+    }
+
+    private void setToolBarHeight(final View view)
+    {
+        view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener()
+        {
+            @Override
+            public boolean onPreDraw()
+            {
+                if (view.getViewTreeObserver().isAlive())
+                {
+                    view.getViewTreeObserver().removeOnPreDrawListener(this);
+                }
+                ViewGroup.LayoutParams toolBarParams;
+                toolBarParams = view.getLayoutParams();
+                toolBarParams.height = (int) (mTollBarsHeight * 0.65);
+                view.requestLayout();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -703,7 +740,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
             else
             {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mWidgetsLayoutWidth);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         }
@@ -794,7 +831,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             if (mEventsList.size() == 0)
             {
                 mEventsList.addAll(events);
-                mEventsQueue.addAll(events);
+                if (mIsNewShiftLogs)
+                {
+                    mEventsQueue.addAll(events);
+                }
                 /*for (Event event : mEventsQueue) {
                     if (!event.isAlarmDismissed()) {
                         mEventsList.add(event);
@@ -822,11 +862,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
             else
             {
-                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this);
+                mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }
 
-            if (!mIsOpenDialog && mEventsQueue.size() > 0 && mIsNewShiftLogs)
+            if (!mIsOpenDialog && mEventsQueue.size() > 0)
             {
                 Event event = mEventsQueue.peek();
                 if (event.getEventGroupID() == 6)
@@ -895,7 +935,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 @Override
                 public void run()
                 {
-                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason, R.id.fragment_dashboard_widgets);
+                    ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                 }
             });
         }

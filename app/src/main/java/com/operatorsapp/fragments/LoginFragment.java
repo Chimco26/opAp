@@ -229,7 +229,7 @@ public class LoginFragment extends Fragment {
             public void onLoginFailed(final ErrorObjectInterface reason) {
                 dismissProgressDialog();
                 mCroutonCallback.onHideConnectivityCroutonRequest();
-                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason, R.id.parent_layouts);
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                 mNavigationCallback.isTryToLogin(false);
             }
         });
@@ -256,7 +256,7 @@ public class LoginFragment extends Fragment {
                     public void onLoginFailed(final ErrorObjectInterface reason) {
                         dismissProgressDialog();
                         mCroutonCallback.onHideConnectivityCroutonRequest();
-                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason, R.id.parent_layouts);
+                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
                         mNavigationCallback.isTryToLogin(false);
                     }
                 });

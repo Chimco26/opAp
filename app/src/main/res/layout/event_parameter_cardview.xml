@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:autofit="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/event_parameter_parent_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/event_parameter_title_layout"
             android:layout_width="154dp"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-
 
                 <ImageView
                     android:id="@+id/shift_log_item_icon"
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:layout_marginStart="24dp"
-                    android:src="@drawable/ic_cloud" />
+                    android:src="@drawable/ic_cloud"/>
 
 
                 <TextView
@@ -38,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
 
             </LinearLayout>
@@ -47,14 +49,13 @@
                 android:id="@+id/shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="3dp"
                 android:layout_marginEnd="8dp"
-                android:maxLines="1"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:textSize="12sp"
-                autofit:minTextSize="8sp" />
+                autofit:minTextSize="8sp"/>
 
 
         </LinearLayout>
@@ -63,25 +64,25 @@
             android:id="@+id/shift_log_divider"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
             android:background="@color/divider_gray"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="3dp"
                 android:gravity="start"
                 android:orientation="horizontal">
 
@@ -89,71 +90,69 @@
                     android:id="@+id/shift_log_item_subtitle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Cycle time" />
+                    android:text="Cycle time"
+                    android:textSize="12sp"/>
 
                 <TextView
-                    style="@style/FontStyle_T31"
                     android:id="@+id/shift_log_item_subtitle_value"
+                    style="@style/FontStyle_T31"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:textSize="12sp"
                     android:text="17"
-                    android:textStyle="bold" />
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/shift_log_item_standard"
                     android:layout_width="wrap_content"
-                    android:maxWidth="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="12dp"
                     android:ellipsize="end"
-                    android:text="Standard: 10"
                     android:maxLines="1"
-                    android:textSize="10sp" />
+                    android:maxWidth="120dp"
+                    android:text="Standard: 10"
+                    android:textSize="10sp"/>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider_gray" />
+                    android:background="@color/divider_gray"/>
 
                 <TextView
                     android:id="@+id/shift_log_item_min"
                     android:layout_width="wrap_content"
-                    android:maxWidth="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginStart="12dp"
                     android:ellipsize="end"
-                    android:text="Min: 8"
                     android:maxLines="1"
-                    android:textSize="10sp" />
+                    android:maxWidth="100dp"
+                    android:text="Min: 8"
+                    android:textSize="10sp"/>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider_gray" />
+                    android:background="@color/divider_gray"/>
 
                 <TextView
                     android:id="@+id/shift_log_item_max"
                     android:layout_width="wrap_content"
-                    android:maxWidth="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="12dp"
                     android:ellipsize="end"
-                    android:text="Max: 12"
                     android:maxLines="1"
-                    android:textSize="10sp" />
+                    android:maxWidth="100dp"
+                    android:text="Max: 12"
+                    android:textSize="10sp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -163,6 +162,6 @@
         android:id="@+id/shift_log_bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider_gray" />
+        android:background="@color/divider_gray"/>
 
 </LinearLayout>

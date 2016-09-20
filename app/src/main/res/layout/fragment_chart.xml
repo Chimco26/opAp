@@ -6,7 +6,6 @@
     tools:context="com.operatorsapp.fragments.ChartFragment">
 
     <LinearLayout
-        android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/rectangle_11_copy_2"

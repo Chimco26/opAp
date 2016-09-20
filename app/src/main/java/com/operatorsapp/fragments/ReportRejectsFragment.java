@@ -259,7 +259,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = 0;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, R.id.parent_layouts);
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
         }
     };

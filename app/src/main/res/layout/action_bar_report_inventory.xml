@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/close_image"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:paddingBottom="5dp"
             android:paddingEnd="25dp"
             android:paddingTop="5dp"

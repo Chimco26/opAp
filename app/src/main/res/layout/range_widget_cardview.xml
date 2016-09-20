@@ -7,7 +7,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/range_widget_parent_layout"
+                android:id="@+id/widget_parent_layout"
     android:layout_centerInParent="true"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:autofit="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/event_stopped_parent_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/event_stopped_title_layout"
             android:layout_width="154dp"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -27,8 +30,7 @@
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:layout_marginStart="24dp"
-                    android:src="@drawable/ic_cloud" />
-
+                    android:src="@drawable/ic_cloud"/>
 
                 <TextView
                     android:id="@+id/shift_log_item_time"
@@ -37,8 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
-
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -46,14 +47,13 @@
                 android:id="@+id/shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="3dp"
                 android:layout_marginEnd="8dp"
-                android:maxLines="1"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:textSize="12sp"
-                autofit:minTextSize="8sp" />
+                autofit:minTextSize="8sp"/>
 
 
         </LinearLayout>
@@ -65,7 +65,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
             android:background="@color/divider_gray"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/shift_log_item_subtitle"
@@ -76,11 +76,10 @@
             android:orientation="vertical">
 
             <LinearLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="6dp"
                 android:layout_marginStart="10dp"
                 android:orientation="horizontal">
 
@@ -100,11 +99,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:text="@string/start_"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"/>
 
                         <TextView
-                            style="@style/FontStyle_T31"
                             android:id="@+id/shift_log_item_start"
+                            style="@style/FontStyle_T31"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
@@ -112,7 +111,7 @@
                             android:maxLines="1"
                             android:text="8:50"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
@@ -123,14 +122,14 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginTop="3dp"
                         android:text="05.11.2016"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider_gray" />
+                    android:background="@color/divider_gray"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -149,11 +148,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:text="@string/end_"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"/>
 
                         <TextView
-                            style="@style/FontStyle_T31"
                             android:id="@+id/shift_log_item_end"
+                            style="@style/FontStyle_T31"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
@@ -161,7 +160,7 @@
                             android:maxLines="1"
                             android:text="9:50"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
                     </LinearLayout>
 
                     <TextView
@@ -171,7 +170,7 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginTop="3dp"
                         android:text="05.11.2016"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -179,25 +178,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Duration: "
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
-                    style="@style/FontStyle_T31"
                     android:id="@+id/shift_log_item_duration"
+                    style="@style/FontStyle_T31"
                     android:layout_width="match_parent"
-                    android:maxLines="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:maxLines="1"
                     android:text="8:11h"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -208,6 +207,6 @@
         android:id="@+id/shift_log_bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider_gray" />
+        android:background="@color/divider_gray"/>
 
 </LinearLayout>

@@ -170,7 +170,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         dismissProgressDialog();
         Log.i(LOG_TAG, "onJobsListReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
-        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, R.id.job_recycler_view);
+        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
 
     @Override

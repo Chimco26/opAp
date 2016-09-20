@@ -171,7 +171,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onResume();
         machineStatusStartPolling();
         shiftForMachineTimer();
-//        shiftLogStartPolling();//
         machineDataStartPolling();
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
@@ -244,6 +243,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
+//                durationOfShift = 900000;
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
                     shiftLogStartPolling();
@@ -274,14 +274,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
-        if (mShiftLogCore != null) {
-            mShiftLogCore.stopPolling();
-            mShiftLogCore.unregisterListener();
-            Log.i(LOG_TAG, "mShiftLogCore cleared");
-        }
-        if (mDashboardUICallbackListener != null) {
-            mDashboardUICallbackListener.onShiftForMachineEnded();
-        }
+//        if (mShiftLogCore != null) {
+//            mShiftLogCore.stopPolling();
+//            mShiftLogCore.unregisterListener();
+//            Log.i(LOG_TAG, "mShiftLogCore cleared");
+//        }
+//        if (mDashboardUICallbackListener != null) {
+//            mDashboardUICallbackListener.onShiftForMachineEnded();
+//        }
         shiftForMachineTimer();
     }
 
@@ -436,7 +436,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStartJobFailed(ErrorObjectInterface reason) {
                 Log.i(LOG_TAG, "onStartJobFailed()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, R.id.fragments_container);
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
             }
         });
     }

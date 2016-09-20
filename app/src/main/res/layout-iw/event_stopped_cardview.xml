@@ -3,22 +3,25 @@
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+              android:id="@+id/event_stopped_parent_layout"
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/event_stopped_title_layout"
             android:layout_width="154dp"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -46,9 +49,8 @@
                 android:id="@+id/shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
                 android:ellipsize="end"
@@ -80,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="6dp"
                 android:layout_marginStart="10dp"
                 android:orientation="horizontal">
 
@@ -179,7 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:orientation="horizontal">
 
                 <TextView

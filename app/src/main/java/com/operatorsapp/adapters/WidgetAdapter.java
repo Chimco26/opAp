@@ -4,13 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -30,7 +29,8 @@ import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
-public class WidgetAdapter extends RecyclerView.Adapter {
+public class WidgetAdapter extends RecyclerView.Adapter
+{
     private static final long FOUR_HOURS = 60000L * 60 * 4;
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private Context mContext;
@@ -43,33 +43,43 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
     private boolean mClosedState;
+    private int mHeight;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState) {
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height)
+    {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
         mClosedState = closedState;
+        mHeight = height;
     }
 
-    public void changeState(boolean closedState) {
+    public void changeState(boolean closedState)
+    {
         mClosedState = closedState;
+        notifyDataSetChanged();
     }
 
-    public void setNewData(List<Widget> widgets) {
+    public void setNewData(List<Widget> widgets)
+    {
         mWidgets = widgets;
         notifyDataSetChanged();
     }
 
-    private class NumericViewHolder extends RecyclerView.ViewHolder {
+    private class NumericViewHolder extends RecyclerView.ViewHolder
+    {
 
+        private RelativeLayout mParentLayout;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
         private TextView mChangeMaterial;
 
-        public NumericViewHolder(View itemView) {
+        public NumericViewHolder(View itemView)
+        {
             super(itemView);
 
+            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.numeric_widget_value);
@@ -78,8 +88,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class RangeViewHolder extends RecyclerView.ViewHolder {
+    private class RangeViewHolder extends RecyclerView.ViewHolder
+    {
 
+        private RelativeLayout mParentLayout;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -92,9 +104,11 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mStandard;
         private TextView mMax;
 
-        public RangeViewHolder(View itemView) {
+        public RangeViewHolder(View itemView)
+        {
             super(itemView);
 
+            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
@@ -110,8 +124,10 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class ProjectionViewHolder extends RecyclerView.ViewHolder {
+    private class ProjectionViewHolder extends RecyclerView.ViewHolder
+    {
 
+        private RelativeLayout mParentLayout;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -128,9 +144,11 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mMin;
         private TextView mMax;
 
-        public ProjectionViewHolder(View itemView) {
+        public ProjectionViewHolder(View itemView)
+        {
             super(itemView);
 
+            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.projection_widget_current_value);
@@ -149,16 +167,20 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class TimeViewHolder extends RecyclerView.ViewHolder {
+    private class TimeViewHolder extends RecyclerView.ViewHolder
+    {
 
+        private RelativeLayout mParentLayout;
         private LineChartTimeSmall mChart;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
 
-        public TimeViewHolder(View itemView) {
+        public TimeViewHolder(View itemView)
+        {
             super(itemView);
 
+            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.time_widget_current_value);
@@ -167,19 +189,25 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        switch (viewType) {
-            case NUMERIC: {
+        switch (viewType)
+        {
+            case NUMERIC:
+            {
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
             }
-            case RANGE: {
+            case RANGE:
+            {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false));
             }
-            case PROJECTION: {
+            case PROJECTION:
+            {
                 return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false));
             }
-            case TIME: {
+            case TIME:
+            {
                 return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
             }
         }
@@ -188,12 +216,15 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     @SuppressLint("SimpleDateFormat")
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    {
         int type = getItemViewType(position);
         final Widget widget = mWidgets.get(position);
-        switch (type) {
+        switch (type)
+        {
             case NUMERIC:
                 final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
+                setByHeight(numericViewHolder.mParentLayout);
                 numericViewHolder.mTitle.setText(widget.getFieldName());
                 numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
                 numericViewHolder.mValue.setText(widget.getCurrentValue());
@@ -202,29 +233,37 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 break;
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
+                setByHeight(timeViewHolder.mParentLayout);
                 timeViewHolder.mTitle.setText(widget.getFieldName());
                 timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
                 final ArrayList<Entry> fourHoursValues = new ArrayList<>();
-                if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
+                if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0)
+                {
                     final String[] xValues = new String[widget.getMachineParamHistoricData().size()];
-                    for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
+                    for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++)
+                    {
                         xValues[i] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());/*new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));*/
                         Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue()/*, new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())*/);
-                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - TEN_HOURS)) {
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - TEN_HOURS))
+                        {
                             tenHoursValues.add(entry);
                         }
-                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - FOUR_HOURS)) {
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - FOUR_HOURS))
+                        {
                             fourHoursValues.add(entry);
                         }
                     }
                     timeViewHolder.mChart.setData(fourHoursValues, xValues);
 
-                    timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    timeViewHolder.itemView.setOnClickListener(new View.OnClickListener()
+                    {
                         @Override
-                        public void onClick(View v) {
-                            if (tenHoursValues.size() > 0) {
+                        public void onClick(View v)
+                        {
+                            if (tenHoursValues.size() > 0)
+                            {
                                 mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues), true);
                             }
                         }
@@ -234,27 +273,36 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
+                setByHeight(rangeViewHolder.mParentLayout);
                 rangeViewHolder.mTitle.setText(widget.getFieldName());
                 rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
                 rangeViewHolder.mCurrentValue.setText(widget.getCurrentValue());
-                if (widget.isOutOfRange()) {
+                if (widget.isOutOfRange())
+                {
                     rangeViewHolder.mValue.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
-                } else {
+                }
+                else
+                {
                     rangeViewHolder.mValue.setTextColor(ContextCompat.getColor(mContext, R.color.C16));
                 }
 
                 rangeViewHolder.mRangeViewRed.setCurrentLine(true);
                 rangeViewHolder.mRangeViewBlue.setCurrentLine(false);
-                if (mRangeCapsuleWidth == 0) {
-                    rangeViewHolder.mCapsule.post(new Runnable() {
+                if (mRangeCapsuleWidth == 0)
+                {
+                    rangeViewHolder.mCapsule.post(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
                             setRangeData(widget, rangeViewHolder);
                         }
                     });
-                } else {
+                }
+                else
+                {
                     mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
                     setRangeData(widget, rangeViewHolder);
                 }
@@ -265,24 +313,31 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
             case PROJECTION:
                 final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
+                setByHeight(projectionViewHolder.mParentLayout);
                 projectionViewHolder.mRangeView.setCurrentLine(false);
                 float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
                 projectionViewHolder.mCurrentValueInChart.setText(valueInK(currentFloat));
-                if (currentFloat >= widget.getTarget()) {
+                if (currentFloat >= widget.getTarget())
+                {
                     projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
                     projectionViewHolder.mCurrentValueInChart.setText("");
                     projectionViewHolder.mRangeView.hideView();
-                } else if (widget.getProjection() >= widget.getTarget()) {
+                }
+                else if (widget.getProjection() >= widget.getTarget())
+                {
                     projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                     projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
-                } else {
+                }
+                else
+                {
                     projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                     projectionViewHolder.mProjectionViewEnd.hideView();
                     projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
                 }
-                if (currentFloat <= widget.getLowLimit()) {
+                if (currentFloat <= widget.getLowLimit())
+                {
                     projectionViewHolder.mRangeView.hideView();
                     projectionViewHolder.mProjectionView.hideViews();
                     projectionViewHolder.mProjectionViewStart.hideView();
@@ -291,42 +346,74 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                     projectionViewHolder.mCurrentValueInChart.setText("");
                 }
                 final float finalCurrentFloat = currentFloat;
-                if (mProjectionCapsuleWidth == 0) {
-                    projectionViewHolder.mCapsule.post(new Runnable() {
+                if (mProjectionCapsuleWidth == 0)
+                {
+                    projectionViewHolder.mCapsule.post(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
                             setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                         }
                     });
-                } else {
+                }
+                else
+                {
                     mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
                     setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                 }
                 projectionViewHolder.mMin.setText(valueInK(widget.getLowLimit()));
-//                projectionViewHolder.mStandard.setText(valueInK((int) widget.getStandardValue()));
+                //                projectionViewHolder.mStandard.setText(valueInK((int) widget.getStandardValue()));
                 projectionViewHolder.mMax.setText(valueInK(widget.getTarget()));
                 break;
 
         }
-//        final View itemview= holder.itemView;
-//        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
-//        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            @Override
-//            public boolean onPreDraw() {
-//                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
-//                return true;
-//            }
-//        });
+        //        final View itemview= holder.itemView;
+        //        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
+        //        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        //            @Override
+        //            public boolean onPreDraw() {
+        //                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
+        //                return true;
+        //            }
+        //        });
 
 
     }
 
-    private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat) {
+    private void setByHeight(final RelativeLayout parent)
+    {
+        parent.post(new Runnable() {
+            @Override
+            public void run()
+            {
+//                ViewGroup.LayoutParams layoutParams;
+//                layoutParams = parent.getLayoutParams();
+//                layoutParams.height = /*(int) (mHeight * 0.38);*/ layoutParams.MATCH_PARENT;
+//                layoutParams.width = /*(int) (layoutParams.height * 1.45)*/layoutParams.MATCH_PARENT;
+//                parent.requestLayout();
+            }
+        });
+
+    }
+
+    private void setByWidth(RelativeLayout parent)
+    {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.width = (int) (mHeight * 0.3);
+        layoutParams.height = (int) (layoutParams.width * 0.69);
+        parent.requestLayout();
+    }
+
+    private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat)
+    {
         projectionViewHolder.mTitle.setText(widget.getFieldName());
         projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
         projectionViewHolder.mValue.setText(valueInK(finalCurrentFloat));
-        if (widget.getTarget() > widget.getLowLimit()) {
+        if (widget.getTarget() > widget.getLowLimit())
+        {
             float scaleValue = (widget.getTarget() - widget.getLowLimit());
             float currentValue = finalCurrentFloat - widget.getLowLimit();
             float projectionValue = (widget.getProjection() - widget.getLowLimit());
@@ -337,43 +424,59 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
             projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
         }
-        if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
+        if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0)
+        {
             projectionViewHolder.mEndDivider.setVisibility(View.GONE);
-        } else {
+        }
+        else
+        {
             projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setRangeData(Widget widget, RangeViewHolder rangeViewHolder) {
+    private void setRangeData(Widget widget, RangeViewHolder rangeViewHolder)
+    {
         int currentValue = (int) tryParse(widget.getCurrentValue(), StringParse.INT);
-        if (widget.isOutOfRange() && currentValue > widget.getHighLimit()) {
+        if (widget.isOutOfRange() && currentValue > widget.getHighLimit())
+        {
             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            if (mClosedState) {
+            if (mClosedState)
+            {
                 rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.84)/*max location*/);
-            } else{
+            }
+            else
+            {
                 //todo
             }
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
-        } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
+        }
+        else if (widget.isOutOfRange() && currentValue < widget.getLowLimit())
+        {
             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
             rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-            if(mClosedState) {
+            if (mClosedState)
+            {
                 rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.001)/*min location*/);
-            } else {
+            }
+            else
+            {
                 //todo
             }
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
-        } else {
+        }
+        else
+        {
             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
             rangeViewHolder.mRedMark.setVisibility(View.GONE);
             rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
             rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
-            if (widget.getHighLimit() > widget.getLowLimit()) {
+            if (widget.getHighLimit() > widget.getLowLimit())
+            {
                 float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
                 float currentFloatValue = currentValue - widget.getLowLimit();
                 final float convertCurrentValue = currentFloatValue / scaleValue;
@@ -384,33 +487,44 @@ public class WidgetAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressLint("DefaultLocale")
-    private String valueInK(float value) {
+    private String valueInK(float value)
+    {
         String valueString = String.valueOf(value);
-        if (value >= 1000) {
+        if (value >= 1000)
+        {
             float valueFloat = value / 1000;
-            if (value % 100 == 0) {
+            if (value % 100 == 0)
+            {
                 valueString = String.format("%.1f", valueFloat);
-            } else {
+            }
+            else
+            {
                 valueString = String.format("%.2f", valueFloat);
             }
-            if (value % 1000 == 0) {
+            if (value % 1000 == 0)
+            {
                 valueString = String.valueOf(value / 1000);
             }
             return valueString + "k";
-        } else {
+        }
+        else
+        {
             return valueString;
         }
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return mWidgets.size();
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position)
+    {
         int type;
-        switch (mWidgets.get(position).getFieldType()) {
+        switch (mWidgets.get(position).getFieldType())
+        {
             case 0:
                 type = NUMERIC;
                 break;
@@ -430,19 +544,25 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         return type;
     }
 
-    enum StringParse {
+    enum StringParse
+    {
         INT, FLOAT
     }
 
-    public float tryParse(String value, StringParse stringParse) {
-        try {
-            if (stringParse == StringParse.INT) {
+    public float tryParse(String value, StringParse stringParse)
+    {
+        try
+        {
+            if (stringParse == StringParse.INT)
+            {
                 return Integer.parseInt(value);
             }
-            if (stringParse == StringParse.FLOAT) {
+            if (stringParse == StringParse.FLOAT)
+            {
                 return Float.parseFloat(value);
             }
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe)
+        {
             // Log exception.
             return 0;
         }

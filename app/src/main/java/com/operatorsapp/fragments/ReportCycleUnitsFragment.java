@@ -301,7 +301,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, R.id.top_layout);
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
 
         }

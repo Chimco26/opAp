@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/range_widget_parent_layout"
+                android:id="@+id/widget_parent_layout"
     android:layout_height="168dp"
     android:layout_width="260dp"
     android:background="@drawable/combined_shape"

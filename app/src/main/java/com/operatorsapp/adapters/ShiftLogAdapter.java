@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operators.machinedatainfra.models.Widget;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -20,7 +19,6 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -31,18 +29,22 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<Event> mEvents;
     private boolean mClosedState;
-    private int mPanelWidth;
+    private int mCloseWidth;
+    private int mOpenWidth;
+    private int mHeight;
 
     private final int PARAMETER = 1;
     private final int STOPPED = 2;
     private OnStopClickListener mOnStopClickListener;
 
-    public ShiftLogAdapter(Context context, ArrayList<Event> events, boolean closedState, int panelWidth, OnStopClickListener onStopClickListener) {
+    public ShiftLogAdapter(Context context, ArrayList<Event> events, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height) {
         mEvents = events;
         mContext = context;
         mClosedState = closedState;
-        mPanelWidth = panelWidth;
+        mCloseWidth = closeWidth;
         mOnStopClickListener = onStopClickListener;
+        mOpenWidth = openWidth;
+        mHeight = height;
     }
 
     public void setNewData(ArrayList<Event> events) {
@@ -52,10 +54,13 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
     public void changeState(boolean closedState) {
         mClosedState = closedState;
+        notifyDataSetChanged();
     }
 
     private class ShiftLogStoppedViewHolder extends RecyclerView.ViewHolder {
 
+        private LinearLayout mParentLayout;
+        private LinearLayout mTitleLayout;
         private AutofitTextView mTitle;
         private ImageView mIcon;
         private TextView mStart;
@@ -70,6 +75,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         public ShiftLogStoppedViewHolder(View itemView) {
             super(itemView);
+            mParentLayout = (LinearLayout)itemView.findViewById(R.id.event_stopped_parent_layout);
+            mTitleLayout = (LinearLayout)itemView.findViewById(R.id.event_stopped_title_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
@@ -86,6 +93,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
     private class ShiftLogParameterViewHolder extends RecyclerView.ViewHolder {
 
+        private LinearLayout mParentLayout;
+        private LinearLayout mTitleLayout;
         private AutofitTextView mTitle;
         private ImageView mIcon;
         private TextView mSubtitleText;
@@ -100,6 +109,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         public ShiftLogParameterViewHolder(View itemView) {
             super(itemView);
+            mParentLayout = (LinearLayout)itemView.findViewById(R.id.event_parameter_parent_layout);
+            mTitleLayout = (LinearLayout)itemView.findViewById(R.id.event_parameter_title_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mSubtitleText = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_text);
@@ -138,6 +149,16 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         if (type == STOPPED) {
             final ShiftLogStoppedViewHolder shiftLogStoppedViewHolder = (ShiftLogStoppedViewHolder) holder;
 
+            ViewGroup.LayoutParams mItemViewParams;
+            mItemViewParams = shiftLogStoppedViewHolder.mParentLayout.getLayoutParams();
+            mItemViewParams.height = (int) (mHeight * 0.23);
+            shiftLogStoppedViewHolder.mParentLayout.requestLayout();
+
+            ViewGroup.LayoutParams mShWoopListParams;
+            mShWoopListParams = shiftLogStoppedViewHolder.mTitleLayout.getLayoutParams();
+            mShWoopListParams.width = (int) (mOpenWidth * 0.38);
+            shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
+
             if (!event.isTreated()) {
                 if (event.getPriority() == 1) {
                     shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
@@ -167,7 +188,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogStoppedViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = (int) (mPanelWidth * 0.4);
+                mBottomDividerLayoutParams.width = (int) (mCloseWidth * 0.5);
                 shiftLogStoppedViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.VISIBLE);
@@ -209,6 +230,16 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         } else if (type == PARAMETER) {
             final ShiftLogParameterViewHolder shiftLogParameterViewHolder = (ShiftLogParameterViewHolder) holder;
 
+            ViewGroup.LayoutParams mItemViewParams;
+            mItemViewParams = shiftLogParameterViewHolder.mParentLayout.getLayoutParams();
+            mItemViewParams.height = (int) (mHeight * 0.23);
+            shiftLogParameterViewHolder.mParentLayout.requestLayout();
+
+            ViewGroup.LayoutParams mShWoopListParams;
+            mShWoopListParams = shiftLogParameterViewHolder.mTitleLayout.getLayoutParams();
+            mShWoopListParams.width = (int) (mOpenWidth * 0.38);
+            shiftLogParameterViewHolder.mTitleLayout.requestLayout();
+
             if (!event.isTreated()) {
                 if (event.getPriority() == 1) {
                     shiftLogParameterViewHolder.mIcon.setImageResource(R.drawable.ic_sun_red);
@@ -238,7 +269,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
 
                 final ViewGroup.LayoutParams mBottomDividerLayoutParams = shiftLogParameterViewHolder.mBottomDivider.getLayoutParams();
-                mBottomDividerLayoutParams.width = (int) (mPanelWidth * 0.4);
+                mBottomDividerLayoutParams.width = (int) (mCloseWidth * 0.5);
                 shiftLogParameterViewHolder.mBottomDivider.requestLayout();
             } else {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.VISIBLE);
