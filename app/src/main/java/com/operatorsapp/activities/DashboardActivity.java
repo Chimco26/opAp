@@ -507,7 +507,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         silentLoginCallback.onSilentLoginFailed(reason);
                         Fragment fragment = getCurrentFragment();
                         if (fragment instanceof SignInOperatorFragment) {
-                            ShowCrouton.operatorLoadingErrorCrouton(onCroutonRequestListener, "credentials mismatch");
+
+                            ShowCrouton.jobsLoadingErrorCrouton(onCroutonRequestListener,reason);
+                            //ShowCrouton.operatorLoadingErrorCrouton(onCroutonRequestListener, "credentials mismatch");
                         }
                     }
                 });
