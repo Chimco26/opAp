@@ -17,11 +17,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.model.CurrentJob;
 
-public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback {
+public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
+{
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
@@ -147,5 +149,11 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     @Override
     public void onStartJobFailure() {
         Log.i(LOG_TAG, "onStartJobFailure()");
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.selected_job_crouton_root;
     }
 }

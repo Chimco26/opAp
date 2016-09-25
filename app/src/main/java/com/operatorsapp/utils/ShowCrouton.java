@@ -34,7 +34,16 @@ public class ShowCrouton {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_data);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
-            } else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
+            } else if (ErrorObject.ErrorCode.Retrofit.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+            } else if (ErrorObject.ErrorCode.Server.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+
+            /*} else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
@@ -46,6 +55,7 @@ public class ShowCrouton {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_shift_log);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+                */
             } else {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);

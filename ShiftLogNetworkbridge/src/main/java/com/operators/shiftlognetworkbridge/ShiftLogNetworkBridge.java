@@ -2,6 +2,7 @@ package com.operators.shiftlognetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
@@ -95,8 +96,8 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 }
                 else
                 {
-                    ZLogger.d(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_shift_for_machine_failed, "shift for machine failed");
+                    ZLogger.e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
             }
@@ -135,7 +136,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             case 0:
                 return ErrorObject.ErrorCode.No_data;
             case 500:
-                return ErrorObject.ErrorCode.Fail_to_perform_GetMachineShiftLog;
+                return ErrorObject.ErrorCode.Server;
         }
         return ErrorObject.ErrorCode.Unknown;
     }

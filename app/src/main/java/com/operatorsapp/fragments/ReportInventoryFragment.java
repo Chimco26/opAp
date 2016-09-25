@@ -33,12 +33,14 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportInventoryFragment extends Fragment implements View.OnClickListener {
+public class ReportInventoryFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -320,5 +322,11 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             });
         }
 
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.report_inventory_crouton_root;
     }
 }

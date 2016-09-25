@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/jobs_list_fragment"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/jobs_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/error_job_frame_layout"
@@ -139,6 +144,8 @@
         android:id="@+id/job_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    </FrameLayout>
 
 
 </LinearLayout>

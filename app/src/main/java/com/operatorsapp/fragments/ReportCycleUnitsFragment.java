@@ -36,13 +36,15 @@ import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
 import java.util.Locale;
 
-public class ReportCycleUnitsFragment extends Fragment implements View.OnClickListener {
+public class ReportCycleUnitsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     public static final String LOG_TAG = ReportCycleUnitsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -333,5 +335,11 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 }
             });
         }
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.top_layout;
     }
 }

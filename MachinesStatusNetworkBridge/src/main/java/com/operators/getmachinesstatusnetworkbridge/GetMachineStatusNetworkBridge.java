@@ -3,6 +3,7 @@ package com.operators.getmachinesstatusnetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.GetMachineStatusDataRequest;
@@ -63,7 +64,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                 } else {
                     mRetryCount = 0;
                     Log.d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "Get_machines_failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }
             }

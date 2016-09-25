@@ -32,12 +32,14 @@ import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportRejectsFragment extends Fragment implements View.OnClickListener {
+public class ReportRejectsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -292,4 +294,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 
     }
 
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.parent_layouts;
+    }
 }

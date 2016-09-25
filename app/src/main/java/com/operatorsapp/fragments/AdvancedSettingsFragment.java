@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 
-public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener {
+public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     private static final String SELECTED_LANGUAGE = "selected_language";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -227,5 +229,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         }
 
 
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.advanced_settings_crouton_root;
     }
 }

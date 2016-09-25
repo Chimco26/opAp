@@ -6,6 +6,7 @@ import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
 import com.operators.operatornetworkbridge.server.ErrorObject;
@@ -74,7 +75,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                 } else {
                     mRetryCount = 0;
                     Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_operator_failed, "Get_operator_failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_operator_failed Error");
                     getOperatorByIdCallback.onGetOperatorFailed(errorObject);
                 }
             }
@@ -106,7 +107,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                 } else {
                     mRetryCount = 0;
                     Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Set_operator_for_machine_failed, "Set_operator_for_machine_failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Set_operator_for_machine_failed Error");
                     setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
                 }
             }

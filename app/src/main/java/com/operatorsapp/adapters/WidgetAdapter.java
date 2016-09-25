@@ -264,7 +264,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
                         {
                             if (tenHoursValues.size() > 0)
                             {
-                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(mContext, tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues), true);
+                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues), true);
                             }
                         }
                     });

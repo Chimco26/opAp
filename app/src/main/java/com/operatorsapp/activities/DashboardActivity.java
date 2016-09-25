@@ -54,6 +54,7 @@ import com.operatorsapp.fragments.DashboardFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
@@ -77,7 +78,8 @@ import java.util.concurrent.TimeUnit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener,
-        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener {
+        JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -260,7 +262,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftForMachineFailed(ErrorObjectInterface reason) {
-                ShowCrouton.operatorLoadingErrorCrouton(DashboardActivity.this, reason.getDetailedDescription());
+                Log.w(LOG_TAG,"get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
             }
         });
     }
@@ -344,7 +347,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
-            mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
+            mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, getCroutonRoot(), croutonType);
         }
     }
 
@@ -637,6 +640,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         startActivity(myIntent);
         finish();
         startActivity(myIntent);
+    }
+
+    public int getCroutonRoot()
+    {
+        Fragment currentFragment = getCurrentFragment();
+        if(currentFragment != null && currentFragment instanceof CroutonRootProvider)
+        {
+            return ((CroutonRootProvider)currentFragment).getCroutonRoot();
+        }
+        return R.id.parent_layouts;
     }
 
     @Override

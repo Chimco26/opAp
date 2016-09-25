@@ -34,6 +34,7 @@ import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -42,7 +43,8 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
-public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener {
+public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
+{
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
 //    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -259,5 +261,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.report_stop_reason_crouton_root;
     }
 }

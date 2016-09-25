@@ -84,6 +84,11 @@
 
     </RelativeLayout>
 
+    <FrameLayout
+        android:id="@+id/report_reject_selected_items_crouton_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -252,5 +257,7 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

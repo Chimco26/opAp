@@ -28,12 +28,14 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.NetworkAvailable;
 
-public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener {
+public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
@@ -244,5 +246,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 //            }
 //        }, 2000);
 
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.settings_crouton_root;
     }
 }

@@ -27,6 +27,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.JobsRecyclerViewAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
@@ -38,7 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener {
+public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener, CroutonRootProvider
+{
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
     private RecyclerView mJobsRecyclerView;
@@ -241,5 +243,11 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
                 ProgressDialogManager.dismiss();
             }
         });
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.jobs_list_fragment;
     }
 }
