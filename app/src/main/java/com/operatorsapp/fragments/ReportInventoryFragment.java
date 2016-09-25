@@ -299,22 +299,26 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     }
 
     private void initJobsSpinner() {
-        mJobsSpinner.setVisibility(View.VISIBLE);
-        final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-        activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-        mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-        mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                activeJobsSpinnerAdapter.setTitle(position);
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
-            }
+        if(getActivity() != null)
+        {
+            mJobsSpinner.setVisibility(View.VISIBLE);
+            final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+            activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    activeJobsSpinnerAdapter.setTitle(position);
+                    mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 }
