@@ -109,9 +109,9 @@
     <string name="one">1</string>
     <string name="end_">End: </string>
     <string name="start_">Start: </string>
-    <string name="chart_min_">Min. </string>
+    <string name="chart_min_">Min: </string>
     <string name="chart_standard_">Standard:&#160;</string>
-    <string name="chart_max_">Max. </string>
+    <string name="chart_max_">Max: </string>
     <string name="space"> </string>
     <string name="switch_user">Switch user</string>
     <string name="standard">Standard&#160;</string>

@@ -30,14 +30,16 @@ public class ChartFragment extends Fragment {
     private static final String STANDARD = "standard";
     private static final String MAX = "max";
     private static final String X_VALUES = "xValues";
+    private static final String FIELD_NAME = "fieldName";
 
     private ArrayList<Entry> mValues;
     private float mMinVal;
     private float mStandardVal;
     private float mMaxVal;
     private String[] mXValues;
+    private String mFieldName;
 
-    public static ChartFragment newInstance(ArrayList<Entry> values, float min, float standard, float max, String[] xValues) {
+    public static ChartFragment newInstance(ArrayList<Entry> values, float min, float standard, float max, String[] xValues,String fieldName) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
         Bundle args = new Bundle();
@@ -46,6 +48,7 @@ public class ChartFragment extends Fragment {
         args.putFloat(STANDARD, standard);
         args.putFloat(MAX, max);
         args.putStringArray(X_VALUES, xValues);
+        args.putString(FIELD_NAME, fieldName);
 
         ChartFragment fragment = new ChartFragment();
         fragment.setArguments(args);
@@ -65,6 +68,7 @@ public class ChartFragment extends Fragment {
             mStandardVal = getArguments().getFloat(STANDARD);
             mMaxVal = getArguments().getFloat(MAX);
             mXValues = getArguments().getStringArray(X_VALUES);
+            mFieldName = getArguments().getString(FIELD_NAME);
         }
     }
 
@@ -83,12 +87,19 @@ public class ChartFragment extends Fragment {
         if(context != null)
         {
             TextView mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-            mMin.setText(new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMinVal)));
+            StringBuilder minText = new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMinVal));
+
             TextView mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-            mStandard.setText(new StringBuilder(context.getString(R.string.chart_standard_)).append(context.getString(R.string.space)).append(String.valueOf((int) mStandardVal)));
+            StringBuilder standardText = new StringBuilder(context.getString(R.string.chart_standard_)).append(context.getString(R.string.space)).append(String.valueOf((int) mStandardVal));
+
             TextView mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-            mMax.setText(new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMaxVal)));
+            StringBuilder maxText = new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMaxVal));
+
             LineChartTimeLarge mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
+
+            mMin.setText(minText);
+            mStandard.setText(standardText);
+            mMax.setText(maxText);
 
             mChart.setData(mValues, mXValues);
             mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal);
@@ -97,7 +108,7 @@ public class ChartFragment extends Fragment {
         setActionBar();
     }
 
-    @SuppressLint("SetTextI18n")
+
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -111,7 +122,7 @@ public class ChartFragment extends Fragment {
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
             TextView title = (TextView) view.findViewById(R.id.new_job_title);
-            title.setText("Cycle time");
+            title.setText(mFieldName);
             ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
