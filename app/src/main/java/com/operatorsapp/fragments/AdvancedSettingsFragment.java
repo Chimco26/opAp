@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -177,7 +178,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.advanced_settings_action_bar, null);
+            View view = inflater.inflate(R.layout.settings_action_bar, null);
             ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -186,6 +187,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                 }
             });
             actionBar.setCustomView(view);
+            ((TextView)view.findViewById(R.id.new_job_title)).setText(getString(R.string.advanced_settings));
         }
     }
 
