@@ -174,6 +174,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         machineStatusStartPolling();
         shiftForMachineTimer();
         machineDataStartPolling();
+        shiftLogStartPolling();
 
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
         mReportFieldsForMachineCore.startPolling();
@@ -248,7 +249,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                durationOfShift = 900000;
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
-                    shiftLogStartPolling();
+                    //shiftLogStartPolling();
                 } else {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -639,7 +640,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);
         finish();
-        startActivity(myIntent);
+        //startActivity(myIntent);
     }
 
     public int getCroutonRoot()

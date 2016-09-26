@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -137,13 +138,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         if (mRetrofit == null) {
             OkHttpClient okHttpClient;
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             if (timeout >= 0 && timeUnit != null) {
+
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
 //                        .addInterceptor(new RetrofitMockClient())
                         .connectTimeout(timeout, timeUnit)
                         .writeTimeout(timeout, timeUnit)
                         .readTimeout(timeout, timeUnit)
+                        .addInterceptor(loggingInterceptor)
 //                    .sslSocketFactory(sslContext.getSocketFactory())
                         .build();
             }
@@ -151,6 +156,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
                 okHttpClient = new OkHttpClient.Builder()
                         //add mock
 //                        .addInterceptor(new RetrofitMockClient())
+                        .addInterceptor(loggingInterceptor)
                         .build();
             }
             mRetrofit = new Retrofit.Builder()
