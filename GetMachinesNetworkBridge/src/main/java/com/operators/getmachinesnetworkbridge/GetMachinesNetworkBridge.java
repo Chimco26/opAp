@@ -1,6 +1,7 @@
 package com.operators.getmachinesnetworkbridge;
 
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
@@ -42,7 +43,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                         getMachinesCallback.onGetMachinesSucceeded(machines);
                     } else {
                         ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "list null or empty");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "list null or empty");
                         getMachinesCallback.onGetMachinesFailed(errorObject);
                     }
                 } else {
@@ -59,7 +60,7 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     call.clone().enqueue(this);
                 } else {
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, "General Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     getMachinesCallback.onGetMachinesFailed(errorObject);
                 }
             }

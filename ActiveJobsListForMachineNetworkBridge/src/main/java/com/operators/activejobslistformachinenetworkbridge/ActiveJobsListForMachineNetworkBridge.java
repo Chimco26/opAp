@@ -10,6 +10,7 @@ import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.activejobslistformachinenetworkbridge.server.requests.GetActiveJobsListForMachineRequest;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
+import com.operators.errorobject.ErrorObjectInterface;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,20 +45,23 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                             if (activeJobsListForMachine != null && activeJobsListForMachine.getActiveJobs().size() > 0) {
                                 callback.onGetActiveJobsListForMachineSuccess(activeJobsListForMachine);
                             } else {
-                                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
+                                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
                             Log.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
-                            callback.onGetActiveJobsListForMachineFailed(errorObject);
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                            if(callback != null)
+                            {
+                                callback.onGetActiveJobsListForMachineFailed(errorObject);
+                            }
                         }
                     } else {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
                     }
                 } else {
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response is null Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }
             }
@@ -70,7 +74,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                 } else {
                     mRetryCount = 0;
                     Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_active_jobs_for_machine_failed, "Response failure");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }
             }

@@ -33,12 +33,14 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportInventoryFragment extends Fragment implements View.OnClickListener {
+public class ReportInventoryFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -299,22 +301,32 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     }
 
     private void initJobsSpinner() {
-        mJobsSpinner.setVisibility(View.VISIBLE);
-        final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-        activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-        mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-        mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                activeJobsSpinnerAdapter.setTitle(position);
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
-            }
+        if(getActivity() != null)
+        {
+            mJobsSpinner.setVisibility(View.VISIBLE);
+            final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+            activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    activeJobsSpinnerAdapter.setTitle(position);
+                    mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.report_inventory_crouton_root;
     }
 }

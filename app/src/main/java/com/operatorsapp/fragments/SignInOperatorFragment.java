@@ -31,11 +31,13 @@ import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
-public class SignInOperatorFragment extends Fragment implements View.OnClickListener {
+public class SignInOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
@@ -233,5 +235,11 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         IBinder binder = view.getWindowToken();
         inputManager.hideSoftInputFromWindow(binder,
                 InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.operator_screen;
     }
 }

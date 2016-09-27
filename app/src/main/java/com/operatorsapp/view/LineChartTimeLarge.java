@@ -172,7 +172,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine1.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine1);
 
-        LimitLine limitLine2 = new LimitLine(standard, "Standard");
+        LimitLine limitLine2 = new LimitLine(standard, "        Standard");
         limitLine2.setLineColor(ContextCompat.getColor(context, R.color.C16));
         limitLine2.setTextSize(16);
         limitLine2.setTextColor(ContextCompat.getColor(context, R.color.red_line));
@@ -180,7 +180,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine2);
 
-        LimitLine limitLine3 = new LimitLine(min, "Min.");
+        LimitLine limitLine3 = new LimitLine(min, "Min");
         limitLine3.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setTextSize(16);
         limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
@@ -188,7 +188,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine3);
 
-        LimitLine limitLine4 = new LimitLine(max, "Max.");
+        LimitLine limitLine4 = new LimitLine(max, "                          Max");
         limitLine4.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setTextSize(16);
         limitLine4.setTextColor(ContextCompat.getColor(context, R.color.red_line));

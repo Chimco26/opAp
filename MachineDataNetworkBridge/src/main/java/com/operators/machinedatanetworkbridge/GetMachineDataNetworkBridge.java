@@ -3,6 +3,7 @@ package com.operators.machinedatanetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.models.Widget;
@@ -69,7 +70,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 {
                     mRetryCount = 0;
                     ZLogger.d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machine_parameters_failed, t.getMessage());
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
             }
@@ -89,7 +90,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;
             case 500:
-                return ErrorObject.ErrorCode.Error_rest;
+                return ErrorObject.ErrorCode.Server;
         }
         return ErrorObject.ErrorCode.Unknown;
     }

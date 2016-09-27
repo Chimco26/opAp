@@ -2,6 +2,7 @@ package com.operators.reportrejectnetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
@@ -78,7 +79,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
                     } else {
                         retryCount[0] = 0;
                         Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "Send_Report_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {
@@ -119,7 +120,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
                     } else {
                         retryCount[0] = 0;
                         Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "Send_Report_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
@@ -159,7 +160,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
                     } else {
                         retryCount[0] = 0;
                         Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "Send_Report_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
@@ -198,7 +199,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
                     } else {
                         retryCount[0] = 0;
                         Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Send_Report_Failed, "Send_Report_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {

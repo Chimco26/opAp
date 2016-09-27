@@ -2,6 +2,7 @@ package com.operatorsapp.utils;
 
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.view.View;
 
@@ -19,54 +20,69 @@ public class ShowCrouton {
         if (reason == null) {
             String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
             String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
-            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + credentialsError);
-            spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
+            createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,credentialsError,null);
         } else {
             if (ErrorObject.ErrorCode.Url_not_correct.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.url_error);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + credentialsError);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.URL_ERROR);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.URL_ERROR,prefix,credentialsError,null);
             } else if (ErrorObject.ErrorCode.Credentials_mismatch.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.credentials_error);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + credentialsError);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
             } else if (ErrorObject.ErrorCode.No_data.equals(reason.getError())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.no_data).concat(" ");
-                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_get_data);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + credentialsError);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-            } else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.error_rest).concat(" ");
-                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_get_data);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(credentialsError + prefix);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_data);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+            } else if (ErrorObject.ErrorCode.Retrofit.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_reach_server_error);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+            } else if (ErrorObject.ErrorCode.Server.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+
+            /*} else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
             } else if (ErrorObject.ErrorCode.Get_machines_failed.equals(reason.getError())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.error_rest).concat(" ");
-                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_get_data);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(credentialsError + prefix);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
             } else if (ErrorObject.ErrorCode.Fail_to_perform_GetMachineShiftLog.equals(reason.getError())) {
-                String prefix = OperatorApplication.getAppContext().getString(R.string.error_shift_log).concat(" ");
-                String credentialsError = OperatorApplication.getAppContext().getString(R.string.could_not_get_data);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(credentialsError + prefix);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showEventsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_shift_log);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+                */
             } else {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);
-                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + networkError);
-                spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                showCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,networkError,null);
             }
         }
+    }
+
+    private static void createCrouton(OnCroutonRequestListener onCroutonRequestListener, CroutonCreator.CroutonType croutonType, String prefix, String message, String suffix)
+    {
+        if(TextUtils.isEmpty(prefix))
+        {
+            prefix = "";
+        }
+        if(TextUtils.isEmpty(message))
+        {
+            message = "";
+        }
+        if(TextUtils.isEmpty(suffix))
+        {
+            suffix = "";
+        }
+
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(prefix + message + suffix);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, prefix.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), spannableStringBuilder.length() - suffix.length(), spannableStringBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        showCrouton(onCroutonRequestListener, spannableStringBuilder, croutonType);
     }
 
     public static void jobsLoadingErrorCrouton(OnCroutonRequestListener onCroutonRequestListener) {

@@ -58,9 +58,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onBackPressed() {
-        if (mIsTryToLogin) {
-            return;
-        } else {
+        if (!mIsTryToLogin)
+        {
             super.onBackPressed();
         }
     }

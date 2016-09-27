@@ -30,6 +30,7 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -38,7 +39,8 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
-public class SelectedStopReasonFragment extends Fragment implements OnSelectedSubReasonListener, View.OnClickListener {
+public class SelectedStopReasonFragment extends Fragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider
+{
 
     public static final String LOG_TAG = SelectedStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -272,4 +274,10 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             }
         }
     };
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.selected_stop_crouton_root;
+    }
 }

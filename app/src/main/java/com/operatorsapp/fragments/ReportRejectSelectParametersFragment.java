@@ -28,11 +28,13 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener {
+public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = ReportRejectSelectParametersFragment.class.getSimpleName();
     private static final String REJECT_REASON = "reject_reason";
@@ -275,4 +277,10 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             }
         }
     };
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.report_reject_selected_items_crouton_root;
+    }
 }

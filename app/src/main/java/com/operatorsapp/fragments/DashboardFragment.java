@@ -49,6 +49,7 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -65,7 +66,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener
+public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
@@ -1000,4 +1001,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
 
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.parent_layouts;
+    }
 }

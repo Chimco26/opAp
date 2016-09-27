@@ -2,6 +2,7 @@ package com.operators.jobsnetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobListForMachine;
@@ -48,12 +49,12 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                         if (jobListForMachine.getData().size() > 0) {
                             getJobsListForMachineCallback.onGetJobsListForMachineSuccess(jobListForMachine);
                         } else {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Jobs_list_Is_Empty, "Jobs_list_Is_Empty Error");
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Jobs_list_Is_Empty Error");
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
                     } else {
                         Log.w(LOG_TAG, "jobListForMachine.getData() is null");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 } else {
@@ -62,7 +63,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     } else {
                         Log.w(LOG_TAG, "response.body() is null");
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
                 }
@@ -76,7 +77,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                 } else {
                     mRetryCount = 0;
                     Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "Get_jobs_list_failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_jobs_list_failed Error");
                     getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                 }
             }
@@ -105,7 +106,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
 
             @Override
             public void onFailure(Call<StartJobForMachineResponse> call, Throwable t) {
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_jobs_list_failed, "General Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                 startJobForMachineCallback.onStartJobForMachineFailed(errorObject);
             }
         });

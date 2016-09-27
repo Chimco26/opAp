@@ -2,6 +2,7 @@ package com.operators.reportfieldsformachinenetworkbridge;
 
 import android.util.Log;
 
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
@@ -40,7 +41,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 if (callback != null) {
                     if (response.isSuccessful()) {
                         if (response.body().getReportFieldsForMachine() == null) {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_report_fields_failed, "Response data is null");
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response data is null");
                             callback.onGetReportFieldsForMachineFailed(errorObject);
                         } else {
                             Log.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
@@ -64,7 +65,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                     } else {
                         mRetryCount = 0;
                         Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_report_fields_failed, "Response Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 } else {

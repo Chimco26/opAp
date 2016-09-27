@@ -22,9 +22,11 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
+import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 
-public class SelectedOperatorFragment extends Fragment implements View.OnClickListener {
+public class SelectedOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+{
     public static final String LOG_TAG = SelectedOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
     private Button mSignInButton;
@@ -141,5 +143,11 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             mOperatorCoreToDashboardActivityCallback = null;
         }
         mOperatorCore.unregisterListener();
+    }
+
+    @Override
+    public int getCroutonRoot()
+    {
+        return R.id.operator_screen;
     }
 }
