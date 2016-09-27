@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.app.operatorinfra.Operator;
 import com.github.mikephil.charting.utils.Utils;
@@ -33,6 +34,7 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
@@ -128,13 +130,12 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     selectedOperatorFragment.setArguments(bundle);
                     mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
                 }
-
             } else {
                 Log.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
             }
-
+            dismissProgressDialog();
         }
 
         @Override
@@ -162,12 +163,12 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
         @Override
         public void onSetOperatorSuccess() {
-
+            dismissProgressDialog();
         }
 
         @Override
         public void onSetOperatorFailed(ErrorObjectInterface reason) {
-
+            dismissProgressDialog();
         }
     };
 
@@ -197,7 +198,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -212,6 +213,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_operator_signIn: {
+                ProgressDialogManager.show(getActivity());
                 String id = mOperatorIdEditText.getText().toString();
                 Log.i(LOG_TAG, "Operator id: " + id);
                 mOperatorCore.getOperatorById(id);
@@ -241,5 +243,20 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     public int getCroutonRoot()
     {
         return R.id.operator_screen;
+    }
+
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 }

@@ -38,7 +38,8 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment
+{
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
     private GoToScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
@@ -48,30 +49,37 @@ public class LoginFragment extends Fragment {
     private RelativeLayout mLoginButton;
     private ImageView mLoginBtnBackground;
     private ImageView mShowHidePass;
+    private boolean mPasswordIsVisible = false;
 
-    public static LoginFragment newInstance() {
+    public static LoginFragment newInstance()
+    {
         return new LoginFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        try {
+        try
+        {
             mNavigationCallback = (GoToScreenListener) context;
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e)
+        {
             throw new ClassCastException("Calling fragment must implement interface");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         final View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
         mSiteUrl = (EditText) rootView.findViewById(R.id.factory_url);
@@ -80,10 +88,13 @@ public class LoginFragment extends Fragment {
         mPassword = (EditText) rootView.findViewById(R.id.password);
         mLoginBtnBackground = (ImageView) rootView.findViewById(R.id.loginBtn_background);
 
-        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (isAllFieldsAreValid()) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (isAllFieldsAreValid())
+                {
                     tryToLogin();
                 }
                 return true;
@@ -95,22 +106,27 @@ public class LoginFragment extends Fragment {
         mUserName.addTextChangedListener(mTextWatcher);
         mPassword.addTextChangedListener(mTextWatcher);
         mShowHidePass = (ImageView) rootView.findViewById(R.id.show_hide_pass);
-        mShowHidePass.setOnClickListener(new View.OnClickListener() {
-            private boolean isVisible = false;
-
+        mShowHidePass.setEnabled(false);
+        mShowHidePass.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                if (mShowHidePass.isEnabled()) {
-                    if (!isVisible) {
+            public void onClick(View v)
+            {
+                if (mShowHidePass.isEnabled())
+                {
+                    if (!mPasswordIsVisible)
+                    {
                         mPassword.setTransformationMethod(null);
                         mPassword.setSelection(mPassword.length());
                         mShowHidePass.setImageResource(R.drawable.icn_show_password);
-                        isVisible = true;
-                    } else {
+                        mPasswordIsVisible = true;
+                    }
+                    else
+                    {
                         mPassword.setTransformationMethod(new PasswordTransformationMethod());
                         mPassword.setSelection(mPassword.length());
                         mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
-                        isVisible = false;
+                        mPasswordIsVisible = false;
                     }
                 }
             }
@@ -119,7 +135,8 @@ public class LoginFragment extends Fragment {
 
         setActionBar();
 
-        if (PersistenceManager.getInstance().isSelectedMachine()) {
+        if (PersistenceManager.getInstance().isSelectedMachine())
+        {
             doSilentLogin();
         }
 
@@ -127,14 +144,18 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         mLoginButton = (RelativeLayout) view.findViewById(R.id.loginBtn);
         mLoginButton.setEnabled(false);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
+        mLoginButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                if (mLoginButton.isEnabled()) {
+            public void onClick(View v)
+            {
+                if (mLoginButton.isEnabled())
+                {
                     tryToLogin();
                 }
             }
@@ -142,26 +163,43 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private TextWatcher mTextWatcher = new TextWatcher() {
+    private TextWatcher mTextWatcher = new TextWatcher()
+    {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
 
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (mLoginButton != null) {
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+            if (mLoginButton != null)
+            {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
-                if (isAllFieldsAreValid()) {
+                if (isAllFieldsAreValid())
+                {
                     mLoginBtnBackground.setImageResource(R.drawable.login_button_selector);
-                } else {
+                }
+                else
+                {
                     mLoginBtnBackground.setImageResource(R.drawable.button_bg_disabled);
                 }
 
-                if (!TextUtils.isEmpty(mPassword.getText().toString())) {
-                    mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
+                if (!TextUtils.isEmpty(mPassword.getText().toString()))
+                {
+                    if (!mPasswordIsVisible)
+                    {
+                        mShowHidePass.setImageResource(R.drawable.icn_password_hidden);
+                    }
+                    else
+                    {
+                        mShowHidePass.setImageResource(R.drawable.icn_show_password);
+                    }
                     mShowHidePass.setEnabled(true);
-                } else {
+                }
+                else
+                {
                     mShowHidePass.setImageResource(R.drawable.icn_password_disabled);
                     mShowHidePass.setEnabled(false);
                 }
@@ -169,14 +207,17 @@ public class LoginFragment extends Fragment {
         }
 
         @Override
-        public void afterTextChanged(Editable s) {
+        public void afterTextChanged(Editable s)
+        {
 
         }
     };
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -195,38 +236,45 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mCroutonCallback = null;
         mNavigationCallback = null;
     }
 
-    private boolean isAllFieldsAreValid() {
+    private boolean isAllFieldsAreValid()
+    {
         String factoryUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString();
         String password = mPassword.getText().toString();
         return !TextUtils.isEmpty(factoryUrl) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password);
     }
 
-    private void tryToLogin() {
+    private void tryToLogin()
+    {
         mNavigationCallback.isTryToLogin(true);
         ProgressDialogManager.show(getActivity());
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString().toLowerCase();
         String password = mPassword.getText().toString().toLowerCase();
-        LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
+        LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>()
+        {
             @Override
-            public void onLoginSucceeded(ArrayList<Machine> machines) {
+            public void onLoginSucceeded(ArrayList<Machine> machines)
+            {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
                 dismissProgressDialog();
-                if (mNavigationCallback != null) {
+                if (mNavigationCallback != null)
+                {
                     mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
                 }
                 mNavigationCallback.isTryToLogin(false);
             }
 
             @Override
-            public void onLoginFailed(final ErrorObjectInterface reason) {
+            public void onLoginFailed(final ErrorObjectInterface reason)
+            {
                 dismissProgressDialog();
                 mCroutonCallback.onHideConnectivityCroutonRequest();
                 ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
@@ -236,37 +284,44 @@ public class LoginFragment extends Fragment {
     }
 
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
-    private void doSilentLogin() {
+    private void doSilentLogin()
+    {
         mNavigationCallback.isTryToLogin(true);
         ProgressDialogManager.show(getActivity());
-        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(),
-                PersistenceManager.getInstance().getUserName(),
-                PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
-                    @Override
-                    public void onLoginSucceeded(ArrayList<Machine> machines) {
-                        ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                        dismissProgressDialog();
-                        if (mNavigationCallback != null) {
-                            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
-                        }
-                        mNavigationCallback.isTryToLogin(false);
-                    }
+        LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>()
+        {
+            @Override
+            public void onLoginSucceeded(ArrayList<Machine> machines)
+            {
+                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                dismissProgressDialog();
+                if (mNavigationCallback != null)
+                {
+                    mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
+                }
+                mNavigationCallback.isTryToLogin(false);
+            }
 
-                    @Override
-                    public void onLoginFailed(final ErrorObjectInterface reason) {
-                        dismissProgressDialog();
-                        mCroutonCallback.onHideConnectivityCroutonRequest();
-                        ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
-                        mNavigationCallback.isTryToLogin(false);
-                    }
-                });
+            @Override
+            public void onLoginFailed(final ErrorObjectInterface reason)
+            {
+                dismissProgressDialog();
+                mCroutonCallback.onHideConnectivityCroutonRequest();
+                ShowCrouton.jobsLoadingErrorCrouton(mCroutonCallback, reason);
+                mNavigationCallback.isTryToLogin(false);
+            }
+        });
     }
 
-    private void dismissProgressDialog() {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     ProgressDialogManager.dismiss();
                 }
             });

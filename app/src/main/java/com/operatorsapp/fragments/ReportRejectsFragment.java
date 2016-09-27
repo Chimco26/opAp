@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -106,7 +108,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mNextButton = (Button) view.findViewById(R.id.button_next);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
-            ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_reject_screen);
+            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             mNextButton.setEnabled(false);
         } else {
 //            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
@@ -207,7 +210,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.report_resects_action_bar, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -273,25 +276,30 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private void initJobsSpinner() {
         if(getActivity() != null)
         {
-            mJobsSpinner.setVisibility(View.VISIBLE);
-            final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-            activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    activeJobsSpinnerAdapter.setTitle(position);
-                    mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
-                }
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
+            {
+                mJobsSpinner.setVisibility(View.VISIBLE);
+                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        activeJobsSpinnerAdapter.setTitle(position);
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
 
-                }
-            });
+                    }
+                });
+            }
         }
-
     }
 
     @Override

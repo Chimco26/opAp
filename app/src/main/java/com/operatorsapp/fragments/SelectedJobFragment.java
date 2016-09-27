@@ -20,6 +20,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 
 public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
@@ -135,6 +136,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
                 break;
             }
             case R.id.button_activate_new_job: {
+                ProgressDialogManager.show(getActivity());
                 mJobsFragmentToDashboardActivityCallback.startJobForMachine(mCurrentJob.getJobId());
                 break;
             }
@@ -144,16 +146,33 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
     @Override
     public void onStartJobSuccess() {
         Log.i(LOG_TAG, "onStartJobSuccess()");
+        dismissProgressDialog();
     }
 
     @Override
     public void onStartJobFailure() {
         Log.i(LOG_TAG, "onStartJobFailure()");
+        dismissProgressDialog();
     }
 
     @Override
     public int getCroutonRoot()
     {
         return R.id.selected_job_crouton_root;
+    }
+
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 }

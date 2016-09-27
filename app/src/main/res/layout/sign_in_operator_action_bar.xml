@@ -10,20 +10,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
+
         android:gravity="center"
         android:orientation="horizontal">
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:id="@+id/close_image"
+    android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/close_image"
+            android:layout_marginStart="27dp"
+
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingEnd="20dp"
             android:src="@drawable/btn_x"/>
-
+</LinearLayout>
         <TextView
             style="@style/Roboto_Action_Bar_Title"
             android:id="@+id/new_job_title"

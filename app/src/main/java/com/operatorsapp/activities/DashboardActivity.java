@@ -278,14 +278,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
-//        if (mShiftLogCore != null) {
-//            mShiftLogCore.stopPolling();
-//            mShiftLogCore.unregisterListener();
-//            Log.i(LOG_TAG, "mShiftLogCore cleared");
-//        }
-//        if (mDashboardUICallbackListener != null) {
-//            mDashboardUICallbackListener.onShiftForMachineEnded();
-//        }
+        if (mShiftLogCore != null) {
+            mShiftLogCore.stopPolling();
+            mShiftLogCore.unregisterListener();
+            Log.i(LOG_TAG, "mShiftLogCore cleared");
+        }
+        if (mDashboardUICallbackListener != null) {
+            mDashboardUICallbackListener.onShiftForMachineEnded();
+        }
         shiftForMachineTimer();
     }
 

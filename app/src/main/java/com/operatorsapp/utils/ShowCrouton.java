@@ -42,6 +42,10 @@ public class ShowCrouton {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_rest);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
+            } else if (ErrorObject.ErrorCode.Missing_reports.equals(reason.getError())) {
+                String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
+                String credentialsError = OperatorApplication.getAppContext().getString(R.string.no_reasons);
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
 
             /*} else if (ErrorObject.ErrorCode.Error_rest.equals(reason.getError())) {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_get_data).concat(" ");
@@ -125,24 +129,19 @@ public class ShowCrouton {
         }
     }
 
+    /*
     public static void reportRejectCrouton(OnCroutonRequestListener onCroutonRequestListener) {
         String error_text = OperatorApplication.getAppContext().getString((R.string.no_reasons)).concat(" ");
         final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(error_text);
         spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, error_text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         showReportCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
     }
+    */
 
     private static void showReportCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
         if (onCroutonRequestListener != null) {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.report_reject_screen, credentialsError);
         }
-    }
-
-    public static void reportStopCrouton(OnCroutonRequestListener onCroutonRequestListener) {
-        String error_text = OperatorApplication.getAppContext().getString((R.string.no_reasons)).concat(" ");
-        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(error_text);
-        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, error_text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        showStopCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.NETWORK_ERROR);
     }
 
     private static void showStopCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
@@ -151,6 +150,7 @@ public class ShowCrouton {
         }
     }
 
+    /*
     public static void noDataCrouton(OnCroutonRequestListener onCroutonRequestListener, int viewId) {
         String error_text = OperatorApplication.getAppContext().getString((R.string.no_reasons)).concat(" ");
         final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(error_text);
@@ -163,4 +163,5 @@ public class ShowCrouton {
             onCroutonRequestListener.onShowCroutonRequest(str, Integer.MAX_VALUE, viewId, credentialsError); //R.id.fragment_report_inventory
         }
     }
+    */
 }

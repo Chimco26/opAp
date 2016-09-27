@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
@@ -179,7 +180,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             // rootView null
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.settings_action_bar, null);
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

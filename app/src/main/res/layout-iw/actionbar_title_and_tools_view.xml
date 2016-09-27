@@ -123,7 +123,32 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/T12_color"
+            android:padding="0.5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/status_bar">
+
+                <com.operatorsapp.view.EmeraldSpinner
+                    android:id="@+id/toolbar_job_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:dropDownVerticalOffset="40dp"
+                    android:gravity="center"
+                    app:theme="@style/ToolbarTheme"
+                    tools:ignore="MissingPrefix" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="25dp"
             android:background="@color/T12_color"
             android:padding="0.5dp">
 
@@ -147,30 +172,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:background="@color/T12_color"
-            android:padding="0.5dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/status_bar">
-
-                <com.operatorsapp.view.EmeraldSpinner
-                    android:id="@+id/toolbar_job_spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="1"
-                    android:dropDownVerticalOffset="40dp"
-                    android:gravity="center"
-                    app:theme="@style/ToolbarTheme"
-                    tools:ignore="MissingPrefix" />
-            </LinearLayout>
-        </LinearLayout>
 
         <ImageView
             android:id="@+id/settings_button"

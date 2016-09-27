@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
@@ -67,7 +69,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
 
-    public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
+    public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId)
+    {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
@@ -78,25 +81,29 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         getActiveJobs();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
 
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
         }
@@ -117,34 +124,46 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mButtonReport = (Button) view.findViewById(R.id.button_next);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
-        mUnitsCounterTextView.addTextChangedListener(new TextWatcher() {
+        mUnitsCounterTextView.addTextChangedListener(new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
 
-                if (!mUnitsCounterTextView.getText().toString().equals("")) {
-                    if (s.length() > 0) {
+                if (!mUnitsCounterTextView.getText().toString().equals(""))
+                {
+                    if (s.length() > 0)
+                    {
                         Character lastCharacter = mUnitsCounterTextView.getText().toString().charAt(mUnitsCounterTextView.getText().toString().length() - 1);
-                        if (!lastCharacter.toString().equals(".")) {
-                            if (Double.valueOf(s.toString()) > 0) {
+                        if (!lastCharacter.toString().equals("."))
+                        {
+                            if (Double.valueOf(s.toString()) > 0)
+                            {
                                 mButtonReport.setEnabled(true);
                                 double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
                                 mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
                             }
-                        } else {
+                        }
+                        else
+                        {
                             mButtonReport.setEnabled(false);
                         }
                     }
-                } else {
+                }
+                else
+                {
                     mButtonReport.setEnabled(false);
                 }
             }
@@ -152,13 +171,13 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return view;
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         mPlusButton.setOnClickListener(this);
         mMinusButton.setOnClickListener(this);
@@ -167,18 +186,22 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         View view = getActivity().getCurrentFocus();
-        if (view != null) {
+        if (view != null)
+        {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -186,13 +209,14 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
             actionBar.setDisplayUseLogoEnabled(true);
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.report_cycle_unit_action_bar, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.report_cycle_unit_action_bar, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
+            buttonClose.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     getFragmentManager().popBackStack();
                 }
             });
@@ -201,28 +225,35 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_plus: {
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.button_plus:
+            {
                 increase();
                 break;
             }
-            case R.id.button_minus: {
+            case R.id.button_minus:
+            {
                 decrease();
                 break;
             }
-            case R.id.button_cancel: {
+            case R.id.button_cancel:
+            {
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
+            case R.id.button_next:
+            {
                 sendReport();
                 break;
             }
         }
     }
 
-    private void increase() {
+    private void increase()
+    {
         double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
         value = value + 1;
         value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
@@ -232,15 +263,20 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mButtonReport.setEnabled(true);
     }
 
-    private void decrease() {
-        if (mUnitsCounter > 0) {
+    private void decrease()
+    {
+        if (mUnitsCounter > 0)
+        {
             mUnitsCounter--;
         }
-        if (mUnitsCounter <= 0) {
+        if (mUnitsCounter <= 0)
+        {
             mUnitsCounterTextView.setText("0.0");
             mButtonReport.setEnabled(false);
             mMinusButton.setEnabled(false);
-        } else {
+        }
+        else
+        {
             double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
             value = value - 1;
             value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
@@ -250,7 +286,9 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    private void sendReport() {
+    private void sendReport()
+    {
+        ProgressDialogManager.show(getActivity());
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.inject(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
@@ -260,22 +298,43 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mReportRejectCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
     }
 
-    private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
+    private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
+    {
         @Override
-        public void sendReportSuccess() {
+        public void sendReportSuccess()
+        {
             Log.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportRejectCore.unregisterListener();
             //TODO check
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            dismissProgressDialog();
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(ErrorObjectInterface reason)
+        {
             Log.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            dismissProgressDialog();
         }
     };
 
-    private void getActiveJobs() {
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
+    }
+
+    private void getActiveJobs()
+    {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
         ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
@@ -283,15 +342,20 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mActiveJobsListForMachineCore.getActiveJobsListForMachine();
     }
 
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener()
+    {
         @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine)
+        {
+            if (activeJobsListForMachine != null)
+            {
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
+            }
+            else
+            {
                 mJobId = null;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
@@ -300,7 +364,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         }
 
         @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason)
+        {
             mJobId = null;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
@@ -309,31 +374,39 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         }
     };
 
-    private void disableProgressBar() {
+    private void disableProgressBar()
+    {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
 
 
-    private void initJobsSpinner() {
-        if(getActivity() != null)
+    private void initJobsSpinner()
+    {
+        if (getActivity() != null)
         {
-            mJobsSpinner.setVisibility(View.VISIBLE);
-            final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-            activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    activeJobsSpinnerAdapter.setTitle(position);
-                    mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
-                }
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
+            {
+                mJobsSpinner.setVisibility(View.VISIBLE);
+                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        activeJobsSpinnerAdapter.setTitle(position);
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

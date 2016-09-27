@@ -261,9 +261,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogParameterViewHolder.mSubtitleText.setText(event.getSubtitleEname());
             shiftLogParameterViewHolder.mSubTitleValue.setText(String.valueOf(event.getAlarmValue()));
-            shiftLogParameterViewHolder.mMin.setText(new StringBuilder(mContext.getString(R.string.shift_log_min)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmLValue())));
-            shiftLogParameterViewHolder.mMax.setText(new StringBuilder(mContext.getString(R.string.shift_log_max)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmHValue())));
-            shiftLogParameterViewHolder.mStandard.setText(new StringBuilder(mContext.getString(R.string.shift_log_standard)).append(mContext.getString(R.string.space)).append(String.valueOf(event.getAlarmStandardValue())));
+            shiftLogParameterViewHolder.mMin.setText(String.valueOf(event.getAlarmLValue()));
+            shiftLogParameterViewHolder.mMax.setText(String.valueOf(event.getAlarmHValue()));
+            shiftLogParameterViewHolder.mStandard.setText(String.valueOf(event.getAlarmStandardValue()));
             if (mClosedState) {
                 shiftLogParameterViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogParameterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);

@@ -24,6 +24,7 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.ProgressDialogManager;
 
 public class SelectedOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -98,6 +99,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
+        dismissProgressDialog();
         mSignInButton.setOnClickListener(null);
     }
 
@@ -129,8 +131,8 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_selected_operator_sign_in: {
+                ProgressDialogManager.show(getActivity());
                 mOperatorCore.setOperatorForMachine(mSelectedOperator.getOperatorId());
-
                 break;
             }
         }
@@ -149,5 +151,20 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
     public int getCroutonRoot()
     {
         return R.id.operator_screen;
+    }
+
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 }

@@ -49,7 +49,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<String> {
             mRowName.setText(item);
             TextViewCompat.setTextAppearance(mRowName, R.style.FontStyle_T10);
             mRowName.setTextColor(Color.BLACK);
-            mRowName.setTextSize(17);
+            mRowName.setTextSize(30);
         }
         return row;
 

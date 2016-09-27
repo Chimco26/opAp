@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -120,7 +122,8 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             Log.i(LOG_TAG, "No Reasons in list");
-            ShowCrouton.noDataCrouton(mOnCroutonRequestListener, R.id.report_stop_screen);
+            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         }
         else {
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
@@ -185,7 +188,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.action_bar_report_stop, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -205,25 +208,28 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         mJobsSpinner.setVisibility(View.VISIBLE);
         if(getActivity()!=null)
         {
-            final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-            activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
             {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
+                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
+                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
-                    activeJobsSpinnerAdapter.setTitle(position);
-                    mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
-                }
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        activeJobsSpinnerAdapter.setTitle(position);
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent)
-                {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

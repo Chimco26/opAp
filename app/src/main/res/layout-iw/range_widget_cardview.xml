@@ -72,7 +72,8 @@
     <RelativeLayout
         android:id="@+id/range_widget_capsule_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_below="@id/divider">
 
         <View
@@ -130,22 +131,6 @@
                 android:textSize="14sp"/>
         </LinearLayout>
 
-        <!-- <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_below="@id/range_widget_range_view_blue"
-             android:layout_marginEnd="40dp"
-             android:layout_marginStart="35dp">
-
-             <TextView
-                 android:id="@+id/range_widget_current_value_in_chart"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="-4dp"
-                 android:text="15"
-                 android:textSize="18sp" />
-         </LinearLayout>-->
-
         <com.operatorsapp.view.RangeView
             android:id="@+id/range_widget_range_view_red"
             android:layout_width="match_parent"
@@ -155,6 +140,7 @@
             android:layout_marginTop="18dp"/>
 
         <LinearLayout
+            android:id="@+id/range_widget_red_mark_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_red"
@@ -168,44 +154,45 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_exclamation_mark"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/range_widget_red_mark_layout"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginStart="32dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/range_widget_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="22"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/range_widget_standard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="19"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/range_widget_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="0"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="32dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/range_widget_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="22"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/range_widget_standard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="19"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/range_widget_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="0"
-            android:textSize="14sp"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

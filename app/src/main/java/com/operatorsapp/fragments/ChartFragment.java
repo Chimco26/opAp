@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
@@ -123,7 +123,7 @@ public class ChartFragment extends Fragment {
             View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
             TextView title = (TextView) view.findViewById(R.id.new_job_title);
             title.setText(mFieldName);
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

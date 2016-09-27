@@ -43,15 +43,17 @@ public class WidgetAdapter extends RecyclerView.Adapter
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
     private boolean mClosedState;
-    private int mSize;
+    private int mHeight;
+    private int mWidth;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int size)
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height, int width)
     {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
         mClosedState = closedState;
-        mSize = size;
+        mHeight = height;
+        mWidth = width;
     }
 
     public void changeState(boolean closedState)
@@ -70,6 +72,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
 
         private RelativeLayout mParentLayout;
+        private View mDivider;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -80,6 +83,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
             super(itemView);
 
             mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mDivider = itemView.findViewById(R.id.divider);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.numeric_widget_value);
@@ -92,6 +96,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
 
         private RelativeLayout mParentLayout;
+        private View mDivider;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -109,6 +114,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
             super(itemView);
 
             mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mDivider = itemView.findViewById(R.id.divider);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
@@ -128,6 +134,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
 
         private RelativeLayout mParentLayout;
+        private View mDivider;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private TextView mValue;
@@ -149,6 +156,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
             super(itemView);
 
             mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mDivider = itemView.findViewById(R.id.divider);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.projection_widget_current_value);
@@ -171,6 +179,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
 
         private RelativeLayout mParentLayout;
+        private View mDivider;
         private LineChartTimeSmall mChart;
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
@@ -181,6 +190,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
             super(itemView);
 
             mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mDivider = itemView.findViewById(R.id.divider);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_title);
             mSubtitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_subtitle);
             mValue = (TextView) itemView.findViewById(R.id.time_widget_current_value);
@@ -224,7 +234,19 @@ public class WidgetAdapter extends RecyclerView.Adapter
         {
             case NUMERIC:
                 final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-                setByHeight(numericViewHolder.mParentLayout);
+
+                numericViewHolder.mDivider.post(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        ViewGroup.MarginLayoutParams mItemViewParams1;
+                        mItemViewParams1 = (ViewGroup.MarginLayoutParams) numericViewHolder.mDivider.getLayoutParams();
+                        mItemViewParams1.setMargins(0,(int) (numericViewHolder.mParentLayout.getHeight()*0.4),0,0);
+                        numericViewHolder.mDivider.requestLayout();
+                    }
+                });
+
+                setSizes(numericViewHolder.mParentLayout);
                 numericViewHolder.mTitle.setText(widget.getFieldName());
                 numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
                 numericViewHolder.mValue.setText(widget.getCurrentValue());
@@ -233,7 +255,19 @@ public class WidgetAdapter extends RecyclerView.Adapter
                 break;
             case TIME:
                 final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
-                setByHeight(timeViewHolder.mParentLayout);
+
+                timeViewHolder.mDivider.post(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        ViewGroup.MarginLayoutParams mItemViewParams2;
+                        mItemViewParams2 = (ViewGroup.MarginLayoutParams) timeViewHolder.mDivider.getLayoutParams();
+                        mItemViewParams2.setMargins(0,(int) (timeViewHolder.mParentLayout.getHeight()*0.4),0,0);
+                        timeViewHolder.mDivider.requestLayout();
+                    }
+                });
+
+                setSizes(timeViewHolder.mParentLayout);
                 timeViewHolder.mTitle.setText(widget.getFieldName());
                 timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
@@ -273,7 +307,19 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
             case RANGE:
                 final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-                setByHeight(rangeViewHolder.mParentLayout);
+
+                rangeViewHolder.mDivider.post(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        ViewGroup.MarginLayoutParams mItemViewParams3;
+                        mItemViewParams3 = (ViewGroup.MarginLayoutParams) rangeViewHolder.mDivider.getLayoutParams();
+                        mItemViewParams3.setMargins(0,(int) (rangeViewHolder.mParentLayout.getHeight()*0.4),0,0);
+                        rangeViewHolder.mDivider.requestLayout();
+                    }
+                });
+
+                setSizes(rangeViewHolder.mParentLayout);
                 rangeViewHolder.mTitle.setText(widget.getFieldName());
                 rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
@@ -313,7 +359,19 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
             case PROJECTION:
                 final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
-                setByHeight(projectionViewHolder.mParentLayout);
+
+                projectionViewHolder.mDivider.post(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        ViewGroup.MarginLayoutParams mItemViewParams4;
+                        mItemViewParams4 = (ViewGroup.MarginLayoutParams) projectionViewHolder.mDivider.getLayoutParams();
+                        mItemViewParams4.setMargins(0,(int) (projectionViewHolder.mParentLayout.getHeight()*0.4),0,0);
+                        projectionViewHolder.mDivider.requestLayout();
+                    }
+                });
+
+                setSizes(projectionViewHolder.mParentLayout);
                 projectionViewHolder.mRangeView.setCurrentLine(false);
                 float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
                 projectionViewHolder.mCurrentValueInChart.setText(valueInK(currentFloat));
@@ -382,11 +440,21 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
     }
 
+    private void setSizes(final RelativeLayout parent)
+    {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
+
+    }
+
     private void setByHeight(final RelativeLayout parent)
     {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mSize * 0.38);
+        layoutParams.height = (int) (mHeight * 0.38);
         layoutParams.width = (int) (layoutParams.height * 1.45);
         parent.requestLayout();
 
@@ -396,7 +464,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.width = (int) (mSize * 0.3);
+        layoutParams.width = (int) (mHeight * 0.3);
         layoutParams.height = (int) (layoutParams.width * 0.69);
         parent.requestLayout();
     }

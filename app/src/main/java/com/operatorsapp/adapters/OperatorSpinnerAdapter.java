@@ -40,6 +40,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
             else {
                 spinnerTitle.setText(mCurrentOperatorName);
             }
+            spinnerTitle.setTextSize(18);
         }
         return row;
     }
@@ -55,6 +56,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             name.setText(item);
+            name.setTextSize(18);
         }
         return row;
     }

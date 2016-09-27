@@ -9,7 +9,8 @@ public interface ErrorObjectInterface {
         No_data,
         SessionInvalid,
         Credentials_mismatch,
-        Url_not_correct
+        Url_not_correct,
+        Missing_reports
     }
 
     ErrorCode getError();

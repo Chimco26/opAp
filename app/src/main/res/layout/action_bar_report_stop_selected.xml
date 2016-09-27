@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:orientation="horizontal">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/close_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:paddingBottom="5dp"
-            android:paddingEnd="25dp"
-            android:paddingTop="5dp"
-            android:src="@drawable/button_back_selector" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="5dp"
+                android:src="@drawable/button_back_selector"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/new_job_title"
@@ -31,14 +36,14 @@
             android:layout_marginStart="20dp"
             android:text="@string/report_stop_event_reason"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="15dp"
-            android:background="@color/white" />
+            android:background="@color/white"/>
 
         <TextView
             android:id="@+id/stop_reason_selected_title"
@@ -46,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </LinearLayout>
 
 

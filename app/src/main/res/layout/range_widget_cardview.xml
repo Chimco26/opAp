@@ -73,7 +73,8 @@
     <RelativeLayout
         android:id="@+id/range_widget_capsule_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_below="@id/divider">
 
         <View
@@ -155,6 +156,7 @@
             android:layout_marginTop="18dp"/>
 
         <LinearLayout
+            android:id="@+id/range_widget_red_mark_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_red"
@@ -168,43 +170,45 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_exclamation_mark"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/range_widget_red_mark_layout"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="34dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/range_widget_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="15"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/range_widget_standard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="19"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/range_widget_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="22"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="34dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/range_widget_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="15"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/range_widget_standard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="19"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/range_widget_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="22"
-            android:textSize="14sp"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

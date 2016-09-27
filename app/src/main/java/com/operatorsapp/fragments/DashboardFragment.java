@@ -112,7 +112,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ViewGroup.MarginLayoutParams mWidgetsParams;
     private ViewGroup.LayoutParams mShiftLogParams;
     private boolean mIsNewShiftLogs;
-
     private MachineStatus mCurrentMachineStatus;
 
     public static DashboardFragment newInstance()
@@ -181,7 +180,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
         GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
         mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
@@ -303,34 +302,40 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         else
         {
-            final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
-            anim.setDuration(ANIM_DURATION_MILLIS);
-            mShiftLogLayout.startAnimation(anim);
-            anim.setAnimationListener(new Animation.AnimationListener()
-            {
-                @Override
-                public void onAnimationStart(Animation animation)
-                {
-                    mShiftLogAdapter.changeState(true);
-                }
 
-                @Override
-                public void onAnimationEnd(Animation animation)
-                {
-                    toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
-                    mGridLayoutManager.setSpanCount(3);
-                    mWidgetAdapter.changeState(true);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation)
-                {
-
-                }
-            });
-            mIsOpen = false;
+            closeWoopList(leftLayoutParams, rightLayoutParams);
         }
 
+    }
+
+    private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams)
+    {
+        final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
+        anim.setDuration(ANIM_DURATION_MILLIS);
+        mShiftLogLayout.startAnimation(anim);
+        anim.setAnimationListener(new Animation.AnimationListener()
+        {
+            @Override
+            public void onAnimationStart(Animation animation)
+            {
+                mShiftLogAdapter.changeState(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
+                mGridLayoutManager.setSpanCount(3);
+                mWidgetAdapter.changeState(true);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation)
+            {
+
+            }
+        });
+        mIsOpen = false;
     }
 
     OperatorForMachineUICallbackListener mOperatorForMachineUICallbackListener = new OperatorForMachineUICallbackListener()
@@ -741,7 +746,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
             else
             {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mWidgetsLayoutWidth);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         }
@@ -902,6 +907,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onShiftForMachineEnded()
     {
+        if (mShiftLogParams != null && mWidgetsParams != null)
+        {
+            closeWoopList(mShiftLogParams, mWidgetsParams);
+        }
         mEventsList.clear();
         mEventsQueue.clear();
         PersistenceManager.getInstance().saveShiftLogs(mEventsList);

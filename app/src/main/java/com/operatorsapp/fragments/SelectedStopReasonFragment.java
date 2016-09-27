@@ -17,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportRejectCore;
@@ -33,6 +35,7 @@ import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
@@ -197,7 +200,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.action_bar_report_stop_selected, null);
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -236,6 +239,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     private void sendReport() {
+        ProgressDialogManager.show(getActivity());
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
@@ -246,6 +250,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess() {
+            dismissProgressDialog();
             Log.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             //TODO check
@@ -254,6 +259,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
+            dismissProgressDialog();
             Log.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
@@ -265,15 +271,32 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         Log.w(LOG_TAG, "Failed silent login");
-                        ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
             } else {
 
-                ShowCrouton.reportRejectCrouton(mOnCroutonRequestListener);
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
         }
     };
+
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
+    }
 
     @Override
     public int getCroutonRoot()
