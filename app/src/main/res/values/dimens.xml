@@ -6,6 +6,8 @@
 
     <dimen name="widget_width">260dp</dimen>
     <dimen name="widget_height">168dp</dimen>
+    <!--<dimen name="widget_width">560dp</dimen>-->
+    <!--<dimen name="widget_height">368dp</dimen>-->
 
     <dimen name="large_toolbar_height">88dp</dimen>
     <dimen name="small_toolbar_height">64dp</dimen>

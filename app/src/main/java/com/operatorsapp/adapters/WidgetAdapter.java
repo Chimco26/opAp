@@ -43,15 +43,15 @@ public class WidgetAdapter extends RecyclerView.Adapter
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
     private boolean mClosedState;
-    private int mHeight;
+    private int mSize;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height)
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int size)
     {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
         mClosedState = closedState;
-        mHeight = height;
+        mSize = size;
     }
 
     public void changeState(boolean closedState)
@@ -384,17 +384,11 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
     private void setByHeight(final RelativeLayout parent)
     {
-        parent.post(new Runnable() {
-            @Override
-            public void run()
-            {
-//                ViewGroup.LayoutParams layoutParams;
-//                layoutParams = parent.getLayoutParams();
-//                layoutParams.height = /*(int) (mHeight * 0.38);*/ layoutParams.MATCH_PARENT;
-//                layoutParams.width = /*(int) (layoutParams.height * 1.45)*/layoutParams.MATCH_PARENT;
-//                parent.requestLayout();
-            }
-        });
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mSize * 0.38);
+        layoutParams.width = (int) (layoutParams.height * 1.45);
+        parent.requestLayout();
 
     }
 
@@ -402,7 +396,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
     {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
-        layoutParams.width = (int) (mHeight * 0.3);
+        layoutParams.width = (int) (mSize * 0.3);
         layoutParams.height = (int) (layoutParams.width * 0.69);
         parent.requestLayout();
     }

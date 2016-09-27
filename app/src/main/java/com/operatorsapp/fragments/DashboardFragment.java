@@ -180,7 +180,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
         GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mWidgetsLayoutWidth);
+        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight);
         mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);

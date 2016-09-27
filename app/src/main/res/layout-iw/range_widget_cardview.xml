@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+                xmlns:autofit="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/widget_parent_layout"
-    android:layout_height="168dp"
-    android:layout_width="260dp"
-    android:background="@drawable/combined_shape"
-    android:orientation="vertical">
+                android:layout_width="260dp"
+                android:layout_height="168dp"
+                android:background="@drawable/combined_shape"
+                android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:text="Cycle weight"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                autofit:minTextSize="12sp" />
+                autofit:minTextSize="12sp"/>
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/range_widget_subtitle"
@@ -43,7 +43,7 @@
                 android:singleLine="true"
                 android:text="Standard 19"
                 android:textSize="14sp"
-                autofit:minTextSize="8sp" />
+                autofit:minTextSize="8sp"/>
         </LinearLayout>
 
         <TextView
@@ -52,12 +52,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="15dp"
-            android:gravity="bottom"
-            android:text="17"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:text="17"
             android:textColor="@color/C16"
-            android:textSize="40dp" />
+            android:textSize="40dp"/>
     </LinearLayout>
 
     <View
@@ -67,7 +67,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="60dp"
-        android:background="@color/divider_gray" />
+        android:background="@color/divider_gray"/>
 
     <RelativeLayout
         android:id="@+id/range_widget_capsule_layout"
@@ -81,7 +81,7 @@
             android:layout_height="20dp"
             android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="30dp"/>
 
         <View
             android:id="@+id/range_widget_oval"
@@ -90,7 +90,7 @@
             android:layout_marginEnd="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="18dp"
-            android:background="@drawable/capsule_oval" />
+            android:background="@drawable/capsule_oval"/>
 
         <View
             android:layout_width="2dp"
@@ -98,7 +98,7 @@
             android:layout_alignStart="@id/range_widget_oval"
             android:layout_marginStart="23dp"
             android:layout_marginTop="18dp"
-            android:background="@color/divider_gray" />
+            android:background="@color/divider_gray"/>
 
         <View
             android:layout_width="2dp"
@@ -106,7 +106,7 @@
             android:layout_alignEnd="@id/range_widget_oval"
             android:layout_marginEnd="23dp"
             android:layout_marginTop="18dp"
-            android:background="@color/divider_gray" />
+            android:background="@color/divider_gray"/>
 
         <com.operatorsapp.view.RangeView
             android:id="@+id/range_widget_range_view_blue"
@@ -114,7 +114,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="35dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="18dp" />
+            android:layout_marginTop="18dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,24 +127,24 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="1"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
-       <!-- <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/range_widget_range_view_blue"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="35dp">
+        <!-- <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/range_widget_range_view_blue"
+             android:layout_marginEnd="40dp"
+             android:layout_marginStart="35dp">
 
-            <TextView
-                android:id="@+id/range_widget_current_value_in_chart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
-                android:text="15"
-                android:textSize="18sp" />
-        </LinearLayout>-->
+             <TextView
+                 android:id="@+id/range_widget_current_value_in_chart"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="-4dp"
+                 android:text="15"
+                 android:textSize="18sp" />
+         </LinearLayout>-->
 
         <com.operatorsapp.view.RangeView
             android:id="@+id/range_widget_range_view_red"
@@ -152,21 +152,21 @@
             android:layout_height="48dp"
             android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="18dp" />
+            android:layout_marginTop="18dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_red"
-            android:layout_marginTop="3dp"
             android:layout_marginEnd="27dp"
-            android:layout_marginStart="25dp">
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="3dp">
 
             <ImageView
                 android:id="@+id/range_widget_red_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_exclamation_mark" />
+                android:src="@drawable/ic_exclamation_mark"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -186,7 +186,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:text="22"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/range_widget_standard"
@@ -195,7 +195,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="19"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/range_widget_min"
@@ -204,7 +204,7 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="0"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
