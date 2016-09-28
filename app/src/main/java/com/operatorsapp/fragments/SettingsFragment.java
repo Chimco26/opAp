@@ -232,21 +232,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void dismissProgressDialog() {
-
-//        //TODO remove handler, only for test
-//        Handler mHandler = new Handler();
-
-//        mHandler.postDelayed(new Runnable() {
-//            public void run() {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
         ProgressDialogManager.dismiss();
-//                    }
-//                });
-//            }
-//        }, 2000);
-
     }
 
     @Override

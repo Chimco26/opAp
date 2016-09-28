@@ -34,7 +34,14 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            mRowName.setText(mSpinnerItems.get(0).getName());  //TODO need change to correct selection
+            if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
+            {
+                mRowName.setText(mSpinnerItems.get(0).getName());
+            }
+            else
+            {
+                mRowName.setText(mContext.getString(R.string.dashes));
+            }
             mRowName.setTextSize(18);
         }
         return row;

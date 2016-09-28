@@ -404,7 +404,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             {
                 if (!event.isIsDismiss())
                 {
-                    event.setTimeOfAdded(System.currentTimeMillis());//todo remove
+                    event.setTimeOfAdded(System.currentTimeMillis());
                     mEventsQueue.add(event);
                 }
             }

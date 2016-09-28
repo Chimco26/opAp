@@ -253,7 +253,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             dismissProgressDialog();
             Log.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
-            //TODO check
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
