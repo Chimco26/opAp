@@ -205,7 +205,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.report_reject_parameters_action_bar, null);
 
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image_report_reject_selected);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
