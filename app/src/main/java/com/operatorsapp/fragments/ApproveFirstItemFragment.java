@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -33,6 +32,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -40,10 +40,12 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportRejectsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+import java.util.ArrayList;
+
+public class ApproveFirstItemFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
 
-    private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
+    private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
@@ -63,8 +65,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
 
-    public static ReportRejectsFragment newInstance(String currentProductName, int currentProductId) {
-        ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
+    public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
+        ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
@@ -93,7 +95,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
+        final View view = inflater.inflate(R.layout.fragment_approve_first_item, container, false);
         setActionBar();
 
         return view;
@@ -105,7 +107,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_next);
+        mNextButton = (Button) view.findViewById(R.id.button_approve);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
@@ -156,21 +158,26 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             });
 
 
-            Spinner causeSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
-            final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
-            causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            causeSpinner.setAdapter(causeSpinnerArrayAdapter);
-            causeSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            ArrayList<String> technicians = new ArrayList<>();
+            technicians.add("Malcolm Reynolds");
+            technicians.add("Ferris Bueller");
+            technicians.add("Wade Wilson");
+            technicians.add("Natasha Romanova");
+            Spinner technicianSpinner = (Spinner) view.findViewById(R.id.technician_spinner);
+            final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, technicians);
+            technicianSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            technicianSpinner.setAdapter(technicianSpinnerAdapter);
+            technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            causeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                     if (mReportFieldsForMachine.getRejectCauses().size() > 0)
                     {
                         mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
                     }
-                    causeSpinnerArrayAdapter.setTitle(position);
+
+                    technicianSpinnerAdapter.setTitle(position);
                 }
 
                 @Override
@@ -180,7 +187,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             });
         }
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_next);
+        //mNextButton = (Button) view.findViewById(R.id.button_next);
 
     }
 
@@ -221,6 +228,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                     getFragmentManager().popBackStack();
                 }
             });
+
+            ((TextView)view.findViewById(R.id.new_job_title)).setText(R.string.first_item_approval);
+
             actionBar.setCustomView(view);
         }
     }
@@ -232,10 +242,9 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
+            case R.id.button_approve: {
 
-                mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
-
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE); // TODO this is mock so we do nothing, for 1.1 to actually send this to the server
                 break;
             }
         }

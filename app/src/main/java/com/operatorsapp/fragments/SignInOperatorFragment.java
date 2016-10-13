@@ -159,6 +159,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
             }
+            dismissProgressDialog();
         }
 
         @Override

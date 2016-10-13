@@ -37,15 +37,22 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
         call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
-                SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
-                if (sessionResult.getErrorResponse() == null) {
-                    ZLogger.d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
-                    loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId());
-                } else {
-                    ZLogger.d(LOG_TAG, "onRequest(), getSessionId failed");
-                    ErrorObject errorObject = errorObjectWithErrorCode(sessionResult.getErrorResponse());
-                    loginCoreCallback.onLoginFailed(errorObject);
+                if(response == null || response.body() == null)
+                {
+                    onFailure(call,new NullPointerException());
                 }
+                else {
+                    SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
+                    if (sessionResult.getErrorResponse() == null) {
+                        ZLogger.d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
+                        loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId());
+                    } else {
+                        ZLogger.d(LOG_TAG, "onRequest(), getSessionId failed");
+                        ErrorObject errorObject = errorObjectWithErrorCode(sessionResult.getErrorResponse());
+                        loginCoreCallback.onLoginFailed(errorObject);
+                    }
+                }
+
             }
 
             @Override

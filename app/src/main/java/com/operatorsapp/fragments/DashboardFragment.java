@@ -562,6 +562,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             }
                             break;
                         }
+                        case 4:
+                        {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            {
+                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
+                            }
+                            else
+                            {
+                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
+                            break;
+                        }
                     }
                 }
 
