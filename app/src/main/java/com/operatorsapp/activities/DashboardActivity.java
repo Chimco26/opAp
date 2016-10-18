@@ -50,7 +50,10 @@ import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.fragments.DashboardFragment;
+import com.operatorsapp.fragments.ReportRejectsFragment;
+import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
@@ -67,7 +70,6 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
-import com.operatorsapp.utils.TimeUtils;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -150,16 +152,27 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         {
             public void onBackStackChanged()
             {
-//                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-//
-//                if (manager != null)
-//                {
-                    Fragment fragment = getCurrentFragment();
-                    if (fragment == null )
+                //                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+                //
+                //                if (manager != null)
+                //                {
+                Fragment fragment = getVisibleFragment();
+                if (fragment != null)
+                {
+                    if (fragment instanceof DashboardFragment)
                     {
                         mDashboardFragment.setActionBar();
                     }
-//                }
+                    else if (fragment instanceof ReportRejectsFragment)
+                    {
+                        ((ReportRejectsFragment) fragment).setActionBar();
+                    }
+                    else if(fragment instanceof SettingsFragment)
+                    {
+                        ((SettingsFragment) fragment).setActionBar();
+                    }
+                }
+                //                }
             }
         };
 
@@ -648,6 +661,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
             return null;
         }
+    }
+
+    public Fragment getVisibleFragment()
+    {
+        Fragment f = null;
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments != null)
+        {
+            for (Fragment fragment : fragments)
+            {
+                if (fragment != null && fragment.isVisible())
+                {
+                    f = fragment;
+                }
+            }
+        }
+        return f;
     }
 
     @Override

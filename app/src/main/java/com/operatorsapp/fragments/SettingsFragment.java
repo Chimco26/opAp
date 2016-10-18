@@ -157,7 +157,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     }
 
 
-    private void setActionBar() {
+    public void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);

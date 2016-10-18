@@ -81,10 +81,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getSiteUrl() {
         //TODO  url remove for production, need to be empty string
-//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
+        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
 //        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
-//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apidev.my.leadermes.com");
-        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "");
+//        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "");
     }
 
     @Override
