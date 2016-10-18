@@ -411,7 +411,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             {
                 if (!event.isIsDismiss())
                 {
-                    event.setTimeOfAdded(System.currentTimeMillis());//todo remove
+                    event.setTimeOfAdded(System.currentTimeMillis());
                     mEventsQueue.add(event);
                 }
             }
@@ -571,6 +571,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             else
                             {
                                 mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                            }
+                            break;
+                        }
+                        case 4:
+                        {
+                            if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            {
+                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
+                            }
+                            else
+                            {
+                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName(), mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
                             }
                             break;
                         }

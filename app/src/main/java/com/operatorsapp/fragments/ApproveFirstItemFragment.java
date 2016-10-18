@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -28,62 +27,60 @@ import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMach
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
-import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
+import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
+import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 
-public class ReportInventoryFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+import java.util.ArrayList;
+
+public class ApproveFirstItemFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
 
-    public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
+    private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
+    private TextView mCancelButton;
+    private Button mNextButton;
+    //    private boolean mIsFirstReasonSpinnerSelection = true;
+//    private boolean mIsReasonSelected;
+    private GoToScreenListener mGoToScreenListener;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
+    private int mSelectedReasonId;
+    private int mSelectedCauseId;
+    private String mSelectedReasonName;
+    private ReportFieldsForMachine mReportFieldsForMachine;
     private String mCurrentProductName;
     private int mCurrentProductId;
-    private ReportRejectCore mReportRejectCore;
-    private ImageView mPlusButton;
-    private ImageView mMinusButton;
-    private TextView mUnitsCounterTextView;
-    private Button mButtonReport;
-    private TextView mButtonCancel;
-    private ProgressBar mActiveJobsProgressBar;
-    private OnCroutonRequestListener mOnCroutonRequestListener;
-    private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mUnitsCounter = 1;
-    private Integer mJobId = null;
-    private int mSelectedPackageTypeId;
-    private String mSelectedPackageTypeName;
+    private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
+    private ProgressBar mActiveJobsProgressBar;
 
-
-    public static ReportInventoryFragment newInstance(String currentProductName, int currentProductId) {
-        ReportInventoryFragment reportInventoryFragment = new ReportInventoryFragment();
+    public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
+        ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
-        reportInventoryFragment.setArguments(bundle);
-        return reportInventoryFragment;
+        reportRejectsFragment.setArguments(bundle);
+        return reportRejectsFragment;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mGoToScreenListener = (GoToScreenListener) getActivity();
+        ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
+        mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-        ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
-
     }
 
     @Override
@@ -98,8 +95,9 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
+        final View view = inflater.inflate(R.layout.fragment_approve_first_item, container, false);
         setActionBar();
+
         return view;
     }
 
@@ -108,39 +106,31 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
-        mButtonReport = (Button) view.findViewById(R.id.button_next);
-        mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
-        mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
+        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+        mNextButton = (Button) view.findViewById(R.id.button_approve);
 
-        if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
-
+        if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
-            mButtonReport.setEnabled(false);
-            mMinusButton.setEnabled(false);
-            mPlusButton.setEnabled(false);
+            mNextButton.setEnabled(false);
+        } else {
+//            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+            mNextButton.setEnabled(true);
         }
-        else {
-            mButtonReport.setEnabled(true);
-            mMinusButton.setEnabled(true);
-            mPlusButton.setEnabled(true);
-        }
-        TextView productTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
+
+        TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        productTitleTextView.setText(mCurrentProductName);
+        productNameTextView.setText(new StringBuilder(mCurrentProductName).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
-
-        mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
-        mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-
-        mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
-        Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.package_type_spinner);
+
         if (mReportFieldsForMachine != null) {
-            final RejectInventorySpinnerAdapter reasonSpinnerArrayAdapter = new RejectInventorySpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
+            Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
+
+            final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
             reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
             rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -148,9 +138,46 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    if (mIsFirstReasonSpinnerSelection) {
+//                        mIsFirstReasonSpinnerSelection = false;
+//                        mIsReasonSelected = false;
+//
+//                    }
+//                    else {
+//                        mIsReasonSelected = true;
+                    mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
+                    mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
                     reasonSpinnerArrayAdapter.setTitle(position);
-                    mSelectedPackageTypeName = mReportFieldsForMachine.getPackageTypes().get(position).getName();
-                    mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
+//                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+//                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+
+            ArrayList<String> technicians = new ArrayList<>();
+            technicians.add("Malcolm Reynolds");
+            technicians.add("Ferris Bueller");
+            technicians.add("Wade Wilson");
+            technicians.add("Natasha Romanova");
+            Spinner technicianSpinner = (Spinner) view.findViewById(R.id.technician_spinner);
+            final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, technicians);
+            technicianSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            technicianSpinner.setAdapter(technicianSpinnerAdapter);
+            technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+            technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (mReportFieldsForMachine.getRejectCauses().size() > 0)
+                    {
+                        mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                    }
+
+                    technicianSpinnerAdapter.setTitle(position);
                 }
 
                 @Override
@@ -159,19 +186,27 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 }
             });
         }
+        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+        //mNextButton = (Button) view.findViewById(R.id.button_next);
 
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mPlusButton.setOnClickListener(this);
-        mMinusButton.setOnClickListener(this);
-        mButtonReport.setOnClickListener(this);
-        mButtonCancel.setOnClickListener(this);
-
+    public void onPause() {
+        super.onPause();
+        mCancelButton.setOnClickListener(null);
+        mNextButton.setOnClickListener(null);
+        mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCancelButton.setOnClickListener(this);
+        mNextButton.setOnClickListener(this);
+
+    }
 
     private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -184,7 +219,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
             @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.action_bar_report_inventory, null);
+            View view = inflater.inflate(R.layout.report_resects_action_bar, null);
 
             LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +228,9 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                     getFragmentManager().popBackStack();
                 }
             });
+
+            ((TextView)view.findViewById(R.id.new_job_title)).setText(R.string.first_item_approval);
+
             actionBar.setCustomView(view);
         }
     }
@@ -200,90 +238,24 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_plus: {
-                increase();
-                break;
-            }
-            case R.id.button_minus: {
-                decrease();
-                break;
-            }
             case R.id.button_cancel: {
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
-                sendReport();
+            case R.id.button_approve: {
+
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE); // TODO this is mock so we do nothing, for 1.1 to actually send this to the server
                 break;
             }
-        }
-    }
-
-    private void increase() {
-        mUnitsCounter++;
-        mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-    }
-
-    private void decrease() {
-        if (mUnitsCounter > 1) {
-            mUnitsCounter--;
-        }
-        if (mUnitsCounter == 1) {
-            mUnitsCounterTextView.setText("1");
-        }
-        else {
-            mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-        }
-    }
-
-    private void sendReport() {
-        ProgressDialogManager.show(getActivity());
-        ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-        reportRejectNetworkBridge.injectInventory(NetworkManager.getInstance());
-        mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
-        mReportRejectCore.registerListener(mReportCallbackListener);
-        Log.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
-
-        mReportRejectCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
-    }
-
-    private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
-        @Override
-        public void sendReportSuccess() {
-            dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportSuccess()");
-            mReportRejectCore.unregisterListener();
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
-
-        @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
-            dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
-        }
-    };
-
-    private void dismissProgressDialog()
-    {
-        if (getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    ProgressDialogManager.dismiss();
-                }
-            });
         }
     }
 
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+        ActiveJobsListForMachineCore activeJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        activeJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        activeJobsListForMachineCore.getActiveJobsListForMachine();
     }
 
     private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
@@ -294,9 +266,8 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
                 Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
-                mJobId = null;
+            } else {
+                mJobId = 0;
                 Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
@@ -304,22 +275,15 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = null;
+            mJobId = 0;
             Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            disableProgressBar();
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+            disableProgressBar();
         }
     };
 
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mActiveJobsListForMachineCore.unregisterListener();
-        mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
     private void initJobsSpinner() {
@@ -354,6 +318,6 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     @Override
     public int getCroutonRoot()
     {
-        return R.id.report_inventory_crouton_root;
+        return R.id.parent_layouts;
     }
 }

@@ -166,7 +166,11 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             causeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+
+                    if (mReportFieldsForMachine.getRejectCauses().size() > 0)
+                    {
+                        mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                    }
                     causeSpinnerArrayAdapter.setTitle(position);
                 }
 

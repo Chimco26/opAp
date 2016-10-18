@@ -116,6 +116,10 @@
     <string name="shift_log_min">מינימום</string>
     <string name="shift_log_max">מקסימום</string>
     <string name="shift_log_standard">סטנדרט</string>
+    <string name="approving_technician">טכנאי מאשר</string>
+    <string name="approve">אישור</string>
+    <string name="setup_end">אישור\nפריט\nראשון</string>
+    <string name="first_item_approval">אישור פריט ראשון</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -131,6 +135,7 @@
         <item>Report Rejects</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>
+        <item>Approve First Item</item>
     </array>
 
     <plurals name="days">

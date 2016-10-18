@@ -13,15 +13,15 @@ import com.operatorsapp.R;
 
 import java.util.List;
 
-public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
+public class TechnicianSpinnerAdapter extends ArrayAdapter<String> {
     private Activity mContext;
-    private List<RejectCauses> mSpinnerItems;
+    private List<String> mSpinnerItems;
     TextView mRowName;
     View mView;
 
-    public RejectCauseSpinnerAdapter(Activity context, int resource, List<RejectCauses> rejectCauses) {
-        super(context, resource, rejectCauses);
-        mSpinnerItems = rejectCauses;
+    public TechnicianSpinnerAdapter(Activity context, int resource, List<String> technicians) {
+        super(context, resource, technicians);
+        mSpinnerItems = technicians;
         mContext = context;
     }
 
@@ -36,7 +36,7 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
             {
-                mRowName.setText(mSpinnerItems.get(0).getName());
+                mRowName.setText(mSpinnerItems.get(0));
             }
             else
             {
@@ -54,7 +54,7 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position).getName();
+        String item = mSpinnerItems.get(position);
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
@@ -68,7 +68,7 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position).getName());
+        mRowName.setText(mSpinnerItems.get(position));
         mRowName.setTextSize(20);
     }
 }

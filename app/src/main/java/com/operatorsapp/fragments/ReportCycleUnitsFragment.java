@@ -305,7 +305,6 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         {
             Log.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportRejectCore.unregisterListener();
-            //TODO check
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             dismissProgressDialog();
         }

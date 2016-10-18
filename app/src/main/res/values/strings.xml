@@ -34,8 +34,6 @@
     <string name="add_another"></string>
     <string name="ok">OK</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go">Go</string>
     <string name="machine_id_name">Machine ID Name</string>
     <string name="enter_machine_id_name">Enter Machine\nID / Name</string>
@@ -119,6 +117,10 @@
     <string name="shift_log_min">Min&#160;</string>
     <string name="shift_log_max">Max&#160;</string>
     <string name="shift_log_standard">Standard&#160;</string>
+    <string name="approving_technician">Approving technician</string>
+    <string name="approve">Approve</string>
+    <string name="setup_end">Setup\nend</string>
+    <string name="first_item_approval">First Item Approval</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -134,6 +136,7 @@
         <item>Report Rejects</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>
+        <item>Approve First Item</item>
     </array>
 
     <plurals name="days">
