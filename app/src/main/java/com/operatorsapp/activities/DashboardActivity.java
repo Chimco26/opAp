@@ -312,6 +312,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse)
             {
+                // TODO: 18-Oct-16 SERGEY
                 //               final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 final int durationOfShift = 691200000;
                 if (durationOfShift > 0)
