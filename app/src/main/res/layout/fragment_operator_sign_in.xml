@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/operator_screen"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    android:background="@color/C2">
+                android:id="@+id/operator_screen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/C2"
+                android:clickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,14 +28,14 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Enter With\nYour ID "
-            android:textSize="30sp" />
+            android:textSize="30sp"/>
 
         <View
             android:layout_width="1dp"
             android:layout_height="120dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:background="@color/C20" />
+            android:background="@color/C20"/>
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -51,20 +51,20 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background_selector"
                 android:hint="@string/operator_id"
-                android:singleLine="true" />
+                android:singleLine="true"/>
 
             <Button
                 android:id="@+id/button_operator_signIn"
                 android:layout_width="128dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="2dp"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/button_bg_disabled"
                 android:clickable="false"
                 android:text="@string/common_signin_button_text"
                 android:textAllCaps="true"
                 android:textColor="@drawable/button_text_color_selector"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
         </LinearLayout>
 
     </LinearLayout>

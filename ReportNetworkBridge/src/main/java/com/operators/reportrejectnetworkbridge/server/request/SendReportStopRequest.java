@@ -18,7 +18,7 @@ public class SendReportStopRequest {
     private int mStopReasonId;
     @SerializedName("StopSubReasonID")
     private int mStopSubReasonId;
-    @SerializedName("JoshID")
+    @SerializedName("joshID")
     private Integer mJoshId;
     @SerializedName("EventID")
     private int mEventID;
