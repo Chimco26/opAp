@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -55,6 +56,7 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.EmeraldSpinner;
@@ -122,13 +124,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        ProgressDialogManager.show(getActivity());
+        View inflate = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return inflate;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+        ZLogger.d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
         mEventsList = PersistenceManager.getInstance().getShiftLogs();
         mIsOpen = false;
@@ -262,7 +266,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
 
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
-        setActionBar();
+
+        ZLogger.d(LOG_TAG, "onViewCreated(), end ");
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams)
@@ -393,7 +398,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onResume()
     {
+        ZLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
+        setActionBar();
         if (mCurrentMachineStatus != null)
         {
             initStatusLayout(mCurrentMachineStatus);
@@ -438,6 +445,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         {
             mNoDataView.setVisibility(View.VISIBLE);
         }
+        ZLogger.d(LOG_TAG, "onResume(), end ");
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen)
@@ -457,6 +465,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onAttach(Context context)
     {
+        ZLogger.d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try
         {
@@ -470,21 +479,24 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         {
             throw new ClassCastException("Calling fragment must implement interface");
         }
+        ZLogger.d(LOG_TAG, "onAttach(), end ");
     }
 
     @Override
     public void onDetach()
     {
+        ZLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
+        ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
     @SuppressLint("InflateParams")
-    private void setActionBar()
+    public void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null)
@@ -630,6 +642,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             @Override
             public boolean onPreDraw()
             {
+                ZLogger.d(LOG_TAG, "onPreDraw(), start ");
                 if (view.getViewTreeObserver().isAlive())
                 {
                     view.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -637,7 +650,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 ViewGroup.LayoutParams toolBarParams;
                 toolBarParams = view.getLayoutParams();
                 toolBarParams.height = (int) (mTollBarsHeight * 0.65);
+                ZLogger.d(LOG_TAG, "onPreDraw(), pre request layout ");
                 view.requestLayout();
+                ZLogger.d(LOG_TAG, "onPreDraw(), end ");
+                dismissProgressDialog();
                 return false;
             }
         });
@@ -1009,10 +1025,24 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     }
 
-
     @Override
     public int getCroutonRoot()
     {
         return R.id.parent_layouts;
+    }
+
+    private void dismissProgressDialog()
+    {
+        if (getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 }
