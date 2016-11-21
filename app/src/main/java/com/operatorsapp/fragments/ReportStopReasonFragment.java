@@ -44,6 +44,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
+import com.zemingo.logrecorder.ZLogger;
 
 public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
 {
@@ -101,7 +102,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             mEnd = getArguments().getString(END_TIME);
             mDuration = getArguments().getLong(DURATION);
             mEventId = getArguments().getInt(EVENT_ID);
-            Log.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
+            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
         }
 //        getActiveJobs();
     }
@@ -121,7 +122,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         mRecyclerView = (RecyclerView) view.findViewById(R.id.stop_recycler_view);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
-            Log.i(LOG_TAG, "No Reasons in list");
+            ZLogger.i(LOG_TAG, "No Reasons in list");
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         }
@@ -248,11 +249,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
-                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else {
                 mJobId = 0;
-                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
         }
@@ -260,7 +261,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = 0;
-            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             disableProgressBar();
         }
     };

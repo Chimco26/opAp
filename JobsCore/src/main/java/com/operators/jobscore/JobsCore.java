@@ -9,6 +9,7 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.jobsinfra.StartJobForMachineCallback;
+import com.zemingo.logrecorder.ZLogger;
 
 public class JobsCore {
     public static final String LOG_TAG = JobsCore.class.getSimpleName();
@@ -37,29 +38,29 @@ public class JobsCore {
                         if (mJobsForMachineUICallbackListener != null) {
                             if (jobListForMachine != null && jobListForMachine.getData().size()>0) {
                                 mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
-                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
+                                ZLogger.w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
                             } else{
-                                Log.w(LOG_TAG, "onGetJobsListForMachineSuccess(), jobListForMachine null or empty");
+                                ZLogger.w(LOG_TAG, "onGetJobsListForMachineSuccess(), jobListForMachine null or empty");
                             }
                         }
                         else {
-                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
                     }
 
                     @Override
                     public void onGetJobsListForMachineFailed(ErrorObjectInterface reason) {
-                        Log.w(LOG_TAG, "Error getting job list");
+                        ZLogger.w(LOG_TAG, "Error getting job list");
                         if (mJobsForMachineUICallbackListener != null) {
                             if (reason != null) {
                                 mJobsForMachineUICallbackListener.onJobListReceiveFailed(reason);
                             }
                             else {
-                                Log.w(LOG_TAG, "reason is nul");
+                                ZLogger.w(LOG_TAG, "reason is nul");
                             }
                         }
                         else {
-                            Log.w(LOG_TAG, "onGetJobsListForMachineFailed() UI Callback is null ");
+                            ZLogger.w(LOG_TAG, "onGetJobsListForMachineFailed() UI Callback is null ");
                         }
                     }
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());
@@ -70,12 +71,12 @@ public class JobsCore {
                 mJobsPersistenceManagerInterface.getMachineId(), jobId, new StartJobForMachineCallback() {
                     @Override
                     public void onStartJobForMachineSuccess() {
-                        Log.i(LOG_TAG, "Starting job success");
+                        ZLogger.i(LOG_TAG, "Starting job success");
                         if (mJobsForMachineUICallbackListener != null) {
                             mJobsForMachineUICallbackListener.onStartJobSuccess();
                         }
                         else {
-                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
                     }
 
@@ -85,9 +86,9 @@ public class JobsCore {
                             mJobsForMachineUICallbackListener.onStartJobFailed(reason);
                         }
                         else {
-                            Log.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
-                        Log.w(LOG_TAG, "Error starting job");
+                        ZLogger.w(LOG_TAG, "Error starting job");
                     }
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());
     }

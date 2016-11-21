@@ -39,6 +39,7 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
@@ -265,10 +266,10 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
-                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             } else {
                 mJobId = 0;
-                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
         }
@@ -276,7 +277,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = 0;
-            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
         }

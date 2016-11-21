@@ -100,12 +100,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_ab_back_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_ab_back_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_light.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_ab_back_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\GetMachinesNetworkBridge\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_tick_mark_material.xml",

@@ -31,7 +31,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
     public void inject(GetMachineDataNetworkManagerInterface getMachineDataNetworkManagerInterface)
     {
         mGetMachineDataNetworkManagerInterface = getMachineDataNetworkManagerInterface;
-        Log.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
+        ZLogger.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override

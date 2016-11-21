@@ -108,12 +108,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_singlechoice_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_singlechoice_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_singlechoice_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_singlechoice_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ReportNetworkBridge\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_title_item.xml",

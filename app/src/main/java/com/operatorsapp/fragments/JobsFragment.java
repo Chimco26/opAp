@@ -35,6 +35,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +129,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
 
 
-        Log.i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
+        ZLogger.i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
 
 
     }
@@ -171,7 +172,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
     @Override
     public void onJobsListReceiveFailed() {
         dismissProgressDialog();
-        Log.i(LOG_TAG, "onJobsListReceiveFailed()");
+        ZLogger.i(LOG_TAG, "onJobsListReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
@@ -187,7 +188,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
         JobsRecyclerViewAdapter mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
 
-        Log.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
+        ZLogger.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
 
     }
 
@@ -220,7 +221,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
             }
         }
         else {
-            Log.w(LOG_TAG, "mHeaderList is null");
+            ZLogger.w(LOG_TAG, "mHeaderList is null");
         }
 
     }

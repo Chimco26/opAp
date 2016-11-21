@@ -76,12 +76,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_template_lines.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_lines.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\notification_template_lines.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_singlechoice_material.xml",
@@ -100,12 +100,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_screen_simple.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_item_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_icon.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\select_dialog_item_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogInfra\\build\\intermediates\\res\\merged\\debug\\layout\\abc_expanded_menu_layout.xml",

@@ -13,6 +13,7 @@ import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStat
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +29,7 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
 
     public void inject(GetMachineStatusNetworkManagerInterface getMachineStatusNetworkManager) {
         mGetMachineStatusNetworkManagerInterface = getMachineStatusNetworkManager;
-        Log.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
+        ZLogger.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
@@ -41,16 +42,16 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             public void onResponse(Call<MachineStatusDataResponse> call, Response<MachineStatusDataResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getMachineStatus().getAllMachinesData().size() == 0) {
-                        Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
+                        ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
 //                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
 //                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     } else {
-                        Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
+                        ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
                     }
                     MachineStatus machineStatus = response.body().getMachineStatus();
                     getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                 } else {
-                    Log.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
+                    ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "isSuccessful = false");
                     ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }
@@ -59,11 +60,11 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             @Override
             public void onFailure(Call<MachineStatusDataResponse> call, Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
+                    ZLogger.d(LOG_TAG, "getMachineStatus, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }

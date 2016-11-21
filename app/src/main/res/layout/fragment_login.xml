@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/C2">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_gravity="bottom"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_factory" />
+
     <LinearLayout
         android:id="@+id/main"
         android:layout_marginTop="42dp"
@@ -153,11 +160,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_gravity="bottom"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_factory" />
 </FrameLayout>

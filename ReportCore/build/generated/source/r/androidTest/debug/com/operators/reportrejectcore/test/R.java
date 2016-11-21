@@ -1942,7 +1942,14 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f050011;
         public static final int abc_toolbar_collapse_description=0x7f050012;
         public static final int app_name=0x7f050020;
+        public static final int automatic_recordings_are_disabled=0x7f050021;
+        public static final int email_feedback_body=0x7f050022;
+        public static final int email_feedback_subject=0x7f050023;
+        public static final int log_files_do_not_exist=0x7f050024;
+        public static final int marketing_data_unavailable=0x7f050025;
+        public static final int ok=0x7f050026;
         public static final int status_bar_notification_info_overflow=0x7f050013;
+        public static final int title_activity_log_test=0x7f050027;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f07008a;

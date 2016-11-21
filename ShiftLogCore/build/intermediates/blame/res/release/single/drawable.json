@@ -4,12 +4,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_btn_borderless_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_spinner_textfield_background_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_spinner_textfield_background_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_spinner_textfield_background_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_tab_indicator_material.xml",
@@ -44,12 +44,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_go_search_api_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_search_api_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_search_api_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_search_api_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ic_search_api_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\ShiftLogCore\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",

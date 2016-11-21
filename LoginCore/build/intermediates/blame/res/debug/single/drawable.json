@@ -68,12 +68,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_btn_colored_material.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_small_material.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\drawable\\abc_ratingbar_small_material.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",

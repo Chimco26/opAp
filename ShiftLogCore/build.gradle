@@ -25,4 +25,5 @@ dependencies {
     compile(name: 'pollingmachanaim-release', ext: 'aar')
     compile project(':ShiftLogInfra')
     compile project(':ErrorObjectInterface')
+    compile(name: 'logrecorder', ext: 'aar')
 }

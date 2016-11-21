@@ -35,6 +35,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -224,7 +225,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_next: {
-                Log.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
+                ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if (!mUnitsEditText.getText().toString().equals("")) {
                     sendReport();
                 }
@@ -254,7 +255,7 @@ ProgressDialogManager.show(getActivity());
         @Override
         public void sendReportSuccess() {
             dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportSuccess()");
+            ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
@@ -262,7 +263,7 @@ ProgressDialogManager.show(getActivity());
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            Log.w(LOG_TAG, "sendReportFailure()");
+            ZLogger.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -272,7 +273,7 @@ ProgressDialogManager.show(getActivity());
 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
-                        Log.w(LOG_TAG, "Failed silent login");
+                        ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();

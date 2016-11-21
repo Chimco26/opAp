@@ -22,6 +22,7 @@ import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallbac
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
+import com.zemingo.logrecorder.ZLogger;
 
 public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
 {
@@ -146,13 +147,13 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onStartJobSuccess() {
-        Log.i(LOG_TAG, "onStartJobSuccess()");
+        ZLogger.i(LOG_TAG, "onStartJobSuccess()");
         dismissProgressDialog();
     }
 
     @Override
     public void onStartJobFailure() {
-        Log.i(LOG_TAG, "onStartJobFailure()");
+        ZLogger.i(LOG_TAG, "onStartJobFailure()");
         dismissProgressDialog();
     }
 

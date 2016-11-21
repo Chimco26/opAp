@@ -12,6 +12,7 @@ import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
+import com.zemingo.logrecorder.ZLogger;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.concurrent.TimeUnit;
@@ -82,26 +83,26 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
                             if (machineStatus.getAllMachinesData().size() > 0) {
                                 mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);
                             } else {
-                                Log.w(LOG_TAG, "All Machine Data Is 0!!");
+                                ZLogger.w(LOG_TAG, "All Machine Data Is 0!!");
                             }
                         } else {
-                            Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
+                            ZLogger.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                         }
                     } else {
-                        Log.e(LOG_TAG, "machineStatus is null");
+                        ZLogger.e(LOG_TAG, "machineStatus is null");
                     }
                     onJobFinishedListener.onJobFinished();
                 }
 
                 @Override
                 public void onGetMachineStatusFailed(ErrorObjectInterface reason) {
-                    Log.w(LOG_TAG, "getMachineStatus() onGetMachineStatusFailed");
+                    ZLogger.w(LOG_TAG, "getMachineStatus() onGetMachineStatusFailed");
                     if (mMachineStatusUICallback != null) {
                         if (reason != null) {
                             mMachineStatusUICallback.onStatusReceiveFailed(reason);
                         }
                     } else {
-                        Log.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
+                        ZLogger.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                     }
                     onJobFinishedListener.onJobFinished();
                 }
@@ -121,7 +122,7 @@ public class MachineStatusCore implements OnTimeToEndChangedListener {
         if (mMachineStatusUICallback != null) {
             mMachineStatusUICallback.onTimerChanged(millisUntilFinished);
         } else {
-            Log.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
+            ZLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
         }
     }
 }

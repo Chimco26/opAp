@@ -25,6 +25,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.zemingo.logrecorder.ZLogger;
 
 public class SelectedOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -77,13 +78,13 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onSetOperatorSuccess() {
-                Log.i(LOG_TAG, "onSetOperatorSuccess()");
+                ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             }
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
-                Log.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+                ZLogger.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
 
             }
         });

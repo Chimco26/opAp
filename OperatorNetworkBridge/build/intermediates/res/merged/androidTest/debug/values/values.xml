@@ -224,7 +224,14 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="app_name">OperatorNetworkBridge</string>
+    <string name="automatic_recordings_are_disabled">Automatic recordings are disabled</string>
+    <string name="email_feedback_body">User name: %1$s\nApplication version: %2$s\nDevice model: %3$s\nAndroid sdk version: %4$s</string>
+    <string name="email_feedback_subject">Feedback for FLIR FX app</string>
+    <string name="log_files_do_not_exist">No log files available</string>
+    <string name="marketing_data_unavailable">LP:Information is unavailable</string>
+    <string name="ok">OK</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="title_activity_log_test">LogTestActivity</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>

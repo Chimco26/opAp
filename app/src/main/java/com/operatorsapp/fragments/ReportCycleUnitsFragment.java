@@ -42,6 +42,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.Locale;
 
@@ -293,7 +294,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         reportRejectNetworkBridge.inject(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        Log.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
+        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
 
         mReportRejectCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
     }
@@ -303,7 +304,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         @Override
         public void sendReportSuccess()
         {
-            Log.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
+            ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportRejectCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             dismissProgressDialog();
@@ -312,7 +313,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         @Override
         public void sendReportFailure(ErrorObjectInterface reason)
         {
-            Log.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             dismissProgressDialog();
         }
     };
@@ -351,12 +352,12 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
-                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else
             {
                 mJobId = null;
-                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
 
@@ -366,7 +367,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason)
         {
             mJobId = null;
-            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
 

@@ -121,6 +121,7 @@
     <string name="approve">Approve</string>
     <string name="setup_end">Setup\nend</string>
     <string name="first_item_approval">First Item Approval</string>
+    <string name="send_logs">Send logs</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

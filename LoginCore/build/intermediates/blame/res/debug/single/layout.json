@@ -92,12 +92,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_layout.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_layout.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_layout.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\debug\\layout\\abc_dialog_title_material.xml",

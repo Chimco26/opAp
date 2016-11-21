@@ -9,6 +9,7 @@ import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallba
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
+import com.zemingo.logrecorder.ZLogger;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.concurrent.TimeUnit;
@@ -67,17 +68,17 @@ public class ReportFieldsForMachineCore {
                                     mReportFieldsForMachineUICallback.onReportFieldsReceivedSuccessfully(reportFieldsForMachine);
                                 }
                                 else {
-                                    Log.w(LOG_TAG, "mReportFieldsForMachineUICallback is null");
+                                    ZLogger.w(LOG_TAG, "mReportFieldsForMachineUICallback is null");
                                 }
                             }
                             else {
-                                Log.e(LOG_TAG, "reportFieldsForMachine is null");
+                                ZLogger.e(LOG_TAG, "reportFieldsForMachine is null");
                             }
                             if (onJobFinishedListener != null) {
                                 onJobFinishedListener.onJobFinished();
                             }
                             else {
-                                Log.w(LOG_TAG, "onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
+                                ZLogger.w(LOG_TAG, "onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
                             }
                         }
 
@@ -89,7 +90,7 @@ public class ReportFieldsForMachineCore {
                                 }
                             }
                             else {
-                                Log.w(LOG_TAG, "getReportFieldForMachine() mReportFieldsForMachineUICallback is null");
+                                ZLogger.w(LOG_TAG, "getReportFieldForMachine() mReportFieldsForMachineUICallback is null");
                             }
                             if (onJobFinishedListener != null) {
                                 onJobFinishedListener.onJobFinished();

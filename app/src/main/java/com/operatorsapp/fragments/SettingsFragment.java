@@ -34,6 +34,7 @@ import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.NetworkAvailable;
+import com.zemingo.logrecorder.ZLogger;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
 {
@@ -144,6 +145,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        mAdvancedSettingsButton.setOnClickListener(null);
+        mSaveButton.setOnClickListener(null);
+        mCancelButton.setOnClickListener(null);
+        mRefreshButton.setOnClickListener(null);
+        mButtonChange.setOnClickListener(null);
     }
 
     @Override
@@ -219,7 +225,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onReportUpdatedSuccess() {
-        Log.i(LOG_TAG, "onReportUpdatedSuccess()");
+        ZLogger.i(LOG_TAG, "onReportUpdatedSuccess()");
         mRefreshStatusTextView.setVisibility(View.VISIBLE);
         dismissProgressDialog();
 
@@ -227,7 +233,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onReportUpdateFailure() {
-        Log.i(LOG_TAG, "onReportUpdateFailure()");
+        ZLogger.i(LOG_TAG, "onReportUpdateFailure()");
         dismissProgressDialog();
     }
 

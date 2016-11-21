@@ -8,12 +8,12 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_popup_exit.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\release\\anim\\abc_popup_enter.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_popup_enter.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_out_bottom.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\release\\anim\\abc_popup_enter.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_popup_enter.xml"
     },
     {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\LoginCore\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_in_top.xml",

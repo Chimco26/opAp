@@ -8,6 +8,7 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallb
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.zemingo.logrecorder.ZLogger;
 
 /**
  * Created by Sergey on 14/08/2016.
@@ -43,15 +44,15 @@ public class ActiveJobsListForMachineCore {
                                         mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceived(activeJobsListForMachine);
                                     }
                                     else {
-                                        Log.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list is empty");
+                                        ZLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list is empty");
                                     }
                                 }
                                 else {
-                                    Log.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list null");
+                                    ZLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine list null");
                                 }
                             }
                             else {
-                                Log.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine is null");
+                                ZLogger.w(LOG_TAG, "getActiveJobsListForMachine() activeJobsListForMachine is null");
 
                             }
                         }
@@ -59,7 +60,7 @@ public class ActiveJobsListForMachineCore {
                         @Override
                         public void onGetActiveJobsListForMachineFailed(ErrorObjectInterface reason) {
                             mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceiveFailed(reason);
-                            Log.e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
+                            ZLogger.e(LOG_TAG, "getActiveJobsListForMachine() - onGetActiveJobsListForMachineFailed() ");
 
 
                         }

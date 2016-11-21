@@ -12,6 +12,7 @@ import com.operators.shiftlogcore.interfaces.ShiftLogUICallback;
 import com.operators.shiftlogcore.polling.EmeraldJobBase;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
+import com.zemingo.logrecorder.ZLogger;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class ShiftLogCore {
 //                }
 //                mShiftLogs.addAll(events);
                 shiftLogUICallback.onGetShiftLogSucceeded(events);
-                Log.d(LOG_TAG, "getShiftLog success");
+                ZLogger.d(LOG_TAG, "getShiftLog success");
                 onJobFinishedListener.onJobFinished();
             }
 
@@ -122,14 +123,14 @@ public class ShiftLogCore {
                 if (mShiftLogUICallback != null) {
                     mShiftLogUICallback.onGetShiftLogSucceeded(events);
                 } else {
-                    Log.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
+                    ZLogger.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                 }
                 onJobFinishedListener.onJobFinished();
             }
 
             @Override
             public void onShiftLogFailed(ErrorObjectInterface reason) {
-                Log.w(LOG_TAG, "getShiftLogs() onGetShiftLogFailed");
+                ZLogger.w(LOG_TAG, "getShiftLogs() onGetShiftLogFailed");
                 onJobFinishedListener.onJobFinished();
                 if (mShiftLogUICallback != null) {
                     mShiftLogUICallback.onGetShiftLogFailed(reason);
@@ -144,13 +145,13 @@ public class ShiftLogCore {
             @Override
             public void onShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 shiftForMachineUICallback.onGetShiftForMachineSucceeded(shiftForMachineResponse);
-                Log.w(LOG_TAG, "getShiftForMachine() onShiftForMachineSucceeded");
+                ZLogger.w(LOG_TAG, "getShiftForMachine() onShiftForMachineSucceeded");
             }
 
             @Override
             public void onShiftForMachineFailed(ErrorObjectInterface reason) {
                 shiftForMachineUICallback.onGetShiftForMachineFailed(reason);
-                Log.w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getDetailedDescription());
+                ZLogger.w(LOG_TAG, "getShiftForMachine() onShiftForMachineFailed" + reason.getDetailedDescription());
             }
 
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());

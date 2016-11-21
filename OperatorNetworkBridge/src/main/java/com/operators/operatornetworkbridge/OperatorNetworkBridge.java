@@ -15,6 +15,7 @@ import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachine
 import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
 import com.operators.operatornetworkbridge.server.responses.OperatorDataResponse;
 import com.operators.operatornetworkbridge.server.responses.SetOperatorForMachineResponse;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +33,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
     public void inject(GetOperatorByIdNetworkManagerInterface getOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface setOperatorForMachineNetworkManagerInterface) {
         mGetOperatorByIdNetworkManagerInterface = getOperatorByIdNetworkManagerInterface;
         mSetOperatorForMachineNetworkManagerInterface = setOperatorForMachineNetworkManagerInterface;
-        Log.i(LOG_TAG, "OperatorNetworkBridge inject()");
+        ZLogger.i(LOG_TAG, "OperatorNetworkBridge inject()");
     }
 
     @Override
@@ -53,7 +54,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                             getOperatorByIdCallback.onGetOperatorSucceeded(operator);
                         }
                     } else {
-                        Log.w(LOG_TAG, "Response is null");
+                        ZLogger.w(LOG_TAG, "Response is null");
                     }
                 } else {
                     if (response.body() != null) {
@@ -61,7 +62,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getOperatorByIdCallback.onGetOperatorFailed(errorObject);
                     } else {
-                        Log.w(LOG_TAG, "Response body is null");
+                        ZLogger.w(LOG_TAG, "Response body is null");
 
                     }
                 }
@@ -70,11 +71,11 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             @Override
             public void onFailure(Call<OperatorDataResponse> call, Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_operator_failed Error");
                     getOperatorByIdCallback.onGetOperatorFailed(errorObject);
                 }
@@ -102,11 +103,11 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             @Override
             public void onFailure(Call<SetOperatorForMachineResponse> call, Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Set_operator_for_machine_failed Error");
                     setOperatorForMachineCallback.onSetOperatorForMachineFailed(errorObject);
                 }

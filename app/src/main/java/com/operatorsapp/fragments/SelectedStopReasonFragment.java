@@ -41,6 +41,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
+import com.zemingo.logrecorder.ZLogger;
 
 public class SelectedStopReasonFragment extends Fragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider
 {
@@ -217,7 +218,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     @Override
     public void onSubReasonSelected(int subReasonId) {
         mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-        Log.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
+        ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
         mSelectedSubreasonId = subReasonId;
         mStopReasonsAdapter.notifyDataSetChanged();
     }
@@ -251,7 +252,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         @Override
         public void sendReportSuccess() {
             dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportSuccess()");
+            ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
@@ -259,7 +260,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            Log.w(LOG_TAG, "sendReportFailure()");
+            ZLogger.w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -269,7 +270,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
-                        Log.w(LOG_TAG, "Failed silent login");
+                        ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }

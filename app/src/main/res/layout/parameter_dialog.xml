@@ -132,6 +132,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="invisible"
             android:clickable="true"
             style="@style/RobotoMedium"
             android:id="@+id/dialog_dismiss_all"

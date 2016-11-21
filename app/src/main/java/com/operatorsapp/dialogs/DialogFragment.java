@@ -108,6 +108,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
+                        //// TODO: 20-Nov-16  check
+                        dismiss();
                         mListener.onReportClick(mEvent.getEventID(), mEvent.getTime(), mEvent.getEndTime(), mEvent.getDuration());
                     }
                 }

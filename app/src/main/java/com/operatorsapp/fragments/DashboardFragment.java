@@ -143,7 +143,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        Log.d("moo", "width is: " + width);
+        ZLogger.d("moo", "width is: " + width);
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
         mWidgetsLayoutWidth = (int) (width * 0.8);
@@ -361,13 +361,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         public void onSetOperatorSuccess()
         {
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-            //            Log.d(LOG_TAG, "onSetOperatorSuccess() ");
+            //            Zloger.d(LOG_TAG, "onSetOperatorSuccess() ");
         }
 
         @Override
         public void onSetOperatorFailed(ErrorObjectInterface reason)
         {
-            Log.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
+            ZLogger.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
         }
 
     };
@@ -534,7 +534,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     {
                         case 0:
                         {
-                            Log.d(LOG_TAG, "New Job");
+                            ZLogger.d(LOG_TAG, "New Job");
                             mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
                             break;
                         }
@@ -753,7 +753,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus)
     {
-        Log.i(LOG_TAG, "onDeviceStatusChanged()");
+        ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
     }
@@ -902,7 +902,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
             if (!mIsOpenDialog && mEventsQueue.size() > 0)
             {
-                Event event = mEventsQueue.peek();
+                Event event = mEventsQueue.pop();
                 if (event.getEventGroupID() == 6)
                 {
                     mDialogFragment = DialogFragment.newInstance(event, true);
@@ -1031,7 +1031,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         }
         else
         {
-            Log.w(LOG_TAG, "Undefined parameter");
+            ZLogger.w(LOG_TAG, "Undefined parameter");
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
         }
 

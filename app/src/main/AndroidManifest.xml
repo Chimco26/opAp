@@ -10,6 +10,8 @@
     <!-- Connectivity -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+
     <application
         android:name=".application.OperatorApplication"
         android:allowBackup="false"

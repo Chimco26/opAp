@@ -10,6 +10,7 @@ import com.operators.reportfieldsformachinenetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachinenetworkbridge.server.requests.GetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.server.responses.ErrorResponse;
 import com.operators.reportfieldsformachinenetworkbridge.server.responses.GetReportFieldsForMachineResponse;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +45,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response data is null");
                             callback.onGetReportFieldsForMachineFailed(errorObject);
                         } else {
-                            Log.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
+                            ZLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
                             callback.onGetReportFieldsForMachineSuccess(response.body().getReportFieldsForMachine());
                         }
                     } else {
@@ -52,7 +53,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 } else {
-                    Log.i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
 
@@ -60,16 +61,16 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
             public void onFailure(Call<GetReportFieldsForMachineResponse> call, Throwable t) {
                 if (callback != null) {
                     if (mRetryCount++ < totalRetries) {
-                        Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                        ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         mRetryCount = 0;
-                        Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 } else {
-                    Log.i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
         });

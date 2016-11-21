@@ -8,7 +8,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
-        versionName "0.4.12"
+        versionName "0.4.14"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -62,6 +63,7 @@ dependencies {
     compile project(':ReportCore')
     compile project(':ReportInfra')
     compile project(':ReportNetworkBridge')
+    compile project(':AllDashboardDataCore')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
@@ -84,4 +86,5 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
 }

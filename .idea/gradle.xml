@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/ActiveJobsListForMachineCore" />
             <option value="$PROJECT_DIR$/ActiveJobsListForMachineInfra" />
             <option value="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge" />
+            <option value="$PROJECT_DIR$/AllDashboardDataCore" />
             <option value="$PROJECT_DIR$/ErrorObjectInterface" />
             <option value="$PROJECT_DIR$/GetMachinesNetworkBridge" />
             <option value="$PROJECT_DIR$/Infra" />

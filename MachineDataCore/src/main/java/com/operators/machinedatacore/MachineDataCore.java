@@ -9,6 +9,7 @@ import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.machinedatainfra.models.Widget;
+import com.zemingo.logrecorder.ZLogger;
 import com.zemingo.pollingmachanaim.JobBase;
 
 import java.util.ArrayList;
@@ -67,14 +68,14 @@ public class MachineDataCore {
                             if (mMachineDataUICallback != null) {
                                 mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
                             } else {
-                                Log.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
+                                ZLogger.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
                             }
                             onJobFinishedListener.onJobFinished();
                         }
 
                         @Override
                         public void onGetMachineDataFailed(ErrorObjectInterface reason) {
-                            Log.w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
+                            ZLogger.w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
                             onJobFinishedListener.onJobFinished();
                             if (mMachineDataUICallback != null) {
                                 mMachineDataUICallback.onDataReceiveFailed(reason);

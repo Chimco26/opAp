@@ -32,11 +32,11 @@
         "source": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_fade_out.xml"
     },
     {
-        "merged": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
-        "source": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_fade_in.xml"
-    },
-    {
         "merged": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
         "source": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\ZemingoProjects\\operatorsApp\\Infra\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.1.1\\res\\anim\\abc_fade_in.xml"
     }
 ]

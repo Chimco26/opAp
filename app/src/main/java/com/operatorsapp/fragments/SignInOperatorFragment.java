@@ -37,6 +37,7 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.zemingo.logrecorder.ZLogger;
 
 public class SignInOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -92,7 +93,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
+                ZLogger.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
                 if (count > 0) {
                     mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                     mSignInButton.setClickable(true);
@@ -115,11 +116,11 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             removePhoneKeypad();
             if (operator != null) {
                 if(operator.getOperatorName().equals("")){
-                    Log.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
+                    ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
                     ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
                 }else {
-                    Log.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
+                    ZLogger.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
                     SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
                     Bundle bundle = new Bundle();
@@ -131,7 +132,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
                     mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
                 }
             } else {
-                Log.d(LOG_TAG, "Operator data receive failed. Reason : ");
+                ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
             }
@@ -140,19 +141,19 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
 
         @Override
         public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
-            Log.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
                         String id = mOperatorIdEditText.getText().toString();
-                        Log.i(LOG_TAG, "Operator id: " + id);
+                        ZLogger.i(LOG_TAG, "Operator id: " + id);
                         mOperatorCore.getOperatorById(id);
                     }
 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
-
+                        ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, reason.getError().toString());
                     }
                 });
             } else {
@@ -216,7 +217,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             case R.id.button_operator_signIn: {
                 ProgressDialogManager.show(getActivity());
                 String id = mOperatorIdEditText.getText().toString();
-                Log.i(LOG_TAG, "Operator id: " + id);
+                ZLogger.i(LOG_TAG, "Operator id: " + id);
                 mOperatorCore.getOperatorById(id);
                 break;
             }

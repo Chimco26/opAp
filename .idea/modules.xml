@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineCore/ActiveJobsListForMachineCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineInfra/ActiveJobsListForMachineInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" filepath="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/ActiveJobsListForMachineNetworkBridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AllDashboardDataCore/AllDashboardDataCore.iml" filepath="$PROJECT_DIR$/AllDashboardDataCore/AllDashboardDataCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" filepath="$PROJECT_DIR$/ErrorObjectInterface/ErrorObjectInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" filepath="$PROJECT_DIR$/GetMachinesNetworkBridge/GetMachinesNetworkBridge.iml" />
       <module fileurl="file://$PROJECT_DIR$/Infra/Infra.iml" filepath="$PROJECT_DIR$/Infra/Infra.iml" />
@@ -22,7 +23,6 @@
       <module fileurl="file://$PROJECT_DIR$/OperatorCore/OperatorCore.iml" filepath="$PROJECT_DIR$/OperatorCore/OperatorCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" filepath="$PROJECT_DIR$/OperatorInfra/OperatorInfra.iml" />
       <module fileurl="file://$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" filepath="$PROJECT_DIR$/OperatorNetworkBridge/OperatorNetworkBridge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Operators.iml" filepath="$PROJECT_DIR$/Operators.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportCore/ReportCore.iml" filepath="$PROJECT_DIR$/ReportCore/ReportCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineCore/ReportFieldsForMachineCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" filepath="$PROJECT_DIR$/ReportFieldsForMachineInfra/ReportFieldsForMachineInfra.iml" />

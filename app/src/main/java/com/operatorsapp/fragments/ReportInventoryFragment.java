@@ -41,6 +41,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.zemingo.logrecorder.ZLogger;
 
 public class ReportInventoryFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -242,7 +243,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         reportRejectNetworkBridge.injectInventory(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        Log.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
+        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
         mReportRejectCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
     }
@@ -251,7 +252,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         @Override
         public void sendReportSuccess() {
             dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportSuccess()");
+            ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
@@ -259,7 +260,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            Log.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
         }
     };
 
@@ -293,11 +294,11 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
                 initJobsSpinner();
-                Log.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else {
                 mJobId = null;
-                Log.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
         }
@@ -305,7 +306,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = null;
-            Log.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             disableProgressBar();
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
         }

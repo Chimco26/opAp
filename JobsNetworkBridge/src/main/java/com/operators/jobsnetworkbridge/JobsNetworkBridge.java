@@ -15,6 +15,7 @@ import com.operators.jobsnetworkbridge.server.requests.StartJobForMachineRequest
 import com.operators.jobsnetworkbridge.server.responses.ErrorResponse;
 import com.operators.jobsnetworkbridge.server.responses.JobsListForMachineResponse;
 import com.operators.jobsnetworkbridge.server.responses.StartJobForMachineResponse;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +34,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
     public void inject(GetJobsListForMachineNetworkManagerInterface getJobsListForMachineNetworkManager, StartJobForMachineNetworkManagerInterface startJobForMachineNetworkManager) {
         mGetJobsListForMachineNetworkManagerInterface = getJobsListForMachineNetworkManager;
         mStartJobForMachineNetworkManagerInterface = startJobForMachineNetworkManager;
-        Log.i(LOG_TAG, "JobsNetworkBridge inject()");
+        ZLogger.i(LOG_TAG, "JobsNetworkBridge inject()");
     }
 
     @Override
@@ -53,7 +54,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                             getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                         }
                     } else {
-                        Log.w(LOG_TAG, "jobListForMachine.getData() is null");
+                        ZLogger.w(LOG_TAG, "jobListForMachine.getData() is null");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
@@ -62,7 +63,7 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     } else {
-                        Log.w(LOG_TAG, "response.body() is null");
+                        ZLogger.w(LOG_TAG, "response.body() is null");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Get_jobs_list_failed Error");
                         getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                     }
@@ -72,11 +73,11 @@ public class JobsNetworkBridge implements JobsListForMachineNetworkBridgeInterfa
             @Override
             public void onFailure(Call<JobsListForMachineResponse> call, Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_jobs_list_failed Error");
                     getJobsListForMachineCallback.onGetJobsListForMachineFailed(errorObject);
                 }

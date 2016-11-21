@@ -66,7 +66,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             {
                 if (retryCount++ < totalRetries)
                 {
-                    Log.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
@@ -107,7 +107,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             {
                 if (retryCount++ < totalRetries)
                 {
-                    Log.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else

@@ -11,6 +11,7 @@ import com.operators.activejobslistformachinenetworkbridge.server.requests.GetAc
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +28,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
     private int mRetryCount = 0;
 
     public void inject(ActiveJobsListForMachineNetworkManagerInterface activeJobsListForMachineNetworkManagerInterface) {
-        Log.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
+        ZLogger.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
         mActiveJobsListForMachineNetworkManagerInterface = activeJobsListForMachineNetworkManagerInterface;
     }
 
@@ -49,7 +50,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
-                            Log.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
+                            ZLogger.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
                             if(callback != null)
                             {
@@ -69,11 +70,11 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
             @Override
             public void onFailure(Call<ActiveJobsListForMachineResponse> call, Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    Log.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    Log.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }

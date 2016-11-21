@@ -10,6 +10,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -26,6 +27,8 @@ public class OperatorApplication extends Application
 
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
+
+        LogRecorder.initInstance(msApplicationContext);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
