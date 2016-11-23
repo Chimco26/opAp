@@ -71,12 +71,17 @@ public class Event {
         return mEventTime;
     }
 
-    public String getEndTime() {
+    public String getEventEndTime() {
         return mEventEndTime;
     }
 
     public long getDuration() {
         return mEventDuration;
+    }
+
+    public void setDuration(long eventDuration)
+    {
+        mEventDuration = eventDuration;
     }
 
     public long getTimeOfAdded() {
@@ -129,5 +134,105 @@ public class Event {
 
     public float getAlarmValue() {
         return mAlarmValue;
+    }
+
+    public void setPriority(int priority)
+    {
+        mPriority = priority;
+    }
+
+    public void setEventTime(String eventTime)
+    {
+        mEventTime = eventTime;
+    }
+
+    public void setEventTitle(String eventTitle)
+    {
+        mEventTitle = eventTitle;
+    }
+
+    public void setEventSubTitleEname(String eventSubTitleEname)
+    {
+        mEventSubTitleEname = eventSubTitleEname;
+    }
+
+    public void setEventSubTitleLname(String eventSubTitleLname)
+    {
+        mEventSubTitleLname = eventSubTitleLname;
+    }
+
+    public void setEventStartTime(String eventStartTime)
+    {
+        mEventStartTime = eventStartTime;
+    }
+
+    public String getEventTime()
+    {
+        return mEventTime;
+    }
+
+    public String getEventTitle()
+    {
+        return mEventTitle;
+    }
+
+    public String getEventSubTitleEname()
+    {
+        return mEventSubTitleEname;
+    }
+
+    public String getEventSubTitleLname()
+    {
+        return mEventSubTitleLname;
+    }
+
+    public String getEventStartTime()
+    {
+        return mEventStartTime;
+    }
+
+    public long getEventDuration()
+    {
+        return mEventDuration;
+    }
+
+    public void setEventEndTime(String eventEndTime)
+    {
+        mEventEndTime = eventEndTime;
+    }
+
+    public void setEventGroupID(int eventGroupID)
+    {
+        mEventGroupID = eventGroupID;
+    }
+
+    public void setEventGroupLname(String eventGroupLname)
+    {
+        mEventGroupLname = eventGroupLname;
+    }
+
+    public void setEventID(int eventID)
+    {
+        mEventID = eventID;
+    }
+
+    public void setAlarmHValue(float alarmHValue)
+    {
+        mAlarmHValue = alarmHValue;
+    }
+
+    public void setAlarmLValue(float alarmLValue)
+    {
+        mAlarmLValue = alarmLValue;
+    }
+
+    public void setAlarmStandardValue(float alarmStandardValue)
+    {
+        mAlarmStandardValue = alarmStandardValue;
+    }
+
+    public void setAlarmValue(float alarmValue)
+    {
+        mAlarmValue = alarmValue;
     }
 }

@@ -10,7 +10,7 @@ public class Header {
 
     @SerializedName("FieldName")
     private String mFieldName;
-    @SerializedName("DisplayHName")
+    @SerializedName("DisplayEName")
     private String mDisplayEName;
     @SerializedName("FormID")
     private Object mFormID;
@@ -18,6 +18,8 @@ public class Header {
     private String mLinkItem;
     @SerializedName("DisplayType")
     private String mDisplayType;
+    @SerializedName("CustomLinkItem")
+    private boolean mCustomLinkItem;
 
     public Header(String fieldName, String displayEName, Object formID, String linkitem, String displayType) {
         mFieldName = fieldName;
@@ -31,7 +33,7 @@ public class Header {
         return mFieldName;
     }
 
-    public String getDisplayHName() {
+    public String getDisplayEName() {
         return mDisplayEName;
     }
 
@@ -45,6 +47,11 @@ public class Header {
 
     public String getDisplayType() {
         return mDisplayType;
+    }
+
+    public boolean isCustomLinkItem()
+    {
+        return mCustomLinkItem;
     }
 }
 

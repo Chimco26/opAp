@@ -352,9 +352,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse)
             {
-                // TODO: 18-Oct-16 SERGEY
-                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
-                //                final int durationOfShift = 691200000;
+                final long durationOfShift = shiftForMachineResponse.getDuration();
+//                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 if(durationOfShift > 0)
                 {
                     startShiftTimer(durationOfShift);
@@ -383,7 +382,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
-    private void startShiftTimer(int timeInSeconds)
+    private void startShiftTimer(long timeInSeconds)
     {
         if(mTimeToEndCounter == null)
         {
@@ -705,9 +704,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             {
                 return fragments.get(fragmentBackStackSize - 1);
             }
-            else
+            else if(fragments.get(fragmentBackStackSize - 2) != null)
             {
                 return fragments.get(fragmentBackStackSize - 2);
+            }
+            else
+            {
+                return null;
             }
         } catch(NullPointerException ex)
         {

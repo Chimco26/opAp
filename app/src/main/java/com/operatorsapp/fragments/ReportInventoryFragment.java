@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -292,7 +291,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
                 mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
@@ -339,7 +338,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override

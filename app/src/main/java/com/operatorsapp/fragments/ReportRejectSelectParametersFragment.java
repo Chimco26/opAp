@@ -61,9 +61,12 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     private ReportRejectCore mReportRejectCore;
     private String mCurrentProductName;
     private int mCurrentProductId;
+    private boolean mHasUnitsData;
+    private boolean mHasWeightData;
 
 
-    public static ReportRejectSelectParametersFragment newInstance(int selectedReasonId, int selectedCauseId, String selectedReasonName, Integer jobId, String currentProductName, int currentProductId) {
+    public static ReportRejectSelectParametersFragment newInstance(int selectedReasonId, int selectedCauseId, String selectedReasonName, Integer jobId, String currentProductName, int currentProductId)
+    {
         ReportRejectSelectParametersFragment reportRejectSelectParametersFragment = new ReportRejectSelectParametersFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(REJECT_REASON, selectedReasonId);
@@ -77,15 +80,18 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if(getArguments() != null)
+        {
             mSelectedReasonId = getArguments().getInt(REJECT_REASON);
             mSelectedCauseId = getArguments().getInt(REJECT_CAUSE);
             mSelectedReasonName = getArguments().getString(REJECT_REASON_TITLE);
@@ -97,7 +103,8 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         final View view = inflater.inflate(R.layout.fragment_report_rejects_selected_parameters, container, false);
 
         setActionBar();
@@ -105,10 +112,10 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
-        final InputMethodManager inputMethodManager = (InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(mUnitsEditText, InputMethodManager.SHOW_IMPLICIT);
 
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_rejects_product_name_text_view);
@@ -124,78 +131,157 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         mUnitsEditText.setFocusableInTouchMode(true);
         mUnitsEditText.requestFocus();
 
-        if (mCurrentProductName != null) {
+        if(mCurrentProductName != null)
+        {
             productNameTextView.setText(new StringBuilder(mCurrentProductName).append(","));
-        } else {
+        }
+        else
+        {
             productNameTextView.setText(getActivity().getString(R.string.dashes));
         }
 
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
-        if (mJobId != null) {
+        if(mJobId != null)
+        {
             jobIdTextView.setText(String.valueOf(mJobId));
-        } else {
+        }
+        else
+        {
             jobIdTextView.setText(getActivity().getString(R.string.dashes));
 
         }
 
 
-        mUnitsEditText.addTextChangedListener(new TextWatcher() {
+        mUnitsEditText.addTextChangedListener(new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 0) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                if(count > 0)
+                {
+                    mHasUnitsData = true;
                     mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                     mReportButton.setEnabled(true);
-                } else {
-                    mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
-                    mReportButton.setEnabled(false);
+                }
+                else
+                {
+                    mHasUnitsData = false;
+                    if(!mHasWeightData)
+                    {
+                        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+                        mReportButton.setEnabled(false);
+                    }
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
 
-                if (s != null && !s.toString().equals("")) {
-                    if (Float.parseFloat(s.toString()) > 0) {
-                        mReportButton.setEnabled(true);
-                    } else {
+                //                if(s != null && !s.toString().equals(""))
+                //                {
+                //                    if(Float.parseFloat(s.toString()) > 0)
+                //                    {
+                //                        mReportButton.setEnabled(true);
+                //                    }
+                //                    else
+                //                    {
+                //                        mReportButton.setEnabled(false);
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    mReportButton.setEnabled(false);
+                //                }
+            }
+        });
+
+        mWeightEditText.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                if(count > 0)
+                {
+                    mHasWeightData = true;
+                    mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+                    mReportButton.setEnabled(true);
+                }
+                else
+                {
+                    mHasWeightData = false;
+                    if(!mHasUnitsData)
+                    {
+                        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
                         mReportButton.setEnabled(false);
                     }
-                } else {
-                    mReportButton.setEnabled(false);
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+
+                //                if(s != null && !s.toString().equals(""))
+                //                {
+                //                    if(Float.parseFloat(s.toString()) > 0)
+                //                    {
+                //                        mReportButton.setEnabled(true);
+                //                    }
+                //                    else
+                //                    {
+                //                        mReportButton.setEnabled(false);
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    mReportButton.setEnabled(false);
+                //                }
             }
         });
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         mCancelButton.setOnClickListener(null);
         mReportButton.setOnClickListener(null);
         View view = getActivity().getCurrentFocus();
-        if (view != null) {
+        if(view != null)
+        {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         mCancelButton.setOnClickListener(this);
         mReportButton.setOnClickListener(this);
 
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if(actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -203,13 +289,14 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             actionBar.setDisplayUseLogoEnabled(true);
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.report_reject_parameters_action_bar, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.report_reject_parameters_action_bar, null);
 
             LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image_report_reject_selected);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
+            buttonClose.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     getFragmentManager().popBackStack();
                 }
             });
@@ -222,38 +309,52 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_next: {
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
+            case R.id.button_next:
+            {
                 ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
-                if (!mUnitsEditText.getText().toString().equals("")) {
+                if(!mUnitsEditText.getText().toString().equals(""))
+                {
                     sendReport();
                 }
                 break;
             }
-            case R.id.button_cancel: {
+            case R.id.button_cancel:
+            {
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
         }
     }
 
-    private void sendReport() {
-ProgressDialogManager.show(getActivity());
+    private void sendReport()
+    {
+        ProgressDialogManager.show(getActivity());
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
         Double weight = null;
-        if (!mWeightEditText.getText().toString().equals("")) {
+        if(!mWeightEditText.getText().toString().equals(""))
+        {
             weight = Double.parseDouble(mWeightEditText.getText().toString());
         }
-        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, Double.parseDouble(mUnitsEditText.getText().toString()), weight, mJobId);
+        Double units = null;
+        if(!mUnitsEditText.getText().toString().equals(""))
+        {
+            units = Double.parseDouble(mUnitsEditText.getText().toString());
+        }
+        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, units, weight, mJobId);
     }
 
-    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
+    {
         @Override
-        public void sendReportSuccess() {
+        public void sendReportSuccess()
+        {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
@@ -261,25 +362,32 @@ ProgressDialogManager.show(getActivity());
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(ErrorObjectInterface reason)
+        {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
+            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
+            {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
+                {
                     @Override
-                    public void onSilentLoginSucceeded() {
+                    public void onSilentLoginSucceeded()
+                    {
                         sendReport();
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason)
+                    {
                         ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
-            } else {
+            }
+            else
+            {
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
@@ -289,7 +397,7 @@ ProgressDialogManager.show(getActivity());
 
     private void dismissProgressDialog()
     {
-        if (getActivity() != null)
+        if(getActivity() != null)
         {
             getActivity().runOnUiThread(new Runnable()
             {

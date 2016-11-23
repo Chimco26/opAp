@@ -11,38 +11,48 @@ import android.widget.TextView;
 
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filterable {
+public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filterable
+{
     private ArrayList<Machine> mMachines;
     private ArrayList<Machine> machinesResults;
 
-    public AutoCompleteAdapter(Context context, ArrayList<Machine> machines) {
+
+    public AutoCompleteAdapter(Context context, ArrayList<Machine> machines)
+    {
         super(context, 0, machines);
         mMachines = machines;
         machinesResults = new ArrayList<>();
         machinesResults.addAll(mMachines);
     }
 
-    static class ViewHolder {
+    static class ViewHolder
+    {
         TextView text;
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return machinesResults.size();
     }
 
     @Override
-    public Machine getItem(int index) {
+    public Machine getItem(int index)
+    {
         return machinesResults.get(index);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if(convertView == null)
+        {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_view_item_layout, parent, false);
             ViewHolder holder = new ViewHolder();
             holder.text = (TextView) convertView.findViewById(R.id.search_view_item_text);
@@ -53,28 +63,35 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
         Machine machine = machinesResults.get(position);
 
         int machineId = machine.getId();
-        String machineName = machine.getMachineName() == null ? "" : machine.getMachineName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineName() : machine.getMachineLName();
+        String machineName = nameByLang == null ? "" : nameByLang;
         holder.text.setText(new StringBuilder(machineId).append(" - ").append(machineName));
 
         return convertView;
     }
 
     @Override
-    public Filter getFilter() {
-        return new Filter() {
+    public Filter getFilter()
+    {
+        return new Filter()
+        {
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
+            protected FilterResults performFiltering(CharSequence constraint)
+            {
                 machinesResults.clear();
                 machinesResults.addAll(mMachines);
                 FilterResults filterResults = new FilterResults();
-                if (constraint != null) {
+                if(constraint != null)
+                {
 
                     Iterator<Machine> iterator = machinesResults.iterator();
-                    while (iterator.hasNext()) {
+                    while(iterator.hasNext())
+                    {
                         Machine machine = iterator.next();
                         int machineId = machine.getId();
                         String machineName = machine.getMachineName() == null ? "" : machine.getMachineName();
-                        if (!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        if(!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase()))
+                        {
                             iterator.remove();
                         }
                     }
@@ -86,10 +103,14 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
             }
 
             @Override
-            protected void publishResults(CharSequence contraint, FilterResults results) {
-                if (results != null && results.count > 0) {
+            protected void publishResults(CharSequence contraint, FilterResults results)
+            {
+                if(results != null && results.count > 0)
+                {
                     notifyDataSetChanged();
-                } else {
+                }
+                else
+                {
                     notifyDataSetInvalidated();
                 }
             }

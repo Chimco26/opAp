@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,14 +56,15 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
     private ImageView mPlusButton;
     private ImageView mMinusButton;
-    private EditText mUnitsCounterTextView;
+    private TextView mUnitsCounterTextView;
     private Button mButtonReport;
     private TextView mButtonCancel;
     private OnCroutonRequestListener mOnCroutonRequestListener;
 
     private double mUnitsCounter = 1;
     private ReportRejectCore mReportRejectCore;
-    private Integer mJobId = null;
+    private Integer mJoshId = null;
+    private int mMaxUnits = 0;
 
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private Spinner mJobsSpinner;
@@ -100,16 +100,29 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
+        setActionBar();
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        //        final InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //        inputMethodManager.showSoftInput(mUnitsCounterTextView, InputMethodManager.SHOW_IMPLICIT);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
 
-        if (getArguments() != null)
+        if(getArguments() != null)
         {
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
         }
 
-        setActionBar();
 
         TextView mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
@@ -117,12 +130,14 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         mProductTitleTextView.setText(mCurrentProductName);
         mProductIdTextView.setText(String.valueOf(mCurrentProductId));
 
-        mUnitsCounterTextView = (EditText) view.findViewById(R.id.units_text_view);
+        mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
+        mUnitsCounterTextView.setFocusableInTouchMode(true);
+        mUnitsCounterTextView.requestFocus();
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
         mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
         mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
-        mButtonReport = (Button) view.findViewById(R.id.button_next);
+        mButtonReport = (Button) view.findViewById(R.id.button_report);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         mUnitsCounterTextView.addTextChangedListener(new TextWatcher()
@@ -136,44 +151,51 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-
+                if(s.length() > 0)
+                {
+                    Character lastCharacter = mUnitsCounterTextView.getText().toString().charAt(mUnitsCounterTextView.getText().toString().length() - 1);
+                    if(!lastCharacter.toString().equals("."))
+                    {
+                        if(Double.valueOf(s.toString()) > 0 && Double.valueOf(s.toString()) <= mMaxUnits)
+                        {
+                            mButtonReport.setEnabled(true);
+                            //                            mButtonReport.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+                            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+                            mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+                        }
+                        //                        else if(Double.valueOf(s.toString()) < 0)
+                        //                        {
+                        //                            mUnitsCounterTextView.setText("0");
+                        //                            mUnitsCounterTextView.setSelection(mUnitsCounterTextView.length());
+                        //                        }
+//                        if(Double.valueOf(s.toString()) > mMaxUnits)
+//                        {
+//                            mUnitsCounterTextView.setText(String.valueOf(mMaxUnits));
+//                            mUnitsCounterTextView.setSelection(mUnitsCounterTextView.length());
+//                        }
+                    }
+                    else
+                    {
+                        mButtonReport.setEnabled(false);
+                        //                        mButtonReport.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+                    }
+                }
+                else
+                {
+                    mButtonReport.setEnabled(false);
+                    //                    mButtonReport.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
 
-                if (!mUnitsCounterTextView.getText().toString().equals(""))
-                {
-                    if (s.length() > 0)
-                    {
-                        Character lastCharacter = mUnitsCounterTextView.getText().toString().charAt(mUnitsCounterTextView.getText().toString().length() - 1);
-                        if (!lastCharacter.toString().equals("."))
-                        {
-                            if (Double.valueOf(s.toString()) > 0)
-                            {
-                                mButtonReport.setEnabled(true);
-                                double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-                                mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
-                            }
-                        }
-                        else
-                        {
-                            mButtonReport.setEnabled(false);
-                        }
-                    }
-                }
-                else
-                {
-                    mButtonReport.setEnabled(false);
-                }
             }
         });
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        return view;
     }
 
     @Override
@@ -190,8 +212,14 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     public void onPause()
     {
         super.onPause();
+        mPlusButton.setOnClickListener(null);
+        mMinusButton.setOnClickListener(null);
+        mButtonReport.setOnClickListener(null);
+        mButtonCancel.setOnClickListener(null);
+
+
         View view = getActivity().getCurrentFocus();
-        if (view != null)
+        if(view != null)
         {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -201,7 +229,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null)
+        if(actionBar != null)
         {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -228,7 +256,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v)
     {
-        switch (v.getId())
+        switch(v.getId())
         {
             case R.id.button_plus:
             {
@@ -245,7 +273,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next:
+            case R.id.button_report:
             {
                 sendReport();
                 break;
@@ -255,26 +283,33 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
     private void increase()
     {
-        double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-        value = value + 1;
-        value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
-        mUnitsCounter = value;
-        mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+        if(mUnitsCounter < mMaxUnits)
+        {
+            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+            value = value + 1;
+            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+            mUnitsCounter = value;
+            mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+            mPlusButton.setEnabled(true);
+        }
+        else
+        {
+            mUnitsCounterTextView.setText(new StringBuilder(String.valueOf(mMaxUnits)).append(".0"));
+            mPlusButton.setEnabled(false);
+        }
         mMinusButton.setEnabled(true);
         mButtonReport.setEnabled(true);
     }
 
     private void decrease()
     {
-        if (mUnitsCounter > 0)
-        {
-            mUnitsCounter--;
-        }
-        if (mUnitsCounter <= 0)
+        mUnitsCounter--;
+        if(mUnitsCounter <= 0)
         {
             mUnitsCounterTextView.setText("0.0");
             mButtonReport.setEnabled(false);
             mMinusButton.setEnabled(false);
+            mPlusButton.setEnabled(true);
         }
         else
         {
@@ -283,6 +318,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
             value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
             mUnitsCounter = value;
             mButtonReport.setEnabled(true);
+            mMinusButton.setEnabled(true);
+            mPlusButton.setEnabled(true);
             mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
         }
     }
@@ -294,9 +331,9 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         reportRejectNetworkBridge.inject(NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
+        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJoshId);
 
-        mReportRejectCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
+        mReportRejectCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
@@ -320,7 +357,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
     private void dismissProgressDialog()
     {
-        if (getActivity() != null)
+        if(getActivity() != null)
         {
             getActivity().runOnUiThread(new Runnable()
             {
@@ -347,16 +384,18 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         @Override
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine)
         {
-            if (activeJobsListForMachine != null)
+            if(activeJobsListForMachine != null)
             {
                 mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
+                mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard();
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else
             {
-                mJobId = null;
+                mJoshId = null;
+                mMaxUnits = 0;
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
             disableProgressBar();
@@ -366,7 +405,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason)
         {
-            mJobId = null;
+            mJoshId = null;
+            mMaxUnits = 0;
             ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
             disableProgressBar();
@@ -382,9 +422,9 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
 
     private void initJobsSpinner()
     {
-        if (getActivity() != null)
+        if(getActivity() != null)
         {
-            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
+            if(mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
             {
                 mJobsSpinner.setVisibility(View.VISIBLE);
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
@@ -397,7 +437,8 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                        mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                        mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(position).getCavitiesStandard();
                     }
 
                     @Override

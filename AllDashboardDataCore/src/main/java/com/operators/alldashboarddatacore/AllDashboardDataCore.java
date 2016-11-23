@@ -163,7 +163,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
                     {
                         ZLogger.e(LOG_TAG, "machineStatus is null");
                     }
-                    /*onJobFinishedListener.onJobFinished();*/
                     mGetMachineStatusFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
                 }
@@ -180,7 +179,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
                     {
                         ZLogger.w(LOG_TAG, "getMachineStatus() mMachineStatusUICallback is null");
                     }
-                    /*onJobFinishedListener.onJobFinished();*/
                     mGetMachineStatusFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
                 }
@@ -205,7 +203,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
                     {
                         ZLogger.w(LOG_TAG, "getMachineData() mMachineDataUICallback is null");
                     }
-                    /*onJobFinishedListener.onJobFinished();*/
                     mGetMachineDataFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
                 }
@@ -214,7 +211,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
                 public void onGetMachineDataFailed(ErrorObjectInterface reason)
                 {
                     ZLogger.w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
-                   /* onJobFinishedListener.onJobFinished();*/
                     mGetMachineDataFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
 
@@ -242,7 +238,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
                 {
                     ZLogger.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                 }
-                /*onJobFinishedListener.onJobFinished();*/
                 mGetShiftLogFinish = true;
                 setJobFinishToAll(onJobFinishedListener);
             }
@@ -251,7 +246,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
             public void onShiftLogFailed(ErrorObjectInterface reason)
             {
                 ZLogger.w(LOG_TAG, "getShiftLogs() onGetShiftLogFailed " + reason.getError());
-               /* onJobFinishedListener.onJobFinished();*/
                 mGetShiftLogFinish = true;
                 setJobFinishToAll(onJobFinishedListener);
 

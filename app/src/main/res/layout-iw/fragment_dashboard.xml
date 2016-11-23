@@ -154,6 +154,35 @@
                     android:textSize="50sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/fragment_dashboard_loading_data_widgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:indeterminateTint="@color/C16"
+                    android:indeterminateTintMode="src_atop"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/loading_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp"/>
+            </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_dashboard_widgets"
                 android:layout_width="match_parent"
@@ -184,6 +213,21 @@
                 android:text="@string/no_notifications"
                 android:textColor="@color/divider_gray"
                 android:textSize="30sp"
+                app:minTextSize="15dp"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/fragment_dashboard_loading_data_shiftlog"
+                style="@style/FontStyle_T7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="@string/loading_data"
+                android:textColor="@color/divider_gray"
+                android:textSize="30sp"
+                android:visibility="gone"
                 app:minTextSize="15dp"/>
 
             <android.support.v7.widget.RecyclerView

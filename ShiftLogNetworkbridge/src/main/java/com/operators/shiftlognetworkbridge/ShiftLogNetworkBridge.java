@@ -48,23 +48,23 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response)
             {
                 ArrayList<Event> events = response.body().getEvents();
-                if (response.body().getErrorResponse() == null)
+                if(response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967)
                 {
                     ZLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
                 }
                 else
                 {
-                    ZLogger.d(LOG_TAG, "getShiftLog onResponse, " + response.body().getErrorResponse().getErrorDesc() + " " + response.body().getErrorResponse().getErrorCode());
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                    shiftLogCoreCallback.onShiftLogFailed(errorObject);
+                        ZLogger.d(LOG_TAG, "getShiftLog onResponse, " + response.body().getErrorResponse().getErrorDesc() + " " + response.body().getErrorResponse().getErrorCode());
+                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                        shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
             }
 
             @Override
             public void onFailure(Call<ShiftLogResponse> call, Throwable t)
             {
-                if (retryCount++ < totalRetries)
+                if(retryCount++ < totalRetries)
                 {
                     ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
@@ -90,7 +90,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             @Override
             public void onResponse(Call<ShiftForMachineResponse> call, Response<ShiftForMachineResponse> response)
             {
-                if (response.body().getError() == null)
+                if(response.body().getError() == null)
                 {
                     shiftForMachineCoreCallback.onShiftForMachineSucceeded(response.body());
                 }
@@ -105,7 +105,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             @Override
             public void onFailure(Call<ShiftForMachineResponse> call, Throwable t)
             {
-                if (retryCount++ < totalRetries)
+                if(retryCount++ < totalRetries)
                 {
                     ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
@@ -129,7 +129,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
 
     private ErrorObject.ErrorCode toCode(int errorCode)
     {
-        switch (errorCode)
+        switch(errorCode)
         {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;

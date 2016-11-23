@@ -55,7 +55,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
             }
         });
 
-
+        // TODO: 22-Nov-16 CHECK THIS!!!!!
         String[] fieldValues = new String[5];
         String[] headers = new String[5];
         if (mHeaderList.size() > 0) {

@@ -48,7 +48,6 @@ public class OperatorApplication extends Application
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
 
-
         if (BuildConfig.DEBUG)
         {
             ZLogger.DEBUG = true;
@@ -58,5 +57,10 @@ public class OperatorApplication extends Application
     public static Context getAppContext()
     {
         return msApplicationContext;
+    }
+
+    public static boolean isEnglishLang()
+    {
+        return PersistenceManager.getInstance().getCurrentLang().equals("en");
     }
 }

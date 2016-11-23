@@ -12,12 +12,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -221,7 +219,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override
@@ -247,7 +245,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
                 mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }

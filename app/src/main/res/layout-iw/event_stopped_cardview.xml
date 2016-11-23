@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:id="@+id/event_stopped_title_layout"
-            android:layout_width="154dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -73,7 +73,7 @@
             android:id="@+id/shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="20dp"
                 android:orientation="horizontal">
 
@@ -95,14 +95,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:text="@string/start_"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp"/>
 
                         <TextView
                             android:id="@+id/shift_log_item_start"
@@ -113,7 +113,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="8:50"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
@@ -144,14 +144,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:text="@string/end_"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp"/>
 
                         <TextView
                             android:id="@+id/shift_log_item_end"
@@ -162,7 +162,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="9:50"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"/>
                     </LinearLayout>
 
@@ -170,7 +170,7 @@
                         android:id="@+id/shift_log_item_end_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginTop="3dp"
                         android:text="05.11.2016"
                         android:textSize="14sp"/>

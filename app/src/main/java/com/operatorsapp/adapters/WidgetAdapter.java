@@ -16,7 +16,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
@@ -247,7 +249,8 @@ public class WidgetAdapter extends RecyclerView.Adapter
                 });
 
                 setSizes(numericViewHolder.mParentLayout);
-                numericViewHolder.mTitle.setText(widget.getFieldName());
+                String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+                numericViewHolder.mTitle.setText(nameByLang1);
                 numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
                 numericViewHolder.mValue.setText(widget.getCurrentValue());
                 numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
@@ -268,7 +271,8 @@ public class WidgetAdapter extends RecyclerView.Adapter
                 });
 
                 setSizes(timeViewHolder.mParentLayout);
-                timeViewHolder.mTitle.setText(widget.getFieldName());
+                String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+                timeViewHolder.mTitle.setText(nameByLang2);
                 timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
                 final ArrayList<Entry> tenHoursValues = new ArrayList<>();
@@ -298,7 +302,8 @@ public class WidgetAdapter extends RecyclerView.Adapter
                         {
                             if (tenHoursValues.size() > 0)
                             {
-                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, widget.getFieldName()), true);
+                                String nameByLang = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang), true);
                             }
                         }
                     });
@@ -320,7 +325,8 @@ public class WidgetAdapter extends RecyclerView.Adapter
                 });
 
                 setSizes(rangeViewHolder.mParentLayout);
-                rangeViewHolder.mTitle.setText(widget.getFieldName());
+                String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+                rangeViewHolder.mTitle.setText(nameByLang3);
                 rangeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 rangeViewHolder.mValue.setText(widget.getCurrentValue());
                 rangeViewHolder.mCurrentValue.setText(widget.getCurrentValue());
@@ -471,7 +477,8 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
     private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat)
     {
-        projectionViewHolder.mTitle.setText(widget.getFieldName());
+        String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        projectionViewHolder.mTitle.setText(nameByLang4);
         projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
         projectionViewHolder.mValue.setText(valueInK(finalCurrentFloat));
         if (widget.getTarget() > widget.getLowLimit())

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
@@ -50,6 +51,39 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     public void setNewData(ArrayList<Event> events) {
         mEvents = events;
         notifyDataSetChanged();
+    }
+
+    public void updateData(ArrayList<Event> events) {
+        for(Event event : events)
+        {
+            for(Event e : mEvents)
+            {
+                if(e.getEventID() == event.getEventID())
+                {
+                    updateStopEvent(event, e);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private void updateStopEvent(Event event, Event e)
+    {
+        e.setDuration(event.getDuration());
+        e.setAlarmHValue(event.getAlarmHValue());
+        e.setAlarmLValue(event.getAlarmLValue());
+        e.setAlarmStandardValue(event.getAlarmStandardValue());
+        e.setAlarmValue(event.getAlarmValue());
+        e.setEventEndTime(event.getEventEndTime());
+        e.setEventGroupID(event.getEventGroupID());
+        e.setEventGroupLname(event.getEventGroupLname());
+        e.setEventID(event.getEventID());
+        e.setEventStartTime(event.getEventStartTime());
+        e.setEventSubTitleEname(event.getEventSubTitleEname());
+        e.setEventSubTitleLname(event.getEventSubTitleLname());
+        e.setEventTime(event.getEventTime());
+        e.setEventTitle(event.getEventTitle());
+        e.setPriority(event.getPriority());
     }
 
     public void changeState(boolean closedState) {
@@ -180,8 +214,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogStoppedViewHolder.mStart.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getTime()));
-            shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEndTime()));
-            shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEndTime()));
+            shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEventEndTime()));
+            shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEventEndTime()));
             shiftLogStoppedViewHolder.mDuration.setText(TimeUtils.getDurationTime(mContext, event.getDuration()));
             if (mClosedState) {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.GONE);
@@ -208,7 +242,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                         shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
-                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEndTime(), event.getDuration());
+                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
 
                         event.setTreated(true);
                     } else {
@@ -259,7 +293,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
-            shiftLogParameterViewHolder.mSubtitleText.setText(event.getSubtitleEname());
+            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname();
+            shiftLogParameterViewHolder.mSubtitleText.setText(subtitleNameByLang);
             shiftLogParameterViewHolder.mSubTitleValue.setText(String.valueOf(event.getAlarmValue()));
             shiftLogParameterViewHolder.mMin.setText(String.valueOf(event.getAlarmLValue()));
             shiftLogParameterViewHolder.mMax.setText(String.valueOf(event.getAlarmHValue()));

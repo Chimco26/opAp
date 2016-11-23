@@ -177,8 +177,8 @@
                                 android:layout_width="260dp"
                                 android:layout_height="40dp"
                                 android:background="@drawable/edit_text_background_selector"
-                                android:hint=" 0"
-                                android:inputType="numberDecimal"
+                                android:hint=" "
+                                android:inputType="numberDecimal|numberSigned"
                                 android:singleLine="true"
                                 android:textSize="18sp"/>
                         </LinearLayout>
@@ -205,7 +205,7 @@
                                 android:layout_width="260dp"
                                 android:layout_height="40dp"
                                 android:background="@drawable/edit_text_background_selector"
-                                android:hint=" 0"
+                                android:hint=" "
                                 android:inputType="numberDecimal"
                                 android:singleLine="true"
                                 android:textSize="18sp"/>

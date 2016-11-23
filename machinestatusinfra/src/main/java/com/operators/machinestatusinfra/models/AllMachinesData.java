@@ -131,6 +131,10 @@ public class AllMachinesData {
         return machineStatusEname;
     }
 
+    public String getMachineStatusName()
+    {
+        return machineStatusName;
+    }
 
     public int getMachineStatusID() {
         return machineStatusID;

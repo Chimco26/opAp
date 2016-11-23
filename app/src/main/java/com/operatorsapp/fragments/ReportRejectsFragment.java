@@ -9,13 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -37,7 +35,6 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
@@ -256,7 +253,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
                 mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             } else {
@@ -295,7 +292,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override

@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.lang.reflect.Type;
@@ -86,8 +87,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 start.setText(TimeUtils.getTimeFromString(mEvent.getTime()));
             }
             TextView end = (TextView) view.findViewById(R.id.dialog_end);
-            if (mEvent.getEndTime() != null && !mEvent.getEndTime().equals("")) {
-                end.setText(TimeUtils.getTimeFromString(mEvent.getEndTime()));
+            if (mEvent.getEventEndTime() != null && !mEvent.getEventEndTime().equals("")) {
+                end.setText(TimeUtils.getTimeFromString(mEvent.getEventEndTime()));
             }
 
             TextView duration = (TextView) view.findViewById(R.id.dialog_duration);
@@ -110,7 +111,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                     if (mListener != null) {
                         //// TODO: 20-Nov-16  check
                         dismiss();
-                        mListener.onReportClick(mEvent.getEventID(), mEvent.getTime(), mEvent.getEndTime(), mEvent.getDuration());
+                        mListener.onReportClick(mEvent.getEventID(), mEvent.getTime(), mEvent.getEventEndTime(), mEvent.getDuration());
                     }
                 }
             });
@@ -118,7 +119,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             view = inflater.inflate(R.layout.parameter_dialog, null);
 
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
-            title.setText(new StringBuilder(mEvent.getSubtitleLname()).append(" Alarm"));
+            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? mEvent.getSubtitleEname() : mEvent.getSubtitleLname();
+            title.setText(new StringBuilder(subtitleNameByLang).append(" ").append(getString(R.string.alarm)));
 
             TextView reason = (TextView) view.findViewById(R.id.dialog_reason);
             reason.setText(mEvent.getTitle());

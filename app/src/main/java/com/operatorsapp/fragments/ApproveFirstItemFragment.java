@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
-import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -264,7 +262,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
                 mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJobID();
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             } else {
@@ -303,7 +301,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJobID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override

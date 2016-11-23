@@ -7,16 +7,51 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ActiveJob {
 
-    @SerializedName("joshID")
+    @SerializedName("CavitiesStandard")
+    private Integer cavitiesStandard;
+    @SerializedName("Department")
+    private Integer department;
+    @SerializedName("JobID")
     private Integer jobID;
+    @SerializedName("MachineID")
+    private Integer machineID;
+    @SerializedName("ShiftID")
+    private Integer shiftID;
+    @SerializedName("joshID")
+    private Integer joshID;
     @SerializedName("joshName")
-    private String jobName;
+    private String joshName;
 
-    public Integer getJobID() {
+    public Integer getCavitiesStandard()
+    {
+        return cavitiesStandard;
+    }
+
+    public Integer getDepartment()
+    {
+        return department;
+    }
+
+    public Integer getJobID()
+    {
         return jobID;
     }
 
-    public String getJobName() {
-        return jobName;
+    public Integer getMachineID()
+    {
+        return machineID;
+    }
+
+    public Integer getShiftID()
+    {
+        return shiftID;
+    }
+
+    public Integer getJoshID() {
+        return joshID;
+    }
+
+    public String getJoshName() {
+        return joshName;
     }
 }

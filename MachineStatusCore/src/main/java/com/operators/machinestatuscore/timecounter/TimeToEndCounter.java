@@ -40,7 +40,7 @@ public class TimeToEndCounter {
         }.start();
     }
 
-    public void calculateShiftToEnd(final int timeInMilliseconds) {
+    public void calculateShiftToEnd(final long timeInMilliseconds) {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
