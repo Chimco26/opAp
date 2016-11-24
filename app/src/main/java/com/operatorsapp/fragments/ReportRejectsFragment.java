@@ -31,6 +31,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectCauseSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -104,7 +105,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_next);
+        mNextButton = (Button) view.findViewById(R.id.button_report);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
@@ -143,7 +144,8 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
 //                    else {
 //                        mIsReasonSelected = true;
                     mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                    mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
+                    String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getRejectReasons().get(position).getEName() :  mReportFieldsForMachine.getRejectReasons().get(position).getLName();
+                    mSelectedReasonName = nameByLang;
                     reasonSpinnerArrayAdapter.setTitle(position);
 //                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
 //                    }
@@ -179,7 +181,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             });
         }
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_next);
+        mNextButton = (Button) view.findViewById(R.id.button_report);
 
     }
 
@@ -231,7 +233,7 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
+            case R.id.button_report: {
 
                 mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
 

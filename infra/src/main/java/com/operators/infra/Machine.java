@@ -12,6 +12,8 @@ public class Machine {
     private int mDisplayOrder;
     @SerializedName("Id")
     private int mId;
+    @SerializedName("MachineEName")
+    private String mMachineEName;
     @SerializedName("MachineLName")
     private String mMachineLName;
     @SerializedName("MachineName")
@@ -33,6 +35,11 @@ public class Machine {
 
     public int getId() {
         return mId;
+    }
+
+    public String getMachineEName()
+    {
+        return mMachineEName;
     }
 
     public String getMachineLName() {

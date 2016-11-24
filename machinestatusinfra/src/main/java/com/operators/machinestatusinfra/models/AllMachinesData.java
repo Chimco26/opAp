@@ -42,6 +42,8 @@ public class AllMachinesData {
     private String machineStatusEname;
     @SerializedName("MachineStatusID")
     private int machineStatusID;
+    @SerializedName("MachineStatusLName")
+    private String machineStatusLName;
     @SerializedName("MachineStatusName")
     private String machineStatusName;
     @SerializedName("NoProgressCount")
@@ -126,6 +128,10 @@ public class AllMachinesData {
         return machineName;
     }
 
+    public String getMachineStatusLName()
+    {
+        return machineStatusLName;
+    }
 
     public String getMachineStatusEname() {
         return machineStatusEname;

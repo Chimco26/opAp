@@ -13,7 +13,9 @@ public class StopReasons {
     @SerializedName("ID")
     private int id;
     @SerializedName("EName")
-    private String name;
+    private String EName;
+    @SerializedName("LName")
+    private String LName;
     @SerializedName("SubReason")
     private List<SubReasons> subReasons = new ArrayList<SubReasons>();
 
@@ -21,11 +23,16 @@ public class StopReasons {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getEName() {
+        return EName;
     }
 
     public List<SubReasons> getSubReasons() {
         return subReasons;
+    }
+
+    public String getLName()
+    {
+        return LName;
     }
 }

@@ -11,12 +11,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +28,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -77,7 +76,8 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private long mDuration;
     private int mEventId;
 
-    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId) {
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId)
+    {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);
@@ -91,9 +91,11 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if(getArguments() != null)
+        {
             mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
             mJobId = getArguments().getInt(CURRENT_JOB_ID);
             mStart = getArguments().getString(START_TIME);
@@ -104,7 +106,8 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
@@ -113,7 +116,8 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         final View view = inflater.inflate(R.layout.fragment_selected_stop_report, container, false);
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
         setActionBar();
@@ -121,22 +125,26 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
         jobIdTextView.setText((String.valueOf(mJobId)));
 
-        mButtonNext = (Button) view.findViewById(R.id.button_next);
+        mButtonNext = (Button) view.findViewById(R.id.button_report);
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
 
         TextView eventIdTextView = (TextView) view.findViewById(R.id.date_text_view);
         TextView productTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
         TextView durationTextView = (TextView) view.findViewById(R.id.duration_text_view);
 
-        if (mStart == null || mEnd == null) {
+        if(mStart == null || mEnd == null)
+        {
             productTextView.setText("- -");
-        } else {
+        }
+        else
+        {
             productTextView.setText(new StringBuilder("Stop ").append(TimeUtils.getTimeFromString(mStart)).append(", Resume ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
@@ -150,15 +158,21 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         int spacing;
         String strManufacturer = android.os.Build.MANUFACTURER;
 
-        if (strManufacturer.equals(SAMSUNG)) {
+        if(strManufacturer.equals(SAMSUNG))
+        {
             spacing = 80;
-        } else {
+        }
+        else
+        {
             spacing = 40;
         }
         Configuration config = getResources().getConfiguration();
-        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if(config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL)
+        {
             mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
-        } else {
+        }
+        else
+        {
 
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
@@ -167,30 +181,36 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         initSubReasons();
     }
 
-    private void initSubReasons() {
-        if (mReportFieldsForMachine != null) {
+    private void initSubReasons()
+    {
+        if(mReportFieldsForMachine != null)
+        {
             mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getSubReasons());
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         mButtonCancel.setOnClickListener(null);
         mButtonNext.setOnClickListener(null);
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         mButtonCancel.setOnClickListener(this);
         mButtonNext.setOnClickListener(this);
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if(actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -198,25 +218,28 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
             actionBar.setDisplayUseLogoEnabled(true);
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.action_bar_report_stop_selected, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.action_bar_report_stop_selected, null);
 
             LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
+            buttonClose.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                public void onClick(View v)
+                {
+                    getActivity().onBackPressed();
                 }
             });
 
             TextView reasonTextView = (TextView) view.findViewById(R.id.stop_reason_selected_title);
-            reasonTextView.setText(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getName());
+            String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() : mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName();
+            reasonTextView.setText(nameByLang);
             actionBar.setCustomView(view);
         }
     }
 
     @Override
-    public void onSubReasonSelected(int subReasonId) {
+    public void onSubReasonSelected(int subReasonId)
+    {
         mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
         ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
         mSelectedSubreasonId = subReasonId;
@@ -224,22 +247,28 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_next: {
-                if (mSelectedSubreasonId != -1) {
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
+            case R.id.button_report:
+            {
+                if(mSelectedSubreasonId != -1)
+                {
                     sendReport();
                 }
                 break;
             }
-            case R.id.button_cancel: {
+            case R.id.button_cancel:
+            {
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
         }
     }
 
-    private void sendReport() {
+    private void sendReport()
+    {
         ProgressDialogManager.show(getActivity());
         ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
@@ -248,9 +277,11 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
     }
 
-    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
+    {
         @Override
-        public void sendReportSuccess() {
+        public void sendReportSuccess()
+        {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportRejectCore.unregisterListener();
@@ -258,24 +289,31 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason) {
+        public void sendReportFailure(ErrorObjectInterface reason)
+        {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
+            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
+            {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
+                {
                     @Override
-                    public void onSilentLoginSucceeded() {
+                    public void onSilentLoginSucceeded()
+                    {
                         sendReport();
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason)
+                    {
                         ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
-            } else {
+            }
+            else
+            {
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
@@ -285,7 +323,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
 
     private void dismissProgressDialog()
     {
-        if (getActivity() != null)
+        if(getActivity() != null)
         {
             getActivity().runOnUiThread(new Runnable()
             {

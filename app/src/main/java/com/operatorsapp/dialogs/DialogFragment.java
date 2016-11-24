@@ -80,7 +80,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             view = inflater.inflate(R.layout.stop_dialog, null);
 
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
-            title.setText(mEvent.getTitle());
+            String titleByLang = OperatorApplication.isEnglishLang() ? mEvent.getEventETitle() : mEvent.getEventLTitle();
+            title.setText(titleByLang);
 
             TextView start = (TextView) view.findViewById(R.id.dialog_start);
             if (mEvent.getTime() != null && !mEvent.getTime().equals("")) {
@@ -123,7 +124,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
             title.setText(new StringBuilder(subtitleNameByLang).append(" ").append(getString(R.string.alarm)));
 
             TextView reason = (TextView) view.findViewById(R.id.dialog_reason);
-            reason.setText(mEvent.getTitle());
+            String titleByLang = OperatorApplication.isEnglishLang() ? mEvent.getEventETitle() : mEvent.getEventLTitle();
+            reason.setText(titleByLang);
 
             TextView reasonVal = (TextView) view.findViewById(R.id.dialog_reason_val);
             reasonVal.setText(String.valueOf(mEvent.getAlarmValue()));
@@ -182,6 +184,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        setTargetFragment(null, 0);
     }
 
     public interface OnDialogButtonsListener {

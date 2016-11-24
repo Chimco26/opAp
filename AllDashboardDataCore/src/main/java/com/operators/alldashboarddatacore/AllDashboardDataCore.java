@@ -112,6 +112,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
             }
         };
         // getPollingFrequency for all
+        ZLogger.d(LOG_TAG, "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
         mJob.startJob(START_DELAY, mMachineStatusPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
     }
 

@@ -124,6 +124,7 @@
     <string name="send_logs">Send logs</string>
     <string name="alarm">"Alarm"</string>
     <string name="loading_data">Loading data..</string>
+    <string name="no_data_chart">You need to provide data\nfor the chart</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

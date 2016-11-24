@@ -70,20 +70,17 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     private void updateStopEvent(Event event, Event e)
     {
         e.setDuration(event.getDuration());
-        e.setAlarmHValue(event.getAlarmHValue());
-        e.setAlarmLValue(event.getAlarmLValue());
-        e.setAlarmStandardValue(event.getAlarmStandardValue());
         e.setAlarmValue(event.getAlarmValue());
         e.setEventEndTime(event.getEventEndTime());
         e.setEventGroupID(event.getEventGroupID());
         e.setEventGroupLname(event.getEventGroupLname());
-        e.setEventID(event.getEventID());
         e.setEventStartTime(event.getEventStartTime());
         e.setEventSubTitleEname(event.getEventSubTitleEname());
         e.setEventSubTitleLname(event.getEventSubTitleLname());
         e.setEventTime(event.getEventTime());
         e.setEventTitle(event.getEventTitle());
         e.setPriority(event.getPriority());
+
     }
 
     public void changeState(boolean closedState) {

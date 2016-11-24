@@ -10,6 +10,10 @@ public class Event {
     private String mEventTime;
     @SerializedName("EventTitle")
     private String mEventTitle;
+    @SerializedName("EventETitle")
+    private String mEventETitle;
+    @SerializedName("EventLTitle")
+    private String mEventLTitle;
     @SerializedName("EventSubTitleEname")
     private String mEventSubTitleEname;
     @SerializedName("EventSubTitleLname")
@@ -24,6 +28,8 @@ public class Event {
     private int mEventGroupID;
     @SerializedName("EventGroupLname")
     private String mEventGroupLname;
+    @SerializedName("EventGroupEname")
+    private String mEventGroupEname;
     @SerializedName("EventID")
     private int mEventID;
     @SerializedName("AlarmDismissed")
@@ -57,6 +63,16 @@ public class Event {
 
     public String getTitle() {
         return mEventTitle;
+    }
+
+    public String getEventETitle()
+    {
+        return mEventETitle;
+    }
+
+    public String getEventLTitle()
+    {
+        return mEventLTitle;
     }
 
     public String getSubtitleEname() {
@@ -106,6 +122,11 @@ public class Event {
 
     public String getEventGroupLname() {
         return mEventGroupLname;
+    }
+
+    public String getEventGroupEname()
+    {
+        return mEventGroupEname;
     }
 
     public int getEventID() {

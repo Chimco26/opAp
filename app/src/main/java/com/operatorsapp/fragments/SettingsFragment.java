@@ -195,12 +195,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 break;
             }
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack();
+                getActivity().onBackPressed();
                 break;
             }
             case R.id.button_save: {
                 if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
-                    getFragmentManager().popBackStack();
+                    getActivity().onBackPressed();
                 } else {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);

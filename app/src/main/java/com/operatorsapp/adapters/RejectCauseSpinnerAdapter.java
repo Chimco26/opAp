@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.RejectCauses;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
 
@@ -34,9 +35,10 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+            String nameByLang = OperatorApplication.isEnglishLang() ?mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
             if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
             {
-                mRowName.setText(mSpinnerItems.get(0).getName());
+                mRowName.setText(nameByLang);
             }
             else
             {
@@ -54,7 +56,8 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position).getName();
+        String nameByLang = OperatorApplication.isEnglishLang() ?mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
+        String item = nameByLang;
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
@@ -68,7 +71,8 @@ public class RejectCauseSpinnerAdapter extends ArrayAdapter<RejectCauses> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position).getName());
+        String nameByLang = OperatorApplication.isEnglishLang() ?mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
+        mRowName.setText(nameByLang);
         mRowName.setTextSize(20);
     }
 }

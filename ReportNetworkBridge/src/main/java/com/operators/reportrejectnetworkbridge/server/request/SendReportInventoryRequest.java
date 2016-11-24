@@ -16,9 +16,9 @@ public class SendReportInventoryRequest {
     private String mOperatorId;
     @SerializedName("PackageTypeId")
     private int mPackageTypeId;
-    @SerializedName("Units")
+    @SerializedName("units")
     private int mUnits;
-    @SerializedName("JobId")
+    @SerializedName("joshID")
     private Integer mJobId;
 
     public SendReportInventoryRequest(String sessionId, String machineId, String operatorId, int packageTypeId, int units, @Nullable Integer jobId) {

@@ -9,13 +9,20 @@ public class PackageTypes {
     @SerializedName("ID")
     private int id;
     @SerializedName("EName")
-    private String name;
+    private String EName;
+    @SerializedName("LName")
+    private String LName;
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getEName() {
+        return EName;
+    }
+
+    public String getLName()
+    {
+        return LName;
     }
 }

@@ -121,15 +121,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
+//        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
 
         GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
         getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
-        mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
+//        mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
 
         ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
         shiftLogNetworkBridge.inject(NetworkManager.getInstance());
-        mShiftLogCore = new ShiftLogCore(PersistenceManager.getInstance(), shiftLogNetworkBridge);
+//        mShiftLogCore = new ShiftLogCore(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
@@ -272,7 +272,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 else
                 {
-                    Log.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
+                    ZLogger.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -288,7 +288,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 else
                 {
-                    Log.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
+                    ZLogger.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -297,8 +297,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             {
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
-                mMachineStatusCore.stopTimer();
-                mMachineStatusCore.stopPolling();
+                //                mMachineStatusCore.stopTimer();
+                //                mMachineStatusCore.stopPolling();
             }
         };
     }
@@ -325,7 +325,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 else
                 {
-                    Log.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
+                    ZLogger.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -334,7 +334,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
-                mMachineDataCore.stopPolling();
+//                mMachineDataCore.stopPolling();
             }
         };
     }
@@ -353,7 +353,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse)
             {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
-//                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
+                //                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
                 if(durationOfShift > 0)
                 {
                     startShiftTimer(durationOfShift);
@@ -376,7 +376,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineFailed(ErrorObjectInterface reason)
             {
-                Log.w(LOG_TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
+                ZLogger.w(LOG_TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
             }
         };
@@ -394,12 +394,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onTimeToEndChanged(long millisUntilFinished)
     {
-        if(mShiftLogCore != null)
-        {
-            mShiftLogCore.stopPolling();
-            mShiftLogCore.unregisterListener();
-            Log.i(LOG_TAG, "mShiftLogCore cleared");
-        }
+//        if(mShiftLogCore != null)
+//        {
+//            mShiftLogCore.stopPolling();
+//            mShiftLogCore.unregisterListener();
+//            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
+//        }
+
         if(mDashboardUICallbackListener != null)
         {
             mDashboardUICallbackListener.onShiftForMachineEnded();
@@ -430,7 +431,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 else
                 {
-                    Log.w(LOG_TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
+                    ZLogger.w(LOG_TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
                 }
             }
 
@@ -439,7 +440,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             {
                 ZLogger.i(LOG_TAG, "shiftLogStartPolling() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
-                mShiftLogCore.stopPolling();
+//                mShiftLogCore.stopPolling();
             }
         };
     }
@@ -451,7 +452,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         {
             if(reportFieldsForMachine != null)
             {
-                Log.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
+                ZLogger.d(LOG_TAG, "onReportFieldsReceivedSuccessfully()");
                 mReportFieldsForMachine = reportFieldsForMachine;
                 if(mOnReportFieldsUpdatedCallbackListener != null)
                 {
@@ -460,7 +461,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
             else
             {
-                Log.w(LOG_TAG, "reportFieldsForMachine is null");
+                ZLogger.w(LOG_TAG, "reportFieldsForMachine is null");
                 if(mOnReportFieldsUpdatedCallbackListener != null)
                 {
                     mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
@@ -559,7 +560,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onJobListReceived(JobListForMachine jobListForMachine)
             {
-                Log.i(LOG_TAG, "onJobListReceived()");
+                ZLogger.i(LOG_TAG, "onJobListReceived()");
                 if(jobListForMachine != null)
                 {
                     if(jobListForMachine.getData() != null || jobListForMachine.getHeaders() != null)
@@ -580,31 +581,33 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onJobListReceiveFailed(ErrorObjectInterface reason)
             {
-                Log.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
+                ZLogger.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
             }
 
             @Override
             public void onStartJobSuccess()
             {
-                Log.i(LOG_TAG, "onStartJobSuccess()");
+                ZLogger.i(LOG_TAG, "onStartJobSuccess()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                mMachineStatusCore.stopPolling();
-                mMachineStatusCore.startPolling();
-
-                mMachineDataCore.stopPolling();
-                mMachineDataCore.startPolling();
-
-                mShiftLogCore.stopPolling();
-                mShiftLogCore.startPolling();
+                //                mMachineStatusCore.stopPolling();
+                //                mMachineStatusCore.startPolling();
+                //
+                //                mMachineDataCore.stopPolling();
+                //                mMachineDataCore.startPolling();
+                //
+                //                mShiftLogCore.stopPolling();
+                //                mShiftLogCore.startPolling();
+                mAllDashboardDataCore.stopPolling();
+                mAllDashboardDataCore.startPolling();
             }
 
 
             @Override
             public void onStartJobFailed(ErrorObjectInterface reason)
             {
-                Log.i(LOG_TAG, "onStartJobFailed()");
+                ZLogger.i(LOG_TAG, "onStartJobFailed()");
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
             }
@@ -652,16 +655,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setOperatorId(operatorId);
         PersistenceManager.getInstance().setOperatorName(operatorName);
 
-        Log.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
+        ZLogger.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
-        mMachineStatusCore.stopPolling();
-        mMachineStatusCore.startPolling();
-
-        mMachineDataCore.stopPolling();
-        mMachineDataCore.startPolling();
-
-        mShiftLogCore.stopPolling();
-        mShiftLogCore.startPolling();
+        //        mMachineStatusCore.stopPolling();
+        //        mMachineStatusCore.startPolling();
+        //
+        //        mMachineDataCore.stopPolling();
+        //        mMachineDataCore.startPolling();
+        //
+        //        mShiftLogCore.stopPolling();
+        //        mShiftLogCore.startPolling();
+        mAllDashboardDataCore.stopPolling();
+        mAllDashboardDataCore.startPolling();
 
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -700,18 +705,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         {
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             int fragmentBackStackSize = fragments.size();
-            if(fragments.get(fragmentBackStackSize - 1) != null)
+            for(int i = fragmentBackStackSize; i > 0; i--)
             {
-                return fragments.get(fragmentBackStackSize - 1);
+                if(fragments.get(i - 1) != null)
+                {
+                    return fragments.get(i - 1);
+                }
             }
-            else if(fragments.get(fragmentBackStackSize - 2) != null)
-            {
-                return fragments.get(fragmentBackStackSize - 2);
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         } catch(NullPointerException ex)
         {
             ZLogger.e(LOG_TAG, "getCurrentFragment(), error: " + ex.getMessage());
@@ -746,7 +747,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             return mReportFieldsForMachine;
         }
-        Log.w(LOG_TAG, "mReportFieldsForMachine is null");
+        ZLogger.w(LOG_TAG, "mReportFieldsForMachine is null");
         return null;
     }
 
@@ -775,73 +776,79 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().clear();
         //        PersistenceManager.getInstance().setSiteUrl(tmpUrl);
         PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
-        Log.i(LOG_TAG, "PersistenceManager cleared");
+        ZLogger.i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear
         if(mReportFieldsForMachineCore != null)
         {
             mReportFieldsForMachineCore.stopPolling();
             mReportFieldsForMachineCore.unregisterListener();
-            Log.i(LOG_TAG, "mReportFieldsForMachineCore cleared");
+            ZLogger.i(LOG_TAG, "mReportFieldsForMachineCore cleared");
         }
-        if(mMachineStatusCore != null)
+        if(mAllDashboardDataCore != null)
         {
-            mMachineStatusCore.stopPolling();
-            mMachineStatusCore.unregisterListener();
-            Log.i(LOG_TAG, "mMachineStatusCore cleared");
+            mAllDashboardDataCore.stopPolling();
+            mAllDashboardDataCore.unregisterListener();
+            ZLogger.i(LOG_TAG, "mAllDashboardDataCore cleared");
         }
-        if(mShiftLogCore != null)
-        {
-            mShiftLogCore.stopPolling();
-            mShiftLogCore.unregisterListener();
-            Log.i(LOG_TAG, "mShiftLogCore cleared");
-        }
+        //        if(mMachineStatusCore != null)
+        //        {
+        //            mMachineStatusCore.stopPolling();
+        //            mMachineStatusCore.unregisterListener();
+        //            ZLogger.i(LOG_TAG, "mMachineStatusCore cleared");
+        //        }
+        //        if(mShiftLogCore != null)
+        //        {
+        //            mShiftLogCore.stopPolling();
+        //            mShiftLogCore.unregisterListener();
+        //            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
+        //        }
         if(mJobsCore != null)
         {
             mJobsCore.unregisterListener();
-            Log.i(LOG_TAG, "mJobsCore cleared");
+            ZLogger.i(LOG_TAG, "mJobsCore cleared");
         }
-        if(mMachineDataCore != null)
-        {
-            mMachineDataCore.stopPolling();
-            mMachineDataCore.unregisterListener();
-            Log.i(LOG_TAG, "mMachineDataCore cleared");
-        }
+        //        if(mMachineDataCore != null)
+        //        {
+        //            mMachineDataCore.stopPolling();
+        //            mMachineDataCore.unregisterListener();
+        //            ZLogger.i(LOG_TAG, "mMachineDataCore cleared");
+        //        }
         //Objects clear
         if(mReportFieldsForMachineCore != null)
         {
             mReportFieldsForMachine = null;
-            Log.i(LOG_TAG, "mReportFieldsForMachine cleared");
+            ZLogger.i(LOG_TAG, "mReportFieldsForMachine cleared");
         }
         //Interfaces clear
         if(mOnReportFieldsUpdatedCallbackListener != null)
         {
             mOnReportFieldsUpdatedCallbackListener = null;
-            Log.i(LOG_TAG, "mOnReportFieldsUpdatedCallbackListener cleared");
+            ZLogger.i(LOG_TAG, "mOnReportFieldsUpdatedCallbackListener cleared");
         }
         if(mDashboardActivityToJobsFragmentCallback != null)
         {
             mDashboardActivityToJobsFragmentCallback = null;
-            Log.i(LOG_TAG, "mDashboardActivityToJobsFragmentCallback cleared");
+            ZLogger.i(LOG_TAG, "mDashboardActivityToJobsFragmentCallback cleared");
         }
         if(mDashboardActivityToSelectedJobFragmentCallback != null)
         {
             mDashboardActivityToSelectedJobFragmentCallback = null;
-            Log.i(LOG_TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
+            ZLogger.i(LOG_TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
         }
         if(mDashboardUICallbackListener != null)
         {
             mDashboardUICallbackListener = null;
-            Log.i(LOG_TAG, "mDashboardUICallbackListener cleared");
+            ZLogger.i(LOG_TAG, "mDashboardUICallbackListener cleared");
         }
         if(mReportFieldsForMachineUICallback != null)
         {
             mReportFieldsForMachineUICallback = null;
-            Log.i(LOG_TAG, "mReportFieldsForMachineUICallback cleared");
+            ZLogger.i(LOG_TAG, "mReportFieldsForMachineUICallback cleared");
         }
         if(mCroutonCreator != null)
         {
             mCroutonCreator = null;
-            Log.i(LOG_TAG, "mCroutonCreator cleared");
+            ZLogger.i(LOG_TAG, "mCroutonCreator cleared");
 
         }
     }
@@ -852,13 +859,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.startPolling();
-        Log.i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
+        ZLogger.i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
     }
 
     @Override
     public void onRefreshApplicationRequest()
     {
-        Log.i(LOG_TAG, "onRefreshApplicationRequest() command received from settings screen");
+        ZLogger.i(LOG_TAG, "onRefreshApplicationRequest() command received from settings screen");
         refreshApp();
     }
 
@@ -920,14 +927,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshPollingRequest()
     {
-        Log.i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
-
-        mMachineStatusCore.stopPolling();
-        mShiftLogCore.stopPolling();
-        mMachineDataCore.stopPolling();
-
-        mMachineStatusCore.startPolling();
-        mShiftLogCore.startPolling();
-        mMachineDataCore.startPolling();
+        ZLogger.i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
+        mAllDashboardDataCore.stopPolling();
+        //        mMachineStatusCore.stopPolling();
+        //        mShiftLogCore.stopPolling();
+        //        mMachineDataCore.stopPolling();
+        mAllDashboardDataCore.startPolling();
+        //        mMachineStatusCore.startPolling();
+        //        mShiftLogCore.startPolling();
+        //        mMachineDataCore.startPolling();
     }
 }

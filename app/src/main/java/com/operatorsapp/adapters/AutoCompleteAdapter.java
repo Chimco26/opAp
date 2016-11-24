@@ -63,7 +63,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
         Machine machine = machinesResults.get(position);
 
         int machineId = machine.getId();
-        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineName() : machine.getMachineLName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineEName() : machine.getMachineLName();
         String machineName = nameByLang == null ? "" : nameByLang;
         holder.text.setText(new StringBuilder(machineId).append(" - ").append(machineName));
 
@@ -89,7 +89,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
                     {
                         Machine machine = iterator.next();
                         int machineId = machine.getId();
-                        String machineName = machine.getMachineName() == null ? "" : machine.getMachineName();
+                        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineEName() : machine.getMachineLName();
+                        String machineName = nameByLang == null ? "" : nameByLang;
                         if(!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase()))
                         {
                             iterator.remove();

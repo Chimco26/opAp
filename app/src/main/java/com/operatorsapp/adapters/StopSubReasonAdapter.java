@@ -3,7 +3,6 @@ package com.operatorsapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 
 import java.util.List;
@@ -65,8 +65,9 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
             holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
         }
 
-        holder.mStopTitle.setText(mSubReasonsList.get(position).getName());
-        char firstLetter = mSubReasonsList.get(position).getName().charAt(0);
+        String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
+        holder.mStopTitle.setText(nameByLang);
+        char firstLetter = nameByLang.charAt(0);
         holder.mImageTitle.setText(String.valueOf(firstLetter));
     }
 

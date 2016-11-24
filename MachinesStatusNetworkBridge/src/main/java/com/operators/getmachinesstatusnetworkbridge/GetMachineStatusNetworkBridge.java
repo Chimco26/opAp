@@ -46,18 +46,27 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
             {
                 if(response.isSuccessful())
                 {
-                    if(response.body().getMachineStatus().getAllMachinesData().size() == 0)
+                    if(response.body() != null && response.body().getMachineStatus() != null)
                     {
-                        ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
-                        //                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
-                        //                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
+                        if(response.body().getMachineStatus().getAllMachinesData().size() == 0)
+                        {
+                            ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = 0");
+                            //                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Get_machines_failed, response.body().getErrorResponse().getErrorDesc());
+                            //                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
+                        }
+                        else
+                        {
+                            ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
+                        }
+                        MachineStatus machineStatus = response.body().getMachineStatus();
+                        getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                     }
                     else
                     {
-                        ZLogger.d(LOG_TAG, "getMachineStatus, onResponse(),  " + "getAllMachinesData size = " + response.body().getMachineStatus().getAllMachinesData().size());
+                        ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getMachineStatus failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
+                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     }
-                    MachineStatus machineStatus = response.body().getMachineStatus();
-                    getMachineStatusCallback.onGetMachineStatusSucceeded(machineStatus);
                 }
                 else
                 {
@@ -65,11 +74,6 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     if(response.body() != null && response.body().getErrorResponse() != null)
                     {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
-                    }
-                    else
-                    {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_machines_failed Error");
                         getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                     }
                 }

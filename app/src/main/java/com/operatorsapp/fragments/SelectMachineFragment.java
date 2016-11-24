@@ -26,13 +26,15 @@ import com.operators.infra.Machine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener
+{
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
@@ -43,7 +45,8 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private boolean canGoNext = false;
 
-    public static SelectMachineFragment newInstance(ArrayList machinesList) {
+    public static SelectMachineFragment newInstance(ArrayList machinesList)
+    {
         Gson gson = new Gson();
         String machinesListString = gson.toJson(machinesList);
         Bundle args = new Bundle();
@@ -55,29 +58,35 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        try {
+        try
+        {
             mNavigationCallback = (GoToScreenListener) context;
-        } catch (ClassCastException e) {
+        } catch(ClassCastException e)
+        {
             throw new ClassCastException("Calling fragment must implement OnCroutonRequestListener interface");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mNavigationCallback = null;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        if(getArguments() != null)
+        {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Machine>>() {
-            }.getType();
+            Type listType = new TypeToken<ArrayList<Machine>>()
+            {}.getType();
             mMachinesList = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
         }
 
@@ -85,8 +94,8 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
 
         mSearchField = (AppCompatAutoCompleteTextView) rootView.findViewById(R.id.machine_id_name);
@@ -94,10 +103,13 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         mSearchField.setAdapter(mAutoCompleteAdapter);
         mSearchField.setOnItemClickListener(this);
         mSearchField.addTextChangedListener(mTextWatcher);
-        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (canGoNext) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(canGoNext)
+                {
                     PersistenceManager.getInstance().setMachineId(mMachineId);
                     mNavigationCallback.goToDashboardActivity(mMachineId);
                 }
@@ -108,10 +120,13 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
 
         mGoButton = (RelativeLayout) rootView.findViewById(R.id.goBtn);
         mGoButton.setEnabled(false);
-        mGoButton.setOnClickListener(new View.OnClickListener() {
+        mGoButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                if (mGoButton.isEnabled()) {
+            public void onClick(View v)
+            {
+                if(mGoButton.isEnabled())
+                {
                     PersistenceManager.getInstance().setMachineId(mMachineId);
                     PersistenceManager.getInstance().setSelectedMachine(true);
                     mNavigationCallback.goToDashboardActivity(mMachineId);
@@ -125,9 +140,11 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         return rootView;
     }
 
-    private void setActionBar() {
+    private void setActionBar()
+    {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
+        if(actionBar != null)
+        {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -138,9 +155,11 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
             @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
             ImageView backButton = (ImageView) view.findViewById(R.id.action_bar_back_btn);
             backButton.setVisibility(View.VISIBLE);
-            backButton.setOnClickListener(new View.OnClickListener() {
+            backButton.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     getActivity().onBackPressed();
                 }
             });
@@ -152,9 +171,11 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
         mMachineId = mAutoCompleteAdapter.getItem(position).getId();
-        String machineName = mAutoCompleteAdapter.getItem(position).getMachineName() == null ? "" : mAutoCompleteAdapter.getItem(position).getMachineName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? mAutoCompleteAdapter.getItem(position).getMachineEName() : mAutoCompleteAdapter.getItem(position).getMachineLName();
+        String machineName = nameByLang == null ? "" : nameByLang;
         mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(machineName));
         mSearchField.setSelection(mSearchField.length());
 
@@ -164,14 +185,17 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         mSearchField.dismissDropDown();
     }
 
-    private TextWatcher mTextWatcher = new TextWatcher() {
+    private TextWatcher mTextWatcher = new TextWatcher()
+    {
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
 
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
             canGoNext = false;
             mGoButton.setEnabled(false);
             mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
@@ -179,7 +203,8 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         }
 
         @Override
-        public void afterTextChanged(Editable s) {
+        public void afterTextChanged(Editable s)
+        {
 
         }
     };

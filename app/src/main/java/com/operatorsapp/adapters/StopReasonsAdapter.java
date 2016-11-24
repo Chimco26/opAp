@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 
 import java.util.List;
@@ -48,7 +49,8 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
     @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mStopTitle.setText(mStopItemsList.get(position).getName());
+        String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(position).getEName() : mStopItemsList.get(position).getLName();
+        holder.mStopTitle.setText(nameByLang);
         holder.mReasonImage.setBackground(mContext.getDrawable(getImageForStopReason(mStopItemsList.get(position).getId())));
     }
 

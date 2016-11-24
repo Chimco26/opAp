@@ -10,13 +10,27 @@ public class RejectCauses {
     @SerializedName("ID")
     private int id;
     @SerializedName("EName")
-    private String name;
+    private String EName;
+    @SerializedName("LName")
+    private String LName;
+    @SerializedName("SubReason")
+    private SubReasons[] subReasons;
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getEName() {
+        return EName;
+    }
+
+    public String getLName()
+    {
+        return LName;
+    }
+
+    public SubReasons[] getSubReasons()
+    {
+        return subReasons;
     }
 }

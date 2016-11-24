@@ -44,16 +44,16 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             @Override
             public void onResponse(Call<MachineDataDataResponse> call, Response<MachineDataDataResponse> response)
             {
-                ArrayList<Widget> widgets = response.body().getMachineParams();
-                if (response.body().getErrorResponse() == null)
+                if(response.body() != null && response.body().getMachineParams() != null && response.body().getErrorResponse() == null)
                 {
+                    ArrayList<Widget> widgets = response.body().getMachineParams();
                     ZLogger.d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
                     getMachineDataCallback.onGetMachineDataSucceeded(response.body().getMachineParams());
                 }
                 else
                 {
-                    ZLogger.d(LOG_TAG, "getMachineData, onResponse " + response.body().getErrorResponse().getErrorCode() + " " + response.body().getErrorResponse().getErrorCode());
-                    ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
             }
@@ -61,7 +61,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             @Override
             public void onFailure(Call<MachineDataDataResponse> call, Throwable t)
             {
-                if (mRetryCount++ < totalRetries)
+                if(mRetryCount++ < totalRetries)
                 {
                     ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
@@ -85,7 +85,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
 
     private ErrorObject.ErrorCode toCode(int errorCode)
     {
-        switch (errorCode)
+        switch(errorCode)
         {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;

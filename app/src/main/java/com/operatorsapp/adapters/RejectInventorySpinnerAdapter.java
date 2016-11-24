@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            mRowName.setText(mSpinnerItems.get(0).getName());
+            String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
+            mRowName.setText(nameByLang);
             mRowName.setTextSize(20);
         }
         return row;
@@ -47,7 +49,8 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position).getName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
+        String item = nameByLang;
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
@@ -61,7 +64,8 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position).getName());
+        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
+        mRowName.setText(nameByLang);
         mRowName.setTextSize(20);
     }
 }

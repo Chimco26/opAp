@@ -191,6 +191,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void saveShiftLogs(ArrayList<Event> events) {
         SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(events));
+        ZLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
     @Override

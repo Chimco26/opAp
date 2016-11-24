@@ -229,7 +229,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                 @Override
                 public void onClick(View v)
                 {
-                    getFragmentManager().popBackStack();
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);

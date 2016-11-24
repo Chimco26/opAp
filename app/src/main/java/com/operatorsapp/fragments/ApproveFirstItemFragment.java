@@ -31,6 +31,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -145,7 +146,8 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
 //                    else {
 //                        mIsReasonSelected = true;
                     mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                    mSelectedReasonName = mReportFieldsForMachine.getRejectReasons().get(position).getName();
+                    String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getRejectReasons().get(position).getEName() :  mReportFieldsForMachine.getRejectReasons().get(position).getLName();
+                    mSelectedReasonName = nameByLang;
                     reasonSpinnerArrayAdapter.setTitle(position);
 //                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
 //                    }

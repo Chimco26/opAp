@@ -47,17 +47,17 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             @Override
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response)
             {
-                ArrayList<Event> events = response.body().getEvents();
-                if(response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967)
+                if(response.body() != null && response.body().getEvents() != null && (response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967))
                 {
+                    ArrayList<Event> events = response.body().getEvents();
                     ZLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
                 }
                 else
                 {
-                        ZLogger.d(LOG_TAG, "getShiftLog onResponse, " + response.body().getErrorResponse().getErrorDesc() + " " + response.body().getErrorResponse().getErrorCode());
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        shiftLogCoreCallback.onShiftLogFailed(errorObject);
+                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getShiftLog failed Error");
+                    shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
             }
 
@@ -90,14 +90,20 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             @Override
             public void onResponse(Call<ShiftForMachineResponse> call, Response<ShiftForMachineResponse> response)
             {
-                if(response.body().getError() == null)
+                if(response.body() != null && response.body().getError() == null)
                 {
                     shiftForMachineCoreCallback.onShiftForMachineSucceeded(response.body());
                 }
-                else
+                else if(response.body() != null)
                 {
                     ZLogger.e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed");
+                    shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
+                }
+                else
+                {
+                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "GetShiftForMachine failed Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
             }

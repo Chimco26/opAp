@@ -16,14 +16,14 @@ public class SendReportCycleUnitsRequest {
     private String mOperatorId;
     @SerializedName("UnitsPerCycle")
     private double mUnitsPerCycle;
-    @SerializedName("JobId")
-    private Integer mJobId;
+//    @SerializedName("JobId")
+//    private Integer mJobId;
 
     public SendReportCycleUnitsRequest(String sessionId, String machineId, String operatorId, double unitsPerCycle, @Nullable Integer jobId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;
         mUnitsPerCycle = unitsPerCycle;
-        mJobId = jobId;
+//        mJobId = jobId;
     }
 }

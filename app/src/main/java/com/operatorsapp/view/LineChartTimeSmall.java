@@ -67,7 +67,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
         // no description text
         mChart.setDescription("");
-        mChart.setNoDataTextDescription("You need to provide data for the chart.");
+        mChart.setNoDataTextDescription(getContext().getString(R.string.no_data_chart));
 
         // enable touch gestures
         mChart.setTouchEnabled(false);

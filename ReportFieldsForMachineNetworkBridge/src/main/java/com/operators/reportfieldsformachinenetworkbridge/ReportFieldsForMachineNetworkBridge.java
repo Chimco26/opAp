@@ -21,68 +21,95 @@ import retrofit2.Response;
 /**
  * Created by Sergey on 02/08/2016.
  */
-public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachineNetworkBridgeInterface {
+public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachineNetworkBridgeInterface
+{
     private static final String LOG_TAG = ReportFieldsForMachineNetworkBridge.class.getSimpleName();
     private GetReportFieldsForMachineNetworkManagerInterface mGetReportFieldsForMachineNetworkManagerInterface;
 
     private int mRetryCount = 0;
 
-    public void inject(GetReportFieldsForMachineNetworkManagerInterface getReportFieldsForMachineNetworkManagerInterface) {
+    public void inject(GetReportFieldsForMachineNetworkManagerInterface getReportFieldsForMachineNetworkManagerInterface)
+    {
         mGetReportFieldsForMachineNetworkManagerInterface = getReportFieldsForMachineNetworkManagerInterface;
     }
 
     @Override
-    public void getReportFieldsForMachine(String siteUrl, String sessionId, int machineId, final GetReportFieldsForMachineCallback callback, final int totalRetries, int specificRequestTimeout) {
+    public void getReportFieldsForMachine(String siteUrl, String sessionId, int machineId, final GetReportFieldsForMachineCallback callback, final int totalRetries, int specificRequestTimeout)
+    {
         GetReportFieldsForMachineRequest getReportFieldsForMachineRequest = new GetReportFieldsForMachineRequest(sessionId, machineId);
-        Call<GetReportFieldsForMachineResponse> call = mGetReportFieldsForMachineNetworkManagerInterface.getReportFieldsForMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout,
-                TimeUnit.SECONDS).getReportFieldsForMachine(getReportFieldsForMachineRequest);
-        call.enqueue(new Callback<GetReportFieldsForMachineResponse>() {
+        Call<GetReportFieldsForMachineResponse> call = mGetReportFieldsForMachineNetworkManagerInterface.getReportFieldsForMachineStatusRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getReportFieldsForMachine(getReportFieldsForMachineRequest);
+        call.enqueue(new Callback<GetReportFieldsForMachineResponse>()
+        {
             @Override
-            public void onResponse(Call<GetReportFieldsForMachineResponse> call, Response<GetReportFieldsForMachineResponse> response) {
-                if (callback != null) {
-                    if (response.isSuccessful()) {
-                        if (response.body().getReportFieldsForMachine() == null) {
+            public void onResponse(Call<GetReportFieldsForMachineResponse> call, Response<GetReportFieldsForMachineResponse> response)
+            {
+                if(callback != null)
+                {
+                    if(response.isSuccessful())
+                    {
+                        if(response.body() == null || response.body().getReportFieldsForMachine() == null)
+                        {
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response data is null");
                             callback.onGetReportFieldsForMachineFailed(errorObject);
-                        } else {
+                        }
+                        else
+                        {
                             ZLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
                             callback.onGetReportFieldsForMachineSuccess(response.body().getReportFieldsForMachine());
                         }
-                    } else {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
-                } else {
+                    else
+                    {
+                        if(response.body() != null)
+                        {
+                            ZLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
+                            ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                            callback.onGetReportFieldsForMachineFailed(errorObject);
+                        }
+                    }
+                }
+                else
+                {
                     ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
 
             @Override
-            public void onFailure(Call<GetReportFieldsForMachineResponse> call, Throwable t) {
-                if (callback != null) {
-                    if (mRetryCount++ < totalRetries) {
+            public void onFailure(Call<GetReportFieldsForMachineResponse> call, Throwable t)
+            {
+                if(callback != null)
+                {
+                    if(mRetryCount++ < totalRetries)
+                    {
                         ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
-                    } else {
+                    }
+                    else
+                    {
                         mRetryCount = 0;
                         ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
-                } else {
+                }
+                else
+                {
                     ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
         });
     }
 
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
+    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
+    {
         ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
         return new ErrorObject(code, errorResponse.getErrorDesc());
     }
 
-    private ErrorObject.ErrorCode toCode(int errorCode) {
-        switch (errorCode) {
+    private ErrorObject.ErrorCode toCode(int errorCode)
+    {
+        switch(errorCode)
+        {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;
         }

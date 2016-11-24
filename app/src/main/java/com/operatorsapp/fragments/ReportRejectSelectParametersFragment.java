@@ -10,14 +10,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -122,7 +120,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_rejects_selected_job_id_text_view);
 
-        mReportButton = (Button) view.findViewById(R.id.button_next);
+        mReportButton = (Button) view.findViewById(R.id.button_report);
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
 
         mUnitsEditText = (EditText) view.findViewById(R.id.units_edit_text);
@@ -313,7 +311,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     {
         switch(v.getId())
         {
-            case R.id.button_next:
+            case R.id.button_report:
             {
                 ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if(!mUnitsEditText.getText().toString().equals(""))

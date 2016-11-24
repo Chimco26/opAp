@@ -33,6 +33,7 @@ import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -108,7 +109,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
-        mButtonReport = (Button) view.findViewById(R.id.button_next);
+        mButtonReport = (Button) view.findViewById(R.id.button_report);
         mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
         mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
 
@@ -149,7 +150,8 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     reasonSpinnerArrayAdapter.setTitle(position);
-                    mSelectedPackageTypeName = mReportFieldsForMachine.getPackageTypes().get(position).getName();
+                    String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getPackageTypes().get(position).getEName() : mReportFieldsForMachine.getPackageTypes().get(position).getLName();
+                    mSelectedPackageTypeName = nameByLang;
                     mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
                 }
 
@@ -212,7 +214,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
                 getFragmentManager().popBackStack();
                 break;
             }
-            case R.id.button_next: {
+            case R.id.button_report: {
                 sendReport();
                 break;
             }
