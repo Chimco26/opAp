@@ -3,7 +3,7 @@ package com.operators.reportrejectinfra;
 import java.lang.annotation.Documented;
 
 public interface ReportRejectNetworkBridgeInterface {
-    void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int RejectCauseId, double units, Double weight, Integer jobId,
+    void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int RejectCauseId, Double units, Double weight, Integer jobId,
                           SendReportRejectCallback callback, int totalRetries, int specificRequestTimeout);
 
     void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, int eventId, Integer jobId,

@@ -33,7 +33,7 @@ public class ReportRejectCore {
         mReportCallbackListener = null;
     }
 
-    public void sendReportReject(int rejectReasonId, int rejectReasonCause, double units, Double weight, Integer jobId) {
+    public void sendReportReject(int rejectReasonId, int rejectReasonCause, Double units, Double weight, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportReject(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())

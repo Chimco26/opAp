@@ -1,8 +1,5 @@
 package com.operators.reportrejectnetworkbridge;
 
-import android.util.Log;
-
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
@@ -94,7 +91,7 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
 
     @Override
-    public void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int rejectCauseId, double units, Double weight, Integer joshId, final SendReportRejectCallback callback, final int totalRetries, int specificRequestTimeout) {
+    public void sendReportReject(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int rejectCauseId, Double units, Double weight, Integer joshId, final SendReportRejectCallback callback, final int totalRetries, int specificRequestTimeout) {
         SendReportRejectRequest sendReportRejectRequest = new SendReportRejectRequest(sessionId, machineId, operatorId, rejectReasonId, units, rejectCauseId, weight, joshId);
         final int[] retryCount = {0};
         Call<SendReportRejectResponse> call = mReportRejectNetworkManagerInterface.reportRejectRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendReportReject(sendReportRejectRequest);

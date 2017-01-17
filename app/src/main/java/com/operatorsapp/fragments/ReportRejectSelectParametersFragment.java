@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +60,8 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
     private ReportRejectCore mReportRejectCore;
     private String mCurrentProductName;
     private int mCurrentProductId;
-    private boolean mHasUnitsData;
-    private boolean mHasWeightData;
+    private Double mUnitsData = null;
+    private Double mWeightData = null;
 
 
     public static ReportRejectSelectParametersFragment newInstance(int selectedReasonId, int selectedCauseId, String selectedReasonName, Integer jobId, String currentProductName, int currentProductId)
@@ -162,42 +163,21 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                if(count > 0)
-                {
-                    mHasUnitsData = true;
-                    mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-                    mReportButton.setEnabled(true);
-                }
-                else
-                {
-                    mHasUnitsData = false;
-                    if(!mHasWeightData)
-                    {
-                        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
-                        mReportButton.setEnabled(false);
-                    }
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
-
-                //                if(s != null && !s.toString().equals(""))
-                //                {
-                //                    if(Float.parseFloat(s.toString()) > 0)
-                //                    {
-                //                        mReportButton.setEnabled(true);
-                //                    }
-                //                    else
-                //                    {
-                //                        mReportButton.setEnabled(false);
-                //                    }
-                //                }
-                //                else
-                //                {
-                //                    mReportButton.setEnabled(false);
-                //                }
+                try
+                {
+                    mUnitsData= Double.parseDouble(s.toString());
+                }
+                catch (NumberFormatException e)
+                {
+                    mUnitsData = null;
+                }
+                refreshSendButtonState();
             }
         });
 
@@ -212,44 +192,37 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                if(count > 0)
-                {
-                    mHasWeightData = true;
-                    mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-                    mReportButton.setEnabled(true);
-                }
-                else
-                {
-                    mHasWeightData = false;
-                    if(!mHasUnitsData)
-                    {
-                        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
-                        mReportButton.setEnabled(false);
-                    }
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable s)
             {
-
-                //                if(s != null && !s.toString().equals(""))
-                //                {
-                //                    if(Float.parseFloat(s.toString()) > 0)
-                //                    {
-                //                        mReportButton.setEnabled(true);
-                //                    }
-                //                    else
-                //                    {
-                //                        mReportButton.setEnabled(false);
-                //                    }
-                //                }
-                //                else
-                //                {
-                //                    mReportButton.setEnabled(false);
-                //                }
+                try
+                {
+                    mWeightData = Double.parseDouble(s.toString());
+                }
+                catch (NumberFormatException e)
+                {
+                    mWeightData = null;
+                }
+                refreshSendButtonState();
             }
         });
+    }
+
+    private void refreshSendButtonState()
+    {
+        if(canSendReport())
+        {
+            mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+            mReportButton.setEnabled(true);
+        }
+        else
+        {
+            mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+            mReportButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -306,6 +279,11 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         }
     }
 
+    private boolean canSendReport()
+    {
+        return (mUnitsData != null || mWeightData != null);
+    }
+
     @Override
     public void onClick(View v)
     {
@@ -314,7 +292,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
             case R.id.button_report:
             {
                 ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
-                if(!mUnitsEditText.getText().toString().equals(""))
+                if(canSendReport())
                 {
                     sendReport();
                 }
@@ -335,17 +313,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
         reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
         mReportRejectCore.registerListener(mReportCallbackListener);
-        Double weight = null;
-        if(!mWeightEditText.getText().toString().equals(""))
-        {
-            weight = Double.parseDouble(mWeightEditText.getText().toString());
-        }
-        Double units = null;
-        if(!mUnitsEditText.getText().toString().equals(""))
-        {
-            units = Double.parseDouble(mUnitsEditText.getText().toString());
-        }
-        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, units, weight, mJobId);
+        mReportRejectCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, mUnitsData, mWeightData, mJobId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
