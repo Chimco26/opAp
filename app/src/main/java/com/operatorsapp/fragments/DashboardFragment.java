@@ -811,6 +811,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void saveAndRestoreChartData(ArrayList<Widget> widgetList)
     {
+        // TODO this is why we have "random" fails and crashes, concurrent modification issues, this entire peice of code need to be fixed (no need for prefs here!)
         //historic data from prefs
         ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
         for(Widget widget : widgetList)
@@ -1029,7 +1030,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void initStatusLayout(MachineStatus machineStatus)
     {
-        String nameByLang = OperatorApplication.isEnglishLang() ? machineStatus.getAllMachinesData().get(0).getCurrentProductEname() : machineStatus.getAllMachinesData().get(0).getCurrentProductName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? machineStatus.getAllMachinesData().get(0).getCurrentProductName() : machineStatus.getAllMachinesData().get(0).getCurrentProductEname();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
         mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));

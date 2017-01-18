@@ -39,14 +39,15 @@ public class LoginCore {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
             mLoginNetworkBridgeInterface.login(siteUrl, username,EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
-            public void onLoginSucceeded(String sessionId) {
+            public void onLoginSucceeded(final String sessionId) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
-                saveSessionData(sessionId, siteUrl, username, password);
+
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
                         ZLogger.d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
+                        saveSessionData(sessionId, siteUrl, username, password);
                         loginUICallback.onLoginSucceeded(machines);
                     }
 
