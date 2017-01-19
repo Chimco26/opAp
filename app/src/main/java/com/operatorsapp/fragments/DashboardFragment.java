@@ -789,8 +789,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgets = widgetList;
         if(widgetList != null && widgetList.size() > 0)
         {
-            saveAndRestoreChartData(widgetList);
-
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
             if(mWidgetAdapter != null)
@@ -811,8 +809,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void saveAndRestoreChartData(ArrayList<Widget> widgetList)
     {
-        // TODO this is why we have "random" fails and crashes, concurrent modification issues, this entire peice of code need to be fixed (no need for prefs here!)
+        // calls to this function were removed as saving to prefs was not needed.
         //historic data from prefs
+        ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoricCopy = new ArrayList<>();
         ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
         for(Widget widget : widgetList)
         {
@@ -822,6 +821,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 // if have historic in prefs
                 if(prefsHistoric.size() > 0)
                 {
+                    prefsHistoricCopy.addAll(prefsHistoric);
                     for(HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric)
                     {
                         // if get new data
@@ -847,7 +847,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                                 // if is new widget,  save to prefs
                                 HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
                                 historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                                prefsHistoric.add(historicById);
+                                prefsHistoricCopy.add(historicById);
                             }
                         }
                         else
@@ -865,11 +865,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     // if is the firs chart data,  save to prefs
                     HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
                     historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                    prefsHistoric.add(historicById);
+                    prefsHistoricCopy.add(historicById);
                 }
             }
         }
-        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoric);
+        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
     }
 
     @Override
