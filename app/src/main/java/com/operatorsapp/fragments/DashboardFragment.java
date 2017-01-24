@@ -433,7 +433,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 Event event = mEventsQueue.peek();//
                 if(event.getEventGroupID() == TYPE_STOP)
                 {
-                    openDialog(event, true);
+                    // TODO Oren - doing this here before we have all the data causes an issue, figure out how to wait for the data or suppress this event
+                    //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
+
+                    //openDialog(event, true); // to show pop up dialog, disabled for now
                 }
                 else if(event.getEventGroupID() == TYPE_ALERT)
                 {
@@ -702,6 +705,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
             if(event.getEventGroupID() == TYPE_STOP)
             {
+                openStopReportScreen(event.getEventID(), null, null, event.getDuration());
+                /*
                 if(event.getEventEndTime() == null || event.getTime() == null || event.getEventEndTime().equals("") || event.getTime().equals(""))
                 {
                     openStopReportScreen(event.getEventID(), null, null, event.getDuration());
@@ -710,6 +715,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 {
                     openDialog(event, true);
                 }
+                */
             }
             else if(event.getEventGroupID() == TYPE_ALERT)
             {
@@ -955,7 +961,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 Event event = mEventsQueue.peek();
                 if(event.getEventGroupID() == TYPE_STOP)
                 {
-                    openDialog(event, true);
+                    openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
+                    //openDialog(event, true);
                     mEventsQueue.pop();
 
                 }
