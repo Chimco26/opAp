@@ -28,8 +28,8 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
@@ -51,7 +51,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private String mCurrentProductName;
     private int mCurrentProductId;
-    private ReportRejectCore mReportRejectCore;
+    private ReportCore mReportCore;
     private ImageView mPlusButton;
     private ImageView mMinusButton;
     private TextView mUnitsCounterTextView;
@@ -240,13 +240,13 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
 
     private void sendReport() {
         ProgressDialogManager.show(getActivity());
-        ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-        reportRejectNetworkBridge.injectInventory(NetworkManager.getInstance());
-        mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
-        mReportRejectCore.registerListener(mReportCallbackListener);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.injectInventory(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
         ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
-        mReportRejectCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
+        mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
@@ -254,7 +254,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
         public void sendReportSuccess() {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
-            mReportRejectCore.unregisterListener();
+            mReportCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 

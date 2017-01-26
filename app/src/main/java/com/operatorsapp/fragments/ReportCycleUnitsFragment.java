@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,8 +30,8 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -62,7 +61,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private OnCroutonRequestListener mOnCroutonRequestListener;
 
     private double mUnitsCounter = 1;
-    private ReportRejectCore mReportRejectCore;
+    private ReportCore mReportCore;
     private Integer mJoshId = null;
     private int mMaxUnits = 0;
 
@@ -327,13 +326,13 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
     private void sendReport()
     {
         ProgressDialogManager.show(getActivity());
-        ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-        reportRejectNetworkBridge.inject(NetworkManager.getInstance());
-        mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
-        mReportRejectCore.registerListener(mReportCallbackListener);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.inject(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
         ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJoshId);
 
-        mReportRejectCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
+        mReportCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
@@ -342,7 +341,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         public void sendReportSuccess()
         {
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
-            mReportRejectCore.unregisterListener();
+            mReportCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             dismissProgressDialog();
         }

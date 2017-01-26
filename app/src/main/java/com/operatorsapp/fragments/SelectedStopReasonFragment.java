@@ -22,8 +22,8 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportRejectCore;
-import com.operators.reportrejectnetworkbridge.ReportRejectNetworkBridge;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
@@ -66,7 +66,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private RecyclerView mRecyclerView;
     private StopSubReasonAdapter mStopReasonsAdapter;
     private OnCroutonRequestListener mOnCroutonRequestListener;
-    private ReportRejectCore mReportRejectCore;
+    private ReportCore mReportCore;
 
 
     private Button mButtonNext;
@@ -270,11 +270,11 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
     private void sendReport()
     {
         ProgressDialogManager.show(getActivity());
-        ReportRejectNetworkBridge reportRejectNetworkBridge = new ReportRejectNetworkBridge();
-        reportRejectNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
-        mReportRejectCore = new ReportRejectCore(reportRejectNetworkBridge, PersistenceManager.getInstance());
-        mReportRejectCore.registerListener(mReportCallbackListener);
-        mReportRejectCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
+        mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
@@ -284,7 +284,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
-            mReportRejectCore.unregisterListener();
+            mReportCore.unregisterListener();
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 

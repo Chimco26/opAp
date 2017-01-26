@@ -4,15 +4,18 @@ import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
 import com.operators.reportrejectinfra.SendReportStopCallback;
+import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
+import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportStopRequest;
+import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportInventoryResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportRejectResponse;
@@ -28,8 +31,9 @@ import retrofit2.Response;
 /**
  * Created by Sergey on 08/08/2016.
  */
-public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInterface {
-    private static final String LOG_TAG = ReportRejectNetworkBridge.class.getSimpleName();
+public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
+    private static final String LOG_TAG = ReportNetworkBridge.class.getSimpleName();
+    private ApproveFirstItemNetworkManagerInterface mApproveFirstItemNetworkManagerInterface;
     private ReportRejectNetworkManagerInterface mReportRejectNetworkManagerInterface;
     private ReportStopNetworkManagerInterface mReportStopNetworkManagerInterface;
     private ReportCycleUnitsNetworkManagerInterface mReportCycleUnitsNetworkManagerInterface;
@@ -46,6 +50,10 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
     public void injectInventory(ReportInventoryNetworkManagerInterface reportInventoryNetworkManagerInterface) {
         mReportInventoryNetworkManagerInterface = reportInventoryNetworkManagerInterface;
+    }
+
+    public void injectApproveFirstItem(ApproveFirstItemNetworkManagerInterface approveFirstItemNetworkManagerInterface) {
+        mApproveFirstItemNetworkManagerInterface = approveFirstItemNetworkManagerInterface;
     }
 
 
@@ -111,6 +119,47 @@ public class ReportRejectNetworkBridge implements ReportRejectNetworkBridgeInter
 
             @Override
             public void onFailure(Call<SendReportRejectResponse> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                        callback.onSendReportFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void sendApproveFirstItem(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int aprovingTechnicianId, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout)
+    {
+        // TODO get the actual API for this call from the client
+        SendApproveFirstItemRequest sendApproveFirstItemRequest = new SendApproveFirstItemRequest(sessionId, machineId, operatorId, rejectReasonId, aprovingTechnicianId, jobId);
+        final int[] retryCount = {0};
+        Call<SendApproveFirstItemResponse> call = mApproveFirstItemNetworkManagerInterface.approveFirstItemRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendApproveFirstItem(sendApproveFirstItemRequest);
+        call.enqueue(new Callback<SendApproveFirstItemResponse>() {
+            @Override
+            public void onResponse(Call<SendApproveFirstItemResponse> call, Response<SendApproveFirstItemResponse> response) {
+                if (response != null) {
+                    if (response.isSuccessful()) {
+                        if (callback != null) {
+                            callback.onSendReportSuccess();
+                        } else {
+                            ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SendApproveFirstItemResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

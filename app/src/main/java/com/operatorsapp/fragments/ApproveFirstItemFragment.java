@@ -26,8 +26,13 @@ import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMach
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportrejectcore.ReportCallbackListener;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
@@ -36,6 +41,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
@@ -50,13 +56,9 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
     private Button mNextButton;
-    //    private boolean mIsFirstReasonSpinnerSelection = true;
-//    private boolean mIsReasonSelected;
     private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private int mSelectedReasonId;
-    private int mSelectedCauseId;
-    private String mSelectedReasonName;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private String mCurrentProductName;
     private int mCurrentProductId;
@@ -64,6 +66,8 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
+    private ReportCore mReportCore;
+    private int mSelectedTechnicianId;
 
     public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
         ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
@@ -147,7 +151,6 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
 //                        mIsReasonSelected = true;
                     mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
                     String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getRejectReasons().get(position).getEName() :  mReportFieldsForMachine.getRejectReasons().get(position).getLName();
-                    mSelectedReasonName = nameByLang;
                     reasonSpinnerArrayAdapter.setTitle(position);
 //                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
 //                    }
@@ -159,6 +162,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
             });
 
 
+            // TODO get real list of technicians
             ArrayList<String> technicians = new ArrayList<>();
             technicians.add("Malcolm Reynolds");
             technicians.add("Ferris Bueller");
@@ -175,7 +179,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (mReportFieldsForMachine.getRejectCauses().size() > 0)
                     {
-                        mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                        mSelectedTechnicianId = mReportFieldsForMachine.getRejectCauses().get(position).getId(); // TODO this is not really the tech ID, need to get API from client
                     }
 
                     technicianSpinnerAdapter.setTitle(position);
@@ -244,10 +248,80 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 break;
             }
             case R.id.button_approve: {
-
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE); // TODO this is mock so we do nothing, for 1.1 to actually send this to the server
+                sendReport();
                 break;
             }
+        }
+    }
+
+    private void sendReport()
+    {
+        ProgressDialogManager.show(getActivity());
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.injectApproveFirstItem(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
+        mReportCore.sendApproveFirstItem(mSelectedReasonId, mSelectedTechnicianId, mJobId);
+    }
+
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
+    {
+        @Override
+        public void sendReportSuccess()
+        {
+            dismissProgressDialog();
+            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+            mReportCore.unregisterListener();
+            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        }
+
+        @Override
+        public void sendReportFailure(ErrorObjectInterface reason)
+        {
+            dismissProgressDialog();
+            ZLogger.w(LOG_TAG, "sendReportFailure()");
+            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
+            {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
+                {
+                    @Override
+                    public void onSilentLoginSucceeded()
+                    {
+                        sendReport();
+                    }
+
+                    @Override
+                    public void onSilentLoginFailed(ErrorObjectInterface reason)
+                    {
+                        ZLogger.w(LOG_TAG, "Failed silent login");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
+                        dismissProgressDialog();
+                    }
+                });
+            }
+            else
+            {
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
+            }
+        }
+    };
+
+    private void dismissProgressDialog()
+    {
+        if(getActivity() != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    ProgressDialogManager.dismiss();
+                }
+            });
         }
     }
 
