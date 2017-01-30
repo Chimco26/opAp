@@ -14,7 +14,7 @@ import retrofit2.http.POST;
  */
 public interface EmeraldSendApproveFirstItem
 {
-    @POST("/LeaderMESApi/ApproveFirstItem") // TODO validate endpoint with client
+    @POST("/LeaderMESApi/ReportSetupEnd")
     Call<SendApproveFirstItemResponse> sendApproveFirstItem(@Body SendApproveFirstItemRequest sendApproveFirstItemRequest);
 
 

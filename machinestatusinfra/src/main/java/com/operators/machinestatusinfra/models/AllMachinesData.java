@@ -54,6 +54,8 @@ public class AllMachinesData {
     private int shiftID;
     @SerializedName("shiftEndingIn")
     private int shiftEndingIn;
+    @SerializedName("canReportApproveFirstItem") // TODO get real value
+    private boolean canReportApproveFirstItem;
 
     public int getCurrentJobID() {
         return currentJobID;
@@ -154,4 +156,8 @@ public class AllMachinesData {
         return shiftEndingIn;
     }
 
+    public boolean canReportApproveFirstItem()
+    {
+        return canReportApproveFirstItem;
+    }
 }

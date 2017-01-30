@@ -17,7 +17,7 @@ public class SendApproveFirstItemRequest
     private String mOperatorId;
     @SerializedName("RejectReasonID")
     private int mRejectReasonId;
-    @SerializedName("ApprovingTechnicianID")
+    @SerializedName("TechnicianUserID")
     private Integer mApprovingTechnicianId;
     @SerializedName("JoshID")
     private Integer mJobId;

@@ -150,7 +150,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        ZLogger.d("moo", "width is: " + width);
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
         mWidgetsLayoutWidth = (int) (width * 0.8);

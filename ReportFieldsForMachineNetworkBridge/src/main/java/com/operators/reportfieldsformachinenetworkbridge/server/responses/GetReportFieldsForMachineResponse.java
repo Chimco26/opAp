@@ -6,6 +6,7 @@ import com.operators.reportfieldsformachineinfra.RejectCauses;
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.StopReasons;
+import com.operators.reportfieldsformachineinfra.Technician;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,14 @@ public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
     private List<RejectCauses> rejectCauses = new ArrayList<RejectCauses>();
     @SerializedName("PackageTypes")
     private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
+    @SerializedName("Technicians")
+    private List<Technician> technicians = new ArrayList<Technician>();
+
 
 
     public ReportFieldsForMachine getReportFieldsForMachine() {
-        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses,packageTypes);
+        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses,packageTypes, technicians);
     }
+
+
 }

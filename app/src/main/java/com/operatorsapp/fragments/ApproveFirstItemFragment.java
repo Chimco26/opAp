@@ -161,15 +161,8 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 }
             });
 
-
-            // TODO get real list of technicians
-            ArrayList<String> technicians = new ArrayList<>();
-            technicians.add("Malcolm Reynolds");
-            technicians.add("Ferris Bueller");
-            technicians.add("Wade Wilson");
-            technicians.add("Natasha Romanova");
             Spinner technicianSpinner = (Spinner) view.findViewById(R.id.technician_spinner);
-            final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, technicians);
+            final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
             technicianSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             technicianSpinner.setAdapter(technicianSpinnerAdapter);
             technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -179,7 +172,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (mReportFieldsForMachine.getRejectCauses().size() > 0)
                     {
-                        mSelectedTechnicianId = mReportFieldsForMachine.getRejectCauses().get(position).getId(); // TODO this is not really the tech ID, need to get API from client
+                        mSelectedTechnicianId = mReportFieldsForMachine.getTechnicians().get(position).getID();
                     }
 
                     technicianSpinnerAdapter.setTitle(position);

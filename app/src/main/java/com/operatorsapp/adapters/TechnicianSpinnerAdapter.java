@@ -9,17 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.RejectCauses;
+import com.operators.reportfieldsformachineinfra.Technician;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 
 import java.util.List;
 
-public class TechnicianSpinnerAdapter extends ArrayAdapter<String> {
+public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
     private Activity mContext;
-    private List<String> mSpinnerItems;
+    private List<Technician> mSpinnerItems;
     TextView mRowName;
     View mView;
 
-    public TechnicianSpinnerAdapter(Activity context, int resource, List<String> technicians) {
+    public TechnicianSpinnerAdapter(Activity context, int resource, List<Technician> technicians) {
         super(context, resource, technicians);
         mSpinnerItems = technicians;
         mContext = context;
@@ -36,7 +38,8 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<String> {
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
             {
-                mRowName.setText(mSpinnerItems.get(0));
+                String technicianName = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
+                mRowName.setText(technicianName);
             }
             else
             {
@@ -54,10 +57,11 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<String> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String item = mSpinnerItems.get(position);
-        if (item != null) {
+        Technician item = mSpinnerItems.get(position);
+        String technicianName = OperatorApplication.isEnglishLang() ? item.getEName() : item.getLName();
+        if (technicianName != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
-            name.setText(item);
+            name.setText(technicianName);
             name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             name.setTextSize(17);
         }
@@ -68,7 +72,9 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<String> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mSpinnerItems.get(position));
+        Technician item = mSpinnerItems.get(position);
+        String technicianName = OperatorApplication.isEnglishLang() ? item.getEName() : item.getLName();
+        mRowName.setText(technicianName);
         mRowName.setTextSize(20);
     }
 }

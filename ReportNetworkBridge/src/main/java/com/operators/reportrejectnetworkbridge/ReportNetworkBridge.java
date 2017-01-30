@@ -140,7 +140,6 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     @Override
     public void sendApproveFirstItem(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int aprovingTechnicianId, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout)
     {
-        // TODO get the actual API for this call from the client
         SendApproveFirstItemRequest sendApproveFirstItemRequest = new SendApproveFirstItemRequest(sessionId, machineId, operatorId, rejectReasonId, aprovingTechnicianId, jobId);
         final int[] retryCount = {0};
         Call<SendApproveFirstItemResponse> call = mApproveFirstItemNetworkManagerInterface.approveFirstItemRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendApproveFirstItem(sendApproveFirstItemRequest);
