@@ -57,7 +57,7 @@
     <string name="id">ID -</string>
     <string name="job">Job</string>
     <string name="shift">Shift</string>
-    <string name="machine_id">Machine ID</string>
+    <string name="machine_id">Machine Name</string>
     <string name="machine_status">Machine status</string>
     <string name="operator_id">Operator Id</string>
     <string name="operator_name">Operator name</string>
@@ -140,8 +140,9 @@
         <item>Report Rejects</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>
-        <item>Approve First Item</item>
     </array>
+
+    <string name="approve_first_item">Approve First Item</string>
 
     <plurals name="days">
         <item quantity="one">%d Day</item>

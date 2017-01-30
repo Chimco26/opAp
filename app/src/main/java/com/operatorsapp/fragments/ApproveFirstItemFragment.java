@@ -38,6 +38,7 @@ import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
@@ -56,7 +57,6 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private TextView mCancelButton;
     private Button mNextButton;
-    private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private int mSelectedReasonId;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -68,6 +68,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
     private ProgressBar mActiveJobsProgressBar;
     private ReportCore mReportCore;
     private int mSelectedTechnicianId;
+    private ApproveFirstItemFragmentCallbackListener mCallbackListener;
 
     public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
         ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
@@ -81,10 +82,22 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mGoToScreenListener = (GoToScreenListener) getActivity();
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+
+        if(context instanceof ApproveFirstItemFragmentCallbackListener)
+        {
+            mCallbackListener = (ApproveFirstItemFragmentCallbackListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach()
+    {
+        super.onDetach();
+        mCallbackListener = null;
+        mOnCroutonRequestListener = null;
     }
 
     @Override
@@ -160,6 +173,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
+
 
             Spinner technicianSpinner = (Spinner) view.findViewById(R.id.technician_spinner);
             final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
@@ -265,6 +279,10 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
+            if(mCallbackListener != null)
+            {
+                mCallbackListener.onApproveFirstItemComplete();
+            }
             getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         }

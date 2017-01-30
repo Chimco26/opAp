@@ -38,6 +38,8 @@ public class AllMachinesData {
     private String machineLname;
     @SerializedName("MachineName")
     private String machineName;
+    @SerializedName("MachineEName")
+    private String machineEName;
     @SerializedName("MachineStatusEname")
     private String machineStatusEname;
     @SerializedName("MachineStatusID")
@@ -54,7 +56,7 @@ public class AllMachinesData {
     private int shiftID;
     @SerializedName("shiftEndingIn")
     private int shiftEndingIn;
-    @SerializedName("canReportApproveFirstItem") // TODO get real value
+    @SerializedName("SetupEnd")
     private boolean canReportApproveFirstItem;
 
     public int getCurrentJobID() {
@@ -159,5 +161,10 @@ public class AllMachinesData {
     public boolean canReportApproveFirstItem()
     {
         return canReportApproveFirstItem;
+    }
+
+    public String getMachineEName()
+    {
+        return machineEName;
     }
 }

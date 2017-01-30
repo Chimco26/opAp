@@ -59,7 +59,7 @@
     <string name="id">מזהה -</string>
     <string name="job">פק"ע</string>
     <string name="shift">משמרת</string>
-    <string name="machine_id">מזהה מכונה</string>
+    <string name="machine_id">שם מכונה</string>
     <string name="machine_status">סטאטוס מכונה</string>
     <string name="operator_id">מזהה מפעיל</string>
     <string name="operator_name">שם מפעיל</string>
@@ -137,8 +137,9 @@
         <item>Report Rejects</item>
         <item>Report Cycle Units</item>
         <item>Report Production</item>
-        <item>Approve First Item</item>
     </array>
+
+    <string name="approve_first_item">Approve First Item</string>
 
     <plurals name="days">
         <item quantity="one">%d יום</item>

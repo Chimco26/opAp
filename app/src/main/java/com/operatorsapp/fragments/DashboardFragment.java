@@ -17,7 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +38,7 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
@@ -56,6 +59,7 @@ import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.JobActionsSpinnerItem;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
@@ -67,6 +71,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener, CroutonRootProvider
 {
@@ -121,6 +126,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private boolean mIsNewShiftLogs;
     private MachineStatus mCurrentMachineStatus;
     private ArrayList<Event> mEventsListToUpdate = new ArrayList<>();
+    private JobsSpinnerAdapter mJobsSpinnerAdapter;
+    private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
+    private int mApproveItemID;
+    private ViewGroup mMachineStatusLayout;
 
     public static DashboardFragment newInstance()
     {
@@ -529,9 +538,29 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             title.setVisibility(View.VISIBLE);
 
             final Spinner jobsSpinner = (Spinner) mToolBarView.findViewById(R.id.toolbar_job_spinner);
-            final ArrayAdapter<String> jobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, getResources().getStringArray(R.array.jobs_spinner_array));
-            jobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            jobsSpinner.setAdapter(jobsSpinnerAdapter);
+
+
+            if(mJobsSpinnerAdapter == null)
+            {
+                // we generate the data for the spinner, approve button can be disabled so created seperatly
+                mJobActionsSpinnerItems = new ArrayList<>();
+
+                String[] options = getResources().getStringArray(R.array.jobs_spinner_array);
+
+                for (int i = 0; i < options.length; i++)
+                {
+                    mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(i, options[i]));
+                }
+                // add approve first item with unique ID;
+                mApproveItemID = mJobActionsSpinnerItems.size();
+                mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID,getString(R.string.approve_first_item)));
+
+                mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
+                mJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            }
+
+            jobsSpinner.setAdapter(mJobsSpinnerAdapter);
+
             jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -541,63 +570,67 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                 {
                     String nameByLang = OperatorApplication.isEnglishLang() ? mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductEname() : mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName();
-                    switch(position)
+                    if(mJobActionsSpinnerItems.get(position).isEnabled())
                     {
-                        case 0:
+                        switch(position)
                         {
-                            ZLogger.d(LOG_TAG, "New Job");
-                            mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
-                            break;
-                        }
-                        case 1:
-                        {
-                            if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            case 0:
                             {
-                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--", 0), true);
+                                ZLogger.d(LOG_TAG, "New Job");
+                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                                break;
                             }
-                            else
+                            case 1:
                             {
-                                mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--", 0), true);
+                                }
+                                else
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                }
+                                break;
                             }
-                            break;
-                        }
-                        case 2:
-                        {
-                            if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            case 2:
                             {
-                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--", 0), true);
+                                if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--", 0), true);
+                                }
+                                else
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                }
+                                break;
                             }
-                            else
+                            case 3:
                             {
-                                mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--", 0), true);
+                                }
+                                else
+                                {
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                }
+                                break;
                             }
-                            break;
-                        }
-                        case 3:
-                        {
-                            if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                            case 4:
                             {
-                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--", 0), true);
+                                if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
+                                {
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
+                                }
+                                else
+                                {
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                }
+                                break;
                             }
-                            else
-                            {
-                                mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
-                            }
-                            break;
-                        }
-                        case 4:
-                        {
-                            if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null)
-                            {
-                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
-                            }
-                            else
-                            {
-                                mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
-                            }
-                            break;
                         }
                     }
+
                 }
 
                 @Override
@@ -643,6 +676,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mMachineStatusStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_status);
             mStatusIndicatorImageView = (ImageView) mToolBarView.findViewById(R.id.job_indicator);
 
+            if(mMachineStatusLayout == null)
+            {
+                mMachineStatusLayout = (ViewGroup) mToolBarView.findViewById(R.id.linearLayout2);
+                mMachineStatusLayout.setVisibility(View.INVISIBLE);
+            }
             ImageView settingsButton = (ImageView) mToolBarView.findViewById(R.id.settings_button);
             settingsButton.setOnClickListener(new View.OnClickListener()
             {
@@ -785,6 +823,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
+        onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
     }
 
     @Override
@@ -928,16 +967,18 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         for(Event event : mEventsList)
                         {
                             ZLogger.d(LOG_TAG, "onShiftLogDataReceived(), checking update event id: " + events.get(i).getEventID());
-                            if(event.getEventID() == events.get(i).getEventID() && event.getDuration() != events.get(i).getDuration())
+                            if(event.getEventID() == events.get(i).getEventID())
                             {
                                 ZLogger.d(LOG_TAG, "onShiftLogDataReceived(), update event id: " + events.get(i).getEventID());
                                 mEventsListToUpdate.add(events.get(i));
+                                Log.i("TEST TEST","found an event with existing ID! " + event.getEventID());
                             }
                         }
                     }
                 }
                 if(mEventsListToUpdate.size() > 0 && mShiftLogAdapter != null)
                 {
+                    Log.i("TEST TEST","update data called: " + mEventsListToUpdate.size());
                     mShiftLogAdapter.updateData(mEventsListToUpdate);
                     mEventsListToUpdate.clear();
                 }
@@ -1001,11 +1042,28 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
+    public void onApproveFirstItemEnabledChanged(boolean enabled)
+    {
+        if(mJobsSpinnerAdapter != null)
+        {
+            for (JobActionsSpinnerItem item : mJobActionsSpinnerItems)
+            {
+                if(item.getUniqueID() == mApproveItemID)
+                {
+                    item.setEnabled(enabled);
+                }
+            }
+            mJobsSpinnerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType)
     {
         mLoadingDataView.setVisibility(View.GONE);
         if(callType == CallType.Status)
         {
+            mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
        /* if (callType == CallType.ShiftLog) {
@@ -1036,14 +1094,21 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     private void initStatusLayout(MachineStatus machineStatus)
     {
-        String nameByLang = OperatorApplication.isEnglishLang() ? machineStatus.getAllMachinesData().get(0).getCurrentProductName() : machineStatus.getAllMachinesData().get(0).getCurrentProductEname();
-        mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentProductID())));
-        mJobIdTextView.setText((String.valueOf(machineStatus.getAllMachinesData().get(0).getCurrentJobID())));
-        mShiftIdTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getShiftID()));
-        mMachineIdStatusBarTextView.setText(String.valueOf(machineStatus.getAllMachinesData().get(0).getMachineID()));
-        String statusNameByLang = OperatorApplication.isEnglishLang() ? machineStatus.getAllMachinesData().get(0).getMachineStatusEname() : machineStatus.getAllMachinesData().get(0).getMachineStatusLName();
+        AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
+        String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
+        mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
+        mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobID())));
+        mShiftIdTextView.setText(String.valueOf(machinesData.getShiftID()));
+        String machineName = OperatorApplication.isEnglishLang() ? machinesData.getMachineEName() : machinesData.getMachineLname();
+        if(TextUtils.isEmpty(machineName))
+        {
+            machineName = getString(R.string.dashes);
+        }
+        mMachineIdStatusBarTextView.setText(machineName);
+        String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
         statusAggregation(machineStatus);
+        mMachineStatusLayout.setVisibility(View.VISIBLE);
     }
 
     private void clearStatusLayout()

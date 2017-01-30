@@ -25,4 +25,6 @@ public interface DashboardUICallbackListener {
     void onDataFailure(ErrorObjectInterface reason, CallType callType);
 
     void onShiftForMachineEnded();
+
+    void onApproveFirstItemEnabledChanged(boolean enabled);
 }

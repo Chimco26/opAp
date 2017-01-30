@@ -73,7 +73,12 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
                     }
+                    else
+                    {
+                        onFailure(call,new Exception("response not successful"));
+                    }
                 }
+
             }
 
             @Override
@@ -113,6 +118,10 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
+                    }
+                    else
+                    {
+                        onFailure(call,new Exception("response not successful"));
                     }
                 }
             }
@@ -154,6 +163,10 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
                     }
+                    else
+                    {
+                        onFailure(call,new Exception("response not successful"));
+                    }
                 }
             }
 
@@ -194,6 +207,10 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
                     }
+                    else
+                    {
+                        onFailure(call,new Exception("response not successful"));
+                    }
                 }
             }
 
@@ -232,6 +249,10 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
                         }
+                    }
+                    else
+                    {
+                        onFailure(call,new Exception("response not successful"));
                     }
                 }
             }
