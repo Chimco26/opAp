@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.google.gson.Gson;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
@@ -466,6 +468,36 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mLoadingDataView.setVisibility(View.VISIBLE);
         }
         ZLogger.d(LOG_TAG, "onResume(), end ");
+
+    }
+
+    // use this to test the shift log update feature
+    private void generateFakeEvents()
+    {
+
+
+        final int eventID = 7779;
+        ArrayList<Event> events = new ArrayList<>();
+        Event event = new Gson().fromJson("{\"AlarmDismissed\":true,\"AlarmHValue\":0,\"AlarmLValue\":0,\"AlarmStandardValue\":0,\"AlarmValue\":0,\"EventDuration\":0,\"EventETitle\":\"Arburg-1: \",\"EventGroupEname\":\"מכונה בעצירה\",\"EventGroupID\":6,\"EventGroupLname\":\"מכונה בעצירה\",\"EventID\":" + eventID + ",\"EventLTitle\":\"Arburg-1: \",\"EventSubTitleEname\":\"Unreported Stop\",\"EventSubTitleLname\":\"עצירה לא מדווחת\",\"EventTime\":\"31\\/01\\/2017 15:12:00\",\"EventTitle\":\"Arburg-1: \"}",Event.class);
+        events.add(event);
+
+
+        onShiftLogDataReceived(events);
+
+
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ArrayList<Event> events = new ArrayList<>();
+                Event event = new Gson().fromJson("{\"AlarmDismissed\":true,\"AlarmHValue\":0,\"AlarmLValue\":0,\"AlarmStandardValue\":0,\"AlarmValue\":0,\"EventDuration\":0,\"EventETitle\":\"Arburg-1: \",\"EventEndTime\":\"31\\/01\\/2017 15:13:00\",\"EventGroupEname\":\"מכונה בעצירה\",\"EventGroupID\":6,\"EventGroupLname\":\"מכונה בעצירה\",\"EventID\":" + eventID + ",\"EventLTitle\":\"Arburg-1: \",\"EventSubTitleEname\":\"Unreported Stop\",\"EventSubTitleLname\":\"עצירה לא מדווחת\",\"EventTime\":\"31\\/01\\/2017 15:12:00\",\"EventTitle\":\"Arburg-1: \"}",Event.class);
+                events.add(event);
+
+                onShiftLogDataReceived(events);
+            }
+        },20000);
     }
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen)
@@ -964,6 +996,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     }
                     else
                     {
+                        ZLogger.d(LOG_TAG,"started looking for matching event for id: " + events.get(i).getEventID());
                         for(Event event : mEventsList)
                         {
                             ZLogger.d(LOG_TAG, "onShiftLogDataReceived(), checking update event id: " + events.get(i).getEventID());
@@ -971,14 +1004,16 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             {
                                 ZLogger.d(LOG_TAG, "onShiftLogDataReceived(), update event id: " + events.get(i).getEventID());
                                 mEventsListToUpdate.add(events.get(i));
-                                Log.i("TEST TEST","found an event with existing ID! " + event.getEventID());
+                                ZLogger.d(LOG_TAG,"found an event with existing ID! " + event.getEventID() + " " + event.getEventEndTime());
+                                break;
                             }
                         }
+                        ZLogger.d(LOG_TAG,"done looking for matching event for id: " + events.get(i).getEventID());
                     }
                 }
                 if(mEventsListToUpdate.size() > 0 && mShiftLogAdapter != null)
                 {
-                    Log.i("TEST TEST","update data called: " + mEventsListToUpdate.size());
+                    ZLogger.d(LOG_TAG,"update data called: " + mEventsListToUpdate.size());
                     mShiftLogAdapter.updateData(mEventsListToUpdate);
                     mEventsListToUpdate.clear();
                 }

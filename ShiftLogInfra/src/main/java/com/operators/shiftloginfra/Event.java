@@ -256,4 +256,14 @@ public class Event {
     {
         mAlarmValue = alarmValue;
     }
+
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventStartTime, String mEventEndTime, int mEventGroupID, int mEventID)
+    {
+        this.mEventTitle = mEventTitle;
+        this.mEventSubTitleEname = mEventSubTitleEname;
+        this.mEventStartTime = mEventStartTime;
+        this.mEventEndTime = mEventEndTime;
+        this.mEventGroupID = mEventGroupID;
+        this.mEventID = mEventID;
+    }
 }
