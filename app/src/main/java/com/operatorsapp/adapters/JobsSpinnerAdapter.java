@@ -59,11 +59,11 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             mRowName.setTextSize(30);
             if(!item.isEnabled())
             {
-                mRowName.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.default_gray));
+                mRowName.setTextColor(ContextCompat.getColor(getContext(),R.color.default_gray));
             }
             else
             {
-                mRowName.setBackgroundColor(ContextCompat.getColor(getContext(),android.R.color.white));
+                mRowName.setTextColor(Color.BLACK);
             }
         }
         return row;

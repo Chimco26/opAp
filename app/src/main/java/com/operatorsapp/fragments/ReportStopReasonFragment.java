@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportStopReasonFragment extends Fragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
+public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
 {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
@@ -174,7 +175,7 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
         getActiveJobs();
     }
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -191,7 +192,11 @@ public class ReportStopReasonFragment extends Fragment implements OnStopReasonSe
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

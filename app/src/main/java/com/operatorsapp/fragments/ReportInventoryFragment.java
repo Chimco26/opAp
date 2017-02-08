@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +44,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportInventoryFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
@@ -175,7 +176,7 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
     }
 
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -192,7 +193,11 @@ public class ReportInventoryFragment extends Fragment implements View.OnClickLis
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

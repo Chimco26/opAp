@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.util.Locale;
 
-public class ReportCycleUnitsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     public static final String LOG_TAG = ReportCycleUnitsFragment.class.getSimpleName();
@@ -225,7 +226,7 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    private void setActionBar()
+    protected void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null)
@@ -245,7 +246,11 @@ public class ReportCycleUnitsFragment extends Fragment implements View.OnClickLi
                 @Override
                 public void onClick(View v)
                 {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
-public class ChartFragment extends Fragment {
+public class ChartFragment extends BackStackAwareFragment {
     private static final String VALUES = "values";
     private static final String MIN = "mib";
     private static final String STANDARD = "standard";
@@ -109,7 +110,7 @@ public class ChartFragment extends Fragment {
     }
 
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -127,7 +128,11 @@ public class ChartFragment extends Fragment {
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

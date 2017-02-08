@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,7 +25,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedJobFragment extends Fragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
+public class SelectedJobFragment extends BackStackAwareFragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
 {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
@@ -104,7 +105,7 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
         mActivateNewJobButton.setOnClickListener(null);
     }
 
-    private void setActionBar() {
+    protected void setActionBar() {
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -122,7 +123,12 @@ public class SelectedJobFragment extends Fragment implements View.OnClickListene
             arrowBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                     //getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });

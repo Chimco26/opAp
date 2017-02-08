@@ -601,6 +601,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                 {
+                    if(mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null || mCurrentMachineStatus.getAllMachinesData().size() == 0)
+                    {
+                        ZLogger.w(LOG_TAG, "missing machine status data in job spinner");
+                        return;
+                    }
                     String nameByLang = OperatorApplication.isEnglishLang() ? mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductEname() : mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName();
                     if(mJobActionsSpinnerItems.get(position).isEnabled())
                     {

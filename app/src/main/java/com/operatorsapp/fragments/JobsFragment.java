@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class JobsFragment extends Fragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener, CroutonRootProvider
+public class JobsFragment extends BackStackAwareFragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener, CroutonRootProvider
 {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
@@ -134,7 +135,7 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
 
     }
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -151,7 +152,11 @@ public class JobsFragment extends Fragment implements OnJobSelectedCallbackListe
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

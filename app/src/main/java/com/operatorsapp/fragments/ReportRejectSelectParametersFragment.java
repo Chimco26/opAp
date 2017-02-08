@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +36,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportRejectSelectParametersFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class ReportRejectSelectParametersFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = ReportRejectSelectParametersFragment.class.getSimpleName();
@@ -247,7 +248,7 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
 
     }
 
-    private void setActionBar()
+    protected void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null)
@@ -267,7 +268,11 @@ public class ReportRejectSelectParametersFragment extends Fragment implements Vi
                 @Override
                 public void onClick(View v)
                 {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
 

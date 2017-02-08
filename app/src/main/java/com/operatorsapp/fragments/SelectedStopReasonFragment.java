@@ -42,7 +42,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedStopReasonFragment extends Fragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider
+public class SelectedStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider
 {
 
     public static final String LOG_TAG = SelectedStopReasonFragment.class.getSimpleName();
@@ -206,7 +206,7 @@ public class SelectedStopReasonFragment extends Fragment implements OnSelectedSu
         mButtonNext.setOnClickListener(this);
     }
 
-    private void setActionBar()
+    protected void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null)

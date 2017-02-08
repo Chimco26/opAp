@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SignInOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class SignInOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
@@ -79,6 +80,8 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
         setActionBar();
         return rootView;
     }
+
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -182,12 +185,23 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
+        {
+            setActionBar();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mSignInButton.setOnClickListener(this);
     }
 
-    private void setActionBar() {
+
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -204,11 +218,17 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);
         }
+
+
     }
 
     @Override

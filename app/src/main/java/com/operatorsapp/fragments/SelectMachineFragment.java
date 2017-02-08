@@ -33,7 +33,7 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class SelectMachineFragment extends Fragment implements AdapterView.OnItemClickListener
+public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener
 {
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
@@ -140,7 +140,7 @@ public class SelectMachineFragment extends Fragment implements AdapterView.OnIte
         return rootView;
     }
 
-    private void setActionBar()
+    protected void setActionBar()
     {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null)

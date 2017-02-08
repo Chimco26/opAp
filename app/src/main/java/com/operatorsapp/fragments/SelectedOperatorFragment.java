@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +28,7 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class SelectedOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
     public static final String LOG_TAG = SelectedOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
@@ -104,7 +105,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
         mSignInButton.setOnClickListener(null);
     }
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -121,7 +122,11 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

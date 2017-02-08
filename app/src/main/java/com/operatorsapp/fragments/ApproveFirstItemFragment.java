@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +50,7 @@ import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
-public class ApproveFirstItemFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
@@ -220,7 +221,7 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
 
     }
 
-    private void setActionBar() {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -237,7 +238,11 @@ public class ApproveFirstItemFragment extends Fragment implements View.OnClickLi
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
 

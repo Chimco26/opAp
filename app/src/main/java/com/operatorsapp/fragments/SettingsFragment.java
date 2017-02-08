@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.NetworkAvailable;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SettingsFragment extends Fragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
+public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
@@ -162,7 +163,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         mButtonChange.setOnClickListener(this);
     }
 
-
     public void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -180,7 +180,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

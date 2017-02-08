@@ -40,7 +40,7 @@ public class ActiveJobsListForMachineCore {
                         public void onGetActiveJobsListForMachineSuccess(ActiveJobsListForMachine activeJobsListForMachine) {
                             if (activeJobsListForMachine != null) {
                                 if (activeJobsListForMachine.getActiveJobs() != null) {
-                                    if (activeJobsListForMachine.getActiveJobs().size() > 0) {
+                                    if (activeJobsListForMachine.getActiveJobs().size() > 0 && mActiveJobsListForMachineUICallbackListener != null) {
                                         mActiveJobsListForMachineUICallbackListener.onActiveJobsListForMachineReceived(activeJobsListForMachine);
                                     }
                                     else {

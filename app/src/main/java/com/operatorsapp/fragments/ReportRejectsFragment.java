@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +41,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportRejectsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
+public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
@@ -219,7 +220,11 @@ public class ReportRejectsFragment extends Fragment implements View.OnClickListe
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager().popBackStack();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);
