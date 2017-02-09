@@ -209,6 +209,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
         mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
+        final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener()
@@ -220,6 +221,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 {
                     case MotionEvent.ACTION_DOWN:
                         mDownX = (int) event.getRawX();
+                        shiftLogHandle.setImageResource(R.drawable.left_panel_btn_pressed);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if(!mNoData)
@@ -243,6 +245,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                         }
                         break;
                     case MotionEvent.ACTION_UP:
+                        shiftLogHandle.setImageResource(R.drawable.left_panel_btn);
                         if(!mNoData)
                         {
                             if(event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5)
@@ -269,6 +272,10 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             }
                         }
                         break;
+                    case MotionEvent.ACTION_CANCEL:
+                        default:
+                            shiftLogHandle.setImageResource(R.drawable.left_panel_btn);
+                            break;
                 }
                 return false;
             }
