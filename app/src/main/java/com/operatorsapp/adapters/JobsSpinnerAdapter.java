@@ -36,7 +36,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
             TextView rowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
-            rowName.setTextSize(18);
+            rowName.setTextSize(22);
 
         }
         return row;
@@ -56,7 +56,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             mRowName.setText(item.getName());
             TextViewCompat.setTextAppearance(mRowName, R.style.FontStyle_T10);
             mRowName.setTextColor(Color.BLACK);
-            mRowName.setTextSize(30);
+            mRowName.setTextSize(36);
             if(!item.isEnabled())
             {
                 mRowName.setTextColor(ContextCompat.getColor(getContext(),R.color.default_gray));
