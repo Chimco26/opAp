@@ -80,7 +80,7 @@
                         android:layout_marginTop="43dp"
                         android:text="@string/language"
                         android:textColor="@color/black"
-                        android:textSize="18dp"/>
+                        android:textSize="22sp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                                 android:id="@+id/languages_spinner"
                                 android:layout_width="280dp"
                                 android:layout_height="40dp"
-                                android:dropDownVerticalOffset="45dp"></Spinner>
+                                android:dropDownVerticalOffset="45dp"/>
                         </RelativeLayout>
 
                         <LinearLayout
@@ -116,25 +116,25 @@
                                 <TextView
                                     android:id="@+id/button_cancel"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="126dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="136dp"
+                                    android:layout_height="36dp"
                                     android:layout_marginEnd="5dp"
                                     android:gravity="center"
                                     android:text="@string/cancel"
                                     android:textAllCaps="true"
                                     android:textColor="@drawable/button_cancel_text_selector"
-                                    android:textSize="18sp"
+                                    android:textSize="22sp"
                                     android:visibility="invisible"/>
 
                                 <Button
                                     android:id="@+id/button_save"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="84dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="100dp"
+                                    android:layout_height="34dp"
                                     android:background="@drawable/buttons_selector"
                                     android:text="@string/login_screen_save"
                                     android:textColor="@drawable/button_text_color_selector"
-                                    android:textSize="18sp"/>
+                                    android:textSize="22sp"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -160,7 +160,7 @@
                                 android:gravity="bottom"
                                 android:text="@string/factory_sign_in"
                                 android:textColor="@color/black"
-                                android:textSize="18dp"/>
+                                android:textSize="22sp"/>
 
                             <TextView
                                 android:id="@+id/url_text_view"
@@ -168,7 +168,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="15dp"
                                 android:textColor="@color/C20"
-                                android:textSize="18dp"/>
+                                android:textSize="22sp"/>
 
 
                         </LinearLayout>
@@ -176,14 +176,14 @@
                         <Button
                             android:id="@+id/button_change"
                             style="@style/FontStyle_Button"
-                            android:layout_width="84dp"
-                            android:layout_height="28dp"
+                            android:layout_width="100dp"
+                            android:layout_height="36dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="37dp"
                             android:background="@drawable/buttons_selector"
                             android:text="@string/change"
                             android:textColor="@drawable/button_text_color_selector"
-                            android:textSize="18sp"/>
+                            android:textSize="22sp"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -212,7 +212,7 @@
                                 android:text="@string/advanced_settings"
                                 android:textAllCaps="true"
                                 android:textColor="@drawable/button_cancel_text_selector"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
                         </LinearLayout>
 
                     </RelativeLayout>
@@ -243,7 +243,7 @@
                             android:paddingStart="20dp"
                             android:text="@string/refresh_reporting_data"
                             android:textColor="@drawable/button_refresh_reporting_data_text_selector"
-                            android:textSize="18dp"/>
+                            android:textSize="22sp"/>
 
                         <TextView
                             android:id="@+id/refresh_status_text_view"
@@ -253,7 +253,7 @@
                             android:drawablePadding="5dp"
                             android:text="@string/refreshed"
                             android:textColor="@color/C20"
-                            android:textSize="15sp"/>
+                            android:textSize="17sp"/>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>

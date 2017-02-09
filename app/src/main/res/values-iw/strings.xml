@@ -53,7 +53,7 @@
     <string name="product_id">מזהה מוצר</string>
     <string name="erp_id">מזהה ERP</string>
     <string name="quantity">כמות</string>
-    <string name="activate_new_job">פעיל/לא פעיל</string>
+    <string name="activate_new_job">הפעלה</string>
     <string name="could_not_retrieve_job_list">לא ניתן לייבא רשימת פק"עות</string>
     <string name="product">מוצר</string>
     <string name="id">מזהה -</string>

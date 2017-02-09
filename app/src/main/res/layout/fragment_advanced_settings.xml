@@ -77,7 +77,7 @@
                     android:text="@string/send_logs"
                     android:textAllCaps="true"
                     android:textColor="@drawable/button_cancel_text_selector"
-                    android:textSize="18sp"/>
+                    android:textSize="22sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,12 +91,12 @@
                     <Button
                         android:id="@+id/button_save"
                         style="@style/FontStyle_Button"
-                        android:layout_width="84dp"
-                        android:layout_height="28dp"
+                        android:layout_width="94dp"
+                        android:layout_height="34dp"
                         android:background="@drawable/buttons_selector"
                         android:text="@string/login_screen_save"
                         android:textColor="@drawable/button_text_color_selector"
-                        android:textSize="18sp"/>
+                        android:textSize="22sp"/>
 
                 </LinearLayout>
 
@@ -124,14 +124,14 @@
                                 android:layout_marginTop="70dp"
                                 android:text="@string/polling_frequency"
                                 android:textColor="@color/black"
-                                android:textSize="18dp"
+                                android:textSize="22sp"
                                 />
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/polling_frequency_edit_text"
                                 style="@style/FontStyle_T6"
                                 android:layout_width="240dp"
-                                android:layout_height="40dp"
+                                android:layout_height="46dp"
                                 android:background="@drawable/edit_text_background_selector"
                                 android:inputType="number"
                                 android:maxLength="3"
@@ -169,13 +169,13 @@
                                 android:layout_marginTop="70dp"
                                 android:text="@string/request_timeout"
                                 android:textColor="@color/status_bar"
-                                android:textSize="18sp"
+                                android:textSize="22sp"
                                 />
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/request_timeout_edit_text"
                                 android:layout_width="240dp"
-                                android:layout_height="40dp"
+                                android:layout_height="46dp"
                                 android:background="@drawable/edit_text_background_selector"
                                 android:inputType="number"
                                 android:maxLength="3"
