@@ -45,7 +45,7 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
             {
                 mRowName.setText(mContext.getString(R.string.dashes));
             }
-            mRowName.setTextSize(18);
+            mRowName.setTextSize(22);
         }
         return row;
     }
@@ -63,7 +63,7 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(technicianName);
             name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            name.setTextSize(17);
+            name.setTextSize(22);
         }
         return row;
     }
@@ -75,6 +75,6 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
         Technician item = mSpinnerItems.get(position);
         String technicianName = OperatorApplication.isEnglishLang() ? item.getEName() : item.getLName();
         mRowName.setText(technicianName);
-        mRowName.setTextSize(20);
+        mRowName.setTextSize(24);
     }
 }

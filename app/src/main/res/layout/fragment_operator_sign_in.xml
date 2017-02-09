@@ -51,12 +51,13 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background_selector"
                 android:hint="@string/operator_id"
+                android:textSize="22sp"
                 android:singleLine="true"/>
 
             <Button
                 android:id="@+id/button_operator_signIn"
-                android:layout_width="128dp"
-                android:layout_height="30dp"
+                android:layout_width="138dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="2dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/button_bg_disabled"
@@ -64,7 +65,7 @@
                 android:text="@string/common_signin_button_text"
                 android:textAllCaps="true"
                 android:textColor="@drawable/button_text_color_selector"
-                android:textSize="18sp"/>
+                android:textSize="22sp"/>
         </LinearLayout>
 
     </LinearLayout>

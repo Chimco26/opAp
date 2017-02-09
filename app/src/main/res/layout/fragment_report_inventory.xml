@@ -191,17 +191,17 @@
                         android:layout_marginBottom="7dp"
                         android:text="@string/package_type"
                         android:textColor="@color/black"
-                        android:textSize="18sp"/>
+                        android:textSize="22sp"/>
 
                     <RelativeLayout
                         android:layout_width="282dp"
-                        android:layout_height="42dp"
+                        android:layout_height="48dp"
                         android:background="@drawable/edit_text_background_selector">
 
                         <Spinner
                             android:id="@+id/package_type_spinner"
                             android:layout_width="280dp"
-                            android:layout_height="40dp"
+                            android:layout_height="46dp"
                             android:dropDownVerticalOffset="45dp"/>
                     </RelativeLayout>
 
@@ -212,24 +212,24 @@
                         android:layout_marginTop="50dp"
                         android:text="@string/units"
                         android:textColor="@color/black"
-                        android:textSize="18sp"/>
+                        android:textSize="22sp"/>
 
                     <LinearLayout
                         android:layout_width="282dp"
-                        android:layout_height="42dp"
+                        android:layout_height="48dp"
                         android:background="@color/divider_gray"
                         android:gravity="center">
 
                         <LinearLayout
                             android:layout_width="280dp"
-                            android:layout_height="40dp"
+                            android:layout_height="46dp"
                             android:background="@android:color/white"
                             android:gravity="center"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/button_minus"
-                                android:layout_width="40dp"
+                                android:layout_width="46dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/button_minus_selector"/>
 
@@ -243,11 +243,11 @@
                                 android:gravity="center"
                                 android:text="@string/one"
                                 android:textColor="@color/status_bar"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <ImageView
                                 android:id="@+id/button_plus"
-                                android:layout_width="40dp"
+                                android:layout_width="46dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/button_plus_selector"/>
                         </LinearLayout>
@@ -273,26 +273,26 @@
 
                         <TextView
                             android:id="@+id/button_cancel"
-                            android:layout_width="126dp"
-                            android:layout_height="28dp"
+                            android:layout_width="134dp"
+                            android:layout_height="34dp"
                             style="@style/FontStyle_Button"
                             android:layout_marginRight="5dp"
                             android:gravity="center"
                             android:text="@string/cancel"
                             android:textAllCaps="true"
                             android:textColor="@drawable/button_cancel_text_selector"
-                            android:textSize="18sp"/>
+                            android:textSize="22sp"/>
 
                         <Button
                             android:id="@+id/button_report"
-                            android:layout_width="84dp"
-                            android:layout_height="28dp"
+                            android:layout_width="94dp"
+                            android:layout_height="34dp"
                             android:layout_weight="0.13"
                             style="@style/FontStyle_Button"
                             android:background="@drawable/buttons_selector"
                             android:text="@string/report"
                             android:textColor="@drawable/button_text_color_selector"
-                            android:textSize="18sp"/>
+                            android:textSize="22sp"/>
                     </LinearLayout>
 
                 </LinearLayout>

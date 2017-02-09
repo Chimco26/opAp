@@ -188,18 +188,18 @@
                                 android:layout_marginBottom="7dp"
                                 android:text="@string/reject_reason"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <RelativeLayout
                                 android:layout_width="282dp"
-                                android:layout_height="42dp"
+                                android:layout_height="52dp"
                                 android:layout_marginBottom="30dp"
                                 android:background="@drawable/edit_text_background_selector">
 
                                 <Spinner
                                     android:id="@+id/reject_reason_spinner"
                                     android:layout_width="280dp"
-                                    android:layout_height="40dp"
+                                    android:layout_height="50dp"
                                     android:dropDownVerticalOffset="45dp"/>
                             </RelativeLayout>
 
@@ -210,17 +210,17 @@
                                 android:layout_marginTop="35dp"
                                 android:text="@string/approving_technician"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <RelativeLayout
                                 android:layout_width="282dp"
-                                android:layout_height="42dp"
+                                android:layout_height="52dp"
                                 android:background="@drawable/edit_text_background_selector">
 
                                 <Spinner
                                     android:id="@+id/technician_spinner"
                                     android:layout_width="280dp"
-                                    android:layout_height="40dp"
+                                    android:layout_height="50dp"
                                     android:dropDownVerticalOffset="45dp"/>
                             </RelativeLayout>
 
@@ -245,25 +245,25 @@
                                 <TextView
                                     android:id="@+id/button_cancel"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="126dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="136dp"
+                                    android:layout_height="34dp"
                                     android:layout_marginEnd="5dp"
                                     android:gravity="center"
                                     android:text="@string/cancel"
                                     android:textAllCaps="true"
                                     android:textColor="@drawable/button_cancel_text_selector"
-                                    android:textSize="18sp"/>
+                                    android:textSize="22sp"/>
 
                                 <Button
                                     android:id="@+id/button_approve"
                                     style="@style/FontStyle_Button"
-                                    android:layout_width="84dp"
-                                    android:layout_height="28dp"
+                                    android:layout_width="94dp"
+                                    android:layout_height="34dp"
                                     android:layout_weight="0.13"
                                     android:background="@drawable/buttons_selector"
                                     android:text="@string/approve"
                                     android:textColor="@drawable/button_text_color_selector"
-                                    android:textSize="18sp"/>
+                                    android:textSize="22sp"/>
                             </LinearLayout>
 
                         </LinearLayout>

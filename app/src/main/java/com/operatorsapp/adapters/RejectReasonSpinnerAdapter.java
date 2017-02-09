@@ -45,7 +45,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
                 mRowName.setText(mContext.getString(R.string.dashes));
             }
 
-            mRowName.setTextSize(18);
+            mRowName.setTextSize(22);
         }
         return row;
     }
@@ -63,7 +63,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
             name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            name.setTextSize(17);
+            name.setTextSize(22);
         }
         return row;
     }
@@ -74,6 +74,6 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
         String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getEName();
         mRowName.setText(nameByLang);
-        mRowName.setTextSize(20);
+        mRowName.setTextSize(24);
     }
 }

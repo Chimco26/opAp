@@ -169,18 +169,18 @@
                                 android:layout_marginBottom="5dp"
                                 android:text="@string/units"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/units_edit_text"
                                 style="@style/FontStyle_T6"
-                                android:layout_width="260dp"
-                                android:layout_height="40dp"
+                                android:layout_width="320dp"
+                                android:layout_height="50dp"
                                 android:background="@drawable/edit_text_background_selector"
                                 android:hint=" "
                                 android:inputType="numberDecimal|numberSigned"
                                 android:singleLine="true"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -197,18 +197,18 @@
                                 android:layout_marginBottom="5dp"
                                 android:text="@string/weight"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/weight_edit_text"
                                 style="@style/FontStyle_T6"
-                                android:layout_width="260dp"
-                                android:layout_height="40dp"
+                                android:layout_width="320dp"
+                                android:layout_height="50dp"
                                 android:background="@drawable/edit_text_background_selector"
                                 android:hint=" "
                                 android:inputType="numberDecimal"
                                 android:singleLine="true"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                         </LinearLayout>
 
@@ -233,22 +233,22 @@
                             <TextView
                                 android:id="@+id/button_cancel"
                                 android:layout_width="wrap_content"
-                                android:layout_height="28dp"
+                                android:layout_height="34dp"
                                 android:layout_marginEnd="25dp"
                                 android:gravity="center"
                                 android:text="@string/cancel"
                                 android:textAllCaps="true"
                                 android:textColor="@drawable/button_cancel_text_selector"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
 
                             <Button
                                 android:id="@+id/button_report"
-                                android:layout_width="84dp"
-                                android:layout_height="28dp"
+                                android:layout_width="94dp"
+                                android:layout_height="34dp"
                                 android:background="@drawable/button_bg_disabled"
                                 android:text="@string/report"
                                 android:textColor="@drawable/button_text_color_selector"
-                                android:textSize="18sp"/>
+                                android:textSize="22sp"/>
                         </LinearLayout>
 
                     </LinearLayout>

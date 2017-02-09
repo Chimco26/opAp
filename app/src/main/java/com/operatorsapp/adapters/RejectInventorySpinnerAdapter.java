@@ -37,7 +37,7 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
             mRowName.setText(nameByLang);
-            mRowName.setTextSize(20);
+            mRowName.setTextSize(22);
         }
         return row;
     }
@@ -55,7 +55,7 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
             name.setText(item);
             name.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            name.setTextSize(17);
+            name.setTextSize(22);
         }
         return row;
     }
@@ -66,6 +66,6 @@ public class RejectInventorySpinnerAdapter extends ArrayAdapter<PackageTypes> {
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
         String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         mRowName.setText(nameByLang);
-        mRowName.setTextSize(20);
+        mRowName.setTextSize(24);
     }
 }
