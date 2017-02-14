@@ -1144,7 +1144,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
-        mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobID())));
+        mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobName())));
         mShiftIdTextView.setText(String.valueOf(machinesData.getShiftIDString()));
         String machineName = OperatorApplication.isEnglishLang() ? machinesData.getMachineEName() : machinesData.getMachineLname();
         if(TextUtils.isEmpty(machineName))

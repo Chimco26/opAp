@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 public class AllMachinesData {
     @SerializedName("CurrentJobID")
     private int currentJobID;
+    @SerializedName("JobName")
+    private String currentJobName;
     @SerializedName("CurrentProductEname")
     private String currentProductEname;
     @SerializedName("CurrentProductID")
@@ -63,6 +65,11 @@ public class AllMachinesData {
 
     public int getCurrentJobID() {
         return currentJobID;
+    }
+
+    public String getCurrentJobName()
+    {
+        return currentJobName;
     }
 
     public String getCurrentProductEname() {
