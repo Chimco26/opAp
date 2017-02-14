@@ -153,6 +153,7 @@
                 android:background="@color/C20" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/second_header_text_view"
                 style="@style/Roboto_Regular_Status_Title"
                 android:layout_width="0dp"
@@ -164,12 +165,14 @@
                 android:textSize="16sp" />
 
             <TextView
+
                 android:id="@+id/prodct_Text_View"
                 style="@style/Roboto_Regular_Status_Data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
-                android:gravity="start"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:text="@string/dashes"
@@ -328,6 +331,7 @@
                     android:textSize="22sp" />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/button_report"
                     android:layout_width="94dp"
                     style="@style/FontStyle_Button"

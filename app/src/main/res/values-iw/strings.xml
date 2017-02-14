@@ -20,7 +20,7 @@
     <string name="login_dialog_dismiss">התעלם</string>
     <string name="login_dialog_dismiss_all">דחה למשמרת הבאה</string>
     <string name="network_error">בעיית תקשורת</string>
-    <string name="credentials_error">בעיית הרשאות</string>
+    <string name="credentials_error">בעיית אימות</string>
     <string name="url_error">קישור לא חוקי</string>
     <string name="could_not_log_in">לא ניתן להתחבר -</string>
     <string name="could_not_get_data">תקלה - לא ניתן לייבא מידע -</string>
@@ -85,7 +85,10 @@
     <string name="report_stop_event_reason">דווח סיבת אירוע עצירה</string>
     <string name="report_stop_reason">דווח סיבת\nעצירה</string>
     <string name="report_reject_nreason">דווח סיבת \nפסילה</string>
-    <string name="stop">"עצור "</string>
+
+
+    <string name="report_stop_start">"התחלה "</string>
+    <string name="report_stop_resume">"סיום"</string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -134,13 +137,13 @@
         <item>iw</item>
     </array>
     <array name="jobs_spinner_array">
-        <item>עבודה חדשה</item>
-        <item>Report Rejects</item>
-        <item>Report Cycle Units</item>
-        <item>Report Production</item>
+        <item>פק"ע חדשה</item>
+        <item>הוספת פסולים</item>
+        <item>שינוי יחידות במחזור</item>
+        <item>דיווח ייצור</item>
     </array>
 
-    <string name="approve_first_item">Approve First Item</string>
+    <string name="approve_first_item">סיום Setup</string>
 
     <plurals name="days">
         <item quantity="one">%d יום</item>

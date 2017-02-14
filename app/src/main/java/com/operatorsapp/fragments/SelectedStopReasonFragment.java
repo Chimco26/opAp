@@ -145,10 +145,11 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         }
         else
         {
-            productTextView.setText(new StringBuilder("Stop ").append(TimeUtils.getTimeFromString(mStart)).append(", Resume ").append(TimeUtils.getTimeFromString(mEnd)));
+            productTextView.setText(new StringBuilder(getActivity().getString(R.string.report_stop_start)).append(TimeUtils.getTimeFromString(mStart)).append(", ").append(getActivity().getString(R.string.report_stop_resume)).append(" ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
-        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
+        long durationInMillis = mDuration * 60 * 1000;
+        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), durationInMillis));
 
         eventIdTextView.setText(String.valueOf(mEventId));
 
@@ -244,6 +245,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
         mSelectedSubreasonId = subReasonId;
         mStopReasonsAdapter.notifyDataSetChanged();
+        sendReport();
     }
 
     @Override

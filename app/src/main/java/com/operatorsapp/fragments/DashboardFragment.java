@@ -199,7 +199,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 24, true, 0);
+        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
         mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
         mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
         mWidgetRecycler.setAdapter(mWidgetAdapter);
@@ -1145,7 +1145,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobID())));
-        mShiftIdTextView.setText(String.valueOf(machinesData.getShiftID()));
+        mShiftIdTextView.setText(String.valueOf(machinesData.getShiftIDString()));
         String machineName = OperatorApplication.isEnglishLang() ? machinesData.getMachineEName() : machinesData.getMachineLname();
         if(TextUtils.isEmpty(machineName))
         {

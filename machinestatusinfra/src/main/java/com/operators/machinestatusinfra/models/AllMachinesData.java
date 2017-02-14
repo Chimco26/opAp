@@ -54,6 +54,8 @@ public class AllMachinesData {
     private int rowCounter;
     @SerializedName("ShiftID")
     private int shiftID;
+    @SerializedName("ShiftName")
+    private String shiftIDString;
     @SerializedName("shiftEndingIn")
     private int shiftEndingIn;
     @SerializedName("SetupEnd")
@@ -166,5 +168,10 @@ public class AllMachinesData {
     public String getMachineEName()
     {
         return machineEName;
+    }
+
+    public String getShiftIDString()
+    {
+        return shiftIDString;
     }
 }

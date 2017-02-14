@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -148,10 +147,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             productTextView.setText("- -");
         }
         else {
-            productTextView.setText(new StringBuilder(getActivity().getString(R.string.stop)).append(TimeUtils.getTimeFromString(mStart)).append(", Resume ").append(TimeUtils.getTimeFromString(mEnd)));
+            productTextView.setText(new StringBuilder(getActivity().getString(R.string.report_stop_start)).append(TimeUtils.getTimeFromString(mStart)).append(", ").append(getActivity().getString(R.string.report_stop_resume)).append(" ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
-        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), mDuration));
+        long durationInMillis = mDuration * 60 * 1000;
+        durationTextView.setText(TimeUtils.getDurationTime(getActivity(), durationInMillis));
         eventIdTextView.setText(String.valueOf(mEventId));
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);

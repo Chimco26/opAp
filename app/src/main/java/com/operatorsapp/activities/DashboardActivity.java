@@ -342,7 +342,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void shiftForMachineTimer()
     {
-        mAllDashboardDataCore.getShiftForMachine(getShiftForMachineUICallback());
+        if(!isFinishing() && !isDestroyed())
+        {
+            mAllDashboardDataCore.getShiftForMachine(getShiftForMachineUICallback());
+        }
     }
 
     @NonNull

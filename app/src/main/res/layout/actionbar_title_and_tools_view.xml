@@ -90,8 +90,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="53dp"
-            android:layout_height="34dp"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
             android:src="@drawable/logo"/>
@@ -105,7 +106,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:paddingStart="9dp"
-            android:textSize="26sp"
+            android:textSize="52sp"
             tools:text="App Title"
             />
 

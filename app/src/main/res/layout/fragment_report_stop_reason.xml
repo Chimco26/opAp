@@ -46,6 +46,7 @@
                     android:background="@color/C20"/>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/second_header_text_view"
                     style="@style/Roboto_Regular_Status_Title"
                     android:layout_width="0dp"
@@ -63,7 +64,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
                     android:ellipsize="end"
-                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:maxLines="1"
                     android:text="@string/dashes"
                     android:textColor="@color/default_gray_status"

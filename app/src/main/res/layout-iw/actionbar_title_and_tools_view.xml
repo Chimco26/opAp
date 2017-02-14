@@ -90,8 +90,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="53dp"
-            android:layout_height="34dp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/logo"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"/>
@@ -104,7 +105,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:paddingStart="9dp"
-            android:textSize="26sp"
+            android:textSize="52sp"
             tools:text="App Title"
             android:layout_gravity="bottom"
             />
@@ -135,10 +136,10 @@
                 <com.operatorsapp.view.EmeraldSpinner
                     android:id="@+id/toolbar_job_spinner"
                     android:layout_width="0dp"
-                    android:layout_height="24dp"
+                    android:layout_height="46dp"
                     android:layout_marginEnd="0dp"
                     android:layout_weight="1"
-                    android:dropDownVerticalOffset="40dp"
+                    android:dropDownVerticalOffset="51dp"
                     android:gravity="center"
                     app:theme="@style/ToolbarTheme"
                     tools:ignore="MissingPrefix" />
@@ -161,10 +162,10 @@
                 <com.operatorsapp.view.EmeraldSpinner
                     android:id="@+id/toolbar_operator_spinner"
                     android:layout_width="0dp"
-                    android:layout_height="21dp"
+                    android:layout_height="46dp"
                     android:layout_weight="1"
                     android:drawSelectorOnTop="true"
-                    android:dropDownVerticalOffset="40dp"
+                    android:dropDownVerticalOffset="51dp"
                     android:gravity="center"
                     app:theme="@style/ToolbarTheme"
                     tools:ignore="MissingPrefix" />

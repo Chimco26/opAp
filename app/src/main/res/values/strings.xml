@@ -86,7 +86,8 @@
     <string name="report_stop_event_reason">Report Stop Event Reason</string>
     <string name="report_stop_reason">Report Stop\nReason</string>
     <string name="report_reject_nreason">Report Reject\nReason</string>
-    <string name="stop">"Stop "</string>
+    <string name="report_stop_start">"Start "</string>
+    <string name="report_stop_resume">"End"</string>
     <string name="report_cycle_nunits">Report Cycle\nUnits</string>
     <string name="report_cycle_units">Report Cycle Units</string>
     <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
@@ -138,12 +139,12 @@
     </array>
     <array name="jobs_spinner_array">
         <item>New Job</item>
-        <item>Report Rejects</item>
-        <item>Report Cycle Units</item>
+        <item>Add Rejects</item>
+        <item>Change Units In Cycle</item>
         <item>Report Production</item>
     </array>
 
-    <string name="approve_first_item">Approve First Item</string>
+    <string name="approve_first_item">Setup End</string>
 
     <plurals name="days">
         <item quantity="one">%d Day</item>

@@ -209,7 +209,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
             }
             shiftLogStoppedViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
-            shiftLogStoppedViewHolder.mTitle.setText(event.getEventGroupLname());
+            String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
+            shiftLogStoppedViewHolder.mTitle.setText(groupName);
             shiftLogStoppedViewHolder.mStart.setText(TimeUtils.getTimeFromString(event.getTime()));
             shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getTime()));
             shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEventEndTime()));
@@ -290,7 +291,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 shiftLogParameterViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 shiftLogParameterViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
             }
-            shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
+            String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
+            shiftLogParameterViewHolder.mTitle.setText(groupName);
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getEventETitle() : event.getEventLTitle();
             shiftLogParameterViewHolder.mSubtitleText.setText(subtitleNameByLang);
