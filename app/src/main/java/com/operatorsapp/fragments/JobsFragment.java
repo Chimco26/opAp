@@ -27,6 +27,7 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.JobsRecyclerViewAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -211,11 +212,17 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
 
                 for (int i = 0; i < 5; i++) {
                     if (i < mHeaderList.size()) {
-                        if (mHeaderList.get(i).getFieldName() == null || mHeaderList.get(i) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName())) {
+
+                        String headerName = null;
+                        if(mHeaderList != null && mHeaderList.get(i) != null)
+                        {
+                            headerName = OperatorApplication.isEnglishLang() ? mHeaderList.get(i).getDisplayEName() : mHeaderList.get(i).getDisplayHName();
+                        }
+                        if (TextUtils.isEmpty(headerName)) {
                             mFieldsValues[i] = "- -";
                         }
                         else {
-                            mFieldsValues[i] = mHeaderList.get(i).getFieldName();
+                            mFieldsValues[i] = headerName;
                         }
                     }
                     else {

@@ -12,6 +12,8 @@ public class Header {
     private String mFieldName;
     @SerializedName("DisplayEName")
     private String mDisplayEName;
+    @SerializedName("DisplayHName")
+    private String mDisplayHName;
     @SerializedName("FormID")
     private Object mFormID;
     @SerializedName("linkitem")
@@ -31,6 +33,11 @@ public class Header {
 
     public String getFieldName() {
         return mFieldName;
+    }
+
+    public String getDisplayHName()
+    {
+        return mDisplayHName;
     }
 
     public String getDisplayEName() {

@@ -57,7 +57,7 @@ public class AllMachinesData {
     @SerializedName("shiftEndingIn")
     private int shiftEndingIn;
     @SerializedName("SetupEnd")
-    private boolean canReportApproveFirstItem;
+    private boolean setupEnd;
 
     public int getCurrentJobID() {
         return currentJobID;
@@ -160,7 +160,7 @@ public class AllMachinesData {
 
     public boolean canReportApproveFirstItem()
     {
-        return canReportApproveFirstItem;
+        return !setupEnd; // when not setup end, we can send this report.
     }
 
     public String getMachineEName()
