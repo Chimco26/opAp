@@ -263,7 +263,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getMachineDataStartingFrom() {
         // TODO: 18-Oct-16 SERGEY 86400000
-        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 691200000, "dd.MM.yy"/*"yyyy-MM-dd HH:mm:ss.SSS"*/));
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - (24*60*60*1000), /*"dd.MM.yy"*/"yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override
