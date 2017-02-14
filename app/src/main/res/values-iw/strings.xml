@@ -58,6 +58,7 @@
     <string name="product">מוצר</string>
     <string name="id">מזהה -</string>
     <string name="job">פק"ע</string>
+    <string name="josh">פקמ"ש</string>
     <string name="shift">משמרת</string>
     <string name="machine_id">שם מכונה</string>
     <string name="machine_status">סטאטוס מכונה</string>

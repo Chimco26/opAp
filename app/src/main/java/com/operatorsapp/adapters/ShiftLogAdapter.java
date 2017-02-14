@@ -61,7 +61,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             {
                 if(e.getEventID() == event.getEventID())
                 {
-                    Log.i("TEST TEST","update data in adapter: " + e.getEventID());
                     updateStopEvent(event, e);
                 }
             }
@@ -215,7 +214,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             shiftLogStoppedViewHolder.mStartDate.setText(TimeUtils.getDateFromString(event.getTime()));
             shiftLogStoppedViewHolder.mEnd.setText(TimeUtils.getTimeFromString(event.getEventEndTime()));
             shiftLogStoppedViewHolder.mEndDate.setText(TimeUtils.getDateFromString(event.getEventEndTime()));
-            shiftLogStoppedViewHolder.mDuration.setText(TimeUtils.getDurationTime(mContext, event.getDuration()));
+            long durationInMillis = event.getDuration() * 1000 * 60; // duration is sent in minutes.
+            shiftLogStoppedViewHolder.mDuration.setText(TimeUtils.getDurationTime(mContext, durationInMillis));
             if (mClosedState) {
                 shiftLogStoppedViewHolder.mDivider.setVisibility(View.GONE);
                 shiftLogStoppedViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
@@ -292,7 +292,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             }
             shiftLogParameterViewHolder.mTitle.setText(event.getEventGroupLname());
             shiftLogParameterViewHolder.mTime.setText(TimeUtils.getTimeFromString(event.getTime()));
-            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname();
+            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getEventETitle() : event.getEventLTitle();
             shiftLogParameterViewHolder.mSubtitleText.setText(subtitleNameByLang);
             shiftLogParameterViewHolder.mSubTitleValue.setText(String.valueOf(event.getAlarmValue()));
             shiftLogParameterViewHolder.mMin.setText(String.valueOf(event.getAlarmLValue()));

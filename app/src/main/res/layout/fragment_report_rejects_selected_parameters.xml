@@ -68,7 +68,7 @@
             android:layout_alignTop="@+id/report_rejects_selected_job_id_text_view"
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@+id/report_rejects_selected_job_id_text_view"
-            android:text="@string/job"
+            android:text="@string/josh"
             android:textColor="@color/status_bar"
             android:textSize="16sp"/>
 
@@ -179,6 +179,7 @@
                                 android:background="@drawable/edit_text_background_selector"
                                 android:hint=" "
                                 android:inputType="numberDecimal|numberSigned"
+                                android:textDirection="ltr"
                                 android:singleLine="true"
                                 android:textSize="22sp"/>
                         </LinearLayout>
@@ -206,7 +207,8 @@
                                 android:layout_height="50dp"
                                 android:background="@drawable/edit_text_background_selector"
                                 android:hint=" "
-                                android:inputType="numberDecimal"
+                                android:inputType="numberDecimal|numberSigned"
+                                android:textDirection="ltr"
                                 android:singleLine="true"
                                 android:textSize="22sp"/>
 

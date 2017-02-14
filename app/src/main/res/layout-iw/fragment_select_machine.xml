@@ -46,8 +46,8 @@
             <android.support.v7.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/machine_id_name"
                 style="@style/FontStyle_T6"
-                android:layout_width="231dp"
-                android:layout_height="36dp"
+                android:layout_width="280dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/white"
                 android:completionThreshold="1"
