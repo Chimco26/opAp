@@ -26,7 +26,7 @@
     <string name="could_not_get_data">תקלה - לא ניתן לייבא מידע -</string>
     <string name="could_not_reach_server_error">תקלה - לא ניתן ליצור קשר עם השרת</string>
     <string name="unrecognized_operator">מפעיל לא ידוע</string>
-    <string name="alarm">"התרעה"</string>
+    <string name="alarm">"התראה"</string>
     <string name="loading_data">טוען נתונים..</string>
 
     <!--Select machine screen -->
@@ -74,7 +74,7 @@
     <string name="report">דווח</string>
     <string name="stop_event">עצירת אירוע</string>
     <string name="enter_with_your_id">התחבר באמצעות\nהמזהה שלך</string>
-    <string name="report_rejects">דווח פסולים</string>
+    <string name="report_rejects">הוספת פסולים</string>
     <string name="reject_reason">סיבת פסילה</string>
     <string name="cause">גורם פסילה</string>
     <string name="next">דווח</string>
@@ -93,10 +93,10 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="material_weight_alarm">Material Weight Alarm</string>
-    <string name="report_cycle_nunits">Report Cycle\nUnits</string>
-    <string name="report_cycle_units">Report Cycle Units</string>
-    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
-    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="report_cycle_nunits">שינוי יחידות\nבמחזור</string>
+    <string name="report_cycle_units">שינוי יחידות במחזור</string>
+    <string name="report_inventory_nitem_production">דיווח\nייצור</string>
+    <string name="report_inventory_item_production">דיווח ייצור</string>
     <string name="package_type">Package Type</string>
     <string name="settings">הגדרות</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
@@ -124,8 +124,8 @@
     <string name="shift_log_standard">סטנדרט</string>
     <string name="approving_technician">טכנאי מאשר</string>
     <string name="approve">אישור</string>
-    <string name="setup_end">אישור\nפריט\nראשון</string>
-    <string name="first_item_approval">אישור פריט ראשון</string>
+    <string name="setup_end">סיום\nSetup</string>
+    <string name="first_item_approval">סיום Setup</string>
 
     <array name="languages_spinner_array">
         <item>English</item>

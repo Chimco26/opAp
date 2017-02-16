@@ -113,7 +113,7 @@
     <string name="chart_standard_">Standard:&#160;</string>
     <string name="chart_max_">Max: </string>
     <string name="space"> </string>
-    <string name="switch_user">Switch user</string>
+    <string name="switch_user">Switch User</string>
     <string name="standard">Standard&#160;</string>
     <string name="total_required">Total required&#160;</string>
     <string name="shift_log_min">Min&#160;</string>
@@ -122,7 +122,7 @@
     <string name="approving_technician">Approving technician</string>
     <string name="approve">Approve</string>
     <string name="setup_end">Setup\nend</string>
-    <string name="first_item_approval">First Item Approval</string>
+    <string name="first_item_approval">Setup End</string>
     <string name="send_logs">Send logs</string>
     <string name="alarm">"Alarm"</string>
     <string name="loading_data">Loading data..</string>
