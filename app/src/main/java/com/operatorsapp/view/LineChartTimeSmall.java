@@ -83,16 +83,6 @@ public class LineChartTimeSmall extends FrameLayout {
         // set an alternative background color
         mChart.setBackgroundColor(ContextCompat.getColor(context, R.color.chart_background));
 
-        String strManufacturer = android.os.Build.MANUFACTURER;
-        if (strManufacturer.equals(SAMSUNG)) {
-            mChart.setViewPortOffsets(50f/*55f*/, 15f/*17f*/, 0f, 50f);
-        } else {
-            mChart.setViewPortOffsets(25f, 8f, 0f, 25f);
-        }
-
-//        mChart.zoom(3, 1, 3, 1);
-        mChart.zoom(10, 5, 10, 5);
-
         setAxis(context);
 
         addView(view);
@@ -113,18 +103,8 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
         xAxis.setCenterAxisLabels(true);
-//        xAxis.setGranularity(60000L * 60); // one minute in millis * 60
-//        xAxis.setValueFormatter(new AxisValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value, AxisBase axis) {
-//                return "" + value;
-//            }
-//
-//            @Override
-//            public int getDecimalDigits() {
-//                return 0;
-//            }
-//        });
+        xAxis.setLabelCount(5,true); // force only 4 labels as size is constant
+
         xAxis.setValueFormatter(new AxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -185,23 +165,16 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
         leftAxis.setAxisMinValue(0f);
-        leftAxis.setLabelCount(4);
+        leftAxis.setLabelCount(4, true);
         leftAxis.setAxisMaxValue(80f);
         leftAxis.setYOffset(0f);
         leftAxis.setTextSize(14f);
         leftAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-
-        LimitLine limitLine = new LimitLine(40f, "");
-        limitLine.setLineColor(ContextCompat.getColor(context, R.color.C16));
-        limitLine.setLineWidth(1f);
-        leftAxis.addLimitLine(limitLine);
-
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
     }
 
-
-    public void setData(final ArrayList<Entry> values, String[] xValues) {
+    public void setData(final ArrayList<Entry> values, String[] xValues, final Float lowLimit, Float standardValue, final Float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
@@ -238,12 +211,61 @@ public class LineChartTimeSmall extends FrameLayout {
         // set data
         mChart.setData(data);
         mChart.animateX(300);
+        float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
+                .getPaintAxisLabels());
 
+        mChart.resetViewPortOffsets();
+        mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
         mChart.post(new Runnable() {
             @Override
             public void run() {
+                float max = highLimit;
+                float min = lowLimit;
+                for (Entry entry : values)
+                {
+                    float entryY = entry.getY();
+                    if(entryY > max)
+                    {
+                        max = entryY;
+                    }
+                    if(entryY < min)
+                    {
+                        min = entryY;
+                    }
+                }
+
+                float addition = ((max - min) + 1) / 5; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+
+                max += addition;
+                min -= addition;
+
+                YAxis leftAxis = mChart.getAxisLeft();
+                leftAxis.resetAxisMaxValue();
+                leftAxis.resetAxisMinValue();
+                leftAxis.setAxisMinValue(min);
+                leftAxis.setAxisMaxValue(max);
+                mChart.zoomOut(); // needed due to chart lib not refreshing.
                 mChart.moveViewToX(values.get(values.size() - 1).getX());
+
+                float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
+                                .getPaintAxisLabels());
+
+                mChart.resetViewPortOffsets();
+                mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
                 mChart.invalidate();
+                mChart.post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
+                                .getPaintAxisLabels());
+
+                        mChart.resetViewPortOffsets();
+                        mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
+                        mChart.invalidate();
+                    }
+                });
             }
         });
     }

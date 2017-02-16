@@ -203,13 +203,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
         return mGson.fromJson(shiftLogsJsonString, listType);
     }
 
-    public void saveChartHistoricData(ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> historicDatas) {
+    public void saveChartHistoricData(HashMap<String, ArrayList<Widget.HistoricData>> historicDatas) {
         SecurePreferences.getInstance().setString(PREF_ARRAY_CHART_HISTORIC_DATA, mGson.toJson(historicDatas));
     }
 
-    public ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> getChartHistoricData() {
+    public HashMap<String, ArrayList<Widget.HistoricData>> getChartHistoricData() {
         String historicDatasString = SecurePreferences.getInstance().getString(PREF_ARRAY_CHART_HISTORIC_DATA, mGson.toJson(new ArrayList<>()));
-        Type listType = new TypeToken<ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>>>() {
+        Type listType = new TypeToken<HashMap<String, ArrayList<Widget.HistoricData>>>() {
         }.getType();
 
         return mGson.fromJson(historicDatasString, listType);

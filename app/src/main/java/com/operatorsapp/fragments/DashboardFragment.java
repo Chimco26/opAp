@@ -877,6 +877,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mWidgets = widgetList;
         if(widgetList != null && widgetList.size() > 0)
         {
+            saveAndRestoreChartData(widgetList);
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
             if(mWidgetAdapter != null)
@@ -899,8 +900,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     {
         // calls to this function were removed as saving to prefs was not needed.
         //historic data from prefs
-        ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoricCopy = new ArrayList<>();
-        ArrayList<HashMap<String, ArrayList<Widget.HistoricData>>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
+        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
+        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
         for(Widget widget : widgetList)
         {
             // if have chart widget (field type 3)
@@ -909,51 +910,44 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 // if have historic in prefs
                 if(prefsHistoric.size() > 0)
                 {
-                    prefsHistoricCopy.addAll(prefsHistoric);
-                    for(HashMap<String, ArrayList<Widget.HistoricData>> hashMap : prefsHistoric)
-                    {
+                    prefsHistoricCopy.putAll(prefsHistoric);
+
                         // if get new data
-                        if(widget.getMachineParamHistoricData().size() > 0)
+                        if(widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0)
                         {
                             // if is old widget
-                            if(hashMap.containsKey(String.valueOf(widget.getID())))
+                            if(prefsHistoricCopy.containsKey(String.valueOf(widget.getID())))
                             {
-                                //add new data to prefs
-                                if(widget.getMachineParamHistoricData() != null)
-                                {
-                                    hashMap.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
-                                    widget.getMachineParamHistoricData().clear();
-                                }
+
+                                prefsHistoricCopy.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
+                                widget.getMachineParamHistoricData().clear();
+
                                 //set all data (old + new) to widget
-                                if(hashMap.get(String.valueOf(widget.getID())) != null)
+                                if(prefsHistoricCopy.get(String.valueOf(widget.getID())) != null)
                                 {
-                                    widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                                    widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
                                 }
                             }
                             else
                             {
                                 // if is new widget,  save to prefs
-                                HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
-                                historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                                prefsHistoricCopy.add(historicById);
+                                prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
                             }
                         }
                         else
                         {
                             // if no new data,  set old data to widget
-                            if(hashMap.get(String.valueOf(widget.getID())) != null)
+                            if(prefsHistoricCopy.get(String.valueOf(widget.getID())) != null)
                             {
-                                widget.getMachineParamHistoricData().addAll(hashMap.get(String.valueOf(widget.getID())));
+                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
                             }
                         }
-                    }
+
                 }
                 else
                 {
                     // if is the firs chart data,  save to prefs
-                    HashMap<String, ArrayList<Widget.HistoricData>> historicById = new HashMap<>();
-                    historicById.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                    prefsHistoricCopy.add(historicById);
+                    prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
                 }
             }
         }

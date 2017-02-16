@@ -88,15 +88,6 @@ public class LineChartTimeLarge extends FrameLayout {
             mChart.setExtraOffsets(5f, 0f, 0f, 10f);
         }
 
-//        mChart.zoomIn();
-//        mChart.zoom(1.5f, 1, 1.5f, 1);
-
-        mChart.getViewPortHandler().setMaximumScaleX(4f);
-        mChart.getViewPortHandler().setMaximumScaleY(4f);
-//        mChart.zoom(5, 3, 5, 3);
-
-        setAxis(context, -10, -10, -10);
-
         addView(view);
     }
 
@@ -201,7 +192,7 @@ public class LineChartTimeLarge extends FrameLayout {
     }
 
 
-    public void setData(final ArrayList<Entry> values, String[] xValues) {
+    public void setData(final ArrayList<Entry> values, String[] xValues, final float lowLimit, final float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
@@ -236,6 +227,35 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart.post(new Runnable() {
             @Override
             public void run() {
+
+                float max = highLimit;
+                float min = lowLimit;
+                for (Entry entry : values)
+                {
+                    float entryY = entry.getY();
+                    if(entryY > max)
+                    {
+                        max = entryY;
+                    }
+                    if(entryY < min)
+                    {
+                        min = entryY;
+                    }
+                }
+
+                float addition = ((max - min) / 5) + 1; // add percentage of full range on each side for better visibility,, adding some for min = max case;
+
+                max += addition;
+                min -= addition;
+
+                YAxis leftAxis = mChart.getAxisLeft();
+                leftAxis.resetAxisMaxValue();
+                leftAxis.resetAxisMinValue();
+                leftAxis.setAxisMinValue(min);
+                leftAxis.setAxisMaxValue(max);
+                leftAxis.calculate(min,max);
+
+                mChart.zoomOut(); // needed for refresh
                 mChart.moveViewToX(values.get(values.size() - 1).getX());
                 mChart.invalidate();
             }

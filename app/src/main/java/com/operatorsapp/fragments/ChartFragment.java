@@ -88,13 +88,13 @@ public class ChartFragment extends BackStackAwareFragment {
         if(context != null)
         {
             TextView mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
-            StringBuilder minText = new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMinVal));
+            StringBuilder minText = new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMinVal));
 
             TextView mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
-            StringBuilder standardText = new StringBuilder(context.getString(R.string.chart_standard_)).append(context.getString(R.string.space)).append(String.valueOf((int) mStandardVal));
+            StringBuilder standardText = new StringBuilder(context.getString(R.string.chart_standard_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mStandardVal));
 
             TextView mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
-            StringBuilder maxText = new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.valueOf((int) mMaxVal));
+            StringBuilder maxText = new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMaxVal));
 
             LineChartTimeLarge mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
 
@@ -102,7 +102,7 @@ public class ChartFragment extends BackStackAwareFragment {
             mStandard.setText(standardText);
             mMax.setText(maxText);
 
-            mChart.setData(mValues, mXValues);
+            mChart.setData(mValues, mXValues,mMinVal, mMaxVal);
             mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal);
         }
 

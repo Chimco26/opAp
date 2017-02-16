@@ -293,7 +293,7 @@ public class WidgetAdapter extends RecyclerView.Adapter
                             fourHoursValues.add(entry);
                         }
                     }
-                    timeViewHolder.mChart.setData(fourHoursValues, xValues);
+                    timeViewHolder.mChart.setData(fourHoursValues, xValues,widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit());
 
                     timeViewHolder.itemView.setOnClickListener(new View.OnClickListener()
                     {
