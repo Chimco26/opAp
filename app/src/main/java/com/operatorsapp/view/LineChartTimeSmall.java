@@ -55,7 +55,7 @@ public class LineChartTimeSmall extends FrameLayout {
         init(context);
     }
 
-    public void init(Context context) {
+    private void init(Context context) {
         mContext = context;
 
         View view = LayoutInflater.from(context).inflate(R.layout.activity_linechart_time, this, false);
@@ -216,6 +216,10 @@ public class LineChartTimeSmall extends FrameLayout {
 
         mChart.resetViewPortOffsets();
         mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
+
+        setLimitLines(lowLimit,highLimit,standardValue);
+
+
         mChart.post(new Runnable() {
             @Override
             public void run() {
@@ -268,5 +272,39 @@ public class LineChartTimeSmall extends FrameLayout {
                 });
             }
         });
+    }
+
+    private void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
+    {
+        YAxis leftAxis = mChart.getAxisLeft();
+
+        LimitLine limitLine1 = new LimitLine(0f, "");
+        limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
+        limitLine1.setLineWidth(1f);
+        leftAxis.addLimitLine(limitLine1);
+
+        LimitLine limitLine2 = new LimitLine(standardValue, "");
+        limitLine2.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
+        limitLine2.setTextSize(16);
+        limitLine2.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine2.setLineWidth(1f);
+        limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        leftAxis.addLimitLine(limitLine2);
+
+        LimitLine limitLine3 = new LimitLine(lowLimit, "");
+        limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine3.setTextSize(16);
+        limitLine3.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine3.setLineWidth(1f);
+        limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        leftAxis.addLimitLine(limitLine3);
+
+        LimitLine limitLine4 = new LimitLine(highLimit, "");
+        limitLine4.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine4.setTextSize(16);
+        limitLine4.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine4.setLineWidth(1f);
+        limitLine4.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        leftAxis.addLimitLine(limitLine4);
     }
 }
