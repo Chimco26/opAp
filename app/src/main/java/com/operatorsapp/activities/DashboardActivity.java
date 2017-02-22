@@ -226,6 +226,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportFieldsForMachineCore.stopPolling();
         mReportFieldsForMachineCore.unregisterListener();
+        finish();
     }
 
     @Override

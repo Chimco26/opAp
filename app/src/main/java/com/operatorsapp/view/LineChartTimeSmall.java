@@ -276,13 +276,23 @@ public class LineChartTimeSmall extends FrameLayout {
 
     private void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
     {
-        YAxis leftAxis = mChart.getAxisLeft();
 
+        /* // zero line, removed due to performance cost
+        YAxis leftAxis = mChart.getAxisLeft();
         LimitLine limitLine1 = new LimitLine(0f, "");
         limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
         limitLine1.setLineWidth(1f);
         leftAxis.addLimitLine(limitLine1);
+        */
 
+
+        //addStandardLine(standardValue); // standard line, removed due to performance cost
+        addLimitLines(lowLimit, highLimit);
+    }
+
+    private void addStandardLine(Float standardValue)
+    {
+        YAxis leftAxis = mChart.getAxisLeft();
         LimitLine limitLine2 = new LimitLine(standardValue, "");
         limitLine2.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
         limitLine2.setTextSize(16);
@@ -290,7 +300,11 @@ public class LineChartTimeSmall extends FrameLayout {
         limitLine2.setLineWidth(1f);
         limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine2);
+    }
 
+    private void addLimitLines(Float lowLimit, Float highLimit)
+    {
+        YAxis leftAxis = mChart.getAxisLeft();
         LimitLine limitLine3 = new LimitLine(lowLimit, "");
         limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
         limitLine3.setTextSize(16);

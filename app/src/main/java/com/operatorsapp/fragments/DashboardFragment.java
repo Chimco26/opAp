@@ -93,7 +93,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
     private LinearLayout mShiftLogLayout;
-    private RelativeLayout mWidgetsLayout;
+    private ViewGroup mWidgetsLayout;
     private TextView mNoNotificationsText;
     private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
@@ -185,7 +185,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
-        mWidgetsLayout = (RelativeLayout) view.findViewById(R.id.fragment_dashboard_widgets_layout);
+        mWidgetsLayout = (ViewGroup) view.findViewById(R.id.fragment_dashboard_widgets_layout);
         mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
         mWidgetsParams.setMarginStart(mCloseWidth);
         mWidgetsLayout.setLayoutParams(mWidgetsParams);

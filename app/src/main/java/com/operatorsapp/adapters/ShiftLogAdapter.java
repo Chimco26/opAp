@@ -363,8 +363,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 type = STOPPED;
                 break;
 
-            default:
-                type = PARAMETER;
+            default: // all event group id's that are not 20 should default to a stop event.
+                type = STOPPED;
                 break;
         }
 
