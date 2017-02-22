@@ -35,7 +35,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
             mView = row;
             mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getEName();
+            String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
             if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
             {
                 mRowName.setText(nameByLang);
@@ -57,7 +57,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
         }
-        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getEName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         String item = nameByLang;
         if (item != null) {
             TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
@@ -72,7 +72,7 @@ public class RejectReasonSpinnerAdapter extends ArrayAdapter<RejectReasons> {
 
         mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getEName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
         mRowName.setText(nameByLang);
         mRowName.setTextSize(24);
     }
