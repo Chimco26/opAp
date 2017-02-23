@@ -287,7 +287,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
 
         //addStandardLine(standardValue); // standard line, removed due to performance cost
-        addLimitLines(lowLimit, highLimit);
+        //addLimitLines(lowLimit, highLimit);
     }
 
     private void addStandardLine(Float standardValue)

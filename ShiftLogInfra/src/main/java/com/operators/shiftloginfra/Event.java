@@ -18,8 +18,6 @@ public class Event {
     private String mEventSubTitleEname;
     @SerializedName("EventSubTitleLname")
     private String mEventSubTitleLname;
-    @SerializedName("EventStartTime")
-    private String mEventStartTime;
     @SerializedName("EventEndTime")
     private String mEventEndTime;
     @SerializedName("EventDuration")
@@ -42,6 +40,8 @@ public class Event {
     private float mAlarmStandardValue;
     @SerializedName("AlarmValue")
     private float mAlarmValue;
+    @SerializedName("EventReasonID")
+    private int mEventReasonID;
 
     private long mTimeOfAdded;
 
@@ -182,14 +182,14 @@ public class Event {
         mEventSubTitleLname = eventSubTitleLname;
     }
 
-    public void setEventStartTime(String eventStartTime)
-    {
-        mEventStartTime = eventStartTime;
-    }
-
     public String getEventTime()
     {
         return mEventTime;
+    }
+
+    public int getEventReasonID()
+    {
+        return mEventReasonID;
     }
 
     public String getEventTitle()
@@ -205,11 +205,6 @@ public class Event {
     public String getEventSubTitleLname()
     {
         return mEventSubTitleLname;
-    }
-
-    public String getEventStartTime()
-    {
-        return mEventStartTime;
     }
 
     public long getEventDuration()
@@ -252,16 +247,21 @@ public class Event {
         mAlarmStandardValue = alarmStandardValue;
     }
 
+    public void setEventReasonID(int mEventReasonID)
+    {
+        this.mEventReasonID = mEventReasonID;
+    }
+
     public void setAlarmValue(float alarmValue)
     {
         mAlarmValue = alarmValue;
     }
 
-    public Event(String mEventTitle, String mEventSubTitleEname, String mEventStartTime, String mEventEndTime, int mEventGroupID, int mEventID)
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, int mEventID)
     {
         this.mEventTitle = mEventTitle;
         this.mEventSubTitleEname = mEventSubTitleEname;
-        this.mEventStartTime = mEventStartTime;
+        this.mEventTime = mEventTime;
         this.mEventEndTime = mEventEndTime;
         this.mEventGroupID = mEventGroupID;
         this.mEventID = mEventID;

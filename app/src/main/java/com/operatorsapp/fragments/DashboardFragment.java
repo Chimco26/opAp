@@ -132,6 +132,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
     private int mApproveItemID;
     private ViewGroup mMachineStatusLayout;
+    public static final int REASON_UNREPORTED = 0;
 
     public static DashboardFragment newInstance()
     {
@@ -454,13 +455,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
 
                     //openDialog(event, true); // to show pop up dialog, disabled for now
+                    mIsOpenDialog = true;
                 }
                 else if(event.getEventGroupID() == TYPE_ALERT)
                 {
                     openDialog(event, false);
+                    mIsOpenDialog = true;
                 }
 
-                mIsOpenDialog = true;
+
             }
         }
         else
@@ -865,6 +868,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDeviceStatusChanged(MachineStatus machineStatus)
     {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
+        AllMachinesData allMachinesData = machineStatus.getAllMachinesData().get(0);
         mCurrentMachineStatus = machineStatus;
         initStatusLayout(mCurrentMachineStatus);
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
@@ -960,6 +964,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mLoadingDataText.setVisibility(View.GONE);
         if(events != null && events.size() > 0)
         {
+            Log.e(LOG_TAG,"new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
+            for (Event event : events)
+            {
+                Log.e(LOG_TAG,"new events to add to shift log: " + event.getEventID());
+            }
+            mNewEventsList.clear();
+            mEventsQueue.clear();
+
             PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoData = false;
             for(Event event : events)
@@ -1037,22 +1049,25 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }
 
-            if(!mIsOpenDialog && mEventsQueue.size() > 0)
+            if(mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
             {
                 Event event = mEventsQueue.peek();
-                if(event.getEventGroupID() == TYPE_STOP)
+                // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
+                if(event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED)
                 {
-                    openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
+                    openStopReportScreen(event.getEventID(),event.getEventTime(), event.getEventEndTime(),event.getDuration());
                     //openDialog(event, true);
                     mEventsQueue.pop();
+                    mIsOpenDialog = true;
 
                 }
                 else if(event.getEventGroupID() == TYPE_ALERT)
                 {
                     openDialog(event, false);
                     mEventsQueue.pop();
+                    mIsOpenDialog = true;
                 }
-                mIsOpenDialog = true;
+
             }
         }
         else

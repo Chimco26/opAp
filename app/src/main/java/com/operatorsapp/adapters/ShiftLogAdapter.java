@@ -21,6 +21,8 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -47,11 +49,40 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         mOnStopClickListener = onStopClickListener;
         mOpenWidth = openWidth;
         mHeight = height;
+        sortEventsByStartTime();
     }
 
     public void setNewData(ArrayList<Event> events) {
         mEvents = events;
+        sortEventsByStartTime();
         notifyDataSetChanged();
+    }
+
+    private void sortEventsByStartTime()
+    {
+        Collections.sort(mEvents, new Comparator<Event>()
+        {
+            @Override
+            public int compare(Event lhs, Event rhs)
+            {
+                if(lhs.getEventTime() == null)
+                {
+                    if(rhs.getEventTime() == null)
+                    {
+                        return -1;
+                    }
+                    return 0;
+                }
+                else if(rhs.getEventTime() == null)
+                {
+                    return 1;
+                }
+
+                int retval = (int) (TimeUtils.getLongFromDateString(rhs.getEventTime(), "dd/MM/yyyy HH:mm:ss") - TimeUtils.getLongFromDateString(lhs.getEventTime(), "dd/MM/yyyy HH:mm:ss"));
+                return retval;
+            }
+        });
+
     }
 
     public void updateData(ArrayList<Event> events) {
@@ -75,12 +106,12 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         e.setEventEndTime(event.getEventEndTime());
         e.setEventGroupID(event.getEventGroupID());
         e.setEventGroupLname(event.getEventGroupLname());
-        e.setEventStartTime(event.getEventStartTime());
         e.setEventSubTitleEname(event.getEventSubTitleEname());
         e.setEventSubTitleLname(event.getEventSubTitleLname());
         e.setEventTime(event.getEventTime());
         e.setEventTitle(event.getEventTitle());
         e.setPriority(event.getPriority());
+        e.setEventReasonID(event.getEventReasonID());
 
     }
 

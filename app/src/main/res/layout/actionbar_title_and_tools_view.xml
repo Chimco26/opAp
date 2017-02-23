@@ -55,7 +55,7 @@
                 android:id="@+id/job_indicator"
                 android:layout_width="19dp"
                 android:layout_height="19dp"
-                android:background="@drawable/circle_yellow_indicator"/>
+                android:background="@drawable/ic_indicator_no_data"/>
 
             <TextView
                 style="@style/FontStyle_T6"

@@ -1,5 +1,6 @@
 package com.operators.alldashboarddatacore;
 
+import android.net.ParseException;
 import android.util.Log;
 
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -27,7 +28,12 @@ import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
 import com.zemingo.pollingmachanaim.JobBase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class AllDashboardDataCore implements OnTimeToEndChangedListener
@@ -226,7 +232,24 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
 
     private void getShiftLogs(final JobBase.OnJobFinishedListener onJobFinishedListener)
     {
-        mShiftLogNetworkBridgeInterface.getShiftLog(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom(), new ShiftLogCoreCallback<Event>()
+        // remove seconds and milliseconds from shift log starting from.
+        String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
+        try {
+            Date date = dateFormat.parse(startingFrom);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.SECOND,0);
+            cal.set(Calendar.MILLISECOND,0);
+            startingFrom = dateFormat.format(cal.getTime());
+        } catch (ParseException ignored) {
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(LOG_TAG,"shift log startingfrom: " + startingFrom);
+
+        mShiftLogNetworkBridgeInterface.getShiftLog(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), startingFrom, new ShiftLogCoreCallback<Event>()
         {
             @Override
             public void onShiftLogSucceeded(ArrayList<Event> events)
