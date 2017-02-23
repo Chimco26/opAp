@@ -32,7 +32,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,6 +58,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -133,6 +133,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private int mApproveItemID;
     private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
+    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
 
     public static DashboardFragment newInstance()
     {
@@ -531,6 +532,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onAttach(context);
         try
         {
+            mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
@@ -549,6 +551,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     {
         ZLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
+        mReportFieldsFragmentCallbackListener = null;
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
@@ -878,6 +881,14 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onMachineDataReceived(ArrayList<Widget> widgetList)
     {
         mLoadingDataView.setVisibility(View.GONE);
+
+        // if we can't fill any reports, show no data, client defined this behavior.
+        if(mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null)
+        {
+            mNoDataView.setVisibility(View.VISIBLE);
+            return;
+        }
+
         mWidgets = widgetList;
         if(widgetList != null && widgetList.size() > 0)
         {

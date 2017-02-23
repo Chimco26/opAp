@@ -72,7 +72,6 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
-import com.operatorsapp.utils.TimeUtils;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.io.File;
@@ -474,6 +473,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }
 
+        int mRetries = 0;
+        final int mMaxRetries = 3;
+
         @Override
         public void onReportFieldsReceivedSFailure(ErrorObjectInterface reason)
         {
@@ -483,6 +485,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
             }
             mReportFieldsForMachineCore.stopPolling();
+            if(mRetries < mMaxRetries)
+            {
+                mRetries++;
+                mReportFieldsForMachineCore.registerListener(this);
+                mReportFieldsForMachineCore.stopPolling();
+                mReportFieldsForMachineCore.startPolling();
+            }
+            else
+            {
+                mReportFieldsForMachineCore.stopPolling();
+                mRetries = 0;
+            }
+
         }
     };
 
