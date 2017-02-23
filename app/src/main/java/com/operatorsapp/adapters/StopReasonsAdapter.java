@@ -87,7 +87,10 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
             }
             case 4: {
                 imageId = R.drawable.stop_malfunction_selector;
-                //imageId = R.drawable.stop_planning_selector;
+                break;
+            }
+            case 5: {
+                imageId = R.drawable.stop_planning_selector;
                 break;
             }
             case 6: {
@@ -98,9 +101,24 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
                 imageId = R.drawable.stop_materials_selector;
                 break;
             }
-
+            case 8: {
+                imageId = R.drawable.stop_labor_selector;
+                // labor
+                break;
+            }
+            case 9: {
+                imageId = R.drawable.stop_mold_selector;
+                // mold
+                break;
+            }
             case 10: {
                 imageId = R.drawable.stop_settings_selector;
+
+                break;
+            }
+            case 12: {
+                // expected stops
+                imageId = R.drawable.stop_planning_selector;
 
                 break;
             }
