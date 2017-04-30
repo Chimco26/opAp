@@ -258,6 +258,13 @@ public class LoginFragment extends Fragment
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString().toLowerCase();
         String password = mPassword.getText().toString().toLowerCase();
+
+        // Ohad change 30/4/17
+        if(!siteUrl.toLowerCase().startsWith("https://"))
+        {
+            siteUrl = String.format("https://api%1$s.my.leadermes.com",siteUrl);
+        }
+
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>()
         {
             @Override
