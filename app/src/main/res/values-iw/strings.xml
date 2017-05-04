@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">אפליקציית מפעיל</string>
+    <string name="app_name">LeaderMES Operator</string>
 
     <!-- General -->
     <string name="no_communication">אין תקשורת</string>
@@ -130,11 +130,13 @@
     <array name="languages_spinner_array">
         <item>English</item>
         <item>Hebrew</item>
+        <item>Chinese</item>
     </array>
 
     <array name="language_codes_array">
         <item>en</item>
         <item>iw</item>
+        <item>zh</item>
     </array>
     <array name="jobs_spinner_array">
         <item>פק"ע חדשה</item>
@@ -159,5 +161,9 @@
         <item quantity="two">שעות</item>
     </plurals>
     <string name="switch_user">שנה משתמש</string>
+    <string name="error_shift_log">נכשל בביצוע פניית שרתGetMachineShiftLog</string>
+    <string name="send_logs">שלח נתוני שגיאות</string>
+    <string name="total_required">סה"כ נדרש&#160;</string>
+    <string name="no_data_chart">נדרש לספק נתונים\nלהצגת הגרף</string>
 
 </resources>

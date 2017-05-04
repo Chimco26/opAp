@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LeaderMES Operator</string>
+    <!-- General -->
+    <string name="no_communication">通信故障</string>
+    <string name="pee_value_null">--</string>
+    <string name="default_empty_field">--</string>
+    <string name="unknown">未知</string>
+    <!-- Login screen -->
+    <string name="link_machine">进入机器</string>
+    <string name="screen_title">LeaderMES</string>
+    <string name="login_fields_error">Error – 填写所有字段</string>
+    <string name="login">登录</string>
+    <string name="login_screen_save">保存</string>
+    <string name="login_fields_factory_name_hint">工厂名称</string>
+    <string name="login_fields_factory_url_hint">工厂网址</string>
+    <string name="login_fields_user_name_hint">用户名</string>
+    <string name="login_fields_password_hint">密码</string>
+    <string name="login_dialog_dismiss">解除</string>
+    <string name="login_dialog_dismiss_all">解除该班次的所有 </string>
+    <string name="network_error">网页错误</string>
+    <string name="credentials_error">错误 – 用户名与密码不匹配</string>
+    <string name="url_error">无法登录- 网络设置错误</string>
+    <string name="could_not_log_in">错误 – 无法登录</string>
+    <string name="could_not_get_data">错误- 无法输入数据 -</string>
+    <string name="could_not_reach_server_error">错误- 搜不到服务器</string>
+    <string name="unrecognized_operator">错误 – 无法识别操作员</string>
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">选择机器</string>
+    <string name="done">完成</string>
+    <string name="add_another">添加机器</string>
+    <string name="ok">OK</string>
+    <string name="go">Go</string>
+    <string name="machine_id_name">机器 ID / 名字</string>
+    <string name="enter_machine_id_name">输入机器 ID / Name</string>
+    <string name="no_notifications">无提示窗口</string>
+    <string name="no_data">无数据</string>
+    <string name="error_rest">服务器出错</string>
+    <string name="jobs_actions">工单动作</string>
+    <string name="job_id">工单 ID</string>
+    <string name="product_name">产品名称</string>
+    <string name="erp">ERP ID</string>
+    <string name="planned_start">预计开始时间</string>
+    <string name="number_of_units">目标数量</string>
+    <string name="new_job">新工单</string>
+    <string name="new_job_details">新工单详细</string>
+    <string name="product_id">产品ID</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">数量</string>
+    <string name="activate_new_job">激活</string>
+    <string name="could_not_retrieve_job_list">无预备工单显示</string>
+    <string name="product">产品</string>
+    <string name="id">ID</string>
+    <string name="job">工单</string>
+    <string name="josh">班次工单</string>
+    <string name="shift">班次</string>
+    <string name="machine_id">机器名称 </string>
+    <string name="machine_status">机器状态</string>
+    <string name="operator_id">操作员ID</string>
+    <string name="operator_name">操作员名字</string>
+    <string name="error_shift_log">错误 -未能执行机移位对数函数</string>
+    <string name="operator_sign_in">操作员注册</string>
+    <string name="operator_sign_in_action_bar">操作员注册</string>
+    <string name="cancel">取消</string>
+    <string name="retry">重试</string>
+    <string name="end">结束</string>
+    <string name="start">开始</string>
+    <string name="duration">持续时间</string>
+    <string name="report">报告</string>
+    <string name="stop_event">停机事件</string>
+    <string name="enter_with_your_id">输入您的 ID</string>
+    <string name="report_rejects">报告不良</string>
+    <string name="reject_reason">不良原因</string>
+    <string name="cause">原因</string>
+    <string name="next">下一个</string>
+    <string name="units">单位</string>
+    <string name="weight">重量</string>
+    <string name="material_weight_alarm">警报 - 材料重量</string>
+    <string name="dashes">- -</string>
+    <string name="no_reasons">未报告原因</string>
+    <string name="report_stop_event_reason">报告事件原因</string>
+    <string name="report_stop_reason">报告停机原因</string>
+    <string name="report_reject_nreason">报告不良原因</string>
+    <string name="report_stop_start">"开始”</string>
+    <string name="report_stop_resume">"结束"</string>
+    <string name="report_cycle_nunits">报告单位周期</string>
+    <string name="report_cycle_units">报告单位周期</string>
+    <string name="report_inventory_nitem_production">报告库存\产品 </string>
+    <string name="report_inventory_item_production">报告库存\ </string>
+    <string name="package_type">包装类型</string>
+    <string name="settings">设置</string>
+    <string name="operator_app_settings">操作员\n应用\n设置</string>
+    <string name="language">语言</string>
+    <string name="factory_sign_in">工厂注册</string>
+    <string name="change">变换</string>
+    <string name="advanced_settings">高级设置</string>
+    <string name="refresh_reporting_data">刷新报告数据</string>
+    <string name="operator_napp_nadvanced_nsettings">操作员\n应用\n高级\n设置</string>
+    <string name="polling_frequency">检测频率</string>
+    <string name="request_timeout">请求超时</string>
+    <string name="request_timeout_range_error">请求时间在20---120秒内</string>
+    <string name="polling_frequency_range_error">检测频率范围须在 20-60 秒内</string>
+    <string name="refreshed">刷新</string>
+    <string name="one">1</string>
+    <string name="end_">结束: </string>
+    <string name="start_">开始: </string>
+    <string name="chart_min_">最小值: </string>
+    <string name="chart_standard_">标准:&#160;</string>
+    <string name="chart_max_">最大值: </string>
+    <string name="space">&#160;</string>
+    <string name="switch_user">切换用户</string>
+    <string name="standard">标准&#160;</string>
+    <string name="total_required">总需求&#160;</string>
+    <string name="shift_log_min">最小值&#160;</string>
+    <string name="shift_log_max">最大值&#160;</string>
+    <string name="shift_log_standard">标准&#160;</string>
+    <string name="approving_technician">技术员批准</string>
+    <string name="approve">批准</string>
+    <string name="setup_end">调机结束</string>
+    <string name="first_item_approval">调机结束</string>
+    <string name="send_logs">发送日志</string>
+    <string name="alarm">"警报"</string>
+    <string name="loading_data">数据载入中..</string>
+    <string name="no_data_chart">您须输入数据到图表中</string>
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Chinese</item>
+    </array>
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>zh</item>
+    </array>
+    <array name="jobs_spinner_array">
+        <item>新工单</item>
+        <item>添加不良品</item>
+        <item>转换周期单位</item>
+        <item>报告产品</item>
+    </array>
+    <string name="approve_first_item">调机结束</string>
+    <plurals name="days">
+        <item quantity="one">%d 天</item>
+        <item quantity="other">%d 天</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="zero">小时</item>
+        <item quantity="one">小时</item>
+        <item quantity="other">小时</item>
+    </plurals>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
