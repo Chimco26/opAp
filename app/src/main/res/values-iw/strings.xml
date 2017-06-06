@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">LeaderMES Operator</string>
 
     <!-- General -->
     <string name="no_communication">אין תקשורת</string>
@@ -8,7 +7,7 @@
     <string name="unknown">לא ידוע</string>
 
     <!-- Login screen -->
-    <string name="link_machine">קשר מכונה</string>
+    <string name="link_machine">בחר מכונה</string>
     <string name="screen_title">LeaderMES</string>
     <string name="login_fields_error">מלא את כל השדות</string>
     <string name="login">התחבר</string>
@@ -30,7 +29,7 @@
     <string name="loading_data">טוען נתונים..</string>
 
     <!--Select machine screen -->
-    <string name="select_machine_screen_title">קשר מכונה</string>
+    <string name="select_machine_screen_title">>בחר מכונה</string>
     <string name="done">בוצע</string>
     <string name="add_another">הוסף מכונה</string>
     <string name="ok">אישור</string>
@@ -72,7 +71,7 @@
     <string name="start">התחלה</string>
     <string name="duration">משך זמן</string>
     <string name="report">דווח</string>
-    <string name="stop_event">עצירת אירוע</string>
+    <string name="stop_event">אירוע עצירה</string>
     <string name="enter_with_your_id">התחבר באמצעות\nהמזהה שלך</string>
     <string name="report_rejects">הוספת פסולים</string>
     <string name="reject_reason">סיבת פסילה</string>
@@ -91,26 +90,24 @@
     <string name="report_stop_resume">"סיום"</string>
 
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="material_weight_alarm">Material Weight Alarm</string>
+    <string name="material_weight_alarm">התראת משקל חומר גלם</string>
     <string name="report_cycle_nunits">שינוי יחידות\nבמחזור</string>
     <string name="report_cycle_units">שינוי יחידות במחזור</string>
     <string name="report_inventory_nitem_production">דיווח\nייצור</string>
     <string name="report_inventory_item_production">דיווח ייצור</string>
-    <string name="package_type">Package Type</string>
     <string name="settings">הגדרות</string>
-    <string name="operator_app_settings">Operator\nApp\nSettings</string>
+    <string name="operator_app_settings">הגדרות\nאפליקציה</string>
     <string name="language">שפה</string>
     <string name="factory_sign_in">כניסה למפעל</string>
     <string name="change">שנה</string>
     <string name="advanced_settings">הגדרות מתקדמות</string>
     <string name="refresh_reporting_data">רענן נתוני דיווח</string>
-    <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
-    <string name="polling_frequency">Polling frequency</string>
-    <string name="request_timeout">Request timeout</string>
-    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
-    <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
-    <string name="refreshed">refreshed</string>
+    <string name="operator_napp_nadvanced_nsettings">הגדרות\nמתקדמות</string>
+    <string name="polling_frequency">תדירות משיכת נתונים מהשרת</string>
+    <string name="request_timeout">זמן להפסקת משיכת נתונים</string>
+    <string name="request_timeout_range_error">זמן לעצירת משיכת נתונים חייב להיות בין הערכים 20-120 שניות</string>
+    <string name="polling_frequency_range_error">תדירות יבוא נתונים חייב להיות בין הערכים 20-60 שניות</string>
+    <string name="refreshed">בוצע ריענון</string>
     <string name="one">1</string>
     <string name="end_">סיום: </string>
     <string name="start_">התחלה: </string>
@@ -131,12 +128,24 @@
         <item>English</item>
         <item>Hebrew</item>
         <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
     </array>
 
     <array name="language_codes_array">
         <item>en</item>
         <item>iw</item>
         <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
     </array>
     <array name="jobs_spinner_array">
         <item>פק"ע חדשה</item>
@@ -165,5 +174,9 @@
     <string name="send_logs">שלח נתוני שגיאות</string>
     <string name="total_required">סה"כ נדרש&#160;</string>
     <string name="no_data_chart">נדרש לספק נתונים\nלהצגת הגרף</string>
+    <string name="package_type">סוג אריזה</string>
+    <string name="welcome">ברוך הבא</string>
+    <string name="log_in_to_nyour_factory">התחבר\nלמפעל</string>
+    <string name="common_signin_button_text">כניסה</string>
 
 </resources>

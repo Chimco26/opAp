@@ -70,7 +70,9 @@ public class TimeUtils {
                 if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
                     h = "Hour";
                 } else {
-                    h = "שעה";
+                    // Ohad change 6/6/17
+                    h = context.getResources().getQuantityString(R.plurals.hours,1);
+                    //h = "שעה";
                 }
             } else {
                 h = context.getResources().getQuantityString(R.plurals.hours, (int) hours);

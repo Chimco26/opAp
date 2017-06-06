@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LeaderMES Operator</string>
     <!-- General -->
     <string name="no_communication">通信故障</string>
     <string name="pee_value_null">--</string>
@@ -81,7 +80,7 @@
     <string name="report_stop_event_reason">报告事件原因</string>
     <string name="report_stop_reason">报告停机原因</string>
     <string name="report_reject_nreason">报告不良原因</string>
-    <string name="report_stop_start">"开始”</string>
+    <string name="report_stop_start">"开始 ”</string>
     <string name="report_stop_resume">"结束"</string>
     <string name="report_cycle_nunits">报告单位周期</string>
     <string name="report_cycle_units">报告单位周期</string>
@@ -122,16 +121,31 @@
     <string name="alarm">"警报"</string>
     <string name="loading_data">数据载入中..</string>
     <string name="no_data_chart">您须输入数据到图表中</string>
+
     <array name="languages_spinner_array">
         <item>English</item>
         <item>Hebrew</item>
         <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
     </array>
+
     <array name="language_codes_array">
         <item>en</item>
         <item>iw</item>
         <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
     </array>
+
     <array name="jobs_spinner_array">
         <item>新工单</item>
         <item>添加不良品</item>
@@ -139,6 +153,8 @@
         <item>报告产品</item>
     </array>
     <string name="approve_first_item">调机结束</string>
+    <string name="welcome">Welcome</string>
+    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
     <plurals name="days">
         <item quantity="one">%d 天</item>
         <item quantity="other">%d 天</item>
@@ -148,8 +164,7 @@
         <item quantity="one">小时</item>
         <item quantity="other">小时</item>
     </plurals>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="common_signin_button_text">SIGN IN</string>
 
 
 </resources>

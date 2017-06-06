@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General -->
+    <string name="no_communication">Відсутній зв\'язок</string>
+    <string name="pee_value_null">--</string>
+    <string name="default_empty_field">--</string>
+    <string name="unknown">Невідомо</string>
+    <!-- Login screen -->
+    <string name="link_machine">Вибір машини</string>
+    <string name="screen_title">LeaderMES</string>
+    <string name="login_fields_error">Потрібно заповнити всі поля</string>
+    <string name="login">Авторизація</string>
+    <string name="login_screen_save">Зберегти</string>
+    <string name="login_fields_factory_name_hint">Назва заводу</string>
+    <string name="login_fields_factory_url_hint">URL заводу</string>
+    <string name="login_fields_user_name_hint">Ім\'я коритувача</string>
+    <string name="login_fields_password_hint">Пароль</string>
+    <string name="login_dialog_dismiss">ВІДКЛОНИТИ</string>
+    <string name="login_dialog_dismiss_all">ВІДКЛОНИТИ ВСЕ</string>
+    <string name="network_error">Помилка мережі</string>
+    <string name="credentials_error">Невірний логін чи пароль</string>
+    <string name="url_error">Невірний URL сайту</string>
+    <string name="could_not_log_in">Вхід неможливий -</string>
+    <string name="could_not_get_data">Неможливо отримати дані -</string>
+    <string name="could_not_reach_server_error">Помилка - сервер недоступний</string>
+    <string name="unrecognized_operator">Нерозпізнаний оператор</string>
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">Вибір машини</string>
+    <string name="done">ГОТОВО</string>
+    <string name="add_another">Додати машину</string>
+    <string name="ok">OK</string>
+    <string name="go">Вперед</string>
+    <string name="machine_id_name">Им\'я машини</string>
+    <string name="enter_machine_id_name">Введіть ID / Имя\n машини</string>
+    <string name="no_notifications">Нема повідомлень</string>
+    <string name="no_data">Немає даних</string>
+    <string name="error_rest">Помилка сервера додатку</string>
+    <string name="jobs_actions">Робочі дії</string>
+    <string name="job_id">ID Завдання</string>
+    <string name="product_name">Найменування продукту</string>
+    <string name="erp">ERP</string>
+    <string name="planned_start">Запланований старт</string>
+    <string name="number_of_units">Кількість одиниць</string>
+    <string name="new_job">Нове завдання</string>
+    <string name="new_job_details">Деталі нового завдання</string>
+    <string name="product_id">ID продукту</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">Кількість</string>
+    <string name="activate_new_job">Активувати</string>
+    <string name="could_not_retrieve_job_list">Неможливо отримати список завдань</string>
+    <string name="product">Продукт</string>
+    <string name="id">ID -</string>
+    <string name="job">Завдання</string>
+    <string name="josh">Робота у зміну</string>
+    <string name="shift">Зміна</string>
+    <string name="machine_id">Машина</string>
+    <string name="machine_status">Статус машини</string>
+    <string name="operator_id">ID оператора</string>
+    <string name="operator_name">Оператор</string>
+    <string name="error_shift_log">Не вдалося виконати функцію GetMachineShiftLog</string>
+    <string name="operator_sign_in">Вхід в систему\nоператора</string>
+    <string name="operator_sign_in_action_bar">Вхід в систему оператора</string>
+    <string name="cancel">Відміна</string>
+    <string name="retry">Повторити</string>
+    <string name="end">Завершення</string>
+    <string name="start">Старт</string>
+    <string name="duration">Тривалість</string>
+    <string name="report">ЗВІТ</string>
+    <string name="stop_event">Зупинити</string>
+    <string name="enter_with_your_id">Введіть свій\nідентифікатор</string>
+    <string name="report_rejects">Звіт з браку</string>
+    <string name="reject_reason">Причина браку</string>
+    <string name="cause">Причина</string>
+    <string name="next">Далі</string>
+    <string name="units">Одиниці</string>
+    <string name="weight">Вага</string>
+    <string name="material_weight_alarm">Сигналізація ваги матеріалу</string>
+    <string name="dashes">- -</string>
+    <string name="no_reasons">Немає доступних звітів</string>
+    <string name="report_stop_event_reason">Звіт про причини зупинки</string>
+    <string name="report_stop_reason">Причина\nзупинки</string>
+    <string name="report_reject_nreason">Звіт з\nбраку</string>
+    <string name="report_stop_start">"Старт "</string>
+    <string name="report_stop_resume">"Закінчення"</string>
+    <string name="report_cycle_nunits">Змінити кількість\nодиниць в циклі</string>
+    <string name="report_cycle_units">Змінити кількість одиниць в циклі</string>
+    <string name="report_inventory_nitem_production">Інвентаризаційний\nзвіт</string>
+    <string name="report_inventory_item_production">Інвентаризаційний звіт</string>
+    <string name="package_type">Тип пакету</string>
+    <string name="settings">Налаштування</string>
+    <string name="operator_app_settings">Налаштування\nДодатку\nОператора</string>
+    <string name="language">Мова</string>
+    <string name="factory_sign_in">Вхід</string>
+    <string name="change">Змінити</string>
+    <string name="advanced_settings">Розширені налаштування</string>
+    <string name="refresh_reporting_data">Поновити дані звіту</string>
+    <string name="operator_napp_nadvanced_nsettings">Додаток\nОператора\nРозширені\nНалаштування</string>
+    <string name="polling_frequency">Частота опитування</string>
+    <string name="request_timeout">Тайм-аут запиту</string>
+    <string name="request_timeout_range_error">Час очікування запиту повинен бути в діапазоні 20-120 секунд.</string>
+    <string name="polling_frequency_range_error">Частота опитування повинна бути в діапазоні 20-60 секунд</string>
+    <string name="refreshed">оновлено</string>
+    <string name="one">1</string>
+    <string name="end_">Закінчення: </string>
+    <string name="start_">Старт: </string>
+    <string name="chart_min_">Мин.: </string>
+    <string name="chart_standard_">Стандарт: </string>
+    <string name="chart_max_">Макс.: </string>
+    <string name="space">&#160;</string>
+    <string name="switch_user">Сменить пользователя</string>
+    <string name="standard">Стандарт </string>
+    <string name="total_required">Загалом потрібно </string>
+    <string name="shift_log_min">Мін. </string>
+    <string name="shift_log_max">Макс. </string>
+    <string name="shift_log_standard">Стандарт </string>
+    <string name="approving_technician">Затвердження технічного спеціаліста</string>
+    <string name="approve">Затвердити</string>
+    <string name="setup_end">Закінчення\nналаштування</string>
+    <string name="first_item_approval">Закінчення налаштування</string>
+    <string name="send_logs">Відправити журнали</string>
+    <string name="alarm">"Тривога"</string>
+    <string name="loading_data">Завантаження даних...</string>
+    <string name="no_data_chart">Необхідно надати\nдані для діаграми</string>
+
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
+    </array>
+
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
+    </array>
+
+    <array name="jobs_spinner_array">
+        <item>Нове завдання</item>
+        <item>Додати брак</item>
+        <item>Змінити кількість одиниць в циклі</item>
+        <item>Виробничий звіт</item>
+    </array>
+    <string name="approve_first_item">Завершення налаштування</string>
+    <string name="welcome">Welcome</string>
+    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
+    <plurals name="days">
+        <item quantity="one">%d д.</item>
+        <item quantity="other">%d д.</item>
+        <item quantity="many">%d д.</item>
+        <item quantity="few">%d д.</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="zero">г</item>
+        <item quantity="one">г</item>
+        <item quantity="other">г</item>
+        <item quantity="many">г</item>
+        <item quantity="few">г</item>
+    </plurals>
+    <string name="common_signin_button_text">Вхід</string>
+
+</resources>

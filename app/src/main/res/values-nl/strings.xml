@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General -->
+    <string name="no_communication">Geen communicatie</string>
+    <string name="pee_value_null">--</string>
+    <string name="default_empty_field">--</string>
+    <string name="unknown">Onbekend</string>
+
+    <!-- Login screen -->
+    <string name="link_machine">Selecteer de machine</string>
+    <string name="screen_title">LeaderMES</string>
+    <string name="login_fields_error">Vul in alle velden</string>
+    <string name="login">Inloggen</string>
+    <string name="login_screen_save">Opslaan</string>
+    <string name="login_fields_factory_name_hint">Bedrijfnaam</string>
+    <string name="login_fields_factory_url_hint">Bedrijf URL</string>
+    <string name="login_fields_user_name_hint">Gebruikersnaam</string>
+    <string name="login_fields_password_hint">Wachtwoord</string>
+    <string name="login_dialog_dismiss">Afwijzen</string>
+    <string name="login_dialog_dismiss_all">Afwijzen voor dienst</string>
+    <string name="network_error">Netwerk fout</string>
+    <string name="credentials_error">Gebruikersnaam of wachtwoord kloppen niet</string>
+    <string name="url_error">Site URL niet correct</string>
+    <string name="could_not_log_in">Kan niet inloggen -</string>
+    <string name="could_not_get_data">Kan geen data krijgen -</string>
+    <string name="could_not_reach_server_error">Fout - Kan niet bij de server komen</string>
+    <string name="unrecognized_operator">Onherkenbare Operator</string>
+    <string name="alarm">"Alarm"</string>
+    <string name="loading_data">Laad data..</string>
+
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">Selecteer de machine</string>
+    <string name="done">KLAAR</string>
+    <string name="add_another">Voeg machine toe</string>
+    <string name="ok">OK</string>
+
+    <!--Dashboard and wizards -->
+    <string name="go">START</string>
+    <string name="machine_id_name">Machine ID of Naam</string>
+    <string name="enter_machine_id_name">Vul de Machine\nID of naam in</string>
+    <string name="no_notifications">Geen notificaties</string>
+    <string name="no_data">Geen data</string>
+    <string name="error_rest">Fout met REST Service</string>
+    <string name="jobs_actions">Order acties</string>
+    <string name="job_id">Ordernummer</string>
+    <string name="product_name">Productnaam</string>
+    <string name="erp">ERP ID</string>
+    <string name="planned_start">Geplande start</string>
+    <string name="number_of_units">Aantal stuks</string>
+    <string name="new_job">Nieuwe order</string>
+    <string name="new_job_details">Nieuwe order details</string>
+    <string name="product_id">Product ID</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">Hoeveelheid</string>
+    <string name="activate_new_job">Activeer</string>
+    <string name="could_not_retrieve_job_list">Kan niet tot de takenlijst komen</string>
+    <string name="product">Product</string>
+    <string name="id">ID -</string>
+    <string name="job">Taak</string>
+    <string name="josh">Josh</string>
+    <string name="shift">Dienst</string>
+    <string name="machine_id">Machine ID</string>
+    <string name="machine_status">Machine status</string>
+    <string name="operator_id">Operator ID</string>
+    <string name="operator_name">Operator Naam</string>
+    <string name="operator_sign_in">Operator\naanmelden</string>
+    <string name="operator_sign_in_action_bar">Operator aanmelden</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Opnieuw</string>
+    <string name="end">Eind</string>
+    <string name="start">Start</string>
+    <string name="duration">Duur</string>
+    <string name="report">Rapporteren</string>
+    <string name="stop_event">Stop Event</string>
+    <string name="enter_with_your_id">Inloggen met\njouw ID</string>
+    <string name="report_rejects">Rapporteer uitval</string>
+    <string name="reject_reason">Reden voor uitval</string>
+    <string name="cause">Oorzaak</string>
+    <string name="next">Volgende</string>
+    <string name="units">Stuks</string>
+    <string name="weight">Gewicht</string>
+    <string name="dashes">- -</string>
+    <string name="no_reasons">Geen rapporten beschikbaar</string>
+    <string name="report_stop_event_reason">Rapporteer een reden voor de stop van de machine</string>
+    <string name="report_stop_reason">Rapporteer een reden\nstop van de machine</string>
+    <string name="report_reject_nreason">Rapporteer een\nreden voor uitval</string>
+
+
+    <string name="report_stop_start">"Start "</string>
+    <string name="report_stop_resume">"Eind"</string>
+
+
+    <string name="material_weight_alarm">Materiaal gewicht alarm</string>
+    <string name="report_cycle_nunits">Update stuks\nper cyclus</string>
+    <string name="report_cycle_units">Update stuks per cyclus</string>
+    <string name="report_inventory_nitem_production">Production\nReporting</string>
+    <string name="report_inventory_item_production">Production Reporting</string>
+    <string name="package_type">Verpakkings type</string>
+    <string name="settings">Instellingen</string>
+    <string name="operator_app_settings">Operator\nApp\nInstellingen</string>
+    <string name="language">Taal</string>
+    <string name="factory_sign_in">Bedrijf log in</string>
+    <string name="change">Veranderen</string>
+    <string name="advanced_settings">Geavenceerde Instellingen</string>
+    <string name="refresh_reporting_data">Ververs gerapporteerde data</string>
+    <string name="operator_napp_nadvanced_nsettings">Geavenceerde\nInstellingen</string>
+    <string name="polling_frequency">Scannen frequentie</string>
+    <string name="request_timeout">Vraag time-out aan</string>
+    <string name="request_timeout_range_error">Time-out moet liggen tussen 20-120 seconden</string>
+    <string name="polling_frequency_range_error">Scan frequentie moet liggen tussen 20-60 seconden</string>
+    <string name="refreshed">Ververst</string>
+    <string name="one">1</string>
+    <string name="end_">Eind: </string>
+    <string name="start_">Start: </string>
+    <string name="chart_min_">Minimaal: </string>
+    <string name="chart_standard_">Standaard: </string>
+    <string name="chart_max_">Maximaal: </string>
+    <string name="space">&#160;</string>
+    <string name="standard">Standaard&#160;</string>
+    <string name="shift_log_min">Minimaal</string>
+    <string name="shift_log_max">Maximaal</string>
+    <string name="shift_log_standard">Standaard</string>
+    <string name="approving_technician">Controleur</string>
+    <string name="approve">Goedkeuren</string>
+    <string name="setup_end">Einde\nOmbouw</string>
+    <string name="first_item_approval">Einde Ombouw</string>
+
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
+    </array>
+
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
+    </array>
+
+    <array name="jobs_spinner_array">
+        <item>Nieuwe order</item>
+        <item>Voeg uitval toe</item>
+        <item>Veranderen stuks per rotatie</item>
+        <item>Productie Rapport</item>
+    </array>
+
+    <string name="approve_first_item">Einde Ombouw</string>
+
+    <plurals name="days">
+        <item quantity="one">%d Dag</item>
+        <item quantity="other">%d Dagen</item>
+        <item quantity="many">%d Dagen</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="one">Uur</item>
+        <item quantity="other">Uren</item>
+        <item quantity="many">Uren</item>
+        <item quantity="two">Uren</item>
+    </plurals>
+    <string name="switch_user">Verander Gebruiker</string>
+    <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
+    <string name="send_logs">Verzend rapport</string>
+    <string name="total_required">Totaal nodig&#160;</string>
+    <string name="no_data_chart">Je moet de\ndata aanleveren</string>
+    <string name="welcome">Welcome</string>
+    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
+    <string name="common_signin_button_text">Aanmelden</string>
+
+</resources>
