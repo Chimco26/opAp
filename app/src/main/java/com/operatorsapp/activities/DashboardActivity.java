@@ -3,12 +3,14 @@ package com.operatorsapp.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -62,7 +64,7 @@ import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
-import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
+import com.operatorsapp.interfaces.DashBoardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -72,6 +74,8 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
+import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.io.File;
@@ -83,8 +87,7 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener
-{
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -93,7 +96,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardUICallbackListener mDashboardUICallbackListener;
     private MachineStatusCore mMachineStatusCore;
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
-    private DashboardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
+    private DashBoardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
     private MachineDataCore mMachineDataCore;
     private ShiftLogCore mShiftLogCore;
@@ -105,6 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private AllDashboardDataCore mAllDashboardDataCore;
 
     private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
+    private RefreshPollingBroadcast mRefreshBroadcast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -231,6 +235,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onResume()
     {
+        registerReceiver();
+
         ZLogger.d(LOG_TAG, "onResume(), start ");
         super.onResume();
 
@@ -243,9 +249,45 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
         mReportFieldsForMachineCore.startPolling();
         ZLogger.d(LOG_TAG, "onResume(), end ");
+
+
     }
 
-    private void dashboardDataStartPolling()
+    private void registerReceiver() {
+
+        if (mRefreshBroadcast == null) {
+
+            mRefreshBroadcast = new RefreshPollingBroadcast(this);
+
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRefreshBroadcast, new IntentFilter(RefreshPollingBroadcast.ACTION_REFRESH_POLLING));
+
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        removeBroadcasts();
+
+    }
+
+    private void removeBroadcasts() {
+
+        try {
+
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mRefreshBroadcast);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public void dashboardDataStartPolling()
     {
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
         mAllDashboardDataCore.startPolling();
@@ -656,7 +698,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onSelectedJobFragmentAttached(DashboardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback)
+    public void onSelectedJobFragmentAttached(DashBoardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback)
     {
         mDashboardActivityToSelectedJobFragmentCallback = dashboardActivityToSelectedJobFragmentCallback;
     }
@@ -965,5 +1007,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         {
             mDashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
         }
+    }
+
+    @Override
+    public void onRefreshPolling() {
+
+        dashboardDataStartPolling();
     }
 }

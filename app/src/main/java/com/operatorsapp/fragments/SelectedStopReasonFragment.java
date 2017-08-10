@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +37,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.zemingo.logrecorder.ZLogger;
@@ -55,6 +55,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
     private static final int NUMBER_OF_COLUMNS = 5;
     public static final String SAMSUNG = "samsung";
+    private static final String REASON_ID = "REASON_ID";
 
     private int mSelectedPosition;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -76,7 +77,9 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     private long mDuration;
     private int mEventId;
 
-    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId)
+    private int mReasonId;
+
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId, int reasonId)
     {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
         Bundle bundle = new Bundle();
@@ -86,6 +89,8 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         bundle.putString(START_TIME, start);
         bundle.putLong(DURATION, duration);
         bundle.putInt(EVENT_ID, eventId);
+
+        bundle.putInt(REASON_ID, eventId);
         selectedStopReasonFragment.setArguments(bundle);
         return selectedStopReasonFragment;
     }
@@ -102,6 +107,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
             mEnd = getArguments().getString(END_TIME);
             mDuration = getArguments().getLong(DURATION);
             mEventId = getArguments().getInt(EVENT_ID);
+            mReasonId = getArguments().getInt(REASON_ID);
         }
     }
 
@@ -272,11 +278,18 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     private void sendReport()
     {
         ProgressDialogManager.show(getActivity());
+
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+
         mReportCore.registerListener(mReportCallbackListener);
+
         mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
+
+        SendBroadcast.sendReason(getContext(),mEventId);
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()

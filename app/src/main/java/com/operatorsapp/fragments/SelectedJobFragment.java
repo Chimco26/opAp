@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.DashboardActivityToSelectedJobFragmentCallback;
+import com.operatorsapp.interfaces.DashBoardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedJobFragment extends BackStackAwareFragment implements View.OnClickListener, DashboardActivityToSelectedJobFragmentCallback, CroutonRootProvider
+public class SelectedJobFragment extends BackStackAwareFragment implements View.OnClickListener, DashBoardActivityToSelectedJobFragmentCallback, CroutonRootProvider
 {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();

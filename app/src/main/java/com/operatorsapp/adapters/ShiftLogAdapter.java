@@ -18,11 +18,13 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -36,6 +38,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     private int mCloseWidth;
     private int mOpenWidth;
     private int mHeight;
+
+    private HashMap<Integer, Integer> mEventId = new HashMap();
 
     private final int PARAMETER = 1;
     private final int STOPPED = 2;
@@ -213,17 +217,27 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
             final ShiftLogStoppedViewHolder shiftLogStoppedViewHolder = (ShiftLogStoppedViewHolder) holder;
 
             ViewGroup.LayoutParams mItemViewParams;
+
             mItemViewParams = shiftLogStoppedViewHolder.mParentLayout.getLayoutParams();
+
             mItemViewParams.height = (int) (mHeight * 0.23);
+
             shiftLogStoppedViewHolder.mParentLayout.requestLayout();
 
             ViewGroup.LayoutParams mShWoopListParams;
+
             mShWoopListParams = shiftLogStoppedViewHolder.mTitleLayout.getLayoutParams();
+
             mShWoopListParams.width = (int) (mOpenWidth * 0.38);
+
             shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
 
             if (!event.isTreated()) {
+
                 if (event.getPriority() == 1) {
+
+                    // TODO: 12 יולי 2017 VR change the image as per the event Reason ID
+
                     shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
                     shiftLogStoppedViewHolder.mTitle.setTextColor(Color.RED);
                     shiftLogStoppedViewHolder.mTime.setTextColor(Color.RED);
@@ -234,7 +248,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                     shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
-                shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
+                shiftLogStoppedViewHolder.mIcon.setImageResource(ReasonImage.getImageForStopReason(event.getEventGroupID()));
                 shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                 shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
@@ -269,13 +283,12 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     v.setTag(true);
                     if (!event.isTreated()) {
-                        shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_grey);
+
                         shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                         shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
                         mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
 
-                        event.setTreated(true);
                     } else {
                         if (event.getPriority() == 1) {
                             shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
@@ -402,4 +415,5 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         return type;
 
     }
+
 }

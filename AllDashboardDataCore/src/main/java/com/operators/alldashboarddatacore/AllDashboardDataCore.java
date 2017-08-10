@@ -120,6 +120,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
         // getPollingFrequency for all
         ZLogger.d(LOG_TAG, "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
         mJob.startJob(START_DELAY, mMachineStatusPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
+
     }
 
     public void stopPolling()
@@ -249,7 +250,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener
 
         Log.d(LOG_TAG,"shift log startingfrom: " + startingFrom);
 
-        mShiftLogNetworkBridgeInterface.getShiftLog(mShiftLogPersistenceManagerInterface.getSiteUrl(), mShiftLogPersistenceManagerInterface.getSessionId(), mShiftLogPersistenceManagerInterface.getMachineId(), startingFrom, new ShiftLogCoreCallback<Event>()
+        mShiftLogNetworkBridgeInterface.getShiftLog(
+                mShiftLogPersistenceManagerInterface.getSiteUrl(),
+                mShiftLogPersistenceManagerInterface.getSessionId(),
+                mShiftLogPersistenceManagerInterface.getMachineId(),
+                startingFrom,
+                new ShiftLogCoreCallback<Event>()
         {
             @Override
             public void onShiftLogSucceeded(ArrayList<Event> events)

@@ -13,6 +13,7 @@ import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
+import com.operatorsapp.utils.ReasonImage;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(position).getEName() : mStopItemsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
-        holder.mReasonImage.setBackground(mContext.getDrawable(getImageForStopReason(mStopItemsList.get(position).getId())));
+        holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(position).getId())));
     }
 
     @Override
@@ -70,63 +71,4 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
         }
     }
 
-    private int getImageForStopReason(int stopReasonId) {
-        int imageId /*= R.drawable.stop_general_selector*/;
-        switch (stopReasonId) {
-            case 1: {
-                imageId = R.drawable.stop_oparations_selector;
-                break;
-            }
-            case 2: {
-                imageId = R.drawable.stop_maitenance_selector;
-                break;
-            }
-            case 3: {
-                imageId = R.drawable.stop_qa_selector;
-                break;
-            }
-            case 4: {
-                imageId = R.drawable.stop_malfunction_selector;
-                break;
-            }
-            case 5: {
-                imageId = R.drawable.stop_planning_selector;
-                break;
-            }
-            case 6: {
-                imageId = R.drawable.stop_machinestop_selector;
-                break;
-            }
-            case 7: {
-                imageId = R.drawable.stop_materials_selector;
-                break;
-            }
-            case 8: {
-                imageId = R.drawable.stop_labor_selector;
-                // labor
-                break;
-            }
-            case 9: {
-                imageId = R.drawable.stop_mold_selector;
-                // mold
-                break;
-            }
-            case 10: {
-                imageId = R.drawable.stop_settings_selector;
-
-                break;
-            }
-            case 12: {
-                // expected stops
-                imageId = R.drawable.stop_planning_selector;
-
-                break;
-            }
-            default:{
-                imageId = R.drawable.stop_general_selector;
-
-            }
-        }
-        return imageId;
-    }
 }

@@ -24,6 +24,8 @@ import com.zemingo.logrecorder.ZLogger;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -58,6 +60,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     private static PersistenceManager msInstance;
     private Gson mGson;
+    public HashMap<Integer, Event> items = new HashMap<>();
+    ;
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -190,17 +194,35 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public void saveShiftLogs(ArrayList<Event> events) {
-        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(events));
+
+        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(deletingDuplicate(events)));
+
         ZLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
+    private ArrayList<Event> deletingDuplicate(ArrayList<Event> events) {
+
+        ArrayList<Event> duplicates = new ArrayList<Event>();
+
+        for (Event item : events) {
+
+            if (!items.containsKey(item.getEventID())) {
+
+                items.put(item.getEventID(),item);
+            }
+        }
+
+        duplicates.addAll(items.values());
+
+        return duplicates;
+    }
     @Override
     public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
         Type listType = new TypeToken<ArrayList<Event>>() {
         }.getType();
 
-        return mGson.fromJson(shiftLogsJsonString, listType);
+        return deletingDuplicate((ArrayList<Event>) mGson.fromJson(shiftLogsJsonString, listType));
     }
 
     public void saveChartHistoricData(HashMap<String, ArrayList<Widget.HistoricData>> historicDatas) {
