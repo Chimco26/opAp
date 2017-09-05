@@ -18,6 +18,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -232,6 +233,13 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
             shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
 
+            Log.e(DavidVardi.SHIFT_LOG,"Position: " +position+" EventGroupID: "+event.getEventGroupID());
+
+            if(event.getEventGroupID()!= 6){
+
+                event.setTreated(true);
+            }
+
             if (!event.isTreated()) {
 
                 if (event.getPriority() == 1) {
@@ -248,7 +256,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                     shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
-                shiftLogStoppedViewHolder.mIcon.setImageResource(ReasonImage.getImageForStopReason(event.getEventGroupID()));
+                shiftLogStoppedViewHolder.mIcon.setImageResource(ReasonImage.getImageForStopReasonShiftLog(event.getEventGroupID()));
                 shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                 shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);

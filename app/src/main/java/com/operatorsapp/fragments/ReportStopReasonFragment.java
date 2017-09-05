@@ -206,10 +206,15 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onStopReasonSelected(int position) {
 
-        // TODO: 12 יולי 2017 VR send broadcast with event and id the Reason /// this is the reason id: mReportFieldsForMachine.getStopReasons().get(position).getId();
-
-
-        mGoToScreenListener.goToFragment(SelectedStopReasonFragment.newInstance(position, mJobId, mStart, mEnd, mDuration, mEventId,mReportFieldsForMachine.getStopReasons().get(position).getId()), true);
+        mGoToScreenListener.goToFragment(SelectedStopReasonFragment.newInstance(position,
+                mJobId,
+                mStart,
+                mEnd,
+                mDuration,
+                mEventId,
+                mReportFieldsForMachine.getStopReasons().get(position).getId(),
+                mReportFieldsForMachine.getStopReasons().get(position).getEName(),
+                mReportFieldsForMachine.getStopReasons().get(position).getLName()), true);
     }
 
     private void initJobsSpinner() {

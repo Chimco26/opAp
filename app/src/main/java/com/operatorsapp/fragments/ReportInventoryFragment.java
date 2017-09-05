@@ -42,6 +42,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
@@ -252,6 +253,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
         mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
+
+        SendBroadcast.refreshPolling(getContext());
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {

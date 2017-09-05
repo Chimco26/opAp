@@ -2,6 +2,7 @@ package com.operatorsapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
@@ -54,6 +55,7 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
+import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
@@ -69,7 +71,6 @@ import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
-import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.zemingo.logrecorder.ZLogger;
@@ -138,8 +139,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
-
     private SelectStopReasonBroadcast mReasonBroadcast = null;
+    public ProgressDialogFragment mProgressDialog;
 
     public static DashboardFragment newInstance() {
         return new DashboardFragment();
@@ -410,7 +411,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onResume();
 
         registerReceiver();
-
+        Log.d(DavidVardi.DAVID_TAG, "onResume");
         setActionBar();
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
@@ -522,6 +523,12 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     @SuppressLint("InflateParams")
     public void setActionBar() {
+
+        mProgressDialog = new ProgressDialogFragment();
+
+        mProgressDialog.show(getActivity().getFragmentManager(), "");
+
+        Log.d(DavidVardi.DAVID_TAG, "setActionBar");
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -607,7 +614,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                             }
                             case 4: {
 
-                                SendBroadcast.refreshPolling(getContext());
+
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
                                     mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
                                 } else {
@@ -653,7 +660,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             });
 
             mMachineIdStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_id_name);
+            mMachineIdStatusBarTextView.setSelected(true);
             mMachineStatusStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_status);
+            mMachineStatusStatusBarTextView.setSelected(true);
             mStatusIndicatorImageView = (ImageView) mToolBarView.findViewById(R.id.job_indicator);
 
             if (mMachineStatusLayout == null) {
@@ -670,7 +679,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             actionBar.setCustomView(mToolBarView);
 
             setToolBarHeight(mToolBarView);
+
+            if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+
+                Log.d("DAVID_TAG", "onDeviceStatusChanged()  from setActionBar");
+
+                onDeviceStatusChanged(mCurrentMachineStatus);
+            }
         }
+
     }
 
     private void setToolBarHeight(final View view) {
@@ -777,10 +794,21 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
-        AllMachinesData allMachinesData = machineStatus.getAllMachinesData().get(0);
+
+        Log.d("DAVID_TAG", "onDeviceStatusChanged()");
+
         mCurrentMachineStatus = machineStatus;
+
         initStatusLayout(mCurrentMachineStatus);
+
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
+
+        if (mProgressDialog != null) {
+
+            mProgressDialog.dismiss();
+
+            mProgressDialog = null;
+        }
     }
 
     @Override
@@ -789,6 +817,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
+
+            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived CallbackListener = null");
+
             mNoDataView.setVisibility(View.VISIBLE);
             return;
         }
@@ -799,7 +830,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
 
-            Log.d(DavidVardi.DAVID_TAG,widgetList.get(0).getCurrentValue());
+            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived " + widgetList.get(0).getCurrentValue());
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {
@@ -807,6 +838,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
+
+            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived widgetList = null");
+
             mNoDataView.setVisibility(View.VISIBLE);
         }
     }
@@ -989,6 +1023,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
     @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
+
+        Log.d(DavidVardi.DAVID_TAG, "onDataFailure");
+
         mLoadingDataView.setVisibility(View.GONE);
         if (callType == CallType.Status) {
             mMachineStatusLayout.setVisibility(View.VISIBLE);
@@ -1016,6 +1053,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
+
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
@@ -1030,6 +1068,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
         statusAggregation(machineStatus);
         mMachineStatusLayout.setVisibility(View.VISIBLE);
+
+        Log.d(DavidVardi.DAVID_TAG, "New MachineStatus " + statusNameByLang + " machineName " + machineName);
+
     }
 
     private void clearStatusLayout() {
@@ -1039,7 +1080,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mMachineIdStatusBarTextView.setText("");
         mMachineStatusStatusBarTextView.setText("");
         mTimerTextView.setText("");
-        mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+        mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_no_data));
     }
 
     @Override
@@ -1072,19 +1113,51 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private void statusAggregation(MachineStatus machineStatus) {
 
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
+
+        Log.d("DAVID_TAG", "machineStatus " + status);
+
+
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_working));
+
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.working));
         } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_stopped));
-        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId() || status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId() || status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
-        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId() || status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_setup));
+
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.stopped));
+
+        } else if (status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.communication_failure));
+
+        } else if (status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.setup_communication_failure));
+
+        } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.no_job));
+
+        } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.ic_indicator_setup));
+
+        } else if (status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.setup_stopped));
+
         } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_exceeding));
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.parameter_deviation));
+
+        } else if (status == MachineStatus.MachineServerStatus.STOP_IDLE.getId()) {
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.stop_idle));
+
         } else {
             ZLogger.w(LOG_TAG, "Undefined parameter");
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_indicator_no_data));
+
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_no_data));
         }
 
     }
@@ -1107,7 +1180,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onSelectStopReason(int eventId) {
+    public void onSelectStopReason(int eventId, int reasonId,String en,String il) {
+
+        Log.i(DavidVardi.DAVID_TAG, "event: " + eventId);
 
         for (Event event : mEventsList) {
 
@@ -1115,9 +1190,20 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 event.setTreated(true);
 
+                event.setEventGroupID(reasonId);
+
+                event.setEventGroupLname(il);
+
+                event.setmEventGroupEname(en);
+
+                Log.i(DavidVardi.DAVID_TAG, "event.setTreated(true)");
+
                 if (mShiftLogAdapter != null) {
 
                     mShiftLogAdapter.notifyDataSetChanged();
+
+                    Log.i(DavidVardi.DAVID_TAG, "mShiftLogAdapter.notifyDataSetChanged()");
+
                 }
                 return;
             }

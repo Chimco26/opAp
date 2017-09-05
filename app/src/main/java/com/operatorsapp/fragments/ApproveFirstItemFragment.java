@@ -46,6 +46,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -274,6 +275,8 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         mReportCore.sendApproveFirstItem(mSelectedReasonId, mSelectedTechnicianId, mJobId);
+        SendBroadcast.refreshPolling(getContext());
+
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()

@@ -40,11 +40,14 @@
             android:name=".utils.broadcast.SelectStopReasonBroadcast"
             android:enabled="true"
             android:exported="true" />
-
         <receiver
             android:name=".utils.broadcast.RefreshPollingBroadcast"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+        <receiver
+            android:name=".utils.broadcast.SendLogsBroadcast"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

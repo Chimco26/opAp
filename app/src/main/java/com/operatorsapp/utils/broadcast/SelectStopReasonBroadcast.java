@@ -10,6 +10,12 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     public static final String EVENT_ID = "EVENT_ID";
 
+    public static final String REASON_ID = "REASON_ID";
+
+    public static final String EN_NAME = "EN_NAME";
+
+    public static final String IL_NAME = "IL_NAME";
+
     private SelectStopReasonListener mListener;
 
     public SelectStopReasonBroadcast(SelectStopReasonListener listener) {
@@ -23,7 +29,10 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
             if (intent.getAction().equals(ACTION_SELECT_REASON)) {
 
-                mListener.onSelectStopReason( intent.getExtras().getInt(EVENT_ID));
+                mListener.onSelectStopReason(intent.getExtras().getInt(EVENT_ID),
+                        intent.getExtras().getInt(REASON_ID),
+                        intent.getExtras().getString(EN_NAME),
+                        intent.getExtras().getString(IL_NAME));
             }
         }
     }
@@ -31,6 +40,6 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     public interface SelectStopReasonListener {
 
-        void onSelectStopReason(int eventId);
+        void onSelectStopReason(int eventId, int reasonId,String enName,String ilName);
     }
 }

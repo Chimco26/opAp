@@ -5,7 +5,6 @@ import android.content.Context;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
@@ -60,8 +59,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     private static PersistenceManager msInstance;
     private Gson mGson;
-    public HashMap<Integer, Event> items = new HashMap<>();
-    ;
+    public HashMap<Integer, Event> items = new HashMap<>();;
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -219,8 +217,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
-        Type listType = new TypeToken<ArrayList<Event>>() {
-        }.getType();
+        Type listType = new TypeToken<ArrayList<Event>>() {}.getType();
 
         return deletingDuplicate((ArrayList<Event>) mGson.fromJson(shiftLogsJsonString, listType));
     }

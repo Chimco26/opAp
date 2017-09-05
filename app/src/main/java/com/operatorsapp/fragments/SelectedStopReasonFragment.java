@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -42,8 +44,7 @@ import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider
-{
+public class SelectedStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider {
 
     public static final String LOG_TAG = SelectedStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -56,6 +57,8 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     private static final int NUMBER_OF_COLUMNS = 5;
     public static final String SAMSUNG = "samsung";
     private static final String REASON_ID = "REASON_ID";
+    private static final String EN_NAME = "EN_NAME";
+    private static final String IL_NAME = "IL_NAME";
 
     private int mSelectedPosition;
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -78,29 +81,29 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     private int mEventId;
 
     private int mReasonId;
+    private String mEnName;
+    private String mILName;
 
-    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId, int reasonId)
-    {
+    public static SelectedStopReasonFragment newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId, int reasonId, String eName, String lName) {
         SelectedStopReasonFragment selectedStopReasonFragment = new SelectedStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);
         bundle.putInt(CURRENT_JOB_ID, jobId);
         bundle.putString(END_TIME, end);
         bundle.putString(START_TIME, start);
+        bundle.putString(EN_NAME, eName);
+        bundle.putString(IL_NAME, lName);
         bundle.putLong(DURATION, duration);
         bundle.putInt(EVENT_ID, eventId);
-
-        bundle.putInt(REASON_ID, eventId);
+        bundle.putInt(REASON_ID, reasonId);
         selectedStopReasonFragment.setArguments(bundle);
         return selectedStopReasonFragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null)
-        {
+        if (getArguments() != null) {
             mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
             mJobId = getArguments().getInt(CURRENT_JOB_ID);
             mStart = getArguments().getString(START_TIME);
@@ -108,12 +111,13 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
             mDuration = getArguments().getLong(DURATION);
             mEventId = getArguments().getInt(EVENT_ID);
             mReasonId = getArguments().getInt(REASON_ID);
+            mEnName =  getArguments().getString(EN_NAME);
+            mILName =  getArguments().getString(IL_NAME);
         }
     }
 
     @Override
-    public void onAttach(Context context)
-    {
+    public void onAttach(Context context) {
         super.onAttach(context);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
@@ -122,8 +126,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_stop_report, container, false);
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
         setActionBar();
@@ -131,8 +134,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView jobIdTextView = (TextView) view.findViewById(R.id.report_job_spinner);
@@ -145,12 +147,9 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         TextView productTextView = (TextView) view.findViewById(R.id.prodct_Text_View);
         TextView durationTextView = (TextView) view.findViewById(R.id.duration_text_view);
 
-        if(mStart == null || mEnd == null)
-        {
+        if (mStart == null || mEnd == null) {
             productTextView.setText("- -");
-        }
-        else
-        {
+        } else {
             productTextView.setText(new StringBuilder(getActivity().getString(R.string.report_stop_start)).append(TimeUtils.getTimeFromString(mStart)).append(", ").append(getActivity().getString(R.string.report_stop_resume)).append(" ").append(TimeUtils.getTimeFromString(mEnd)));
         }
 
@@ -165,21 +164,15 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         int spacing;
         String strManufacturer = android.os.Build.MANUFACTURER;
 
-        if(strManufacturer.equals(SAMSUNG))
-        {
+        if (strManufacturer.equals(SAMSUNG)) {
             spacing = 80;
-        }
-        else
-        {
+        } else {
             spacing = 40;
         }
         Configuration config = getResources().getConfiguration();
-        if(config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL)
-        {
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
-        }
-        else
-        {
+        } else {
 
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
@@ -188,36 +181,30 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         initSubReasons();
     }
 
-    private void initSubReasons()
-    {
-        if(mReportFieldsForMachine != null)
-        {
+    private void initSubReasons() {
+        if (mReportFieldsForMachine != null) {
             mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getSubReasons());
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         mButtonCancel.setOnClickListener(null);
         mButtonNext.setOnClickListener(null);
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         mButtonCancel.setOnClickListener(this);
         mButtonNext.setOnClickListener(this);
     }
 
-    protected void setActionBar()
-    {
+    protected void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null)
-        {
+        if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -228,11 +215,9 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.action_bar_report_stop_selected, null);
 
             LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener()
-            {
+            buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     getActivity().onBackPressed();
                 }
             });
@@ -245,38 +230,32 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     }
 
     @Override
-    public void onSubReasonSelected(int subReasonId)
-    {
+    public void onSubReasonSelected(int subReasonId) {
         mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
         ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
         mSelectedSubreasonId = subReasonId;
         mStopReasonsAdapter.notifyDataSetChanged();
         sendReport();
+        SendBroadcast.refreshPolling(getContext());
     }
 
     @Override
-    public void onClick(View v)
-    {
-        switch(v.getId())
-        {
-            case R.id.button_report:
-            {
-                if(mSelectedSubreasonId != -1)
-                {
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_report: {
+                if (mSelectedSubreasonId != -1) {
                     sendReport();
                 }
                 break;
             }
-            case R.id.button_cancel:
-            {
+            case R.id.button_cancel: {
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
         }
     }
 
-    private void sendReport()
-    {
+    private void sendReport() {
         ProgressDialogManager.show(getActivity());
 
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -289,14 +268,16 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
         mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
 
-        SendBroadcast.sendReason(getContext(),mEventId);
+        Log.d(DavidVardi.DAVID_TAG, "event: " + mEventId + " reason:  " + mReasonId);
+
+        SendBroadcast.sendReason(getContext(), mEventId, mReasonId,mEnName,mILName);
+
+
     }
 
-    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
-    {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess()
-        {
+        public void sendReportSuccess() {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
@@ -304,31 +285,24 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason)
-        {
+        public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
-            {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
-                {
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
-                    public void onSilentLoginSucceeded()
-                    {
+                    public void onSilentLoginSucceeded() {
                         sendReport();
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason)
-                    {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }
                 });
-            }
-            else
-            {
+            } else {
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
@@ -336,15 +310,11 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         }
     };
 
-    private void dismissProgressDialog()
-    {
-        if(getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });
@@ -352,8 +322,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.selected_stop_crouton_root;
     }
 }

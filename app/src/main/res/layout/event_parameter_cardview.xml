@@ -55,7 +55,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textSize="18sp"
-                autofit:minTextSize="14sp"/>
+                autofit:minTextSize="18sp"/>
 
 
         </LinearLayout>

@@ -26,6 +26,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 public class SelectedOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
@@ -139,6 +140,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             case R.id.button_selected_operator_sign_in: {
                 ProgressDialogManager.show(getActivity());
                 mOperatorCore.setOperatorForMachine(mSelectedOperator.getOperatorId());
+                SendBroadcast.refreshPolling(getContext());
                 break;
             }
         }
