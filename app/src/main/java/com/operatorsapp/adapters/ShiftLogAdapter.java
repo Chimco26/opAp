@@ -63,23 +63,16 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    private void sortEventsByStartTime()
-    {
-        Collections.sort(mEvents, new Comparator<Event>()
-        {
+    private void sortEventsByStartTime() {
+        Collections.sort(mEvents, new Comparator<Event>() {
             @Override
-            public int compare(Event lhs, Event rhs)
-            {
-                if(lhs.getEventTime() == null)
-                {
-                    if(rhs.getEventTime() == null)
-                    {
+            public int compare(Event lhs, Event rhs) {
+                if (lhs.getEventTime() == null) {
+                    if (rhs.getEventTime() == null) {
                         return -1;
                     }
                     return 0;
-                }
-                else if(rhs.getEventTime() == null)
-                {
+                } else if (rhs.getEventTime() == null) {
                     return 1;
                 }
 
@@ -91,12 +84,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
     }
 
     public void updateData(ArrayList<Event> events) {
-        for(Event event : events)
-        {
-            for(Event e : mEvents)
-            {
-                if(e.getEventID() == event.getEventID())
-                {
+        for (Event event : events) {
+            for (Event e : mEvents) {
+                if (e.getEventID() == event.getEventID()) {
                     updateStopEvent(event, e);
                 }
             }
@@ -104,8 +94,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    private void updateStopEvent(Event event, Event e)
-    {
+    private void updateStopEvent(Event event, Event e) {
         e.setDuration(event.getDuration());
         e.setAlarmValue(event.getAlarmValue());
         e.setEventEndTime(event.getEventEndTime());
@@ -143,8 +132,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         public ShiftLogStoppedViewHolder(View itemView) {
             super(itemView);
-            mParentLayout = (LinearLayout)itemView.findViewById(R.id.event_stopped_parent_layout);
-            mTitleLayout = (LinearLayout)itemView.findViewById(R.id.event_stopped_title_layout);
+            mParentLayout = (LinearLayout) itemView.findViewById(R.id.event_stopped_parent_layout);
+            mTitleLayout = (LinearLayout) itemView.findViewById(R.id.event_stopped_title_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mTime = (TextView) itemView.findViewById(R.id.shift_log_item_time);
@@ -177,8 +166,8 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
         public ShiftLogParameterViewHolder(View itemView) {
             super(itemView);
-            mParentLayout = (LinearLayout)itemView.findViewById(R.id.event_parameter_parent_layout);
-            mTitleLayout = (LinearLayout)itemView.findViewById(R.id.event_parameter_title_layout);
+            mParentLayout = (LinearLayout) itemView.findViewById(R.id.event_parameter_parent_layout);
+            mTitleLayout = (LinearLayout) itemView.findViewById(R.id.event_parameter_title_layout);
             mTitle = (AutofitTextView) itemView.findViewById(R.id.shift_log_item_title);
             mIcon = (ImageView) itemView.findViewById(R.id.shift_log_item_icon);
             mSubtitleText = (TextView) itemView.findViewById(R.id.shift_log_item_subtitle_text);
@@ -233,9 +222,9 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
             shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
 
-            Log.e(DavidVardi.SHIFT_LOG,"Position: " +position+" EventGroupID: "+event.getEventGroupID());
+            Log.e(DavidVardi.SHIFT_LOG, "Position: " + position + " EventGroupID: " + event.getEventGroupID());
 
-            if(event.getEventGroupID()!= 6){
+            if (event.getEventGroupID() != 6) {
 
                 event.setTreated(true);
             }
@@ -290,14 +279,14 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     v.setTag(true);
-                    if (!event.isTreated()) {
+                    //  if (!event.isTreated()) {
 
-                        shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                        shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-                        shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
-                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
+                    shiftLogStoppedViewHolder.mTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    shiftLogStoppedViewHolder.mTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                    shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.NORMAL);
+                    mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
 
-                    } else {
+                /*    } else {
                         if (event.getPriority() == 1) {
                             shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
                             shiftLogStoppedViewHolder.mTitle.setTextColor(Color.RED);
@@ -309,7 +298,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                         }
                         shiftLogStoppedViewHolder.mTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
-                    }
+                    }*/
                     PersistenceManager.getInstance().saveShiftLogs(mEvents);
                 }
             });

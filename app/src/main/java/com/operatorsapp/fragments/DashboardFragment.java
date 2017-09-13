@@ -140,7 +140,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public static final int REASON_UNREPORTED = 0;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
-    public ProgressDialogFragment mProgressDialog;
+
 
     public static DashboardFragment newInstance() {
         return new DashboardFragment();
@@ -388,12 +388,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     };
 
     private boolean isExists(Event event) {
-        for (int i = 0; i < mEventsList.size(); i++) {
-            if (mEventsList.get(i).getEventID() == event.getEventID()) {
-                return true;
-            }
-        }
-        return false;
+
+        return PersistenceManager.getInstance().items.containsKey(event.getEventID());
     }
 
     @Override
@@ -524,9 +520,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @SuppressLint("InflateParams")
     public void setActionBar() {
 
-        mProgressDialog = new ProgressDialogFragment();
-
-        mProgressDialog.show(getActivity().getFragmentManager(), "");
 
         Log.d(DavidVardi.DAVID_TAG, "setActionBar");
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -803,12 +796,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
 
-        if (mProgressDialog != null) {
 
-            mProgressDialog.dismiss();
-
-            mProgressDialog = null;
-        }
     }
 
     @Override
@@ -963,7 +951,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             mNoNotificationsText.setVisibility(View.GONE);
 
             if (mShiftLogAdapter != null) {
-                mShiftLogAdapter.setNewData(mEventsList);
+                mShiftLogAdapter.setNewData(PersistenceManager.getInstance().getShiftLogs());
             } else {
                 mShiftLogAdapter = new ShiftLogAdapter(getActivity(), mEventsList, !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
@@ -1180,7 +1168,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     @Override
-    public void onSelectStopReason(int eventId, int reasonId,String en,String il) {
+    public void onSelectStopReason(int eventId, int reasonId, String en, String il) {
 
         Log.i(DavidVardi.DAVID_TAG, "event: " + eventId);
 

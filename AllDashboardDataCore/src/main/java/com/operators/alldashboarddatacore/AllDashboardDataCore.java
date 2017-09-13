@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -233,7 +234,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     @Override
                     public void onShiftLogSucceeded(ArrayList<Event> events) {
                         if (mShiftLogUICallback != null) {
-                            mShiftLogUICallback.onGetShiftLogSucceeded(events);
+                            mShiftLogUICallback.onGetShiftLogSucceeded(clearEvents(events));
                         } else {
                             ZLogger.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                         }
@@ -254,6 +255,26 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
                 }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
     }
+
+    private ArrayList<Event> clearEvents(ArrayList<Event> events) {
+
+         HashMap<Integer, Event> items = new HashMap<>();;
+
+        ArrayList<Event> duplicates = new ArrayList<Event>();
+
+        for (Event item : events) {
+
+            if (!items.containsKey(item.getEventID())) {
+
+                items.put(item.getEventID(),item);
+            }
+        }
+
+        duplicates.addAll(items.values());
+
+        return duplicates;
+    }
+
 
     private void setJobFinishToAll(JobBase.OnJobFinishedListener onJobFinishedListener) {
         if (mGetMachineStatusFinish && mGetMachineDataFinish && mGetShiftLogFinish) {

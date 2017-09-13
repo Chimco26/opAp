@@ -271,7 +271,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     public String getShiftLogStartingFrom() {
         // TODO: 18-Oct-16 SERGEY 86400000
 //        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 691200000, "dd.MM.yy"/*"yyyy-MM-dd HH:mm:ss.SSS"*/));
-        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 691200000, /*"yyyy-MM-dd"*/"yyyy-MM-dd HH:mm:ss.SSS"));
+        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 86400000, /*"yyyy-MM-dd"*/"yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override
