@@ -1136,7 +1136,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.parameter_deviation));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.parameter_deviation));
 
         } else if (status == MachineStatus.MachineServerStatus.STOP_IDLE.getId()) {
 
