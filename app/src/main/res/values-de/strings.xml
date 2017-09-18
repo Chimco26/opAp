@@ -58,8 +58,6 @@
     <string name="job">Aktivitaet</string>
     <string name="josh">Josh</string>
     <string name="shift">Schicht</string>
-    <string name="machine_id">Machinenname</string>
-    <string name="machine_status">Machinenstatus</string>
     <string name="operator_id">Werker-ID</string>
     <string name="operator_name">Name des Werkers</string>
     <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>

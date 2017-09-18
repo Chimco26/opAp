@@ -53,8 +53,6 @@
     <string name="job">Задание</string>
     <string name="josh">Работа в смену</string>
     <string name="shift">Смена</string>
-    <string name="machine_id">Машина</string>
-    <string name="machine_status">Статус машины</string>
     <string name="operator_id">ID оператора</string>
     <string name="operator_name">Оператор</string>
     <string name="error_shift_log">Не удалось выполнить функцию GetMachineShiftLog</string>

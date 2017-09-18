@@ -1,39 +1,44 @@
 package com.operatorsapp.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.TextViewCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.broadcast.SendLogsBroadcast;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
-public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
-{
+import static com.operatorsapp.activities.DashboardActivity.IGNORE_FROM_ON_PAUSE;
+
+
+public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider, SendLogsBroadcast.SendLogsListener {
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getSimpleName();
 
     private static final String SELECTED_LANGUAGE = "selected_language";
@@ -53,8 +58,10 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     private boolean mTimeoutIsValid = true;
     private TextView mSendLogButton;
 
-    public static AdvancedSettingsFragment newInstance(String selectedLanguage)
-    {
+    private SendLogsBroadcast mSendLogsBroadcast = null;
+
+
+    public static AdvancedSettingsFragment newInstance(String selectedLanguage) {
         AdvancedSettingsFragment advancedSettingsFragment = new AdvancedSettingsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SELECTED_LANGUAGE, selectedLanguage);
@@ -64,34 +71,29 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
 
     @Override
-    public void onAttach(Context context)
-    {
+    public void onAttach(Context context) {
         super.onAttach(context);
         mSettingsInterface = (SettingsInterface) getActivity();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null)
-        {
+        if (getArguments() != null) {
             mSelectedLanguage = getArguments().getString(SELECTED_LANGUAGE);
         }
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_advanced_settings, container, false);
         setActionBar();
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPollingFrequencyEditText = (EditText) view.findViewById(R.id.polling_frequency_edit_text);
         mPollingFrequencyEditText.setText(String.valueOf(PersistenceManager.getInstance().getPollingFrequency()));
@@ -100,25 +102,20 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         mButtonSave = (Button) view.findViewById(R.id.button_save);
         mPollingRangeErrorTextView = (TextView) view.findViewById(R.id.polling_range_error_text_view);
         mTimeoutRangeErrorTextView = (TextView) view.findViewById(R.id.timeout_range_error_text_view);
-        mPollingFrequencyEditText.addTextChangedListener(new TextWatcher()
-        {
+        mPollingFrequencyEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
-                if(s.length() > 0)
-                {
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
                     int pollingFrequency = Integer.parseInt(mPollingFrequencyEditText.getText().toString());
                     validatePollingFrequency(pollingFrequency);
                 }
@@ -126,25 +123,20 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         });
 
 
-        mRequestTimeoutEditText.addTextChangedListener(new TextWatcher()
-        {
+        mRequestTimeoutEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
-                if(s.length() > 0)
-                {
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
                     int requestTimeout = Integer.parseInt(mRequestTimeoutEditText.getText().toString());
                     validateTimeout(requestTimeout);
                 }
@@ -155,32 +147,24 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     }
 
 
-    private void validatePollingFrequency(int pollingFrequency)
-    {
-        if(pollingFrequency >= MIN_POLLING_FREQUENCY_VALUE && pollingFrequency <= MAX_POLLING_FREQUENCY_VALUE)
-        {
+    private void validatePollingFrequency(int pollingFrequency) {
+        if (pollingFrequency >= MIN_POLLING_FREQUENCY_VALUE && pollingFrequency <= MAX_POLLING_FREQUENCY_VALUE) {
             mPollingFrequencyIsValid = true;
             mPollingRangeErrorTextView.setVisibility(View.INVISIBLE);
             mButtonSave.setEnabled(true);
-        }
-        else
-        {
+        } else {
             mPollingFrequencyIsValid = false;
             mPollingRangeErrorTextView.setVisibility(View.VISIBLE);
             mButtonSave.setEnabled(false);
         }
     }
 
-    private void validateTimeout(int requestTimeout)
-    {
-        if(requestTimeout >= MIN_TIMEOUT_VALUE && requestTimeout <= MAX_TIMEOUT_VALUE)
-        {
+    private void validateTimeout(int requestTimeout) {
+        if (requestTimeout >= MIN_TIMEOUT_VALUE && requestTimeout <= MAX_TIMEOUT_VALUE) {
             mTimeoutIsValid = true;
             mTimeoutRangeErrorTextView.setVisibility(View.INVISIBLE);
             mButtonSave.setEnabled(true);
-        }
-        else
-        {
+        } else {
             mTimeoutIsValid = false;
             mTimeoutRangeErrorTextView.setVisibility(View.VISIBLE);
             mButtonSave.setEnabled(false);
@@ -188,33 +172,49 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         mButtonSave.setOnClickListener(this);
         mSendLogButton.setOnClickListener(this);
+        registerReceiver();
     }
 
     @Override
-    public void onPause()
-    {
+    public void onDestroy() {
+        super.onDestroy();
+
+      removeBroadcasts();
+    }
+
+    private void removeBroadcasts() {
+
+        try {
+
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mSendLogsBroadcast);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onPause() {
         super.onPause();
         mButtonSave.setOnClickListener(null);
         mSendLogButton.setOnClickListener(null);
 
         View view = getActivity().getCurrentFocus();
-        if(view != null)
-        {
+        if (view != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
-    private void setActionBar()
-    {
+    private void setActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null)
-        {
+        if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -224,11 +224,9 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             // rootView null
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.settings_action_bar, null);
             LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener()
-            {
+            buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     getActivity().onBackPressed();
                 }
             });
@@ -238,49 +236,43 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v)
-    {
-        switch(v.getId())
-        {
-            case R.id.button_save:
-            {
-                if(mPollingFrequencyEditText.getText() != null && !mPollingFrequencyEditText.getText().toString().equals("") && mRequestTimeoutEditText.getText() != null && !mRequestTimeoutEditText.getText().toString().equals(""))
-                {
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_save: {
+                if (mPollingFrequencyEditText.getText() != null && !mPollingFrequencyEditText.getText().toString().equals("") && mRequestTimeoutEditText.getText() != null && !mRequestTimeoutEditText.getText().toString().equals("")) {
                     checkDataAndSave();
                 }
                 break;
             }
-            case R.id.send_log_settings_button:
-            {
-                sendLogToEmail();
+            case R.id.send_log_settings_button: {
+
+                if (isStoragePermissionGranted()) {
+
+                    sendLogToEmail();
+
+                }
             }
-                break;
+            break;
         }
     }
 
-    private void sendLogToEmail()
-    {
+    private void sendLogToEmail() {
+
+
         ProgressDialogManager.show(getActivity());
         ZLogger.d(LOG_TAG, "start sendLogToEmail(), ");
         LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
-        try
-        {
-            LogRecorder.getInstance().requestSendLogsIntent(true, new LogRecorder.SendLogsListener()
-            {
+        try {
+            LogRecorder.getInstance().requestSendLogsIntent(true, new LogRecorder.SendLogsListener() {
                 @Override
-                public void onCompleted(final Intent intent)
-                {
+                public void onCompleted(final Intent intent) {
                     ProgressDialogManager.dismiss();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void run()
-                        {
-                            try
-                            {
+                        public void run() {
+                            try {
                                 startActivity(intent);
-                            }
-                            catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 ZLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
                             }
 
@@ -289,47 +281,57 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                 }
             });
             ZLogger.d(LOG_TAG, "end sendLogToEmail(), ");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ProgressDialogManager.dismiss();
             e.printStackTrace();
         }
     }
 
-    private void checkDataAndSave()
-    {
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(LOG_TAG, "Permission is granted");
+                return true;
+            } else {
+
+                Log.v(LOG_TAG, "Permission is revoked");
+
+                IGNORE_FROM_ON_PAUSE = true;
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else {
+            Log.v(LOG_TAG, "Permission is granted");
+            return true;
+        }
+    }
+
+
+
+    private void checkDataAndSave() {
         int pollingFrequency = Integer.parseInt(mPollingFrequencyEditText.getText().toString());
         int requestTimeout = Integer.parseInt(mRequestTimeoutEditText.getText().toString());
 
 
-        if(mPollingFrequencyIsValid && mTimeoutIsValid)
-        {
-            if(pollingFrequency != PersistenceManager.getInstance().getPollingFrequency())
-            {
+        if (mPollingFrequencyIsValid && mTimeoutIsValid) {
+            if (pollingFrequency != PersistenceManager.getInstance().getPollingFrequency()) {
                 PersistenceManager.getInstance().setPolingFrequency(pollingFrequency);
                 mSettingsInterface.onRefreshPollingRequest();
             }
 
-            if(requestTimeout != PersistenceManager.getInstance().getRequestTimeout())
-            {
+            if (requestTimeout != PersistenceManager.getInstance().getRequestTimeout()) {
                 PersistenceManager.getInstance().setRequestTimeOut(requestTimeout);
             }
-            if(mSelectedLanguage != null)
-            {
+            if (mSelectedLanguage != null) {
 
-                if(!mSelectedLanguage.equals(PersistenceManager.getInstance().getCurrentLang()))
-                {
+                if (!mSelectedLanguage.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguage);
                     mSettingsInterface.onRefreshApplicationRequest();
-                }
-                else
-                {
+                } else {
                     getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-            }
-            else
-            {
+            } else {
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
@@ -338,8 +340,26 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.advanced_settings_crouton_root;
+    }
+
+    private void registerReceiver() {
+
+        if (mSendLogsBroadcast == null) {
+
+            mSendLogsBroadcast = new SendLogsBroadcast(this);
+
+            LocalBroadcastManager.getInstance(getContext()).registerReceiver(mSendLogsBroadcast, new IntentFilter(SendLogsBroadcast.ACTION_SEND_LOGS));
+
+        }
+
+    }
+
+
+    @Override
+    public void onPermissionGranted() {
+
+        sendLogToEmail();
     }
 }

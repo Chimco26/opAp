@@ -53,8 +53,6 @@
     <string name="job">工单</string>
     <string name="josh">班次工单</string>
     <string name="shift">班次</string>
-    <string name="machine_id">机器名称 </string>
-    <string name="machine_status">机器状态</string>
     <string name="operator_id">操作员ID</string>
     <string name="operator_name">操作员名字</string>
     <string name="error_shift_log">错误 -未能执行机移位对数函数</string>

@@ -1,125 +1,162 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:background="@android:color/transparent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_vertical">
+
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="50dp"
-        android:gravity="center|start"
-        android:orientation="vertical"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:gravity="center|start">
+
+        <ImageView
+            android:id="@+id/job_indicator"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_no_data" />
+
+
+        -
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
 
-            <TextView
-                style="@style/FontStyle_T7"
+
+            -
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="13dp"
-                android:text="@string/machine_id"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_view_machine_id_name"
-                style="@style/FontStyle_T7"
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="13dp"
+                    android:text="@string/machine_id"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/text_view_machine_id_name"
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+
+            -
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
+                android:layout_gravity="start"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+                <TextView
+                    style="@style/FontStyle_T6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/machine_status"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/job_indicator"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:background="@drawable/ic_indicator_no_data" />
+                <TextView
+                    android:id="@+id/text_view_machine_status"
+                    style="@style/FontStyle_T6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
-            <TextView
-                style="@style/FontStyle_T6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/machine_status"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="16sp"
-                android:textColor="@color/white" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_view_machine_status"
-                style="@style/FontStyle_T6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:textSize="16sp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
 
+
+    -
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_toEndOf="@+id/linearLayout2"
         android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/linearLayout2"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <ImageView
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/logo"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/toolbar_title"
             style="@style/FontStyle_T11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:gravity="center"
             android:maxLines="1"
             android:paddingStart="9dp"
             android:textSize="52sp"
-            tools:text="App Title"
-            android:layout_gravity="bottom"
-            />
+            tools:text="App Title" />
 
     </LinearLayout>
+
+
+    -
 
     <LinearLayout
         android:id="@+id/spinner_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:gravity="center|end"
-        android:padding="1dp"
-        android:layout_centerVertical="true">
+        android:padding="1dp">
+
+
+        -
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -127,6 +164,9 @@
             android:layout_marginEnd="20dp"
             android:background="@color/T12_color"
             android:padding="0.5dp">
+
+
+            -
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -143,8 +183,13 @@
                     android:gravity="center"
                     app:theme="@style/ToolbarTheme"
                     tools:ignore="MissingPrefix" />
+
             </LinearLayout>
+
         </LinearLayout>
+
+
+        -
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -153,17 +198,18 @@
             android:background="@color/T12_color"
             android:padding="0.5dp">
 
+
+            -
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/status_bar">
 
-
                 <com.operatorsapp.view.EmeraldSpinner
                     android:id="@+id/toolbar_operator_spinner"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="46dp"
-                    android:layout_weight="1"
                     android:drawSelectorOnTop="true"
                     android:dropDownVerticalOffset="51dp"
                     android:gravity="center"
@@ -171,15 +217,16 @@
                     tools:ignore="MissingPrefix" />
 
             </LinearLayout>
+
         </LinearLayout>
-
-
 
         <ImageView
             android:id="@+id/settings_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/button_settings_selector" />
+
     </LinearLayout>
+
 </RelativeLayout>

@@ -1,6 +1,6 @@
 package com.operatorsapp.interfaces;
 
-public interface DashboardActivityToSelectedJobFragmentCallback {
+public interface DashBoardActivityToSelectedJobFragmentCallback {
     void onStartJobSuccess();
     void onStartJobFailure();
 }

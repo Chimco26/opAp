@@ -5,7 +5,6 @@ import android.content.Context;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
@@ -24,6 +23,8 @@ import com.zemingo.logrecorder.ZLogger;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -58,6 +59,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     private static PersistenceManager msInstance;
     private Gson mGson;
+    public HashMap<Integer, Event> items = new HashMap<>();;
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -190,17 +192,34 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public void saveShiftLogs(ArrayList<Event> events) {
-        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(events));
+
+        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(deletingDuplicate(events)));
+
         ZLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
+    private ArrayList<Event> deletingDuplicate(ArrayList<Event> events) {
+
+        ArrayList<Event> duplicates = new ArrayList<Event>();
+
+        for (Event item : events) {
+
+            if (!items.containsKey(item.getEventID())) {
+
+                items.put(item.getEventID(),item);
+            }
+        }
+
+        duplicates.addAll(items.values());
+
+        return duplicates;
+    }
     @Override
     public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
-        Type listType = new TypeToken<ArrayList<Event>>() {
-        }.getType();
+        Type listType = new TypeToken<ArrayList<Event>>() {}.getType();
 
-        return mGson.fromJson(shiftLogsJsonString, listType);
+        return deletingDuplicate((ArrayList<Event>) mGson.fromJson(shiftLogsJsonString, listType));
     }
 
     public void saveChartHistoricData(HashMap<String, ArrayList<Widget.HistoricData>> historicDatas) {
@@ -252,7 +271,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     public String getShiftLogStartingFrom() {
         // TODO: 18-Oct-16 SERGEY 86400000
 //        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 691200000, "dd.MM.yy"/*"yyyy-MM-dd HH:mm:ss.SSS"*/));
-        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 691200000, /*"yyyy-MM-dd"*/"yyyy-MM-dd HH:mm:ss.SSS"));
+        return SecurePreferences.getInstance().getString(PREF_SHIFT_LOG_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - 86400000, /*"yyyy-MM-dd"*/"yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override

@@ -59,8 +59,6 @@
     <string name="job">Taak</string>
     <string name="josh">Josh</string>
     <string name="shift">Dienst</string>
-    <string name="machine_id">Machine ID</string>
-    <string name="machine_status">Machine status</string>
     <string name="operator_id">Operator ID</string>
     <string name="operator_name">Operator Naam</string>
     <string name="operator_sign_in">Operator\naanmelden</string>

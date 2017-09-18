@@ -13,7 +13,7 @@
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
     <string name="login_screen_save">Save</string>
-    <string name="login_fields_factory_name_hint">Factory Name</string>
+    <string name="login_fields_factory_name_hint">Factory Name</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
@@ -58,8 +58,7 @@
     <string name="job">Job</string>
     <string name="josh">Josh</string>
     <string name="shift">Shift</string>
-    <string name="machine_id">Machine Name</string>
-    <string name="machine_status">Machine Status</string>
+    <string name="machine_status" translatable="false">	&#160;</string>
     <string name="operator_id">Operator ID</string>
     <string name="operator_name">Operator Name</string>
     <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
@@ -125,7 +124,7 @@
     <string name="first_item_approval">Setup End</string>
     <string name="send_logs">Send Logs</string>
     <string name="alarm">"Alarm"</string>
-    <string name="loading_data">Loading data..</string>
+    <string name="loading_data">Loading data...</string>
     <string name="no_data_chart">You need to provide data\nfor the chart</string>
     <string name="common_signin_button_text">SIGN IN</string>
 
@@ -176,6 +175,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="welcome">Welcome</string>
     <string name="log_in_to_nyour_factory">Log In To\nYour Factory</string>
+    <string name="machine_id" translatable="false">&#160;</string>
 
 
 </resources>

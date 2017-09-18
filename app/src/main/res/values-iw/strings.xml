@@ -26,7 +26,7 @@
     <string name="could_not_reach_server_error">תקלה - לא ניתן ליצור קשר עם השרת</string>
     <string name="unrecognized_operator">מפעיל לא ידוע</string>
     <string name="alarm">"התראה"</string>
-    <string name="loading_data">טוען נתונים..</string>
+    <string name="loading_data">טוען נתונים...</string>
 
     <!--Select machine screen -->
     <string name="select_machine_screen_title">>בחר מכונה</string>
@@ -41,7 +41,7 @@
     <string name="no_notifications">אין התראות</string>
     <string name="no_data">אין מידע</string>
     <string name="error_rest">שגיאת שרת</string>
-    <string name="jobs_actions">פעולת פק"ע</string>
+    <string name="jobs_actions">פעולות פק"ע</string>
     <string name="job_id">מזהה פק"ע</string>
     <string name="product_name">שם מוצר</string>
     <string name="erp">מזהה ERP</string>
@@ -59,8 +59,6 @@
     <string name="job">פק"ע</string>
     <string name="josh">פקמ"ש</string>
     <string name="shift">משמרת</string>
-    <string name="machine_id">שם מכונה</string>
-    <string name="machine_status">סטאטוס מכונה</string>
     <string name="operator_id">מזהה מפעיל</string>
     <string name="operator_name">שם מפעיל</string>
     <string name="operator_sign_in">כניסת\nמפעיל</string>

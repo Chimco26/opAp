@@ -266,4 +266,8 @@ public class Event {
         this.mEventGroupID = mEventGroupID;
         this.mEventID = mEventID;
     }
+
+    public void setmEventGroupEname(String mEventGroupEname) {
+        this.mEventGroupEname = mEventGroupEname;
+    }
 }

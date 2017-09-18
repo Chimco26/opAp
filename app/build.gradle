@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.5.4"
+        versionCode 7
+        versionName "0.5.5"
         multiDexEnabled true
     }
     buildTypes {
@@ -20,6 +20,10 @@ android {
 
     repositories {
         maven { url "https://jitpack.io" }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
     }
 }
 

@@ -26,19 +26,16 @@ public class MachineStatus {
         return mAllMachinesData;
     }
 
-    public enum MachineServerStatus
-    {
-        NO_JOB(0), WORKING_OK(1), PARAMETER_DEVIATION(2), STOPPED(3), COMMUNICATION_FAILURE(4), SETUP_WORKING(5), SETUP_STOPPED(6), SETUP_COMMUNICATION_FAILURE(7);
+    public enum MachineServerStatus {
+        NO_JOB(0), WORKING_OK(1), PARAMETER_DEVIATION(2), STOPPED(3), COMMUNICATION_FAILURE(4), SETUP_WORKING(5), SETUP_STOPPED(6), SETUP_COMMUNICATION_FAILURE(7), STOP_IDLE(8);
 
         private int mId;
 
-        MachineServerStatus(int id)
-        {
+        MachineServerStatus(int id) {
             mId = id;
         }
 
-        public int getId()
-        {
+        public int getId() {
             return mId;
         }
     }

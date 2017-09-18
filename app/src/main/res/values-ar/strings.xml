@@ -58,8 +58,6 @@
     <string name="job">عمل</string>
     <string name="josh">عمل في الورديه</string>
     <string name="shift">ورديه</string>
-    <string name="machine_id">اسم الماكنه</string>
-    <string name="machine_status">وضع الماكنه</string>
     <string name="operator_id">رقم المشغل</string>
     <string name="operator_name">اسم المشغل</string>
     <string name="error_shift_log">فشل في سجلات الورديه</string>

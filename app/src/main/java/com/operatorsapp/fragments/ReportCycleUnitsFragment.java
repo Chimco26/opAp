@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -41,6 +42,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.Locale;
@@ -338,6 +340,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJoshId);
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
+
+        SendBroadcast.refreshPolling(getContext());
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()

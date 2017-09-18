@@ -34,6 +34,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 public class ReportRejectSelectParametersFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
@@ -318,6 +319,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         mReportCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, mUnitsData, mWeightData, mJobId);
+        SendBroadcast.refreshPolling(getContext());
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
