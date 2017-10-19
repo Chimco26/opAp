@@ -95,7 +95,7 @@
     <string name="operator_napp_nadvanced_nsettings">操作员\n应用\n高级\n设置</string>
     <string name="polling_frequency">检测频率</string>
     <string name="request_timeout">请求超时</string>
-    <string name="request_timeout_range_error">请求时间在20---120秒内</string>
+    <string name="request_timeout_range_error">请求时间在5---120秒内</string>
     <string name="polling_frequency_range_error">检测频率范围须在 20-60 秒内</string>
     <string name="refreshed">刷新</string>
     <string name="one">1</string>

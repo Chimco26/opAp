@@ -101,7 +101,7 @@
     <string name="operator_napp_nadvanced_nsettings">مشغل\nتطبيق\nمتقدم\nاعدادات</string>
     <string name="polling_frequency">اعاده الاقتراحات</string>
     <string name="request_timeout">رفض الطلب</string>
-    <string name="request_timeout_range_error">يجب أن تنتهي مهلة الطلب في نطاق 20-120 ثانية 20-120 </string>
+    <string name="request_timeout_range_error">يجب أن تنتهي مهلة الطلب في نطاق 20-120 ثانية 5-120</string>
     <string name="polling_frequency_range_error">يجب ان يكون التردد في نطاق 20-60 ثانيه</string>
     <string name="refreshed">تجديد</string>
     <string name="one">1</string>

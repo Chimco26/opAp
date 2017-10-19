@@ -100,7 +100,7 @@
     <string name="operator_napp_nadvanced_nsettings">Operador\nApp\nAvanzados\nAjustes</string>
     <string name="polling_frequency">Frecuencia de Sondeo</string>
     <string name="request_timeout">Tiempo para final de solicitud</string>
-    <string name="request_timeout_range_error">Tiempo para final de solicitud debe ser entre 20-120 segundos</string>
+    <string name="request_timeout_range_error">Tiempo para final de solicitud debe ser entre 5-120 segundos</string>
     <string name="polling_frequency_range_error">La Frecuencia de sondeo debe ser entre 20-60 segundos</string>
     <string name="refreshed">Actualizado</string>
     <string name="one">1</string>

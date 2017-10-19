@@ -100,7 +100,7 @@
     <string name="operator_napp_nadvanced_nsettings">Opérateur\nApp\nAvancés\nAjustements</string>
     <string name="polling_frequency">Fréquence de sondage</string>
     <string name="request_timeout">Temps pour fin de demande</string>
-    <string name="request_timeout_range_error">La demande de délai d\'attente doit être comprise entre 20 et 120 secondes</string>
+    <string name="request_timeout_range_error">La demande de délai d\'attente doit être comprise entre 5 et 120 secondes</string>
     <string name="polling_frequency_range_error">La fréquence d\'interrogation doit être comprise entre 20 et 60 secondes</string>
     <string name="refreshed">Rafraîchir</string>
     <string name="one">1</string>

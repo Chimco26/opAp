@@ -103,7 +103,7 @@
     <string name="operator_napp_nadvanced_nsettings">הגדרות\nמתקדמות</string>
     <string name="polling_frequency">תדירות משיכת נתונים מהשרת</string>
     <string name="request_timeout">זמן להפסקת משיכת נתונים</string>
-    <string name="request_timeout_range_error">זמן לעצירת משיכת נתונים חייב להיות בין הערכים 20-120 שניות</string>
+    <string name="request_timeout_range_error">זמן לעצירת משיכת נתונים חייב להיות בין הערכים 5-120 שניות</string>
     <string name="polling_frequency_range_error">תדירות יבוא נתונים חייב להיות בין הערכים 20-60 שניות</string>
     <string name="refreshed">בוצע ריענון</string>
     <string name="one">1</string>
