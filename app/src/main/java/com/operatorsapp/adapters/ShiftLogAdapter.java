@@ -76,8 +76,25 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
                     return 1;
                 }
 
-                int retval = (int) (TimeUtils.getLongFromDateString(rhs.getEventTime(), "dd/MM/yyyy HH:mm:ss") - TimeUtils.getLongFromDateString(lhs.getEventTime(), "dd/MM/yyyy HH:mm:ss"));
-                return retval;
+                //int retval = (int) (TimeUtils.getLongFromDateString(rhs.getEventTime(), "dd/MM/yyyy HH:mm:ss") - TimeUtils.getLongFromDateString(lhs.getEventTime(), "dd/MM/yyyy HH:mm:ss"));
+                //return retval;
+
+                try {
+                    long retval = (TimeUtils.getLongFromDateString(rhs.getEventTime(), "dd/MM/yyyy HH:mm:ss") - TimeUtils.getLongFromDateString(lhs.getEventTime(), "dd/MM/yyyy HH:mm:ss"));
+
+                    if (retval > 0) {
+                        return 1;
+                    }
+
+                    if (retval == 0) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                } catch (RuntimeException e) {
+                    return 0;
+                }
+
             }
         });
 

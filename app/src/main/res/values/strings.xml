@@ -72,7 +72,7 @@
     <string name="duration">Duration</string>
     <string name="report">REPORT</string>
     <string name="stop_event">Stop Event</string>
-    <string name="enter_with_your_id">Enter With\nYour ID</string>
+    <string name="enter_with_your_id">Enter\nYour ID</string>
     <string name="report_rejects">Report Rejects</string>
     <string name="reject_reason">Reject reason</string>
     <string name="cause">Cause</string>
@@ -89,8 +89,8 @@
     <string name="report_stop_resume">"End"</string>
     <string name="report_cycle_nunits">Report Cycle\nUnits</string>
     <string name="report_cycle_units">Report Cycle Units</string>
-    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
-    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="report_inventory_nitem_production">Report Production \n</string>
+    <string name="report_inventory_item_production">Report Production to Inventory</string>
     <string name="package_type">Package Type</string>
     <string name="settings">Settings</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
@@ -154,13 +154,13 @@
         <item>ar</item>
     </array>
     <array name="jobs_spinner_array">
-        <item>New Job</item>
+        <item>Activate Job</item>
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
     </array>
 
-    <string name="approve_first_item">Setup End</string>
+    <string name="approve_first_item">End Setup</string>
 
     <plurals name="days">
         <item quantity="one">%d Day</item>

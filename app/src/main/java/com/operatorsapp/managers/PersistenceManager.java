@@ -23,8 +23,6 @@ import com.zemingo.logrecorder.ZLogger;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -52,7 +50,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_NEW_SHIFTLOG = "pref.PREF_NEW_SHIFTLOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
-    private static final int DEFAULT_POLLING_VALUE = 60;
+    private static final int DEFAULT_POLLING_VALUE = 10;
     private static final int DEFAULT_TIMEOUT_VALUE = 20;
     public static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
 
