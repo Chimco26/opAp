@@ -28,6 +28,7 @@ import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMach
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
@@ -43,6 +44,10 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.zemingo.logrecorder.ZLogger;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
 
 public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
 {
@@ -159,8 +164,28 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     private void initStopReasons() {
-        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
+
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), getFilterReasone(mReportFieldsForMachine.getStopReasons()), this);
+
         mRecyclerView.setAdapter(mStopReasonsAdapter);
+    }
+
+    private List<StopReasons> getFilterReasone(List<StopReasons> stopReasons) {
+        List<StopReasons> stopReasonsList = new ArrayList<>();
+
+        try {
+
+            for(StopReasons reasons: stopReasons){
+
+                // TODO: DAVID VARDI Sprint 1.5: add if for filter
+                stopReasons.add(reasons);
+            }
+
+        }catch (ConcurrentModificationException e){}
+
+
+
+        return stopReasonsList;
     }
 
     @Override

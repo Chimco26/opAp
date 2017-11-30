@@ -2,7 +2,6 @@ package com.operatorsapp.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
@@ -55,7 +54,6 @@ import com.operatorsapp.adapters.ShiftLogAdapter;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
-import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;

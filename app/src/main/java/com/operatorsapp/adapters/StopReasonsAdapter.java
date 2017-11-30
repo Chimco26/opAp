@@ -50,8 +50,11 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
     @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(position).getEName() : mStopItemsList.get(position).getLName();
+
         holder.mStopTitle.setText(nameByLang);
+
         holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(position).getId())));
     }
 

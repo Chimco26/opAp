@@ -421,6 +421,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
 //        }
 
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"millisUntilFinished: "+millisUntilFinished);
+
         if (mDashboardUICallbackListener != null) {
             mDashboardUICallbackListener.onShiftForMachineEnded();
         }

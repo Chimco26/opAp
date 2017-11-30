@@ -22,6 +22,9 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
         mListener = listener;
     }
+    public SelectStopReasonBroadcast() {
+
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

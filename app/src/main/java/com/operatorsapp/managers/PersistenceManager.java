@@ -23,8 +23,7 @@ import com.zemingo.logrecorder.ZLogger;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -54,12 +53,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
     private static final int DEFAULT_POLLING_VALUE = 60;
     private static final int DEFAULT_TIMEOUT_VALUE = 20;
-    public static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
+    private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
 
 
     private static PersistenceManager msInstance;
     private Gson mGson;
-    public HashMap<Integer, Event> items = new HashMap<>();;
+    public HashMap<Integer, Event> items = new HashMap<>();
+
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -200,13 +200,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     private ArrayList<Event> deletingDuplicate(ArrayList<Event> events) {
 
-        ArrayList<Event> duplicates = new ArrayList<Event>();
+        ArrayList<Event> duplicates = new ArrayList<>();
 
         for (Event item : events) {
 
             if (!items.containsKey(item.getEventID())) {
 
-                items.put(item.getEventID(),item);
+                items.put(item.getEventID(), item);
             }
         }
 
@@ -214,6 +214,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
         return duplicates;
     }
+
     @Override
     public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
@@ -282,7 +283,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public String getMachineDataStartingFrom() {
         // TODO: 18-Oct-16 SERGEY 86400000
-        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - (24*60*60*1000), /*"dd.MM.yy"*/"yyyy-MM-dd HH:mm:ss.SSS"));
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_DATA_STARTING_FROM, TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 1000), /*"dd.MM.yy"*/"yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @Override
