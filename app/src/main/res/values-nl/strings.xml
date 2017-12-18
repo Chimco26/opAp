@@ -59,8 +59,6 @@
     <string name="job">Taak</string>
     <string name="josh">Josh</string>
     <string name="shift">Dienst</string>
-    <string name="machine_id">Machine ID</string>
-    <string name="machine_status">Machine status</string>
     <string name="operator_id">Operator ID</string>
     <string name="operator_name">Operator Naam</string>
     <string name="operator_sign_in">Operator\naanmelden</string>
@@ -106,7 +104,7 @@
     <string name="operator_napp_nadvanced_nsettings">Geavenceerde\nInstellingen</string>
     <string name="polling_frequency">Scannen frequentie</string>
     <string name="request_timeout">Vraag time-out aan</string>
-    <string name="request_timeout_range_error">Time-out moet liggen tussen 20-120 seconden</string>
+    <string name="request_timeout_range_error">Time-out moet liggen tussen 5-120 seconden</string>
     <string name="polling_frequency_range_error">Scan frequentie moet liggen tussen 20-60 seconden</string>
     <string name="refreshed">Ververst</string>
     <string name="one">1</string>
@@ -135,6 +133,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -147,6 +146,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
 
     <array name="jobs_spinner_array">

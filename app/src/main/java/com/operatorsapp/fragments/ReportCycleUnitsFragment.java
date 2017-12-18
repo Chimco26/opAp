@@ -102,6 +102,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
+
         setActionBar();
 
         return view;

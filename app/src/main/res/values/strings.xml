@@ -13,7 +13,7 @@
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
     <string name="login_screen_save">Save</string>
-    <string name="login_fields_factory_name_hint">Factory Name</string>
+    <string name="login_fields_factory_name_hint">Factory Name</string>URL de l'usine
     <string name="login_fields_factory_url_hint">Factory URL</string>
     <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
@@ -58,8 +58,7 @@
     <string name="job">Job</string>
     <string name="josh">Josh</string>
     <string name="shift">Shift</string>
-    <string name="machine_id">Machine Name</string>
-    <string name="machine_status">Machine Status</string>
+    <string name="machine_status" translatable="false">	&#160;</string>
     <string name="operator_id">Operator ID</string>
     <string name="operator_name">Operator Name</string>
     <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
@@ -73,7 +72,7 @@
     <string name="duration">Duration</string>
     <string name="report">REPORT</string>
     <string name="stop_event">Stop Event</string>
-    <string name="enter_with_your_id">Enter With\nYour ID</string>
+    <string name="enter_with_your_id">Enter\nYour ID</string>
     <string name="report_rejects">Report Rejects</string>
     <string name="reject_reason">Reject reason</string>
     <string name="cause">Cause</string>
@@ -90,8 +89,8 @@
     <string name="report_stop_resume">"End"</string>
     <string name="report_cycle_nunits">Report Cycle\nUnits</string>
     <string name="report_cycle_units">Report Cycle Units</string>
-    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
-    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="report_inventory_nitem_production">Report Production \n</string>
+    <string name="report_inventory_item_production">Report Production to Inventory</string>
     <string name="package_type">Package Type</string>
     <string name="settings">Settings</string>
     <string name="operator_app_settings">Operator\nApp\nSettings</string>
@@ -103,7 +102,9 @@
     <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
     <string name="polling_frequency">Polling Frequency</string>
     <string name="request_timeout">Request Timeout</string>
-    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
+    <string name="popup_timeout">Pop up Timeout</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 5-120 seconds</string>
+    <string name="popup_timeout_range_error">Pop up timeout must be in range 5-30 seconds</string>
     <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
     <string name="refreshed">Refreshed</string>
     <string name="one">1</string>
@@ -125,7 +126,7 @@
     <string name="first_item_approval">Setup End</string>
     <string name="send_logs">Send Logs</string>
     <string name="alarm">"Alarm"</string>
-    <string name="loading_data">Loading data..</string>
+    <string name="loading_data">Loading data...</string>
     <string name="no_data_chart">You need to provide data\nfor the chart</string>
     <string name="common_signin_button_text">SIGN IN</string>
 
@@ -139,6 +140,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -151,15 +153,16 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
     <array name="jobs_spinner_array">
-        <item>New Job</item>
+        <item>Activate Job</item>
         <item>Add Rejects</item>
         <item>Change Units In Cycle</item>
         <item>Report Production</item>
     </array>
 
-    <string name="approve_first_item">Setup End</string>
+    <string name="approve_first_item">End Setup</string>
 
     <plurals name="days">
         <item quantity="one">%d Day</item>
@@ -174,6 +177,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="welcome">Welcome</string>
     <string name="log_in_to_nyour_factory">Log In To\nYour Factory</string>
+    <string name="machine_id" translatable="false">&#160;</string>
 
 
 </resources>

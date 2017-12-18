@@ -10,11 +10,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -41,12 +45,13 @@ import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
-{
+public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -56,7 +61,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private ReportCore mReportCore;
     private ImageView mPlusButton;
     private ImageView mMinusButton;
-    private TextView mUnitsCounterTextView;
+    private EditText mUnitsCounterTextView;
     private Button mButtonReport;
     private TextView mButtonCancel;
     private ProgressBar mActiveJobsProgressBar;
@@ -69,6 +74,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
+
+    private View mTopView;
 
 
     public static ReportInventoryFragment newInstance(String currentProductName, int currentProductId) {
@@ -109,11 +116,18 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
+
         getActiveJobs();
+
         mButtonReport = (Button) view.findViewById(R.id.button_report);
+
         mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
+
         mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
+
+        mTopView = view.findViewById(R.id.FRI_top_view);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
 
@@ -134,7 +148,30 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         productTitleTextView.setText(mCurrentProductName);
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
-        mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
+        mUnitsCounterTextView = (EditText) view.findViewById(R.id.units_text_view);
+
+        mUnitsCounterTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length()>0){
+
+                    mUnitsCounter = Integer.valueOf(s.toString());
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
 
         mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
@@ -163,6 +200,10 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                 }
             });
         }
+
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"keyboardIsShown");
+
+        KeyboardUtils.keyboardIsShownC(getActivity(),this);
 
     }
 
@@ -365,5 +406,25 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     public int getCroutonRoot()
     {
         return R.id.report_inventory_crouton_root;
+    }
+
+    @Override
+    public void onKeyboardShown() {
+
+    //    mTopView.setVisibility(View.GONE);
+
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onKeyboardShown");
+
+
+    }
+
+    @Override
+    public void onKeyboardHidden() {
+
+     //   mTopView.setVisibility(View.VISIBLE);
+
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onKeyboardHidden");
+
+
     }
 }

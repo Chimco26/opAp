@@ -39,6 +39,7 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
@@ -91,10 +92,17 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mGoToScreenListener = (GoToScreenListener) getActivity();
+        mGoToScreenListener = (GoToScreenListener) context;
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mGoToScreenListener = null;
     }
 
     @Override
@@ -165,7 +173,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     private void initStopReasons() {
 
-        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), getFilterReasone(mReportFieldsForMachine.getStopReasons()), this);
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
 
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
@@ -181,7 +189,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 stopReasons.add(reasons);
             }
 
-        }catch (ConcurrentModificationException e){}
+        }catch (ConcurrentModificationException e){
+
+            e.printStackTrace();
+        }
 
 
 
@@ -231,15 +242,22 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onStopReasonSelected(int position) {
 
-        mGoToScreenListener.goToFragment(SelectedStopReasonFragment.newInstance(position,
-                mJobId,
-                mStart,
-                mEnd,
-                mDuration,
-                mEventId,
-                mReportFieldsForMachine.getStopReasons().get(position).getId(),
-                mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                mReportFieldsForMachine.getStopReasons().get(position).getLName()), true);
+        try {
+            mGoToScreenListener.goToFragment(SelectedStopReasonFragment.newInstance(position,
+                    mJobId,
+                    mStart,
+                    mEnd,
+                    mDuration,
+                    mEventId,
+                    mReportFieldsForMachine.getStopReasons().get(position).getId(),
+                    mReportFieldsForMachine.getStopReasons().get(position).getEName(),
+                    mReportFieldsForMachine.getStopReasons().get(position).getLName()), true);
+        }catch (IllegalStateException e){
+
+            SendReportUtil.sendAcraExeption(e,"onStopReasonSelected");
+        }
+
+
     }
 
     private void initJobsSpinner() {

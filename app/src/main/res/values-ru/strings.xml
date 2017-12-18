@@ -53,8 +53,6 @@
     <string name="job">Задание</string>
     <string name="josh">Работа в смену</string>
     <string name="shift">Смена</string>
-    <string name="machine_id">Машина</string>
-    <string name="machine_status">Статус машины</string>
     <string name="operator_id">ID оператора</string>
     <string name="operator_name">Оператор</string>
     <string name="error_shift_log">Не удалось выполнить функцию GetMachineShiftLog</string>
@@ -97,7 +95,7 @@
     <string name="operator_napp_nadvanced_nsettings">Приложение\nОператора\nРасширенные\nНастройки</string>
     <string name="polling_frequency">Частота опроса</string>
     <string name="request_timeout">Тайм-аут запроса</string>
-    <string name="request_timeout_range_error">Время ожидания запроса должно быть в диапазоне 20-120 секунд.</string>
+    <string name="request_timeout_range_error">Время ожидания запроса должно быть в диапазоне 5-120 секунд.</string>
     <string name="polling_frequency_range_error">Частота опроса должна быть в диапазоне 20-60 секунд</string>
     <string name="refreshed">обновлено</string>
     <string name="one">1</string>
@@ -132,6 +130,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -144,6 +143,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
 
     <array name="jobs_spinner_array">

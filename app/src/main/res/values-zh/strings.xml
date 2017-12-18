@@ -53,8 +53,6 @@
     <string name="job">工单</string>
     <string name="josh">班次工单</string>
     <string name="shift">班次</string>
-    <string name="machine_id">机器名称 </string>
-    <string name="machine_status">机器状态</string>
     <string name="operator_id">操作员ID</string>
     <string name="operator_name">操作员名字</string>
     <string name="error_shift_log">错误 -未能执行机移位对数函数</string>
@@ -97,7 +95,7 @@
     <string name="operator_napp_nadvanced_nsettings">操作员\n应用\n高级\n设置</string>
     <string name="polling_frequency">检测频率</string>
     <string name="request_timeout">请求超时</string>
-    <string name="request_timeout_range_error">请求时间在20---120秒内</string>
+    <string name="request_timeout_range_error">请求时间在5---120秒内</string>
     <string name="polling_frequency_range_error">检测频率范围须在 20-60 秒内</string>
     <string name="refreshed">刷新</string>
     <string name="one">1</string>
@@ -132,6 +130,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -144,6 +143,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
 
     <array name="jobs_spinner_array">

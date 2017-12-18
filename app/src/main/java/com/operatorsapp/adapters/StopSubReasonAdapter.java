@@ -38,16 +38,21 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         final ViewHolder holder = new ViewHolder(view);
 
+        try {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSelectedPosition = holder.getAdapterPosition();
+                    mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(holder.getAdapterPosition()).getId());
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSelectedPosition = holder.getAdapterPosition();
-                mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(holder.getAdapterPosition()).getId());
 
+                }
+            });
 
-            }
-        });
+        } catch (ArrayIndexOutOfBoundsException e){
+
+            e.printStackTrace();
+        }
 
 
         return holder;

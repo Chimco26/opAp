@@ -74,7 +74,19 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                                 break;
                             }
                             case "num": {
-                                fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                try {
+                                    String doubleFormat = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                    Double doubleValue = Double.parseDouble(doubleFormat);
+
+                                    // Check if the num value is double or integer.
+                                    if(doubleValue % 1 > 0)
+                                        fieldValues[i] = doubleValue.toString();
+                                    else
+                                        fieldValues[i] = ((Long)Math.round(doubleValue)).toString();
+
+                                } catch (Exception e) {
+                                    fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                }
                                 break;
                             }
                             case "text": {

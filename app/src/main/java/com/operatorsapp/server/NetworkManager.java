@@ -33,8 +33,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManag
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
-import com.operatorsapp.server.mocks.RetrofitMockClient;
-import com.squareup.okhttp.Dispatcher;
+import com.operatorsapp.utils.SendReportUtil;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
@@ -46,53 +45,42 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface, ReportCycleUnitsNetworkManagerInterface, ReportInventoryNetworkManagerInterface, ActiveJobsListForMachineNetworkManagerInterface, ApproveFirstItemNetworkManagerInterface
-{
+public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface, ReportCycleUnitsNetworkManagerInterface, ReportInventoryNetworkManagerInterface, ActiveJobsListForMachineNetworkManagerInterface, ApproveFirstItemNetworkManagerInterface {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
     private Retrofit mRetrofit;
 
-    public static NetworkManager initInstance()
-    {
-        if(msInstance == null)
-        {
+    public static NetworkManager initInstance() {
+        if (msInstance == null) {
             msInstance = new NetworkManager();
         }
 
         return msInstance;
     }
 
-    public static NetworkManager getInstance()
-    {
-        if(msInstance == null)
-        {
+    public static NetworkManager getInstance() {
+        if (msInstance == null) {
             ZLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
         }
         return msInstance;
     }
 
-    public NetworkManager()
-    {
+    public NetworkManager() {
     }
 
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl) {
         // -1  to get default timeout
         return getLoginRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
-        if(mEmeraldServiceRequestsHashMap.containsKey(siteUrl))
-        {
+    public EmeraldLoginServiceRequests getLoginRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        if (mEmeraldServiceRequestsHashMap.containsKey(siteUrl)) {
             return mEmeraldServiceRequestsHashMap.get(siteUrl);
-        }
-        else
-        {
+        } else {
             mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = mRetrofit.create(EmeraldLoginServiceRequests.class);
@@ -102,239 +90,476 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getMachinesRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachinesRetroFitServiceRequests");
+        }
+
         return getMachinesRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetMachinesServiceRequests getMachinesRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetMachinesServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachinesRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetMachinesServiceRequests.class);
 
     }
 
     @Override
-    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getShiftLogRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getShiftLogRetroFitServiceRequests");
+        }
         return getShiftLogRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldShiftLogServiceRequests getShiftLogRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldShiftLogServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getShiftLogRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldShiftLogServiceRequests.class);
     }
 
     @Override
-    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getMachineDataRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachineDataRetroFitServiceRequests");
+        }
         return getMachineDataRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetMachinesDataServiceRequest getMachineDataRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetMachinesDataServiceRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachineDataRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetMachinesDataServiceRequest.class);
     }
 
     @Override
-    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl)
-    {
+    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl) {
+        try {
+
+            return getShiftForMachineServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getShiftForMachineServiceRequests");
+        }
         return getShiftForMachineServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldShiftForMachineServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getShiftForMachineServiceRequests");
+        }
         return mRetrofit.create(EmeraldShiftForMachineServiceRequests.class);
     }
 
-    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
-        if(mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl))
-        {
-            okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
-            dispatcher.setMaxRequestsPerHost(1);
-            OkHttpClient okHttpClient;
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            if(timeout >= 0 && timeUnit != null)
-            {
-                okHttpClient = new OkHttpClient.Builder()
-                        //add mock
-                        //                        .addInterceptor(new RetrofitMockClient())
-                        .connectTimeout(timeout, timeUnit).writeTimeout(timeout, timeUnit).readTimeout(timeout, timeUnit).addInterceptor(loggingInterceptor).dispatcher(dispatcher)
-                        //                    .sslSocketFactory(sslContext.getSocketFactory())
+    private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
+        try {
+            if (mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl)) {
+                okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
+                dispatcher.setMaxRequestsPerHost(1);
+                OkHttpClient okHttpClient;
+                HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                if (timeout >= 0 && timeUnit != null) {
+                    okHttpClient = new OkHttpClient.Builder()
+                            //add mock
+                            //                        .addInterceptor(new RetrofitMockClient())
+                            .connectTimeout(timeout, timeUnit).writeTimeout(timeout, timeUnit).readTimeout(timeout, timeUnit).addInterceptor(loggingInterceptor).dispatcher(dispatcher)
+                            //                    .sslSocketFactory(sslContext.getSocketFactory())
 
-                        .build();
-            }
-            else
-            {
-                okHttpClient = new OkHttpClient.Builder()
-                        //add mock
-                        //                        .addInterceptor(new RetrofitMockClient())
-                        .addInterceptor(loggingInterceptor).build();
-            }
-            mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
+                            .build();
+                } else {
+                    okHttpClient = new OkHttpClient.Builder()
+                            //add mock
+                            //                        .addInterceptor(new RetrofitMockClient())
+                            .addInterceptor(loggingInterceptor).build();
+                }
+                mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
+            }
+        } catch (IllegalArgumentException e) {
+
+            String s = "siteUrl" + siteUrl;
+
+            if (siteUrl == null) {
+
+                s += " null";
+            }
+
+            SendReportUtil.sendAcraExeption(e, "getRetrofit " + s);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
         }
         return mRetrofit;
+
     }
 
     @Override
-    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachineStatusRetroFitServiceRequests");
+        }
         return getMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+
+            return mRetrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getMachineStatusRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
     }
 
     @Override
-    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getJobListForMachineStatusRetroFitServiceRequests");
+        }
         return getJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetJobsListServiceRequests getJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetJobsListServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getJobListForMachineStatusRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetJobsListServiceRequests.class);
     }
 
     @Override
-    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return startJobForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "startJobForMachineStatusRetroFitServiceRequests");
+        }
         return startJobForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldStartJobServiceRequests startJobForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldStartJobServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "startJobForMachineStatusRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldStartJobServiceRequests.class);
     }
 
     @Override
-    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getOperatorByIdRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getOperatorByIdRetroFitServiceRequests");
+        }
         return getOperatorByIdRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetOperatorById.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getOperatorByIdRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetOperatorById.class);
     }
 
     @Override
-    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return setOperatorForMachineRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "setOperatorForMachineRetroFitServiceRequests");
+        }
         return setOperatorForMachineRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSetOperatorForMachine setOperatorForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSetOperatorForMachine.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "setOperatorForMachineRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSetOperatorForMachine.class);
     }
 
     @Override
-    public EmeraldGetReportFieldsForMachineRequest getReportFieldsForMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetReportFieldsForMachineRequest getReportFieldsForMachineStatusRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return getReportFieldsForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getReportFieldsForMachineStatusRetroFitServiceRequests");
+        }
         return getReportFieldsForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetReportFieldsForMachineRequest getReportFieldsForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetReportFieldsForMachineRequest getReportFieldsForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetReportFieldsForMachineRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getReportFieldsForMachineStatusRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetReportFieldsForMachineRequest.class);
     }
 
     @Override
-    public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return reportRejectRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportRejectRetroFitServiceRequests");
+        }
         return reportRejectRetroFitServiceRequests(siteUrl, -1, null);
 
     }
 
     @Override
-    public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSendReportReject reportRejectRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSendReportReject.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportRejectRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSendReportReject.class);
     }
 
     @Override
-    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl) {
+
+        try {
+
+            return reportStopRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportStopRetroFitServiceRequests");
+        }
         return reportStopRetroFitServiceRequests(siteUrl, -1, null);
 
     }
 
     @Override
-    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+
+            return mRetrofit.create(EmeraldSendStopReport.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportStopRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSendStopReport.class);
     }
 
     @Override
-    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl) {
+
+        try {
+
+            return reportCycleUnitsRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportCycleUnitsRetroFitServiceRequests");
+        }
         return reportCycleUnitsRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSendReportCycleUnits reportCycleUnitsRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSendReportCycleUnits.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportCycleUnitsRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSendReportCycleUnits.class);
     }
 
     @Override
-    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return reportInventoryRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportInventoryRetroFitServiceRequests");
+        }
         return reportInventoryRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSendReportInventory reportInventoryRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSendReportInventory.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "reportInventoryRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSendReportInventory.class);
     }
 
     @Override
-    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl)
-    {
+    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl) {
+
+        try {
+
+            return getActiveJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getActiveJobListForMachineStatusRetroFitServiceRequests");
+        }
         return getActiveJobListForMachineStatusRetroFitServiceRequests(siteUrl, -1, null);
     }
 
     @Override
-    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldGetActiveJobsListForMachineServiceRequests getActiveJobListForMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+
+            return mRetrofit.create(EmeraldGetActiveJobsListForMachineServiceRequests.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getActiveJobListForMachineStatusRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldGetActiveJobsListForMachineServiceRequests.class);
     }
 
     @Override
-    public EmeraldSendApproveFirstItem approveFirstItemRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit)
-    {
+    public EmeraldSendApproveFirstItem approveFirstItemRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+
+            return mRetrofit.create(EmeraldSendApproveFirstItem.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveFirstItemRetroFitServiceRequests");
+        }
         return mRetrofit.create(EmeraldSendApproveFirstItem.class);
     }
 }

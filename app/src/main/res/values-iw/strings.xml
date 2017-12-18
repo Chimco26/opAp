@@ -26,7 +26,7 @@
     <string name="could_not_reach_server_error">תקלה - לא ניתן ליצור קשר עם השרת</string>
     <string name="unrecognized_operator">מפעיל לא ידוע</string>
     <string name="alarm">"התראה"</string>
-    <string name="loading_data">טוען נתונים..</string>
+    <string name="loading_data">טוען נתונים...</string>
 
     <!--Select machine screen -->
     <string name="select_machine_screen_title">>בחר מכונה</string>
@@ -41,7 +41,7 @@
     <string name="no_notifications">אין התראות</string>
     <string name="no_data">אין מידע</string>
     <string name="error_rest">שגיאת שרת</string>
-    <string name="jobs_actions">פעולת פק"ע</string>
+    <string name="jobs_actions">פעולות פק"ע</string>
     <string name="job_id">מזהה פק"ע</string>
     <string name="product_name">שם מוצר</string>
     <string name="erp">מזהה ERP</string>
@@ -59,8 +59,6 @@
     <string name="job">פק"ע</string>
     <string name="josh">פקמ"ש</string>
     <string name="shift">משמרת</string>
-    <string name="machine_id">שם מכונה</string>
-    <string name="machine_status">סטאטוס מכונה</string>
     <string name="operator_id">מזהה מפעיל</string>
     <string name="operator_name">שם מפעיל</string>
     <string name="operator_sign_in">כניסת\nמפעיל</string>
@@ -105,7 +103,7 @@
     <string name="operator_napp_nadvanced_nsettings">הגדרות\nמתקדמות</string>
     <string name="polling_frequency">תדירות משיכת נתונים מהשרת</string>
     <string name="request_timeout">זמן להפסקת משיכת נתונים</string>
-    <string name="request_timeout_range_error">זמן לעצירת משיכת נתונים חייב להיות בין הערכים 20-120 שניות</string>
+    <string name="request_timeout_range_error">זמן לעצירת משיכת נתונים חייב להיות בין הערכים 5-120 שניות</string>
     <string name="polling_frequency_range_error">תדירות יבוא נתונים חייב להיות בין הערכים 20-60 שניות</string>
     <string name="refreshed">בוצע ריענון</string>
     <string name="one">1</string>
@@ -134,6 +132,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -146,6 +145,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
     <array name="jobs_spinner_array">
         <item>פק"ע חדשה</item>

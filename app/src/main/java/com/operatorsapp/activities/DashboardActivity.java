@@ -75,6 +75,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
@@ -251,6 +252,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ZLogger.d(LOG_TAG, "onResume(), end ");
 
         }
+
+       /* try {
+
+
+            int i = 5 / 0;
+        } catch (Exception e) {
+
+            SendReportUtil.sendAcraExeption(e, " test for test");
+
+        }*/
     }
 
     private void registerReceiver() {
@@ -421,7 +432,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
 //        }
 
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"millisUntilFinished: "+millisUntilFinished);
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "millisUntilFinished: " + millisUntilFinished);
 
         if (mDashboardUICallbackListener != null) {
             mDashboardUICallbackListener.onShiftForMachineEnded();
@@ -452,9 +463,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftLogFailed(ErrorObjectInterface reason) {
-                ZLogger.i(LOG_TAG, "shiftLogStartPolling() reason: " + reason.getDetailedDescription());
-                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
+
+                if (reason != null) {
+
+                    ZLogger.i(LOG_TAG, "shiftLogStartPolling() reason: " + reason.getDetailedDescription());
+
+                    mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
 //                mShiftLogCore.stopPolling();
+                }
             }
         };
     }

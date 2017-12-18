@@ -7,8 +7,8 @@ android {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.5.4"
+        versionCode 9
+        versionName "0.5.7"
         multiDexEnabled true
     }
     buildTypes {
@@ -16,10 +16,18 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
     }
 
     repositories {
         maven { url "https://jitpack.io" }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
     }
 }
 
@@ -64,21 +72,22 @@ dependencies {
     compile project(':ReportInfra')
     compile project(':ReportNetworkBridge')
     compile project(':AllDashboardDataCore')
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.diogobernardino:williamchart:2.2'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     compile 'me.grantland:autofittextview:0.2.+'
-    compile 'com.android.support:design:24.0.0'
-    compile 'com.google.android.gms:play-services-plus:9.2.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.google.android.gms:play-services-plus:11.6.2'
     compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:cardview-v7:24.0.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
     compile project(':ErrorObjectInterface')
     compile project(':ActiveJobsListForMachineCore')
     compile project(':ActiveJobsListForMachineInfra')
@@ -86,5 +95,10 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    compile 'ch.acra:acra:4.8.0'
+    compile 'com.android.support:multidex:1.0.2'
+    androidTestCompile 'com.android.support:multidex:1.0.2'
+    androidTestCompile 'com.android.support:multidex-instrumentation:1.0.2'
+
 
 }

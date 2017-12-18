@@ -43,21 +43,26 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
     private static final String SELECTED_LANGUAGE = "selected_language";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
-    private static final int MIN_POLLING_FREQUENCY_VALUE = 20;
+    private static final int MIN_POLLING_FREQUENCY_VALUE = 5; //20
     private static final int MAX_POLLING_FREQUENCY_VALUE = 60;
+    private static final int MIN_POPUP_VALUE = 5;
+    private static final int MAX_POPUP_VALUE = 30;
     private static final int MIN_TIMEOUT_VALUE = 20;
     private static final int MAX_TIMEOUT_VALUE = 120;
     private SettingsInterface mSettingsInterface;
     private String mSelectedLanguage;
     private EditText mPollingFrequencyEditText;
     private EditText mRequestTimeoutEditText;
+    private EditText mPopupTimeoutEditText;
     private Button mButtonSave;
+    private TextView mPopupRangeErrorTextView;
     private TextView mPollingRangeErrorTextView;
     private TextView mTimeoutRangeErrorTextView;
     private boolean mPollingFrequencyIsValid = true;
     private boolean mTimeoutIsValid = true;
-    private TextView mSendLogButton;
+    private boolean mPopupIsValid = true;
 
+    private TextView mSendLogButton;
     private SendLogsBroadcast mSendLogsBroadcast = null;
 
 
@@ -99,9 +104,12 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         mPollingFrequencyEditText.setText(String.valueOf(PersistenceManager.getInstance().getPollingFrequency()));
         mRequestTimeoutEditText = (EditText) view.findViewById(R.id.request_timeout_edit_text);
         mRequestTimeoutEditText.setText(String.valueOf(PersistenceManager.getInstance().getRequestTimeout()));
+        mPopupTimeoutEditText = (EditText) view.findViewById(R.id.popup_timeout_edit_text);
+        mPopupTimeoutEditText.setText(String.valueOf(PersistenceManager.getInstance().getTimeToDownParameterDialog() / 1000));
         mButtonSave = (Button) view.findViewById(R.id.button_save);
         mPollingRangeErrorTextView = (TextView) view.findViewById(R.id.polling_range_error_text_view);
         mTimeoutRangeErrorTextView = (TextView) view.findViewById(R.id.timeout_range_error_text_view);
+        mPopupRangeErrorTextView = (TextView) view.findViewById(R.id.pop_up_range_error_text_view);
         mPollingFrequencyEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,6 +151,27 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             }
         });
 
+        mPopupTimeoutEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+
+                    validatePopupTimeout(Integer.parseInt(mPopupTimeoutEditText.getText().toString()));
+
+                }
+            }
+        });
+
         mSendLogButton = (TextView) view.findViewById(R.id.send_log_settings_button);
     }
 
@@ -171,6 +200,18 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         }
     }
 
+    private void validatePopupTimeout(int popupTimeout) {
+        if (popupTimeout >= MIN_POPUP_VALUE && popupTimeout <= MAX_POPUP_VALUE) {
+            mPopupIsValid = true;
+            mPopupRangeErrorTextView.setVisibility(View.INVISIBLE);
+            mButtonSave.setEnabled(true);
+        } else {
+            mPopupIsValid = false;
+            mPopupRangeErrorTextView.setVisibility(View.VISIBLE);
+            mButtonSave.setEnabled(false);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -183,7 +224,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public void onDestroy() {
         super.onDestroy();
 
-      removeBroadcasts();
+        removeBroadcasts();
     }
 
     private void removeBroadcasts() {
@@ -308,13 +349,13 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     }
 
 
-
     private void checkDataAndSave() {
         int pollingFrequency = Integer.parseInt(mPollingFrequencyEditText.getText().toString());
         int requestTimeout = Integer.parseInt(mRequestTimeoutEditText.getText().toString());
+        int popupTimeout = Integer.parseInt(mPopupTimeoutEditText.getText().toString());
 
 
-        if (mPollingFrequencyIsValid && mTimeoutIsValid) {
+        if (mPollingFrequencyIsValid && mTimeoutIsValid && mPopupIsValid) {
             if (pollingFrequency != PersistenceManager.getInstance().getPollingFrequency()) {
                 PersistenceManager.getInstance().setPolingFrequency(pollingFrequency);
                 mSettingsInterface.onRefreshPollingRequest();
@@ -323,6 +364,12 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
             if (requestTimeout != PersistenceManager.getInstance().getRequestTimeout()) {
                 PersistenceManager.getInstance().setRequestTimeOut(requestTimeout);
             }
+
+            if (popupTimeout != PersistenceManager.getInstance().getTimeToDownParameterDialog() / 1000) {
+
+                PersistenceManager.getInstance().setTimeToDownParameterDialog(popupTimeout);
+            }
+
             if (mSelectedLanguage != null) {
 
                 if (!mSelectedLanguage.equals(PersistenceManager.getInstance().getCurrentLang())) {

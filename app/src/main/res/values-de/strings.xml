@@ -58,8 +58,6 @@
     <string name="job">Aktivitaet</string>
     <string name="josh">Josh</string>
     <string name="shift">Schicht</string>
-    <string name="machine_id">Machinenname</string>
-    <string name="machine_status">Machinenstatus</string>
     <string name="operator_id">Werker-ID</string>
     <string name="operator_name">Name des Werkers</string>
     <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
@@ -103,7 +101,7 @@
     <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
     <string name="polling_frequency">Polling frequency</string>
     <string name="request_timeout">Request timeout</string>
-    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 5-120 seconds</string>
     <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
     <string name="refreshed">refreshed</string>
     <string name="one">1</string>
@@ -138,6 +136,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -150,6 +149,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
     <array name="jobs_spinner_array">
         <item>Neuer Job</item>

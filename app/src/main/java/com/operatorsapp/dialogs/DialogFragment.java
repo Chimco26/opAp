@@ -1,5 +1,7 @@
 package com.operatorsapp.dialogs;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,13 +14,17 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.lang.reflect.Type;
@@ -27,10 +33,11 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     private final static String TYPE = "type";
     public final static String DIALOG = "dialog";
     private final static String EVENT = "event";
-//    public static final int DAY_MILLIS = 86400000;
+    //    public static final int DAY_MILLIS = 86400000;
     private OnDialogButtonsListener mListener;
     private boolean mIsStopDialog;
     private Event mEvent;
+    private ProgressBar mProgressBar;
 
     public static DialogFragment newInstance(Event event, boolean isStopDialog) {
         DialogFragment dialogFragment = new DialogFragment();
@@ -48,23 +55,32 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
             mIsStopDialog = getArguments().getBoolean(TYPE);
             Gson gson = new Gson();
+
             Type eventType = new TypeToken<Event>() {
             }.getType();
+
             mEvent = gson.fromJson(getArguments().getString(EVENT), eventType);
         }
     }
 
     @Override
     public void onResume() {
+
         Display display = getActivity().getWindowManager().getDefaultDisplay();
+
         Point size = new Point();
+
         display.getSize(size);
+
         int width = size.x;
 
         WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+
         params.width = (int) (width * 0.35);
+
         getDialog().getWindow().setAttributes(params);
 
         super.onResume();
@@ -119,6 +135,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
         } else {
             view = inflater.inflate(R.layout.parameter_dialog, null);
 
+            setProgressCountDown(view);
+
             TextView title = (TextView) view.findViewById(R.id.dialog_title);
             String subtitleNameByLang = OperatorApplication.isEnglishLang() ? mEvent.getSubtitleEname() : mEvent.getSubtitleLname();
             title.setText(new StringBuilder(subtitleNameByLang).append(" ").append(getString(R.string.alarm)));
@@ -145,7 +163,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 public void onClick(View v) {
                     if (mListener != null) {
                         mListener.onDismissClick(getDialog(), getTargetRequestCode());
-                    } else{
+                    } else {
                         //todo
                     }
                 }
@@ -170,6 +188,42 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
         return builder.create();
     }
 
+    private void setProgressCountDown(View view) {
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.PT_progressbar_time_left);
+
+        ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 100);
+
+        animation.setDuration(PersistenceManager.getInstance().getTimeToDownParameterDialog());
+
+        animation.setInterpolator(new DecelerateInterpolator());
+
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+                if (mListener != null) {
+
+                    mListener.onDismissClick(getDialog(), getTargetRequestCode());
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+
+        animation.start();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -188,6 +242,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     }
 
     public interface OnDialogButtonsListener {
+
         void onDismissClick(DialogInterface dialog, int requestCode);
 
         void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode);

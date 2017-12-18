@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="248dp"
-    android:paddingStart="24dp"
+    android:orientation="vertical"
     android:paddingEnd="24dp"
-    android:orientation="vertical">
+    android:paddingStart="24dp">
 
     <TextView
-        style="@style/RobotoMedium"
         android:id="@+id/dialog_title"
+        style="@style/RobotoMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/material_weight_alarm"
         android:layout_marginTop="21dp"
         android:maxLines="1"
+        android:text="@string/material_weight_alarm"
         android:textColor="@color/color_jobs_row"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -26,26 +26,26 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/RobotoRegular"
             android:id="@+id/dialog_reason"
+            style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Material weight"
             android:textColor="@android:color/black"
-            android:text="Material weight" />
+            android:textSize="16sp" />
 
         <TextView
-            style="@style/RobotoRegular"
             android:id="@+id/dialog_reason_val"
+            style="@style/RobotoRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:ellipsize="end"
             android:gravity="end"
             android:maxLines="1"
-            android:ellipsize="end"
             android:text="--"
+            android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -59,18 +59,18 @@
             style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:text="Standard"
             android:textColor="@color/dialog_text_gray"
-            android:text="Standard" />
+            android:textSize="16sp" />
 
         <TextView
-            style="@style/RobotoRegular"
             android:id="@+id/dialog_standard"
+            style="@style/RobotoRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/dialog_text_gray"
             android:gravity="end"
             android:text="--"
+            android:textColor="@color/dialog_text_gray"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -84,18 +84,18 @@
             style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Min Value"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="16sp"
-            android:text="Min Value" />
+            android:textSize="16sp" />
 
         <TextView
-            style="@style/RobotoRegular"
             android:id="@+id/dialog_low"
+            style="@style/RobotoRegular"
             android:layout_width="match_parent"
-            android:textColor="@color/dialog_text_gray"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:text="--"
+            android:textColor="@color/dialog_text_gray"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -109,38 +109,38 @@
             style="@style/RobotoRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Max Value"
             android:textColor="@color/dialog_text_gray"
-            android:textSize="16sp"
-            android:text="Max Value" />
+            android:textSize="16sp" />
 
         <TextView
-            style="@style/RobotoRegular"
             android:id="@+id/dialog_high"
+            style="@style/RobotoRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/dialog_text_gray"
             android:gravity="end"
             android:text="--"
+            android:textColor="@color/dialog_text_gray"
             android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginBottom="14dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal">
 
         <TextView
-            android:visibility="invisible"
-            android:clickable="true"
-            style="@style/RobotoMedium"
             android:id="@+id/dialog_dismiss_all"
+            style="@style/RobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="@string/login_dialog_dismiss_all"
             android:textColor="@color/C1"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="invisible" />
 
         <View
             android:layout_width="match_parent"
@@ -148,14 +148,22 @@
             android:layout_weight="1" />
 
         <TextView
-            android:clickable="true"
-            style="@style/RobotoMedium"
             android:id="@+id/dialog_dismiss"
+            style="@style/RobotoMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="@string/login_dialog_dismiss"
             android:textColor="@color/dismiss_dialog"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/PT_progressbar_time_left"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
 
 </LinearLayout>

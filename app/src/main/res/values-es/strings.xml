@@ -39,7 +39,7 @@
     <string name="no_notifications">No hay Notificaciones</string>
     <string name="no_data">No hay Datos</string>
     <string name="error_rest">Error en el servidor</string>
-    <string name="jobs_actions">Opciones de trabajo</string>
+    <string name="jobs_actions">Acciones</string>
     <string name="job_id">Identificacion del Trabajo</string>
     <string name="product_name">Nombre del Producto</string>
     <string name="erp">ERP</string>
@@ -57,8 +57,6 @@
     <string name="job">Trabajo</string>
     <string name="josh">josh</string>
     <string name="shift">Turno</string>
-    <string name="machine_id">Nombre de Maquina</string>
-    <string name="machine_status">Estado de la Maquina</string>
     <string name="operator_id">Identificacion del Operador</string>
     <string name="operator_name">Nombre del Operador</string>
     <string name="error_shift_log">Error en el registro de turnos</string>
@@ -95,14 +93,14 @@
     <string name="settings">Ajustes</string>
     <string name="operator_app_settings">Operador\nApp\nAjustes</string>
     <string name="language">Lenguaje</string>
-    <string name="factory_sign_in">Inicio de sesiףn de fבbrica</string>
+    <string name="factory_sign_in">Inicio de sesión de fábrica</string>
     <string name="change">Cambiar</string>
     <string name="advanced_settings">Ajustes Avanzados</string>
     <string name="refresh_reporting_data">Actualizar informe de datos</string>
     <string name="operator_napp_nadvanced_nsettings">Operador\nApp\nAvanzados\nAjustes</string>
     <string name="polling_frequency">Frecuencia de Sondeo</string>
     <string name="request_timeout">Tiempo para final de solicitud</string>
-    <string name="request_timeout_range_error">Tiempo para final de solicitud debe ser entre 20-120 segundos</string>
+    <string name="request_timeout_range_error">Tiempo para final de solicitud debe ser entre 5-120 segundos</string>
     <string name="polling_frequency_range_error">La Frecuencia de sondeo debe ser entre 20-60 segundos</string>
     <string name="refreshed">Actualizado</string>
     <string name="one">1</string>
@@ -137,6 +135,7 @@
         <item>Spanish</item>
         <item>French</item>
         <item>Dutch</item>
+        <item>Arabic</item>
     </array>
 
     <array name="language_codes_array">
@@ -149,6 +148,7 @@
         <item>es</item>
         <item>fr</item>
         <item>nl</item>
+        <item>ar</item>
     </array>
     <array name="jobs_spinner_array">
         <item>Nuevo Trabajo</item>

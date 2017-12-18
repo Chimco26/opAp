@@ -91,7 +91,8 @@
                         android:text="@string/dashes"
                         android:textColor="@color/status_bar"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textAlignment="center" />
 
                     <TextView
                         android:id="@+id/second_header_text_view"
@@ -102,7 +103,8 @@
                         android:text="@string/dashes"
                         android:textColor="@color/status_bar"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textAlignment="center" />
 
                     <TextView
                         android:id="@+id/third_header_text_view"
@@ -113,7 +115,8 @@
                         android:text="@string/dashes"
                         android:textColor="@color/status_bar"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textAlignment="center" />
 
                     <TextView
                         android:id="@+id/fourth_header_text_view"
@@ -124,7 +127,8 @@
                         android:text="@string/dashes"
                         android:textColor="@color/status_bar"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textAlignment="center" />
 
                     <TextView
                         android:id="@+id/fifth_header_text_view"
@@ -135,7 +139,8 @@
                         android:text="@string/dashes"
                         android:textColor="@color/status_bar"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textAlignment="center" />
 
                     <ImageView
                         android:layout_width="9dp"

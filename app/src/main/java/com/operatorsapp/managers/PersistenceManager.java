@@ -17,13 +17,15 @@ import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
+import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.zemingo.logrecorder.ZLogger;
+
+import org.acra.ACRA;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class PersistenceManager implements LoginPersistenceManagerInterface, ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -49,17 +51,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_FORCE_LOCAL_NAME = "pref.PREF_FORCE_LOCAL_NAME";
     private static final String PREF_POLLING_FREQUENCY = "pref.PREF_POLLING_FREQUENCY";
     private static final String PREF_NEW_SHIFTLOG = "pref.PREF_NEW_SHIFTLOG";
+    private static final String PREF_TIME_PARAMETER_DIALOG = "pref.PREF_TIME_PARAMETER_DIALOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
-    private static final int DEFAULT_POLLING_VALUE = 60;
+    private static final int DEFAULT_POLLING_VALUE = 10;
     private static final int DEFAULT_TIMEOUT_VALUE = 20;
-    private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
+    public static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
+    private static final int MAX_EVENT_SIZE = 200;
 
 
     private static PersistenceManager msInstance;
     private Gson mGson;
     public HashMap<Integer, Event> items = new HashMap<>();
-
+    ;
 
     public static PersistenceManager initInstance(Context context) {
         if (msInstance == null) {
@@ -88,6 +92,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public void setSiteUrl(String siteUrl) {
+
+        ACRA.getConfig().setFormUri(siteUrl + "/LeaderMESApi/ReportApplicationCrash");
+
         SecurePreferences.getInstance().setString(PREF_SITE_URL, siteUrl);
     }
 
@@ -193,21 +200,54 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void saveShiftLogs(ArrayList<Event> events) {
 
-        SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(deletingDuplicate(events)));
+        ArrayList<Event> events1 = new ArrayList<>();
+
+        try {
+
+            SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(deletingDuplicate(events)));
+
+        } catch (OutOfMemoryError e) {
+
+            SendReportUtil.sendAcraExeption(e, "saveShiftLogs  events size = " + events.size());
+
+            SecurePreferences.getInstance().setString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(deletingDuplicate(getEventsFirstHalf(events))));
+
+        }
+
 
         ZLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
+    private ArrayList<Event> getEventsFirstHalf(ArrayList<Event> events) {
+
+        ArrayList<Event> firstHalf = new ArrayList<>();
+
+        int x = events.size() / 2 + (events.size() % 2) - 1;
+
+        for (int i = 0; i < x; i++) {
+
+            firstHalf.add(events.get(i));
+        }
+
+        return firstHalf;
+    }
+
     private ArrayList<Event> deletingDuplicate(ArrayList<Event> events) {
 
-        ArrayList<Event> duplicates = new ArrayList<>();
+        ArrayList<Event> duplicates = new ArrayList<Event>();
+
+        int count = 0;
 
         for (Event item : events) {
 
-            if (!items.containsKey(item.getEventID())) {
+            count++;
 
-                items.put(item.getEventID(), item);
-            }
+            if (count < MAX_EVENT_SIZE)
+
+                if (!items.containsKey(item.getEventID())) {
+
+                    items.put(item.getEventID(), item);
+                }
         }
 
         duplicates.addAll(items.values());
@@ -218,7 +258,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public ArrayList<Event> getShiftLogs() {
         String shiftLogsJsonString = SecurePreferences.getInstance().getString(PREF_ARRAY_SHIFT_LOGS, mGson.toJson(new ArrayList<>()));
-        Type listType = new TypeToken<ArrayList<Event>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<Event>>() {
+        }.getType();
 
         return deletingDuplicate((ArrayList<Event>) mGson.fromJson(shiftLogsJsonString, listType));
     }
@@ -297,5 +338,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     public void setIsNewShiftLogs(boolean isNew) {
         SecurePreferences.getInstance().setBoolean(PREF_NEW_SHIFTLOG, isNew);
+    }
+
+    public int getTimeToDownParameterDialog() {
+        return SecurePreferences.getInstance().getInt(PREF_TIME_PARAMETER_DIALOG, 10000);
+    }
+
+    public void setTimeToDownParameterDialog(int time) {
+        SecurePreferences.getInstance().setInt(PREF_TIME_PARAMETER_DIALOG, time);
     }
 }

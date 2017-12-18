@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General -->
+    <string name="no_communication">لا يوجد اتصال</string>
+    <string name="pee_value_null">--</string>
+    <string name="default_empty_field">--</string>
+    <string name="unknown">غير معرف</string>
+
+    <!-- Login screen -->
+    <string name="link_machine">رابط الماكنه</string>
+    <string name="screen_title">LeaderMES</string>
+    <string name="login_fields_error">املا جميع الفراغات</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="login_screen_save">حفظ</string>
+    <string name="login_fields_factory_name_hint">اسم المصنع</string>
+    <string name="login_fields_factory_url_hint">عنوان الخادم</string>
+    <string name="login_fields_user_name_hint">اسم المستخدم</string>
+    <string name="login_fields_password_hint">كلمة المرور</string>
+    <string name="login_dialog_dismiss">تجاهل</string>
+    <string name="login_dialog_dismiss_all">تجاهل للورديه القادمه</string>
+    <string name="network_error">خطأ في الاتصال</string>
+    <string name="credentials_error">خطأ في المؤهلات</string>
+    <string name="url_error">رابط غير قانوني</string>
+    <string name="could_not_log_in">الدخول غير ممكن -</string>
+    <string name="could_not_get_data">لا يمكن لا يمكنك استيراد المعلومات</string>
+    <string name="could_not_reach_server_error">عطل - لا يمكن الاتصال مع الخادم</string>
+    <string name="unrecognized_operator">مشغل غير معروف</string>
+
+    <!--Select machine screen -->
+    <string name="select_machine_screen_title">رابط ماكينه</string>
+
+    <string name="done">تم</string>
+    <string name="add_another">اضافه اخر</string>
+    <string name="ok">موافقه</string>
+
+    <string name="go">تابع</string>
+    <string name="machine_id_name">اسم الماكنه</string>
+    <string name="enter_machine_id_name">ادخل الماكنه\nاسم / رقم</string>
+    <string name="no_notifications">لا إشعارات</string>
+    <string name="no_data">المعلومات غير متوفره</string>
+    <string name="error_rest">خطأ في الاتصال</string>
+    <string name="jobs_actions">امكانيات تشغيل المهمة</string>
+    <string name="job_id">رقم المهمة</string>
+    <string name="product_name">اسم المُنتج</string>
+    <string name="erp">ERP</string>
+    <string name="planned_start">بدء المخطط</string>
+    <string name="number_of_units">عدد الوحدات</string>
+    <string name="new_job">أمر عمل جديد</string>
+    <string name="new_job_details">تفاصيل امرالعمل الجديد</string>
+    <string name="product_id">معرف المنتج</string>
+    <string name="erp_id">ERP ID</string>
+    <string name="quantity">كمية</string>
+    <string name="activate_new_job">تشغيل</string>
+    <string name="could_not_retrieve_job_list">لا يمكن استرداد قائمه اوامر التشغيل</string>
+    <string name="product">منتج</string>
+    <string name="id">رقم -</string>
+    <string name="job">عمل</string>
+    <string name="josh">عمل في الورديه</string>
+    <string name="shift">ورديه</string>
+    <string name="operator_id">رقم المشغل</string>
+    <string name="operator_name">اسم المشغل</string>
+    <string name="error_shift_log">فشل في سجلات الورديه</string>
+
+    <string name="operator_sign_in">مشغل\nدخول</string>
+    <string name="operator_sign_in_action_bar">دخول المشغل</string>
+    <string name="cancel">الغاء</string>
+    <string name="retry">اعاده المحاوله</string>
+    <string name="end">انهاء</string>
+    <string name="start">بدء</string>
+    <string name="duration">المدة الزمنية</string>
+    <string name="report">تقرير</string>
+    <string name="stop_event">اوقف الحدث</string>
+    <string name="enter_with_your_id">ادخل الرقم\nالخاص بك</string>
+    <string name="report_rejects">الابلاغ عن مردودات</string>
+    <string name="reject_reason">اسباب المردودات</string>
+    <string name="cause">سبب</string>
+    <string name="next">التالي</string>
+    <string name="units">وحدات</string>
+    <string name="weight">وزن</string>
+    <string name="material_weight_alarm">انذار وزن المواد</string>
+    <string name="dashes">- -</string>
+    <string name="no_reasons">ا تتوفر تقارير</string>
+    <string name="report_stop_event_reason">الإبلاغ عن سبب حدث التوقف</string>
+    <string name="report_stop_reason">تقرير ايقاف\nسبب</string>
+    <string name="report_reject_nreason">تقرير تجاهل\nسبب</string>
+    <string name="report_stop_start">"البدايه"</string>
+    <string name="report_stop_resume">"النهايه"</string>
+    <string name="report_cycle_nunits">تقرير دورات\nوحدات</string>
+    <string name="report_cycle_units">تقرير وجدات الدورات</string>
+    <string name="report_inventory_nitem_production">تسجيل مخزون\nالمنتج</string>
+    <string name="report_inventory_item_production">تسجيل محزون المنتج</string>
+    <string name="package_type">نوع الرزمه</string>
+    <string name="settings">إعدادات</string>
+    <string name="operator_app_settings">المشغل\nتطبيق\nاعدادات</string>
+    <string name="language">لغه</string>
+    <string name="factory_sign_in">تسجيل الدخول الى المصنع</string>
+    <string name="change">تغير</string>
+    <string name="advanced_settings">اعدادات متقدمه</string>
+    <string name="refresh_reporting_data">تحديث بيانات التقرير</string>
+    <string name="operator_napp_nadvanced_nsettings">مشغل\nتطبيق\nمتقدم\nاعدادات</string>
+    <string name="polling_frequency">اعاده الاقتراحات</string>
+    <string name="request_timeout">رفض الطلب</string>
+    <string name="request_timeout_range_error">يجب أن تنتهي مهلة الطلب في نطاق 20-120 ثانية 5-120</string>
+    <string name="polling_frequency_range_error">يجب ان يكون التردد في نطاق 20-60 ثانيه</string>
+    <string name="refreshed">تجديد</string>
+    <string name="one">1</string>
+    <string name="end_">النهايه: </string>
+    <string name="start_">بدء: </string>
+    <string name="chart_min_">الحد الادنى: </string>
+    <string name="chart_standard_">رئيسي:&#160;</string>
+    <string name="chart_max_">الحد الاقصى: </string>
+    <string name="space">&#160;</string>
+    <string name="switch_user">تغير المستخدم</string>
+    <string name="standard">اساسي&#160;</string>
+    <string name="total_required">مجموع&#160;</string>
+    <string name="shift_log_min">الحد الادنى&#160;</string>
+    <string name="shift_log_max">الحد الاقصى&#160;</string>
+    <string name="shift_log_standard">رئيسي&#160;</string>
+    <string name="approving_technician">موافقه التقني</string>
+    <string name="approve">وافق</string>
+    <string name="setup_end">الإعداد\nانتهاء</string>
+    <string name="first_item_approval">انتهاء الإعداد</string>
+    <string name="send_logs">إرسال سجلات</string>
+    <string name="alarm">"إنذار"</string>
+    <string name="loading_data">...تحميل المعلومات</string>
+    <string name="no_data_chart">انت بحاجه الى تزويد المعلومات\nللرسم البياني</string>
+
+    <array name="languages_spinner_array">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Dutch</item>
+        <item>Arabic</item>
+    </array>
+
+    <array name="language_codes_array">
+        <item>en</item>
+        <item>iw</item>
+        <item>zh</item>
+        <item>de</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>nl</item>
+        <item>ar</item>
+    </array>
+
+    <array name="jobs_spinner_array">
+        <item>مهمة جديده</item>
+        <item>اضافة مردودات</item>
+        <item>تغيير عدد الوحدات في الدورة</item>
+        <item>تقرير الإنتاج</item>
+    </array>
+
+    <string name="approve_first_item">نهاية الإعداد</string>
+
+    <plurals name="days">
+        <item quantity="one">%d يوم</item>
+        <item quantity="other">%d ايام</item>
+    </plurals>
+
+    <plurals name="hours">
+        <item quantity="zero">ساعة</item>
+        <item quantity="one">ساعة</item>
+        <item quantity="other">ساعات</item>
+    </plurals>
+    <string name="welcome">اهلاً وسهلاً</string>
+    <string name="log_in_to_nyour_factory">ادخل الى \nمصنعك</string>
+    <string name="common_signin_button_text">تسجيل الدخول</string>
+
+
+</resources>

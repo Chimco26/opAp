@@ -37,6 +37,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -111,8 +112,8 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
             mDuration = getArguments().getLong(DURATION);
             mEventId = getArguments().getInt(EVENT_ID);
             mReasonId = getArguments().getInt(REASON_ID);
-            mEnName =  getArguments().getString(EN_NAME);
-            mILName =  getArguments().getString(IL_NAME);
+            mEnName = getArguments().getString(EN_NAME);
+            mILName = getArguments().getString(IL_NAME);
         }
     }
 
@@ -270,7 +271,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
         Log.d(DavidVardi.DAVID_TAG, "event: " + mEventId + " reason:  " + mReasonId);
 
-        SendBroadcast.sendReason(getContext(), mEventId, mReasonId,mEnName,mILName);
+        SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName);
 
 
     }
@@ -280,8 +281,21 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         public void sendReportSuccess() {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
-            mReportCore.unregisterListener();
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+
+            try {
+
+                mReportCore.unregisterListener();
+
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            } catch (NullPointerException e) {
+
+                if (getFragmentManager() == null)
+                    SendReportUtil.sendAcraExeption(e,"mReportCallbackListener getFragmentManager = null");
+
+                if (mReportCore == null)
+                    SendReportUtil.sendAcraExeption(e,"mReportCallbackListener mReportCore = null");
+            }
         }
 
         @Override

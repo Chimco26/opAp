@@ -23,9 +23,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile(name: 'logrecorder', ext: 'aar')
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile project(':ErrorObjectInterface')
     compile project(':ActiveJobsListForMachineInfra')
 }

@@ -1,7 +1,7 @@
 package com.operatorsapp.application;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
@@ -13,17 +13,45 @@ import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
+import org.acra.ACRA;
+import org.acra.ReportField;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.sender.HttpSender;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
 
-public class OperatorApplication extends Application
-{
+@ReportsCrashes(
+        formUri = "https://leaders.my.leadermes.com/LeaderMESApi/ReportApplicationCrash",
+        httpMethod = HttpSender.Method.POST,
+        customReportContent = {
+                ReportField.APP_VERSION_CODE,
+                ReportField.APP_VERSION_NAME,
+                ReportField.ANDROID_VERSION,
+                ReportField.PACKAGE_NAME,
+                ReportField.REPORT_ID,
+                ReportField.REPORT_ID,
+                ReportField.STACK_TRACE,
+                ReportField.PHONE_MODEL,
+                ReportField.BUILD,
+                ReportField.CUSTOM_DATA
+        },
+        mode = ReportingInteractionMode.SILENT,
+        reportType = HttpSender.Type.JSON
+
+)
+public class OperatorApplication extends MultiDexApplication {
     private static Context msApplicationContext;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
+
+        ACRA.init(this);
+
+        ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
 
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
@@ -48,19 +76,16 @@ public class OperatorApplication extends Application
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
 
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
     }
 
-    public static Context getAppContext()
-    {
+    public static Context getAppContext() {
         return msApplicationContext;
     }
 
-    public static boolean isEnglishLang()
-    {
+    public static boolean isEnglishLang() {
         return PersistenceManager.getInstance().getCurrentLang().equals("en");
     }
 }

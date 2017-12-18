@@ -18,12 +18,13 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     private SelectStopReasonListener mListener;
 
+    public SelectStopReasonBroadcast() {
+
+    }
+
     public SelectStopReasonBroadcast(SelectStopReasonListener listener) {
 
         mListener = listener;
-    }
-    public SelectStopReasonBroadcast() {
-
     }
 
     @Override

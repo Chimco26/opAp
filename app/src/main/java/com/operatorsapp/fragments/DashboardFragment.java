@@ -66,6 +66,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
+import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
@@ -739,6 +740,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     }
 
     private void openDialog(Event event, boolean isStopDialog) {
+
         ZLogger.d(LOG_TAG, "openDialog(), start ");
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
@@ -862,7 +864,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     } else {
                         // if no new data,  set old data to widget
                         if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+                            try {
+
+                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+                            } catch (OutOfMemoryError error) {
+
+                                SendReportUtil.sendAcraExeption(error, "saveAndRestoreChartData " +
+                                        " widget ID " + widget.getID() +
+                                        " size " + String.valueOf(prefsHistoricCopy.get(String.valueOf(widget.getID())).size()));
+                            }
                         }
                     }
 
@@ -1118,7 +1128,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         } else if (status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.setup_communication_failure));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.communication_failure));
 
         } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId()) {
 
