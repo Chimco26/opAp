@@ -76,7 +76,6 @@
                     android:hint="@string/login_fields_factory_url_hint"
                     android:inputType="textUri"
                     android:singleLine="true"
-                    android:text="test"
                     android:paddingStart="14dp"
                     android:textSize="24sp"
                     android:textColorHint="@color/T4_color"
@@ -92,7 +91,6 @@
                     android:layout_weight="1"
                     android:background="@drawable/edit_text_background_selector"
                     android:hint="@string/login_fields_user_name_hint"
-                    android:text="ravtech"
                     android:paddingStart="14dp"
                     android:inputType="text"
                     android:textSize="24sp"
@@ -116,7 +114,6 @@
                         android:inputType="textPassword"
                         android:paddingStart="14dp"
                         android:textSize="26sp"
-                        android:text="RavTech@1"
                         android:paddingEnd="40dp"
                         android:singleLine="true"
                         android:textColorHint="@color/T4_color" />

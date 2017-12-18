@@ -16,7 +16,7 @@ public class SendReportUtil {
 
     public static final String IS_APP_CRASH = "IS_APP_CRASH";
 
-    private static final String MACHINE_ID  = "MACHINE_ID ";
+    private static final String MACHINE_ID  = "MACHINE_ID";
 
     public static final String CURRENT_STORAGE_SIZE  = "CURRENT_STORAGE_SIZE ";
 

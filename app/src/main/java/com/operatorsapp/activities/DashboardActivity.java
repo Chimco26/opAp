@@ -82,6 +82,8 @@ import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
+import org.acra.ACRA;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -253,7 +255,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-       /* try {
+       try {
 
 
             int i = 5 / 0;
@@ -261,7 +263,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             SendReportUtil.sendAcraExeption(e, " test for test");
 
-        }*/
+            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "url" + ACRA.getConfig().formUri());
+
+        }
     }
 
     private void registerReceiver() {

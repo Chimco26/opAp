@@ -93,7 +93,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     @Override
     public void setSiteUrl(String siteUrl) {
 
-        ACRA.getConfig().setFormUri(siteUrl + "/LeaderMESApi/ReportApplicationCrash");
+       ACRA.getConfig().setFormUri(siteUrl + "/LeaderMESApi/ReportApplicationCrash");
+       // ACRA.getConfig().setFormUri("http://207.154.207.162/test/");
 
         SecurePreferences.getInstance().setString(PREF_SITE_URL, siteUrl);
     }
