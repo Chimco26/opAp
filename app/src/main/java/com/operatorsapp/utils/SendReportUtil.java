@@ -12,15 +12,15 @@ import org.acra.ACRA;
 
 public class SendReportUtil {
 
-    private static final String SESSION_ID = "SESSION_ID";
+    public static final String SESSION_ID = "SESSION_ID";
 
     public static final String IS_APP_CRASH = "IS_APP_CRASH";
 
-    private static final String MACHINE_ID  = "MACHINE_ID";
+    public static final String MACHINE_ID  = "MACHINE_ID";
 
     public static final String CURRENT_STORAGE_SIZE  = "CURRENT_STORAGE_SIZE ";
 
-    private static final String METHOD_NAME = "METHOD_NAME";
+    public static final String METHOD_NAME = "METHOD_NAME";
 
     public static void sendAcraExeption(Throwable throwable, String method) {
 

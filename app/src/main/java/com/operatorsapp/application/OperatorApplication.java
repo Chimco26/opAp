@@ -23,6 +23,9 @@ import org.acra.sender.HttpSender;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
+import static com.operatorsapp.utils.SendReportUtil.MACHINE_ID;
+import static com.operatorsapp.utils.SendReportUtil.METHOD_NAME;
+import static com.operatorsapp.utils.SendReportUtil.SESSION_ID;
 
 @ReportsCrashes(
         formUri = "https://leaders.my.leadermes.com/LeaderMESApi/ReportApplicationCrash",
@@ -97,6 +100,17 @@ public class OperatorApplication extends MultiDexApplication {
                 }
 
                 ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
+
+                ACRA.getErrorReporter().putCustomData(METHOD_NAME, "exception handler");
+
+                try {
+
+                    ACRA.getErrorReporter().putCustomData(MACHINE_ID  , String.valueOf(PersistenceManager.getInstance().getMachineId()));
+
+                    ACRA.getErrorReporter().putCustomData(SESSION_ID, String.valueOf(PersistenceManager.getInstance().getSessionId()));
+
+                }catch (Exception ignored){}
+
 
                 ACRA.getErrorReporter().handleException(paramThrowable);
 
