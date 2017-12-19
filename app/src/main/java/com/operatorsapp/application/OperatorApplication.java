@@ -1,6 +1,7 @@
 package com.operatorsapp.application;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
@@ -51,7 +52,6 @@ public class OperatorApplication extends MultiDexApplication {
 
         ACRA.init(this);
 
-        ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
 
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
@@ -75,10 +75,38 @@ public class OperatorApplication extends MultiDexApplication {
 //
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
+        exceptionHandler();
 
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
+    }
+
+    private void exceptionHandler() {
+
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                //Catch your exception
+                // Without System.exit() this will not work.
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                if (i != null) {
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+
+                ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
+
+                ACRA.getErrorReporter().handleException(paramThrowable);
+
+                startActivity(i);
+
+
+
+                System.exit(2);
+            }
+        });
     }
 
     public static Context getAppContext() {
