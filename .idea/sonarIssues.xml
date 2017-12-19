@@ -398,7 +398,42 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/acivities/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/AboutFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/AddSynagogueFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/MainScreenFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/MapFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/SynagogueDetailsFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/main_screen_fragments/MainScreenFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_main_screen.xml">
           <value>
             <set />
           </value>

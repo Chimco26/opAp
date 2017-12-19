@@ -164,6 +164,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
+    boolean first = false;
+
     private android.support.v4.app.FragmentManager.OnBackStackChangedListener getListener() {
         android.support.v4.app.FragmentManager.OnBackStackChangedListener result = new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -173,16 +175,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 //                {
                 Fragment fragment = getVisibleFragment();
                 if (fragment != null) {
-                    if (fragment instanceof DashboardFragment) {
-
-                        Log.d(DavidVardi.DAVID_TAG, "onBackStackChanged");
-
-                        mDashboardFragment.setActionBar();
-
-                    } else if (fragment instanceof ReportRejectsFragment) {
+                    if (fragment instanceof ReportRejectsFragment) {
                         ((ReportRejectsFragment) fragment).setActionBar();
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
+                    } else if (fragment instanceof DashboardFragment) {
+                        Log.d(DavidVardi.DAVID_TAG, "onBackStackChanged");
+                        if (first) {
+                            mDashboardFragment.setActionBar();
+                            first = false;
+
+                        } else {
+                            first = true;
+                        }
                     }
                 }
                 //                }
@@ -255,17 +260,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-       try {
-
-
-            int i = 5 / 0;
-        } catch (Exception e) {
-
-            SendReportUtil.sendAcraExeption(e, " test for test");
-
-            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "url" + ACRA.getConfig().formUri());
-
-        }
     }
 
     private void registerReceiver() {

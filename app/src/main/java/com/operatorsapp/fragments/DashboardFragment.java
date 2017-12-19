@@ -864,15 +864,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     } else {
                         // if no new data,  set old data to widget
                         if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                            try {
-
-                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-                            } catch (OutOfMemoryError error) {
-
-                                SendReportUtil.sendAcraExeption(error, "saveAndRestoreChartData " +
-                                        " widget ID " + widget.getID() +
-                                        " size " + String.valueOf(prefsHistoricCopy.get(String.valueOf(widget.getID())).size()));
-                            }
+                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
                         }
                     }
 
