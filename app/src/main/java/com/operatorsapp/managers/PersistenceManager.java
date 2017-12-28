@@ -56,7 +56,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
     private static final int DEFAULT_POLLING_VALUE = 30;
     private static final int DEFAULT_TIMEOUT_VALUE = 20;
-    public static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
+    public static final int DEFAULT_TOTAL_RETRIES_VALUE = 3;
     private static final int MAX_EVENT_SIZE = 200;
 
 
@@ -180,7 +180,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public int getTotalRetries() {
-        return SecurePreferences.getInstance().getInt(PREF_TOTAL_RETRIES, DEFAULT_TOTAL_RETRIE_VALUE);
+        return SecurePreferences.getInstance().getInt(PREF_TOTAL_RETRIES, DEFAULT_TOTAL_RETRIES_VALUE);
     }
 
     @Override
