@@ -1,12 +1,12 @@
 package com.operators.machinedatacore.polling;
 
 
-import com.zemingo.pollingmachanaim.JobBase;
 
+import ravtech.co.il.publicutils.JobBase;
 public abstract class EmeraldJobBase extends JobBase{
 
     @Override
-    protected abstract void executeJob(OnJobFinishedListener onJobFinishedListener);
+    protected abstract void executeJob(JobBase.OnJobFinishedListener onJobFinishedListener);
 
 }
 

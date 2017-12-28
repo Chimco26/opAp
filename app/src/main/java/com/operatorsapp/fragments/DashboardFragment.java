@@ -245,6 +245,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                     case MotionEvent.ACTION_MOVE:
                         if (!mNoData) {
                             int currentX;
+
                             if (PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
                                 currentX = mShiftLogLayout.getLayoutParams().width - (int) event.getRawX() + mDownX;
                             } else {
@@ -818,7 +819,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
 
-            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived " + widgetList.get(0).getCurrentValue());
+
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {

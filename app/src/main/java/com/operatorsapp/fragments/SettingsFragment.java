@@ -34,6 +34,7 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+
 import com.operatorsapp.utils.NetworkAvailable;
 import com.zemingo.logrecorder.ZLogger;
 

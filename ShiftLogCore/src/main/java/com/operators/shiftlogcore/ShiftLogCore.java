@@ -1,6 +1,5 @@
 package com.operators.shiftlogcore;
 
-import android.util.Log;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.shiftlogcore.interfaces.ShiftForMachineUICallback;
@@ -13,7 +12,7 @@ import com.operators.shiftlogcore.polling.EmeraldJobBase;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
+import ravtech.co.il.publicutils.JobBase;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

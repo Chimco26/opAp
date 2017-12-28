@@ -13,8 +13,7 @@ import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridge
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 import java.util.concurrent.TimeUnit;
 
 public class MachineStatusCore implements OnTimeToEndChangedListener {

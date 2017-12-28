@@ -1,6 +1,7 @@
 package com.operators.logincore;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
@@ -69,6 +70,7 @@ public class LoginCore {
 
     public void silentLoginFromDashBoard(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
+
         mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(String sessionId) {

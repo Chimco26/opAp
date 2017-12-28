@@ -10,8 +10,7 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 import java.util.concurrent.TimeUnit;
 
 /**

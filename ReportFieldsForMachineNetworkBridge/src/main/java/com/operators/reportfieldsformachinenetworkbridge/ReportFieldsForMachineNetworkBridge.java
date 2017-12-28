@@ -96,6 +96,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 {
                     ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
+
             }
         });
     }

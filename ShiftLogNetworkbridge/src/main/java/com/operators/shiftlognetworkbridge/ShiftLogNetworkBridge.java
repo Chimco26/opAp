@@ -47,6 +47,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             @Override
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response)
             {
+
                 if(response.body() != null && response.body().getEvents() != null && (response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967))
                 {
                     ArrayList<Event> events = response.body().getEvents();
@@ -84,6 +85,8 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                     ZLogger.d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
+
+
                 }
             }
         });
@@ -132,6 +135,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
+
             }
         });
     }

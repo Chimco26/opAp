@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -19,7 +18,7 @@ public class ProjectionViewEnd extends View {
     private Bitmap mRightViewBlue;
     private Bitmap mRightViewGray;
     private Bitmap mCurrentView;
-    private Paint mPaint;
+    //private Paint mPaint;
 
     public ProjectionViewEnd(Context context) {
         super(context);
@@ -36,14 +35,14 @@ public class ProjectionViewEnd extends View {
     private void init(Context context) {
         mRightViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_blue));
         mRightViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_gray));
-        mPaint = new Paint();
+       // mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mCurrentView != null) {
-            canvas.drawBitmap(mCurrentView, 0, 0, mPaint);
+            canvas.drawBitmap(mCurrentView, 0, 0, null);
         }
     }
 
@@ -56,6 +55,7 @@ public class ProjectionViewEnd extends View {
     }
 
     public void hideView() {
+        mCurrentView.recycle();
         mCurrentView = null;
         forceRedraw();
     }

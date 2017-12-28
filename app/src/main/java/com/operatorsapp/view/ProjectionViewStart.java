@@ -17,7 +17,7 @@ import com.operatorsapp.R;
 public class ProjectionViewStart extends View {
 
     private Bitmap mLeftView;
-    private Paint mPaint;
+  //private Paint mPaint;
 
     public ProjectionViewStart(Context context) {
         super(context);
@@ -33,18 +33,19 @@ public class ProjectionViewStart extends View {
 
     private void init(Context context) {
         mLeftView = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
-        mPaint = new Paint();
+     //   mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mLeftView != null) {
-            canvas.drawBitmap(mLeftView, 0, 0, mPaint);
+            canvas.drawBitmap(mLeftView, 0, 0, null);
         }
     }
 
     public void hideView() {
+        mLeftView.recycle();
         mLeftView = null;
         forceRedraw();
     }

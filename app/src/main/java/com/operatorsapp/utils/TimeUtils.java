@@ -3,6 +3,7 @@ package com.operatorsapp.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ParseException;
+import android.util.Log;
 
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
@@ -67,6 +68,7 @@ public class TimeUtils {
         } else {
             String h;
             if (hours == 0) {
+
                 if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
                     h = "Hour";
                 } else {
