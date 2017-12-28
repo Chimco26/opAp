@@ -26,8 +26,7 @@ import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,6 +100,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         Log.d("DAVID_TAG", "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
 
         mJob = null;
+
         mJob = new EmeraldJobBase() {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
@@ -191,6 +191,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     }
                     mGetMachineDataFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
+
                 }
 
                 @Override
@@ -301,6 +302,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             }
 
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+
     }
 
 
