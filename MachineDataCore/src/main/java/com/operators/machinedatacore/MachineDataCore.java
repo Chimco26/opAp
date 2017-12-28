@@ -10,8 +10,7 @@ import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInte
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -61,10 +60,13 @@ public class MachineDataCore {
     }
 
     public void getMachineData(final JobBase.OnJobFinishedListener onJobFinishedListener) {
+
+
         if (mMachineDataPersistenceManagerInterface != null) {
             mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom(), new GetMachineDataCallback<Widget>() {
                         @Override
                         public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
+
                             if (mMachineDataUICallback != null) {
                                 mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
                             } else {
@@ -75,6 +77,8 @@ public class MachineDataCore {
 
                         @Override
                         public void onGetMachineDataFailed(ErrorObjectInterface reason) {
+
+
                             ZLogger.w(LOG_TAG, "getMachineData() onGetMachineDataFailed " + reason.getError());
                             onJobFinishedListener.onJobFinished();
                             if (mMachineDataUICallback != null) {

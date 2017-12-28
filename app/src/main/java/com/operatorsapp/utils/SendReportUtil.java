@@ -24,7 +24,7 @@ public class SendReportUtil {
 
     public static void sendAcraExeption(Throwable throwable, String method) {
 
-        ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "false");
+      ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "false");
 
         ACRA.getErrorReporter().putCustomData(METHOD_NAME, method);
 

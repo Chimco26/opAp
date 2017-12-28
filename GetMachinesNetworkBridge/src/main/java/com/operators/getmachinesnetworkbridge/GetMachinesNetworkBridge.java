@@ -19,8 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterface
-{
+public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterface {
     private static final String LOG_TAG = GetMachinesNetworkBridge.class.getSimpleName();
 
     private int retryCount = 0;
@@ -28,38 +27,29 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
     private GetMachineNetworkManagerInterface mGetMachineNetworkManagerInterface;
 
     @Override
-    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback, final int totalRetries, int specificRequestTimeout)
-    {
+    public void getMachines(String siteUrl, String sessionId, final GetMachinesCallback<Machine> getMachinesCallback, final int totalRetries, int specificRequestTimeout) {
         GetMachinesRequest getMachinesRequest = new GetMachinesRequest(sessionId);
         Call<MachinesResponse> call = mGetMachineNetworkManagerInterface.getMachinesRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachinesForFactory(getMachinesRequest);
-        call.enqueue(new Callback<MachinesResponse>()
-        {
+        call.enqueue(new Callback<MachinesResponse>() {
             @Override
-            public void onResponse(Call<MachinesResponse> call, Response<MachinesResponse> response)
-            {
-                if(response.body()!=null)
-                {
+            public void onResponse(Call<MachinesResponse> call, Response<MachinesResponse> response) {
+                if (response.body() != null) {
                     ArrayList<Machine> machines = null;
-                    if(response.body().getMachines() != null)
-                    {
+                    if (response.body().getMachines() != null) {
                         machines = response.body().getMachines();
                     }
-                    if(response.body().getErrorResponse() == null)
-                    {
-                        if(machines != null && machines.size() > 0)
-                        {
+                    if (response.body().getErrorResponse() == null) {
+                        if (machines != null && machines.size() > 0) {
                             ZLogger.d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
+
                             getMachinesCallback.onGetMachinesSucceeded(machines);
-                        }
-                        else
-                        {
+
+                        } else {
                             ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "list null or empty");
                             getMachinesCallback.onGetMachinesFailed(errorObject);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         ZLogger.d(LOG_TAG, "onRequest(), getMachines failed");
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getMachinesCallback.onGetMachinesFailed(errorObject);
@@ -68,15 +58,11 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
             }
 
             @Override
-            public void onFailure(Call<MachinesResponse> call, Throwable t)
-            {
-                if(retryCount++ < totalRetries)
-                {
+            public void onFailure(Call<MachinesResponse> call, Throwable t) {
+                if (retryCount++ < totalRetries) {
                     ZLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
-                }
-                else
-                {
+                } else {
                     ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     getMachinesCallback.onGetMachinesFailed(errorObject);
@@ -85,21 +71,17 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
         });
     }
 
-    public void inject(GetMachineNetworkManagerInterface getMachineNetworkManagerInterface)
-    {
+    public void inject(GetMachineNetworkManagerInterface getMachineNetworkManagerInterface) {
         mGetMachineNetworkManagerInterface = getMachineNetworkManagerInterface;
     }
 
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
-    {
+    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse) {
         ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
         return new ErrorObject(code, errorResponse.getErrorDesc());
     }
 
-    private ErrorObject.ErrorCode toCode(int errorCode)
-    {
-        switch(errorCode)
-        {
+    private ErrorObject.ErrorCode toCode(int errorCode) {
+        switch (errorCode) {
             case 101:
                 return ErrorObject.ErrorCode.Credentials_mismatch;
         }

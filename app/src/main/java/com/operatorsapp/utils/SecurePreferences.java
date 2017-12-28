@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.zemingo.logrecorder.ZLogger;
@@ -183,9 +184,9 @@ public class SecurePreferences {
         return Integer.parseInt(intValue);
     }
 
-    public int getInt(String key, int defaultValue) {
+    public int getInt(String key,int defaultValue){
         int value = getInt(key);
-        if (value == -1) {
+        if(value == -1){
             return defaultValue;
         }
         return value;
@@ -264,18 +265,14 @@ public class SecurePreferences {
         } catch (UnsupportedEncodingException e) {
             throw new SecurePreferencesException(e);
         }
-
         try {
 
-            String secureValueEncoded = Base64.encodeToString(secureValue, Base64.NO_WRAP);
-
+            return Base64.encodeToString(secureValue, Base64.NO_WRAP);
         } catch (OutOfMemoryError error) {
 
-            SendReportUtil.sendAcraExeption(error,"encrypt value = " + value + " secure Value size = " + secureValue.length);
+            SendReportUtil.sendAcraExeption(error, "encrypt value = " + value + " secure Value size = " + secureValue.length);
         }
-
-
-        return Base64.encodeToString(secureValue, Base64.NO_WRAP);
+return null;
     }
 
     protected String decrypt(String securedEncodedValue) {
@@ -287,13 +284,12 @@ public class SecurePreferences {
         }
         try {
             return new String(value, CHARSET);
-        }
-        catch (OutOfMemoryError| UnsupportedEncodingException e) {
+        } catch (OutOfMemoryError | UnsupportedEncodingException e) {
 
-            SendReportUtil.sendAcraExeption(e,"decrypt "
-                    +" securedEncodedValue :"+securedEncodedValue
-                    +" securedValue size ="+securedValue.length
-                    +" value size ="+value.length);
+            SendReportUtil.sendAcraExeption(e, "decrypt "
+                    + " securedEncodedValue :" + securedEncodedValue
+                    + " securedValue size =" + securedValue.length
+                    + " value size =" + value.length);
 
 
             throw new SecurePreferencesException(e);

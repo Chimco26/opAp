@@ -66,7 +66,14 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
     public void setNewData(List<Widget> widgets)
     {
-        mWidgets = widgets;
+        if (mWidgets != null) {
+            mWidgets.clear();
+            mWidgets.addAll(widgets);
+        }else {
+
+            mWidgets = widgets ;
+
+        }
         notifyDataSetChanged();
     }
 
@@ -434,11 +441,11 @@ public class WidgetAdapter extends RecyclerView.Adapter
 
         }
         //        final View itemview= holder.itemView;
-        //        Log.d("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
+        //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
         //        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
         //            @Override
         //            public boolean onPreDraw() {
-        //                Log.d("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
+        //                Log.clearPollingRequest("moo", "onDraw: inner: " + itemview.getWidth() + " " + itemview.getHeight());
         //                return true;
         //            }
         //        });

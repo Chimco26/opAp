@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,7 +17,7 @@ public class RangeView extends View {
     private Bitmap mDataLineBlue;
     private Bitmap mDataLineRed;
     private Bitmap mCurrentLine;
-    private Paint mPaint;
+  //  private Paint mPaint;
     private float mX;
 
     public RangeView(Context context) {
@@ -38,14 +37,14 @@ public class RangeView extends View {
         mDataLineBlue = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
         mDataLineRed = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_red));
         mCurrentLine = mDataLineBlue;
-        mPaint = new Paint();
+     //   mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mCurrentLine != null) {
-            canvas.drawBitmap(mCurrentLine, mX, 0, mPaint);
+            canvas.drawBitmap(mCurrentLine, mX, 0, null);
         }
     }
 
@@ -72,6 +71,7 @@ public class RangeView extends View {
     }
 
     public void hideView() {
+        mCurrentLine.recycle();
         mCurrentLine = null;
         forceRedraw();
     }

@@ -125,6 +125,15 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mReportFieldsForMachine = null;
+
+        mOnCroutonRequestListener =null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -233,10 +242,15 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     @Override
     public void onSubReasonSelected(int subReasonId) {
         mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+
         ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
+
         mSelectedSubreasonId = subReasonId;
+
         mStopReasonsAdapter.notifyDataSetChanged();
+
         sendReport();
+
         SendBroadcast.refreshPolling(getContext());
     }
 
@@ -269,7 +283,6 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
         mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
 
-        Log.d(DavidVardi.DAVID_TAG, "event: " + mEventId + " reason:  " + mReasonId);
 
         SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName);
 

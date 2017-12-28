@@ -26,8 +26,7 @@ import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -98,14 +97,13 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     public void startPolling() {
 
-        Log.d("DAVID_TAG", "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
 
         mJob = null;
+
         mJob = new EmeraldJobBase() {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                Log.d("DAVID_TAG", "executeJob");
 
                 getMachineData(onJobFinishedListener);
                 getMachineStatus(onJobFinishedListener);
@@ -130,7 +128,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 @Override
                 public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
 
-                    Log.d("DAVID_TAG", "onGetMachineStatusSucceeded");
 
                     int timeToEndInSeconds = 0;
                     if (machineStatus != null) {
@@ -178,11 +175,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
                     if (mMachineDataUICallback != null) {
 
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getSiteUrl() " + mMachineDataPersistenceManagerInterface.getSiteUrl());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getSessionId() " + mMachineDataPersistenceManagerInterface.getSessionId());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom() " + mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getMachineId()" + mMachineDataPersistenceManagerInterface.getMachineId());
-                        Log.d("DAVID_TAG", "onGetMachineDataSucceeded " + widgetList.get(0).getCurrentValue());
 
 
                         mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
@@ -191,6 +183,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     }
                     mGetMachineDataFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
+
                 }
 
                 @Override
@@ -301,6 +294,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             }
 
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+
     }
 
 

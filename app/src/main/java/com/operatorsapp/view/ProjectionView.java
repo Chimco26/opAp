@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,7 +17,7 @@ public class ProjectionView extends View {
 
     private Bitmap mCurrentQuantity;
     private Bitmap mProjectionQuantity;
-    private Paint mPaint;
+   // private Paint mPaint;
 
     public ProjectionView(Context context) {
         super(context);
@@ -35,22 +34,24 @@ public class ProjectionView extends View {
     private void init(Context context) {
         mProjectionQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_projection_quantity_oval));
         mCurrentQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_current_quantity_oval));
-        mPaint = new Paint();
+      //  mPaint = new Paint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mProjectionQuantity != null) {
-            canvas.drawBitmap(mProjectionQuantity, 0, 0, mPaint);
+            canvas.drawBitmap(mProjectionQuantity, 0, 0, null);
         }
         if (mCurrentQuantity != null) {
-            canvas.drawBitmap(mCurrentQuantity, 0, 0, mPaint);
+            canvas.drawBitmap(mCurrentQuantity, 0, 0, null);
         }
     }
 
     public void hideViews() {
+        mCurrentQuantity.recycle();
         mCurrentQuantity = null;
+        mProjectionQuantity.recycle();
         mProjectionQuantity = null;
         forceRedraw();
     }

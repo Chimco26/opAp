@@ -64,6 +64,8 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface
 
             }
 
+
+
             @Override
             public void onFailure(Call<SessionResponse> call, Throwable t)
             {
@@ -81,6 +83,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface
                 }
             }
         });
+
     }
 
     public void inject(LoginNetworkManagerInterface loginNetworkManagerInterface)

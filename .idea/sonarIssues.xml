@@ -23,12 +23,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/ActiveJobsListForMachineNetworkBridge/src/main/java/com/operators/activejobslistformachinenetworkbridge/ActiveJobsListForMachineNetworkBridge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/AllDashboardDataCore/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/AllDashboardDataCore/src/main/java/com/operators/alldashboarddatacore/AllDashboardDataCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/AllDashboardDataCore/src/main/java/com/operators/alldashboarddatacore/polling/EmeraldJobBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ErrorObjectInterface/build.gradle">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/GetMachinesNetworkBridge/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/GetMachinesNetworkBridge/src/main/java/com/operators/getmachinesnetworkbridge/GetMachinesNetworkBridge.java">
           <value>
             <set />
           </value>
@@ -53,7 +78,27 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/LoginCore/src/main/java/com/operators/logincore/LoginCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/LoginNetworkBridge/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/LoginNetworkBridge/src/main/java/com/operators/loginnetworkbridge/LoginNetworkBridge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/MachineDataCore/src/main/java/com/operators/machinedatacore/MachineDataCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/MachineDataCore/src/main/java/com/operators/machinedatacore/polling/EmeraldJobBase.java">
           <value>
             <set />
           </value>
@@ -68,7 +113,27 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/MachineDataNetworkBridge/src/main/java/com/operators/machinedatanetworkbridge/GetMachineDataNetworkBridge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/MachineStatusCore/src/main/java/com/operators/machinestatuscore/MachineStatusCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/MachineStatusCore/src/main/java/com/operators/machinestatuscore/polling/EmeraldJobBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/MachinesStatusNetworkBridge/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/MachinesStatusNetworkBridge/src/main/java/com/operators/getmachinesstatusnetworkbridge/GetMachineStatusNetworkBridge.java">
           <value>
             <set />
           </value>
@@ -83,12 +148,27 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/ReportFieldsForMachineCore/src/main/java/com/operators/reportfieldsformachinecore/ReportFieldsForMachineCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ReportFieldsForMachineCore/src/main/java/com/operators/reportfieldsformachinecore/polling/EmeraldJobBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ReportFieldsForMachineInfra/build.gradle">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ReportFieldsForMachineNetworkBridge/src/main/java/com/operators/reportfieldsformachinenetworkbridge/ReportFieldsForMachineNetworkBridge.java">
           <value>
             <set />
           </value>
@@ -103,6 +183,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/ShiftLogCore/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ShiftLogCore/src/main/java/com/operators/shiftlogcore/ShiftLogCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ShiftLogCore/src/main/java/com/operators/shiftlogcore/polling/EmeraldJobBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ShiftLogInfra/build.gradle">
           <value>
             <set />
@@ -113,7 +208,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/ShiftLogNetworkbridge/src/main/java/com/operators/shiftlognetworkbridge/ShiftLogNetworkBridge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <value>
             <set />
           </value>
@@ -133,7 +238,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/ShiftLogAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/StopReasonsAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/StopSubReasonAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/WidgetAdapter.java">
           <value>
             <set />
           </value>
@@ -178,7 +298,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/SettingsFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/managers/PersistenceManager.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/polling/EmeraldJobBase.java">
           <value>
             <set />
           </value>
@@ -189,6 +319,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/utils/DavidVardi.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/utils/JobBase.java">
           <value>
             <set />
           </value>
@@ -213,7 +348,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/utils/TimeUtils.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/utils/broadcast/SelectStopReasonBroadcast.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/utils/broadcast/SendBroadcast.java">
           <value>
             <set />
           </value>
@@ -223,7 +368,47 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/view/ProjectionView.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/view/ProjectionViewEnd.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/view/ProjectionViewStart.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/view/RangeView.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/event_parameter_cardview.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/event_stopped_cardview.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_advanced_settings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_dashboard.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_jobs.xml">
           <value>
             <set />
           </value>
@@ -243,12 +428,72 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-ar/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-de/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-es/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-iw/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-nl/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-uk/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values-zh/strings.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/machinestatusinfra/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/publicutils/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/publicutils/src/main/java/ravtech/co/il/publicutils/EmeraldJobBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/publicutils/src/main/java/ravtech/co/il/publicutils/JobBase.java">
           <value>
             <set />
           </value>
@@ -383,7 +628,52 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/build/intermediates/res/merged/debug/layout/fragment_add_synagogue.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/acivities/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/ExactTime.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/Minyan.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/PrayDayType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/PrayType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/RelativeTime.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/RelativeTimeType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/minyan/WeekDay.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/models/synagogue/Synagogue.java">
           <value>
             <set />
           </value>
@@ -403,7 +693,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/acivities/NavigationHelper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/adapters/MinyanAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/AboutFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/AddMinyanFragment.java">
           <value>
             <set />
           </value>
@@ -428,12 +733,117 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/SynagoguesFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/ui/fragments/main_screen_fragments/MainScreenFragment.java">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/java/com/app/minyaneto_android/utilities/fragment/FragmentHelper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_about.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_add_synagogue.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_main_screen.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_map.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/fragment_synagogues.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/main_activity.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/httpClient/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/httpClient/src/main/java/ravtech/co/il/httpclient/AppQueue.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyanetoOld/app/src/main/java/com/app/minyaneto_android/fragments/main_screen_fragments/MainScreenFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/.android/build-cache/044ee15698e2f1bcb64a5ceda3eb6b46462c18e3/output/jars/classes.jar!/com/zemingo/pollingmachanaim/JobBase.class">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/.gradle/caches/transforms-1/files-1.1/pollingmachanaim-release.aar/a92afae67bb13c57eb3434907a8bf2fd/jars/classes.jar!/com/zemingo/pollingmachanaim/JobBase.class">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/app/src/main/java/com/journaldev/retrofitintro/APIClient.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/app/src/main/java/com/journaldev/retrofitintro/EmeraldGetMachinesDataServiceRequest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/app/src/main/java/com/journaldev/retrofitintro/MachineDataDataResponse.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/app/src/main/java/com/journaldev/retrofitintro/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/RetrofitIntro/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/codeexamples-android-master/com.vogella.android.retrofitgithub/app/src/main/java/com/vogella/android/retrofitgithub/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/Desktop/codeexamples-android-master/com.vogella.android.retrofitgithub/app/src/main/java/com/vogella/android/retrofitgithub/Test.java">
           <value>
             <set />
           </value>

@@ -1,8 +1,7 @@
 package com.operators.machinestatuscore.polling;
 
 
-import com.zemingo.pollingmachanaim.JobBase;
-
+import ravtech.co.il.publicutils.JobBase;
 public abstract class EmeraldJobBase extends JobBase{
 
     @Override

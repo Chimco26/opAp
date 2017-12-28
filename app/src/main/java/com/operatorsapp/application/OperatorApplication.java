@@ -3,6 +3,7 @@ package com.operatorsapp.application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
@@ -11,6 +12,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.DavidVardi;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -18,6 +20,8 @@ import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.config.ACRAConfiguration;
+import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -53,6 +57,8 @@ public class OperatorApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+
+
         ACRA.init(this);
 
 
@@ -87,7 +93,6 @@ public class OperatorApplication extends MultiDexApplication {
 
     private void exceptionHandler() {
 
-
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
@@ -99,6 +104,9 @@ public class OperatorApplication extends MultiDexApplication {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
 
+                paramThrowable.printStackTrace();
+
+
                 ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
 
                 ACRA.getErrorReporter().putCustomData(METHOD_NAME, "exception handler");
@@ -109,14 +117,13 @@ public class OperatorApplication extends MultiDexApplication {
 
                     ACRA.getErrorReporter().putCustomData(SESSION_ID, String.valueOf(PersistenceManager.getInstance().getSessionId()));
 
+                    ACRA.getErrorReporter().handleException(paramThrowable);
+
+
+
                 }catch (Exception ignored){}
 
-
-                ACRA.getErrorReporter().handleException(paramThrowable);
-
                 startActivity(i);
-
-
 
                 System.exit(2);
             }
@@ -128,6 +135,7 @@ public class OperatorApplication extends MultiDexApplication {
     }
 
     public static boolean isEnglishLang() {
+
         return PersistenceManager.getInstance().getCurrentLang().equals("en");
     }
 }

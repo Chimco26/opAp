@@ -147,7 +147,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         private View mBottomDivider;
         private LinearLayout mSubtitle;
 
-        public ShiftLogStoppedViewHolder(View itemView) {
+        ShiftLogStoppedViewHolder(View itemView) {
             super(itemView);
             mParentLayout = (LinearLayout) itemView.findViewById(R.id.event_stopped_parent_layout);
             mTitleLayout = (LinearLayout) itemView.findViewById(R.id.event_stopped_title_layout);
@@ -181,7 +181,7 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
         private LinearLayout mSubtitle;
         private View mBottomDivider;
 
-        public ShiftLogParameterViewHolder(View itemView) {
+        ShiftLogParameterViewHolder(View itemView) {
             super(itemView);
             mParentLayout = (LinearLayout) itemView.findViewById(R.id.event_parameter_parent_layout);
             mTitleLayout = (LinearLayout) itemView.findViewById(R.id.event_parameter_title_layout);
@@ -239,7 +239,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
             shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
 
-            Log.e(DavidVardi.SHIFT_LOG, "Position: " + position + " EventGroupID: " + event.getEventGroupID());
 
             if (event.getEventGroupID() != 6) {
 
@@ -250,7 +249,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
                 if (event.getPriority() == 1) {
 
-                    // TODO: 12 יולי 2017 VR change the image as per the event Reason ID
 
                     shiftLogStoppedViewHolder.mIcon.setImageResource(R.drawable.ic_hand_red);
                     shiftLogStoppedViewHolder.mTitle.setTextColor(Color.RED);

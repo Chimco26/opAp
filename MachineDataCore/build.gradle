@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 17
@@ -27,4 +27,5 @@ dependencies {
     compile project(':Infra')
     compile project(':MachineDataInfra')
     compile project(':ErrorObjectInterface')
+    compile project(path: ':publicutils')
 }

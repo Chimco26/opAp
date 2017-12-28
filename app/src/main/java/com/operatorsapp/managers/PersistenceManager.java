@@ -54,9 +54,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     private static final String PREF_TIME_PARAMETER_DIALOG = "pref.PREF_TIME_PARAMETER_DIALOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
-    private static final int DEFAULT_POLLING_VALUE = 30;
+    private static final int DEFAULT_POLLING_VALUE = 20;
     private static final int DEFAULT_TIMEOUT_VALUE = 20;
-    public static final int DEFAULT_TOTAL_RETRIES_VALUE = 3;
+    private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
     private static final int MAX_EVENT_SIZE = 200;
 
 
@@ -65,11 +65,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
     public HashMap<Integer, Event> items = new HashMap<>();
     ;
 
-    public static PersistenceManager initInstance(Context context) {
+    public static void initInstance(Context context) {
         if (msInstance == null) {
             msInstance = new PersistenceManager(context);
         }
-        return msInstance;
     }
 
     public static PersistenceManager getInstance() {
@@ -180,7 +179,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public int getTotalRetries() {
-        return SecurePreferences.getInstance().getInt(PREF_TOTAL_RETRIES, DEFAULT_TOTAL_RETRIES_VALUE);
+        return SecurePreferences.getInstance().getInt(PREF_TOTAL_RETRIES, DEFAULT_TOTAL_RETRIE_VALUE);
     }
 
     @Override
@@ -200,8 +199,6 @@ public class PersistenceManager implements LoginPersistenceManagerInterface, Shi
 
     @Override
     public void saveShiftLogs(ArrayList<Event> events) {
-
-        ArrayList<Event> events1 = new ArrayList<>();
 
         try {
 

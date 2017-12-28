@@ -44,6 +44,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             @Override
             public void onResponse(Call<MachineDataDataResponse> call, Response<MachineDataDataResponse> response)
             {
+
                 if(response.body() != null && response.body().getMachineParams() != null && response.body().getErrorResponse() == null)
                 {
                     ArrayList<Widget> widgets = response.body().getMachineParams();
@@ -72,6 +73,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                     ZLogger.d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
+
                 }
             }
         });
