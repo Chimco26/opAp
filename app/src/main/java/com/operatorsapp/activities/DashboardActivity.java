@@ -171,7 +171,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof DashboardFragment) {
-                        Log.d(DavidVardi.DAVID_TAG, "onBackStackChanged");
                         if (first) {
                             mDashboardFragment.setActionBar();
                             first = false;
@@ -206,7 +205,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onPause() {
         super.onPause();
 
-        Log.d(DavidVardi.DAVID_TAG, "onPause ");
 
         if (!IGNORE_FROM_ON_PAUSE) {
 

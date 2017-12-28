@@ -95,7 +95,7 @@
     <string name="operator_napp_nadvanced_nsettings">Додаток\nОператора\nРозширені\nНалаштування</string>
     <string name="polling_frequency">Частота опитування</string>
     <string name="request_timeout">Тайм-аут запиту</string>
-    <string name="request_timeout_range_error">Час очікування запиту повинен бути в діапазоні 5-120 секунд.</string>
+    <string name="request_timeout_range_error">Час очікування запиту повинен бути в діапазоні 20-120 секунд.</string>
     <string name="polling_frequency_range_error">Частота опитування повинна бути в діапазоні 20-60 секунд</string>
     <string name="refreshed">оновлено</string>
     <string name="one">1</string>

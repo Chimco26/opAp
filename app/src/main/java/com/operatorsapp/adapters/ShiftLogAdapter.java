@@ -239,7 +239,6 @@ public class ShiftLogAdapter extends RecyclerView.Adapter {
 
             shiftLogStoppedViewHolder.mTitleLayout.requestLayout();
 
-            Log.e(DavidVardi.SHIFT_LOG, "Position: " + position + " EventGroupID: " + event.getEventGroupID());
 
             if (event.getEventGroupID() != 6) {
 

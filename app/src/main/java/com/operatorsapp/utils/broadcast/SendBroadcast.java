@@ -40,7 +40,6 @@ public class SendBroadcast {
 
     public static void refreshPolling(Context context) {
 
-        Log.d(DavidVardi.DAVID_TAG, "SendBroadcast refreshPolling");
 
         Intent intent = new Intent();
 

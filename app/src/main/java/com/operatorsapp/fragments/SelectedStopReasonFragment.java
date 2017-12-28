@@ -283,7 +283,6 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
         mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
 
-        Log.d(DavidVardi.DAVID_TAG, "event: " + mEventId + " reason:  " + mReasonId);
 
         SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName);
 

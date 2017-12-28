@@ -103,7 +103,7 @@
     <string name="polling_frequency">Polling Frequency</string>
     <string name="request_timeout">Request Timeout</string>
     <string name="popup_timeout">Pop up Timeout</string>
-    <string name="request_timeout_range_error">Request timeout must be in range 5-120 seconds</string>
+    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
     <string name="popup_timeout_range_error">Pop up timeout must be in range 5-30 seconds</string>
     <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
     <string name="refreshed">Refreshed</string>

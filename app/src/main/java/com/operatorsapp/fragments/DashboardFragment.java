@@ -377,7 +377,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         @Override
         public void onSetOperatorSuccess() {
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
-            //            Zloger.d(LOG_TAG, "onSetOperatorSuccess() ");
+            //            Zloger.clearPollingRequest(LOG_TAG, "onSetOperatorSuccess() ");
         }
 
         @Override
@@ -407,7 +407,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         super.onResume();
 
         registerReceiver();
-        Log.d(DavidVardi.DAVID_TAG, "onResume");
         setActionBar();
         if (mCurrentMachineStatus != null) {
             initStatusLayout(mCurrentMachineStatus);
@@ -482,8 +481,8 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mShiftLogAdapter.changeState(!isOpen);
         mWidgetAdapter.changeState(!isOpen);
 
-        //        ZLogger.d(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
-        //        ZLogger.d(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
+        //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
+        //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
     }
 
     @Override
@@ -521,7 +520,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void setActionBar() {
 
 
-        Log.d(DavidVardi.DAVID_TAG, "setActionBar");
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
@@ -675,7 +673,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
             if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                Log.d("DAVID_TAG", "onDeviceStatusChanged()  from setActionBar");
 
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
@@ -789,7 +786,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
 
-        Log.d("DAVID_TAG", "onDeviceStatusChanged()");
 
         mCurrentMachineStatus = machineStatus;
 
@@ -807,7 +803,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
 
-            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived CallbackListener = null");
 
             mNoDataView.setVisibility(View.VISIBLE);
             return;
@@ -828,7 +823,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             }
         } else {
 
-            Log.d(DavidVardi.DAVID_TAG, "onMachineDataReceived widgetList = null");
 
             mNoDataView.setVisibility(View.VISIBLE);
         }
@@ -1013,7 +1007,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
 
-        Log.d(DavidVardi.DAVID_TAG, "onDataFailure");
 
         mLoadingDataView.setVisibility(View.GONE);
         if (callType == CallType.Status) {
@@ -1058,7 +1051,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         statusAggregation(machineStatus);
         mMachineStatusLayout.setVisibility(View.VISIBLE);
 
-        Log.d(DavidVardi.DAVID_TAG, "New MachineStatus " + statusNameByLang + " machineName " + machineName);
 
     }
 
@@ -1103,7 +1095,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
 
-        Log.d("DAVID_TAG", "machineStatus " + status);
 
 
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
@@ -1171,7 +1162,6 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onSelectStopReason(int eventId, int reasonId, String en, String il) {
 
-        Log.i(DavidVardi.DAVID_TAG, "event: " + eventId);
 
         for (Event event : mEventsList) {
 
@@ -1185,13 +1175,11 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
                 event.setmEventGroupEname(en);
 
-                Log.i(DavidVardi.DAVID_TAG, "event.setTreated(true)");
 
                 if (mShiftLogAdapter != null) {
 
                     mShiftLogAdapter.notifyDataSetChanged();
 
-                    Log.i(DavidVardi.DAVID_TAG, "mShiftLogAdapter.notifyDataSetChanged()");
 
                 }
                 return;

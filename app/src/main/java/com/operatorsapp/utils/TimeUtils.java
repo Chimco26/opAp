@@ -31,9 +31,9 @@ public class TimeUtils {
         } else {
             int day = (int) (timeInSeconds / ONE_DAY_IN_SECONDS);
             if (day >= 99) {
-                return 99 + "+ d";
+                return 99 + "+ clearPollingRequest";
             } else {
-                return day + " d";
+                return day + " clearPollingRequest";
 
             }
         }

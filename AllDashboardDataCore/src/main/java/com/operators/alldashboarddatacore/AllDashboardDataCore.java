@@ -97,7 +97,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     public void startPolling() {
 
-        Log.d("DAVID_TAG", "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
 
         mJob = null;
 
@@ -105,7 +104,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                Log.d("DAVID_TAG", "executeJob");
 
                 getMachineData(onJobFinishedListener);
                 getMachineStatus(onJobFinishedListener);
@@ -130,7 +128,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 @Override
                 public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
 
-                    Log.d("DAVID_TAG", "onGetMachineStatusSucceeded");
 
                     int timeToEndInSeconds = 0;
                     if (machineStatus != null) {
@@ -178,11 +175,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
                     if (mMachineDataUICallback != null) {
 
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getSiteUrl() " + mMachineDataPersistenceManagerInterface.getSiteUrl());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getSessionId() " + mMachineDataPersistenceManagerInterface.getSessionId());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom() " + mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom());
-                        Log.d("DAVID_TAG", "mMachineDataPersistenceManagerInterface.getMachineId()" + mMachineDataPersistenceManagerInterface.getMachineId());
-                        Log.d("DAVID_TAG", "onGetMachineDataSucceeded " + widgetList.get(0).getCurrentValue());
 
 
                         mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);

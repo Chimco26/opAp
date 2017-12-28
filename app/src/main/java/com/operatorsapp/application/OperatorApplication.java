@@ -104,7 +104,6 @@ public class OperatorApplication extends MultiDexApplication {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
 
-                Log.d(DavidVardi.DAVID_TAG,"TEST paramThrowable");
                 paramThrowable.printStackTrace();
 
 
