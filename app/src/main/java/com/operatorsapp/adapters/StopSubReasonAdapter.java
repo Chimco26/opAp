@@ -36,31 +36,12 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sub_stop_reason_grid_item, parent, false);
 
-        final ViewHolder holder = new ViewHolder(view);
-
-        try {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSelectedPosition = holder.getAdapterPosition();
-                    mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(holder.getAdapterPosition()).getId());
-
-
-                }
-            });
-
-        } catch (ArrayIndexOutOfBoundsException e){
-
-            e.printStackTrace();
-        }
-
-
-        return holder;
+        return new ViewHolder(view);
     }
 
     @SuppressLint("NewApi")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         if (mSelectedPosition == position) {
             holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
@@ -74,6 +55,22 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
         holder.mStopTitle.setText(nameByLang);
         char firstLetter = nameByLang.charAt(0);
         holder.mImageTitle.setText(String.valueOf(firstLetter));
+
+        try {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSelectedPosition =position;
+                    mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(position).getId());
+
+
+                }
+            });
+
+        } catch (ArrayIndexOutOfBoundsException e){
+
+            e.printStackTrace();
+        }
     }
 
     @Override

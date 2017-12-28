@@ -35,10 +35,8 @@ import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsnetworkbridge.JobsNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
-import com.operators.machinedatacore.MachineDataCore;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.GetMachineDataNetworkBridge;
-import com.operators.machinestatuscore.MachineStatusCore;
 import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
 import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -48,7 +46,6 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
-import com.operators.shiftlogcore.ShiftLogCore;
 import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -75,17 +72,13 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
-import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
-import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
-import org.acra.ACRA;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -101,21 +94,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private CroutonCreator mCroutonCreator;
     private TimeToEndCounter mTimeToEndCounter;
     private DashboardUICallbackListener mDashboardUICallbackListener;
-    private MachineStatusCore mMachineStatusCore;
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
     private DashBoardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
-    private MachineDataCore mMachineDataCore;
-    private ShiftLogCore mShiftLogCore;
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
     private DashboardFragment mDashboardFragment;
-
     private AllDashboardDataCore mAllDashboardDataCore;
-
-    private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
     private RefreshPollingBroadcast mRefreshBroadcast = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,21 +113,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         updateAndroidSecurityProvider(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
 
         GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
+
         getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-//        mMachineStatusCore = new MachineStatusCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance());
 
         GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
+
         getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
-//        mMachineDataCore = new MachineDataCore(getMachineDataNetworkBridge, PersistenceManager.getInstance());
+
 
         ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+
         shiftLogNetworkBridge.inject(NetworkManager.getInstance());
-//        mShiftLogCore = new ShiftLogCore(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
@@ -153,7 +143,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
+
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
@@ -167,12 +159,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     boolean first = false;
 
     private android.support.v4.app.FragmentManager.OnBackStackChangedListener getListener() {
-        android.support.v4.app.FragmentManager.OnBackStackChangedListener result = new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
+
+        return new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
-                //                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-                //
-                //                if (manager != null)
-                //                {
+
+
                 Fragment fragment = getVisibleFragment();
                 if (fragment != null) {
                     if (fragment instanceof ReportRejectsFragment) {
@@ -193,17 +184,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 //                }
             }
         };
-
-        return result;
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
+
         try {
+
             ProviderInstaller.installIfNeeded(this);
+
         } catch (GooglePlayServicesRepairableException e) {
-            // Thrown when Google Play Services is not installed, up-to-date, or enabled
-            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+
+
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
+
         } catch (GooglePlayServicesNotAvailableException e) {
             ZLogger.e("SecurityException", "Google Play Services not available.");
         }
@@ -215,23 +208,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.d(DavidVardi.DAVID_TAG, "onPause ");
 
-        //        mMachineStatusCore.stopPolling();
-        //        mMachineStatusCore.unregisterListener();
-        //        mMachineStatusCore.stopTimer();
-        //
-        //        mMachineDataCore.stopPolling();
-        //        mMachineDataCore.unregisterListener();
-        //
-        //        mShiftLogCore.stopPolling();
-        //        mShiftLogCore.unregisterListener();
         if (!IGNORE_FROM_ON_PAUSE) {
 
             mAllDashboardDataCore.stopPolling();
+
             mAllDashboardDataCore.unregisterListener();
+
             mAllDashboardDataCore.stopTimer();
 
             mReportFieldsForMachineCore.stopPolling();
+
             mReportFieldsForMachineCore.unregisterListener();
+
             finish();
 
         }
@@ -241,23 +229,22 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onResume() {
 
         if (!IGNORE_FROM_ON_PAUSE) {
+
             registerReceiver();
 
             ZLogger.d(LOG_TAG, "onResume(), start ");
+
             super.onResume();
 
-            Log.d(DavidVardi.DAVID_TAG, "onResume  dashboardDataStartPolling");
-
             dashboardDataStartPolling();
-            //        machineStatusStartPolling();
+
             shiftForMachineTimer();
-            //        machineDataStartPolling();
-            //        shiftLogStartPolling();
 
             mReportFieldsForMachineCore.registerListener(mReportFieldsForMachineUICallback);
-            mReportFieldsForMachineCore.startPolling();
-            ZLogger.d(LOG_TAG, "onResume(), end ");
 
+            mReportFieldsForMachineCore.startPolling();
+
+            ZLogger.d(LOG_TAG, "onResume(), end ");
         }
 
     }
@@ -271,8 +258,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             LocalBroadcastManager.getInstance(this).registerReceiver(mRefreshBroadcast, new IntentFilter(RefreshPollingBroadcast.ACTION_REFRESH_POLLING));
 
         }
-
     }
+
 
     @Override
     protected void onDestroy() {
@@ -280,8 +267,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onDestroy();
 
         removeBroadcasts();
-
     }
+
 
     private void removeBroadcasts() {
 
@@ -297,19 +284,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void dashboardDataStartPolling() {
-        Log.d(DavidVardi.DAVID_TAG, "dashboardDataStartPolling");
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
+
+        mAllDashboardDataCore.stopPolling();
+
+        NetworkManager.getInstance().clearPollingRequest();
+
         mAllDashboardDataCore.startPolling();
     }
 
-    //    private void machineStatusStartPolling()
-    //    {
-    //        mMachineStatusCore.registerListener(getMachineStatusUICallback());
-    //
-    //        mMachineStatusCore.startPolling();
-    //
-    //    }
 
     @NonNull
     private MachineStatusUICallback getMachineStatusUICallback() {
@@ -339,18 +323,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
-                //                mMachineStatusCore.stopTimer();
-                //                mMachineStatusCore.stopPolling();
+
             }
         };
     }
 
-    //    private void machineDataStartPolling()
-    //    {
-    //        mMachineDataCore.registerListener(getMachineDataUICallback());
-    //
-    //        mMachineDataCore.startPolling();
-    //    }
 
     @NonNull
     private MachineDataUICallback getMachineDataUICallback() {
@@ -359,12 +336,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
 
-                Log.d(DavidVardi.DAVID_TAG, "onDataReceivedSuccessfully");
                 if (mDashboardUICallbackListener != null) {
                     mDashboardUICallbackListener.onMachineDataReceived(widgetList);
                 } else {
-
-                    Log.d(DavidVardi.DAVID_TAG, "onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
 
                     ZLogger.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
@@ -374,7 +348,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
                 mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
-//                mMachineDataCore.stopPolling();
             }
         };
     }
@@ -391,10 +364,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
-                //                final int durationOfShift = (int) ((TimeUtils.getLongFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()) + shiftForMachineResponse.getDuration()) - System.currentTimeMillis());
+
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
-                    //shiftLogStartPolling();
                 } else {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -419,18 +391,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mTimeToEndCounter = new TimeToEndCounter(this);
         }
         mTimeToEndCounter.calculateShiftToEnd(timeInSeconds);
+
     }
 
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
-//        if(mShiftLogCore != null)
-//        {
-//            mShiftLogCore.stopPolling();
-//            mShiftLogCore.unregisterListener();
-//            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
-//        }
-
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "millisUntilFinished: " + millisUntilFinished);
 
         if (mDashboardUICallbackListener != null) {
             mDashboardUICallbackListener.onShiftForMachineEnded();
@@ -438,13 +403,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         shiftForMachineTimer();
     }
 
-    //    private void shiftLogStartPolling()
-    //    {
-    //
-    //        mShiftLogCore.registerListener(getShiftLogUICallback());
-    //
-    //        mShiftLogCore.startPolling();
-    //    }
+
 
     @NonNull
     private ShiftLogUICallback getShiftLogUICallback() {
@@ -467,7 +426,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ZLogger.i(LOG_TAG, "shiftLogStartPolling() reason: " + reason.getDetailedDescription());
 
                     mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
-//                mShiftLogCore.stopPolling();
                 }
             }
         };
@@ -596,19 +554,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStartJobSuccess() {
                 ZLogger.i(LOG_TAG, "onStartJobSuccess()");
-                Log.d("DAVID_TAG", "onStartJobSuccess");
 
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
+
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                //                mMachineStatusCore.stopPolling();
-                //                mMachineStatusCore.startPolling();
-                //
-                //                mMachineDataCore.stopPolling();
-                //                mMachineDataCore.startPolling();
-                //
-                //                mShiftLogCore.stopPolling();
-                //                mShiftLogCore.startPolling();
+
                 mAllDashboardDataCore.stopPolling();
+
+                NetworkManager.getInstance().clearPollingRequest();
+
                 mAllDashboardDataCore.startPolling();
             }
 
@@ -659,25 +613,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ZLogger.i(LOG_TAG, "onSetOperatorForMachineSuccess(), operator Id: " + operatorId + " operator name: " + operatorName);
 
-        Log.d("DAVID_TAG", "onSetOperatorForMachineSuccess");
-
-
-        //        mMachineStatusCore.stopPolling();
-        //        mMachineStatusCore.startPolling();
-        //
-        //        mMachineDataCore.stopPolling();
-        //        mMachineDataCore.startPolling();
-        //
-        //        mShiftLogCore.stopPolling();
-        //        mShiftLogCore.startPolling();
         mAllDashboardDataCore.stopPolling();
+
+        NetworkManager.getInstance().clearPollingRequest();
+
         mAllDashboardDataCore.startPolling();
 
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }
 
-    // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
         LoginCore.getInstance().silentLoginFromDashBoard(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
@@ -693,7 +638,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (fragment instanceof SignInOperatorFragment) {
 
                     ShowCrouton.jobsLoadingErrorCrouton(onCroutonRequestListener, reason);
-                    //ShowCrouton.operatorLoadingErrorCrouton(onCroutonRequestListener, "credentials mismatch");
                 }
             }
         });
@@ -756,15 +700,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     private void clearData() {
-        //Persistence storage clear
-        //        String tmpUrl = PersistenceManager.getInstance().getSiteUrl();
+
+
         String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+
         PersistenceManager.getInstance().clear();
 
         PersistenceManager.getInstance().items.clear();
 
-        //        PersistenceManager.getInstance().setSiteUrl(tmpUrl);
         PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+
         ZLogger.i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear
         if (mReportFieldsForMachineCore != null) {
@@ -777,29 +722,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mAllDashboardDataCore.unregisterListener();
             ZLogger.i(LOG_TAG, "mAllDashboardDataCore cleared");
         }
-        //        if(mMachineStatusCore != null)
-        //        {
-        //            mMachineStatusCore.stopPolling();
-        //            mMachineStatusCore.unregisterListener();
-        //            ZLogger.i(LOG_TAG, "mMachineStatusCore cleared");
-        //        }
-        //        if(mShiftLogCore != null)
-        //        {
-        //            mShiftLogCore.stopPolling();
-        //            mShiftLogCore.unregisterListener();
-        //            ZLogger.i(LOG_TAG, "mShiftLogCore cleared");
-        //        }
+
         if (mJobsCore != null) {
             mJobsCore.unregisterListener();
             ZLogger.i(LOG_TAG, "mJobsCore cleared");
         }
-        //        if(mMachineDataCore != null)
-        //        {
-        //            mMachineDataCore.stopPolling();
-        //            mMachineDataCore.unregisterListener();
-        //            ZLogger.i(LOG_TAG, "mMachineDataCore cleared");
-        //        }
-        //Objects clear
+
         if (mReportFieldsForMachineCore != null) {
             mReportFieldsForMachine = null;
             ZLogger.i(LOG_TAG, "mReportFieldsForMachine cleared");
@@ -851,7 +779,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);
         finish();
-        //startActivity(myIntent);
     }
 
     public static void deleteCache(Context context) {
@@ -859,24 +786,22 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             File dir = context.getCacheDir();
             deleteDir(dir);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
                 if (!success) {
                     return false;
                 }
             }
             return dir.delete();
-        } else if (dir != null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
+        } else
+            return dir != null && dir.isFile() && dir.delete();
     }
 
     public int getCroutonRoot() {
@@ -891,16 +816,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onRefreshPollingRequest() {
         ZLogger.i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
 
-        Log.d("DAVID_TAG", "onRefreshPollingRequest");
-
         mAllDashboardDataCore.stopPolling();
-        //        mMachineStatusCore.stopPolling();
-        //        mShiftLogCore.stopPolling();
-        //        mMachineDataCore.stopPolling();
+
+        NetworkManager.getInstance().clearPollingRequest();
         mAllDashboardDataCore.startPolling();
-        //        mMachineStatusCore.startPolling();
-        //        mShiftLogCore.startPolling();
-        //        mMachineDataCore.startPolling();
+
     }
 
     @Override
@@ -913,23 +833,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshPolling() {
 
-        Log.d(DavidVardi.DAVID_TAG, "onRefreshPolling  dashboardDataStartPolling");
-
         dashboardDataStartPolling();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        Log.v(DavidVardi.DAVID_TAG, "onRequestPermissionsResult");
 
         IGNORE_FROM_ON_PAUSE = false;
 
-
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            Log.v(DavidVardi.DAVID_TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
 
             SendBroadcast.SendEmail(this);
 

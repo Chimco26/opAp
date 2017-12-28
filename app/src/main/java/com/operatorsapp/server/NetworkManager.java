@@ -39,6 +39,8 @@ import com.zemingo.logrecorder.ZLogger;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
+import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -50,6 +52,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
     private Retrofit mRetrofit;
+    private OkHttpClient okHttpClient;
 
     public static NetworkManager initInstance() {
         if (msInstance == null) {
@@ -84,7 +87,11 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
             EmeraldLoginServiceRequests emeraldLoginServiceRequests = mRetrofit.create(EmeraldLoginServiceRequests.class);
+
+
             mEmeraldServiceRequestsHashMap.put(siteUrl, emeraldLoginServiceRequests);
+
+
             return emeraldLoginServiceRequests;
         }
     }
@@ -200,27 +207,32 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
+        ConnectionPool pool = new ConnectionPool(5, 10000, TimeUnit.MILLISECONDS);
+
         try {
             if (mRetrofit == null || !mRetrofit.baseUrl().toString().equals(siteUrl)) {
-                okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
-                dispatcher.setMaxRequestsPerHost(1);
-                OkHttpClient okHttpClient;
+                Dispatcher dispatcher = new okhttp3.Dispatcher();
+                dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
                 loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                 if (timeout >= 0 && timeUnit != null) {
                     okHttpClient = new OkHttpClient.Builder()
-                            //add mock
-                            //                        .addInterceptor(new RetrofitMockClient())
-                            .connectTimeout(timeout, timeUnit).writeTimeout(timeout, timeUnit).readTimeout(timeout, timeUnit).addInterceptor(loggingInterceptor).dispatcher(dispatcher)
-                            //                    .sslSocketFactory(sslContext.getSocketFactory())
-
+                            .connectionPool(pool)
+                            .connectTimeout(timeout, timeUnit)
+                            .writeTimeout(timeout, timeUnit)
+                            .readTimeout(timeout, timeUnit)
+                            .addInterceptor(loggingInterceptor)
+                            .dispatcher(dispatcher)
                             .build();
                 } else {
                     okHttpClient = new OkHttpClient.Builder()
-                            //add mock
-                            //                        .addInterceptor(new RetrofitMockClient())
-                            .addInterceptor(loggingInterceptor).build();
+                            .connectionPool(pool)
+                            .dispatcher(dispatcher)
+                            .addInterceptor(loggingInterceptor)
+                            .build();
                 }
+
+
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
             }
@@ -235,9 +247,17 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + s);
 
+            e.printStackTrace();
+
+            mRetrofit = new Retrofit.Builder().build();
+
         } catch (RuntimeException e) {
+            e.printStackTrace();
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
+
+            mRetrofit = new Retrofit.Builder().build();
+
         }
         return mRetrofit;
 
@@ -340,6 +360,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldGetOperatorById getOperatorByIdRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
         try {
 
@@ -553,7 +574,6 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
         try {
-
             return mRetrofit.create(EmeraldSendApproveFirstItem.class);
 
         } catch (RuntimeException e) {
@@ -561,5 +581,21 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
             SendReportUtil.sendAcraExeption(e, "approveFirstItemRetroFitServiceRequests");
         }
         return mRetrofit.create(EmeraldSendApproveFirstItem.class);
+    }
+
+    public void clearPollingRequest() {
+
+        try {
+            okHttpClient.dispatcher().cancelAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        try {
+            okHttpClient.connectionPool().evictAll();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
