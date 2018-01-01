@@ -48,9 +48,11 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             public void onResponse(Call<ShiftLogResponse> call, Response<ShiftLogResponse> response)
             {
 
+
                 if(response.body() != null && response.body().getEvents() != null && (response.body().getErrorResponse() == null || response.body().getErrorResponse().getErrorCode() == 1967))
                 {
                     ArrayList<Event> events = response.body().getEvents();
+
                     ZLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
 
                     if(events != null)
@@ -65,6 +67,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 }
                 else
                 {
+
                     ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getShiftLog failed Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
@@ -77,12 +80,14 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 if(retryCount++ < totalRetries)
                 {
                     ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     retryCount = 0;
                     ZLogger.d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
+
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
 
