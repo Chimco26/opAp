@@ -183,6 +183,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/ReportNetworkBridge/src/main/java/com/operators/reportrejectnetworkbridge/ReportNetworkBridge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ShiftLogCore/build.gradle">
           <value>
             <set />

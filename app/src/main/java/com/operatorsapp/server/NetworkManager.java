@@ -1,5 +1,7 @@
 package com.operatorsapp.server;
 
+import android.util.Log;
+
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
@@ -235,6 +237,7 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
+
             }
         } catch (IllegalArgumentException e) {
 
@@ -458,11 +461,15 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     @Override
     public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl) {
 
+        Log.d("NEW_TAG","sendReportStop 3");
+
+
         try {
 
             return reportStopRetroFitServiceRequests(siteUrl, -1, null);
 
         } catch (RuntimeException e) {
+
 
             SendReportUtil.sendAcraExeption(e, "reportStopRetroFitServiceRequests");
         }
@@ -472,13 +479,20 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
     @Override
     public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
+
+
         try {
+            Log.d("NEW_TAG","sendReportStop 6");
+
 
             return mRetrofit.create(EmeraldSendStopReport.class);
 
         } catch (RuntimeException e) {
+
+
 
             SendReportUtil.sendAcraExeption(e, "reportStopRetroFitServiceRequests");
         }
@@ -584,13 +598,12 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     public void clearPollingRequest() {
-
-        try {
-            okHttpClient.dispatcher().cancelAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
+//        try {
+//            okHttpClient.dispatcher().cancelAll();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
         try {
             okHttpClient.connectionPool().evictAll();
 

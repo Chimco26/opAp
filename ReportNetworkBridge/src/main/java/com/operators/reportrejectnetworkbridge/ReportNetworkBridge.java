@@ -1,5 +1,8 @@
 package com.operators.reportrejectnetworkbridge;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
@@ -59,24 +62,30 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     @Override
     public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, int eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+
         SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId);
+
         final int[] retryCount = {0};
+
         Call<SendReportStopResponse> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendStopReport(sendReportStopRequest);
+
         call.enqueue(new Callback<SendReportStopResponse>() {
             @Override
-            public void onResponse(Call<SendReportStopResponse> call, Response<SendReportStopResponse> response) {
-                if (response != null) {
-                    if (response.isSuccessful()) {
-                        if (callback != null) {
-                            callback.onSendStopReportSuccess();
-                        } else {
-                            ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
-                        }
+            public void onResponse(@NonNull Call<SendReportStopResponse> call, @NonNull Response<SendReportStopResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onSendStopReportSuccess();
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
-                    else
-                    {
-                        onFailure(call,new Exception("response not successful"));
-                    }
+                }
+                else
+                {
+
+                    onFailure(call,new Exception("response not successful"));
                 }
 
             }
