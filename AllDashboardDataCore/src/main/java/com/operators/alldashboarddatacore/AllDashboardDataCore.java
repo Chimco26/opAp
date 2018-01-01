@@ -26,15 +26,16 @@ import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.zemingo.logrecorder.ZLogger;
-import ravtech.co.il.publicutils.JobBase;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import ravtech.co.il.publicutils.JobBase;
 
 public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
@@ -103,7 +104,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         mJob = new EmeraldJobBase() {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
-
 
                 getMachineData(onJobFinishedListener);
                 getMachineStatus(onJobFinishedListener);

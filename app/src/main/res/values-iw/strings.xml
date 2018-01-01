@@ -178,5 +178,7 @@
     <string name="welcome">ברוך הבא</string>
     <string name="log_in_to_nyour_factory">התחבר\nלמפעל</string>
     <string name="common_signin_button_text">כניסה</string>
+    <string name="popup_timeout_range_error">זמן הצגת ההתראה חייב להיות בטווח 3-30 שניות</string>
+    <string name="popup_timeout">זמן הצגת התראות</string>
 
 </resources>

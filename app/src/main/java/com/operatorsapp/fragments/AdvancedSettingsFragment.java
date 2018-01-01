@@ -45,7 +45,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private static final int MIN_POLLING_FREQUENCY_VALUE = 20;
     private static final int MAX_POLLING_FREQUENCY_VALUE = 60;
-    private static final int MIN_POPUP_VALUE = 5;
+    private static final int MIN_POPUP_VALUE = 3;
     private static final int MAX_POPUP_VALUE = 30;
     private static final int MIN_TIMEOUT_VALUE = 20;
     private static final int MAX_TIMEOUT_VALUE = 120;
