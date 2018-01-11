@@ -17,7 +17,7 @@ import de.keyboardsurfer.android.widget.crouton.LifecycleCallback;
 public class CroutonCreator {
     private static final String LOG_TAG = CroutonCreator.class.getSimpleName();
     private final EmeraldCrouton mCurrentCrouton = new EmeraldCrouton();
-    private final int DEFAULT_CROUTON_TIME = 5000;
+    private static final int DEFAULT_CROUTON_TIME = 5000;
 
     public void showCrouton(Activity activity, String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonType croutonType) {
         showCrouton(activity, SpannableStringBuilder.valueOf(croutonMessage), croutonDurationInMilliseconds, viewGroup, croutonType);
@@ -67,18 +67,19 @@ public class CroutonCreator {
         mCurrentCrouton.setCroutonType(croutonType);
     }
 
-//    public void cancelAllCroutons() {
-//        if (mCurrentCrouton != null) {
-//            mCurrentCrouton.removeCrouton();
-//        }
-//        Crouton.cancelAllCroutons();
-//    }
 
     public void hideConnectivityCrouton() {
-        if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
-            mCurrentCrouton.getCrouton().hide();
-        }else if(!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR)){
-            mCurrentCrouton.getCrouton().hide();
+
+        if (!mCurrentCrouton.isEmpty()) {
+
+            if (mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
+
+                mCurrentCrouton.getCrouton().hide();
+
+            } else if (mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR)) {
+
+                mCurrentCrouton.getCrouton().hide();
+            }
         }
     }
 
@@ -108,6 +109,8 @@ public class CroutonCreator {
             case NETWORK_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
                 break;
+            default:
+                croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
         }
         TextView croutonText = (TextView) croutonView.findViewById(R.id.crouton_text);
         croutonText.setText(croutonMessage);
@@ -120,33 +123,32 @@ public class CroutonCreator {
 
     public class EmeraldCrouton {
 
-
         private Crouton mCrouton;
 
         private CroutonType mCroutonType;
 
-        public boolean isEmpty() {
+        boolean isEmpty() {
             return mCrouton == null;
         }
 
-        public Crouton getCrouton() {
+        Crouton getCrouton() {
             return mCrouton;
         }
 
-        public void setCrouton(Crouton crouton) {
+        void setCrouton(Crouton crouton) {
             mCrouton = crouton;
         }
 
-        public void removeCrouton() {
+        void removeCrouton() {
             mCrouton = null;
             mCroutonType = null;
         }
 
-        public CroutonType getCroutonType() {
+        CroutonType getCroutonType() {
             return mCroutonType;
         }
 
-        public void setCroutonType(CroutonType croutonType) {
+        void setCroutonType(CroutonType croutonType) {
             mCroutonType = croutonType;
         }
     }

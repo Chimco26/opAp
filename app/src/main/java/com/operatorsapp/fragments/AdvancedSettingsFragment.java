@@ -35,15 +35,13 @@ import com.operatorsapp.utils.broadcast.SendLogsBroadcast;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
-import static com.operatorsapp.activities.DashboardActivity.IGNORE_FROM_ON_PAUSE;
-
 
 public class AdvancedSettingsFragment extends Fragment implements View.OnClickListener, CroutonRootProvider, SendLogsBroadcast.SendLogsListener {
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getSimpleName();
 
     private static final String SELECTED_LANGUAGE = "selected_language";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
-    private static final int MIN_POLLING_FREQUENCY_VALUE = 20;
+    private static final int MIN_POLLING_FREQUENCY_VALUE = 1; // TODO: David  return to 20
     private static final int MAX_POLLING_FREQUENCY_VALUE = 60;
     private static final int MIN_POPUP_VALUE = 5;
     private static final int MAX_POPUP_VALUE = 30;
@@ -64,6 +62,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
     private TextView mSendLogButton;
     private SendLogsBroadcast mSendLogsBroadcast = null;
+
 
 
     public static AdvancedSettingsFragment newInstance(String selectedLanguage) {
@@ -235,7 +234,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+
+            Log.e(LOG_TAG, e.getMessage());
         }
 
     }
@@ -325,6 +325,9 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         } catch (Exception e) {
             ProgressDialogManager.dismiss();
             e.printStackTrace();
+            if(e.getMessage()!=null)
+
+                Log.e(LOG_TAG, e.getMessage());
         }
     }
 
@@ -338,7 +341,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
                 Log.v(LOG_TAG, "Permission is revoked");
 
-                IGNORE_FROM_ON_PAUSE = true;
+                mSettingsInterface.onIgnoreFromOnPause(true);
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
@@ -402,6 +405,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         }
 
     }
+
+
 
 
     @Override

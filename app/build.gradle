@@ -44,12 +44,10 @@ dependencies {
     compile project(':LoginNetworkBridge')
     compile project(':Infra')
     compile project(':GetMachinesNetworkBridge')
-    compile project(':ShiftLogCore')
     compile project(':ShiftLogInfra')
     compile project(':ShiftLogNetworkbridge')
     //noinspection GradleCompatible
     compile project(':MachinesStatusNetworkBridge')
-    compile project(':MachineStatusCore')
     compile project(':MachineStatusInfra')
     compile project(':JobsInfra')
     compile project(':JobsNetworkBridge')
@@ -57,7 +55,6 @@ dependencies {
     compile project(':OperatorCore')
     compile project(':OperatorInfra')
     compile project(':OperatorNetworkBridge')
-    compile project(':MachineDataCore')
     compile project(':MachineDataInfra')
     compile project(':MachineDataNetworkBridge')
     compile project(':JobsInfra')
@@ -99,6 +96,4 @@ dependencies {
     compile 'com.android.support:multidex:1.0.2'
     androidTestCompile 'com.android.support:multidex:1.0.2'
     androidTestCompile 'com.android.support:multidex-instrumentation:1.0.2'
-
-
 }

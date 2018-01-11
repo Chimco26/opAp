@@ -51,12 +51,14 @@ import static com.operatorsapp.utils.SendReportUtil.SESSION_ID;
 
 )
 public class OperatorApplication extends MultiDexApplication {
+
+    private static final String LOG_TAG = OperatorApplication.class.getSimpleName();
+
     private static Context msApplicationContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
 
 
         ACRA.init(this);
@@ -99,12 +101,14 @@ public class OperatorApplication extends MultiDexApplication {
                 //Catch your exception
                 // Without System.exit() this will not work.
                 Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
                 if (i != null) {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
 
-                paramThrowable.printStackTrace();
+                if (paramThrowable.getMessage() != null)
+
+                    Log.e(LOG_TAG, paramThrowable.getMessage());
 
 
                 ACRA.getErrorReporter().putCustomData(IS_APP_CRASH, "true");
@@ -113,15 +117,15 @@ public class OperatorApplication extends MultiDexApplication {
 
                 try {
 
-                    ACRA.getErrorReporter().putCustomData(MACHINE_ID  , String.valueOf(PersistenceManager.getInstance().getMachineId()));
+                    ACRA.getErrorReporter().putCustomData(MACHINE_ID, String.valueOf(PersistenceManager.getInstance().getMachineId()));
 
                     ACRA.getErrorReporter().putCustomData(SESSION_ID, String.valueOf(PersistenceManager.getInstance().getSessionId()));
 
                     ACRA.getErrorReporter().handleException(paramThrowable);
 
 
-
-                }catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
 
                 startActivity(i);
 

@@ -47,7 +47,9 @@ import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.shiftloginfra.Event;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogAdapter;
@@ -70,6 +72,7 @@ import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
+import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.zemingo.logrecorder.ZLogger;
@@ -79,6 +82,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener {
 
@@ -139,6 +144,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     public static final int REASON_UNREPORTED = 0;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
+    private boolean thereAlreadyRequest = false;
 
 
     public static DashboardFragment newInstance() {
@@ -412,6 +418,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
             initStatusLayout(mCurrentMachineStatus);
         }
         if (mEventsList != null && mEventsList.size() > 0) {
+
             for (Event event : mEventsList) {
                 if (!event.isIsDismiss()) {
                     event.setTimeOfAdded(System.currentTimeMillis());
@@ -906,12 +913,7 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 if (mIsNewShiftLogs) {
                     mEventsQueue.addAll(events);
                 }
-                /*for (Event event : mEventsQueue) {
-                    if (!event.isAlarmDismissed()) {
-                        mEventsList.add(event);
-                        mEventsQueue.add(event);
-                    }
-                }*/
+
             } else {
                 for (int i = 0; i < events.size(); i++) {
                     if (!isExists(events.get(i)) /*&& !events.get(i).isAlarmDismissed()*/) {
@@ -1007,18 +1009,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
 
+        Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onDataFailure");
+
 
         mLoadingDataView.setVisibility(View.GONE);
         if (callType == CallType.Status) {
             mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
-       /* if (callType == CallType.ShiftLog) {
-            if (mEventsList == null || mEventsList.size() == 0) {
-                mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
-            }
-        }*/
+
         if (callType == CallType.MachineData) {
             if (mWidgets == null || mWidgets.size() == 0) {
                 mNoDataView.setVisibility(View.VISIBLE);
@@ -1032,6 +1031,46 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
                 }
             });
         }
+
+       silentLogin(reason);
+    }
+
+    private void silentLogin(ErrorObjectInterface reason) {
+
+       if(!thereAlreadyRequest) {
+
+           thereAlreadyRequest = true;
+
+           if (reason.getError() == ErrorObjectInterface.ErrorCode.Retrofit) {
+
+               ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mCroutonCallback, new SilentLoginCallback() {
+                   @Override
+                   public void onSilentLoginSucceeded() {
+
+                       SendBroadcast.refreshPolling(getContext());
+
+                       openSilentLoginOption();
+                   }
+
+                   @Override
+                   public void onSilentLoginFailed(ErrorObjectInterface reason) {
+
+                       ShowCrouton.operatorLoadingErrorCrouton(mCroutonCallback, reason.getError().toString());
+                   }
+               });
+           }
+       }
+    }
+
+    private void openSilentLoginOption() {
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+             thereAlreadyRequest = false;
+            }
+        },15000);
+
     }
 
     private void initStatusLayout(MachineStatus machineStatus) {
@@ -1085,7 +1124,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+if(e.getMessage()!=null)
+            Log.e(LOG_TAG, e.getMessage());
+
         }
 
     }

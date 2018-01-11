@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -191,7 +192,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         }catch (ConcurrentModificationException e){
 
-            e.printStackTrace();
+if(e.getMessage()!=null)
+            Log.e(LOG_TAG,e.getMessage());
         }
 
 

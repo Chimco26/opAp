@@ -250,12 +250,12 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + s);
 
-            e.printStackTrace();
-
             mRetrofit = new Retrofit.Builder().build();
 
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            if(e.getMessage()!=null)
+
+                Log.e(LOG_TAG,e.getMessage());
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
 
@@ -461,8 +461,6 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     @Override
     public EmeraldSendStopReport reportStopRetroFitServiceRequests(String siteUrl) {
 
-        Log.d("NEW_TAG","sendReportStop 3");
-
 
         try {
 
@@ -482,16 +480,11 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
-
-
         try {
-            Log.d("NEW_TAG","sendReportStop 6");
-
 
             return mRetrofit.create(EmeraldSendStopReport.class);
 
         } catch (RuntimeException e) {
-
 
 
             SendReportUtil.sendAcraExeption(e, "reportStopRetroFitServiceRequests");
@@ -598,17 +591,14 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
     }
 
     public void clearPollingRequest() {
-//        try {
-//            okHttpClient.dispatcher().cancelAll();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
+
         try {
             okHttpClient.connectionPool().evictAll();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            if(e.getMessage()!=null)
+
+                Log.e(LOG_TAG, e.getMessage());
         }
     }
 }

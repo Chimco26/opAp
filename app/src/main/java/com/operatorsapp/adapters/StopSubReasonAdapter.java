@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
+    private static final String LOG_TAG = StopSubReasonAdapter.class.getSimpleName();
     private List<SubReasons> mSubReasonsList;
     private Context mContext;
     private int mSelectedPosition = -1;
@@ -60,16 +62,19 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mSelectedPosition =position;
+                    mSelectedPosition = position;
                     mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(position).getId());
 
 
                 }
             });
 
-        } catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
 
-            e.printStackTrace();
+            if(e.getMessage()!=null)
+
+            Log.e(LOG_TAG, e.getMessage());
+
         }
     }
 
