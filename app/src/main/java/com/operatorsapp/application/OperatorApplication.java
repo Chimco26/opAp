@@ -3,7 +3,6 @@ package com.operatorsapp.application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
@@ -12,7 +11,6 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.DavidVardi;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -20,8 +18,6 @@ import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
-import org.acra.config.ACRAConfiguration;
-import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

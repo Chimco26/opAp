@@ -304,6 +304,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         ZLogger.d(LOG_TAG, "start sendLogToEmail(), ");
         LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
         try {
+            LogRecorder lr = LogRecorder.getInstance();
             LogRecorder.getInstance().requestSendLogsIntent(true, new LogRecorder.SendLogsListener() {
                 @Override
                 public void onCompleted(final Intent intent) {
