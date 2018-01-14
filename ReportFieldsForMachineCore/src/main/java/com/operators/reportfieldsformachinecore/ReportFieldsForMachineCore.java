@@ -1,6 +1,5 @@
 package com.operators.reportfieldsformachinecore;
 
-import android.util.Log;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
@@ -14,7 +13,7 @@ import ravtech.co.il.publicutils.JobBase;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Sergey on 02/08/2016.
+ * Created by Sergey on 02/08/2016
  */
 public class ReportFieldsForMachineCore {
     private static final String LOG_TAG = ReportFieldsForMachineCore.class.getSimpleName();

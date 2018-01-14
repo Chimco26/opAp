@@ -74,8 +74,12 @@ public class LoginCore {
         mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(String sessionId) {
+
                 ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
+
                 saveSessionData(sessionId, siteUrl, username, password);
+
+                loginUICallback.onLoginSucceeded(null);
             }
 
             @Override

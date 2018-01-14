@@ -18,6 +18,7 @@ public class TimeUtils {
     public static final int ONE_MINUTE_IN_SECONDS = 60;
     public static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     public static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
+    private static final String LOG_TAG = TimeUtils.class.getSimpleName();
 
     public static String getStoppedTimeToDisplay(long timeInSeconds) {
 
@@ -154,7 +155,9 @@ public class TimeUtils {
                 out = dateFormat2.format(date);
             } catch (ParseException ignored) {
             } catch (java.text.ParseException e) {
-                e.printStackTrace();
+                if(e.getMessage()!=null)
+
+                Log.e(LOG_TAG,e.getMessage());
             }
 
             return out;
@@ -171,7 +174,9 @@ public class TimeUtils {
             Date mDate = sdf.parse(date);
             timeInMilliseconds = mDate.getTime();
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            if(e.getMessage()!=null)
+
+            Log.e(LOG_TAG,e.getMessage());
         }
         return timeInMilliseconds;
     }

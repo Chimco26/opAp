@@ -20,12 +20,14 @@ import android.util.Log;
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
+import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
 import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
 import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.infra.Machine;
@@ -37,8 +39,6 @@ import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.GetMachineDataNetworkBridge;
-import com.operators.machinestatuscore.interfaces.OnTimeToEndChangedListener;
-import com.operators.machinestatuscore.timecounter.TimeToEndCounter;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatornetworkbridge.OperatorNetworkBridge;
@@ -89,7 +89,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
-    public static boolean IGNORE_FROM_ON_PAUSE = false;
+    private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
     private TimeToEndCounter mTimeToEndCounter;
@@ -206,7 +206,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onPause();
 
 
-        if (!IGNORE_FROM_ON_PAUSE) {
+        if (!ignoreFromOnPause) {
 
             mAllDashboardDataCore.stopPolling();
 
@@ -226,7 +226,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onResume() {
 
-        if (!IGNORE_FROM_ON_PAUSE) {
+        if (!ignoreFromOnPause) {
 
             registerReceiver();
 
@@ -276,7 +276,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            if (e.getMessage() != null)
+                Log.e(LOG_TAG, e.getMessage());
         }
 
     }
@@ -400,7 +401,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         shiftForMachineTimer();
     }
-
 
 
     @NonNull
@@ -622,9 +622,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
+
         LoginCore.getInstance().silentLoginFromDashBoard(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
+
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                 silentLoginCallback.onSilentLoginSucceeded();
             }
@@ -632,6 +634,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onLoginFailed(ErrorObjectInterface reason) {
                 silentLoginCallback.onSilentLoginFailed(reason);
+
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof SignInOperatorFragment) {
 
@@ -784,7 +787,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             File dir = context.getCacheDir();
             deleteDir(dir);
         } catch (Exception e) {
-            e.printStackTrace();
+            if (e.getMessage() != null)
+
+                Log.e(LOG_TAG, e.getMessage());
         }
     }
 
@@ -822,6 +827,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onIgnoreFromOnPause(boolean ignore) {
+        ignoreFromOnPause = ignore;
+    }
+
+    @Override
     public void onApproveFirstItemComplete() {
         if (mDashboardUICallbackListener != null) {
             mDashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
@@ -831,6 +841,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshPolling() {
 
+        Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
+
         dashboardDataStartPolling();
     }
 
@@ -838,7 +850,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        IGNORE_FROM_ON_PAUSE = false;
+        ignoreFromOnPause = false;
 
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 

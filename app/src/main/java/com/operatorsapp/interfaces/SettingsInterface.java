@@ -7,4 +7,6 @@ public interface SettingsInterface {
     void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener);
     void onRefreshApplicationRequest();
     void onRefreshPollingRequest();
+    void onIgnoreFromOnPause(boolean ignore);
+
 }

@@ -13,6 +13,26 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../ALS-Analyzer/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../ALS-Analyzer/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../OperatorsApp-0.5.4/app/src/main/java/com/operatorsapp/fragments/interfaces/onReportFieldsUpdatedCallbackListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../OperatorsApp-0.5.4/app/src/main/java/com/operatorsapp/interfaces/DashBoardActivityToSelectedJobFragmentCallback.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ActiveJobsListForMachineInfra/build.gradle">
           <value>
             <set />
@@ -43,7 +63,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/AllDashboardDataCore/src/main/java/com/operators/alldashboarddatacore/timecounter/TimeToEndCounter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ErrorObjectInterface/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ErrorObjectInterface/src/main/java/com/operators/errorobject/ErrorObjectInterface.java">
           <value>
             <set />
           </value>
@@ -283,6 +313,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/LoginFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/ReportCycleUnitsFragment.java">
           <value>
             <set />
@@ -304,6 +339,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/SettingsFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/interfaces/SettingsInterface.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/managers/CroutonCreator.java">
           <value>
             <set />
           </value>
@@ -534,6 +579,36 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../Test/app/src/main/res/layout/activity_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/java/ravtech/co/il/testnotification/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/java/ravtech/co/il/testnotification/MyService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/java/ravtech/co/il/testnotification/NotificationEventReceiver.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/java/ravtech/co/il/testnotification/NotificationIntentService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestNotification/app/src/main/java/ravtech/co/il/testnotification/NotificationServiceStarterReceiver.java">
           <value>
             <set />
           </value>
@@ -779,6 +854,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/layout/main_activity.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../minyaneto/app/src/main/res/menu/nav_menu.xml">
           <value>
             <set />
           </value>
