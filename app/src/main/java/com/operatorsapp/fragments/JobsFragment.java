@@ -10,12 +10,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,8 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class JobsFragment extends BackStackAwareFragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener, CroutonRootProvider
-{
+public class JobsFragment extends BackStackAwareFragment implements OnJobSelectedCallbackListener, DashboardActivityToJobsFragmentCallback, View.OnClickListener, CroutonRootProvider, TextWatcher {
     private static final String LOG_TAG = JobsFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
     private RecyclerView mJobsRecyclerView;
@@ -62,7 +64,14 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     private TextView mFourthHeader;
     private TextView mFifthHeader;
 
+    private EditText mFirstFilter;
+    private EditText mSecondFilter;
+    private EditText mThirdFilter;
+    private EditText mFourthFilter;
+    private EditText mFifthFilter;
+
     private String[] mFieldsValues = new String[5];
+    public JobsRecyclerViewAdapter mJobsRecyclerViewAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +88,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
             mJobsFragmentToDashboardActivityCallback = (JobsFragmentToDashboardActivityCallback) getActivity();
             mJobsFragmentToDashboardActivityCallback.onJobFragmentAttached(this);
             mJobsFragmentToDashboardActivityCallback.initJobsCore();
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement required interface");
         }
     }
@@ -124,11 +132,19 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         mFourthHeader = (TextView) view.findViewById(R.id.fourth_header_text_view);
         mFifthHeader = (TextView) view.findViewById(R.id.fifth_header_text_view);
 
+        mFirstFilter = (EditText) view.findViewById(R.id.FJ_ET_first_header);
+        mSecondFilter = (EditText) view.findViewById(R.id.FJ_ET_second_header);
+        mThirdFilter = (EditText) view.findViewById(R.id.FJ_ET_third_header);
+        mFourthFilter = (EditText) view.findViewById(R.id.FJ_ET_fourth_header);
+        mFifthFilter = (EditText) view.findViewById(R.id.FJ_ET_fifth_header);
+
         mRetryButton = (Button) view.findViewById(R.id.button_retry);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
         mJobsFragmentToDashboardActivityCallback.updateReportRejectFields();
+
+        view.findViewById(R.id.FJ_clear_filters).setOnClickListener(this);
 
 
         ZLogger.i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
@@ -154,8 +170,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
                 @Override
                 public void onClick(View v) {
                     FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
+                    if (fragmentManager != null) {
                         fragmentManager.popBackStack();
                     }
                 }
@@ -191,19 +206,39 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         List<HashMap<String, Object>> mJobsDataList = jobListForMachine.getData();
         jobListForMachine.getData();
         initHeaders();
-        JobsRecyclerViewAdapter mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
+        mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
+        initTextWatcherListener();
 
         ZLogger.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
 
     }
 
+    private void initTextWatcherListener() {
+
+        mFirstFilter.addTextChangedListener(this);
+
+        mSecondFilter.addTextChangedListener(this);
+
+        mThirdFilter.addTextChangedListener(this);
+
+        mFourthFilter.addTextChangedListener(this);
+
+        mFifthFilter.addTextChangedListener(this);
+
+    }
+
     private void initTitles(String text1, String text2, String text3, String text4, String text5) {
         mFirstHeader.setText(text1);
+        mFirstFilter.setHint(text1);
         mSecondHeader.setText(text2);
+        mSecondFilter.setHint(text2);
         mThirdHeader.setText(text3);
+        mThirdFilter.setHint(text3);
         mFourthHeader.setText(text4);
+        mFourthFilter.setHint(text4);
         mFifthHeader.setText(text5);
+        mFifthFilter.setHint(text5);
     }
 
     private void initHeaders() {
@@ -214,25 +249,21 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
                     if (i < mHeaderList.size()) {
 
                         String headerName = null;
-                        if(mHeaderList != null && mHeaderList.get(i) != null)
-                        {
+                        if (mHeaderList != null && mHeaderList.get(i) != null) {
                             headerName = OperatorApplication.isEnglishLang() ? mHeaderList.get(i).getDisplayEName() : mHeaderList.get(i).getDisplayHName();
                         }
                         if (TextUtils.isEmpty(headerName)) {
                             mFieldsValues[i] = "- -";
-                        }
-                        else {
+                        } else {
                             mFieldsValues[i] = headerName;
                         }
-                    }
-                    else {
+                    } else {
                         mFieldsValues[i] = "- -";
                     }
                 }
                 initTitles(mFieldsValues[0], mFieldsValues[1], mFieldsValues[2], mFieldsValues[3], mFieldsValues[4]);
             }
-        }
-        else {
+        } else {
             ZLogger.w(LOG_TAG, "mHeaderList is null");
         }
 
@@ -241,13 +272,30 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_retry: {
+            case R.id.button_retry:
                 //Start Progress
                 ProgressDialogManager.show(getActivity());
                 mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
                 break;
-            }
+
+
+            case R.id.FJ_clear_filters:
+
+                clearTextFromFilters();
+
+                break;
         }
+    }
+
+    private void clearTextFromFilters() {
+
+        mFirstFilter.setText("");
+        mSecondFilter.setText("");
+        mThirdFilter.setText("");
+        mFourthFilter.setText("");
+        mFifthFilter.setText("");
+
+
     }
 
     private void dismissProgressDialog() {
@@ -260,8 +308,27 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.jobs_list_fragment;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mJobsRecyclerViewAdapter.getFilter().filter(mFirstFilter.getText().toString()
+                + ",#@#" + mSecondFilter.getText().toString()
+                + ",#@#" + mThirdFilter.getText().toString()
+                + ",#@#" + mFourthFilter.getText().toString()
+                + ",#@#" + mFifthFilter.getText().toString() + ","
+        );
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }
