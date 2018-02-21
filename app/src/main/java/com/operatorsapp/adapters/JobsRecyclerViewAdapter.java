@@ -164,11 +164,11 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                 for (HashMap<String, Object> objectHashMap : mJobsFilter) {
 
 
-                    if ((objectHashMap.get(mHeaderList.get(0).getFieldName()) == null || objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1)))
-                            && (objectHashMap.get(mHeaderList.get(1).getFieldName()) == null || objectHashMap.get(mHeaderList.get(1).getFieldName()).toString().contains(textToFilter[1].substring(0, textToFilter[1].length() - 1)))
-                            && (objectHashMap.get(mHeaderList.get(2).getFieldName()) == null || objectHashMap.get(mHeaderList.get(2).getFieldName()).toString().contains(textToFilter[2].substring(0, textToFilter[2].length() - 1)))
-                            && (objectHashMap.get(mHeaderList.get(3).getFieldName()) == null || objectHashMap.get(mHeaderList.get(3).getFieldName()).toString().contains(textToFilter[3].substring(0, textToFilter[3].length() - 1)))
-                            && (objectHashMap.get(mHeaderList.get(4).getFieldName()) == null || objectHashMap.get(mHeaderList.get(4).getFieldName()).toString().contains(textToFilter[4].substring(0, textToFilter[4].length() - 1))))
+                    if ((objectHashMap.get(mHeaderList.get(0).getFieldName()) == null || objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().toLowerCase().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1).toLowerCase()))
+                            && (objectHashMap.get(mHeaderList.get(1).getFieldName()) == null || objectHashMap.get(mHeaderList.get(1).getFieldName()).toString().toLowerCase().contains(textToFilter[1].substring(0, textToFilter[1].length() - 1).toLowerCase()))
+                            && (objectHashMap.get(mHeaderList.get(2).getFieldName()) == null || objectHashMap.get(mHeaderList.get(2).getFieldName()).toString().toLowerCase().contains(textToFilter[2].substring(0, textToFilter[2].length() - 1).toLowerCase()))
+                            && (objectHashMap.get(mHeaderList.get(3).getFieldName()) == null || objectHashMap.get(mHeaderList.get(3).getFieldName()).toString().toLowerCase().contains(textToFilter[3].substring(0, textToFilter[3].length() - 1).toLowerCase()))
+                            && (objectHashMap.get(mHeaderList.get(4).getFieldName()) == null || objectHashMap.get(mHeaderList.get(4).getFieldName()).toString().toLowerCase().contains(textToFilter[4].substring(0, textToFilter[4].length() - 1).toLowerCase())))
 
                         filterJobs.add(objectHashMap);
 

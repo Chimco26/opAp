@@ -248,6 +248,46 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/EventSqlActions.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/Properties.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/SqlHelper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/interfaces/ShiftLogNetworkManagerInterface.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/interfaces/SqlCursorListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/interfaces/SqlGetListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/SqlCore/src/main/java/com/ravtech/david/sqlcore/interfaces/SqlPutListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build.gradle">
           <value>
             <set />
@@ -269,6 +309,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/AutoCompleteAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/adapters/JobsRecyclerViewAdapter.java">
           <value>
             <set />
           </value>
@@ -309,6 +354,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/DashboardFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/JobsFragment.java">
           <value>
             <set />
           </value>
@@ -438,6 +488,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout-iw/actionbar_title_and_tools_view.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/actionbar_title_and_tools_view.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/event_parameter_cardview.xml">
           <value>
             <set />
@@ -548,6 +608,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/sqlcore/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Test/app/build.gradle">
           <value>
             <set />
@@ -613,6 +678,101 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/AndroidManifest.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/BooksActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/ColorsActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/Event.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/EventHelper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/EventSqlHelper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/RestClient.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/RxJavaSimpleActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/SchedulerActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/SimpleStringAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/java/com/ravtech/david/testsql/TaskQueueService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/activity_books.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/activity_colors.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/activity_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/activity_rx_java_simple.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/activity_scheduler.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../TestSQL/app/src/main/res/layout/string_list_item.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../Tikkun/app/build.gradle">
           <value>
             <set />
@@ -629,6 +789,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../Tikkun/app/src/main/java/com/il/tikkun/model/ordersTikkun/Order.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Tikkun/app/src/main/java/com/il/tikkun/restApi/URL.java">
           <value>
             <set />
           </value>
@@ -664,6 +829,31 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../Tikkun/app/src/main/java/com/il/tikkun/ui/fragments/order/PrivateOrderFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../YaelApplication/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../YaelApplication/app/src/main/java/yaelcenter/yakymets/alexey/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../YaelApplication/app/src/main/java/yaelcenter/yakymets/alexey/NavigationDrawerFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../YaelApplication/app/src/main/java/yaelcenter/yakymets/alexey/VashdiAlgo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../YaelApplication/gradle.properties">
           <value>
             <set />
           </value>

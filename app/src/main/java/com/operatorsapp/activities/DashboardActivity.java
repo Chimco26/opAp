@@ -171,8 +171,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof DashboardFragment) {
+                        mDashboardFragment.setActionBar();
                         if (first) {
-                            mDashboardFragment.setActionBar();
                             first = false;
 
                         } else {
