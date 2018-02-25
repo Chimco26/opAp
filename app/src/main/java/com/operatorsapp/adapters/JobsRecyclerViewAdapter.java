@@ -71,7 +71,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                         fieldValues[i] = "- -";
                         headers[i] = "- -";
                     } else {
-                        headers[i] = mHeaderList.get(i).getFieldName();
+                        headers[i] = mHeaderList.get(i).getDisplayHName();
                         switch (mHeaderList.get(i).getDisplayType()) {
                             case "date": {
                                 fieldValues[i] = TimeUtils.getDateForJob(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString());
@@ -163,12 +163,17 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
                 for (HashMap<String, Object> objectHashMap : mJobsFilter) {
 
+                    for (int i = 0; i < 5; i++) {
 
-                    if ((objectHashMap.get(mHeaderList.get(0).getFieldName()) == null || objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().toLowerCase().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1).toLowerCase()))
-                            && (objectHashMap.get(mHeaderList.get(1).getFieldName()) == null || objectHashMap.get(mHeaderList.get(1).getFieldName()).toString().toLowerCase().contains(textToFilter[1].substring(0, textToFilter[1].length() - 1).toLowerCase()))
-                            && (objectHashMap.get(mHeaderList.get(2).getFieldName()) == null || objectHashMap.get(mHeaderList.get(2).getFieldName()).toString().toLowerCase().contains(textToFilter[2].substring(0, textToFilter[2].length() - 1).toLowerCase()))
-                            && (objectHashMap.get(mHeaderList.get(3).getFieldName()) == null || objectHashMap.get(mHeaderList.get(3).getFieldName()).toString().toLowerCase().contains(textToFilter[3].substring(0, textToFilter[3].length() - 1).toLowerCase()))
-                            && (objectHashMap.get(mHeaderList.get(4).getFieldName()) == null || objectHashMap.get(mHeaderList.get(4).getFieldName()).toString().toLowerCase().contains(textToFilter[4].substring(0, textToFilter[4].length() - 1).toLowerCase())))
+                        if ((objectHashMap.get(mHeaderList.get(i).getFieldName()) == null))
+                            objectHashMap.put(mHeaderList.get(i).getFieldName(), "--");
+                    }
+
+                    if ( objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().toLowerCase().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1).toLowerCase())
+                            && objectHashMap.get(mHeaderList.get(1).getFieldName()).toString().toLowerCase().contains(textToFilter[1].substring(0, textToFilter[1].length() - 1).toLowerCase())
+                            && objectHashMap.get(mHeaderList.get(2).getFieldName()).toString().toLowerCase().contains(textToFilter[2].substring(0, textToFilter[2].length() - 1).toLowerCase())
+                            && objectHashMap.get(mHeaderList.get(3).getFieldName()).toString().toLowerCase().contains(textToFilter[3].substring(0, textToFilter[3].length() - 1).toLowerCase())
+                            && objectHashMap.get(mHeaderList.get(4).getFieldName()).toString().toLowerCase().contains(textToFilter[4].substring(0, textToFilter[4].length() - 1).toLowerCase()))
 
                         filterJobs.add(objectHashMap);
 
@@ -195,6 +200,8 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            mCurrentJobs = new ArrayList<>();
 
             mJobsList = (List<HashMap<String, Object>>) results.values;
 

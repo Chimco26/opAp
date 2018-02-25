@@ -39,6 +39,7 @@ import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -181,6 +182,8 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
 
     @Override
     public void onJobSelected(CurrentJob currentJob) {
+
+        KeyboardUtils.closeKeyboard(getActivity());
         SelectedJobFragment selectedJobFragment = new SelectedJobFragment();
         Bundle bundle = new Bundle();
         Gson gson = new Gson();

@@ -93,6 +93,9 @@ public class OperatorApplication extends MultiDexApplication {
         }
     }
 
+
+    
+
     private void exceptionHandler() {
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {

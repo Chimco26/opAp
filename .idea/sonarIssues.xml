@@ -93,6 +93,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/JobsCore/src/main/java/com/operators/jobscore/JobsCore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/JobsInfra/build.gradle">
           <value>
             <set />
@@ -383,6 +388,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/SelectedJobFragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/operatorsapp/fragments/SelectedStopReasonFragment.java">
           <value>
             <set />
@@ -529,6 +539,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_report_inventory.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_selected_job.xml">
           <value>
             <set />
           </value>
