@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"
-              android:clickable="true"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +29,7 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/dashes"
                 android:textColor="@color/status_bar"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/first_title_text_view"
@@ -38,7 +39,7 @@
                 android:layout_marginStart="10dp"
                 android:text="@string/dashes"
                 android:textColor="@color/status_bar"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -69,9 +70,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="start"
                     android:text="@string/planned_start"
                     android:textColor="@color/C1"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/second_title_text_view"
@@ -79,10 +81,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="start"
                     android:text="@string/planned_start"
                     android:textColor="@color/default_gray"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <View
@@ -90,7 +92,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="7dp"
                 android:layout_marginTop="7dp"
-                android:background="@color/divider_gray"/>
+                android:background="@color/divider_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,8 +108,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/dashes"
+                    android:gravity="start"
                     android:textColor="@color/C1"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/third_title_text_view"
@@ -115,10 +118,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/product_name"
                     android:textColor="@color/default_gray"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <View
@@ -126,7 +129,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="7dp"
                 android:layout_marginTop="7dp"
-                android:background="@color/divider_gray"/>
+                android:background="@color/divider_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -142,8 +145,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/dashes"
+                    android:gravity="start"
                     android:textColor="@color/C1"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/fourth_title_text_view"
@@ -151,10 +155,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/erp_id"
                     android:textColor="@color/default_gray"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <View
@@ -162,7 +166,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="7dp"
                 android:layout_marginTop="7dp"
-                android:background="@color/divider_gray"/>
+                android:background="@color/divider_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -179,7 +183,7 @@
                     android:layout_weight="1"
                     android:text="@string/dashes"
                     android:textColor="@color/C1"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/fifth_title_text_view"
@@ -187,10 +191,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:text="@string/dashes"
                     android:textColor="@color/default_gray"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -209,7 +213,7 @@
                     android:text="@string/cancel"
                     android:textAllCaps="true"
                     android:textColor="@drawable/button_cancel_text_selector"
-                    android:textSize="22sp"/>
+                    android:textSize="22sp" />
 
                 <Button
                     android:id="@+id/button_activate_new_job"
@@ -217,11 +221,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="34dp"
                     android:background="@drawable/buttons_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:text="@string/activate_new_job"
                     android:textColor="@drawable/button_text_color_selector"
-                    android:textSize="22sp"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="10dp" />
+                    android:textSize="22sp" />
             </LinearLayout>
         </LinearLayout>
 
