@@ -3,6 +3,7 @@ package com.operatorsapp.application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;

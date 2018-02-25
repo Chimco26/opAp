@@ -97,7 +97,7 @@
     <string name="operator_app_settings">הגדרות\nאפליקציה</string>
     <string name="language">שפה</string>
     <string name="factory_sign_in">כניסה למפעל</string>
-    <string name="change">שנה</string>
+    <string name="change">החלפה</string>
     <string name="advanced_settings">הגדרות מתקדמות</string>
     <string name="refresh_reporting_data">רענן נתוני דיווח</string>
     <string name="operator_napp_nadvanced_nsettings">הגדרות\nמתקדמות</string>
@@ -119,8 +119,8 @@
     <string name="shift_log_standard">סטנדרט</string>
     <string name="approving_technician">טכנאי מאשר</string>
     <string name="approve">אישור</string>
-    <string name="setup_end">סיום\nSetup</string>
-    <string name="first_item_approval">סיום Setup</string>
+    <string name="setup_end">אישור פריט\nראשון</string>
+    <string name="first_item_approval">אישור פריט ראשון</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -154,7 +154,7 @@
         <item>דיווח ייצור</item>
     </array>
 
-    <string name="approve_first_item">סיום Setup</string>
+    <string name="approve_first_item">אישור פריט ראשון</string>
 
     <plurals name="days">
         <item quantity="one">%d יום</item>
