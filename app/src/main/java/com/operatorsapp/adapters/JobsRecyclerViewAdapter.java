@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.operators.jobsinfra.Header;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnJobSelectedCallbackListener;
 import com.operatorsapp.model.CurrentJob;
 import com.operatorsapp.utils.TimeUtils;
@@ -71,7 +72,10 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                         fieldValues[i] = "- -";
                         headers[i] = "- -";
                     } else {
-                        headers[i] = mHeaderList.get(i).getDisplayHName();
+                        if (OperatorApplication.isEnglishLang()) {
+                            headers[i] = mHeaderList.get(i).getDisplayEName();
+                        } else
+                            headers[i] = mHeaderList.get(i).getDisplayHName();
                         switch (mHeaderList.get(i).getDisplayType()) {
                             case "date": {
                                 fieldValues[i] = TimeUtils.getDateForJob(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString());
@@ -169,7 +173,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                             objectHashMap.put(mHeaderList.get(i).getFieldName(), "--");
                     }
 
-                    if ( objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().toLowerCase().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1).toLowerCase())
+                    if (objectHashMap.get(mHeaderList.get(0).getFieldName()).toString().toLowerCase().contains(textToFilter[0].substring(0, textToFilter[0].length() - 1).toLowerCase())
                             && objectHashMap.get(mHeaderList.get(1).getFieldName()).toString().toLowerCase().contains(textToFilter[1].substring(0, textToFilter[1].length() - 1).toLowerCase())
                             && objectHashMap.get(mHeaderList.get(2).getFieldName()).toString().toLowerCase().contains(textToFilter[2].substring(0, textToFilter[2].length() - 1).toLowerCase())
                             && objectHashMap.get(mHeaderList.get(3).getFieldName()).toString().toLowerCase().contains(textToFilter[3].substring(0, textToFilter[3].length() - 1).toLowerCase())
