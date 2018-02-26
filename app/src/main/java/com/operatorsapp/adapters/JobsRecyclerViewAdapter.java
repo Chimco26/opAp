@@ -68,14 +68,16 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
             for (int i = 0; i < 5; i++) {
                 if (i < mHeaderList.size()) {
+
+                    if (OperatorApplication.isEnglishLang()) {
+                        headers[i] = mHeaderList.get(i).getDisplayEName();
+                    } else
+                        headers[i] = mHeaderList.get(i).getDisplayHName();
+
+
                     if (mJobsList == null || mJobsList.get(position) == null || TextUtils.isEmpty(mHeaderList.get(i).getFieldName()) || mJobsList.get(position).get(mHeaderList.get(i).getFieldName()) == null || TextUtils.isEmpty(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString())) {
                         fieldValues[i] = "- -";
-                        headers[i] = "- -";
                     } else {
-                        if (OperatorApplication.isEnglishLang()) {
-                            headers[i] = mHeaderList.get(i).getDisplayEName();
-                        } else
-                            headers[i] = mHeaderList.get(i).getDisplayHName();
                         switch (mHeaderList.get(i).getDisplayType()) {
                             case "date": {
                                 fieldValues[i] = TimeUtils.getDateForJob(mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString());
