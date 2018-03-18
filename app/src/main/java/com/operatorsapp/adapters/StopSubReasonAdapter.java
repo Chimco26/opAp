@@ -55,9 +55,10 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
-        char firstLetter = nameByLang.charAt(0);
-        holder.mImageTitle.setText(String.valueOf(firstLetter));
-
+        if (nameByLang != null) {
+            char firstLetter = nameByLang.charAt(0);
+            holder.mImageTitle.setText(String.valueOf(firstLetter));
+        }
         try {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,9 +72,9 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         } catch (ArrayIndexOutOfBoundsException e) {
 
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
-            Log.e(LOG_TAG, e.getMessage());
+                Log.e(LOG_TAG, e.getMessage());
 
         }
     }

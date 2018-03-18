@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         mCroutonCreator = new CroutonCreator();
         goToFragment(LoginFragment.newInstance(), false);
 

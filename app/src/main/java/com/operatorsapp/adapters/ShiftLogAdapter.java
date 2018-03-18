@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operators.shiftloginfra.Event;
+import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.TimeUtils;
 

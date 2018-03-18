@@ -46,13 +46,13 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
-import com.operators.shiftloginfra.Event;
+import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
-import com.operatorsapp.fragments.DashboardFragment;
+import com.operatorsapp.fragments.DashboardFragmentSql;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
@@ -100,7 +100,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
-    private DashboardFragment mDashboardFragment;
+    private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
 
@@ -133,7 +133,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        mDashboardFragment = DashboardFragment.newInstance();
+        mDashboardFragment = DashboardFragmentSql.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
@@ -170,7 +170,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         ((ReportRejectsFragment) fragment).setActionBar();
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
-                    } else if (fragment instanceof DashboardFragment) {
+                    } else if (fragment instanceof DashboardFragmentSql) {
                         mDashboardFragment.setActionBar();
                         if (first) {
                             first = false;

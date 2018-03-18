@@ -2,7 +2,7 @@ package com.operators.shiftlognetworkbridge.server.responses;
 
 
 import com.google.gson.annotations.SerializedName;
-import com.operators.shiftloginfra.Event;
+import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 

@@ -1,11 +1,7 @@
 package com.operators.shiftlognetworkbridge;
 
-import android.util.Log;
-
-import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.shiftloginfra.Event;
-import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
+import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
@@ -14,6 +10,7 @@ import com.operators.shiftlognetworkbridge.server.requests.GetShiftForMachineReq
 import com.operators.shiftlognetworkbridge.server.requests.GetShiftLogRequest;
 import com.operators.shiftlognetworkbridge.server.responses.ErrorResponse;
 import com.operators.shiftlognetworkbridge.server.responses.ShiftLogResponse;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;

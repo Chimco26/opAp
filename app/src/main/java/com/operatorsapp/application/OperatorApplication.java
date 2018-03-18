@@ -12,7 +12,6 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.DavidVardi;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -20,9 +19,8 @@ import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
-import org.acra.config.ACRAConfiguration;
-import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
+import org.litepal.LitePal;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -60,8 +58,10 @@ public class OperatorApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+        LitePal.initialize(this);
 
         ACRA.init(this);
+
 
 
         msApplicationContext = getApplicationContext();
@@ -86,7 +86,7 @@ public class OperatorApplication extends MultiDexApplication {
 //
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        exceptionHandler();
+       // exceptionHandler();
 
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;

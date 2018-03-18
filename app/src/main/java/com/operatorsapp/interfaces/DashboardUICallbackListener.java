@@ -3,7 +3,7 @@ package com.operatorsapp.interfaces;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.shiftloginfra.Event;
+import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 

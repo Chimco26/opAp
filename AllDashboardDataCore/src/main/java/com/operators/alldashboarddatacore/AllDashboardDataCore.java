@@ -19,15 +19,13 @@ import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.shiftloginfra.Event;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
-
-import ravtech.co.il.publicutils.JobBase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,6 +35,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import ravtech.co.il.publicutils.JobBase;
 
 public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
@@ -270,7 +270,7 @@ if(e.getMessage()!=null)
     private ArrayList<Event> clearEvents(ArrayList<Event> events) {
 
         HashMap<Integer, Event> items = new HashMap<>();
-        ;
+
 
         ArrayList<Event> duplicates = new ArrayList<>();
 
