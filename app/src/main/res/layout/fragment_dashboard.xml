@@ -1,145 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:paddingEnd="30dp"
+        android:paddingStart="24dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/status_bar_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginRight="30dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/Roboto_Regular_Status_Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/product"
-                    android:textColor="@color/status_bar"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/text_view_product_name_and_id"
-                    style="@style/Roboto_Regular_Status_Data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textColor="@color/default_gray_status"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="24dp"
-                android:background="@color/C20"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/Roboto_Regular_Status_Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
-                    android:text="@string/job"
-                    android:textColor="@color/status_bar"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/text_view_job_id"
-                    style="@style/Roboto_Regular_Status_Data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/default_gray_status"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="24dp"
-                android:background="@color/C20"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/Roboto_Regular_Status_Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
-                    android:text="@string/shift"
-                    android:textColor="@color/status_bar"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/text_view_shift_id"
-                    style="@style/Roboto_Regular_Status_Data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/default_gray_status"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/timer_layout"
+            <TextView
+                style="@style/Roboto_Regular_Status_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginEnd="10dp"
+                android:text="@string/product"
+                android:textColor="@color/status_bar"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-
-
-                <TextView
-                    android:id="@+id/text_view_timer"
-                    style="@style/Roboto_Regular_Status_Data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:textColor="@color/default_gray_status"
-                    android:textSize="16sp"/>
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/ic_clock_blue"/>
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/text_view_product_name_and_id"
+                style="@style/Roboto_Regular_Status_Data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/default_gray_status"
+                android:textSize="16sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/C20" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Roboto_Regular_Status_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="@string/job"
+                android:textColor="@color/status_bar"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_view_job_id"
+                style="@style/Roboto_Regular_Status_Data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/default_gray_status"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/pConfig_view"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:background="@color/C20" />
+
+        <LinearLayout
+            android:id="@+id/pConfig_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Roboto_Regular_Status_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="@string/pConfig"
+                android:textColor="@color/status_bar"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_view_config"
+                style="@style/Roboto_Regular_Status_Data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/default_gray_status"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/C20" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Roboto_Regular_Status_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="@string/shift"
+                android:textColor="@color/status_bar"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_view_shift_id"
+                style="@style/Roboto_Regular_Status_Data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/default_gray_status"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/text_view_timer"
+            style="@style/Roboto_Regular_Status_Data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:textColor="@color/default_gray_status"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_clock_blue" />
+
 
     </LinearLayout>
 
@@ -169,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/ic_cloud"/>
+                    android:background="@drawable/ic_cloud" />
 
                 <TextView
                     style="@style/FontStyle_T7"
@@ -178,7 +210,7 @@
                     android:layout_gravity="center"
                     android:text="@string/no_data"
                     android:textColor="@color/divider_gray"
-                    android:textSize="50sp"/>
+                    android:textSize="50sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -191,14 +223,14 @@
                 android:visibility="gone">
 
                 <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:indeterminateTint="@color/C16"
-                    android:indeterminateTintMode="src_atop"
-                    android:indeterminate="true"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/C16"
+                    android:indeterminateTintMode="src_atop" />
 
                 <TextView
                     style="@style/FontStyle_T7"
@@ -207,7 +239,7 @@
                     android:layout_gravity="center"
                     android:text="@string/loading_data"
                     android:textColor="@color/divider_gray"
-                    android:textSize="50sp"/>
+                    android:textSize="50sp" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -218,7 +250,7 @@
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="0dp"
                 android:scrollbarFadeDuration="0"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
         </FrameLayout>
 
         <LinearLayout
@@ -242,7 +274,7 @@
                 android:textColor="@color/divider_gray"
                 android:textSize="30sp"
                 android:visibility="gone"
-                app:minTextSize="15dp"/>
+                app:minTextSize="15dp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/fragment_dashboard_loading_data_shiftlog"
@@ -257,14 +289,14 @@
                 android:textColor="@color/divider_gray"
                 android:textSize="30sp"
                 android:visibility="gone"
-                app:minTextSize="15dp"/>
+                app:minTextSize="15dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_dashboard_shift_log"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarFadeDuration="0"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </LinearLayout>
 
@@ -275,7 +307,7 @@
             android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
             android:layout_marginEnd="-25dp"
             android:background="@android:color/transparent"
-            android:clickable="true"/>
+            android:clickable="true" />
 
         <ImageView
             android:id="@+id/fragment_dashboard_left_btn"
@@ -285,8 +317,9 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="-23dp"
             android:paddingEnd="10dp"
+            android:paddingStart="0dp"
             android:scaleType="fitXY"
-            android:src="@drawable/left_panel_btn"/>
+            android:src="@drawable/left_panel_btn" />
     </RelativeLayout>
 
 

@@ -180,5 +180,7 @@
     <string name="common_signin_button_text">כניסה</string>
     <string name="popup_timeout_range_error">זמן הצגת ההתראה חייב להיות בטווח 3-30 שניות</string>
     <string name="popup_timeout">זמן הצגת התראות</string>
+    <string name="pConfig">תצורה</string>
+
 
 </resources>

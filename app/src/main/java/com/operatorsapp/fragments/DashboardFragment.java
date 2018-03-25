@@ -85,7 +85,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DashboardFragment extends Fragment implements DialogFragment.OnDialogButtonsListener, DashboardUICallbackListener, OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener {
+public class DashboardFragment extends Fragment implements
+        DialogFragment.OnDialogButtonsListener,
+        DashboardUICallbackListener,
+        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener {
 
     private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -127,6 +130,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
+    private TextView mConfigTextView;
+    private View mConfigView;
+    private View mConfigLayout;
     private TextView mTimerTextView;
     private TextView mMachineIdStatusBarTextView;
     private TextView mMachineStatusStatusBarTextView;
@@ -204,8 +210,13 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mStatusLayout.requestLayout();
 
         mProductNameTextView = (TextView) view.findViewById(R.id.text_view_product_name_and_id);
+        mProductNameTextView.setSelected(true);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
+        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);
+        mConfigTextView.setSelected(true);
+        mConfigLayout =  view.findViewById(R.id.pConfig_layout);
+        mConfigView =  view.findViewById(R.id.pConfig_view);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
 
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
@@ -1084,6 +1095,15 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         if (TextUtils.isEmpty(machineName)) {
             machineName = getString(R.string.dashes);
         }
+        if(machinesData.getConfigName()!= null ){
+
+            mConfigView.setVisibility(View.VISIBLE);
+            mConfigLayout.setVisibility(View.VISIBLE);
+
+            mConfigTextView.setText( machinesData.getConfigName());
+        }
+
+
         mMachineIdStatusBarTextView.setText(machineName);
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
@@ -1097,6 +1117,9 @@ public class DashboardFragment extends Fragment implements DialogFragment.OnDial
         mProductNameTextView.setText("");
         mJobIdTextView.setText("");
         mShiftIdTextView.setText("");
+        mConfigTextView.setText("");
+        mConfigView.setVisibility(View.GONE);
+        mConfigLayout.setVisibility(View.GONE);
         mMachineIdStatusBarTextView.setText("");
         mMachineStatusStatusBarTextView.setText("");
         mTimerTextView.setText("");

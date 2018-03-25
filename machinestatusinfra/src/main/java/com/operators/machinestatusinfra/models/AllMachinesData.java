@@ -52,6 +52,9 @@ public class AllMachinesData {
     private String machineStatusName;
     @SerializedName("NoProgressCount")
     private int noProgressCount;
+    // TODO: 25 מרץ 2018 Add to SQL sprint
+    @SerializedName("PConfigName")
+    private String pConfigName;
     @SerializedName("Row_Counter")
     private int rowCounter;
     @SerializedName("ShiftID")
@@ -181,4 +184,16 @@ public class AllMachinesData {
     {
         return shiftIDString;
     }
+
+
+    public String getConfigName() {
+        return pConfigName;
+    }
+
+    public void setpConfigName(String pConfigName) {
+        this.pConfigName = pConfigName;
+    }
+
+
+
 }
