@@ -68,7 +68,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
-import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
@@ -1099,8 +1098,11 @@ public class DashboardFragment extends Fragment implements
 
             mConfigView.setVisibility(View.VISIBLE);
             mConfigLayout.setVisibility(View.VISIBLE);
-
             mConfigTextView.setText( machinesData.getConfigName());
+        }
+        else {
+            mConfigView.setVisibility(View.GONE);
+            mConfigLayout.setVisibility(View.GONE);
         }
 
 

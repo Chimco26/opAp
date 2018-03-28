@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -19,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -398,6 +396,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJoshId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard();
+                mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesActual();
+                mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
                 initJobsSpinner();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
