@@ -43,6 +43,9 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
@@ -161,8 +164,10 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                         {
                             mButtonReport.setEnabled(true);
                             //                            mButtonReport.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-                            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-                            mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+//                            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+//                            mUnitsCounter = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+                            Number num = convertNumericStringToNumberObject(mUnitsCounterTextView.getText().toString());
+                            mUnitsCounter = convertNumericStringToNumberObject(mUnitsCounterTextView.getText().toString()).doubleValue();
                         }
                         //                        else if(Double.valueOf(s.toString()) < 0)
                         //                        {
@@ -197,6 +202,22 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
+    }
+
+    private Number convertNumericStringToNumberObject(String strValue){
+        //double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+        DecimalFormat df = new DecimalFormat("######.0");
+        NumberFormat format = NumberFormat.getInstance(new Locale("EN","en"));
+
+        try {
+            Number number = format.parse(strValue);
+            //number = df.parse(strValue);
+            return number;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 1.0;
     }
 
     @Override
@@ -290,11 +311,13 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     {
         if(mUnitsCounter < mMaxUnits)
         {
-            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-            value = value + 1;
-            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
-            mUnitsCounter = value;
+//            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+//            value = value + 1;
+//            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+//            mUnitsCounter = value;
+            mUnitsCounter = convertNumericStringToNumberObject(mUnitsCounterTextView.getText().toString()).doubleValue() + 1.0;
             mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+
             mPlusButton.setEnabled(true);
         }
         else
@@ -318,10 +341,11 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         }
         else
         {
-            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
-            value = value - 1;
-            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
-            mUnitsCounter = value;
+//            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
+//            value = value - 1;
+//            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
+//            mUnitsCounter = value;
+            mUnitsCounter = convertNumericStringToNumberObject(mUnitsCounterTextView.getText().toString()).doubleValue() - 1.0;
             mButtonReport.setEnabled(true);
             mMinusButton.setEnabled(true);
             mPlusButton.setEnabled(true);
