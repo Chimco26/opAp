@@ -908,7 +908,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
 
             for (Event event : events) {
-                if (!DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+
+
+                if (DataSupport.count(Event.class)==0||!DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
                     mNewEventsList.add(event);
 
@@ -926,13 +928,17 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
             mNoNotificationsText.setVisibility(View.GONE);
 
-            if (mShiftLogAdapter != null) {
+// TODO: 15/04/2018 David Vardi fix this code
+          /*  if (mShiftLogAdapter != null) {
                 mShiftLogAdapter.notifyDataSetChanged();
             } else {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-            }
+            }*/
+
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
             if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
             {
@@ -959,6 +965,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         }
         mIsNewShiftLogs = true;
         PersistenceManager.getInstance().setIsNewShiftLogs(true);
+
+        if (mShiftLogAdapter != null)
+            mShiftLogAdapter.notifyDataSetChanged();
     }
 
     @Override

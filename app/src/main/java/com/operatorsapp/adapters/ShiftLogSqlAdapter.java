@@ -392,7 +392,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         holder.mParameterTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
-                    event.updateAll("EventID = ?", String.valueOf(event.getEventID()));
+                    event.updateAll(DatabaseHelper.KEY_EVENT_ID+" = ?", String.valueOf(event.getEventID()));
                 }
             });
         }

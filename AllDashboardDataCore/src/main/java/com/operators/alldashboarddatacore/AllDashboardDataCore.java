@@ -230,8 +230,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             startingFrom = dateFormat.format(cal.getTime());
         } catch (ParseException ignored) {
         } catch (java.text.ParseException e) {
-if(e.getMessage()!=null)
-            Log.e(LOG_TAG,e.getMessage());
+            if (e.getMessage() != null)
+                Log.e(LOG_TAG, e.getMessage());
         }
 
         Log.d(LOG_TAG, "shift log startingfrom: " + startingFrom);

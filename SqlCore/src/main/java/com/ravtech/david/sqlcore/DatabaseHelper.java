@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -49,10 +49,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_ALARM_STANDARD_VALUE = "malarmstandardvalue";
     public static final String KEY_ALARM_VALUE = "malarmvalue";
     public static final String KEY_TREATED = "mtreated";
-    private static final String KEY_SUB_TITLE_L_NAME = "sub_title_l_name";
-    private static final String KEY_ALARM_DISMISSED = "alarm_dismissed";
-    private static final String KEY_REASON_ID = "reason_id";
-    private static final String KEY_TIME_OF_ADDED = "time_of_added";
+    private static final String KEY_SUB_TITLE_L_NAME = "meventsubtitlelname";
+    private static final String KEY_ALARM_DISMISSED = "malarmdismissed";
+    private static final String KEY_REASON_ID = "meventreasonid";
+    private static final String KEY_TIME_OF_ADDED = "mtimeofadded";
     public static final String KEY_IS_DISMISS = "misdismiss";
     private static final String KEY_CREATED_AT = "created_at";
 
@@ -61,7 +61,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Event table create statement
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
-            KEY_ID + " INTEGER PRIMARY KEY," +
+            KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
+            KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
             KEY_TITLE + " TEXT," +
