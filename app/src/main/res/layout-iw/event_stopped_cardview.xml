@@ -27,7 +27,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/shift_log_item_icon"
+                    android:id="@+id/event_stopped_shift_log_item_icon"
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:layout_marginStart="24dp"
@@ -35,7 +35,7 @@
 
 
                 <TextView
-                    android:id="@+id/shift_log_item_time"
+                    android:id="@+id/event_stopped_shift_log_item_time"
                     style="@style/FontStyle_T9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             </LinearLayout>
 
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/shift_log_item_title"
+                android:id="@+id/event_stopped_shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/shift_log_divider"
+            android:id="@+id/event_stopped_shift_log_divider"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
@@ -71,7 +71,7 @@
             android:visibility="gone"/>
 
         <LinearLayout
-            android:id="@+id/shift_log_item_subtitle"
+            android:id="@+id/event_stopped_shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
@@ -106,7 +106,7 @@
                             android:textSize="16sp"/>
 
                         <TextView
-                            android:id="@+id/shift_log_item_start"
+                            android:id="@+id/event_stopped_shift_log_item_start"
                             style="@style/FontStyle_T31"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/shift_log_item_start_date"
+                        android:id="@+id/event_stopped_shift_log_item_start_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
@@ -155,7 +155,7 @@
                             android:textSize="16sp"/>
 
                         <TextView
-                            android:id="@+id/shift_log_item_end"
+                            android:id="@+id/event_stopped_shift_log_item_end"
                             style="@style/FontStyle_T31"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/shift_log_item_end_date"
+                        android:id="@+id/event_stopped_shift_log_item_end_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
@@ -192,7 +192,7 @@
                     android:textSize="15sp"/>
 
                 <TextView
-                    android:id="@+id/shift_log_item_duration"
+                    android:id="@+id/event_stopped_shift_log_item_duration"
                     style="@style/FontStyle_T31"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/shift_log_bottom_divider"
+        android:id="@+id/event_stopped_shift_log_bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_gray"/>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:autofit="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/event_parameter_parent_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/event_parameter_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -26,27 +26,27 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/shift_log_item_icon"
+                    android:id="@+id/event_parameter_shift_log_item_icon"
                     android:layout_width="39dp"
                     android:layout_height="39dp"
                     android:layout_marginStart="24dp"
-                    android:src="@drawable/ic_cloud"/>
+                    android:src="@drawable/ic_cloud" />
 
 
                 <TextView
-                    android:id="@+id/shift_log_item_time"
+                    android:id="@+id/event_parameter_shift_log_item_time"
                     style="@style/FontStyle_T9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
 
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/shift_log_item_title"
+                android:id="@+id/event_parameter_shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -55,23 +55,23 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textSize="18sp"
-                autofit:minTextSize="18sp"/>
+                autofit:minTextSize="18sp" />
 
 
         </LinearLayout>
 
         <View
-            android:id="@+id/shift_log_divider"
+            android:id="@+id/event_parameter_shift_log_divider"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:background="@color/divider_gray"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/shift_log_item_subtitle"
+            android:id="@+id/event_parameter_shift_log_item_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
@@ -87,21 +87,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/shift_log_item_subtitle_text"
+                    android:id="@+id/event_parameter_shift_log_item_subtitle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cycle time"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/shift_log_item_subtitle_value"
+                    android:id="@+id/event_parameter_shift_log_item_subtitle_value"
                     style="@style/FontStyle_T31"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="17"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -117,14 +117,14 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/shift_log_item_standard"
+                        android:id="@+id/event_parameter_shift_log_item_standard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="10"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -133,13 +133,13 @@
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="Standard"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider_gray"/>
+                    android:background="@color/divider_gray" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -149,14 +149,14 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/shift_log_item_min"
+                        android:id="@+id/event_parameter_shift_log_item_min"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="10"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -165,13 +165,13 @@
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="Min"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider_gray"/>
+                    android:background="@color/divider_gray" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -180,14 +180,14 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/shift_log_item_max"
+                        android:id="@+id/event_parameter_shift_log_item_max"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="10"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -196,7 +196,7 @@
                         android:maxLines="1"
                         android:maxWidth="120dp"
                         android:text="Max"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -204,9 +204,9 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/shift_log_bottom_divider"
+        android:id="@+id/event_parameter_shift_log_bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider_gray"/>
+        android:background="@color/divider_gray" />
 
 </LinearLayout>

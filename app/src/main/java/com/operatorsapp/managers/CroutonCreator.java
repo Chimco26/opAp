@@ -1,10 +1,14 @@
 package com.operatorsapp.managers;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
@@ -18,8 +22,14 @@ public class CroutonCreator {
     private static final String LOG_TAG = CroutonCreator.class.getSimpleName();
     private final EmeraldCrouton mCurrentCrouton = new EmeraldCrouton();
     private static final int DEFAULT_CROUTON_TIME = 5000;
+    private CroutonListener mListener;
 
     public void showCrouton(Activity activity, String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonType croutonType) {
+        showCrouton(activity, SpannableStringBuilder.valueOf(croutonMessage), croutonDurationInMilliseconds, viewGroup, croutonType);
+    }
+
+    public void showCrouton(Activity activity, String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonType croutonType, CroutonListener listener) {
+        mListener = listener;
         showCrouton(activity, SpannableStringBuilder.valueOf(croutonMessage), croutonDurationInMilliseconds, viewGroup, croutonType);
     }
 
@@ -33,6 +43,7 @@ public class CroutonCreator {
         }
         Crouton crouton;
         switch (croutonType) {
+            case ALERT_DIALOG:
             case CREDENTIALS_ERROR:
             case URL_ERROR:
                 crouton = createCrouton(activity, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
@@ -101,6 +112,11 @@ public class CroutonCreator {
         Configuration configuration = new Configuration.Builder().setDuration(croutonDurationInMilliseconds).build();
         View croutonView = null;
         switch (croutonType) {
+            case ALERT_DIALOG:
+                croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
+                setOnClickListener(croutonView);
+                break;
+
             case CREDENTIALS_ERROR:
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
@@ -114,12 +130,66 @@ public class CroutonCreator {
         }
         TextView croutonText = (TextView) croutonView.findViewById(R.id.crouton_text);
         croutonText.setText(croutonMessage);
+
+        setProgressCountDown(croutonView);
+
         return Crouton.make(activity, croutonView, viewGroup, configuration);
     }
 
-    public enum CroutonType {
-        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR
+    private void setOnClickListener(View croutonView) {
+
+        croutonView.findViewById(R.id.dialog_dismiss).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+               hideConnectivityCrouton();
+
+                if(mListener!= null){
+
+                    mListener.onCroutonDismiss();
+                }
+            }
+        });
+
     }
+
+    public enum CroutonType {
+        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR, ALERT_DIALOG
+    }
+
+    private void setProgressCountDown(View view) {
+
+        ProgressBar mProgressBar = view.findViewById(R.id.PT_progressbar_time_left);
+
+        ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 100);
+
+        animation.setDuration(5000);
+
+        animation.setInterpolator(new DecelerateInterpolator());
+
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+
+        animation.start();
+    }
+
 
     public class EmeraldCrouton {
 
@@ -151,5 +221,11 @@ public class CroutonCreator {
         void setCroutonType(CroutonType croutonType) {
             mCroutonType = croutonType;
         }
+    }
+
+
+    public interface CroutonListener {
+
+        void onCroutonDismiss();
     }
 }

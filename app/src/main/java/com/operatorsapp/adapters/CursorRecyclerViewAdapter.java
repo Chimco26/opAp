@@ -45,6 +45,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return 0;
     }
 
+
+
     @Override
     public long getItemId(int position) {
         if (mDataValid && mCursor != null && mCursor.moveToPosition(position)) {

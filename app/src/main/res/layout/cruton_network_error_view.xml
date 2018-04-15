@@ -18,4 +18,15 @@
         android:textSize="15sp"
         tools:text="cruton text"/>
 
+    <ProgressBar
+        android:id="@+id/PT_progressbar_time_left"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="40dp"
+        android:max="100"
+        android:progress="0"
+        android:theme="@style/LinearProgress"/>
+
+
 </FrameLayout>

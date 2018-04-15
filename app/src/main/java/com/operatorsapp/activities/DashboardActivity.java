@@ -86,7 +86,7 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -477,12 +477,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
-            mCroutonCreator.showCrouton(this, croutonMessage, croutonDurationInMilliseconds, getCroutonRoot(), croutonType);
+            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType,this);
+
         }
     }
 
     @Override
     public void onHideConnectivityCroutonRequest() {
+
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onHideConnectivityCroutonRequest");
+
         if (mCroutonCreator != null) {
             mCroutonCreator.hideConnectivityCrouton();
         }
@@ -857,5 +861,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             SendBroadcast.SendEmail(this);
 
         }
+    }
+
+    @Override
+    public void onCroutonDismiss() {
+
+        mDashboardFragment.openNextDialog();
     }
 }

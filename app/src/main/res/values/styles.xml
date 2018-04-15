@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -282,10 +282,8 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <!-- <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
-         <item name="android:textSize">16sp</item>
-         <item name="textAllCaps">false</item>
-         <item name="android:textColor">@color/white</item>
-         <item name="fontPath">fonts/DroidSans.ttf</item>
-     </style>-->
+    <style name="LinearProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:progressBackgroundTint" tools:targetApi="lollipop">@color/white</item>
+    </style>
 </resources>

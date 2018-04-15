@@ -109,6 +109,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     private TextView mNoNotificationsText;
     private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
+    private TextView mConfigTextView;
     private LinearLayout mLoadingDataView;
     private LinearLayout mStatusLayout;
     private int mDownX;
@@ -121,6 +122,8 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
+    private View mConfigView;
+    private View mConfigLayout;
     private int mWidgetsLayoutWidth;
     private int mTollBarsHeight;
     private int mRecyclersHeight;
@@ -212,6 +215,10 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
 
+        mConfigLayout =  view.findViewById(R.id.pConfig_layout);
+        mConfigView =  view.findViewById(R.id.pConfig_view);
+        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);
+        mConfigTextView.setSelected(true);
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
@@ -706,7 +713,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     }
 
-    private void openNextDialog() {
+    public void openNextDialog() {
         ZLogger.d(LOG_TAG, "openNextDialog(), start ");
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             Event event = mEventsQueue.pop();
@@ -735,16 +742,19 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     private void openDialog(Event event, boolean isStopDialog) {
 
-        ZLogger.d(LOG_TAG, "openDialog(), start ");
-        if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
-            ZLogger.d(LOG_TAG, "openDialog(), dismiss ");
-        }
-        mDialogFragment = DialogFragment.newInstance(event, isStopDialog);
-        mDialogFragment.setTargetFragment(DashboardFragmentSql.this, 0);
-        mDialogFragment.setCancelable(false);
-        mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-        ZLogger.d(LOG_TAG, "openDialog(), show ");
+
+        ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback,"");
+
+//        ZLogger.d(LOG_TAG, "openDialog(), start ");
+//        if (mDialogFragment != null) {
+//            mDialogFragment.dismiss();
+//            ZLogger.d(LOG_TAG, "openDialog(), dismiss ");
+//        }
+//        mDialogFragment = DialogFragment.newInstance(event, isStopDialog);
+//        mDialogFragment.setTargetFragment(DashboardFragmentSql.this, 0);
+//        mDialogFragment.setCancelable(false);
+//        mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
+//        ZLogger.d(LOG_TAG, "openDialog(), show ");
     }
 
     @Override
@@ -1062,6 +1072,20 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         if (TextUtils.isEmpty(machineName)) {
             machineName = getString(R.string.dashes);
         }
+
+        if(machinesData.getConfigName()!= null ){
+
+            mConfigView.setVisibility(View.VISIBLE);
+            mConfigLayout.setVisibility(View.VISIBLE);
+
+            mConfigTextView.setText( machinesData.getConfigName());
+        }else {
+            mConfigView.setVisibility(View.GONE);
+            mConfigLayout.setVisibility(View.GONE);
+
+
+        }
+
         mMachineIdStatusBarTextView.setText(machineName);
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
@@ -1078,6 +1102,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         mMachineIdStatusBarTextView.setText("");
         mMachineStatusStatusBarTextView.setText("");
         mTimerTextView.setText("");
+        mConfigTextView.setText("");
+        mConfigView.setVisibility(View.GONE);
+        mConfigLayout.setVisibility(View.GONE);
         mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_no_data));
     }
 
@@ -1201,6 +1228,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
             }
         }
     }
+
 
 
 }

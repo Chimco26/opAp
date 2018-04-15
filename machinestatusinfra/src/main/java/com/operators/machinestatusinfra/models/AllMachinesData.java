@@ -52,6 +52,8 @@ public class AllMachinesData {
     private String machineStatusName;
     @SerializedName("NoProgressCount")
     private int noProgressCount;
+    @SerializedName("PConfigName")
+    private String pConfigName;
     @SerializedName("Row_Counter")
     private int rowCounter;
     @SerializedName("ShiftID")
@@ -180,5 +182,13 @@ public class AllMachinesData {
     public String getShiftIDString()
     {
         return shiftIDString;
+    }
+
+    public String getConfigName() {
+        return pConfigName;
+    }
+
+    public void setConfigName(String pConfigName) {
+        this.pConfigName = pConfigName;
     }
 }
