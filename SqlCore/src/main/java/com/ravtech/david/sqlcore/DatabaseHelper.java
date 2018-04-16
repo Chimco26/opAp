@@ -205,7 +205,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        return db.rawQuery(countQuery, null);
+        Cursor c = db.rawQuery(countQuery, null);
+
+        return c;
 
     }
 

@@ -170,6 +170,8 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    KeyboardUtils.closeKeyboard(getContext());
                     FragmentManager fragmentManager = getFragmentManager();
                     if (fragmentManager != null) {
                         fragmentManager.popBackStack();

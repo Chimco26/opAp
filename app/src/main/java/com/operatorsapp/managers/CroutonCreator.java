@@ -44,6 +44,8 @@ public class CroutonCreator {
         Crouton crouton;
         switch (croutonType) {
             case ALERT_DIALOG:
+                crouton = createCrouton(activity, croutonMessage, PersistenceManager.getInstance().getTimeToDownParameterDialog(), viewGroup, croutonType);
+                break;
             case CREDENTIALS_ERROR:
             case URL_ERROR:
                 crouton = createCrouton(activity, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
@@ -115,23 +117,27 @@ public class CroutonCreator {
             case ALERT_DIALOG:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
                 setOnClickListener(croutonView);
+                setProgressCountDown(croutonView,PersistenceManager.getInstance().getTimeToDownParameterDialog());
                 break;
 
             case CREDENTIALS_ERROR:
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
+                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
                 break;
             case CONNECTIVITY:
             case NETWORK_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
+                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
                 break;
             default:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
+                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
         }
         TextView croutonText = (TextView) croutonView.findViewById(R.id.crouton_text);
         croutonText.setText(croutonMessage);
 
-        setProgressCountDown(croutonView);
+        setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
 
         return Crouton.make(activity, croutonView, viewGroup, configuration);
     }
@@ -142,9 +148,9 @@ public class CroutonCreator {
             @Override
             public void onClick(View view) {
 
-               hideConnectivityCrouton();
+                hideConnectivityCrouton();
 
-                if(mListener!= null){
+                if (mListener != null) {
 
                     mListener.onCroutonDismiss();
                 }
@@ -157,13 +163,13 @@ public class CroutonCreator {
         CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR, ALERT_DIALOG
     }
 
-    private void setProgressCountDown(View view) {
+    private void setProgressCountDown(View view, int croutonTime) {
 
         ProgressBar mProgressBar = view.findViewById(R.id.PT_progressbar_time_left);
 
         ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 100);
 
-        animation.setDuration(5000);
+        animation.setDuration(croutonTime);
 
         animation.setInterpolator(new DecelerateInterpolator());
 

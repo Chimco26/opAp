@@ -742,19 +742,8 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     private void openDialog(Event event, boolean isStopDialog) {
 
-
         ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback,"");
 
-//        ZLogger.d(LOG_TAG, "openDialog(), start ");
-//        if (mDialogFragment != null) {
-//            mDialogFragment.dismiss();
-//            ZLogger.d(LOG_TAG, "openDialog(), dismiss ");
-//        }
-//        mDialogFragment = DialogFragment.newInstance(event, isStopDialog);
-//        mDialogFragment.setTargetFragment(DashboardFragmentSql.this, 0);
-//        mDialogFragment.setCancelable(false);
-//        mDialogFragment.show(getChildFragmentManager(), DialogFragment.DIALOG);
-//        ZLogger.d(LOG_TAG, "openDialog(), show ");
     }
 
     @Override
