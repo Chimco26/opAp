@@ -167,7 +167,10 @@ public class CroutonCreator {
 
         ProgressBar mProgressBar = view.findViewById(R.id.PT_progressbar_time_left);
 
-        ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 100);
+        mProgressBar.setMax(croutonTime);
+
+
+        ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, croutonTime);
 
         animation.setDuration(croutonTime);
 

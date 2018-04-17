@@ -166,12 +166,12 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
 
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
+            LinearLayout buttonClose = view.findViewById(R.id.close_image);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    KeyboardUtils.closeKeyboard(getContext());
+                    KeyboardUtils.closeKeyboard(getActivity());
                     FragmentManager fragmentManager = getFragmentManager();
                     if (fragmentManager != null) {
                         fragmentManager.popBackStack();

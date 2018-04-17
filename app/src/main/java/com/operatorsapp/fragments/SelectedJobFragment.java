@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -23,8 +24,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SelectedJobFragment extends BackStackAwareFragment implements View.OnClickListener, DashBoardActivityToSelectedJobFragmentCallback, CroutonRootProvider
-{
+public class SelectedJobFragment extends BackStackAwareFragment implements View.OnClickListener, DashBoardActivityToSelectedJobFragmentCallback, CroutonRootProvider {
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
@@ -38,23 +38,27 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     public void onAttach(Context context) {
         super.onAttach(context);
         mJobsFragmentToDashboardActivityCallback = (JobsFragmentToDashboardActivityCallback) getActivity();
-        mJobsFragmentToDashboardActivityCallback.onSelectedJobFragmentAttached(this);
+        if (mJobsFragmentToDashboardActivityCallback != null) {
+            mJobsFragmentToDashboardActivityCallback.onSelectedJobFragmentAttached(this);
+        }
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_job, container, false);
 
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
-        mCurrentJob = gson.fromJson(bundle.getString(SELECTED_JOB), CurrentJob.class);
+        if (bundle != null) {
+            mCurrentJob = gson.fromJson(bundle.getString(SELECTED_JOB), CurrentJob.class);
+        }
         String[] headersArray = mCurrentJob.getHeaders();
         setActionBar();
 
-        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
+        mCancelButton = view.findViewById(R.id.button_cancel);
 
-        mActivateNewJobButton = (Button) view.findViewById(R.id.button_activate_new_job);
+        mActivateNewJobButton = view.findViewById(R.id.button_activate_new_job);
         setTitles(view);
         setValues(view, headersArray);
 
@@ -62,11 +66,11 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     }
 
     private void setTitles(View view) {
-        TextView firstTitle = (TextView) view.findViewById(R.id.first_title_text_view);
-        TextView secondTitle = (TextView) view.findViewById(R.id.second_title_text_view);
-        TextView thirdTitle = (TextView) view.findViewById(R.id.third_title_text_view);
-        TextView fourthTitle = (TextView) view.findViewById(R.id.fourth_title_text_view);
-        TextView fifthTitle = (TextView) view.findViewById(R.id.fifth_title_text_view);
+        TextView firstTitle = view.findViewById(R.id.first_title_text_view);
+        TextView secondTitle = view.findViewById(R.id.second_title_text_view);
+        TextView thirdTitle = view.findViewById(R.id.third_title_text_view);
+        TextView fourthTitle = view.findViewById(R.id.fourth_title_text_view);
+        TextView fifthTitle = view.findViewById(R.id.fifth_title_text_view);
 
         firstTitle.setText(mCurrentJob.getFirstField());
         secondTitle.setText(mCurrentJob.getSecondField());
@@ -76,11 +80,11 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     }
 
     private void setValues(View view, String[] headersArray) {
-        TextView jobIdTitle = (TextView) view.findViewById(R.id.first_field_text_view);
-        TextView secondField = (TextView) view.findViewById(R.id.second_field_text_view);
-        TextView thirdField = (TextView) view.findViewById(R.id.third_field_text_view);
-        TextView fourthField = (TextView) view.findViewById(R.id.fourth_field_text_view);
-        TextView fifthField = (TextView) view.findViewById(R.id.fifth_field_text_view);
+        TextView jobIdTitle = view.findViewById(R.id.first_field_text_view);
+        TextView secondField = view.findViewById(R.id.second_field_text_view);
+        TextView thirdField = view.findViewById(R.id.third_field_text_view);
+        TextView fourthField = view.findViewById(R.id.fourth_field_text_view);
+        TextView fifthField = view.findViewById(R.id.fifth_field_text_view);
 
         jobIdTitle.setText(headersArray[0]);
         secondField.setText(headersArray[1]);
@@ -105,7 +109,10 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
 
     protected void setActionBar() {
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = null;
+        if (getActivity() != null) {
+            actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        }
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -117,14 +124,13 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
             // rootView null
             @SuppressLint("InflateParams")
             View view = inflater.inflate(R.layout.selected_job_action_bar, null);
-            ImageView arrowBack = (ImageView) view.findViewById(R.id.arrow_back);
+            ImageView arrowBack = view.findViewById(R.id.arrow_back);
             arrowBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
+                    if (fragmentManager != null) {
                         fragmentManager.popBackStack();
                     }
                     //getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -138,7 +144,8 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (getFragmentManager() != null)
+                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 break;
             }
             case R.id.button_activate_new_job: {
@@ -162,20 +169,15 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.selected_job_crouton_root;
     }
 
-    private void dismissProgressDialog()
-    {
-        if (getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });

@@ -9,6 +9,7 @@
     <color name="C3">#fb165c</color>
     <color name="C3T">#80fb165c</color>
     <color name="C4">#f2b752</color>
+    <color name="alert_progress">#FDCD7D</color>
 
     <color name="C5">#1aa917</color>
     <color name="C6">#c11117</color>
@@ -53,4 +54,5 @@
     <color name="dialog_text_gray">#8a000000</color>
     <color name="projection_gray">#acacac</color>
     <color name="black">#000000</color>
+    <color name="alert">#F5A623</color>
 </resources>

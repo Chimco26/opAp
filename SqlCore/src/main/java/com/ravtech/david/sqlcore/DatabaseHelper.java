@@ -201,7 +201,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * getting cursor
      */
     public  Cursor getCursorOrderByTime() {
-        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " ORDER BY date(" + KEY_TIME + ") DESC";
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
