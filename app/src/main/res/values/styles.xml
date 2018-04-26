@@ -287,4 +287,9 @@
         <item name="android:progressBackgroundTint" tools:targetApi="lollipop">@color/alert_progress</item>
     </style>
 
+    <style name="LinearErrorProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/alert_error_progress</item>
+        <item name="android:progressBackgroundTint" tools:targetApi="lollipop">@color/alert_error_progress</item>
+    </style>
+
 </resources>

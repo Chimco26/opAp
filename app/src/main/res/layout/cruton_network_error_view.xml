@@ -26,7 +26,7 @@
         android:layout_marginTop="40dp"
         android:max="100"
         android:progress="0"
-        android:theme="@style/LinearProgress"/>
+        android:theme="@style/LinearErrorProgress"/>
 
 
 </FrameLayout>

@@ -134,7 +134,7 @@ public class CroutonCreator {
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
                 setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
         }
-        TextView croutonText = (TextView) croutonView.findViewById(R.id.crouton_text);
+        TextView croutonText = croutonView.findViewById(R.id.crouton_text);
         croutonText.setText(croutonMessage);
 
         setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);

@@ -123,7 +123,21 @@ public class LoginFragment extends Fragment {
             doSilentLogin();
         }
 
+        ravtechTest(rootView);
+
         return rootView;
+    }
+
+    private void ravtechTest(View rootView) {
+
+        rootView.findViewById(R.id.ravtech_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSiteUrl.setText("dev");
+                mUserName.setText("ravtech");
+                mPassword.setText("ravTech@1");
+            }
+        });
     }
 
     @Override
