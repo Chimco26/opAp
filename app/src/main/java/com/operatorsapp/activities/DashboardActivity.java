@@ -46,6 +46,7 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
+import com.operatorsapp.fragments.DashBoardFragmentSqlNewLeft;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -103,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
+    private DashBoardFragmentSqlNewLeft mDashboardFragmentNew;
 
 
     @Override
@@ -133,25 +135,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        mDashboardFragment = DashboardFragmentSql.newInstance();
+//        mDashboardFragment = DashboardFragmentSql.newInstance();
+        mDashboardFragmentNew = DashBoardFragmentSqlNewLeft.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragmentNew).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
-
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mDashboardFragment != null) {
+        if (mDashboardFragmentNew != null) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mDashboardFragment).commit();
+            fm.beginTransaction().remove(mDashboardFragmentNew).commit();
         }
         super.onSaveInstanceState(outState, outPersistentState);
     }
