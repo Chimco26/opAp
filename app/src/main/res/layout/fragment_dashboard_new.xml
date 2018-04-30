@@ -175,14 +175,14 @@
 
     </LinearLayout>
 
-
     <RelativeLayout
-        android:id="@+id/parent_layouts_new"
+        android:id="@+id/parent_layouts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/status_layout">
 
         <LinearLayout
-            android:id="@+id/fragment_dashboard_shiftlog_new"
+            android:id="@+id/fragment_dashboard_shiftlog"
             android:layout_width="164dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
@@ -190,7 +190,7 @@
             android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/fragment_dashboard_no_notif_new"
+                android:id="@+id/fragment_dashboard_no_notif"
                 style="@style/FontStyle_T7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -205,7 +205,7 @@
                 app:minTextSize="15dp" />
 
             <me.grantland.widget.AutofitTextView
-                android:id="@+id/fragment_dashboard_loading_data_shiftlog_new"
+                android:id="@+id/fragment_dashboard_loading_data_shiftlog"
                 style="@style/FontStyle_T7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -220,7 +220,7 @@
                 app:minTextSize="15dp" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_dashboard_shift_log_new"
+                android:id="@+id/fragment_dashboard_shift_log"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarFadeDuration="0"
@@ -229,53 +229,26 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/fragment_dashboard_divider_new"
+            android:id="@+id/fragment_dashboard_divider"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@id/fragment_dashboard_shiftlog_new"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
             android:layout_marginEnd="-25dp"
             android:background="@android:color/transparent"
             android:clickable="true" />
 
         <ImageView
-            android:id="@+id/fragment_dashboard_left_btn_new"
+            android:id="@+id/fragment_dashboard_left_btn"
             android:layout_width="25dp"
             android:layout_height="35dp"
-            android:layout_alignEnd="@id/fragment_dashboard_shiftlog_new"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
             android:layout_centerVertical="true"
             android:layout_marginEnd="-23dp"
             android:paddingEnd="10dp"
             android:paddingStart="0dp"
             android:scaleType="fitXY"
             android:src="@drawable/left_panel_btn" />
-
-        <LinearLayout
-            android:id="@+id/fragment_dashboard_loading_data_widgets_new"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/C16"
-                android:indeterminateTintMode="src_atop" />
-
-            <TextView
-                style="@style/FontStyle_T7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/loading_data"
-                android:textColor="@color/divider_gray"
-                android:textSize="50sp" />
-        </LinearLayout>
     </RelativeLayout>
+
+
 </LinearLayout>

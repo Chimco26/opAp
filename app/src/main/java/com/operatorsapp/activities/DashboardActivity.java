@@ -46,7 +46,8 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
-import com.operatorsapp.fragments.DashBoardFragmentSqlNewLeft;
+import com.operatorsapp.fragments.DashBoardFragmentNew2;
+import com.operatorsapp.fragments.DashBoardFragmentNew3;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -104,7 +105,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
-    private DashBoardFragmentSqlNewLeft mDashboardFragmentNew;
+    private DashBoardFragmentNew3 mDashboardFragmentNew;
+    private DashBoardFragmentNew2 mDashboardFragmentNew2;
 
 
     @Override
@@ -136,13 +138,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
 //        mDashboardFragment = DashboardFragmentSql.newInstance();
-        mDashboardFragmentNew = DashBoardFragmentSqlNewLeft.newInstance();
+//        mDashboardFragmentNew = DashBoardFragmentSqlNewLeft.newInstance();
+//        mDashboardFragmentNew = DashBoardFragmentNew3.newInstance();
+        mDashboardFragmentNew2 = DashBoardFragmentNew2.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragmentNew2).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
@@ -151,9 +155,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mDashboardFragmentNew != null) {
+        if (mDashboardFragmentNew2 != null) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mDashboardFragmentNew).commit();
+            fm.beginTransaction().remove(mDashboardFragmentNew2).commit();
         }
         super.onSaveInstanceState(outState, outPersistentState);
     }
@@ -173,7 +177,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof DashboardFragmentSql) {
-                        mDashboardFragment.setActionBar();
+                        mDashboardFragmentNew2.setActionBar();
                         if (first) {
                             first = false;
 
@@ -868,6 +872,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onCroutonDismiss() {
 
-        mDashboardFragment.openNextDialog();
+        mDashboardFragmentNew2.openNextDialog();
     }
 }

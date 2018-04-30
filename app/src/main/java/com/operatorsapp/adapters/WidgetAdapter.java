@@ -592,7 +592,9 @@ public class WidgetAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-        return mWidgets.size();
+        if (mWidgets != null) {
+            return mWidgets.size();
+        }else return 0;
     }
 
     @Override
