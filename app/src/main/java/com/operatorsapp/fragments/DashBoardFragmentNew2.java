@@ -119,7 +119,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     private int mOpenWidth;
     private View mConfigView;
     private View mConfigLayout;
-    private int mWidgetsLayoutWidth;
     private int mTollBarsHeight;
     private int mRecyclersHeight;
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
@@ -145,6 +144,7 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     private boolean thereAlreadyRequest = false;
     public DatabaseHelper mDatabaseHelper;
     private boolean mNoData;
+    private DashBoard2Listener mListener;
 
 
     public static DashBoardFragmentNew2 newInstance() {
@@ -192,7 +192,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         int height = size.y;
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
-        mWidgetsLayoutWidth = (int) (width * 0.8);
         mTollBarsHeight = (int) (height * 0.25);
         mRecyclersHeight = (int) (height * 0.75);
 
@@ -226,7 +225,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
@@ -261,14 +259,15 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
                             if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
                                 if (mShiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
-//                                   toggleWoopList(mShiftLogParams, mCloseWidth, mWidgetsParams, false);
-//                                TODO     mGridLayoutManager.setSpanCount(3);
-//                                    mWidgetAdapter.changeState(true);
+                                    toggleWoopList(mShiftLogParams, mCloseWidth, null, false);
+                                    mListener.onWidgetChangestate(true);
+                                    mListener.onWidgetUpdateSpane(3);
                                 } else {
                                     mIsOpen = true;
-//                                    toggleWoopList(mShiftLogParams, mOpenWidth, mWidgetsParams, true);
-//                               TODO      mGridLayoutManager.setSpanCount(2);
-//                                    mWidgetAdapter.changeState(false);
+                                    toggleWoopList(mShiftLogParams, mOpenWidth, null, true);
+                                    mListener.onWidgetChangestate(false);
+                                    mListener.onWidgetUpdateSpane(2);
+
                                 }
 
                             } else {
@@ -307,8 +306,9 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
                     public void onAnimationEnd(Animation animation) {
                         toggleWoopList(leftLayoutParams, mOpenWidth, null, true);
                         mShiftLogAdapter.notifyDataSetChanged();
-//                       TODO mGridLayoutManager.setSpanCount(2);
-//                        mWidgetAdapter.changeState(false);
+                        mListener.onWidgetChangestate(false);
+                        mListener.onWidgetUpdateSpane(2);
+
                     }
 
                     @Override
@@ -338,9 +338,10 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 
             @Override
             public void onAnimationEnd(Animation animation) {
-//                toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
-//            TODO    mGridLayoutManager.setSpanCount(3);
-//                mWidgetAdapter.changeState(true);
+                toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
+                mListener.onWidgetChangestate(true);
+                mListener.onWidgetUpdateSpane(3);
+
             }
 
             @Override
@@ -453,12 +454,11 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
-//        mRightLayoutParams.setMarginStart(newWidth);
         mShiftLogLayout.requestLayout();
-//       TODO mWidgetsLayout.setLayoutParams(mRightLayoutParams);
+        mListener.onWidgetUpdatemargine(newWidth);
 
         mShiftLogAdapter.changeState(!isOpen);
-//      TODO  mWidgetAdapter.changeState(!isOpen);
+        mListener.onWidgetChangestate(!isOpen);
 
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
@@ -474,6 +474,7 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mListener = (DashBoard2Listener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
@@ -494,6 +495,7 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
+        mListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
@@ -802,49 +804,49 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 //        }
     }
 
-    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
-        // calls to this function were removed as saving to prefs was not needed.
-        //historic data from prefs
-        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
-        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
-        for (Widget widget : widgetList) {
-            // if have chart widget (field type 3)
-            if (widget.getFieldType() == 3) {
-                // if have historic in prefs
-                if (prefsHistoric.size() > 0) {
-                    prefsHistoricCopy.putAll(prefsHistoric);
-
-                    // if get new data
-                    if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-                        // if is old widget
-                        if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID()))) {
-
-                            prefsHistoricCopy.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
-                            widget.getMachineParamHistoricData().clear();
-
-                            //set all data (old + new) to widget
-                            if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-                            }
-                        } else {
-                            // if is new widget,  save to prefs
-                            prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                        }
-                    } else {
-                        // if no new data,  set old data to widget
-                        if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-                        }
-                    }
-
-                } else {
-                    // if is the firs chart data,  save to prefs
-                    prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                }
-            }
-        }
-        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
-    }
+//    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
+//        // calls to this function were removed as saving to prefs was not needed.
+//        //historic data from prefs
+//        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
+//        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
+//        for (Widget widget : widgetList) {
+//            // if have chart widget (field type 3)
+//            if (widget.getFieldType() == 3) {
+//                // if have historic in prefs
+//                if (prefsHistoric.size() > 0) {
+//                    prefsHistoricCopy.putAll(prefsHistoric);
+//
+//                    // if get new data
+//                    if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
+//                        // if is old widget
+//                        if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID()))) {
+//
+//                            prefsHistoricCopy.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
+//                            widget.getMachineParamHistoricData().clear();
+//
+//                            //set all data (old + new) to widget
+//                            if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
+//                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+//                            }
+//                        } else {
+//                            // if is new widget,  save to prefs
+//                            prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
+//                        }
+//                    } else {
+//                        // if no new data,  set old data to widget
+//                        if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
+//                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+//                        }
+//                    }
+//
+//                } else {
+//                    // if is the firs chart data,  save to prefs
+//                    prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
+//                }
+//            }
+//        }
+//        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
+//    }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
@@ -1207,5 +1209,12 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         }
     }
 
+    public interface DashBoard2Listener {
+        void onWidgetChangestate(boolean state);
+
+        void onWidgetUpdateSpane(int span);
+
+        void onWidgetUpdatemargine(float margine);
+    }
 
 }

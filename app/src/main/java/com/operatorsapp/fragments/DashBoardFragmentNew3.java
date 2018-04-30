@@ -187,6 +187,19 @@ public class DashBoardFragmentNew3 extends Fragment implements
 
     }
 
+    public void setSpanCount(int span){
+        mGridLayoutManager.setSpanCount(span);
+    }
+
+    public void setWidgetState(boolean state) {
+        mWidgetAdapter.changeState(state);
+    }
+
+    public void setMargin(float margin){
+        mWidgetsParams.setMarginStart((int) margin);
+        mWidgetsLayout.setLayoutParams(mWidgetsParams);
+    }
+
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 

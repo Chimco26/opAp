@@ -88,7 +88,13 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
+        OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
+        OperatorCoreToDashboardActivityCallback,
+        /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
+        OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
+        RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
+        DashBoardFragmentNew2.DashBoard2Listener{
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -105,7 +111,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
-    private DashBoardFragmentNew3 mDashboardFragmentNew;
+    private DashBoardFragmentNew3 mDashboardFragmentNew3;
     private DashBoardFragmentNew2 mDashboardFragmentNew2;
 
 
@@ -137,16 +143,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-//        mDashboardFragment = DashboardFragmentSql.newInstance();
-//        mDashboardFragmentNew = DashBoardFragmentSqlNewLeft.newInstance();
-//        mDashboardFragmentNew = DashBoardFragmentNew3.newInstance();
+        mDashboardFragmentNew3 = DashBoardFragmentNew3.newInstance();
         mDashboardFragmentNew2 = DashBoardFragmentNew2.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragmentNew2).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragmentNew3).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container_2, mDashboardFragmentNew2).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
@@ -155,6 +160,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        if (mDashboardFragmentNew3 != null) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mDashboardFragmentNew3).commit();
+        }
         if (mDashboardFragmentNew2 != null) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().remove(mDashboardFragmentNew2).commit();
@@ -873,5 +882,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onCroutonDismiss() {
 
         mDashboardFragmentNew2.openNextDialog();
+    }
+
+    @Override
+    public void onWidgetChangestate(boolean state) {
+        mDashboardFragmentNew3.setWidgetState(state);
+    }
+
+    @Override
+    public void onWidgetUpdateSpane(int span) {
+        mDashboardFragmentNew3.setSpanCount(span);
+    }
+
+    @Override
+    public void onWidgetUpdatemargine(float margine) {
+        mDashboardFragmentNew3.setMargin(margine);
     }
 }
