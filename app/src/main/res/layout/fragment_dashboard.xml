@@ -188,6 +188,32 @@
             android:layout_gravity="end">
 
             <LinearLayout
+                android:id="@+id/fragment_dashboard_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/ic_cloud" />
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/fragment_dashboard_loading_data_widgets"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

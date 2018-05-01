@@ -72,7 +72,7 @@ public class WidgetFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProgressDialogManager.show(getActivity());
-        View inflate = inflater.inflate(R.layout.fragment_dashboard_new_right, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_widgets, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }

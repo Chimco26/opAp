@@ -164,7 +164,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        ProgressDialogManager.show(getActivity()); TODO in dismiss ther are conflict with widgetFragment
 // TODO because ProgessDialogManager support only one progress management in same time
-        View inflate = inflater.inflate(R.layout.fragment_dashboard_new, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_actionbar_and_events, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
@@ -203,7 +203,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mConfigLayout = view.findViewById(R.id.pConfig_layout);
         mConfigView = view.findViewById(R.id.pConfig_view);
-        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);
+        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);//TODO bug no in iw
         mConfigTextView.setSelected(true);
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
