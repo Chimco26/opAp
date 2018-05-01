@@ -112,7 +112,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mOpenWidth;
     private View mConfigView;
     private View mConfigLayout;
-    private int mTollBarsHeight;
+    private float mTollBarsHeight;
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
@@ -136,6 +136,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public DatabaseHelper mDatabaseHelper;
     private boolean mNoData;
     private DashBoard2Listener mListener;
+    private int mRecyclersHeight;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -181,10 +182,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = size.y;
+        float height = size.y;
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
         mTollBarsHeight = (int) (height * 0.25);
+        mRecyclersHeight = (int) (( 1 - (mTollBarsHeight / height)) * height);
 
         final int middleWidth = (int) (width * 0.3);
 
