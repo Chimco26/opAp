@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -51,7 +50,6 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
-import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -60,7 +58,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -71,7 +68,6 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
-import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -79,14 +75,13 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.OnDialogButtonsListener,
+public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener {
 
@@ -104,10 +99,8 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     private RecyclerView mShiftLogRecycler;
     private LinearLayout mShiftLogLayout;
     private TextView mNoNotificationsText;
-    private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
     private TextView mConfigTextView;
-    private LinearLayout mLoadingDataView;
     private LinearLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
@@ -139,7 +132,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     private int mApproveItemID;
     private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
     private boolean thereAlreadyRequest = false;
     public DatabaseHelper mDatabaseHelper;
@@ -147,8 +139,8 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     private DashBoard2Listener mListener;
 
 
-    public static DashBoardFragmentNew2 newInstance() {
-        return new DashBoardFragmentNew2();
+    public static ActionBarAndEventsFragment newInstance() {
+        return new ActionBarAndEventsFragment();
     }
 
 
@@ -170,7 +162,8 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ProgressDialogManager.show(getActivity());
+//        ProgressDialogManager.show(getActivity()); TODO in dismiss ther are conflict with widgetFragment
+// TODO because ProgessDialogManager support only one progress management in same time
         View inflate = inflater.inflate(R.layout.fragment_dashboard_new, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
@@ -222,7 +215,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
-        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
@@ -400,11 +392,11 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 
         if (DataSupport.count(Event.class) > 0) {
             mNoData = false;
-            //            mNoNotificationsText.setVisibility(View.GONE);
+            mNoNotificationsText.setVisibility(View.GONE);
             mLoadingDataText.setVisibility(View.GONE);
         } else {
             mNoData = true;
-            //            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mNoNotificationsText.setVisibility(View.VISIBLE);
             mLoadingDataText.setVisibility(View.VISIBLE);
         }
 
@@ -440,13 +432,10 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
             }
         } else {
             mNoData = true;
-            //            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mNoNotificationsText.setVisibility(View.VISIBLE);
             mLoadingDataText.setVisibility(View.VISIBLE);
         }
-//       TODO if (mWidgets == null || mWidgets.size() == 0) {
-//            //            mNoDataView.setVisibility(View.VISIBLE);
-//            mLoadingDataView.setVisibility(View.VISIBLE);
-//        }
+
         ZLogger.d(LOG_TAG, "onResume(), end ");
 
     }
@@ -469,7 +458,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         ZLogger.d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
-            mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
@@ -489,7 +477,6 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
     public void onDetach() {
         ZLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
-        mReportFieldsFragmentCallbackListener = null;
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
         mOnActivityCallbackRegistered = null;
@@ -680,7 +667,7 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
                 ZLogger.d(LOG_TAG, "onPreDraw(), pre request layout ");
                 view.requestLayout();
                 ZLogger.d(LOG_TAG, "onPreDraw(), end ");
-                dismissProgressDialog();
+//        TODO        dismissProgressDialog();
                 return false;
             }
         });
@@ -774,79 +761,9 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-//    TODO    mLoadingDataView.setVisibility(View.GONE);
-//
-//        // if we can't fill any reports, show no data, client defined this behavior.
-//        if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
-//
-//
-//            mNoDataView.setVisibility(View.VISIBLE);
-//            return;
-//        }
-//
-//        mWidgets = widgetList;
-//        if (widgetList != null && widgetList.size() > 0) {
-//            saveAndRestoreChartData(widgetList);
-//            PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-//            mNoDataView.setVisibility(View.GONE);
-//
-//
-//            if (mWidgetAdapter != null) {
-//                mWidgetAdapter.setNewData(widgetList);
-//            } else {
-//                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth);
-//                mWidgetRecycler.setAdapter(mWidgetAdapter);
-//            }
-//        } else {
-//
-//
-//            mNoDataView.setVisibility(View.VISIBLE);
-//        }
+
     }
 
-//    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
-//        // calls to this function were removed as saving to prefs was not needed.
-//        //historic data from prefs
-//        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
-//        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
-//        for (Widget widget : widgetList) {
-//            // if have chart widget (field type 3)
-//            if (widget.getFieldType() == 3) {
-//                // if have historic in prefs
-//                if (prefsHistoric.size() > 0) {
-//                    prefsHistoricCopy.putAll(prefsHistoric);
-//
-//                    // if get new data
-//                    if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-//                        // if is old widget
-//                        if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID()))) {
-//
-//                            prefsHistoricCopy.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
-//                            widget.getMachineParamHistoricData().clear();
-//
-//                            //set all data (old + new) to widget
-//                            if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-//                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-//                            }
-//                        } else {
-//                            // if is new widget,  save to prefs
-//                            prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-//                        }
-//                    } else {
-//                        // if no new data,  set old data to widget
-//                        if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-//                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-//                        }
-//                    }
-//
-//                } else {
-//                    // if is the firs chart data,  save to prefs
-//                    prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-//                }
-//            }
-//        }
-//        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
-//    }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
@@ -980,17 +897,11 @@ public class DashBoardFragmentNew2 extends Fragment implements DialogFragment.On
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onDataFailure");
 
 
-        mLoadingDataView.setVisibility(View.GONE);
         if (callType == CallType.Status) {
             mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
 
-        if (callType == CallType.MachineData) {
-//           TODO if (mWidgets == null || mWidgets.size() == 0) {
-//                mNoDataView.setVisibility(View.VISIBLE);
-//            }
-        }
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override

@@ -22,6 +22,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
@@ -39,7 +40,7 @@ import static org.acra.ACRA.LOG_TAG;
  * Created by nathanb on 4/29/2018.
  */
 
-public class DashBoardFragmentNew3 extends Fragment implements
+public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener {
 
     private ViewGroup mWidgetsLayout;
@@ -62,14 +63,15 @@ public class DashBoardFragmentNew3 extends Fragment implements
     private List<Widget> mWidgets;
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
 
-    public static DashBoardFragmentNew3 newInstance() {
-        return new DashBoardFragmentNew3();
+    public static WidgetFragment newInstance() {
+        return new WidgetFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ProgressDialogManager.show(getActivity());
+        ProgressDialogManager.show(getActivity());
         View inflate = inflater.inflate(R.layout.fragment_dashboard_new_right, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
@@ -120,6 +122,7 @@ public class DashBoardFragmentNew3 extends Fragment implements
         ZLogger.d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
+            mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
@@ -135,9 +138,19 @@ public class DashBoardFragmentNew3 extends Fragment implements
         super.onDetach();
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
+        mReportFieldsFragmentCallbackListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mWidgets == null || mWidgets.size() == 0) {
+            mNoDataView.setVisibility(View.VISIBLE);
+            mLoadingDataView.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
@@ -149,18 +162,20 @@ public class DashBoardFragmentNew3 extends Fragment implements
         mLoadingDataView.setVisibility(View.GONE);
 
         // if we can't fill any reports, show no data, client defined this behavior.
-//        if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
-//
-//            mNoDataView.setVisibility(View.VISIBLE);
-//            return;
-//        }
+        if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
+
+            mNoDataView.setVisibility(View.VISIBLE);
+
+            return;
+
+        }
 
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
             saveAndRestoreChartData(widgetList);
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
             mNoDataView.setVisibility(View.GONE);
-
+            dismissProgressDialog();
 
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
@@ -187,7 +202,7 @@ public class DashBoardFragmentNew3 extends Fragment implements
 
     }
 
-    public void setSpanCount(int span){
+    public void setSpanCount(int span) {
         mGridLayoutManager.setSpanCount(span);
     }
 
@@ -195,7 +210,7 @@ public class DashBoardFragmentNew3 extends Fragment implements
         mWidgetAdapter.changeState(state);
     }
 
-    public void setMargin(float margin){
+    public void setMargin(float margin) {
         mWidgetsParams.setMarginStart((int) margin);
         mWidgetsLayout.setLayoutParams(mWidgetsParams);
     }
@@ -212,6 +227,8 @@ public class DashBoardFragmentNew3 extends Fragment implements
 
     @Override
     public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+
+        mLoadingDataView.setVisibility(View.GONE);
 
         if (callType == CallType.MachineData) {
             if (mWidgets == null || mWidgets.size() == 0) {
