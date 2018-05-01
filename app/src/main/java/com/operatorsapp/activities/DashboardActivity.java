@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -13,9 +14,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -114,6 +119,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
+    private View mContainer;
 
 
     @Override
@@ -152,7 +158,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mWidgetFragment).commit();
+        mContainer = findViewById(R.id.fragments_container);
+
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), mWidgetFragment).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container_2, mActionBarAndEventsFragment).commit();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
@@ -933,7 +941,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onWidgetChangestate(boolean state) {
+    public void onWidgetChangeState(boolean state) {
         mWidgetFragment.setWidgetState(state);
     }
 
@@ -943,7 +951,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onWidgetUpdatemargine(float margine) {
-        mWidgetFragment.setMargin(margine);
+    public void onResize(int width, int statusBarsHeight) {
+
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer.getLayoutParams();
+
+        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+
+        mContainer.setLayoutParams(layoutParams);
+
     }
 }

@@ -48,9 +48,9 @@ public class WidgetFragment extends Fragment implements
     private int mCloseWidth;
     private boolean mIsOpen;
     private boolean mIsNewShiftLogs;
-    private int mOpenWidth;
+//    private int mOpenWidth;
     private int mWidgetsLayoutWidth;
-    private int mTollBarsHeight;
+//    private int mTollBarsHeight;
     private int mRecyclersHeight;
     private int mMiddleWidth;
     private TextView mNoNotificationsText;
@@ -64,6 +64,8 @@ public class WidgetFragment extends Fragment implements
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
+    private int mWidth;
+    private int mHeight;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
@@ -88,14 +90,11 @@ public class WidgetFragment extends Fragment implements
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        mOpenWidth = (int) (width * 0.2);
-        mCloseWidth = (int) (width * 0.0);
-        mWidgetsLayoutWidth = (int) (width * 0.8);
-        mTollBarsHeight = (int) (height * 0.25);
-        mRecyclersHeight = (int) (height * 0.75);
-        mMiddleWidth = (int) (width * 0.3);
+        mWidth = size.x;
+        mHeight = size.y;
+        mWidgetsLayoutWidth = (int) (mWidth * 0.8);
+        mRecyclersHeight = (int) (mHeight * 0.75);
+        mMiddleWidth = (int) (mWidth * 0.3);
 
         mWidgetsLayout = (ViewGroup) view.findViewById(R.id.fragment_dashboard_widgets_layout);
         mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();

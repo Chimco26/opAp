@@ -113,7 +113,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mConfigView;
     private View mConfigLayout;
     private int mTollBarsHeight;
-    private int mRecyclersHeight;
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
@@ -186,7 +185,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
         mTollBarsHeight = (int) (height * 0.25);
-        mRecyclersHeight = (int) (height * 0.75);
 
         final int middleWidth = (int) (width * 0.3);
 
@@ -195,6 +193,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams = mStatusLayout.getLayoutParams();
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
+
+        mListener.onResize(mCloseWidth, statusBarParams.height);
 
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
@@ -252,12 +252,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 if (mShiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
                                     toggleWoopList(mShiftLogParams, mCloseWidth, null, false);
-                                    mListener.onWidgetChangestate(true);
+                                    mListener.onWidgetChangeState(true);
                                     mListener.onWidgetUpdateSpane(3);
                                 } else {
                                     mIsOpen = true;
                                     toggleWoopList(mShiftLogParams, mOpenWidth, null, true);
-                                    mListener.onWidgetChangestate(false);
+                                    mListener.onWidgetChangeState(false);
                                     mListener.onWidgetUpdateSpane(2);
 
                                 }
@@ -298,7 +298,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     public void onAnimationEnd(Animation animation) {
                         toggleWoopList(leftLayoutParams, mOpenWidth, null, true);
                         mShiftLogAdapter.notifyDataSetChanged();
-                        mListener.onWidgetChangestate(false);
+                        mListener.onWidgetChangeState(false);
                         mListener.onWidgetUpdateSpane(2);
 
                     }
@@ -331,7 +331,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onAnimationEnd(Animation animation) {
                 toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
-                mListener.onWidgetChangestate(true);
+                mListener.onWidgetChangeState(true);
                 mListener.onWidgetUpdateSpane(3);
 
             }
@@ -444,10 +444,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
-        mListener.onWidgetUpdatemargine(newWidth);
+//        mListener.onWidgetUpdatemargine(newWidth);
+        mListener.onResize(newWidth, mStatusLayout.getLayoutParams().height);
 
         mShiftLogAdapter.changeState(!isOpen);
-        mListener.onWidgetChangestate(!isOpen);
+        mListener.onWidgetChangeState(!isOpen);
 
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
@@ -1121,11 +1122,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public interface DashBoard2Listener {
-        void onWidgetChangestate(boolean state);
+        void onWidgetChangeState(boolean state);
 
         void onWidgetUpdateSpane(int span);
 
-        void onWidgetUpdatemargine(float margine);
+        void onResize(int width, int statusBarsHeight);
     }
 
 }
