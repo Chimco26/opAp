@@ -25,6 +25,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+                
+                <CheckBox
+                    android:id="@+id/event_stop_checkbox"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="10dp"
+                    android:visibility="gone"
+                    />
 
                 <ImageView
                     android:id="@+id/event_stopped_shift_log_item_icon"

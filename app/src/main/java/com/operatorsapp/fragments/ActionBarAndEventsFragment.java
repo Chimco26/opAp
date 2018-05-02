@@ -744,6 +744,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
+    @Override
+    public void onStopEventSelected(int eventID, String time, String eventEndTime, long duration) {
+      //TODO  openStopReportScreen(eventId, startTime, endTime, duration);
+    }
+
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
 //        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(start, end, duration, eventId));

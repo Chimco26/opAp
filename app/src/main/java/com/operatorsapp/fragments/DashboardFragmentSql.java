@@ -772,6 +772,12 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
+    @Override
+    public void onStopEventSelected(int eventID, String time, String eventEndTime, long duration) {
+
+    }
+    
+
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
         mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
     }

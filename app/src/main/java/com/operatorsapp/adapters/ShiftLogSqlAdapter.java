@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     private OnStopClickListener mOnStopClickListener;
     public LayoutInflater inflater;
+    private boolean mIsSelection;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height) {
         super(context, cursor);
@@ -48,9 +51,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mHeight = height;
     }
 
+
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
-    //    private LinearLayout mStoppedParentLayout;
+        private final CheckBox mStopEventCheckBox;
+        //    private LinearLayout mStoppedParentLayout;
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
         private ImageView mStoppedIcon;
@@ -83,6 +88,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             super(itemView);
             mParameterCard = itemView.findViewById(R.id.parameter_cardview);
             mStoppedCard = itemView.findViewById(R.id.stopped_cardview);
+            mStopEventCheckBox = itemView.findViewById(R.id.event_stop_checkbox);
      //       mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
             mStoppedTitleLayout = itemView.findViewById(R.id.event_stopped_title_layout);
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
@@ -201,7 +207,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final Cursor cursor) {
 
         final ShiftLogViewHolder holder = (ShiftLogViewHolder) viewHolder;
 
@@ -249,6 +255,33 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
             holder.mStoppedTitleLayout.requestLayout();
 
+            holder.mStoppedCard.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    mIsSelection = true;
+
+                    notifyDataSetChanged();
+
+                    return false;
+                }
+            });
+
+            if (mIsSelection){
+
+                holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
+                holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                        mOnStopClickListener.onStopEventSelected(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
+                    }
+                });
+
+            }else {
+
+                holder.mStopEventCheckBox.setVisibility(View.GONE);
+            }
 
             if (event.getEventGroupID() != 6) {
 
@@ -315,6 +348,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         } else if (type == PARAMETER) {
             holder.mStoppedCard.setVisibility(View.GONE);
 
+            if (mIsSelection){
+                holder.mParameterCard.setVisibility(View.GONE);
+                return;
+            }
             holder.mParameterCard.setVisibility(View.VISIBLE);
 
             ViewGroup.LayoutParams mItemViewParams;
@@ -397,7 +434,6 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             });
         }
     }
-
 
     @Override
     public int getItemViewType(int groupID) {
