@@ -745,7 +745,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
-        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
+//        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(start, end, duration, eventId));
     }
 
     @Override
@@ -1129,6 +1130,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onWidgetUpdateSpane(int span);
 
         void onResize(int width, int statusBarsHeight);
+
+        void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
     }
 
 }

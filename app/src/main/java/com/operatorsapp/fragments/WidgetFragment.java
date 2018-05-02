@@ -209,11 +209,6 @@ public class WidgetFragment extends Fragment implements
         mWidgetAdapter.changeState(state);
     }
 
-    public void setMargin(float margin) {
-        mWidgetsParams.setMarginStart((int) margin);
-        mWidgetsLayout.setLayoutParams(mWidgetsParams);
-    }
-
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 

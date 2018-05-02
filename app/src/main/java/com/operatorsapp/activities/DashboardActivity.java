@@ -52,6 +52,8 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
+import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
@@ -99,7 +101,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
-        ActionBarAndEventsFragment.DashBoard2Listener {
+        ActionBarAndEventsFragment.DashBoard2Listener,
+        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -958,6 +961,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         layoutParams.setMargins(width, statusBarsHeight, 0, 0);
 
         mContainer.setLayoutParams(layoutParams);
+
+    }
+
+    @Override
+    public void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew) {
+
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), reportStopReasonFragmentNew).commit();
+
+    }
+
+    @Override
+    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew selectStopReasonFragmentNew) {
+
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), selectStopReasonFragmentNew).commit();
 
     }
 }

@@ -17,6 +17,8 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
+import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
+import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.ChangeLang;
@@ -72,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         mCurrentFragment = fragment;
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
-        } else {
+        }
+        else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
         }
     }

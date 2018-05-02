@@ -211,6 +211,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public  Cursor getStopTypeShiftOrderByTime() {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +  " WHERE "+ KEY_GROUP_ID + " = 6" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(countQuery, null);
+
+        return c;
+
+    }
+
     /**
      * Updating a event
      */
