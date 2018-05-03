@@ -57,15 +57,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     private static final int NUMBER_OF_COLUMNS = 5;
     //    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
 //    private static final String CURRENT_JOB_ID = "current_job_id";
-    private static final String END_TIME = "end_time";
-    private static final String START_TIME = "start_time";
-    private static final String DURATION = "duration";
-    private static final String EVENT_ID = "stop_report_event_id";
 
-    private int mEventId;
-    private String mStart;
-    private String mEnd;
-    private long mDuration;
     private Integer mJobId = 0;
 
     private RecyclerView mRecyclerView;
@@ -78,13 +70,9 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     private ProgressBar mActiveJobsProgressBar;
     private ReportStopReasonFragmentListener mListener;
 
-    public static ReportStopReasonFragmentNew newInstance(String start, String end, long duration, int eventId) {
+    public static ReportStopReasonFragmentNew newInstance() {
         ReportStopReasonFragmentNew reportStopReasonFragment = new ReportStopReasonFragmentNew();
         Bundle bundle = new Bundle();
-        bundle.putString(START_TIME, start);
-        bundle.putString(END_TIME, end);
-        bundle.putLong(DURATION, duration);
-        bundle.putInt(EVENT_ID, eventId);
         reportStopReasonFragment.setArguments(bundle);
         return reportStopReasonFragment;
     }
@@ -111,11 +99,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mStart = getArguments().getString(START_TIME);
-            mEnd = getArguments().getString(END_TIME);
-            mDuration = getArguments().getLong(DURATION);
-            mEventId = getArguments().getInt(EVENT_ID);
-            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
+//            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
         }
 //        getActiveJobs();
     }
@@ -215,12 +199,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
 //                    mReportFieldsForMachine.getStopReasons().get(position).getEName(),
 //                    mReportFieldsForMachine.getStopReasons().get(position).getLName()), true);
 //
-            mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew.newInstance(position,
-                    mJobId,
-                    mStart,
-                    mEnd,
-                    mDuration,
-                    mEventId,
+            mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew.newInstance(position, mJobId,
                     mReportFieldsForMachine.getStopReasons().get(position).getId(),
                     mReportFieldsForMachine.getStopReasons().get(position).getEName(),
                     mReportFieldsForMachine.getStopReasons().get(position).getLName()));

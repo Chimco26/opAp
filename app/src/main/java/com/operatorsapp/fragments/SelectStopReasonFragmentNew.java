@@ -43,25 +43,24 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
+
+import java.util.ArrayList;
+
+import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.EN_NAME;
+import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.IL_NAME;
+import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.REASON_ID;
 
 public class SelectStopReasonFragmentNew extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider {
 
     public static final String LOG_TAG = SelectStopReasonFragmentNew.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOB_ID = "current_job_id";
-    private static final String END_TIME = "end_time";
-    private static final String START_TIME = "start_time";
-    private static final String DURATION = "duration";
-    private static final String EVENT_ID = "stop_report_event_id";
 
     private static final int NUMBER_OF_COLUMNS = 5;
     public static final String SAMSUNG = "samsung";
-    private static final String REASON_ID = "REASON_ID";
-    private static final String EN_NAME = "EN_NAME";
-    private static final String IL_NAME = "IL_NAME";
 
-    private int mSelectedPosition;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJobId = 0;
 
@@ -73,26 +72,19 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportCore mReportCore;
 
-    private String mStart;
-    private String mEnd;
-    private long mDuration;
-    private int mEventId;
-
+    private ArrayList<Event> mSelectedEvents;
+    private int mSelectedPosition;
     private int mReasonId;
     private String mEnName;
     private String mILName;
 
-    public static SelectStopReasonFragmentNew newInstance(int selectedPosition, Integer jobId, String start, String end, long duration, int eventId, int reasonId, String eName, String lName) {
+    public static SelectStopReasonFragmentNew newInstance(int position, int jobId, int reasonId, String eName, String lName) {
         SelectStopReasonFragmentNew selectedStopReasonFragment = new SelectStopReasonFragmentNew();
         Bundle bundle = new Bundle();
-        bundle.putInt(SELECTED_STOP_REASON_POSITION, selectedPosition);
+        bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
         bundle.putInt(CURRENT_JOB_ID, jobId);
-        bundle.putString(END_TIME, end);
-        bundle.putString(START_TIME, start);
         bundle.putString(EN_NAME, eName);
         bundle.putString(IL_NAME, lName);
-        bundle.putLong(DURATION, duration);
-        bundle.putInt(EVENT_ID, eventId);
         bundle.putInt(REASON_ID, reasonId);
         selectedStopReasonFragment.setArguments(bundle);
         return selectedStopReasonFragment;
@@ -104,10 +96,6 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
         if (getArguments() != null) {
             mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
             mJobId = getArguments().getInt(CURRENT_JOB_ID);
-            mStart = getArguments().getString(START_TIME);
-            mEnd = getArguments().getString(END_TIME);
-            mDuration = getArguments().getLong(DURATION);
-            mEventId = getArguments().getInt(EVENT_ID);
             mReasonId = getArguments().getInt(REASON_ID);
             mEnName = getArguments().getString(EN_NAME);
             mILName = getArguments().getString(IL_NAME);
@@ -129,6 +117,11 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
         mReportFieldsForMachine = null;
 
         mOnCroutonRequestListener =null;
+    }
+
+    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+
+        mSelectedEvents = selectedEvents;
     }
 
     @Nullable
@@ -207,20 +200,27 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     }
 
     private void sendReport() {
-        ProgressDialogManager.show(getActivity());
 
-        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-        reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+            ProgressDialogManager.show(getActivity());
 
-        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+            ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
 
-        mReportCore.registerListener(mReportCallbackListener);
+            reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
 
-        mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
+            mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
 
-        SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName);
+            mReportCore.registerListener(mReportCallbackListener);
 
+            for (Event event: mSelectedEvents) {
+
+                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, event.getEventID(), mJobId);
+
+                SendBroadcast.sendReason(getContext(), event.getEventID(), mReasonId, mEnName, mILName);
+
+            }
+        }
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
@@ -235,6 +235,9 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
                 mReportCore.unregisterListener();
 
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                getActivity().onBackPressed();
+
             } catch (NullPointerException e) {
 
                 if (getFragmentManager() == null)

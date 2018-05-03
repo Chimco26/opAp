@@ -773,7 +773,12 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     }
 
     @Override
-    public void onStopEventSelected(int eventID, String time, String eventEndTime, long duration) {
+    public void onSelectMode() {
+
+    }
+
+    @Override
+    public void onStopEventSelected(Event event, boolean b) {
 
     }
     

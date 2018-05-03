@@ -137,6 +137,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mNoData;
     private DashBoard2Listener mListener;
     private int mRecyclersHeight;
+    private boolean mIsSelectionMode;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -231,7 +232,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         shiftLogHandle.setImageResource(R.drawable.left_panel_btn_pressed);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (!mNoData) {
+                        if (!mNoData && !mIsSelectionMode) {
                             int currentX;
 
                             if (PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
@@ -286,7 +287,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
         if (!mIsOpen) {
-            if (!mNoData) {
+            if (!mNoData && !mIsSelectionMode) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
@@ -745,13 +746,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onStopEventSelected(int eventID, String time, String eventEndTime, long duration) {
-      //TODO  openStopReportScreen(eventId, startTime, endTime, duration);
+    public void onStopEventSelected(Event event, boolean b) {
+      mListener.onEventSelected(event, b);
+    }
+
+    @Override
+    public void onSelectMode() {
+
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance());
+
+        mIsSelectionMode = true;
     }
 
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
-//        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(start, end, duration, eventId));
+        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
     }
 
     @Override
@@ -1129,6 +1137,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+    public void disableSelectMode() {
+
+        mShiftLogAdapter.disableSelectMode();
+
+        mIsSelectionMode = false;
+    }
+
     public interface DashBoard2Listener {
         void onWidgetChangeState(boolean state);
 
@@ -1137,6 +1152,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onResize(int width, int statusBarsHeight);
 
         void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
+
+        void onEventSelected(Event event, boolean b);
     }
 
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -14,11 +13,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -123,6 +120,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer;
+    private ArrayList<Event> mSelectedEvents;
+    private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
+    private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
 
 
     @Override
@@ -153,7 +153,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        mWidgetFragment = WidgetFragment.newInstance();
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
 //        mDashboardFragment = DashboardFragmentSql.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
@@ -163,12 +162,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mContainer = findViewById(R.id.fragments_container);
 
-        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), mWidgetFragment).commit();
+        openWidgetFragment();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container_2, mActionBarAndEventsFragment).commit();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
+    }
+
+    private void openWidgetFragment() {
+
+        mWidgetFragment = WidgetFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), mWidgetFragment).commit();
     }
 
 
@@ -572,7 +579,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//      TODO but make bug because different container      if (fragment instanceof SelectStopReasonFragmentNew) {
+//
+//                getSupportFragmentManager().beginTransaction().add(mContainer.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//
+//            } else {
+                getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//            }
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
         }
@@ -967,14 +980,72 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew) {
 
+        mReportStopReasonFragmentNew = reportStopReasonFragmentNew;
+
         getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), reportStopReasonFragmentNew).commit();
 
     }
 
     @Override
+    public void onEventSelected(Event event, boolean b) {
+
+        if (mSelectedEvents == null) {
+
+            mSelectedEvents = new ArrayList<>();
+        }
+
+        if (b) {
+            mSelectedEvents.add(event);
+
+        } else if (mSelectedEvents.contains(event)) {
+
+            mSelectedEvents.remove(event);
+        }
+
+        if (mSelectStopReasonFragmentNew != null) {
+
+            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+        }
+    }
+
+    @Override
     public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew selectStopReasonFragmentNew) {
+
+        mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
 
         getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), selectStopReasonFragmentNew).commit();
 
+//        goToFragment(selectStopReasonFragmentNew, true);
+
+        if (mSelectStopReasonFragmentNew != null) {
+
+            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (mReportStopReasonFragmentNew != null){
+
+            getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
+
+            mReportStopReasonFragmentNew = null;
+
+        }else if (mSelectStopReasonFragmentNew != null){
+
+//            getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+
+            openWidgetFragment();
+
+            mSelectStopReasonFragmentNew = null;
+
+            if (mActionBarAndEventsFragment != null){
+
+                mActionBarAndEventsFragment.disableSelectMode();
+            }
+        }
     }
 }

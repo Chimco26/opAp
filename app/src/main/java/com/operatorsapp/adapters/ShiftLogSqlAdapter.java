@@ -51,6 +51,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mHeight = height;
     }
 
+    public void disableSelectMode() {
+
+        mIsSelection = false;
+    }
+
 
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
@@ -235,6 +240,15 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {
+
+            if (mIsSelection && event.isChecked()){
+
+                holder.mStopEventCheckBox.setChecked(true);
+            }else {
+
+                holder.mStopEventCheckBox.setChecked(false);
+            }
+
             holder.mStoppedCard.setVisibility(View.VISIBLE);
 
             holder.mParameterCard.setVisibility(View.GONE);
@@ -263,6 +277,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                     notifyDataSetChanged();
 
+                    mOnStopClickListener.onSelectMode();
+
                     return false;
                 }
             });
@@ -274,7 +290,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                        mOnStopClickListener.onStopEventSelected(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
+                        event.setChecked(b);
+
+                        mOnStopClickListener.onStopEventSelected(event, b);
                     }
                 });
 
@@ -333,16 +351,19 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 holder.mStoppedBottomDivider.requestLayout();
             }
 
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.mStoppedCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.setTag(true);
 
-                    holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
-                    holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-                    holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
-                    mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
-                    event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    if (!mIsSelection) {
+
+                        v.setTag(true);
+                        holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+                        holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
+                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
+                        event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    }
                 }
             });
         } else if (type == PARAMETER) {
