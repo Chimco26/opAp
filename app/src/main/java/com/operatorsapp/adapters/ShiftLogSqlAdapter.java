@@ -54,6 +54,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     public void disableSelectMode() {
 
         mIsSelection = false;
+
+        notifyDataSetChanged();
     }
 
 
