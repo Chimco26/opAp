@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
@@ -116,7 +117,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
         mReportFieldsForMachine = null;
 
-        mOnCroutonRequestListener =null;
+        mOnCroutonRequestListener = null;
     }
 
     public void setSelectedEvents(ArrayList<Event> selectedEvents) {
@@ -183,15 +184,23 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     @Override
     public void onSubReasonSelected(int subReasonId) {
 
-        ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
+        if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-        mSelectedSubreasonId = subReasonId;
+            ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
 
-        mStopReasonsAdapter.notifyDataSetChanged();
+            mSelectedSubreasonId = subReasonId;
 
-        sendReport();
+            mStopReasonsAdapter.notifyDataSetChanged();
 
-        SendBroadcast.refreshPolling(getContext());
+            sendReport();
+
+            SendBroadcast.refreshPolling(getContext());
+
+        } else {
+
+            Toast.makeText(getActivity(), "you need to choice at least one Event", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -201,26 +210,24 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
     private void sendReport() {
 
-        if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
+        ProgressDialogManager.show(getActivity());
 
-            ProgressDialogManager.show(getActivity());
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
 
-            ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
 
-            reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
 
-            mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
 
-            mReportCore.registerListener(mReportCallbackListener);
+        for (Event event : mSelectedEvents) {
 
-            for (Event event: mSelectedEvents) {
+            mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, event.getEventID(), mJobId);
 
-                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, event.getEventID(), mJobId);
+            SendBroadcast.sendReason(getContext(), event.getEventID(), mReasonId, mEnName, mILName);
 
-                SendBroadcast.sendReason(getContext(), event.getEventID(), mReasonId, mEnName, mILName);
-
-            }
         }
+
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
@@ -234,17 +241,15 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
                 mReportCore.unregisterListener();
 
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
                 getActivity().onBackPressed();
 
             } catch (NullPointerException e) {
 
                 if (getFragmentManager() == null)
-                    SendReportUtil.sendAcraExeption(e,"mReportCallbackListener getFragmentManager = null");
+                    SendReportUtil.sendAcraExeption(e, "mReportCallbackListener getFragmentManager = null");
 
                 if (mReportCore == null)
-                    SendReportUtil.sendAcraExeption(e,"mReportCallbackListener mReportCore = null");
+                    SendReportUtil.sendAcraExeption(e, "mReportCallbackListener mReportCore = null");
             }
         }
 

@@ -147,7 +147,7 @@ public class WidgetFragment extends Fragment implements
 
         if (mWidgets == null || mWidgets.size() == 0) {
             mNoDataView.setVisibility(View.VISIBLE);
-            mLoadingDataView.setVisibility(View.VISIBLE);
+//            mLoadingDataView.setVisibility(View.VISIBLE);
         }
     }
 

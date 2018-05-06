@@ -29,6 +29,7 @@ import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
+    private final int mType;
     private Context mContext;
     private boolean mClosedState;
     private int mCloseWidth;
@@ -41,7 +42,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     public LayoutInflater inflater;
     private boolean mIsSelection;
 
-    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height) {
+    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height, int type, boolean selectMode) {
         super(context, cursor);
         mContext = context;
         mClosedState = closedState;
@@ -49,14 +50,16 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mOnStopClickListener = onStopClickListener;
         mOpenWidth = openWidth;
         mHeight = height;
+        mIsSelection = selectMode;
+        mType = type;
     }
 
-    public void disableSelectMode() {
-
-        mIsSelection = false;
-
-        notifyDataSetChanged();
-    }
+//    public void disableSelectMode() {
+//
+//        mIsSelection = false;
+//
+//        notifyDataSetChanged();
+//    }
 
 
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
@@ -239,7 +242,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
         );
 
-        int type = getItemViewType(event.getEventGroupID());
+        final int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {
 
@@ -275,11 +278,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 @Override
                 public boolean onLongClick(View view) {
 
-                    mIsSelection = true;
+//                    mIsSelection = true;
+//
+//                    notifyDataSetChanged();
 
-                    notifyDataSetChanged();
-
-                    mOnStopClickListener.onSelectMode();
+                    mOnStopClickListener.onSelectMode(type);
 
                     return false;
                 }
@@ -371,10 +374,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         } else if (type == PARAMETER) {
             holder.mStoppedCard.setVisibility(View.GONE);
 
-            if (mIsSelection){
-                holder.mParameterCard.setVisibility(View.GONE);
-                return;
-            }
+//            if (mIsSelection){
+//                holder.mParameterCard.setVisibility(View.GONE);
+//                return;
+//            }
             holder.mParameterCard.setVisibility(View.VISIBLE);
 
             ViewGroup.LayoutParams mItemViewParams;

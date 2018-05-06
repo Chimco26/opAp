@@ -412,7 +412,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
         mDatabaseHelper = new DatabaseHelper(getContext());
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,0, false);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mShiftLogAdapter.notifyDataSetChanged();
@@ -773,7 +773,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     }
 
     @Override
-    public void onSelectMode() {
+    public void onSelectMode(int type) {
 
     }
 
@@ -937,7 +937,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
 
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
             if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.

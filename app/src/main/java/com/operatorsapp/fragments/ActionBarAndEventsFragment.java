@@ -187,7 +187,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
         mTollBarsHeight = (int) (height * 0.25);
-        mRecyclersHeight = (int) (( 1 - (mTollBarsHeight / height)) * height);
+        mRecyclersHeight = (int) ((1 - (mTollBarsHeight / height)) * height);
 
         final int middleWidth = (int) (width * 0.3);
 
@@ -388,7 +388,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mDatabaseHelper = new DatabaseHelper(getContext());
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mShiftLogAdapter.notifyDataSetChanged();
@@ -747,15 +747,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onStopEventSelected(Event event, boolean b) {
-      mListener.onEventSelected(event, b);
+        mListener.onEventSelected(event, b);
     }
 
     @Override
-    public void onSelectMode() {
+    public void onSelectMode(int type) {
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance());
 
         mIsSelectionMode = true;
+
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type, true);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
     }
 
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
@@ -784,54 +787,55 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
-        mLoadingDataText.setVisibility(View.GONE);
 
-        if (events != null && events.size() > 0) {
+        if (!mIsSelectionMode) {
+            mLoadingDataText.setVisibility(View.GONE);
 
-            Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
+            if (events != null && events.size() > 0) {
+                Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
 
-            for (Event event : events) {
-                Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
-            }
-
-            mNewEventsList.clear();
-
-            mEventsQueue.clear();
-
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-
-            mNoData = false;
-
-            for (Event event : events) {
-                event.setTimeOfAdded(System.currentTimeMillis());
-
-                if (!mIsNewShiftLogs) {
-                    event.setIsDismiss(true);
+                for (Event event : events) {
+                    Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
                 }
 
-            }
+                mNewEventsList.clear();
 
+                mEventsQueue.clear();
 
-            for (Event event : events) {
+                PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
+                mNoData = false;
 
-                if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+                for (Event event : events) {
+                    event.setTimeOfAdded(System.currentTimeMillis());
 
-                    mNewEventsList.add(event);
-
-                    event.save();
-
-                    if (mIsNewShiftLogs) {
-                        mEventsQueue.add(event);
+                    if (!mIsNewShiftLogs) {
+                        event.setIsDismiss(true);
                     }
-                } else {
 
-                    event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                 }
-            }
 
 
-            mNoNotificationsText.setVisibility(View.GONE);
+                for (Event event : events) {
+
+
+                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+
+                        mNewEventsList.add(event);
+
+                        event.save();
+
+                        if (mIsNewShiftLogs) {
+                            mEventsQueue.add(event);
+                        }
+                    } else {
+
+                        event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    }
+                }
+
+
+                mNoNotificationsText.setVisibility(View.GONE);
 
 // TODO: 15/04/2018 David Vardi fix this code
           /*  if (mShiftLogAdapter != null) {
@@ -842,37 +846,41 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
 
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
-            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-            if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
-            {
-                Event event = mEventsQueue.peek();
-                // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
-                if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
-                    openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
-                    //openDialog(event, true);
-                    mEventsQueue.pop();
-                    mIsOpenDialog = true;
+                if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
+                {
+                    Event event = mEventsQueue.peek();
+                    // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
+                    if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
+                        openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
+                        //openDialog(event, true);
+                        mEventsQueue.pop();
+                        mIsOpenDialog = true;
 
-                } else if (event.getEventGroupID() == TYPE_ALERT) {
-                    openDialog(event, false);
-                    mEventsQueue.pop();
-                    mIsOpenDialog = true;
+                    } else if (event.getEventGroupID() == TYPE_ALERT) {
+                        openDialog(event, false);
+                        mEventsQueue.pop();
+                        mIsOpenDialog = true;
+                    }
+
                 }
+            } else
 
+            {
+                if (DataSupport.count(Event.class) == 0) {
+                    mNoData = true;
+                    mNoNotificationsText.setVisibility(View.VISIBLE);
+                }
             }
-        } else {
-            if (DataSupport.count(Event.class) == 0) {
-                mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
-            }
+
+            mIsNewShiftLogs = true;
+            PersistenceManager.getInstance().setIsNewShiftLogs(true);
+
+            if (mShiftLogAdapter != null)
+                mShiftLogAdapter.notifyDataSetChanged();
         }
-        mIsNewShiftLogs = true;
-        PersistenceManager.getInstance().setIsNewShiftLogs(true);
-
-        if (mShiftLogAdapter != null)
-            mShiftLogAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -990,7 +998,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             mConfigView.setVisibility(View.GONE);
             mConfigLayout.setVisibility(View.GONE);
-
 
         }
 
@@ -1139,7 +1146,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void disableSelectMode() {
 
-        mShiftLogAdapter.disableSelectMode();
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mIsSelectionMode = false;
     }

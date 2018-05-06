@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -55,6 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TIME_OF_ADDED = "mtimeofadded";
     public static final String KEY_IS_DISMISS = "misdismiss";
     private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_CHECKED = "mchecked";
 
 
     // Table Create Statements
@@ -83,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_REASON_ID + " INTEGER," +
             KEY_TIME_OF_ADDED + " BIGINT," +
             KEY_TREATED + " BOOLEAN," +
+            KEY_CHECKED + " BOOLEAN," +
             KEY_IS_DISMISS + " BOOLEAN," +
             KEY_CREATED_AT + " DATETIME" +
             ")";
@@ -212,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public  Cursor getStopTypeShiftOrderByTime() {
-        String countQuery = "SELECT  * FROM " + TABLE_EVENT +  " WHERE "+ KEY_GROUP_ID + " = 6" +
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +  " WHERE NOT "+ KEY_GROUP_ID + " = 20" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();

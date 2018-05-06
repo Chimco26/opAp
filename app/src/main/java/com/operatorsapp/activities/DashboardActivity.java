@@ -579,13 +579,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
-//      TODO but make bug because different container      if (fragment instanceof SelectStopReasonFragmentNew) {
-//
-//                getSupportFragmentManager().beginTransaction().add(mContainer.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-//
-//            } else {
-                getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-//            }
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
         }
@@ -1015,8 +1009,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), selectStopReasonFragmentNew).commit();
 
-//        goToFragment(selectStopReasonFragmentNew, true);
-
         if (mSelectStopReasonFragmentNew != null) {
 
             mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
@@ -1026,26 +1018,33 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
 
-        if (mReportStopReasonFragmentNew != null){
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
 
-            getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
+            if (mReportStopReasonFragmentNew != null) {
 
-            mReportStopReasonFragmentNew = null;
+                getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
 
-        }else if (mSelectStopReasonFragmentNew != null){
+                mReportStopReasonFragmentNew = null;
 
-//            getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+                openWidgetFragment();
 
-            openWidgetFragment();
+                if (mActionBarAndEventsFragment != null) {
 
-            mSelectStopReasonFragmentNew = null;
+                    mActionBarAndEventsFragment.disableSelectMode();
+                }
 
-            if (mActionBarAndEventsFragment != null){
-
-                mActionBarAndEventsFragment.disableSelectMode();
             }
+            if (mSelectStopReasonFragmentNew != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+
+                mSelectStopReasonFragmentNew = null;
+
+            }
+        } else {
+            super.onBackPressed();
         }
     }
 }
