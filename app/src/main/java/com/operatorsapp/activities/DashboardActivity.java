@@ -1007,7 +1007,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
 
-        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), selectStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer.getId(), selectStopReasonFragmentNew).commit();
 
         if (mSelectStopReasonFragmentNew != null) {
 
@@ -1022,7 +1022,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
 
-            if (mReportStopReasonFragmentNew != null) {
+            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
 

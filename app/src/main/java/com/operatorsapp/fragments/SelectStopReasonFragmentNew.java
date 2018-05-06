@@ -242,6 +242,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
                 mReportCore.unregisterListener();
 
                 getActivity().onBackPressed();
+                getActivity().onBackPressed();
 
             } catch (NullPointerException e) {
 
