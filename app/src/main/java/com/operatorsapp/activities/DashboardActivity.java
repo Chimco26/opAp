@@ -577,6 +577,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onFragmentDetached(DashboardUICallbackListener dashboardUICallbackListener) {
+        mDashboardUICallbackListenerList.remove(dashboardUICallbackListener);
+
+    }
+
+    @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();

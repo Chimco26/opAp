@@ -48,9 +48,9 @@ public class WidgetFragment extends Fragment implements
     private int mCloseWidth;
     private boolean mIsOpen;
     private boolean mIsNewShiftLogs;
-//    private int mOpenWidth;
+    //    private int mOpenWidth;
     private int mWidgetsLayoutWidth;
-//    private int mTollBarsHeight;
+    //    private int mTollBarsHeight;
     private int mRecyclersHeight;
     private int mMiddleWidth;
     private TextView mNoNotificationsText;
@@ -135,6 +135,7 @@ public class WidgetFragment extends Fragment implements
     public void onDetach() {
         ZLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;

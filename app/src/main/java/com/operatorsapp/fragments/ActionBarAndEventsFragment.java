@@ -483,6 +483,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDetach();
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
