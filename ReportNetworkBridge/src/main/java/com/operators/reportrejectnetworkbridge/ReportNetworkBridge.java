@@ -60,8 +60,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
 
+
     @Override
-    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, int eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+    public void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
 
         SendReportStopRequest sendReportStopRequest = new SendReportStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId);
 
@@ -198,6 +199,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             }
         });
     }
+
 
 
     @Override

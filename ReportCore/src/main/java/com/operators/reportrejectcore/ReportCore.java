@@ -84,7 +84,7 @@ public class ReportCore
         }
     }
 
-    public void sendStopReport(int stopReasonId, int stopSubReasonId, int eventId, Integer jobId) {
+    public void sendStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())

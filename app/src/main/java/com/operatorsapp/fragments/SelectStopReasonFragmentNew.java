@@ -220,13 +220,17 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
         mReportCore.registerListener(mReportCallbackListener);
 
-        for (Event event : mSelectedEvents) {
+        long[] eventsId = new long[mSelectedEvents.size()];
 
-            mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, event.getEventID(), mJobId);
+        for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-            SendBroadcast.sendReason(getContext(), event.getEventID(), mReasonId, mEnName, mILName);
+            eventsId[0] = mSelectedEvents.get(i).getEventID();
+
+            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i).getEventID(), mReasonId, mEnName, mILName);
 
         }
+
+        mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, eventsId, mJobId);
 
     }
 

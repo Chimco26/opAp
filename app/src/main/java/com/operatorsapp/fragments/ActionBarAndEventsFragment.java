@@ -1134,7 +1134,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 events.get(0).setEventGroupLname(il);
                 events.get(0).setmEventGroupEname(en);
 
-                if (mShiftLogAdapter != null) {
+                if (mShiftLogAdapter != null && !mIsSelectionMode) {
 
                     mShiftLogAdapter.notifyDataSetChanged();
 
