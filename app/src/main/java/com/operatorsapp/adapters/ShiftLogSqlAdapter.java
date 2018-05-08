@@ -25,11 +25,14 @@ import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 
+import java.util.ArrayList;
+
 import me.grantland.widget.AutofitTextView;
 
 public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     private final int mType;
+    private final int mSelectedEventId;
     private Context mContext;
     private boolean mClosedState;
     private int mCloseWidth;
@@ -41,8 +44,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private OnStopClickListener mOnStopClickListener;
     public LayoutInflater inflater;
     private boolean mIsSelection;
+    private ArrayList<Event> mSelectedEvents;
 
-    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height, int type, boolean selectMode) {
+    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height, int type, boolean selectMode, int eventID) {
         super(context, cursor);
         mContext = context;
         mClosedState = closedState;
@@ -52,9 +56,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mHeight = height;
         mIsSelection = selectMode;
         mType = type;
+        mSelectedEventId = eventID;
     }
 
-//    public void disableSelectMode() {
+    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+        mSelectedEvents = selectedEvents;
+    }
+
+    //    public void disableSelectMode() {
 //
 //        mIsSelection = false;
 //
@@ -78,7 +87,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private View mStoppedDivider;
         private View mStoppedBottomDivider;
         private LinearLayout mStoppedSubtitle;
-     //   private LinearLayout mParameterParentLayout;
+        //   private LinearLayout mParameterParentLayout;
         private LinearLayout mParameterTitleLayout;
         private AutofitTextView mParameterTitle;
         private ImageView mParameterIcon;
@@ -99,7 +108,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mParameterCard = itemView.findViewById(R.id.parameter_cardview);
             mStoppedCard = itemView.findViewById(R.id.stopped_cardview);
             mStopEventCheckBox = itemView.findViewById(R.id.event_stop_checkbox);
-     //       mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
+            //       mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
             mStoppedTitleLayout = itemView.findViewById(R.id.event_stopped_title_layout);
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
             mStoppedIcon = itemView.findViewById(R.id.event_stopped_shift_log_item_icon);
@@ -112,7 +121,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
             mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
             mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
-   //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
+            //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
             mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
             mParameterIcon = itemView.findViewById(R.id.event_parameter_shift_log_item_icon);
@@ -239,17 +248,24 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_H_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_L_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_STANDARD_VALUE))
-
         );
+
 
         final int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {
 
-            if (mIsSelection && event.isChecked()){
+            if (mSelectedEvents != null) {
+                for (Event event1 : mSelectedEvents) {
+                    if (event.getEventID() == event1.getEventID()) {
+                        event.setChecked(true);
+                    }
+                }
+            }
+            if (mIsSelection && event.isChecked()) {
 
                 holder.mStopEventCheckBox.setChecked(true);
-            }else {
+            } else {
 
                 holder.mStopEventCheckBox.setChecked(false);
             }
@@ -274,21 +290,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
             holder.mStoppedTitleLayout.requestLayout();
 
-            holder.mStoppedCard.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
 
-//                    mIsSelection = true;
-//
-//                    notifyDataSetChanged();
-
-                    mOnStopClickListener.onSelectMode(type);
-
-                    return false;
-                }
-            });
-
-            if (mIsSelection){
+            if (mIsSelection) {
 
                 holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
                 holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -298,10 +301,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         event.setChecked(b);
 
                         mOnStopClickListener.onStopEventSelected(event, b);
+
                     }
                 });
 
-            }else {
+            } else {
 
                 holder.mStopEventCheckBox.setVisibility(View.GONE);
             }
@@ -362,12 +366,19 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                     if (!mIsSelection) {
 
+                        mOnStopClickListener.onSelectMode(type, event.getEventID());
+                        mOnStopClickListener.onStopEventSelected(event, true);
+
                         v.setTag(true);
                         holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
                         holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
-                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
+//                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
                         event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    } else {
+
+                        holder.mStopEventCheckBox.setChecked(!event.isChecked());
+
                     }
                 }
             });
@@ -455,7 +466,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         holder.mParameterTime.setTypeface(null, Typeface.BOLD);
                         event.setTreated(false);
                     }
-                    event.updateAll(DatabaseHelper.KEY_EVENT_ID+" = ?", String.valueOf(event.getEventID()));
+                    event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
                 }
             });
         }

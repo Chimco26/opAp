@@ -49,6 +49,7 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.WidgetFragment;
@@ -119,10 +120,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
-    private View mContainer;
+    private View mContainer2;
     private ArrayList<Event> mSelectedEvents;
     private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
     private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
+    private View mContainer3;
+    private Fragment mChartFragment;
 
 
     @Override
@@ -160,11 +163,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        mContainer = findViewById(R.id.fragments_container);
+        mContainer2 = findViewById(R.id.fragments_container_widget);
+
+        mContainer3 = findViewById(R.id.fragments_container_reason);
 
         openWidgetFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container_2, mActionBarAndEventsFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
@@ -175,7 +180,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), mWidgetFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
     }
 
 
@@ -584,10 +589,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
+        if (fragment instanceof ChartFragment){
+            mChartFragment = fragment;
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
+            return;
+        }
         if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_2, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_widget, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
         } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
         }
     }
 
@@ -969,11 +979,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onResize(int width, int statusBarsHeight) {
 
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer.getLayoutParams();
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
 
         layoutParams.setMargins(width, statusBarsHeight, 0, 0);
 
-        mContainer.setLayoutParams(layoutParams);
+        mContainer2.setLayoutParams(layoutParams);
+
+        ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
+
+        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+
+        mContainer3.setLayoutParams(layoutParams);
 
     }
 
@@ -982,7 +998,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportStopReasonFragmentNew = reportStopReasonFragmentNew;
 
-        getSupportFragmentManager().beginTransaction().replace(mContainer.getId(), reportStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragmentNew).commit();
 
     }
 
@@ -995,16 +1011,39 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         if (b) {
-            mSelectedEvents.add(event);
+            if (!mSelectedEvents.contains(event)) {
+                mSelectedEvents.add(event);
+            }
+        } else {
 
-        } else if (mSelectedEvents.contains(event)) {
-
-            mSelectedEvents.remove(event);
+            ArrayList<Event> toDelete = new ArrayList<>();
+            for (Event event1 : mSelectedEvents) {
+                if (event.getEventID() == event1.getEventID()) {
+                    toDelete.add(event1);
+                }
+            }
+            for (Event event1: toDelete){
+                mSelectedEvents.remove(event1);
+            }
         }
 
         if (mSelectStopReasonFragmentNew != null) {
 
             mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+        }
+        if (mActionBarAndEventsFragment != null){
+
+            mActionBarAndEventsFragment.setSelectedEvents(mSelectedEvents);
+        }
+        if (mSelectedEvents.size() == 0){
+            if (mSelectStopReasonFragmentNew != null) {
+
+                onBackPressed();
+            }
+            if (mReportStopReasonFragmentNew != null) {
+
+                onBackPressed();
+            }
         }
     }
 
@@ -1013,7 +1052,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
 
-        getSupportFragmentManager().beginTransaction().add(mContainer.getId(), selectStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragmentNew).commit();
 
         if (mSelectStopReasonFragmentNew != null) {
 
@@ -1026,31 +1065,57 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onBackPressed() {
 //        super.onBackPressed();
 
-        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
+                mChartFragment != null) {
 
             if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 
-                getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
-
-                mReportStopReasonFragmentNew = null;
-
-                openWidgetFragment();
-
-                if (mActionBarAndEventsFragment != null) {
-
-                    mActionBarAndEventsFragment.disableSelectMode();
-                }
+                removeReportStopreasonfragment();
 
             }
             if (mSelectStopReasonFragmentNew != null) {
 
-                getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+                removeSelectStopreasonfragment();
 
-                mSelectStopReasonFragmentNew = null;
+            }
+            if (mChartFragment != null){
 
+                getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
+
+                mChartFragment = null;
+
+                if (mActionBarAndEventsFragment != null){
+
+                    mActionBarAndEventsFragment.setActionBar();
+
+                }
             }
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void removeSelectStopreasonfragment() {
+        getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+
+        mSelectStopReasonFragmentNew = null;
+
+        if (mSelectedEvents != null){
+            mSelectedEvents = null;
+        }
+    }
+
+    private void removeReportStopreasonfragment() {
+        getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
+
+        mReportStopReasonFragmentNew = null;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.disableSelectMode();
+        }
+        if (mSelectedEvents != null){
+            mSelectedEvents = null;
         }
     }
 }

@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true"
     android:background="@android:color/white"
+    android:keepScreenOn="true"
     tools:context=".activities.DashboardActivity">
-
 
 
     <LinearLayout
@@ -15,17 +14,26 @@
         android:orientation="vertical">
 
         <include layout="@layout/toolbar" />
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        <FrameLayout
-            android:id="@+id/fragments_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <FrameLayout
-            android:id="@+id/fragments_container_2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/fragments_container_widget"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/fragments_container_reason"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/fragments_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </RelativeLayout>
     </LinearLayout>
 

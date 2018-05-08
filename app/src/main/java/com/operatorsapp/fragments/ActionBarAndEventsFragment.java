@@ -138,6 +138,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private DashBoard2Listener mListener;
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
+    private ArrayList<Event> mSelectedEvents;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -232,7 +233,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         shiftLogHandle.setImageResource(R.drawable.left_panel_btn_pressed);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (!mNoData && !mIsSelectionMode) {
+                        if (!mNoData) {
                             int currentX;
 
                             if (PersistenceManager.getInstance().getCurrentLang().equals("iw")) {
@@ -287,7 +288,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
         if (!mIsOpen) {
-            if (!mNoData && !mIsSelectionMode) {
+            if (!mNoData) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
@@ -388,7 +389,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mDatabaseHelper = new DatabaseHelper(getContext());
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mShiftLogAdapter.notifyDataSetChanged();
@@ -752,13 +753,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onSelectMode(int type) {
+    public void onSelectMode(int type, int eventID) {
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance());
 
         mIsSelectionMode = true;
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type, true);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type, true, eventID);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
     }
 
@@ -847,7 +848,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
 
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
                 if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
@@ -1147,10 +1148,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void disableSelectMode() {
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mIsSelectionMode = false;
+    }
+
+    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+        mSelectedEvents = selectedEvents;
+
+        if (mShiftLogAdapter != null){
+
+            mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
+        }
     }
 
     public interface DashBoard2Listener {

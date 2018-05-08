@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TIME_OF_ADDED = "mtimeofadded";
     public static final String KEY_IS_DISMISS = "misdismiss";
     private static final String KEY_CREATED_AT = "created_at";
-    private static final String KEY_CHECKED = "mchecked";
+    public static final String KEY_CHECKED = "mchecked";
 
 
     // Table Create Statements
@@ -175,6 +175,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 events.add(event);
             } while (c.moveToNext());
+        }
+
+        return events;
+    }
+
+    public ArrayList<Event> getListFromCursor(Cursor cursor){
+
+        ArrayList<Event> events = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                Event event = convertRawToEvent(cursor);
+
+                events.add(event);
+            } while (cursor.moveToNext());
         }
 
         return events;

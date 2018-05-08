@@ -93,6 +93,7 @@ public class Event extends DataSupport implements Parcelable {
 
     }
 
+
     public boolean isIsDismiss() {
         return mIsDismiss;
     }

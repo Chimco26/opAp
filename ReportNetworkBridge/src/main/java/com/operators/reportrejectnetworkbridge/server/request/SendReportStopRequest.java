@@ -21,9 +21,9 @@ public class SendReportStopRequest {
     @SerializedName("joshID")
     private Integer mJoshId;
     @SerializedName("EventID")
-    private long[] mEventID;
+    private int mEventID;
 
-    public SendReportStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId, long[] eventId) {
+    public SendReportStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId, int eventId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;

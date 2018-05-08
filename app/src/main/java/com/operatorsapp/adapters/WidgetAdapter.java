@@ -283,7 +283,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                         public void onClick(View v) {
                             if (tenHoursValues.size() > 0) {
                                 String nameByLang = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang), true);
+                                mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang), false);
                             }
                         }
                     });
