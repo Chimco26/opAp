@@ -54,7 +54,7 @@ public class WidgetFragment extends Fragment implements
     private int mRecyclersHeight;
     private int mMiddleWidth;
     private TextView mNoNotificationsText;
-    private LinearLayout mNoDataView;
+//    private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
     private LinearLayout mLoadingDataView;
     private RecyclerView mWidgetRecycler;
@@ -73,7 +73,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ProgressDialogManager.show(getActivity());
+//        ProgressDialogManager.show(getActivity());
         View inflate = inflater.inflate(R.layout.fragment_widgets, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
@@ -110,10 +110,12 @@ public class WidgetFragment extends Fragment implements
         mWidgetRecycler.setAdapter(mWidgetAdapter);
 
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
-        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
+//        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
         mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
+        mLoadingDataView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -147,8 +149,7 @@ public class WidgetFragment extends Fragment implements
         super.onResume();
 
         if (mWidgets == null || mWidgets.size() == 0) {
-            mNoDataView.setVisibility(View.VISIBLE);
-//            mLoadingDataView.setVisibility(View.VISIBLE);
+//            mNoDataView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -159,12 +160,11 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        mLoadingDataView.setVisibility(View.GONE);
 
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
 
-            mNoDataView.setVisibility(View.VISIBLE);
+//            mNoDataView.setVisibility(View.VISIBLE);
 
             return;
 
@@ -174,8 +174,9 @@ public class WidgetFragment extends Fragment implements
         if (widgetList != null && widgetList.size() > 0) {
             saveAndRestoreChartData(widgetList);
             PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-            mNoDataView.setVisibility(View.GONE);
-            dismissProgressDialog();
+//            mNoDataView.setVisibility(View.GONE);
+            mLoadingDataView.setVisibility(View.GONE);
+
 
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
@@ -185,21 +186,10 @@ public class WidgetFragment extends Fragment implements
             }
         } else {
 
+            mLoadingDataView.setVisibility(View.GONE);
 
-            mNoDataView.setVisibility(View.VISIBLE);
+//            mNoDataView.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void dismissProgressDialog() {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ProgressDialogManager.dismiss();
-                }
-            });
-        }
-
     }
 
     public void setSpanCount(int span) {
@@ -227,7 +217,7 @@ public class WidgetFragment extends Fragment implements
 
         if (callType == CallType.MachineData) {
             if (mWidgets == null || mWidgets.size() == 0) {
-                mNoDataView.setVisibility(View.VISIBLE);
+//                mNoDataView.setVisibility(View.VISIBLE);
             }
         }
     }

@@ -55,6 +55,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
 {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
+    private static final String IS_OPEN = "IS_OPEN";
     //    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
 //    private static final String CURRENT_JOB_ID = "current_job_id";
 
@@ -69,14 +70,17 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ProgressBar mActiveJobsProgressBar;
     private ReportStopReasonFragmentListener mListener;
+    private GridLayoutManager mGridLayoutManager;
+    private boolean mIsOpen;
+    private StopReasonsAdapter mStopReasonsAdapter;
 
-    public static ReportStopReasonFragmentNew newInstance() {
+    public static ReportStopReasonFragmentNew newInstance(boolean isOpen) {
         ReportStopReasonFragmentNew reportStopReasonFragment = new ReportStopReasonFragmentNew();
         Bundle bundle = new Bundle();
+        bundle.putBoolean(IS_OPEN, isOpen);
         reportStopReasonFragment.setArguments(bundle);
         return reportStopReasonFragment;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -100,6 +104,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 //            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
+            mIsOpen = getArguments().getBoolean(IS_OPEN, false);
         }
 //        getActiveJobs();
     }
@@ -109,7 +114,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
         setActionBar();
-        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
+//        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;
     }
 
@@ -124,25 +129,37 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         }
         else {
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            int spacing = 40;
+
+            mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            int spacing = 0;//40
 
             Configuration config = getResources().getConfiguration();
             if(config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
             }else {
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
-
             }
             initStopReasons();
+
+            setSpanCount(mIsOpen);
+
         }
 
     }
 
+    public void setSpanCount(boolean isOpen) {
+        if (isOpen) {
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
+        } else {
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+        }
+        mIsOpen = isOpen;
+    }
+
     private void initStopReasons() {
 
-        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
+        mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
 
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
@@ -202,7 +219,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
             mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew.newInstance(position, mJobId,
                     mReportFieldsForMachine.getStopReasons().get(position).getId(),
                     mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getLName()));
+                    mReportFieldsForMachine.getStopReasons().get(position).getLName(),mIsOpen));
 
         }catch (IllegalStateException e){
 
@@ -232,14 +249,14 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
                 mJobId = 0;
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
-            disableProgressBar();
+//            disableProgressBar();
         }
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             mJobId = 0;
             ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            disableProgressBar();
+//            disableProgressBar();
         }
     };
 

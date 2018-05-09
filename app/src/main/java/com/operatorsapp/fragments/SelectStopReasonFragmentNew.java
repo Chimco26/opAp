@@ -1,22 +1,15 @@
 package com.operatorsapp.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.operators.errorobject.ErrorObjectInterface;
@@ -29,7 +22,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -40,7 +32,6 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
-import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
@@ -58,6 +49,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     public static final String LOG_TAG = SelectStopReasonFragmentNew.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOB_ID = "current_job_id";
+    private static final String IS_OPEN = "IS_OPEN";
 
     private static final int NUMBER_OF_COLUMNS = 5;
     public static final String SAMSUNG = "samsung";
@@ -78,8 +70,10 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     private int mReasonId;
     private String mEnName;
     private String mILName;
+    private GridLayoutManager mGridLayoutManager;
+    private boolean mIsOpen;
 
-    public static SelectStopReasonFragmentNew newInstance(int position, int jobId, int reasonId, String eName, String lName) {
+    public static SelectStopReasonFragmentNew newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
         SelectStopReasonFragmentNew selectedStopReasonFragment = new SelectStopReasonFragmentNew();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
@@ -87,6 +81,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
         bundle.putString(EN_NAME, eName);
         bundle.putString(IL_NAME, lName);
         bundle.putInt(REASON_ID, reasonId);
+        bundle.putBoolean(IS_OPEN, isOpen);
         selectedStopReasonFragment.setArguments(bundle);
         return selectedStopReasonFragment;
     }
@@ -100,6 +95,8 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
             mReasonId = getArguments().getInt(REASON_ID);
             mEnName = getArguments().getString(EN_NAME);
             mILName = getArguments().getString(IL_NAME);
+            mIsOpen = getArguments().getBoolean(IS_OPEN, false);
+
         }
     }
 
@@ -138,16 +135,17 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         int spacing;
         String strManufacturer = android.os.Build.MANUFACTURER;
 
-        if (strManufacturer.equals(SAMSUNG)) {
-            spacing = 80;
-        } else {
-            spacing = 40;
-        }
+//        if (strManufacturer.equals(SAMSUNG)) {
+//            spacing = 80;
+//        } else {
+//            spacing = 40;
+//        }
+        spacing = 0;
         Configuration config = getResources().getConfiguration();
         if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
@@ -156,8 +154,9 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
             mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
 
-
         initSubReasons();
+
+        setSpanCount(mIsOpen);
     }
 
     private void initSubReasons() {
@@ -165,6 +164,16 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
             mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getSubReasons());
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
+    }
+
+    public void setSpanCount(boolean isOpen) {
+        if (isOpen) {
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
+        } else {
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+
+        }
+    mIsOpen = isOpen;
     }
 
     @Override

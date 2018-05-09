@@ -126,6 +126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
     private View mContainer3;
     private Fragment mChartFragment;
+    private int mSpan = 3;
 
 
     @Override
@@ -589,7 +590,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
-        if (fragment instanceof ChartFragment){
+        if (fragment instanceof ChartFragment) {
             mChartFragment = fragment;
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
             return;
@@ -968,12 +969,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onWidgetChangeState(boolean state) {
-        mWidgetFragment.setWidgetState(state);
+        if (mWidgetFragment != null) {
+            mWidgetFragment.setWidgetState(state);
+        }
     }
 
     @Override
     public void onWidgetUpdateSpane(int span) {
-        mWidgetFragment.setSpanCount(span);
+        mSpan = span;
+        if (mWidgetFragment != null) {
+            mWidgetFragment.setSpanCount(span);
+        }
+        if (mSelectStopReasonFragmentNew != null){
+            mSelectStopReasonFragmentNew.setSpanCount(span != 3);
+        }
+        if (mReportStopReasonFragmentNew != null){
+            mReportStopReasonFragmentNew.setSpanCount(span != 3);
+        }
+
     }
 
     @Override
@@ -1022,7 +1035,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     toDelete.add(event1);
                 }
             }
-            for (Event event1: toDelete){
+            for (Event event1 : toDelete) {
                 mSelectedEvents.remove(event1);
             }
         }
@@ -1031,11 +1044,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
         }
-        if (mActionBarAndEventsFragment != null){
+        if (mActionBarAndEventsFragment != null) {
 
             mActionBarAndEventsFragment.setSelectedEvents(mSelectedEvents);
         }
-        if (mSelectedEvents.size() == 0){
+        if (mSelectedEvents.size() == 0) {
             if (mSelectStopReasonFragmentNew != null) {
 
                 onBackPressed();
@@ -1057,6 +1070,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mSelectStopReasonFragmentNew != null) {
 
             mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+
         }
 
     }
@@ -1070,42 +1084,39 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 
-                removeReportStopreasonfragment();
+                removeReportStopReasonFragment();
 
             }
             if (mSelectStopReasonFragmentNew != null) {
 
-                removeSelectStopreasonfragment();
+                removeSelectStopReasonFragment();
 
             }
-            if (mChartFragment != null){
+            if (mChartFragment != null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
 
                 mChartFragment = null;
 
-                if (mActionBarAndEventsFragment != null){
+                if (mActionBarAndEventsFragment != null) {
 
                     mActionBarAndEventsFragment.setActionBar();
 
                 }
             }
-        } else {
+        } else {  
             super.onBackPressed();
         }
     }
 
-    private void removeSelectStopreasonfragment() {
+    private void removeSelectStopReasonFragment() {
         getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
 
         mSelectStopReasonFragmentNew = null;
 
-        if (mSelectedEvents != null){
-            mSelectedEvents = null;
-        }
     }
 
-    private void removeReportStopreasonfragment() {
+    private void removeReportStopReasonFragment() {
         getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
 
         mReportStopReasonFragmentNew = null;
@@ -1114,7 +1125,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mActionBarAndEventsFragment.disableSelectMode();
         }
-        if (mSelectedEvents != null){
+        if (mSelectedEvents != null) {
             mSelectedEvents = null;
         }
     }

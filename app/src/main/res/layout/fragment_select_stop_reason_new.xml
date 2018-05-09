@@ -6,7 +6,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/selected_stop_recycler_view"
-        android:layout_marginBottom="70dp"
         android:layout_width="match_parent"
         android:scrollbars="vertical"
         android:scrollbarFadeDuration="0"

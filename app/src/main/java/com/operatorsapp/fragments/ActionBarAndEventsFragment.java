@@ -755,7 +755,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(int type, int eventID) {
 
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance());
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(mIsOpen));
 
         mIsSelectionMode = true;
 
