@@ -6,9 +6,11 @@ android {
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
+    buildToolsVersion '26.0.2'
+
         targetSdkVersion 27
-        versionCode 9
-        versionName "0.5.7"
+        versionCode 15
+        versionName "0.7.2"
         multiDexEnabled true
     }
     buildTypes {

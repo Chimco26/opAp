@@ -103,6 +103,10 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
                                 fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
                                 break;
                             }
+                            case "combo": {
+                                fieldValues[i] = mJobsList.get(position).get(mHeaderList.get(i).getFieldName()).toString();
+                                break;
+                            }
                         }
                     }
                 } else {

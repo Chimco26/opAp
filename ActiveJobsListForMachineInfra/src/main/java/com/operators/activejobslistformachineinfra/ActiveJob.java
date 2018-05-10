@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ActiveJob {
 
+    @SerializedName("CavitiesActual")
+    private Integer cavitiesActual;
     @SerializedName("CavitiesStandard")
     private Integer cavitiesStandard;
     @SerializedName("Department")
@@ -25,6 +27,11 @@ public class ActiveJob {
     public Integer getCavitiesStandard()
     {
         return cavitiesStandard;
+    }
+
+    public Integer getCavitiesActual()
+    {
+        return cavitiesActual;
     }
 
     public Integer getDepartment()
