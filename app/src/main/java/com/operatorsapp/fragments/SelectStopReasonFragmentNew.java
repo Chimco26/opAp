@@ -65,7 +65,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportCore mReportCore;
 
-    private ArrayList<Event> mSelectedEvents;
+    private ArrayList<Integer> mSelectedEvents;
     private int mSelectedPosition;
     private int mReasonId;
     private String mEnName;
@@ -117,7 +117,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
         mOnCroutonRequestListener = null;
     }
 
-    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
 
         mSelectedEvents = selectedEvents;
     }
@@ -229,16 +229,19 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
         mReportCore.registerListener(mReportCallbackListener);
 
+        long[] eventsId = new long[mSelectedEvents.size()];
 
-        for (Event event : mSelectedEvents) {
+        for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-            mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, event.getEventID(), mJobId);
+            eventsId[0] = mSelectedEvents.get(i);
 
-            SendBroadcast.sendReason(getContext(), event.getEventID(), mReasonId, mEnName, mILName);
+            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReasonId, mEnName, mILName);
 
         }
+        mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreasonId, eventsId, mJobId);
 
     }
+
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override

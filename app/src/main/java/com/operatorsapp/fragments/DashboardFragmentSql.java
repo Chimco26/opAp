@@ -778,7 +778,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     }
 
     @Override
-    public void onStopEventSelected(Event event, boolean b) {
+    public void onStopEventSelected(Integer event, boolean b) {
 
     }
     

@@ -7,5 +7,5 @@ public interface OnStopClickListener {
 
     void onSelectMode(int type, int eventID);
 
-    void onStopEventSelected(Event event, boolean b);
+    void onStopEventSelected(Integer event, boolean b);
 }

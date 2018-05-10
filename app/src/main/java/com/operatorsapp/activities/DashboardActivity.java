@@ -121,7 +121,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer2;
-    private ArrayList<Event> mSelectedEvents;
+    private ArrayList<Integer> mSelectedEvents;
     private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
     private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
     private View mContainer3;
@@ -1016,26 +1016,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onEventSelected(Event event, boolean b) {
+    public void onEventSelected(Integer event, boolean checked) {
 
         if (mSelectedEvents == null) {
 
             mSelectedEvents = new ArrayList<>();
         }
 
-        if (b) {
+        if (checked) {
             if (!mSelectedEvents.contains(event)) {
                 mSelectedEvents.add(event);
             }
         } else {
 
-            ArrayList<Event> toDelete = new ArrayList<>();
-            for (Event event1 : mSelectedEvents) {
-                if (event.getEventID() == event1.getEventID()) {
+            ArrayList<Integer> toDelete = new ArrayList<>();
+            for (Integer event1 : mSelectedEvents) {
+                if (event.compareTo(event1) == 0) {
                     toDelete.add(event1);
                 }
             }
-            for (Event event1 : toDelete) {
+            for (Integer event1 : toDelete) {
                 mSelectedEvents.remove(event1);
             }
         }
@@ -1104,7 +1104,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 }
             }
-        } else {  
+        } else {
             super.onBackPressed();
         }
     }

@@ -1,5 +1,6 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
+import com.operators.reportrejectnetworkbridge.server.request.SendMultipleStopRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportStopRequest;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportRejectResponse;
@@ -15,4 +16,7 @@ import retrofit2.http.POST;
 public interface EmeraldSendStopReport {
     @POST("/LeaderMESApi/ReportStop")
     Call<SendReportStopResponse> sendStopReport(@Body SendReportStopRequest sendReportStopRequest);
+
+    @POST("/LeaderMESApi/ReportMultiStopEvents")
+    Call<SendMultipleStopRequest> sendMultipleStopReport(@Body SendMultipleStopRequest sendMultipleStopRequest);
 }

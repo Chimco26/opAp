@@ -43,8 +43,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     private OnStopClickListener mOnStopClickListener;
     public LayoutInflater inflater;
-    private boolean mIsSelection;
-    private ArrayList<Event> mSelectedEvents;
+    private boolean mIsSelectionMode;
+    private ArrayList<Integer> mSelectedEvents;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height, int type, boolean selectMode, int eventID) {
         super(context, cursor);
@@ -54,21 +54,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mOnStopClickListener = onStopClickListener;
         mOpenWidth = openWidth;
         mHeight = height;
-        mIsSelection = selectMode;
+        mIsSelectionMode = selectMode;
         mType = type;
         mSelectedEventId = eventID;
     }
 
-    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
         mSelectedEvents = selectedEvents;
     }
-
-    //    public void disableSelectMode() {
-//
-//        mIsSelection = false;
-//
-//        notifyDataSetChanged();
-//    }
 
 
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
@@ -226,7 +219,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final Cursor cursor) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final Cursor cursor) {
 
         final ShiftLogViewHolder holder = (ShiftLogViewHolder) viewHolder;
 
@@ -255,18 +248,37 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
         if (type == STOPPED) {
 
+            if (mIsSelectionMode) {
+
+                holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
+                holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+                        event.setChecked(checked);
+
+                        mOnStopClickListener.onStopEventSelected(event.getEventID(), checked);
+
+                    }
+                });
+
+            } else {
+
+                holder.mStopEventCheckBox.setVisibility(View.GONE);
+            }
+
             if (mSelectedEvents != null) {
-                for (Event event1 : mSelectedEvents) {
-                    if (event.getEventID() == event1.getEventID()) {
+                for (Integer event1 : mSelectedEvents) {
+                    if (event.getEventID() == event1) {
                         event.setChecked(true);
                     }
                 }
             }
-            if (mIsSelection && event.isChecked()) {
+            if (mIsSelectionMode && event.isChecked()) {
 
                 holder.mStopEventCheckBox.setChecked(true);
-            } else {
-
+            }
+            else {
                 holder.mStopEventCheckBox.setChecked(false);
             }
 
@@ -290,25 +302,6 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
             holder.mStoppedTitleLayout.requestLayout();
 
-
-            if (mIsSelection) {
-
-                holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
-                holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                        event.setChecked(b);
-
-                        mOnStopClickListener.onStopEventSelected(event, b);
-
-                    }
-                });
-
-            } else {
-
-                holder.mStopEventCheckBox.setVisibility(View.GONE);
-            }
 
             if (event.getEventGroupID() != 6) {
 
@@ -364,10 +357,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
 
-                    if (!mIsSelection) {
+                    if (!mIsSelectionMode) {
 
+                        event.setChecked(true);
                         mOnStopClickListener.onSelectMode(type, event.getEventID());
-                        mOnStopClickListener.onStopEventSelected(event, true);
+                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
 
                         v.setTag(true);
                         holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
@@ -377,15 +371,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                     } else {
 
-                        holder.mStopEventCheckBox.setChecked(!event.isChecked());
-
+                            holder.mStopEventCheckBox.setChecked(!event.isChecked());
                     }
                 }
             });
         } else if (type == PARAMETER) {
             holder.mStoppedCard.setVisibility(View.GONE);
 
-//            if (mIsSelection){
+//            if (mIsSelectionMode){
 //                holder.mParameterCard.setVisibility(View.GONE);
 //                return;
 //            }

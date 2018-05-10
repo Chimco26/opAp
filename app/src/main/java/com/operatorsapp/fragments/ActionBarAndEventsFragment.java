@@ -138,7 +138,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private DashBoard2Listener mListener;
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
-    private ArrayList<Event> mSelectedEvents;
+    private ArrayList<Integer> mSelectedEvents;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -748,7 +748,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onStopEventSelected(Event event, boolean b) {
+    public void onStopEventSelected(Integer event, boolean b) {
         mListener.onEventSelected(event, b);
     }
 
@@ -1154,7 +1154,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsSelectionMode = false;
     }
 
-    public void setSelectedEvents(ArrayList<Event> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
         mSelectedEvents = selectedEvents;
 
         if (mShiftLogAdapter != null){
@@ -1172,7 +1172,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
 
-        void onEventSelected(Event event, boolean b);
+        void onEventSelected(Integer event, boolean b);
     }
 
 }

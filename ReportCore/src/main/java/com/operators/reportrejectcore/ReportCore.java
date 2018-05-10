@@ -110,6 +110,32 @@ public class ReportCore
         }
 
     }
+    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int jobId) {
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                    String.valueOf(mReportPersistenceManagerInterface.getMachineId())
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
+                        @Override
+                        public void onSendStopReportSuccess() {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess();
+                            } else {
+                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onSendStopReportFailed(ErrorObjectInterface reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            } else {
+                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
+
+    }
 
     public void sendCycleUnitsReport(double unitsPerCycle, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
