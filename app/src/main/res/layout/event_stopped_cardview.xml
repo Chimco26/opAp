@@ -65,6 +65,19 @@
                 android:textSize="18sp"
                 autofit:minTextSize="18sp" />
 
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/event_stopped_shift_log_item_sub_reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="12sp"
+                autofit:minTextSize="14sp"
+                android:visibility="gone"/>
+
 
         </LinearLayout>
 

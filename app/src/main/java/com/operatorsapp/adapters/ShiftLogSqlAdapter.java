@@ -71,6 +71,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
         private ImageView mStoppedIcon;
+        private TextView mStopEventSubReasonTv;
         private TextView mStoppedStart;
         private TextView mStoppedStartDate;
         private TextView mStoppedDuration;
@@ -101,6 +102,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mParameterCard = itemView.findViewById(R.id.parameter_cardview);
             mStoppedCard = itemView.findViewById(R.id.stopped_cardview);
             mStopEventCheckBox = itemView.findViewById(R.id.event_stop_checkbox);
+            mStopEventSubReasonTv = itemView.findViewById(R.id.event_stopped_shift_log_item_sub_reason);
             //       mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
             mStoppedTitleLayout = itemView.findViewById(R.id.event_stopped_title_layout);
             mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
@@ -331,6 +333,14 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             holder.mStoppedTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
             holder.mStoppedTitle.setText(groupName);
+            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname();
+            if (subtitleNameByLang != null){
+
+                holder.mStopEventSubReasonTv.setText(subtitleNameByLang);
+                holder.mStopEventSubReasonTv.setVisibility(View.VISIBLE);
+            }else {
+                holder.mStopEventSubReasonTv.setVisibility(View.GONE);
+            }
             holder.mStoppedStart.setText(TimeUtils.getTimeFromString(event.getTime()));
             holder.mStoppedStartDate.setText(TimeUtils.getDateFromString(event.getTime()));
             holder.mStoppedEnd.setText(TimeUtils.getTimeFromString(event.getEventEndTime()));

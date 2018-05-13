@@ -239,6 +239,8 @@ public class WidgetAdapter extends RecyclerView.Adapter {
                 numericViewHolder.mTitle.setText(nameByLang1);
                 numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
                 numericViewHolder.mValue.setText(widget.getCurrentValue());
+                numericViewHolder.mValue.setSelected(true);
+
                 numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
 
                 break;

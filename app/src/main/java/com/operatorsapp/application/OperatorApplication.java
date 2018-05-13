@@ -86,7 +86,7 @@ public class OperatorApplication extends MultiDexApplication {
 //
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-//       exceptionHandler();
+       exceptionHandler();
 
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
