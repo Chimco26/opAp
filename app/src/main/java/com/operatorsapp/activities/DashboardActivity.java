@@ -595,11 +595,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
             return;
         }
-        if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_widget, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-        }
+//        if (addToBackStack) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//        } else {
+//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
+//        }
     }
 
     @Override
