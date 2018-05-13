@@ -4,10 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Sergey on 09/08/2016.
- */
-public class SendReportStopRequest {
+public class SendMultipleStopRequest {
+
     @SerializedName("SessionID")
     private String mSessionId;
     @SerializedName("MachineID")
@@ -21,9 +19,9 @@ public class SendReportStopRequest {
     @SerializedName("joshID")
     private Integer mJoshId;
     @SerializedName("EventID")
-    private int mEventID;
+    private long[] mEventID;
 
-    public SendReportStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId, int eventId) {
+    public SendMultipleStopRequest(String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, @Nullable Integer jobId, long[] eventId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mOperatorId = operatorId;

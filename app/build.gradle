@@ -54,6 +54,7 @@ dependencies {
     implementation project(':MachineStatusInfra')
     implementation project(':JobsInfra')
     implementation project(':JobsNetworkBridge')
+    implementation project(':publicutils')
     implementation project(':JobsCore')
     implementation project(':OperatorCore')
     implementation project(':OperatorInfra')

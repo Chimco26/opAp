@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -46,6 +48,11 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
+import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
+import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
+import com.operatorsapp.fragments.WidgetFragment;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -86,7 +93,14 @@ import java.util.concurrent.TimeUnit;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener, OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback, OperatorCoreToDashboardActivityCallback, /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface, OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener, RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener {
+public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
+        OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
+        OperatorCoreToDashboardActivityCallback,
+        /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
+        OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
+        RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
+        ActionBarAndEventsFragment.DashBoard2Listener,
+        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -103,6 +117,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
+    private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
+    private WidgetFragment mWidgetFragment;
+    private ActionBarAndEventsFragment mActionBarAndEventsFragment;
+    private View mContainer2;
+    private ArrayList<Integer> mSelectedEvents;
+    private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
+    private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
+    private View mContainer3;
+    private Fragment mChartFragment;
+    private int mSpan = 3;
 
 
     @Override
@@ -133,26 +157,48 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        mDashboardFragment = DashboardFragmentSql.newInstance();
+        mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
+//        mDashboardFragment = DashboardFragmentSql.newInstance();
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
+        mContainer2 = findViewById(R.id.fragments_container_widget);
+
+        mContainer3 = findViewById(R.id.fragments_container_reason);
+
+        openWidgetFragment();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
+    }
 
+    private void openWidgetFragment() {
+
+        mWidgetFragment = WidgetFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mDashboardFragment != null) {
+        if (mWidgetFragment != null) {
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mDashboardFragment).commit();
+            fm.beginTransaction().remove(mWidgetFragment).commit();
         }
+        if (mActionBarAndEventsFragment != null) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+        }
+//        if (mDashboardFragment != null) {
+//            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//            fm.beginTransaction().remove(mDashboardFragment).commit();
+//        }
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -163,15 +209,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         return new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
 
-
                 Fragment fragment = getVisibleFragment();
                 if (fragment != null) {
                     if (fragment instanceof ReportRejectsFragment) {
                         ((ReportRejectsFragment) fragment).setActionBar();
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
-                    } else if (fragment instanceof DashboardFragmentSql) {
-                        mDashboardFragment.setActionBar();
+                    } else if (fragment instanceof ActionBarAndEventsFragment) {
+                        mActionBarAndEventsFragment.setActionBar();
+//                        mDashboardFragment.setActionBar();
                         if (first) {
                             first = false;
 
@@ -299,8 +345,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         return new MachineStatusUICallback() {
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
-                if (mDashboardUICallbackListener != null) {
-                    mDashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                        dashboardUICallbackListener.onDeviceStatusChanged(machineStatus); // disable the button at least until next polling cycle
+
+                    }
                 } else {
                     ZLogger.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
@@ -308,11 +359,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onTimerChanged(long millisUntilFinished) {
-                if (mDashboardUICallbackListener != null) {
-                    Locale locale = getApplicationContext().getResources().getConfiguration().locale;
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
-                    String countDownTimer = String.format(locale, "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished), TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)), TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-                    mDashboardUICallbackListener.onTimerChanged(countDownTimer);
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                        Locale locale = getApplicationContext().getResources().getConfiguration().locale;
+
+                        String countDownTimer = String.format(locale, "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished), TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)), TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                        dashboardUICallbackListener.onTimerChanged(countDownTimer);
+                    }
                 } else {
                     ZLogger.w(LOG_TAG, "onTimerChanged() - DashboardUICallbackListener is null");
                 }
@@ -320,9 +375,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
-                ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
-                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
 
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                        ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
+                        mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
+                    }
+                }
             }
         };
     }
@@ -335,8 +396,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
 
-                if (mDashboardUICallbackListener != null) {
-                    mDashboardUICallbackListener.onMachineDataReceived(widgetList);
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                        dashboardUICallbackListener.onMachineDataReceived(widgetList);
+                    }
                 } else {
 
                     ZLogger.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
@@ -346,7 +410,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
-                mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
+
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                        dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
+                    }
+                }
             }
         };
     }
@@ -396,8 +466,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
 
-        if (mDashboardUICallbackListener != null) {
-            mDashboardUICallbackListener.onShiftForMachineEnded();
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                dashboardUICallbackListener.onShiftForMachineEnded();
+            }
         }
         shiftForMachineTimer();
     }
@@ -409,8 +482,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
-                if (mDashboardUICallbackListener != null) {
-                    mDashboardUICallbackListener.onShiftLogDataReceived(events);
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                        dashboardUICallbackListener.onShiftLogDataReceived(events);
+                    }
                 } else {
                     ZLogger.w(LOG_TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
                 }
@@ -423,7 +499,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     ZLogger.i(LOG_TAG, "shiftLogStartPolling() reason: " + reason.getDetailedDescription());
 
-                    mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
+                    if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                        for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+                            dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
+                        }
+                    }
                 }
             }
         };
@@ -477,7 +558,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (mCroutonCreator != null) {
-            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType,this);
+            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
         }
     }
@@ -485,7 +566,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onHideConnectivityCroutonRequest() {
 
-        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onHideConnectivityCroutonRequest");
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "onHideConnectivityCroutonRequest");
 
         if (mCroutonCreator != null) {
             mCroutonCreator.hideConnectivityCrouton();
@@ -498,16 +579,27 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void onFragmentAttached(DashboardUICallbackListener dashboardUICallbackListener) {
-        mDashboardUICallbackListener = dashboardUICallbackListener;
+        mDashboardUICallbackListenerList.add(dashboardUICallbackListener);
+    }
+
+    @Override
+    public void onFragmentDetached(DashboardUICallbackListener dashboardUICallbackListener) {
+        mDashboardUICallbackListenerList.remove(dashboardUICallbackListener);
+
     }
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
-        if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragment).commit();
+        if (fragment instanceof ChartFragment) {
+            mChartFragment = fragment;
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
+            return;
         }
+//        if (addToBackStack) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//        } else {
+//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
+//        }
     }
 
     @Override
@@ -750,9 +842,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mDashboardActivityToSelectedJobFragmentCallback = null;
             ZLogger.i(LOG_TAG, "mDashboardActivityToSelectedJobFragmentCallback cleared");
         }
-        if (mDashboardUICallbackListener != null) {
-            mDashboardUICallbackListener = null;
-            ZLogger.i(LOG_TAG, "mDashboardUICallbackListener cleared");
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+            mDashboardUICallbackListenerList.clear();
+            ZLogger.i(LOG_TAG, "mDashboardUICallbackListenerList cleared");
         }
         if (mReportFieldsForMachineUICallback != null) {
             mReportFieldsForMachineUICallback = null;
@@ -837,8 +929,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onApproveFirstItemComplete() {
-        if (mDashboardUICallbackListener != null) {
-            mDashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
+
+        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                dashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
+
+            }
         }
     }
 
@@ -866,6 +964,169 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onCroutonDismiss() {
 
-        mDashboardFragment.openNextDialog();
+        mActionBarAndEventsFragment.openNextDialog();
+    }
+
+    @Override
+    public void onWidgetChangeState(boolean state) {
+        if (mWidgetFragment != null) {
+            mWidgetFragment.setWidgetState(state);
+        }
+    }
+
+    @Override
+    public void onWidgetUpdateSpane(int span) {
+        mSpan = span;
+        if (mWidgetFragment != null) {
+            mWidgetFragment.setSpanCount(span);
+        }
+        if (mSelectStopReasonFragmentNew != null){
+            mSelectStopReasonFragmentNew.setSpanCount(span != 3);
+        }
+        if (mReportStopReasonFragmentNew != null){
+            mReportStopReasonFragmentNew.setSpanCount(span != 3);
+        }
+
+    }
+
+    @Override
+    public void onResize(int width, int statusBarsHeight) {
+
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
+
+        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+
+        mContainer2.setLayoutParams(layoutParams);
+
+        ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
+
+        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+
+        mContainer3.setLayoutParams(layoutParams);
+
+    }
+
+    @Override
+    public void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew) {
+
+        mReportStopReasonFragmentNew = reportStopReasonFragmentNew;
+
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragmentNew).commit();
+
+    }
+
+    @Override
+    public void onEventSelected(Integer event, boolean checked) {
+
+        if (mSelectedEvents == null) {
+
+            mSelectedEvents = new ArrayList<>();
+        }
+
+        if (checked) {
+            if (!mSelectedEvents.contains(event)) {
+                mSelectedEvents.add(event);
+            }
+        } else {
+
+            ArrayList<Integer> toDelete = new ArrayList<>();
+            for (Integer event1 : mSelectedEvents) {
+                if (event.compareTo(event1) == 0) {
+                    toDelete.add(event1);
+                }
+            }
+            for (Integer event1 : toDelete) {
+                mSelectedEvents.remove(event1);
+            }
+        }
+
+        if (mSelectStopReasonFragmentNew != null) {
+
+            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+        }
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setSelectedEvents(mSelectedEvents);
+        }
+        if (mSelectedEvents.size() == 0) {
+            if (mSelectStopReasonFragmentNew != null) {
+
+                onBackPressed();
+            }
+            if (mReportStopReasonFragmentNew != null) {
+
+                onBackPressed();
+            }
+        }
+    }
+
+    @Override
+    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew selectStopReasonFragmentNew) {
+
+        mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
+
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragmentNew).commit();
+
+        if (mSelectStopReasonFragmentNew != null) {
+
+            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
+                mChartFragment != null) {
+
+            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
+
+                removeReportStopReasonFragment();
+
+            }
+            if (mSelectStopReasonFragmentNew != null) {
+
+                removeSelectStopReasonFragment();
+
+            }
+            if (mChartFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
+
+                mChartFragment = null;
+
+                if (mActionBarAndEventsFragment != null) {
+
+                    mActionBarAndEventsFragment.setActionBar();
+
+                }
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void removeSelectStopReasonFragment() {
+        getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+
+        mSelectStopReasonFragmentNew = null;
+
+    }
+
+    private void removeReportStopReasonFragment() {
+        getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
+
+        mReportStopReasonFragmentNew = null;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.disableSelectMode();
+        }
+        if (mSelectedEvents != null) {
+            mSelectedEvents = null;
+        }
     }
 }

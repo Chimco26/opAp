@@ -27,5 +27,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation(name: 'logrecorder', ext: 'aar')
     implementation project(':ShiftLogInfra')
+    implementation project(':SqlCore')
+    implementation 'org.litepal.android:core:1.6.1'
     implementation project(':ErrorObjectInterface')
 }

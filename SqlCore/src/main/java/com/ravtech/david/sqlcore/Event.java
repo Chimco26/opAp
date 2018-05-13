@@ -1,11 +1,14 @@
 package com.ravtech.david.sqlcore;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
-public class Event extends DataSupport {
+public class Event extends DataSupport implements Parcelable {
 
     @SerializedName("priority")
     private int mPriority;
@@ -54,6 +57,8 @@ public class Event extends DataSupport {
 
     private boolean mIsDismiss;
 
+    private boolean mChecked;
+
     public Event() {
     }
 
@@ -87,6 +92,7 @@ public class Event extends DataSupport {
 
 
     }
+
 
     public boolean isIsDismiss() {
         return mIsDismiss;
@@ -291,5 +297,81 @@ public class Event extends DataSupport {
 
     public void setmEventLTitle(String mEventLTitle) {
         this.mEventLTitle = mEventLTitle;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mPriority);
+        dest.writeString(this.mEventTime);
+        dest.writeString(this.mEventTitle);
+        dest.writeString(this.mEventETitle);
+        dest.writeString(this.mEventLTitle);
+        dest.writeString(this.mEventSubTitleEname);
+        dest.writeString(this.mEventSubTitleLname);
+        dest.writeString(this.mEventEndTime);
+        dest.writeLong(this.mEventDuration);
+        dest.writeInt(this.mEventGroupID);
+        dest.writeString(this.mEventGroupLname);
+        dest.writeString(this.mEventGroupEname);
+        dest.writeInt(this.mEventID);
+        dest.writeByte(this.mAlarmDismissed ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.mAlarmHValue);
+        dest.writeFloat(this.mAlarmLValue);
+        dest.writeFloat(this.mAlarmStandardValue);
+        dest.writeFloat(this.mAlarmValue);
+        dest.writeInt(this.mEventReasonID);
+        dest.writeLong(this.mTimeOfAdded);
+        dest.writeByte(this.mTreated ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
+    }
+
+    protected Event(Parcel in) {
+        this.mPriority = in.readInt();
+        this.mEventTime = in.readString();
+        this.mEventTitle = in.readString();
+        this.mEventETitle = in.readString();
+        this.mEventLTitle = in.readString();
+        this.mEventSubTitleEname = in.readString();
+        this.mEventSubTitleLname = in.readString();
+        this.mEventEndTime = in.readString();
+        this.mEventDuration = in.readLong();
+        this.mEventGroupID = in.readInt();
+        this.mEventGroupLname = in.readString();
+        this.mEventGroupEname = in.readString();
+        this.mEventID = in.readInt();
+        this.mAlarmDismissed = in.readByte() != 0;
+        this.mAlarmHValue = in.readFloat();
+        this.mAlarmLValue = in.readFloat();
+        this.mAlarmStandardValue = in.readFloat();
+        this.mAlarmValue = in.readFloat();
+        this.mEventReasonID = in.readInt();
+        this.mTimeOfAdded = in.readLong();
+        this.mTreated = in.readByte() != 0;
+        this.mIsDismiss = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    public void setChecked(boolean checked) {
+        this.mChecked = checked;
+    }
+
+    public boolean isChecked() {
+        return mChecked;
     }
 }

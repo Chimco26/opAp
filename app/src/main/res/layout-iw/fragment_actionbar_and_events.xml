@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/status_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/rectangle_11_copy_2"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/status_bar_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="130dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/product"
+                    android:textSize="16sp"
+                    android:textColor="@color/status_bar"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Data"
+                    android:id="@+id/text_view_product_name_and_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/default_gray_status"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:background="@color/C20" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/job"
+                    android:textSize="16sp"
+                    android:textColor="@color/status_bar" />
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Data"
+                    android:id="@+id/text_view_job_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/default_gray_status"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:background="@color/C20" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/shift"
+                    android:textSize="16sp"
+                    android:textColor="@color/status_bar" />
+
+                <TextView
+                    style="@style/Roboto_Regular_Status_Data"
+                    android:id="@+id/text_view_shift_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/default_gray_status"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/parent_layouts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/status_layout">
+
+        <RelativeLayout
+            android:id="@+id/fragment_dashboard_widgets_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end">
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/fragment_dashboard_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/ic_cloud" />
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_dashboard_loading_data_widgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:indeterminateTint="@color/C16"
+                    android:indeterminateTintMode="src_atop"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/loading_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_dashboard_widgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="7dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="0dp"
+                android:scrollbarFadeDuration="0"
+                android:scrollbars="vertical" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_dashboard_shiftlog"
+            android:layout_width="270dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@drawable/r_t_l_side_menu"
+            android:orientation="horizontal">
+
+            <me.grantland.widget.AutofitTextView
+                android:visibility="gone"
+                style="@style/FontStyle_T7"
+                android:id="@+id/fragment_dashboard_no_notif"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="@string/no_notifications"
+                android:textColor="@color/divider_gray"
+                android:textSize="30sp"
+                app:minTextSize="15dp"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/fragment_dashboard_loading_data_shiftlog"
+                style="@style/FontStyle_T7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="@string/loading_data"
+                android:textColor="@color/divider_gray"
+                android:textSize="30sp"
+                android:visibility="gone"
+                app:minTextSize="15dp"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_dashboard_shift_log"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/fragment_dashboard_divider"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
+            android:layout_marginEnd="-25dp"
+            android:background="@android:color/transparent"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/fragment_dashboard_left_btn"
+            android:layout_width="25dp"
+            android:layout_height="35dp"
+            android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="-23dp"
+            android:paddingEnd="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/left_panel_btn" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/timer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/parent_layouts"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@id/status_layout"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Roboto_Regular_Status_Data"
+            android:id="@+id/text_view_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:textColor="@color/default_gray_status"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_clock_blue" />
+    </LinearLayout>
+</RelativeLayout>

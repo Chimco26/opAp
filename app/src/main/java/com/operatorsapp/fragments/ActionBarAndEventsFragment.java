@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -51,7 +50,6 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
-import com.operatorsapp.adapters.WidgetAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -60,7 +58,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -71,7 +68,6 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
-import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -79,14 +75,13 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class DashboardFragmentSql extends Fragment implements DialogFragment.OnDialogButtonsListener,
+public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener {
 
@@ -102,32 +97,22 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     private OperatorCore mOperatorCore;
     private OnCroutonRequestListener mCroutonCallback;
     private RecyclerView mShiftLogRecycler;
-    private RecyclerView mWidgetRecycler;
-    private GridLayoutManager mGridLayoutManager;
     private LinearLayout mShiftLogLayout;
-    private ViewGroup mWidgetsLayout;
     private TextView mNoNotificationsText;
-    private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
     private TextView mConfigTextView;
-    private LinearLayout mLoadingDataView;
     private LinearLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
-    private WidgetAdapter mWidgetAdapter;
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
     private ArrayList<Event> mNewEventsList = new ArrayList<>();
-    private boolean mNoData;
     private boolean mIsOpen = false;
     private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
     private View mConfigView;
     private View mConfigLayout;
-    private int mWidgetsLayoutWidth;
-    private int mTollBarsHeight;
-    private int mRecyclersHeight;
-    private ArrayList<Widget> mWidgets = new ArrayList<>();
+    private float mTollBarsHeight;
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
@@ -137,7 +122,6 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
     private DialogFragment mDialogFragment;
-    private ViewGroup.MarginLayoutParams mWidgetsParams;
     private ViewGroup.LayoutParams mShiftLogParams;
     private boolean mIsNewShiftLogs;
     private MachineStatus mCurrentMachineStatus;
@@ -147,14 +131,18 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     private int mApproveItemID;
     private ViewGroup mMachineStatusLayout;
     public static final int REASON_UNREPORTED = 0;
-    private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private SelectStopReasonBroadcast mReasonBroadcast = null;
     private boolean thereAlreadyRequest = false;
     public DatabaseHelper mDatabaseHelper;
+    private boolean mNoData;
+    private DashBoard2Listener mListener;
+    private int mRecyclersHeight;
+    private boolean mIsSelectionMode;
+    private ArrayList<Integer> mSelectedEvents;
 
 
-    public static DashboardFragmentSql newInstance() {
-        return new DashboardFragmentSql();
+    public static ActionBarAndEventsFragment newInstance() {
+        return new ActionBarAndEventsFragment();
     }
 
 
@@ -176,8 +164,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ProgressDialogManager.show(getActivity());
-        View inflate = inflater.inflate(R.layout.fragment_dashboard, container, false);
+//        ProgressDialogManager.show(getActivity()); TODO in dismiss ther are conflict with widgetFragment
+// TODO because ProgessDialogManager support only one progress management in same time
+        View inflate = inflater.inflate(R.layout.fragment_actionbar_and_events, container, false);
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }
@@ -195,12 +184,11 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = size.y;
+        float height = size.y;
         mOpenWidth = (int) (width * 0.4);
         mCloseWidth = (int) (width * 0.2);
-        mWidgetsLayoutWidth = (int) (width * 0.8);
         mTollBarsHeight = (int) (height * 0.25);
-        mRecyclersHeight = (int) (height * 0.75);
+        mRecyclersHeight = (int) ((1 - (mTollBarsHeight / height)) * height);
 
         final int middleWidth = (int) (width * 0.3);
 
@@ -210,43 +198,29 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mListener.onResize(mCloseWidth, statusBarParams.height);
+
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
 
-        mConfigLayout =  view.findViewById(R.id.pConfig_layout);
-        mConfigView =  view.findViewById(R.id.pConfig_view);
-        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);
+        mConfigLayout = view.findViewById(R.id.pConfig_layout);
+        mConfigView = view.findViewById(R.id.pConfig_view);
+        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);//TODO bug no in iw
         mConfigTextView.setSelected(true);
         mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
-        mWidgetsLayout = (ViewGroup) view.findViewById(R.id.fragment_dashboard_widgets_layout);
-        mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
-        mWidgetsParams.setMarginStart(mCloseWidth);
-        mWidgetsLayout.setLayoutParams(mWidgetsParams);
-
         mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
-
-        mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
-        mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
-        mWidgetRecycler.setAdapter(mWidgetAdapter);
-
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
-        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
@@ -281,18 +255,19 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
                             if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
                                 if (mShiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
-                                    toggleWoopList(mShiftLogParams, mCloseWidth, mWidgetsParams, false);
-                                    mGridLayoutManager.setSpanCount(3);
-                                    mWidgetAdapter.changeState(true);
+                                    toggleWoopList(mShiftLogParams, mCloseWidth, null, false);
+                                    mListener.onWidgetChangeState(true);
+                                    mListener.onWidgetUpdateSpane(3);
                                 } else {
                                     mIsOpen = true;
-                                    toggleWoopList(mShiftLogParams, mOpenWidth, mWidgetsParams, true);
-                                    mGridLayoutManager.setSpanCount(2);
-                                    mWidgetAdapter.changeState(false);
+                                    toggleWoopList(mShiftLogParams, mOpenWidth, null, true);
+                                    mListener.onWidgetChangeState(false);
+                                    mListener.onWidgetUpdateSpane(2);
+
                                 }
 
                             } else {
-                                onButtonClick(mShiftLogParams, mWidgetsParams);
+                                onButtonClick(mShiftLogParams, null);
                             }
                         }
                         break;
@@ -325,10 +300,11 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(leftLayoutParams, mOpenWidth, rightLayoutParams, true);
-                        //                        mShiftLogAdapter.notifyDataSetChanged();
-                        mGridLayoutManager.setSpanCount(2);
-                        mWidgetAdapter.changeState(false);
+                        toggleWoopList(leftLayoutParams, mOpenWidth, null, true);
+                        mShiftLogAdapter.notifyDataSetChanged();
+                        mListener.onWidgetChangeState(false);
+                        mListener.onWidgetUpdateSpane(2);
+
                     }
 
                     @Override
@@ -340,7 +316,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
             }
         } else {
 
-            closeWoopList(leftLayoutParams, rightLayoutParams);
+            closeWoopList(leftLayoutParams, null);
         }
 
     }
@@ -359,8 +335,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
             @Override
             public void onAnimationEnd(Animation animation) {
                 toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
-                mGridLayoutManager.setSpanCount(3);
-                mWidgetAdapter.changeState(true);
+                mListener.onWidgetChangeState(true);
+                mListener.onWidgetUpdateSpane(3);
+
             }
 
             @Override
@@ -412,18 +389,18 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
         mDatabaseHelper = new DatabaseHelper(getContext());
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,0, false, 0);
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mShiftLogAdapter.notifyDataSetChanged();
 
         if (DataSupport.count(Event.class) > 0) {
             mNoData = false;
-            //            mNoNotificationsText.setVisibility(View.GONE);
+            mNoNotificationsText.setVisibility(View.GONE);
             mLoadingDataText.setVisibility(View.GONE);
         } else {
             mNoData = true;
-            //            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mNoNotificationsText.setVisibility(View.VISIBLE);
             mLoadingDataText.setVisibility(View.VISIBLE);
         }
 
@@ -459,13 +436,10 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
             }
         } else {
             mNoData = true;
-            //            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mNoNotificationsText.setVisibility(View.VISIBLE);
             mLoadingDataText.setVisibility(View.VISIBLE);
         }
-        if (mWidgets == null || mWidgets.size() == 0) {
-            //            mNoDataView.setVisibility(View.VISIBLE);
-            mLoadingDataView.setVisibility(View.VISIBLE);
-        }
+
         ZLogger.d(LOG_TAG, "onResume(), end ");
 
     }
@@ -473,12 +447,12 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
-        mRightLayoutParams.setMarginStart(newWidth);
         mShiftLogLayout.requestLayout();
-        mWidgetsLayout.setLayoutParams(mRightLayoutParams);
+//        mListener.onWidgetUpdatemargine(newWidth);
+        mListener.onResize(newWidth, mStatusLayout.getLayoutParams().height);
 
         mShiftLogAdapter.changeState(!isOpen);
-        mWidgetAdapter.changeState(!isOpen);
+        mListener.onWidgetChangeState(!isOpen);
 
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " toolBar: " + mToolBarView.getHeight() + " -- " + mTollBarsHeight * 0.65);
         //        ZLogger.clearPollingRequest(LOG_TAG, "setActionBar(),  " + " status: " + mStatusLayout.getHeight() + " -- " + mTollBarsHeight * 0.35);
@@ -489,11 +463,11 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         ZLogger.d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
-            mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
             mCroutonCallback = (OnCroutonRequestListener) getActivity();
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mListener = (DashBoard2Listener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
@@ -508,12 +482,13 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     public void onDetach() {
         ZLogger.d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
-        mReportFieldsFragmentCallbackListener = null;
         mCroutonCallback = null;
         mOnGoToScreenListener = null;
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
         mOperatorCore.unregisterListener();
         mOperatorCore = null;
+        mListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
@@ -698,7 +673,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
                 ZLogger.d(LOG_TAG, "onPreDraw(), pre request layout ");
                 view.requestLayout();
                 ZLogger.d(LOG_TAG, "onPreDraw(), end ");
-                dismissProgressDialog();
+//        TODO        dismissProgressDialog();
                 return false;
             }
         });
@@ -742,7 +717,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     private void openDialog(Event event, boolean isStopDialog) {
 
-        ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback,"");
+        ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, "");
 
     }
 
@@ -773,15 +748,20 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     }
 
     @Override
-    public void onSelectMode(int type, int eventID) {
-
+    public void onStopEventSelected(Integer event, boolean b) {
+        mListener.onEventSelected(event, b);
     }
 
     @Override
-    public void onStopEventSelected(Integer event, boolean b) {
+    public void onSelectMode(int type, int eventID) {
 
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(mIsOpen));
+
+        mIsSelectionMode = true;
+
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type, true, eventID);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
     }
-    
 
     private void openStopReportScreen(int eventId, String start, String end, long duration) {
         mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
@@ -803,130 +783,61 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        mLoadingDataView.setVisibility(View.GONE);
 
-        // if we can't fill any reports, show no data, client defined this behavior.
-        if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
-
-
-            mNoDataView.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        mWidgets = widgetList;
-        if (widgetList != null && widgetList.size() > 0) {
-            saveAndRestoreChartData(widgetList);
-            PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-            mNoDataView.setVisibility(View.GONE);
-
-
-            if (mWidgetAdapter != null) {
-                mWidgetAdapter.setNewData(widgetList);
-            } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth);
-                mWidgetRecycler.setAdapter(mWidgetAdapter);
-            }
-        } else {
-
-
-            mNoDataView.setVisibility(View.VISIBLE);
-        }
     }
 
-    private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
-        // calls to this function were removed as saving to prefs was not needed.
-        //historic data from prefs
-        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
-        HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
-        for (Widget widget : widgetList) {
-            // if have chart widget (field type 3)
-            if (widget.getFieldType() == 3) {
-                // if have historic in prefs
-                if (prefsHistoric.size() > 0) {
-                    prefsHistoricCopy.putAll(prefsHistoric);
-
-                    // if get new data
-                    if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-                        // if is old widget
-                        if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID()))) {
-
-                            prefsHistoricCopy.get(String.valueOf(widget.getID())).addAll(widget.getMachineParamHistoricData());
-                            widget.getMachineParamHistoricData().clear();
-
-                            //set all data (old + new) to widget
-                            if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                                widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-                            }
-                        } else {
-                            // if is new widget,  save to prefs
-                            prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                        }
-                    } else {
-                        // if no new data,  set old data to widget
-                        if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
-                            widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
-                        }
-                    }
-
-                } else {
-                    // if is the firs chart data,  save to prefs
-                    prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
-                }
-            }
-        }
-        PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
-    }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
-        mLoadingDataText.setVisibility(View.GONE);
 
-        if (events != null && events.size() > 0) {
+        if (!mIsSelectionMode) {
+            mLoadingDataText.setVisibility(View.GONE);
 
-            Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
+            if (events != null && events.size() > 0) {
+                Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
 
-            for (Event event : events) {
-                Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
-            }
-
-            mNewEventsList.clear();
-
-            mEventsQueue.clear();
-
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-
-            mNoData = false;
-
-            for (Event event : events) {
-                event.setTimeOfAdded(System.currentTimeMillis());
-
-                if (!mIsNewShiftLogs) {
-                    event.setIsDismiss(true);
+                for (Event event : events) {
+                    Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
                 }
 
-            }
+                mNewEventsList.clear();
 
+                mEventsQueue.clear();
 
-            for (Event event : events) {
+                PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
+                mNoData = false;
 
-                if (DataSupport.count(Event.class)==0||!DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+                for (Event event : events) {
+                    event.setTimeOfAdded(System.currentTimeMillis());
 
-                    mNewEventsList.add(event);
-
-                    event.save();
-
-                    if (mIsNewShiftLogs) {
-                        mEventsQueue.add(event);
+                    if (!mIsNewShiftLogs) {
+                        event.setIsDismiss(true);
                     }
-                } else {
 
-                    event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                 }
-            }
 
 
-            mNoNotificationsText.setVisibility(View.GONE);
+                for (Event event : events) {
+
+
+                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
+
+                        mNewEventsList.add(event);
+
+                        event.save();
+
+                        if (mIsNewShiftLogs) {
+                            mEventsQueue.add(event);
+                        }
+                    } else {
+
+                        event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    }
+                }
+
+
+                mNoNotificationsText.setVisibility(View.GONE);
 
 // TODO: 15/04/2018 David Vardi fix this code
           /*  if (mShiftLogAdapter != null) {
@@ -937,37 +848,41 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
 
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
-            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-            if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
-            {
-                Event event = mEventsQueue.peek();
-                // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
-                if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
-                    openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
-                    //openDialog(event, true);
-                    mEventsQueue.pop();
-                    mIsOpenDialog = true;
+                if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
+                {
+                    Event event = mEventsQueue.peek();
+                    // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
+                    if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
+                        openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
+                        //openDialog(event, true);
+                        mEventsQueue.pop();
+                        mIsOpenDialog = true;
 
-                } else if (event.getEventGroupID() == TYPE_ALERT) {
-                    openDialog(event, false);
-                    mEventsQueue.pop();
-                    mIsOpenDialog = true;
+                    } else if (event.getEventGroupID() == TYPE_ALERT) {
+                        openDialog(event, false);
+                        mEventsQueue.pop();
+                        mIsOpenDialog = true;
+                    }
+
                 }
+            } else
 
+            {
+                if (DataSupport.count(Event.class) == 0) {
+                    mNoData = true;
+                    mNoNotificationsText.setVisibility(View.VISIBLE);
+                }
             }
-        } else {
-            if (DataSupport.count(Event.class) == 0) {
-                mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
-            }
+
+            mIsNewShiftLogs = true;
+            PersistenceManager.getInstance().setIsNewShiftLogs(true);
+
+            if (mShiftLogAdapter != null)
+                mShiftLogAdapter.notifyDataSetChanged();
         }
-        mIsNewShiftLogs = true;
-        PersistenceManager.getInstance().setIsNewShiftLogs(true);
-
-        if (mShiftLogAdapter != null)
-            mShiftLogAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -979,9 +894,9 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
     @Override
     public void onShiftForMachineEnded() {
-        if (mShiftLogParams != null && mWidgetsParams != null) {
-            closeWoopList(mShiftLogParams, mWidgetsParams);
-        }
+//       TODO if (mShiftLogParams != null && mWidgetsParams != null) {
+//            closeWoopList(mShiftLogParams, mWidgetsParams);
+//        }
 
         DataSupport.deleteAll(Event.class);
 
@@ -1009,17 +924,11 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onDataFailure");
 
 
-        mLoadingDataView.setVisibility(View.GONE);
         if (callType == CallType.Status) {
             mMachineStatusLayout.setVisibility(View.VISIBLE);
             clearStatusLayout();
         }
 
-        if (callType == CallType.MachineData) {
-            if (mWidgets == null || mWidgets.size() == 0) {
-                mNoDataView.setVisibility(View.VISIBLE);
-            }
-        }
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -1082,16 +991,15 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
             machineName = getString(R.string.dashes);
         }
 
-        if(machinesData.getConfigName()!= null ){
+        if (machinesData.getConfigName() != null) {
 
             mConfigView.setVisibility(View.VISIBLE);
             mConfigLayout.setVisibility(View.VISIBLE);
 
-            mConfigTextView.setText( machinesData.getConfigName());
-        }else {
+            mConfigTextView.setText(machinesData.getConfigName());
+        } else {
             mConfigView.setVisibility(View.GONE);
             mConfigLayout.setVisibility(View.GONE);
-
 
         }
 
@@ -1227,7 +1135,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
                 events.get(0).setEventGroupLname(il);
                 events.get(0).setmEventGroupEname(en);
 
-                if (mShiftLogAdapter != null) {
+                if (mShiftLogAdapter != null && !mIsSelectionMode) {
 
                     mShiftLogAdapter.notifyDataSetChanged();
 
@@ -1238,6 +1146,33 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
         }
     }
 
+    public void disableSelectMode() {
 
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
+        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+        mIsSelectionMode = false;
+    }
+
+    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
+        mSelectedEvents = selectedEvents;
+
+        if (mShiftLogAdapter != null){
+
+            mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
+        }
+    }
+
+    public interface DashBoard2Listener {
+        void onWidgetChangeState(boolean state);
+
+        void onWidgetUpdateSpane(int span);
+
+        void onResize(int width, int statusBarsHeight);
+
+        void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
+
+        void onEventSelected(Integer event, boolean b);
+    }
 
 }

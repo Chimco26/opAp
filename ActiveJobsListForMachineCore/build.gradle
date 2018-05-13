@@ -25,4 +25,5 @@ dependencies {
     implementation project(':ActiveJobsListForMachineInfra')
     implementation project(':ActiveJobsListForMachineNetworkBridge')
     implementation(name: 'logrecorder', ext: 'aar')
+    compile project(path: ':ErrorObjectInterface')
 }

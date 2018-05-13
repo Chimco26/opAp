@@ -1,7 +1,6 @@
 package com.operators.reportrejectnetworkbridge;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
@@ -14,6 +13,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkMan
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
+import com.operators.reportrejectnetworkbridge.server.request.SendMultipleStopRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
@@ -58,6 +58,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     public void injectApproveFirstItem(ApproveFirstItemNetworkManagerInterface approveFirstItemNetworkManagerInterface) {
         mApproveFirstItemNetworkManagerInterface = approveFirstItemNetworkManagerInterface;
     }
+
 
 
     @Override
@@ -109,6 +110,55 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             }
         });
 
+    }
+
+        public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+
+            SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId);
+
+            final int[] retryCount = {0};
+
+            Call<SendMultipleStopRequest> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendMultipleStopReport(sendMultipleStopRequest);
+
+            call.enqueue(new Callback<SendMultipleStopRequest>() {
+                @Override
+                public void onResponse(@NonNull Call<SendMultipleStopRequest> call, @NonNull Response<SendMultipleStopRequest> response) {
+
+                    if (response.isSuccessful()) {
+                        if (callback != null) {
+
+                            callback.onSendStopReportSuccess();
+                        } else {
+
+                            ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
+                        }
+                    }
+                    else
+                    {
+
+                        onFailure(call,new Exception("response not successful"));
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<SendMultipleStopRequest> call, Throwable t) {
+                    if (callback != null) {
+                        if (retryCount[0]++ < totalRetries) {
+                            ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                            call.clone().enqueue(this);
+                        } else {
+                            retryCount[0] = 0;
+                            ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                            callback.onSendStopReportFailed(errorObject);
+                        }
+                    } else {
+                        ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
+
+                    }
+                }
+            });
     }
 
 
@@ -198,6 +248,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             }
         });
     }
+
 
 
     @Override
