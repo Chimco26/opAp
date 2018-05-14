@@ -90,6 +90,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final int THIRTY_SECONDS = 30 * 1000;
     public static final int TYPE_STOP = 6;
     public static final int TYPE_ALERT = 20;
+    private static final int STOPPED = 2;
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -552,6 +553,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     String nameByLang = OperatorApplication.isEnglishLang() ? mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductEname() : mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName();
                     if (mJobActionsSpinnerItems.get(position).isEnabled()) {
+                        // TODO: 5/10/2018 NATAN
                         switch (position) {
                             case 0: {
                                 ZLogger.d(LOG_TAG, "New Job");
@@ -696,7 +698,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             event.setIsDismiss(true);
 
             if (event.getEventGroupID() == TYPE_STOP) {
-                openStopReportScreen(event.getEventID(), null, null, event.getDuration());
+  //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
+                startSelectMode(STOPPED, event.getEventID());
+
                 /*
                 if(event.getEventEndTime() == null || event.getTime() == null || event.getEventEndTime().equals("") || event.getTime().equals(""))
                 {
@@ -738,13 +742,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onReportClick(int eventId, String start, String end, long duration) {
-        openStopReportScreen(eventId, start, end, duration);
+    //TODO    openStopReportScreen(eventId, start, end, duration);
+        startSelectMode(STOPPED, eventId);
     }
 
     @Override
     public void onStopClicked(int eventId, String startTime, String endTime, long duration) {
 
-        openStopReportScreen(eventId, startTime, endTime, duration);
+    //TODO    openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
     @Override
@@ -755,17 +760,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(int type, int eventID) {
 
+        startSelectMode(type, eventID);
+    }
+
+    private void startSelectMode(int type, int eventID) {
+
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(mIsOpen));
 
         mIsSelectionMode = true;
 
         mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type, true, eventID);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+        onStopEventSelected(eventID, true);
     }
 
-    private void openStopReportScreen(int eventId, String start, String end, long duration) {
-        mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
-    }
+//    private void openStopReportScreen(int eventId, String start, String end, long duration) {
+//   aa     mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
+//    }
 
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
@@ -847,7 +859,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
-
+//TODO bug כאשר המידע מתרפרש הshift log קופץ למעלה, צריך להישאר בפריים עליו אני מסתכל.
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
@@ -856,7 +868,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     Event event = mEventsQueue.peek();
                     // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
                     if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
-                        openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
+                      //TODO  openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
+                        startSelectMode(STOPPED, event.getEventID());
                         //openDialog(event, true);
                         mEventsQueue.pop();
                         mIsOpenDialog = true;

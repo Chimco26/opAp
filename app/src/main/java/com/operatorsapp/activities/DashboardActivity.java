@@ -107,7 +107,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
     private TimeToEndCounter mTimeToEndCounter;
-    private DashboardUICallbackListener mDashboardUICallbackListener;
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
     private DashBoardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
@@ -381,7 +380,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                         ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
-                        mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
+                        dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
                     }
                 }
             }
