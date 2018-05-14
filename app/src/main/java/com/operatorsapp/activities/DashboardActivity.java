@@ -48,10 +48,12 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
+import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
+import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
@@ -100,7 +102,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.DashBoard2Listener,
-        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener {
+        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener,
+        ViewPagerFragment.OnViewPagerListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -126,6 +129,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private View mContainer3;
     private Fragment mChartFragment;
     private int mSpan = 3;
+    private ViewPagerFragment mViewPagerfragment;
 
 
     @Override
@@ -169,6 +173,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         openWidgetFragment();
 
+        initViewPagerFragment();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
@@ -180,13 +186,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+//        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+    }
+
+    private void initViewPagerFragment() {
+
+        mViewPagerfragment = ViewPagerFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mWidgetFragment != null) {
+        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().remove(mWidgetFragment).commit();
         }
@@ -595,7 +608,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             return;
         }
 //        if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //        } else {
 //            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
 //        }
@@ -979,10 +992,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(span);
         }
-        if (mSelectStopReasonFragmentNew != null){
+        if (mSelectStopReasonFragmentNew != null) {
             mSelectStopReasonFragmentNew.setSpanCount(span != 3);
         }
-        if (mReportStopReasonFragmentNew != null){
+        if (mReportStopReasonFragmentNew != null) {
             mReportStopReasonFragmentNew.setSpanCount(span != 3);
         }
 
@@ -1127,5 +1140,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mSelectedEvents != null) {
             mSelectedEvents = null;
         }
+    }
+
+    @Override
+    public void onViewPagerCreated() {
+
+        mViewPagerfragment.addFragment(mWidgetFragment);
+
     }
 }
