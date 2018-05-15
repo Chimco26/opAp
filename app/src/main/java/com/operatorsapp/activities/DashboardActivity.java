@@ -173,7 +173,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         openWidgetFragment();
 
-        initViewPagerFragment();
+//    TODO    initViewPagerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
@@ -186,13 +186,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-//        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
     }
 
     private void initViewPagerFragment() {
 
         mViewPagerfragment = ViewPagerFragment.newInstance();
 
+        //TODO remove for viewpager
         getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
 

@@ -179,6 +179,10 @@
     <string name="log_in_to_nyour_factory">Log In To\nYour Factory</string>
     <string name="machine_id" translatable="false">&#160;</string>
     <string name="pConfig">PConfig</string>
+    <string name="channel_0">Channel 0</string>
+    <string name="channel_1_99">channel 1-99</string>
+    <string name="channel_100">channel 100</string>
+    <string name="channel_100_consumbles">Channel 100 - Consumbles</string>
 
 
 </resources>

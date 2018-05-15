@@ -72,7 +72,7 @@
                     android:layout_weight="1"
                     android:gravity="start"
                     android:text="@string/planned_start"
-                    android:textColor="@color/C1"
+                    android:textColor="@color/dark_blue_two"
                     android:textSize="18sp" />
 
                 <TextView
@@ -109,7 +109,7 @@
                     android:layout_weight="1"
                     android:text="@string/dashes"
                     android:gravity="start"
-                    android:textColor="@color/C1"
+                    android:textColor="@color/dark_blue_two"
                     android:textSize="18sp" />
 
                 <TextView
@@ -146,7 +146,7 @@
                     android:layout_weight="1"
                     android:text="@string/dashes"
                     android:gravity="start"
-                    android:textColor="@color/C1"
+                    android:textColor="@color/dark_blue_two"
                     android:textSize="18sp" />
 
                 <TextView
@@ -182,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/dashes"
-                    android:textColor="@color/C1"
+                    android:textColor="@color/dark_blue_two"
                     android:textSize="18sp" />
 
                 <TextView

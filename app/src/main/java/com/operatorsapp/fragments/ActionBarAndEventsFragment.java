@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -302,7 +303,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         toggleWoopList(leftLayoutParams, mOpenWidth, null, true);
-                        mShiftLogAdapter.notifyDataSetChanged();
+                        if (mShiftLogAdapter != null) {
+                            mShiftLogAdapter.notifyDataSetChanged();
+                        }
                         mListener.onWidgetChangeState(false);
                         mListener.onWidgetUpdateSpane(2);
 
@@ -390,10 +393,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mDatabaseHelper = new DatabaseHelper(getContext());
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
-        mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+        Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTime();
 
-        mShiftLogAdapter.notifyDataSetChanged();
+        if (mTempCursor.moveToFirst()) {
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
+            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+            mShiftLogAdapter.notifyDataSetChanged();
+        }
 
         if (DataSupport.count(Event.class) > 0) {
             mNoData = false;
@@ -698,7 +705,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             event.setIsDismiss(true);
 
             if (event.getEventGroupID() == TYPE_STOP) {
-  //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
+                //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
                 startSelectMode(STOPPED, event.getEventID());
 
                 /*
@@ -721,7 +728,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void openDialog(Event event, boolean isStopDialog) {
 
-        ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, "");
+        String message;
+
+        if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
+
+        message =  event.getSubtitleEname();
+
+        }else {
+
+            message = event.getSubtitleLname();
+        }
+
+        message += " " + getActivity().getResources().getString(R.string.alarm);
+
+        message += " " + event.getAlarmValue();
+
+        ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, message);
 
     }
 
@@ -742,14 +764,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onReportClick(int eventId, String start, String end, long duration) {
-    //TODO    openStopReportScreen(eventId, start, end, duration);
+        //TODO    openStopReportScreen(eventId, start, end, duration);
         startSelectMode(STOPPED, eventId);
     }
 
     @Override
     public void onStopClicked(int eventId, String startTime, String endTime, long duration) {
 
-    //TODO    openStopReportScreen(eventId, startTime, endTime, duration);
+        //TODO    openStopReportScreen(eventId, startTime, endTime, duration);
     }
 
     @Override
@@ -848,7 +870,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                 }
 
-
                 mNoNotificationsText.setVisibility(View.GONE);
 
 // TODO: 15/04/2018 David Vardi fix this code
@@ -859,16 +880,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
             }*/
-//TODO bug כאשר המידע מתרפרש הshift log קופץ למעלה, צריך להישאר בפריים עליו אני מסתכל.
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
-                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+                if (mShiftLogAdapter == null) {
+                    mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
+                    mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
+                } else {
+                    mShiftLogAdapter.notifyDataSetChanged();
+                }
                 if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
                 {
                     Event event = mEventsQueue.peek();
                     // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
                     if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
-                      //TODO  openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
+                        //TODO  openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
                         startSelectMode(STOPPED, event.getEventID());
                         //openDialog(event, true);
                         mEventsQueue.pop();
@@ -1170,7 +1194,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
         mSelectedEvents = selectedEvents;
 
-        if (mShiftLogAdapter != null){
+        if (mShiftLogAdapter != null) {
 
             mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
         }

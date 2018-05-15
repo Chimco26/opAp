@@ -70,6 +70,11 @@ public class ViewPagerFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     public void addFragment(Fragment fragment){
 
         if (mPagerAdapter != null){
@@ -81,12 +86,8 @@ public class ViewPagerFragment extends Fragment {
 
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     public interface OnViewPagerListener {
+
 
         void onViewPagerCreated();
 
