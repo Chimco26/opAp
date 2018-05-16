@@ -21,7 +21,7 @@ import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUni
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportStopRequest;
-import com.operators.reportrejectnetworkbridge.server.response.RecipeResponse;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportInventoryResponse;

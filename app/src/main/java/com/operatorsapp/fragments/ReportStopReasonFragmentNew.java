@@ -253,7 +253,7 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
             }
         });
 
-        mReportCore.getAllRecipe(jobId);
+        mReportCore.getAllRecipe(2);
 
 
     }

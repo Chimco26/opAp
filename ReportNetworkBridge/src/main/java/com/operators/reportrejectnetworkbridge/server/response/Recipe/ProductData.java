@@ -1,4 +1,4 @@
-package com.operators.reportrejectnetworkbridge.server.response;
+package com.operators.reportrejectnetworkbridge.server.response.Recipe;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -17,12 +17,15 @@ public class ProductData{
   private String Name;
   public ProductData(){
   }
-  public ProductData(List<String> fileUrl, Integer ID,String Name){
-   this.FileUrl=fileUrl;
+  public ProductData(List<String> FileUrl, Integer ID,String Name){
+   this.FileUrl=FileUrl;
    this.ID=ID;
    this.Name=Name;
   }
-  public Object getFileUrl(){
+  public void setFileUrl(List<String> FileUrl){
+   this.FileUrl=FileUrl;
+  }
+  public List<String> getFileUrl(){
    return FileUrl;
   }
   public void setID(Integer ID){

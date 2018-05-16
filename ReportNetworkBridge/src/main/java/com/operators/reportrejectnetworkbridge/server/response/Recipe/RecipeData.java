@@ -1,8 +1,6 @@
-package com.operators.reportrejectnetworkbridge.server.response;
+package com.operators.reportrejectnetworkbridge.server.response.Recipe;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.operators.reportrejectnetworkbridge.server.response.ChannelSplits;
-
 import java.util.List;
 /**
  * Awesome Pojo Generator

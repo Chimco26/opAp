@@ -1,4 +1,4 @@
-package com.operators.reportrejectnetworkbridge.server.response;
+package com.operators.reportrejectnetworkbridge.server.response.Recipe;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
