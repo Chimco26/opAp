@@ -1159,27 +1159,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onSelectStopReason(int eventId, int reasonId, String en, String il) {
+    public void onSelectStopReason(int eventId, int reasonId, String en, String il, String eSubTitle, String lSubtitle) {
 
         List<Event> events = DataSupport.where(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId)).find(Event.class);
+
 
         if (events != null && events.size() > 0) {
             {
 
+                for (Event event: events){
 
-                events.get(0).setTreated(true);
-                events.get(0).setEventGroupID(reasonId);
-                events.get(0).setEventGroupLname(il);
-                events.get(0).setmEventGroupEname(en);
+                    event.setTreated(true);
+                    event.setEventGroupID(reasonId);
+                    event.setEventGroupLname(il);
+                    event.setmEventGroupEname(en);
+                    event.setEventSubTitleEname(eSubTitle);
+                    event.setEventSubTitleLname(lSubtitle);
+                    event.updateAll("meventid = ?", String.valueOf(eventId));
+                }
 
-                if (mShiftLogAdapter != null && !mIsSelectionMode) {
+
+                if (mShiftLogAdapter != null) {
 
                     mShiftLogAdapter.notifyDataSetChanged();
 
 
                 }
-
             }
+
         }
     }
 

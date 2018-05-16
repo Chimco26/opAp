@@ -2,22 +2,26 @@ package com.operators.reportrejectnetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
 import com.operators.reportrejectinfra.SendReportStopCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
+import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendApproveFirstItemRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendMultipleStopRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUnitsRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportStopRequest;
+import com.operators.reportrejectnetworkbridge.server.response.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportInventoryResponse;
@@ -41,6 +45,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     private ReportStopNetworkManagerInterface mReportStopNetworkManagerInterface;
     private ReportCycleUnitsNetworkManagerInterface mReportCycleUnitsNetworkManagerInterface;
     private ReportInventoryNetworkManagerInterface mReportInventoryNetworkManagerInterface;
+    private GetAllRecipeNetworkManagerInterface mGetAllRecipeNetworkManagerInterface;
 
     public void inject(ReportRejectNetworkManagerInterface reportRejectNetworkManagerInterface, ReportStopNetworkManagerInterface reportStopNetworkManagerInterface) {
         mReportRejectNetworkManagerInterface = reportRejectNetworkManagerInterface;
@@ -59,6 +64,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
         mApproveFirstItemNetworkManagerInterface = approveFirstItemNetworkManagerInterface;
     }
 
+    public void injectGetAllRecipe(GetAllRecipeNetworkManagerInterface getAllRecipeNetworkManagerInterface) {
+        mGetAllRecipeNetworkManagerInterface = getAllRecipeNetworkManagerInterface;
+    }
 
 
     @Override
@@ -82,11 +90,9 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
                         ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
-                }
-                else
-                {
+                } else {
 
-                    onFailure(call,new Exception("response not successful"));
+                    onFailure(call, new Exception("response not successful"));
                 }
 
             }
@@ -112,53 +118,98 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     }
 
-        public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
+    public void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId, final SendReportStopCallback callback, final int totalRetries, int specificRequestTimeout) {
 
-            SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId);
+        SendMultipleStopRequest sendMultipleStopRequest = new SendMultipleStopRequest(sessionId, machineId, operatorId, stopReasonId, stopSubReasonId, jobId, eventId);
 
-            final int[] retryCount = {0};
+        final int[] retryCount = {0};
 
-            Call<SendMultipleStopRequest> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendMultipleStopReport(sendMultipleStopRequest);
+        Call<SendMultipleStopRequest> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendMultipleStopReport(sendMultipleStopRequest);
 
-            call.enqueue(new Callback<SendMultipleStopRequest>() {
-                @Override
-                public void onResponse(@NonNull Call<SendMultipleStopRequest> call, @NonNull Response<SendMultipleStopRequest> response) {
+        call.enqueue(new Callback<SendMultipleStopRequest>() {
+            @Override
+            public void onResponse(@NonNull Call<SendMultipleStopRequest> call, @NonNull Response<SendMultipleStopRequest> response) {
 
-                    if (response.isSuccessful()) {
-                        if (callback != null) {
-
-                            callback.onSendStopReportSuccess();
-                        } else {
-
-                            ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
-                        }
-                    }
-                    else
-                    {
-
-                        onFailure(call,new Exception("response not successful"));
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<SendMultipleStopRequest> call, Throwable t) {
+                if (response.isSuccessful()) {
                     if (callback != null) {
-                        if (retryCount[0]++ < totalRetries) {
-                            ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
-                            call.clone().enqueue(this);
-                        } else {
-                            retryCount[0] = 0;
-                            ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
-                            callback.onSendStopReportFailed(errorObject);
-                        }
-                    } else {
-                        ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
 
+                        callback.onSendStopReportSuccess();
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
                     }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
                 }
-            });
+
+            }
+
+            @Override
+            public void onFailure(Call<SendMultipleStopRequest> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                        callback.onSendStopReportFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public void getAllRecipe(String siteUrl, String sessionId, Integer jobId, final GetAllRecipeCallback callback, final int totalRetries, int specificRequestTimeout) {
+
+        GetAllRecipesRequest getAllRecipesRequest = new GetAllRecipesRequest(sessionId, jobId);
+
+        final int[] retryCount = {0};
+
+        Call<RecipeResponse> call = mGetAllRecipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getAllRecipesRequest(getAllRecipesRequest);
+
+        call.enqueue(new Callback<RecipeResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<RecipeResponse> call, @NonNull Response<RecipeResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onGetAllRecipeSuccess();
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<RecipeResponse> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
+                        callback.onGetAllRecipeFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+
+                }
+            }
+        });
     }
 
 
@@ -177,10 +228,8 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
-                    }
-                    else
-                    {
-                        onFailure(call,new Exception("response not successful"));
+                    } else {
+                        onFailure(call, new Exception("response not successful"));
                     }
                 }
             }
@@ -206,8 +255,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
     @Override
-    public void sendApproveFirstItem(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int aprovingTechnicianId, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout)
-    {
+    public void sendApproveFirstItem(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int aprovingTechnicianId, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
         SendApproveFirstItemRequest sendApproveFirstItemRequest = new SendApproveFirstItemRequest(sessionId, machineId, operatorId, rejectReasonId, aprovingTechnicianId, jobId);
         final int[] retryCount = {0};
         Call<SendApproveFirstItemResponse> call = mApproveFirstItemNetworkManagerInterface.approveFirstItemRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendApproveFirstItem(sendApproveFirstItemRequest);
@@ -221,10 +269,8 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
-                    }
-                    else
-                    {
-                        onFailure(call,new Exception("response not successful"));
+                    } else {
+                        onFailure(call, new Exception("response not successful"));
                     }
                 }
             }
@@ -250,7 +296,6 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     }
 
 
-
     @Override
     public void sendReportCycleUnits(String siteUrl, String sessionId, String machineId, String operatorId, double unitsPerCycle, Integer jobId, final SendReportCallback callback, final int totalRetries, int specificRequestTimeout) {
         SendReportCycleUnitsRequest sendReportCycleUnitsRequest = new SendReportCycleUnitsRequest(sessionId, machineId, operatorId, unitsPerCycle, jobId);
@@ -266,10 +311,8 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
-                    }
-                    else
-                    {
-                        onFailure(call,new Exception("response not successful"));
+                    } else {
+                        onFailure(call, new Exception("response not successful"));
                     }
                 }
             }
@@ -309,10 +352,8 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
                         }
-                    }
-                    else
-                    {
-                        onFailure(call,new Exception("response not successful"));
+                    } else {
+                        onFailure(call, new Exception("response not successful"));
                     }
                 }
             }
@@ -336,4 +377,5 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             }
         });
     }
+
 }

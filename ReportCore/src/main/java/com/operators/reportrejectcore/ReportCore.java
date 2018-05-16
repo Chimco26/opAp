@@ -1,6 +1,7 @@
 package com.operators.reportrejectcore;
 
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
@@ -11,8 +12,7 @@ import com.zemingo.logrecorder.ZLogger;
 /**
  * Created by Sergey on 08/08/2016.
  */
-public class ReportCore
-{
+public class ReportCore {
     private static final String LOG_TAG = ReportCore.class.getSimpleName();
     private ReportRejectNetworkBridgeInterface mReportRejectNetworkBridgeInterface;
     private ReportCallbackListener mReportCallbackListener;
@@ -110,6 +110,33 @@ public class ReportCore
         }
 
     }
+
+    public void getAllRecipe(Integer jobId) {
+        if (mReportPersistenceManagerInterface != null) {
+            mReportRejectNetworkBridgeInterface.getAllRecipe(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
+                      jobId, new GetAllRecipeCallback() {
+                        @Override
+                        public void onGetAllRecipeSuccess() {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportSuccess();
+                            } else {
+                                ZLogger.w(LOG_TAG, "onGetAllRecipeSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+
+                        @Override
+                        public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
+                            if (mReportCallbackListener != null) {
+                                mReportCallbackListener.sendReportFailure(reason);
+                            } else {
+                                ZLogger.w(LOG_TAG, "onGetAllRecipeSuccess() mReportCallbackListener is null ");
+                            }
+                        }
+                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
+        }
+
+    }
+
     public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),

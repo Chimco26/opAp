@@ -30,6 +30,9 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.StopReasons;
+import com.operators.reportrejectcore.ReportCallbackListener;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
@@ -205,6 +208,8 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     @Override
     public void onStopReasonSelected(int position) {
 
+//        getAllRecipes(mJobId);
+
         try {
 //            mGoToScreenListener.goToFragment(SelectStopReasonFragmentNew.newInstance(position,
 //                    mJobId,
@@ -225,6 +230,31 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
 
             SendReportUtil.sendAcraExeption(e,"onStopReasonSelected");
         }
+
+    }
+
+    private void getAllRecipes(Integer jobId){
+
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+
+        reportNetworkBridge.injectGetAllRecipe(NetworkManager.getInstance());
+
+        ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+
+        mReportCore.registerListener(new ReportCallbackListener() {
+            @Override
+            public void sendReportSuccess() {
+
+            }
+
+            @Override
+            public void sendReportFailure(ErrorObjectInterface reason) {
+
+            }
+        });
+
+        mReportCore.getAllRecipe(jobId);
+
 
     }
 

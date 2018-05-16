@@ -11,8 +11,8 @@ import retrofit2.http.POST;
  * Created by Sergey on 08/08/2016.
  */
 public interface EmeraldSendReportReject {
+
     @POST("/LeaderMESApi/ReportReject")
     Call<SendReportRejectResponse> sendReportReject(@Body SendReportRejectRequest sendReportRejectRequest);
-
 
 }

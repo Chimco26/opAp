@@ -16,6 +16,10 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     public static final String IL_NAME = "IL_NAME";
 
+    public static final String L_SUB_NAME = "L_SUB_NAME";
+
+    public static final String E_SUB_NAME = "E_SUB_NAME";
+
     private SelectStopReasonListener mListener;
 
     public SelectStopReasonBroadcast() {
@@ -36,7 +40,10 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
                 mListener.onSelectStopReason(intent.getExtras().getInt(EVENT_ID),
                         intent.getExtras().getInt(REASON_ID),
                         intent.getExtras().getString(EN_NAME),
-                        intent.getExtras().getString(IL_NAME));
+                        intent.getExtras().getString(IL_NAME),
+                        intent.getExtras().getString(E_SUB_NAME),
+                        intent.getExtras().getString(L_SUB_NAME)
+                        );
             }
         }
     }
@@ -44,6 +51,6 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     public interface SelectStopReasonListener {
 
-        void onSelectStopReason(int eventId, int reasonId,String enName,String ilName);
+        void onSelectStopReason(int eventId, int reasonId, String enName, String ilName, String string, String s);
     }
 }

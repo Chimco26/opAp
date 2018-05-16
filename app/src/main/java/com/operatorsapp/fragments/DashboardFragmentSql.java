@@ -1214,7 +1214,7 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
     }
 
     @Override
-    public void onSelectStopReason(int eventId, int reasonId, String en, String il) {
+    public void onSelectStopReason(int eventId, int reasonId, String en, String il, String string, String s) {
 
         List<Event> events = DataSupport.where(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId)).find(Event.class);
 

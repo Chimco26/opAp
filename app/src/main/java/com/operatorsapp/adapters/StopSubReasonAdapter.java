@@ -64,7 +64,7 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
                 @Override
                 public void onClick(View v) {
                     mSelectedPosition = position;
-                    mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(position).getId());
+                    mOnSelectedSubReasonListener.onSubReasonSelected(mSubReasonsList.get(position));
 
 
                 }

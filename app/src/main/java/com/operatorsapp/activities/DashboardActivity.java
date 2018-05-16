@@ -48,6 +48,9 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
+import com.operators.reportrejectcore.ReportCallbackListener;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
@@ -173,27 +176,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         openWidgetFragment();
 
-//    TODO    initViewPagerFragment();
+        initViewPagerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
 
+
     private void openWidgetFragment() {
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+//        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
     }
 
     private void initViewPagerFragment() {
 
         mViewPagerfragment = ViewPagerFragment.newInstance();
 
-        //TODO remove for viewpager
         getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
 

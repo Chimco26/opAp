@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -65,7 +66,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJobId = 0;
 
-    private int mSelectedSubreasonId = -1;
+    private SubReasons mSelectedSubreason;
     private int mSelectedReason;
 
     private RecyclerView mRecyclerView;
@@ -240,12 +241,12 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     }
 
     @Override
-    public void onSubReasonSelected(int subReasonId) {
+    public void onSubReasonSelected(SubReasons subReason) {
         mButtonNext.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
 
-        ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
+        ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
 
-        mSelectedSubreasonId = subReasonId;
+        mSelectedSubreason = subReason;
 
         mStopReasonsAdapter.notifyDataSetChanged();
 
@@ -258,7 +259,7 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_report: {
-                if (mSelectedSubreasonId != -1) {
+                if (mSelectedSubreason != null) {
                     sendReport();
                 }
                 break;
@@ -281,9 +282,9 @@ public class SelectedStopReasonFragment extends BackStackAwareFragment implement
 
         mReportCore.registerListener(mReportCallbackListener);
 
-        mReportCore.sendStopReport(mSelectedReason, mSelectedSubreasonId, mEventId, mJobId);
+        mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mEventId, mJobId);
 
-        SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName);
+        SendBroadcast.sendReason(getContext(), mEventId, mReasonId, mEnName, mILName, mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
 
 
     }
