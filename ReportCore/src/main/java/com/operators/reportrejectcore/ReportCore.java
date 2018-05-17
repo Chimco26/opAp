@@ -1,7 +1,6 @@
 package com.operators.reportrejectcore;
 
 import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
@@ -104,32 +103,6 @@ public class ReportCore {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
-                            }
-                        }
-                    }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
-        }
-
-    }
-
-    public void getAllRecipe(Integer jobId) {
-        if (mReportPersistenceManagerInterface != null) {
-            mReportRejectNetworkBridgeInterface.getAllRecipe(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
-                      jobId, new GetAllRecipeCallback() {
-                        @Override
-                        public void onGetAllRecipeSuccess() {
-                            if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
-                            } else {
-                                ZLogger.w(LOG_TAG, "onGetAllRecipeSuccess() mReportCallbackListener is null ");
-                            }
-                        }
-
-                        @Override
-                        public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
-                            if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportFailure(reason);
-                            } else {
-                                ZLogger.w(LOG_TAG, "onGetAllRecipeSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());

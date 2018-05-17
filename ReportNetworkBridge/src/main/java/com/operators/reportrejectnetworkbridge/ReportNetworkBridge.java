@@ -2,13 +2,11 @@ package com.operators.reportrejectnetworkbridge;
 
 import android.support.annotation.NonNull;
 
-import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
 import com.operators.reportrejectinfra.SendReportStopCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
-import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
@@ -45,7 +43,6 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
     private ReportStopNetworkManagerInterface mReportStopNetworkManagerInterface;
     private ReportCycleUnitsNetworkManagerInterface mReportCycleUnitsNetworkManagerInterface;
     private ReportInventoryNetworkManagerInterface mReportInventoryNetworkManagerInterface;
-    private GetAllRecipeNetworkManagerInterface mGetAllRecipeNetworkManagerInterface;
 
     public void inject(ReportRejectNetworkManagerInterface reportRejectNetworkManagerInterface, ReportStopNetworkManagerInterface reportStopNetworkManagerInterface) {
         mReportRejectNetworkManagerInterface = reportRejectNetworkManagerInterface;
@@ -62,10 +59,6 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
     public void injectApproveFirstItem(ApproveFirstItemNetworkManagerInterface approveFirstItemNetworkManagerInterface) {
         mApproveFirstItemNetworkManagerInterface = approveFirstItemNetworkManagerInterface;
-    }
-
-    public void injectGetAllRecipe(GetAllRecipeNetworkManagerInterface getAllRecipeNetworkManagerInterface) {
-        mGetAllRecipeNetworkManagerInterface = getAllRecipeNetworkManagerInterface;
     }
 
 
@@ -159,53 +152,6 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     }
                 } else {
                     ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
-
-                }
-            }
-        });
-    }
-
-    public void getAllRecipe(String siteUrl, String sessionId, Integer jobId, final GetAllRecipeCallback callback, final int totalRetries, int specificRequestTimeout) {
-
-        GetAllRecipesRequest getAllRecipesRequest = new GetAllRecipesRequest(sessionId, jobId);
-
-        final int[] retryCount = {0};
-
-        Call<RecipeResponse> call = mGetAllRecipeNetworkManagerInterface.emeraldGetAllRecipe(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getAllRecipesRequest(getAllRecipesRequest);
-
-        call.enqueue(new Callback<RecipeResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<RecipeResponse> call, @NonNull Response<RecipeResponse> response) {
-
-                if (response.isSuccessful()) {
-                    if (callback != null) {
-
-                        callback.onGetAllRecipeSuccess();
-                    } else {
-
-                        ZLogger.w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");
-                    }
-                } else {
-
-                    onFailure(call, new Exception("response not successful"));
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<RecipeResponse> call, Throwable t) {
-                if (callback != null) {
-                    if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
-                        call.clone().enqueue(this);
-                    } else {
-                        retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getAllRecipesRequest_Failed Error");
-                        callback.onGetAllRecipeFailed(errorObject);
-                    }
-                } else {
-                    ZLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
 
                 }
             }

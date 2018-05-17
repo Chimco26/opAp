@@ -32,7 +32,10 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
@@ -45,6 +48,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
@@ -208,19 +212,10 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     @Override
     public void onStopReasonSelected(int position) {
 
-//        getAllRecipes(mJobId);
+        getAllRecipes(2);
 
         try {
-//            mGoToScreenListener.goToFragment(SelectStopReasonFragmentNew.newInstance(position,
-//                    mJobId,
-//                    mStart,
-//                    mEnd,
-//                    mDuration,
-//                    mEventId,
-//                    mReportFieldsForMachine.getStopReasons().get(position).getId(),
-//                    mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-//                    mReportFieldsForMachine.getStopReasons().get(position).getLName()), true);
-//
+
             mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew.newInstance(position, mJobId,
                     mReportFieldsForMachine.getStopReasons().get(position).getId(),
                     mReportFieldsForMachine.getStopReasons().get(position).getEName(),
@@ -235,26 +230,23 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
 
     private void getAllRecipes(Integer jobId){
 
-        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
-        reportNetworkBridge.injectGetAllRecipe(NetworkManager.getInstance());
+        SimpleRequests simpleRequests = new SimpleRequests();
 
-        ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        simpleRequests.getAllRecipe(persistanceManager.getSiteUrl(), persistanceManager.getSessionId(),
+                jobId, new GetAllRecipeCallback() {
+                    @Override
+                    public void onGetAllRecipeSuccess(Object response) {
 
-        mReportCore.registerListener(new ReportCallbackListener() {
-            @Override
-            public void sendReportSuccess() {
+                        response = (RecipeResponse) response;
+                    }
 
-            }
+                    @Override
+                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
 
-            @Override
-            public void sendReportFailure(ErrorObjectInterface reason) {
-
-            }
-        });
-
-        mReportCore.getAllRecipe(2);
-
+                    }
+                }, NetworkManager.getInstance(),persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
     }
 
