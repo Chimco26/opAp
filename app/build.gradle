@@ -97,5 +97,6 @@ dependencies {
     androidTestCompile 'com.android.support:multidex:1.0.3'
     androidTestCompile 'com.android.support:multidex-instrumentation:1.0.3'
     implementation  'org.litepal.android:core:1.6.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile project(path: ':SqlCore')
 }

@@ -212,8 +212,6 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     @Override
     public void onStopReasonSelected(int position) {
 
-        getAllRecipes(2);
-
         try {
 
             mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew.newInstance(position, mJobId,
@@ -225,28 +223,6 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
 
             SendReportUtil.sendAcraExeption(e,"onStopReasonSelected");
         }
-
-    }
-
-    private void getAllRecipes(Integer jobId){
-
-        PersistenceManager persistanceManager = PersistenceManager.getInstance();
-
-        SimpleRequests simpleRequests = new SimpleRequests();
-
-        simpleRequests.getAllRecipe(persistanceManager.getSiteUrl(), persistanceManager.getSessionId(),
-                jobId, new GetAllRecipeCallback() {
-                    @Override
-                    public void onGetAllRecipeSuccess(Object response) {
-
-                        response = (RecipeResponse) response;
-                    }
-
-                    @Override
-                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
-
-                    }
-                }, NetworkManager.getInstance(),persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
     }
 

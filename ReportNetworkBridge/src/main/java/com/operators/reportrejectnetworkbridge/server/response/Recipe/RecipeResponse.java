@@ -1,11 +1,16 @@
 package com.operators.reportrejectnetworkbridge.server.response.Recipe;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
-public class RecipeResponse{
+public class RecipeResponse implements Parcelable {
   @SerializedName("ProductData")
   @Expose
   private ProductData ProductData;
@@ -14,7 +19,7 @@ public class RecipeResponse{
   private Integer LeaderRecordID;
   @SerializedName("error")
   @Expose
-  private Object error;
+  private String error;
   @SerializedName("FunctionSucceed")
   @Expose
   private Boolean FunctionSucceed;
@@ -23,7 +28,7 @@ public class RecipeResponse{
   private List<RecipeData> RecipeData;
   public RecipeResponse(){
   }
-  public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,Object error,Boolean FunctionSucceed,List<RecipeData> RecipeData){
+  public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,String error,Boolean FunctionSucceed,List<RecipeData> RecipeData){
    this.ProductData=ProductData;
    this.LeaderRecordID=LeaderRecordID;
    this.error=error;
@@ -42,7 +47,7 @@ public class RecipeResponse{
   public Integer getLeaderRecordID(){
    return LeaderRecordID;
   }
-  public void setError(Object error){
+  public void setError(String error){
    this.error=error;
   }
   public Object getError(){
@@ -60,4 +65,39 @@ public class RecipeResponse{
   public List<RecipeData> getRecipeData(){
    return RecipeData;
   }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.ProductData, flags);
+        dest.writeValue(this.LeaderRecordID);
+        dest.writeString(this.error);
+        dest.writeValue(this.FunctionSucceed);
+        dest.writeList(this.RecipeData);
+    }
+
+    protected RecipeResponse(Parcel in) {
+        this.ProductData = in.readParcelable(com.operators.reportrejectnetworkbridge.server.response.Recipe.ProductData.class.getClassLoader());
+        this.LeaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.error = in.readParcelable(Object.class.getClassLoader());
+        this.FunctionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.RecipeData = new ArrayList<com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData>();
+        in.readList(this.RecipeData, com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<RecipeResponse> CREATOR = new Parcelable.Creator<RecipeResponse>() {
+        @Override
+        public RecipeResponse createFromParcel(Parcel source) {
+            return new RecipeResponse(source);
+        }
+
+        @Override
+        public RecipeResponse[] newArray(int size) {
+            return new RecipeResponse[size];
+        }
+    };
 }

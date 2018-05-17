@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="716dp"
-    android:layout_height="534dp"
+    android:layout_width="450dp"
+    android:layout_height="334dp"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
     android:paddingBottom="69dp"
@@ -47,10 +47,15 @@
         android:background="@color/default_gray" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/IP_rv"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:id="@+id/IP_split_ly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
+    </ScrollView>
 </LinearLayout>

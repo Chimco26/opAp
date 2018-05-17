@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
@@ -87,9 +90,26 @@ public class OperatorApplication extends MultiDexApplication {
 
 //        exceptionHandler();
 
+        initImageLoading();
+
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
+    }
+
+
+    private void initImageLoading() {
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(options).build();
+
+        ImageLoader.getInstance().init(config);
+
     }
 
 

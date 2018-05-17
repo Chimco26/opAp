@@ -50,14 +50,18 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
+import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -106,7 +110,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.DashBoard2Listener,
         ReportStopReasonFragmentNew.ReportStopReasonFragmentListener,
-        ViewPagerFragment.OnViewPagerListener {
+        ViewPagerFragment.OnViewPagerListener,
+        RecipeFragment.OnRecipeFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
@@ -1150,5 +1155,42 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mViewPagerfragment.addFragment(mWidgetFragment);
 
+        initRecipeFragment();
     }
+
+    private void initRecipeFragment() {
+
+//        getAllRecipes(PersistenceManager.getInstance().getJobId());
+        getAllRecipes(2);
+    }
+
+    private void getAllRecipes(Integer jobId) {
+
+        PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        simpleRequests.getAllRecipe(persistanceManager.getSiteUrl(), persistanceManager.getSessionId(),
+                jobId, new GetAllRecipeCallback() {
+                    @Override
+                    public void onGetAllRecipeSuccess(Object response) {
+
+                        showRecipeFragment((RecipeResponse) response);
+                    }
+
+                    @Override
+                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
+
+                    }
+                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+    }
+
+    private void showRecipeFragment(RecipeResponse recipeResponse) {
+
+        RecipeFragment recipeFragment = RecipeFragment.newInstance(recipeResponse);
+
+        mViewPagerfragment.addFragment(recipeFragment);
+    }
+
 }

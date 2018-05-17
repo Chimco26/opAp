@@ -8,34 +8,27 @@ import java.util.List;
 /**
  * Awesome Pojo Generator
  * */
-public class ProductData implements Parcelable {
+public class MaterialInformation implements Parcelable {
   @SerializedName("FileUrl")
   @Expose
   private List<String> FileUrl;
-  @SerializedName("ID")
+  @SerializedName("CatalogID")
   @Expose
-  private Integer ID;
+  private String CatalogID;
   @SerializedName("Name")
   @Expose
   private String Name;
-  public ProductData(){
-  }
-  public ProductData(List<String> FileUrl, Integer ID,String Name){
-   this.FileUrl=FileUrl;
-   this.ID=ID;
-   this.Name=Name;
-  }
   public void setFileUrl(List<String> FileUrl){
    this.FileUrl=FileUrl;
   }
   public List<String> getFileUrl(){
    return FileUrl;
   }
-  public void setID(Integer ID){
-   this.ID=ID;
+  public void setCatalogID(String CatalogID){
+   this.CatalogID=CatalogID;
   }
-  public Integer getID(){
-   return ID;
+  public String getCatalogID(){
+   return CatalogID;
   }
   public void setName(String Name){
    this.Name=Name;
@@ -52,25 +45,28 @@ public class ProductData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(this.FileUrl);
-        dest.writeValue(this.ID);
+        dest.writeString(this.CatalogID);
         dest.writeString(this.Name);
     }
 
-    protected ProductData(Parcel in) {
+    public MaterialInformation() {
+    }
+
+    protected MaterialInformation(Parcel in) {
         this.FileUrl = in.createStringArrayList();
-        this.ID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.CatalogID = in.readString();
         this.Name = in.readString();
     }
 
-    public static final Parcelable.Creator<ProductData> CREATOR = new Parcelable.Creator<ProductData>() {
+    public static final Parcelable.Creator<MaterialInformation> CREATOR = new Parcelable.Creator<MaterialInformation>() {
         @Override
-        public ProductData createFromParcel(Parcel source) {
-            return new ProductData(source);
+        public MaterialInformation createFromParcel(Parcel source) {
+            return new MaterialInformation(source);
         }
 
         @Override
-        public ProductData[] newArray(int size) {
-            return new ProductData[size];
+        public MaterialInformation[] newArray(int size) {
+            return new MaterialInformation[size];
         }
     };
 }
