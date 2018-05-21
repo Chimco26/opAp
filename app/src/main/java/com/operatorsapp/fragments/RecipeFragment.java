@@ -15,18 +15,23 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
+import com.operatorsapp.utils.ViewTagsHelper;
 
-public class RecipeFragment extends Fragment implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class RecipeFragment extends Fragment implements View.OnClickListener, Channel100Adapter.Channel100AdapterListener {
 
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
     private OnRecipeFragmentListener mListener;
     private RecipeResponse mRecipeResponse;
-    private View mchannel0BootomView;
-    private View mchannel1_99BootomView;
-    private View mchannel100BootomView;
+    private View mchannel0BotomView;
+    private View mchannel1_99BotomView;
+    private View mchannel100BotomView;
     private View mLayoutChannel0;
     private TextView mLayoutChannel0Title;
     private ImageView mLayoutChannel0Image;
@@ -36,6 +41,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mLayoutChannel0ItemRv;
     private LinearLayout mLayoutChannel0ItemSplitLy;
     private View mMainView;
+    private View mLayoutChannel100;
+    private TextView mLayoutChannel100Title;
+    private RecyclerView mLayoutChannel100Rv;
+    private Channel100Adapter mChannel100Adapter;
+    private LinearLayout mlayoutChannel1_99;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -77,7 +87,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         mMainView = inflater.inflate(R.layout.frament_recipe, container, false);
+        mMainView = inflater.inflate(R.layout.frament_recipe, container, false);
 
         return mMainView;
     }
@@ -93,14 +103,32 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
     private void initVars(View view) {
 
-        mchannel0BootomView = view.findViewById(R.id.FR_channel_0_btn_bottom);
+        mchannel0BotomView = view.findViewById(R.id.FR_channel_0_btn_bottom);
 
-        mchannel1_99BootomView = view.findViewById(R.id.FR_channel_1_99_btn_bottom);
+        mchannel1_99BotomView = view.findViewById(R.id.FR_channel_1_99_btn_bottom);
 
-        mchannel100BootomView = view.findViewById(R.id.FR_channel_100_btn_bottom);
+        mchannel100BotomView = view.findViewById(R.id.FR_channel_100_btn_bottom);
 
         initChannel0Vars(view);
 
+        initChannel1_99Vars(view);
+
+        initChannel100Vars(view);
+
+    }
+
+    private void initChannel1_99Vars(View view) {
+
+        mlayoutChannel1_99 = view.findViewById(R.id.FR_channel_1_99_ly);
+    }
+
+    private void initChannel100Vars(View view) {
+
+        mLayoutChannel100 = view.findViewById(R.id.FR_channel_100_ly);
+
+        mLayoutChannel100Title = mLayoutChannel100.findViewById(R.id.C100_tv);
+
+        mLayoutChannel100Rv = mLayoutChannel100.findViewById(R.id.channel_100_rv);
     }
 
     private void initChannel0Vars(View view) {
@@ -124,6 +152,28 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     private void initView(View view) {
 
         initChannel0View(view);
+
+        initChannel100View();
+
+        initChanne1_1_99_View();
+    }
+
+    private void initChannel100View() {
+//TODO check channel 100 exist logic
+
+//     TODO   if (mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 98){
+
+        mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(1).getName());
+
+        mChannel100Adapter = new Channel100Adapter(getActivity(), this, (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(1).getChannelSplits());
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+        mLayoutChannel100Rv.setLayoutManager(layoutManager);
+
+        mLayoutChannel100Rv.setAdapter(mChannel100Adapter);
+//        }
     }
 
     private void initChannel0View(View view) {
@@ -144,15 +194,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
 
-            for (BaseSplits baseSplits: recipeChannel0.getChannelSplits().get(0).getBaseSplits()){
+            for (BaseSplits baseSplits : recipeChannel0.getChannelSplits().get(0).getBaseSplits()) {
 
                 LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 View itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
 
-                ((TextView)itemView.findViewById(R.id.IS_tv1)).setText(baseSplits.getPropertyName());
+                ((TextView) itemView.findViewById(R.id.IS_tv1)).setText(baseSplits.getPropertyName());
 
-//                ((TextView)itemView.findViewById(R.id.IS_tv1_nmbr)).setText(baseSplits.getFValue());
+//           TODO     ((TextView)itemView.findViewById(R.id.IS_tv1_nmbr)).setText(baseSplits.getFValue());
 
                 mLayoutChannel0ItemSplitLy.addView(itemView);
 
@@ -173,37 +223,98 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initChanne1_1_99_View() {
-//
-//        if (mCoreTagsResponse.getName() != null) {
-//
-//            ((TextView) mView.findViewById(R.id.FSP_title)).setText(mCoreTagsResponse.getName());
-//
-//        }
-//
-//        if (mCoreTagsResponse.getQuestion() != null){
-//
-//            ViewTagsHelper.addTitle(getActivity() , mCoreTagsResponse.getQuestion() , mMainView);
-//
-//            ViewTagsHelper.addRv(getContext() , mCoreTagsResponse , mMainView , this, false);
-//
-//        }else {
-//
-//            if (mCoreTagsResponse.getOptions() != null){
-//
-//                for (Object coreExpertiseResponse: mCoreTagsResponse.getOptions()){
-//
-//                    ViewTagsHelper.addTitle(getContext() , ((CoreTagsResponse)coreExpertiseResponse).getQuestion() , mMainView);
-//
-//                    ViewTagsHelper.addRv(getContext()
-//                            , ((CoreTagsResponse) coreExpertiseResponse), mMainView , this, false);
-//                }
-//            }
-//        }
+//TODO check channel 100 exist logic
+        if (mRecipeResponse.getRecipeData() != null){
+
+            List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
+            if (recipeResponse_1_99.size() >= 99){
+
+                recipeResponse_1_99.remove(99);
+            }
+            recipeResponse_1_99.remove(0);
+
+            for (RecipeData recipeData: recipeResponse_1_99) {
+
+                ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
+
+                ViewTagsHelper.addRv(getContext(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
+
+                ViewTagsHelper.addSeparator(getContext(), mlayoutChannel1_99);
+            }
+        }
 
     }
 
     @Override
     public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.FR_channel_0_btn:
+
+                updateBar(view.getId());
+
+                break;
+
+            case R.id.FR_channel_1_99_btn:
+
+                updateBar(view.getId());
+
+                break;
+
+            case R.id.FR_channel_100_btn:
+
+                updateBar(view.getId());
+
+                break;
+
+        }
+    }
+
+    private void updateBar(int id) {
+
+        mchannel0BotomView.setVisibility(View.INVISIBLE);
+        mchannel1_99BotomView.setVisibility(View.INVISIBLE);
+        mchannel100BotomView.setVisibility(View.INVISIBLE);
+
+        switch (id) {
+
+            case R.id.FR_channel_0_btn:
+
+                mchannel1_99BotomView.setVisibility(View.INVISIBLE);
+                mchannel100BotomView.setVisibility(View.INVISIBLE);
+                mchannel0BotomView.setVisibility(View.VISIBLE);
+
+                mlayoutChannel1_99.setVisibility(View.GONE);
+                mLayoutChannel100.setVisibility(View.GONE);
+                mLayoutChannel0.setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.FR_channel_1_99_btn:
+
+                mchannel0BotomView.setVisibility(View.INVISIBLE);
+                mchannel100BotomView.setVisibility(View.INVISIBLE);
+                mchannel1_99BotomView.setVisibility(View.VISIBLE);
+
+                mLayoutChannel0.setVisibility(View.GONE);
+                mLayoutChannel100.setVisibility(View.GONE);
+                mlayoutChannel1_99.setVisibility(View.VISIBLE);
+
+                break;
+
+            case R.id.FR_channel_100_btn:
+
+                mchannel0BotomView.setVisibility(View.INVISIBLE);
+                mchannel1_99BotomView.setVisibility(View.INVISIBLE);
+                mchannel100BotomView.setVisibility(View.VISIBLE);
+
+                mLayoutChannel0.setVisibility(View.GONE);
+                mlayoutChannel1_99.setVisibility(View.GONE);
+                mLayoutChannel100.setVisibility(View.VISIBLE);
+
+                break;
+
+        }
 
     }
 

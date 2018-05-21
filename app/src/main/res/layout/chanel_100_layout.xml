@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/C100_tv"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:textSize="35sp"

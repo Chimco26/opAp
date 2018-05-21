@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class RecipeResponse implements Parcelable {
   private Integer LeaderRecordID;
   @SerializedName("error")
   @Expose
-  private String error;
+  private ErrorResponse error;
   @SerializedName("FunctionSucceed")
   @Expose
   private Boolean FunctionSucceed;
@@ -28,7 +29,7 @@ public class RecipeResponse implements Parcelable {
   private List<RecipeData> RecipeData;
   public RecipeResponse(){
   }
-  public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,String error,Boolean FunctionSucceed,List<RecipeData> RecipeData){
+  public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,ErrorResponse error,Boolean FunctionSucceed,List<RecipeData> RecipeData){
    this.ProductData=ProductData;
    this.LeaderRecordID=LeaderRecordID;
    this.error=error;
@@ -47,7 +48,7 @@ public class RecipeResponse implements Parcelable {
   public Integer getLeaderRecordID(){
    return LeaderRecordID;
   }
-  public void setError(String error){
+  public void setError(ErrorResponse error){
    this.error=error;
   }
   public Object getError(){
@@ -75,7 +76,7 @@ public class RecipeResponse implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.ProductData, flags);
         dest.writeValue(this.LeaderRecordID);
-        dest.writeString(this.error);
+        dest.writeParcelable(this.error, flags);
         dest.writeValue(this.FunctionSucceed);
         dest.writeList(this.RecipeData);
     }
