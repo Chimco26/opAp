@@ -48,11 +48,20 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
+import com.operators.reportrejectcore.ReportCallbackListener;
+import com.operators.reportrejectcore.ReportCore;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
+import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
+import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
+import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -100,14 +109,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.DashBoard2Listener,
-        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener {
+        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener,
+        ViewPagerFragment.OnViewPagerListener,
+        RecipeFragment.OnRecipeFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
     private TimeToEndCounter mTimeToEndCounter;
-    private DashboardUICallbackListener mDashboardUICallbackListener;
     private DashboardActivityToJobsFragmentCallback mDashboardActivityToJobsFragmentCallback;
     private DashBoardActivityToSelectedJobFragmentCallback mDashboardActivityToSelectedJobFragmentCallback;
     private JobsCore mJobsCore;
@@ -127,6 +137,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private View mContainer3;
     private Fragment mChartFragment;
     private int mSpan = 3;
+    private ViewPagerFragment mViewPagerfragment;
 
 
     @Override
@@ -170,24 +181,33 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         openWidgetFragment();
 
+        initViewPagerFragment();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mDashboardFragment).commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(getListener());
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
 
+
     private void openWidgetFragment() {
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+//        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
+    }
+
+    private void initViewPagerFragment() {
+
+        mViewPagerfragment = ViewPagerFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mWidgetFragment != null) {
+        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().remove(mWidgetFragment).commit();
         }
@@ -381,7 +401,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                         ZLogger.i(LOG_TAG, "onStatusReceiveFailed() reason: " + reason.getDetailedDescription());
-                        mDashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
+                        dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.Status);
                     }
                 }
             }
@@ -596,7 +616,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             return;
         }
 //        if (addToBackStack) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //        } else {
 //            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
 //        }
@@ -980,10 +1000,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(span);
         }
-        if (mSelectStopReasonFragmentNew != null){
+        if (mSelectStopReasonFragmentNew != null) {
             mSelectStopReasonFragmentNew.setSpanCount(span != 3);
         }
-        if (mReportStopReasonFragmentNew != null){
+        if (mReportStopReasonFragmentNew != null) {
             mReportStopReasonFragmentNew.setSpanCount(span != 3);
         }
 
@@ -1129,4 +1149,48 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mSelectedEvents = null;
         }
     }
+
+    @Override
+    public void onViewPagerCreated() {
+
+        mViewPagerfragment.addFragment(mWidgetFragment);
+
+        initRecipeFragment();
+    }
+
+    private void initRecipeFragment() {
+
+//        getAllRecipes(PersistenceManager.getInstance().getJobId());
+        getAllRecipes(2);
+    }
+
+    private void getAllRecipes(Integer jobId) {
+
+        PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        simpleRequests.getAllRecipe(persistanceManager.getSiteUrl(), persistanceManager.getSessionId(),
+                jobId, new GetAllRecipeCallback() {
+                    @Override
+                    public void onGetAllRecipeSuccess(Object response) {
+
+                        showRecipeFragment((RecipeResponse) response);
+                    }
+
+                    @Override
+                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
+
+                    }
+                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+    }
+
+    private void showRecipeFragment(RecipeResponse recipeResponse) {
+
+        RecipeFragment recipeFragment = RecipeFragment.newInstance(recipeResponse);
+
+        mViewPagerfragment.addFragment(recipeFragment);
+    }
+
 }

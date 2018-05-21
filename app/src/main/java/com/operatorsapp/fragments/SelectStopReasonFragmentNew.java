@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -35,7 +36,6 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
-import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJobId = 0;
 
-    private int mSelectedSubreasonId = -1;
+    private SubReasons mSelectedSubreason;
     private int mSelectedReason;
 
     private RecyclerView mRecyclerView;
@@ -173,7 +173,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
             mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
 
         }
-    mIsOpen = isOpen;
+        mIsOpen = isOpen;
     }
 
     @Override
@@ -191,13 +191,13 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     }
 
     @Override
-    public void onSubReasonSelected(int subReasonId) {
+    public void onSubReasonSelected(SubReasons subReason) {
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReasonId);
+            ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
 
-            mSelectedSubreasonId = subReasonId;
+            mSelectedSubreason = subReason;
 
             mStopReasonsAdapter.notifyDataSetChanged();
 
@@ -235,10 +235,23 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
             eventsId[0] = mSelectedEvents.get(i);
 
-            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReasonId, mEnName, mILName);
+            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReasonId, mEnName, mILName, mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
 
         }
-        mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreasonId, eventsId, mJobId);
+
+        mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJobId);
+
+     /*   if (!isOldVersion) {
+
+            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason, eventsId, mJobId);
+
+        } else {
+            for (int i = 0; i < mSelectedEvents.size(); i++) {
+                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason, mSelectedEvents.get(i), mJobId);
+
+            }
+        }*/
+
 
     }
 

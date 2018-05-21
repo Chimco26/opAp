@@ -1,5 +1,7 @@
 package com.operatorsapp.fragments.interfaces;
 
+import com.operators.reportfieldsformachineinfra.SubReasons;
+
 public interface OnSelectedSubReasonListener {
-    void onSubReasonSelected(int subReasonId);
+    void onSubReasonSelected(SubReasons subReasonId);
 }

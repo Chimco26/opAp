@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/C1</item>
+        <item name="colorPrimary">@color/dark_blue_two</item>
         <item name="colorPrimaryDark">@color/status_bar</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowNoTitle">true</item>
@@ -67,12 +67,12 @@
 
     <style name="FontStyle_T1" parent="DroidSansBold">
         <item name="android:textSize">21sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T2" parent="DroidSans">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T3" parent="BreeSerifRegular">
@@ -92,7 +92,7 @@
 
     <style name="FontStyle_T6" parent="DroidSans">
         <item name="android:textSize">19sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T7" parent="BreeSerifRegular">
@@ -127,23 +127,23 @@
 
     <style name="FontStyle_T13" parent="DroidSans">
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T14" parent="DroidSans">
         <item name="android:textSize">43sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T15" parent="DroidSansBold">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <!--no use for this font style by now-->
     <style name="FontStyle_T16" parent="DroidSansBold">
         <item name="android:textSize">9sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T17" parent="DroidSansBold">
@@ -159,7 +159,7 @@
 
     <style name="FontStyle_T19" parent="DroidSansBold">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T120" parent="DroidSans">
@@ -174,7 +174,7 @@
 
     <style name="FontStyle_T20" parent="DroidSans">
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T21" parent="DroidSansBold">
@@ -184,7 +184,7 @@
 
     <style name="FontStyle_T22" parent="DroidSans">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T23" parent="DroidSans">
@@ -199,7 +199,7 @@
 
     <style name="FontStyle_T25_Splash_logo" parent="DroidSans">
         <item name="android:textSize">33sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T24" parent="DroidSans">
@@ -209,7 +209,7 @@
 
     <style name="FontStyle_T25" parent="DroidSans">
         <item name="android:textSize">33sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T26" parent="DroidSans">
@@ -219,12 +219,12 @@
 
     <style name="FontStyle_T27" parent="DroidSans">
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_T28" parent="DroidSansBold">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
     <style name="FontStyle_Button" parent="DroidSansBold">
@@ -264,7 +264,7 @@
 
     <style name="FontStyle_T35" parent="DroidSans">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/C1</item>
+        <item name="android:textColor">@color/dark_blue_two</item>
     </style>
 
 

@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
-    buildToolsVersion BUILD_TOOLS_VERSION
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
-        buildToolsVersion BUILD_TOOLS_VERSION
-
         targetSdkVersion 27
-        versionCode 15
-        versionName "0.7.2"
+        versionCode 9
+        versionName "0.5.7"
         multiDexEnabled true
     }
     buildTypes {
@@ -37,68 +35,68 @@ android {
 
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation(name: 'pollingmachanaim-release', ext: 'aar')
-    implementation(name: 'logrecorder', ext: 'aar')
-    implementation('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile(name: 'pollingmachanaim-release', ext: 'aar')
+    compile(name: 'logrecorder', ext: 'aar')
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         exclude group: 'com.google.android', module: 'support-v4'
     }
-    testImplementation 'junit:junit:4.12'
-    implementation project(':LoginCore')
-    implementation project(':LoginNetworkBridge')
-    implementation project(':Infra')
-    implementation project(':GetMachinesNetworkBridge')
-    implementation project(':ShiftLogInfra')
-    implementation project(':ShiftLogNetworkbridge')
-    implementation project(':MachinesStatusNetworkBridge')
-    implementation project(':MachineStatusInfra')
-    implementation project(':JobsInfra')
-    implementation project(':JobsNetworkBridge')
-    implementation project(':publicutils')
-    implementation project(':JobsCore')
-    implementation project(':OperatorCore')
-    implementation project(':OperatorInfra')
-    implementation project(':OperatorNetworkBridge')
-    implementation project(':MachineDataInfra')
-    implementation project(':MachineDataNetworkBridge')
-    implementation project(':JobsInfra')
-    implementation project(':JobsNetworkBridge')
-    implementation project(':JobsCore')
-    implementation project(':OperatorCore')
-    implementation project(':OperatorInfra')
-    implementation project(':OperatorNetworkBridge')
-    implementation project(':ReportFieldsForMachineNetworkBridge')
-    implementation project(':ReportFieldsForMachineCore')
-    implementation project(':ReportFieldsForMachineInfra')
-    implementation project(':ReportCore')
-    implementation project(':ReportInfra')
-    implementation project(':ReportNetworkBridge')
-    implementation project(':AllDashboardDataCore')
+    testCompile 'junit:junit:4.12'
+    compile project(':LoginCore')
+    compile project(':LoginNetworkBridge')
+    compile project(':Infra')
+    compile project(':GetMachinesNetworkBridge')
+    compile project(':ShiftLogInfra')
+    compile project(':ShiftLogNetworkbridge')
+    compile project(':MachinesStatusNetworkBridge')
+    compile project(':MachineStatusInfra')
+    compile project(':JobsInfra')
+    compile project(':JobsNetworkBridge')
+    compile project(':JobsCore')
+    compile project(':OperatorCore')
+    compile project(':OperatorInfra')
+    compile project(':OperatorNetworkBridge')
+    compile project(':MachineDataInfra')
+    compile project(':MachineDataNetworkBridge')
+    compile project(':JobsInfra')
+    compile project(':JobsNetworkBridge')
+    compile project(':JobsCore')
+    compile project(':OperatorCore')
+    compile project(':OperatorInfra')
+    compile project(':OperatorNetworkBridge')
+    compile project(':ReportFieldsForMachineNetworkBridge')
+    compile project(':ReportFieldsForMachineCore')
+    compile project(':ReportFieldsForMachineInfra')
+    compile project(':ReportCore')
+    compile project(':ReportInfra')
+    compile project(':ReportNetworkBridge')
+    compile project(':AllDashboardDataCore')
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.google.code.gson:gson:2.8.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
-    implementation 'com.facebook.stetho:stetho:1.3.1'
-    implementation 'com.diogobernardino:williamchart:2.2'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
-    implementation 'me.grantland:autofittextview:0.2.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.google.android.gms:play-services-plus:15.0.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation project(':ErrorObjectInterface')
-    implementation project(':ActiveJobsListForMachineCore')
-    implementation project(':ActiveJobsListForMachineInfra')
-    implementation project(':ActiveJobsListForMachineNetworkBridge')
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+    compile 'com.facebook.stetho:stetho:1.3.1'
+    compile 'com.diogobernardino:williamchart:2.2'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
+    compile 'me.grantland:autofittextview:0.2.1'
+    compile 'com.android.support:design:27.1.0'
+    compile 'com.google.android.gms:play-services-plus:11.8.0'
+    compile 'com.android.support:support-v4:27.1.0'
+    compile 'com.android.support:cardview-v7:27.1.0'
+    compile project(':ErrorObjectInterface')
+    compile project(':ActiveJobsListForMachineCore')
+    compile project(':ActiveJobsListForMachineInfra')
+    compile project(':ActiveJobsListForMachineNetworkBridge')
     //noinspection GradleDependency
-    implementation 'ch.acra:acra:4.8.2'
-    implementation 'com.android.support:multidex:1.0.3'
+    compile 'ch.acra:acra:4.8.2'
+    compile 'com.android.support:multidex:1.0.3'
     androidTestCompile 'com.android.support:multidex:1.0.3'
     androidTestCompile 'com.android.support:multidex-instrumentation:1.0.3'
-    implementation 'org.litepal.android:core:1.6.1'
-    implementation project(path: ':SqlCore')
+    implementation  'org.litepal.android:core:1.6.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile project(path: ':SqlCore')
 }

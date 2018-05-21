@@ -336,7 +336,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname();
             if (subtitleNameByLang != null){
 
-                holder.mStopEventSubReasonTv.setText(subtitleNameByLang);
+                if (subtitleNameByLang.length() > 15) {
+                    holder.mStopEventSubReasonTv.setText(subtitleNameByLang.substring(0, 15) + "...");
+                }else {
+                    holder.mStopEventSubReasonTv.setText(subtitleNameByLang);
+                }
                 holder.mStopEventSubReasonTv.setVisibility(View.VISIBLE);
             }else {
                 holder.mStopEventSubReasonTv.setVisibility(View.GONE);
@@ -371,7 +375,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                         event.setChecked(true);
                         mOnStopClickListener.onSelectMode(type, event.getEventID());
-                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
+//                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
 
                         v.setTag(true);
                         holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));

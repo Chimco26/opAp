@@ -11,8 +11,7 @@ import com.zemingo.logrecorder.ZLogger;
 /**
  * Created by Sergey on 08/08/2016.
  */
-public class ReportCore
-{
+public class ReportCore {
     private static final String LOG_TAG = ReportCore.class.getSimpleName();
     private ReportRejectNetworkBridgeInterface mReportRejectNetworkBridgeInterface;
     private ReportCallbackListener mReportCallbackListener;
@@ -110,6 +109,7 @@ public class ReportCore
         }
 
     }
+
     public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int jobId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),

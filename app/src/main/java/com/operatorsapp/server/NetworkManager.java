@@ -23,11 +23,13 @@ import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetwo
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetAllRecipe;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendApproveFirstItem;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
+import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
@@ -49,7 +51,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class NetworkManager implements LoginNetworkManagerInterface, GetMachineNetworkManagerInterface, GetMachineStatusNetworkManagerInterface, GetJobsListForMachineNetworkManagerInterface, StartJobForMachineNetworkManagerInterface, GetOperatorByIdNetworkManagerInterface, SetOperatorForMachineNetworkManagerInterface, ShiftLogNetworkManagerInterface, GetReportFieldsForMachineNetworkManagerInterface, ReportRejectNetworkManagerInterface, GetMachineDataNetworkManagerInterface, ReportStopNetworkManagerInterface, ReportCycleUnitsNetworkManagerInterface, ReportInventoryNetworkManagerInterface, ActiveJobsListForMachineNetworkManagerInterface, ApproveFirstItemNetworkManagerInterface {
+public class NetworkManager implements LoginNetworkManagerInterface,
+        GetMachineNetworkManagerInterface,
+        GetMachineStatusNetworkManagerInterface,
+        GetJobsListForMachineNetworkManagerInterface,
+        StartJobForMachineNetworkManagerInterface,
+        GetOperatorByIdNetworkManagerInterface,
+        SetOperatorForMachineNetworkManagerInterface,
+        ShiftLogNetworkManagerInterface,
+        GetReportFieldsForMachineNetworkManagerInterface,
+        ReportRejectNetworkManagerInterface,
+        GetMachineDataNetworkManagerInterface,
+        ReportStopNetworkManagerInterface,
+        ReportCycleUnitsNetworkManagerInterface,
+        ReportInventoryNetworkManagerInterface,
+        ActiveJobsListForMachineNetworkManagerInterface,
+        ApproveFirstItemNetworkManagerInterface,
+        GetAllRecipeNetworkManagerInterface{
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -600,5 +618,19 @@ public class NetworkManager implements LoginNetworkManagerInterface, GetMachineN
 
                 Log.e(LOG_TAG, e.getMessage());
         }
+    }
+
+    @Override
+    public EmeraldGetAllRecipe emeraldGetAllRecipe(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldGetAllRecipe.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldGetAllRecipeRequests");
+        }
+        return mRetrofit.create(EmeraldGetAllRecipe.class);
     }
 }

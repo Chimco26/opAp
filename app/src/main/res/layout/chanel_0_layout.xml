@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/C0L_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/channel_0"
+                android:textColor="@color/dismiss_dialog"
+                android:textSize="35sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+                <include
+                    android:id="@+id/C0L_item"
+                    layout="@layout/item_product_0" />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/C0L_img"
+                    android:layout_width="450dp"
+                    android:layout_height="334dp"
+                    android:background="@drawable/combined_shape"
+                    android:padding="10dp" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
