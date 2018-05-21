@@ -19,6 +19,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.Channel100Adapter;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
@@ -159,13 +160,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
     }
 
     private void initChannel100View() {
-//TODO check channel 100 exist logic
 
-//     TODO   if (mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 98){
+       if (mRecipeResponse.getRecipeData() != null &&
+               mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100){
 
-        mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(1).getName());
+        mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
-        mChannel100Adapter = new Channel100Adapter(getActivity(), this, (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(1).getChannelSplits());
+        mChannel100Adapter = new Channel100Adapter(getActivity(), this,
+                (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits());
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -173,7 +175,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
         mLayoutChannel100Rv.setLayoutManager(layoutManager);
 
         mLayoutChannel100Rv.setAdapter(mChannel100Adapter);
-//        }
+        }
     }
 
     private void initChannel0View(View view) {
@@ -200,9 +202,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
 
                 View itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
 
-                ((TextView) itemView.findViewById(R.id.IS_tv1)).setText(baseSplits.getPropertyName());
+                ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-//           TODO     ((TextView)itemView.findViewById(R.id.IS_tv1_nmbr)).setText(baseSplits.getFValue());
+                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
 
                 mLayoutChannel0ItemSplitLy.addView(itemView);
 
@@ -223,13 +225,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
     }
 
     private void initChanne1_1_99_View() {
-//TODO check channel 100 exist logic
-        if (mRecipeResponse.getRecipeData() != null){
+
+        if (mRecipeResponse.getRecipeData() != null ) {
 
             List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
-            if (recipeResponse_1_99.size() >= 99){
 
-                recipeResponse_1_99.remove(99);
+            if ( mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100){
+
+                recipeResponse_1_99.remove( mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
             }
             recipeResponse_1_99.remove(0);
 

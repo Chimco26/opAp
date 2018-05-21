@@ -3,7 +3,6 @@ package com.operatorsapp.utils;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
-import com.operatorsapp.fragments.Channel100Adapter;
+import com.operatorsapp.adapters.Channel100Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
