@@ -22,7 +22,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation(name: 'pollingmachanaim-release', ext: 'aar')
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation project(':ReportFieldsForMachineInfra')
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
