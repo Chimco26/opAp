@@ -117,5 +117,15 @@
         layout="@layout/chanel_100_layout"
         android:visibility="gone" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:id="@+id/FR_channel_1_99_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
+    </ScrollView>
 </LinearLayout>

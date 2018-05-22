@@ -62,134 +62,29 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/IP_rv"
-            android:layout_width="469dp"
-            android:layout_height="match_parent"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="469dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
+            <LinearLayout
+                android:id="@+id/IP_split_ly"
+                android:layout_width="469dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="86dp"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv1"-->
-                <!--android:layout_width="230dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="25sp" />-->
-
-            <!--<View-->
-                <!--android:layout_width="89dp"-->
-                <!--android:layout_height="match_parent" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv1_nmbr"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/dismiss_dialog"-->
-                <!--android:textSize="25sp" />-->
-
-        <!--</LinearLayout>-->
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/default_gray" />-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="86dp"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv2"-->
-                <!--android:layout_width="230dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="25sp" />-->
-
-            <!--<View-->
-                <!--android:layout_width="89dp"-->
-                <!--android:layout_height="match_parent" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv2_nmbr"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/dismiss_dialog"-->
-                <!--android:textSize="25sp" />-->
-
-        <!--</LinearLayout>-->
-
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/default_gray" />-->
-
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="86dp"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv3"-->
-                <!--android:layout_width="230dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="25sp" />-->
-
-            <!--<View-->
-                <!--android:layout_width="89dp"-->
-                <!--android:layout_height="match_parent" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/IP_tv3_nmbr"-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/dismiss_dialog"-->
-                <!--android:textSize="25sp" />-->
-
-        <!--</LinearLayout>-->
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/default_gray" />-->
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="55dp"/>-->
-
-    <!--</LinearLayout>-->
+        </ScrollView>
 
         <View
             android:layout_width="75dp"
-            android:layout_height="match_parent"/>
-        
-        
+            android:layout_height="match_parent" />
+
+
         <ImageView
             android:id="@+id/IP_img"
             android:layout_width="375dp"
             android:layout_height="235dp"
-            android:layout_gravity="center_vertical"/>
-        
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
 </LinearLayout>

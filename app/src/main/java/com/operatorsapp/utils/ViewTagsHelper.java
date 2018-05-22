@@ -3,14 +3,18 @@ package com.operatorsapp.utils;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.Channel100Adapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ViewTagsHelper {
@@ -45,8 +49,8 @@ public class ViewTagsHelper {
         mainView.addView(mTv);
 
     }
-//TODO replace Object
-    public static void addRv(Context context, Object object, LinearLayout mainView, Object listener) {
+
+    public static void addRv(Context context, List<ChannelSplits> channelSplits, LinearLayout mainView, Channel100Adapter.Channel100AdapterListener listener) {
 
         float mDensity = context.getResources().getDisplayMetrics().density;
 
@@ -63,12 +67,12 @@ public class ViewTagsHelper {
 
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-//      TODO  mRecyclerView.setAdapter(new Adapter);
+        mRecyclerView.setAdapter(new Channel100Adapter(context, listener, (ArrayList<ChannelSplits>) channelSplits));
     }
 
-    public static void addSeparator(Context context , String question , LinearLayout mainView) {
+    public static void addSeparator(Context context , LinearLayout mainView) {
 
         float mDensity = context.getResources().getDisplayMetrics().density;
 
