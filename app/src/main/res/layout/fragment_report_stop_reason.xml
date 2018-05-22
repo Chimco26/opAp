@@ -116,19 +116,19 @@
 
                 <FrameLayout
                     android:id="@+id/report_job_spinner_frame"
-                    android:layout_width="200dp"
+                    android:layout_width="350dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="30dp">
 
                     <Spinner
                         android:id="@+id/report_job_spinner"
-                        android:layout_width="200dp"
+                        android:layout_width="350dp"
                         android:layout_height="23dp"
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:dropDownVerticalOffset="55dp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <ProgressBar
                         android:id="@+id/active_jobs_progressBar"
@@ -138,7 +138,7 @@
                         android:layout_gravity="center"
                         android:indeterminate="true"
                         android:indeterminateTint="@color/C16"
-                        android:indeterminateTintMode="src_atop"/>
+                        android:indeterminateTintMode="src_atop" />
                 </FrameLayout>
 
 

@@ -1,7 +1,6 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,8 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
 {
     private Activity mContext;
     private List<ActiveJob> mSpinnerItems;
-    private TextView mRowName;
-    private View mView;
+    TextView mRowName;
+    View mView;
 
     public ActiveJobsSpinnerAdapter(Activity context, int resource, List<ActiveJob> activeJobs)
     {
@@ -28,9 +27,8 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
         mContext = context;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent)
+    public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
         if (row == null)
@@ -38,16 +36,17 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
             mView = row;
-            mRowName = row.findViewById(R.id.spinner_item_name);
+            mRowName = (TextView) row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
             mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJoshName()));
+            //mRowName.setText(String.valueOf(mSpinnerItems.get(0).getJoshID()));
             mRowName.setTextSize(20);
         }
         return row;
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent)
+    public View getDropDownView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
         if (row == null)
@@ -55,7 +54,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.active_jobs_spinner_item, parent, false);
         }
-        TextView name =  row.findViewById(R.id.spinner_item_name);
+        TextView name = (TextView) row.findViewById(R.id.spinner_item_name);
         name.setText(String.valueOf(mSpinnerItems.get(position).getJoshName()));
         //name.setText(String.valueOf(mSpinnerItems.get(position).getJoshID()));
         name.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
@@ -68,7 +67,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
     {
         if (mView != null)
         {
-            mRowName =  mView.findViewById(R.id.spinner_item_name);
+            mRowName = (TextView) mView.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
             mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJoshName()));
             //mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJoshID()));

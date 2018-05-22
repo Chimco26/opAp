@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion BUILD_TOOLS_VERSION
 
     defaultConfig {
         minSdkVersion 17
@@ -19,12 +19,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile(name: 'pollingmachanaim-release', ext: 'aar')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile project(':ReportFieldsForMachineInfra')
-    compile project(':ErrorObjectInterface')
-    compile(name: 'logrecorder', ext: 'aar')
-    compile project(path: ':publicutils')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(name: 'pollingmachanaim-release', ext: 'aar')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation project(':ReportFieldsForMachineInfra')
+    implementation project(':ErrorObjectInterface')
+    implementation(name: 'logrecorder', ext: 'aar')
+    implementation project(path: ':publicutils')
 }
