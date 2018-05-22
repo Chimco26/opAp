@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="995dp"
-    android:layout_height="430dp"
+    android:layout_width="800dp"
+    android:layout_height="380dp"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
-    android:paddingEnd="39dp"
-    android:paddingStart="39dp"
-    android:paddingTop="27dp">
+    android:paddingEnd="19dp"
+    android:paddingStart="19dp"
+    android:paddingTop="17dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="86dp">
+        android:layout_height="70dp">
 
         <LinearLayout
             android:id="@+id/IP_title_layout"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="35sp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/IP_sub_title"
@@ -54,7 +54,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@color/default_gray" />
 
     <LinearLayout
@@ -68,21 +68,21 @@
 
             <LinearLayout
                 android:id="@+id/IP_split_ly"
-                android:layout_width="469dp"
-                android:layout_height="wrap_content"
+                android:layout_width="400dp"
+                android:layout_height="380dp"
                 android:orientation="vertical" />
 
         </ScrollView>
 
         <View
-            android:layout_width="75dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent" />
 
 
         <ImageView
             android:id="@+id/IP_img"
-            android:layout_width="375dp"
-            android:layout_height="235dp"
+            android:layout_width="240dp"
+            android:layout_height="190dp"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>

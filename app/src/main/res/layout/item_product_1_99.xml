@@ -1,69 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="534dp"
-    android:layout_height="470dp"
-    android:background="@drawable/combined_shape"
-    android:orientation="vertical"
-    android:paddingBottom="69dp"
-    android:paddingEnd="39dp"
-    android:paddingStart="39dp"
-    android:paddingTop="27dp">
+    android:layout_width="430dp"
+    android:layout_height="380dp"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="68dp"
-        android:orientation="horizontal">
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/combined_shape"
+        android:orientation="vertical"
+        android:paddingBottom="19dp"
+        android:paddingEnd="19dp"
+        android:paddingStart="19dp"
+        android:paddingTop="17dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="68dp">
 
-            <TextView
-                android:id="@+id/IP_title"
-                android:layout_width="369dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-
-            <TextView
-                android:id="@+id/IP_sub_title"
+            <LinearLayout
+                android:id="@+id/IP_title_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/default_gray"
-                android:textSize="25sp" />
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/IP_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/IP_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/default_gray"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/IP_img"
+                android:layout_width="76dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/default_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/IP_split_ly"
+                    android:layout_width="match_parent"
+                    android:layout_height="380dp"
+                    android:orientation="vertical" />
+
+            </ScrollView>
 
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/IP_img"
-            android:layout_width="86dp"
-            android:layout_height="68dp" />
 
     </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/default_gray" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/IP_split_ly"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-    </ScrollView>
-
+        android:layout_width="30dp"
+        android:layout_height="match_parent" />
 </LinearLayout>

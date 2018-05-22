@@ -19,13 +19,14 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.Channel100Adapter;
+import com.operatorsapp.adapters.No0ChanneAdapter;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.NodeChangeEvent;
 
-public class RecipeFragment extends Fragment implements View.OnClickListener, Channel100Adapter.Channel100AdapterListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChanneAdapter.Channel100AdapterListener {
 
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
     private OnRecipeFragmentListener mListener;
@@ -45,7 +46,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
     private View mLayoutChannel100;
     private TextView mLayoutChannel100Title;
     private RecyclerView mLayoutChannel100Rv;
-    private Channel100Adapter mChannel100Adapter;
+    private No0ChanneAdapter mNo0ChanneAdapter;
     private LinearLayout mlayoutChannel1_99;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
@@ -166,15 +167,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Ch
 
         mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
-        mChannel100Adapter = new Channel100Adapter(getActivity(), this,
-                (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits());
+        mNo0ChanneAdapter = new No0ChanneAdapter(getActivity(), this,
+                (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChanneAdapter.TYPE_CHANNEL_100);
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
         mLayoutChannel100Rv.setLayoutManager(layoutManager);
 
-        mLayoutChannel100Rv.setAdapter(mChannel100Adapter);
+        mLayoutChannel100Rv.setAdapter(mNo0ChanneAdapter);
         }
     }
 

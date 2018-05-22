@@ -6,17 +6,16 @@
     <TextView
         android:id="@+id/C100_tv"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:textSize="35sp"
-        android:textColor="@color/dismiss_dialog"
-        android:text="@string/channel_100_consumbles"/>
+        android:layout_height="40dp"
+        android:textSize="30sp"
+        android:textColor="@color/dismiss_dialog" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/channel_100_rv"
         android:layout_width="match_parent"
-        android:layout_height="430dp"
+        android:layout_height="380dp"
         android:orientation="horizontal"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="10dp"/>
 
 
 </LinearLayout>

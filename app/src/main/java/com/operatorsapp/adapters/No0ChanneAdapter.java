@@ -17,33 +17,45 @@ import com.operatorsapp.R;
 
 import java.util.ArrayList;
 
-public class Channel100Adapter extends RecyclerView.Adapter<Channel100Adapter.ViewHolder> {
+public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.ViewHolder> {
 
+    public static final int TYPE_CHANNEL_100 = 100;
+    public static final int TYPE_CHANNEL_1_99 = 99;
     private final Context mContext;
     private final Channel100AdapterListener mListener;
     private final ArrayList<ChannelSplits> mChannelSplits;
+    private final int mType;
     private View mMainView;
 
-    public Channel100Adapter(Context context, Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits) {
+    public No0ChanneAdapter(Context context, Channel100AdapterListener listener, ArrayList<ChannelSplits> channelSplits, int type) {
 
         mContext = context;
         mListener = listener;
         mChannelSplits = channelSplits;
+        mType = type;
     }
 
 
     @NonNull
     @Override
-    public Channel100Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public No0ChanneAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        mMainView = inflater.inflate(R.layout.item_product_100, parent, false);
+        if (mType == TYPE_CHANNEL_100){
 
-        return new Channel100Adapter.ViewHolder(mMainView);
+            mMainView = inflater.inflate(R.layout.item_product_100, parent, false);
+
+        }else if (mType == TYPE_CHANNEL_1_99){
+
+            mMainView = inflater.inflate(R.layout.item_product_1_99, parent, false);
+
+        }
+
+        return new No0ChanneAdapter.ViewHolder(mMainView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Channel100Adapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final No0ChanneAdapter.ViewHolder viewHolder, final int position) {
 
         initSplits(viewHolder, position);
 
@@ -51,7 +63,10 @@ public class Channel100Adapter extends RecyclerView.Adapter<Channel100Adapter.Vi
 
         if (mChannelSplits.get(position).getMaterialInformation() != null) {
             viewHolder.mSubTitle.setText(mChannelSplits.get(position).getMaterialInformation().describeContents());
-            viewHolder.mSubTitleId.setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
+
+            if (mType == TYPE_CHANNEL_100) {
+                ((TextView)viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
+            }
 
             if (mChannelSplits.get(position).getMaterialInformation().getFileUrl() != null) {
 
@@ -93,7 +108,6 @@ public class Channel100Adapter extends RecyclerView.Adapter<Channel100Adapter.Vi
         private final LinearLayout mSplitLy;
         private final TextView mTitle;
         private final TextView mSubTitle;
-        private final TextView mSubTitleId;
         private final ImageView mImage;
 
         ViewHolder(View itemView) {
@@ -102,7 +116,6 @@ public class Channel100Adapter extends RecyclerView.Adapter<Channel100Adapter.Vi
             mSplitLy = itemView.findViewById(R.id.IP_split_ly);
             mTitle = itemView.findViewById(R.id.IP_title);
             mSubTitle = itemView.findViewById(R.id.IP_sub_title);
-            mSubTitleId = itemView.findViewById(R.id.IP_sub_title_id);
             mImage = itemView.findViewById(R.id.IP_img);
         }
 

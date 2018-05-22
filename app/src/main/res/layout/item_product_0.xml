@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="450dp"
-    android:layout_height="334dp"
+    android:layout_height="380dp"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
-    android:paddingBottom="69dp"
-    android:paddingEnd="39dp"
-    android:paddingStart="39dp"
-    android:paddingTop="27dp">
+    android:paddingBottom="19dp"
+    android:paddingEnd="19dp"
+    android:paddingStart="19dp"
+    android:paddingTop="17dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="35sp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/IP_sub_title"
@@ -49,12 +49,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/IP_split_ly"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" />
 
     </ScrollView>
