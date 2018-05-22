@@ -138,6 +138,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Fragment mChartFragment;
     private int mSpan = 3;
     private ViewPagerFragment mViewPagerfragment;
+    private RecipeFragment mRecipeFragment;
 
 
     @Override
@@ -706,6 +707,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.i(LOG_TAG, "startJobForMachine(), Job Id: " + jobId);
         PersistenceManager.getInstance().setJobId(jobId);
         mJobsCore.startJobForMachine(jobId);
+
+        if (mRecipeFragment != null){
+
+            getAllRecipes(jobId);
+        }
     }
 
     @Override
@@ -1188,9 +1194,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        RecipeFragment recipeFragment = RecipeFragment.newInstance(recipeResponse);
+        if (mRecipeFragment == null){
 
-        mViewPagerfragment.addFragment(recipeFragment);
+            mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
+
+            mViewPagerfragment.addFragment(mRecipeFragment);
+
+        }else {
+
+            mRecipeFragment.updateRecipeResponse(recipeResponse);
+        }
     }
 
 }

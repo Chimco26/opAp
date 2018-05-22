@@ -322,6 +322,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     }
 
+    public void updateRecipeResponse(RecipeResponse recipeResponse) {
+
+        mRecipeResponse = recipeResponse;
+
+        initView(mMainView);
+    }
+
     public interface OnRecipeFragmentListener {
 
     }
