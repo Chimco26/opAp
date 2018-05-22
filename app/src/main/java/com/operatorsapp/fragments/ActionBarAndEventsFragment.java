@@ -141,6 +141,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
+    private TextView mSelectedNumberTv;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -206,6 +207,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
+        mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
 
         mConfigLayout = view.findViewById(R.id.pConfig_layout);
         mConfigView = view.findViewById(R.id.pConfig_view);
@@ -1196,6 +1198,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         mIsSelectionMode = false;
+
+        mSelectedNumberTv.setVisibility(View.GONE);
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
@@ -1204,6 +1208,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogAdapter != null) {
 
             mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
+        }
+
+        if (mSelectedEvents != null && mSelectedEvents.size() > 0){
+
+            if (mSelectedNumberTv.getVisibility() == View.GONE){
+
+                mSelectedNumberTv.setVisibility(View.VISIBLE);
+
+            }
+
+            mSelectedNumberTv.setText(getActivity().getResources().getString(R.string.events_selected) + " " + mSelectedEvents.size());
+
+        }else {
+
+            mSelectedNumberTv.setVisibility(View.GONE);
         }
     }
 

@@ -9,11 +9,11 @@
         android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:paddingEnd="30dp"
-        android:paddingStart="24dp"
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingEnd="30dp"
+        android:paddingStart="24dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -86,16 +86,16 @@
             android:layout_marginBottom="10dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="12dp"
-            android:visibility="gone"
-            android:background="@color/C20" />
+            android:background="@color/C20"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/pConfig_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 style="@style/Roboto_Regular_Status_Title"
@@ -111,13 +111,13 @@
                 style="@style/Roboto_Regular_Status_Data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:layout_marginStart="10dp"
                 android:textColor="@color/default_gray_status"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -219,12 +219,26 @@
                 android:visibility="gone"
                 app:minTextSize="15dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_dashboard_shift_log"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbarFadeDuration="0"
-                android:scrollbars="vertical" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/FAAE_selected_nmbr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragment_dashboard_shift_log"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbarFadeDuration="0"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

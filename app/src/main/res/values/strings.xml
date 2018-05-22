@@ -183,6 +183,7 @@
     <string name="channel_1_99">channel 1-99</string>
     <string name="channel_100">channel 100</string>
     <string name="channel_100_consumbles">Channel 100 - Consumbles</string>
+    <string name="events_selected">Events selected:</string>
 
 
 </resources>
