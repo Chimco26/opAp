@@ -1020,15 +1020,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
 
-        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+        layoutParams.setMarginStart(width);
+
+        layoutParams.topMargin = statusBarsHeight;
 
         mContainer2.setLayoutParams(layoutParams);
 
         ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
 
-        layoutParams.setMargins(width, statusBarsHeight, 0, 0);
+        layoutParams3.setMarginStart(width);
 
-        mContainer3.setLayoutParams(layoutParams);
+        layoutParams3.topMargin = statusBarsHeight;
+
+        mContainer3.setLayoutParams(layoutParams3);
 
     }
 
@@ -1194,15 +1198,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        if (mRecipeFragment == null){
+        if (recipeResponse.getRecipeData() != null){
 
-            mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
+            if (mRecipeFragment == null){
 
-            mViewPagerfragment.addFragment(mRecipeFragment);
+                mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
-        }else {
+                mViewPagerfragment.addFragment(mRecipeFragment);
 
-            mRecipeFragment.updateRecipeResponse(recipeResponse);
+            }else {
+
+                mRecipeFragment.updateRecipeResponse(recipeResponse);
+            }
         }
     }
 

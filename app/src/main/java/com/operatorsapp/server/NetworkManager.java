@@ -22,14 +22,17 @@ import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkMana
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
+import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetAllRecipe;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetVersion;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendApproveFirstItem;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
@@ -67,7 +70,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         ReportInventoryNetworkManagerInterface,
         ActiveJobsListForMachineNetworkManagerInterface,
         ApproveFirstItemNetworkManagerInterface,
-        GetAllRecipeNetworkManagerInterface{
+        GetAllRecipeNetworkManagerInterface,
+        GetVersionNetworkManager{
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -632,5 +636,20 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "approveEmeraldGetAllRecipeRequests");
         }
         return mRetrofit.create(EmeraldGetAllRecipe.class);
+    }
+
+    @Override
+    public EmeraldGetVersion emeraldGetVersion(String siteUrl, int timeout, TimeUnit timeUnit) {
+
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldGetVersion.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldGetVersionRequests");
+        }
+        return mRetrofit.create(EmeraldGetVersion.class);
     }
 }

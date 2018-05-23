@@ -20,11 +20,11 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
+import com.operatorsapp.utils.OnSwipeTouchListener;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.NodeChangeEvent;
 
 public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChanneAdapter.Channel100AdapterListener {
 
@@ -48,6 +48,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private RecyclerView mLayoutChannel100Rv;
     private No0ChanneAdapter mNo0ChanneAdapter;
     private LinearLayout mlayoutChannel1_99;
+    private int mChannel0Counter;
+    private float x1, x2;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -162,20 +164,20 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initChannel100View() {
 
-       if (mRecipeResponse.getRecipeData() != null &&
-               mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100){
+        if (mRecipeResponse.getRecipeData() != null &&
+                mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
 
-        mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
+            mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
-        mNo0ChanneAdapter = new No0ChanneAdapter(getActivity(), this,
-                (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChanneAdapter.TYPE_CHANNEL_100);
+            mNo0ChanneAdapter = new No0ChanneAdapter(getActivity(), this,
+                    (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChanneAdapter.TYPE_CHANNEL_100);
 
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-        mLayoutChannel100Rv.setLayoutManager(layoutManager);
+            mLayoutChannel100Rv.setLayoutManager(layoutManager);
 
-        mLayoutChannel100Rv.setAdapter(mNo0ChanneAdapter);
+            mLayoutChannel100Rv.setAdapter(mNo0ChanneAdapter);
         }
     }
 
@@ -207,13 +209,53 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
 
+                ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
+
                 mLayoutChannel0ItemSplitLy.addView(itemView);
 
             }
 
         }
 
+        mChannel0Counter = 0;
 
+        mLayoutChannel0Image.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeTop() {
+
+                swipeBottomToTop();
+
+            }
+
+            public void onSwipeBottom() {
+
+                swipeTopToBottom();
+
+            }
+
+        });
+
+        mLayoutChannel0Image.setOnClickListener(this);
+
+    }
+
+    private void swipeTopToBottom() {
+        if (mChannel0Counter < mRecipeResponse.getProductData().getFileUrl().size()) {
+
+            mChannel0Counter = ++mChannel0Counter;
+
+            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(mChannel0Counter), mLayoutChannel0Image);
+
+        }
+    }
+
+    private void swipeBottomToTop() {
+        if (mChannel0Counter > 0) {
+
+            mChannel0Counter = --mChannel0Counter;
+
+            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(mChannel0Counter), mLayoutChannel0Image);
+
+        }
     }
 
     private void initListener(View view) {
@@ -227,17 +269,17 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initChanne1_1_99_View() {
 
-        if (mRecipeResponse.getRecipeData() != null ) {
+        if (mRecipeResponse.getRecipeData() != null) {
 
             List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
 
-            if ( mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100){
+            if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
 
-                recipeResponse_1_99.remove( mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
+                recipeResponse_1_99.remove(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
             }
             recipeResponse_1_99.remove(0);
 
-            for (RecipeData recipeData: recipeResponse_1_99) {
+            for (RecipeData recipeData : recipeResponse_1_99) {
 
                 ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
 

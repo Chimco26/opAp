@@ -8,13 +8,19 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
+import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.GetVersionCallback;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.SimpleRequests;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -24,6 +30,8 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.litepal.LitePal;
+
+import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -88,15 +96,45 @@ public class OperatorApplication extends MultiDexApplication {
 //
 //        ShiftLogCore.getInstance().inject(PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
-        exceptionHandler();
+//        exceptionHandler();
 
         initImageLoading();
+
+        getVersion();
 
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
     }
 
+    private void getVersion() {
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        simpleRequests.getVersion(persistanceManager.getSiteUrl(), new GetVersionCallback() {
+            @Override
+            public void onGetVersionSuccess(Object response) {
+
+                List<VersionResponse> versionResponses = (List<VersionResponse>) response;
+
+                if (versionResponses != null && versionResponses.get(0) != null) {
+
+                    persistanceManager.setVersion(Float.parseFloat((String) (versionResponses.get(0).getVersion().subSequence(0, 3))));
+
+                }
+
+            }
+
+            @Override
+            public void onGetVersionFailed(ErrorObjectInterface reason) {
+
+            }
+
+        }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+    }
 
     private void initImageLoading() {
 

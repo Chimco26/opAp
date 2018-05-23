@@ -53,6 +53,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
     private static final int NUMBER_OF_COLUMNS = 5;
     public static final String SAMSUNG = "samsung";
+    private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
     private ReportFieldsForMachine mReportFieldsForMachine;
     private Integer mJobId = 0;
@@ -239,18 +240,19 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
         }
 
-        mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJobId);
+        if (PersistenceManager.getInstance().getVersion() < MINIMUM_VERSION_TO_NEW_API) {
 
-     /*   if (!isOldVersion) {
-
-            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason, eventsId, mJobId);
-
-        } else {
             for (int i = 0; i < mSelectedEvents.size(); i++) {
-                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason, mSelectedEvents.get(i), mJobId);
+
+                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mSelectedEvents.get(i), mJobId);
 
             }
-        }*/
+
+        } else {
+
+            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJobId);
+
+        }
 
 
     }

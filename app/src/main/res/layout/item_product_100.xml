@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="800dp"
+    android:layout_width="wrap_content"
     android:layout_height="380dp"
     android:background="@drawable/combined_shape"
     android:orientation="vertical"
@@ -9,8 +9,8 @@
     android:paddingTop="17dp">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="70dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/IP_title_layout"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/IP_sub_title"
@@ -34,7 +34,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/default_gray"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -47,19 +47,19 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:textColor="@color/default_gray"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="1dp"
         android:layout_marginTop="12dp"
         android:background="@color/default_gray" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <ScrollView
@@ -75,6 +75,7 @@
         </ScrollView>
 
         <View
+            android:id="@+id/IP_vertical_separator"
             android:layout_width="50dp"
             android:layout_height="match_parent" />
 
@@ -82,7 +83,7 @@
         <ImageView
             android:id="@+id/IP_img"
             android:layout_width="240dp"
-            android:layout_height="190dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>

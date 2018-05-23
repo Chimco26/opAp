@@ -102,7 +102,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LinearLayout mShiftLogLayout;
     private TextView mNoNotificationsText;
     private TextView mLoadingDataText;
-    private TextView mConfigTextView;
     private LinearLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
@@ -112,8 +111,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
-    private View mConfigView;
-    private View mConfigLayout;
     private float mTollBarsHeight;
     private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
     private TextView mProductNameTextView;
@@ -142,7 +139,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
     private TextView mSelectedNumberTv;
-
+    private View mConfigView;
+    private View mConfigLayout;
+    private TextView mConfigTextView;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();

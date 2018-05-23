@@ -17,7 +17,7 @@ public class ChannelSplits implements Parcelable {
   @SerializedName("BaseSplits")
   @Expose
   private List<BaseSplits> BaseSplits;
-  @SerializedName("materialInformation")
+  @SerializedName("MaterialInformation")
   @Expose
   private MaterialInformation materialInformation;
   @SerializedName("Name")

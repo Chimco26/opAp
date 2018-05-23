@@ -60,6 +60,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final int DEFAULT_POPUP_VALUE = 5;
     private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
     private static final int MAX_EVENT_SIZE = 200;
+    private static final String PREFS_VERSION = "PREFS_VERSION";
 
 
     private static PersistenceManager msInstance;
@@ -345,5 +346,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setTimeToDownParameterDialog(int time) {
         SecurePreferences.getInstance().setInt(PREF_TIME_PARAMETER_DIALOG, time);
+    }
+
+    public void setVersion(float version) {
+
+        SecurePreferences.getInstance().setFloat(PREFS_VERSION, version);
+    }
+
+    public float getVersion() {
+
+        return SecurePreferences.getInstance().getFloat(PREFS_VERSION);
     }
 }

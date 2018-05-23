@@ -61,17 +61,28 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
 
         viewHolder.mTitle.setText(mChannelSplits.get(position).getName());
 
-        if (mChannelSplits.get(position).getMaterialInformation() != null) {
-            viewHolder.mSubTitle.setText(mChannelSplits.get(position).getMaterialInformation().describeContents());
+        if (mChannelSplits.get(position).getMaterialInformation() != null ) {
+            viewHolder.mSubTitle.setText(mChannelSplits.get(position).getMaterialInformation().getName() + "");
 
             if (mType == TYPE_CHANNEL_100) {
                 ((TextView)viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
             }
 
-            if (mChannelSplits.get(position).getMaterialInformation().getFileUrl() != null) {
+            if (mChannelSplits.get(position).getMaterialInformation().getFileUrl() != null && mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0) != null) {
 
                 ImageLoader.getInstance().displayImage(mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0), viewHolder.mImage);
 
+                if (mType == TYPE_CHANNEL_100){
+
+                    (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.VISIBLE);
+                    (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.VISIBLE);
+
+                }
+
+            }else if (mType == TYPE_CHANNEL_100){
+
+                (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
+                (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
             }
         }
     }
@@ -88,6 +99,17 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
                 ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
                 ((TextView)itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+
+                if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0){
+
+                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.VISIBLE);
+
+                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
+
+                }else{
+
+                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.GONE);
+                }
 
                 viewHolder.mSplitLy.addView(itemView);
 

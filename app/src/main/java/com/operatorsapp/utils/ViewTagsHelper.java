@@ -21,13 +21,13 @@ import java.util.List;
 
 public class ViewTagsHelper {
 
-    private static final float TITLE_MARGIN_TOP = 0;
-    private static final float TITLE_TEXT_SIZE = 30;
+    private static final float TITLE_MARGIN_TOP = -5;
+    private static final float TITLE_TEXT_SIZE = 25;
     private static final float RV_MARGIN_TOP = 10;
     private static final int SEPARATOR_HEIGHT = 2;
     private static final float SEPARATOR_MARGIN_TOP = 15;
     private static final int SEPARATOR_MARGIN_BOTTOM = 15;
-    private static final float TITLE_HEIGHT = 40;
+    private static final float TITLE_HEIGHT = 35;
     private static float TITLE_MARGIN_LEFT = 0;
 
     public static void addTitle(Context context , String question , LinearLayout mainView) {
@@ -48,7 +48,7 @@ public class ViewTagsHelper {
         textView.setTextSize(TITLE_TEXT_SIZE);
 
         Typeface tf = Typeface.createFromAsset(context.getAssets(),
-                "fonts/DroidSans.ttf");
+                "fonts/BreeSerif-Regular.ttf");
 
         textView.setTypeface(tf);
 
