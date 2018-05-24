@@ -16,6 +16,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSpl
 import com.operatorsapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.ViewHolder> {
 
@@ -41,11 +42,11 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
     public No0ChanneAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        if (mType == TYPE_CHANNEL_100){
+        if (mType == TYPE_CHANNEL_100) {
 
             mMainView = inflater.inflate(R.layout.item_product_100, parent, false);
 
-        }else if (mType == TYPE_CHANNEL_1_99){
+        } else if (mType == TYPE_CHANNEL_1_99) {
 
             mMainView = inflater.inflate(R.layout.item_product_1_99, parent, false);
 
@@ -61,25 +62,33 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
 
         viewHolder.mTitle.setText(mChannelSplits.get(position).getName());
 
-        if (mChannelSplits.get(position).getMaterialInformation() != null ) {
+        if (mChannelSplits.get(position).getMaterialInformation() != null) {
             viewHolder.mSubTitle.setText(mChannelSplits.get(position).getMaterialInformation().getName() + "");
 
             if (mType == TYPE_CHANNEL_100) {
-                ((TextView)viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
+                ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
             }
 
             if (mChannelSplits.get(position).getMaterialInformation().getFileUrl() != null && mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0) != null) {
 
                 ImageLoader.getInstance().displayImage(mChannelSplits.get(position).getMaterialInformation().getFileUrl().get(0), viewHolder.mImage);
 
-                if (mType == TYPE_CHANNEL_100){
+                viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onImageProductClick(mChannelSplits.get(position).getMaterialInformation().getFileUrl());
+
+                    }
+                });
+
+                if (mType == TYPE_CHANNEL_100) {
 
                     (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.VISIBLE);
                     (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.VISIBLE);
 
                 }
 
-            }else if (mType == TYPE_CHANNEL_100){
+            } else if (mType == TYPE_CHANNEL_100) {
 
                 (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
                 (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
@@ -98,17 +107,17 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
 
                 ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-                ((TextView)itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
 
-                if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0){
+                if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0) {
 
-                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.VISIBLE);
+                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.VISIBLE);
 
-                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
+                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
 
-                }else{
+                } else {
 
-                    ((TextView)itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.GONE);
+                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.GONE);
                 }
 
                 viewHolder.mSplitLy.addView(itemView);
@@ -146,5 +155,6 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
     public interface Channel100AdapterListener {
 
 
+        void onImageProductClick(List<String> fileUrl);
     }
 }

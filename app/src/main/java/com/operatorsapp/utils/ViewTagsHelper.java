@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -82,6 +83,7 @@ public class ViewTagsHelper {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(new No0ChanneAdapter(context, listener, (ArrayList<ChannelSplits>) channelSplits, No0ChanneAdapter.TYPE_CHANNEL_1_99));
+
     }
 
     public static void addSeparator(Context context , LinearLayout mainView) {

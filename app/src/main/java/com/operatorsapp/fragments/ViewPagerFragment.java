@@ -75,15 +75,24 @@ public class ViewPagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void addFragment(Fragment fragment){
+    public void addFragment(Fragment fragment) {
 
-        if (mPagerAdapter != null){
+        if (mPagerAdapter != null) {
 
             mFragmentList.add(fragment);
 
             mPagerAdapter.notifyDataSetChanged();
+
+            updateDirection();
         }
 
+    }
+
+    private void updateDirection(){
+
+        if (getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
+        }
     }
 
     public interface OnViewPagerListener {

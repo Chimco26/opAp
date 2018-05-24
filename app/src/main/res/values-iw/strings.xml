@@ -183,5 +183,9 @@
     <string name="popup_timeout">זמן הצגת התראות</string>
     <string name="pConfig">תצורה</string>
 
+    <string name="channel_0">ערוץ 0</string>
+    <string name="channel_1_99">ערוץ 99–1</string>
+    <string name="channel_100">ערוץ 100</string>
+    <string name="events_selected">אירועים שנבחרו:</string>
 
 </resources>

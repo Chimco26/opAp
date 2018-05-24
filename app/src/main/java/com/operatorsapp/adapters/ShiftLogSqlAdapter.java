@@ -333,7 +333,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             holder.mStoppedTime.setText(TimeUtils.getTimeFromString(event.getTime()));
             String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
             holder.mStoppedTitle.setText(groupName);
-            String subtitleNameByLang = OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname();
+            String subtitleNameByLang = event.getSubtitleEname();
             if (subtitleNameByLang != null){
 
                 if (subtitleNameByLang.length() > 15) {

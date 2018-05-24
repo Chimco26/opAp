@@ -48,7 +48,9 @@
         <receiver
             android:name=".utils.broadcast.SendLogsBroadcast"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
+        <activity android:name=".activities.GalleryActivity"></activity>
     </application>
 
 </manifest>

@@ -20,7 +20,6 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
-import com.operatorsapp.utils.OnSwipeTouchListener;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
@@ -155,17 +154,19 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initView(View view) {
 
-        initChannel0View(view);
+        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0) {
 
-        initChannel100View();
+            initChannel0View();
 
-        initChanne1_1_99_View();
+            initChannel100View();
+
+            initChanne1_1_99_View();
+        }
     }
 
     private void initChannel100View() {
 
-        if (mRecipeResponse.getRecipeData() != null &&
-                mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+        if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
 
             mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
@@ -181,7 +182,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         }
     }
 
-    private void initChannel0View(View view) {
+    private void initChannel0View() {
 
         RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
 
@@ -219,43 +220,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mChannel0Counter = 0;
 
-        mLayoutChannel0Image.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
-            public void onSwipeTop() {
 
-                swipeBottomToTop();
-
-            }
-
-            public void onSwipeBottom() {
-
-                swipeTopToBottom();
-
-            }
-
-        });
-
-        mLayoutChannel0Image.setOnClickListener(this);
-
-    }
-
-    private void swipeTopToBottom() {
-        if (mChannel0Counter < mRecipeResponse.getProductData().getFileUrl().size()) {
-
-            mChannel0Counter = ++mChannel0Counter;
-
-            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(mChannel0Counter), mLayoutChannel0Image);
-
-        }
-    }
-
-    private void swipeBottomToTop() {
-        if (mChannel0Counter > 0) {
-
-            mChannel0Counter = --mChannel0Counter;
-
-            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(mChannel0Counter), mLayoutChannel0Image);
-
-        }
     }
 
     private void initListener(View view) {
@@ -265,28 +230,36 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         view.findViewById(R.id.FR_channel_1_99_btn).setOnClickListener(this);
 
         view.findViewById(R.id.FR_channel_100_btn).setOnClickListener(this);
+
+        mLayoutChannel0Image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null) {
+                    mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl());
+                }
+            }
+        });
+
     }
 
     private void initChanne1_1_99_View() {
 
-        if (mRecipeResponse.getRecipeData() != null) {
+        List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
 
-            List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
+        if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
 
-            if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+            recipeResponse_1_99.remove(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
+        }
+        recipeResponse_1_99.remove(0);
 
-                recipeResponse_1_99.remove(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
-            }
-            recipeResponse_1_99.remove(0);
+        for (RecipeData recipeData : recipeResponse_1_99) {
 
-            for (RecipeData recipeData : recipeResponse_1_99) {
+            ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
 
-                ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
+            ViewTagsHelper.addRv(getContext(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
 
-                ViewTagsHelper.addRv(getContext(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
-
-                ViewTagsHelper.addSeparator(getContext(), mlayoutChannel1_99);
-            }
+            ViewTagsHelper.addSeparator(getContext(), mlayoutChannel1_99);
         }
 
     }
@@ -371,7 +344,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         initView(mMainView);
     }
 
+    @Override
+    public void onImageProductClick(List<String> fileUrls) {
+
+        mListener.onImageProductClick(fileUrls);
+    }
+
     public interface OnRecipeFragmentListener {
 
+        void onImageProductClick(List<String> fileUrl);
     }
 }

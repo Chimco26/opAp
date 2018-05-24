@@ -75,6 +75,11 @@ public class WidgetFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        ProgressDialogManager.show(getActivity());
         View inflate = inflater.inflate(R.layout.fragment_widgets, container, false);
+
+//        if(getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+//            inflate.setRotationY(180);
+//        }
+
         SoftKeyboardUtil.hideKeyboard(this);
         return inflate;
     }

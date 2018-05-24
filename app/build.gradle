@@ -41,6 +41,7 @@ dependencies {
     implementation('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         exclude group: 'com.google.android', module: 'support-v4'
     }
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
     implementation project(':LoginCore')
     implementation project(':LoginNetworkBridge')
@@ -96,7 +97,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support:multidex-instrumentation:1.0.3'
-    implementation  'org.litepal.android:core:1.6.1'
+    implementation 'org.litepal.android:core:1.6.1'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation project(path: ':SqlCore')
     implementation project(path: ':publicutils')

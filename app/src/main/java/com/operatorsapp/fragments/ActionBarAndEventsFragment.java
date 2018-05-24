@@ -142,6 +142,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mConfigView;
     private View mConfigLayout;
     private TextView mConfigTextView;
+    private View mSelectedNumberLy;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -207,6 +208,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
         mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
+
+        mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
 
         mConfigLayout = view.findViewById(R.id.pConfig_layout);
         mConfigView = view.findViewById(R.id.pConfig_view);
@@ -1198,7 +1201,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mIsSelectionMode = false;
 
-        mSelectedNumberTv.setVisibility(View.GONE);
+        mSelectedNumberLy.setVisibility(View.GONE);
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
@@ -1211,9 +1214,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0){
 
-            if (mSelectedNumberTv.getVisibility() == View.GONE){
+            if (mSelectedNumberLy.getVisibility() == View.GONE){
 
-                mSelectedNumberTv.setVisibility(View.VISIBLE);
+                mSelectedNumberLy.setVisibility(View.VISIBLE);
 
             }
 
@@ -1221,7 +1224,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         }else {
 
-            mSelectedNumberTv.setVisibility(View.GONE);
+            mSelectedNumberLy.setVisibility(View.GONE);
         }
     }
 

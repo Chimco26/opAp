@@ -48,12 +48,8 @@ import com.operators.reportfieldsformachinecore.ReportFieldsForMachineCore;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
-import com.operators.reportrejectcore.ReportCallbackListener;
-import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
-import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
-import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.fragments.RecipeFragment;
@@ -114,6 +110,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         RecipeFragment.OnRecipeFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
+    private static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
+    private static final int EXTRA_GALLERY_CODE = 123;
+
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -139,6 +138,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mSpan = 3;
     private ViewPagerFragment mViewPagerfragment;
     private RecipeFragment mRecipeFragment;
+    private Intent mGalleryIntent;
 
 
     @Override
@@ -202,6 +202,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mViewPagerfragment = ViewPagerFragment.newInstance();
 
+//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+//            mContainer3.setRotationY(180);
+//        }
+
         getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
 
@@ -236,7 +240,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         ((ReportRejectsFragment) fragment).setActionBar();
                     } else if (fragment instanceof SettingsFragment) {
                         ((SettingsFragment) fragment).setActionBar();
-                    } else if (fragment instanceof ActionBarAndEventsFragment) {
+                    } else if (fragment instanceof ActionBarAndEventsFragment ||
+                            fragment instanceof RecipeFragment ||
+                            fragment instanceof WidgetFragment) {
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -247,7 +253,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                     }
                 }
-                //                }
             }
         };
     }
@@ -273,7 +278,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         super.onPause();
 
 
-        if (!ignoreFromOnPause) {
+        if (!ignoreFromOnPause && mGalleryIntent == null) {
 
             mAllDashboardDataCore.stopPolling();
 
@@ -708,7 +713,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         PersistenceManager.getInstance().setJobId(jobId);
         mJobsCore.startJobForMachine(jobId);
 
-        if (mRecipeFragment != null){
+        if (mRecipeFragment != null) {
 
             getAllRecipes(jobId);
         }
@@ -1163,8 +1168,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onViewPagerCreated() {
 
-        mViewPagerfragment.addFragment(mWidgetFragment);
-
         initRecipeFragment();
     }
 
@@ -1185,7 +1188,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onGetAllRecipeSuccess(Object response) {
 
-                        showRecipeFragment((RecipeResponse) response);
+                        addFragmentsToViewPager((RecipeResponse) response);
+
                     }
 
                     @Override
@@ -1196,21 +1200,66 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    private void addFragmentsToViewPager(RecipeResponse response) {
+
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+
+            showRecipeFragment(response);
+
+            mViewPagerfragment.addFragment(mWidgetFragment);
+
+        } else {
+
+            mViewPagerfragment.addFragment(mWidgetFragment);
+
+            showRecipeFragment(response);
+
+        }
+    }
+
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        if (recipeResponse.getRecipeData() != null){
+        if (recipeResponse.getRecipeData() != null && recipeResponse.getRecipeData().size() > 0) {
 
-            if (mRecipeFragment == null){
+            if (mRecipeFragment == null) {
 
                 mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
                 mViewPagerfragment.addFragment(mRecipeFragment);
 
-            }else {
+            } else {
 
                 mRecipeFragment.updateRecipeResponse(recipeResponse);
             }
         }
     }
 
+    @Override
+    public void onImageProductClick(List<String> fileUrl) {
+
+        startGalleryActivity(fileUrl);
+    }
+
+    private void startGalleryActivity(List<String> fileUrl) {
+
+        if (fileUrl != null && fileUrl.size() > 0) {
+
+            mGalleryIntent = new Intent(DashboardActivity.this, GalleryActivity.class);
+
+            mGalleryIntent.putExtra(EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
+
+            startActivityForResult(mGalleryIntent, EXTRA_GALLERY_CODE);
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK){
+
+            mGalleryIntent = null;
+        }
+    }
 }
