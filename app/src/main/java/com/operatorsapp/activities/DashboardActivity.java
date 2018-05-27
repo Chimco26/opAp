@@ -424,6 +424,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
 
+                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
+
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -438,6 +440,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+
+                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
+
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -462,8 +467,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
 
-                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
-
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
                 } else {
@@ -481,8 +484,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineFailed(ErrorObjectInterface reason) {
                 ZLogger.w(LOG_TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
-
-                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
 
             }
         };

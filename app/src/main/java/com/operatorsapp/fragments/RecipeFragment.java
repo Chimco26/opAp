@@ -212,7 +212,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             mLayoutChannel0Title.setText(recipeChannel0.getName());
 
-            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
+            if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
+                    mRecipeResponse.getProductData().getFileUrl().size() > 0) {
+                ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
+            }
 
             mLayoutChannel0ItemTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getName());
 
@@ -220,9 +223,18 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getMaterialInformation().getCatalogID());
 
+            } else {
+
+                mLayoutChannel0ItemSubTitleTv.setText("");
+
             }
 
             if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
+
+                if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
+
+                    mLayoutChannel0ItemSplitLy.removeAllViews();
+                }
 
                 for (BaseSplits baseSplits : recipeChannel0.getChannelSplits().get(0).getBaseSplits()) {
 
@@ -240,12 +252,20 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 }
 
+            } else if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
+
+                mLayoutChannel0ItemSplitLy.removeAllViews();
             }
 
         } else {
 
             mLayoutChannel0Mainlayout.setVisibility(View.GONE);
             mLayoutChannel0NoDataImage.setVisibility(View.VISIBLE);
+
+            if (mLayoutChannel0ItemSplitLy.getChildAt(0) != null) {
+
+                mLayoutChannel0ItemSplitLy.removeAllViews();
+            }
         }
 
     }
@@ -288,6 +308,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             mChannel1_99NoDataImage.setVisibility(View.GONE);
 
+            if (mlayoutChannel1_99.getChildAt(0) != null) {
+
+                mlayoutChannel1_99.removeAllViews();
+            }
+
             for (RecipeData recipeData : recipeResponse_1_99) {
 
                 ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
@@ -297,7 +322,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ViewTagsHelper.addSeparator(getActivity(), mlayoutChannel1_99);
             }
 
-        }else {
+        } else {
 
             mlayoutChannel1_99.removeAllViews();
 
