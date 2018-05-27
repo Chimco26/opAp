@@ -106,9 +106,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
     private ArrayDeque<Event> mEventsQueue = new ArrayDeque<>();
-    private ArrayList<Event> mNewEventsList = new ArrayList<>();
     private boolean mIsOpen = false;
-    private boolean mIsOpenDialog = false;
     private int mCloseWidth;
     private int mOpenWidth;
     private float mTollBarsHeight;
@@ -143,6 +141,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mConfigLayout;
     private TextView mConfigTextView;
     private View mSelectedNumberLy;
+    private Event mLastEvent;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -386,7 +385,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onPause();
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
-            mIsOpenDialog = false;
         }
     }
 
@@ -438,10 +436,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
 
                     //openDialog(event, true); // to show pop up dialog, disabled for now
-                    mIsOpenDialog = true;
                 } else if (event.getEventGroupID() == TYPE_ALERT) {
                     openDialog(event, false);
-                    mIsOpenDialog = true;
                 }
 
 
@@ -665,7 +661,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
         }
@@ -712,21 +707,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
                 startSelectMode(STOPPED, event.getEventID());
 
-                /*
-                if(event.getEventEndTime() == null || event.getTime() == null || event.getEventEndTime().equals("") || event.getTime().equals(""))
-                {
-                    openStopReportScreen(event.getEventID(), null, null, event.getDuration());
-                }
-                else
-                {
-                    openDialog(event, true);
-                }
-                */
+
             } else if (event.getEventGroupID() == TYPE_ALERT) {
                 openDialog(event, false);
             }
         } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
-            mIsOpenDialog = false;
+        }
+    }
+
+    public void setAlertChecked() {
+
+        if (mLastEvent != null && mLastEvent.getEventGroupID() == TYPE_ALERT) {
+
+            mLastEvent.setTreated(true);
+
+            mLastEvent.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(mLastEvent.getEventID()));
+
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
+            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
         }
     }
 
@@ -736,9 +735,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
 
-        message =  event.getSubtitleEname();
+            message = event.getSubtitleEname();
 
-        }else {
+        } else {
 
             message = event.getSubtitleLname();
         }
@@ -832,13 +831,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mLoadingDataText.setVisibility(View.GONE);
 
             if (events != null && events.size() > 0) {
-                Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
 
                 for (Event event : events) {
                     Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
                 }
 
-                mNewEventsList.clear();
 
                 mEventsQueue.clear();
 
@@ -861,7 +858,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
-                        mNewEventsList.add(event);
 
                         event.save();
 
@@ -876,36 +872,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 mNoNotificationsText.setVisibility(View.GONE);
 
-// TODO: 15/04/2018 David Vardi fix this code
-          /*  if (mShiftLogAdapter != null) {
-                mShiftLogAdapter.notifyDataSetChanged();
-            } else {
 
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight);
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-            }*/
-                if (mShiftLogAdapter == null) {
-                    mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0, false, 0);
-                    mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                } else {
+               /* else {
                     mShiftLogAdapter.notifyDataSetChanged();
-                }
+                }*/
                 if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
                 {
                     Event event = mEventsQueue.peek();
                     // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
                     if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
-                        //TODO  openStopReportScreen(event.getEventID(), event.getEventTime(), event.getEventEndTime(), event.getDuration());
                         startSelectMode(STOPPED, event.getEventID());
-                        //openDialog(event, true);
                         mEventsQueue.pop();
-                        mIsOpenDialog = true;
 
                     } else if (event.getEventGroupID() == TYPE_ALERT) {
                         openDialog(event, false);
+                        mLastEvent = event;
                         mEventsQueue.pop();
-                        mIsOpenDialog = true;
                     }
 
                 }
@@ -1171,7 +1156,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (events != null && events.size() > 0) {
             {
 
-                for (Event event: events){
+                for (Event event : events) {
 
                     event.setTreated(true);
                     event.setEventGroupID(reasonId);
@@ -1212,9 +1197,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
         }
 
-        if (mSelectedEvents != null && mSelectedEvents.size() > 0){
+        if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            if (mSelectedNumberLy.getVisibility() == View.GONE){
+            if (mSelectedNumberLy.getVisibility() == View.GONE) {
 
                 mSelectedNumberLy.setVisibility(View.VISIBLE);
 
@@ -1222,7 +1207,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mSelectedNumberTv.setText(getActivity().getResources().getString(R.string.events_selected) + " " + mSelectedEvents.size());
 
-        }else {
+        } else {
 
             mSelectedNumberLy.setVisibility(View.GONE);
         }

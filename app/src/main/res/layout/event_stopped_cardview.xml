@@ -67,8 +67,8 @@
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/event_stopped_shift_log_item_sub_reason"
-                android:layout_width="130dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="5dp"

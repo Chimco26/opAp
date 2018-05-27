@@ -90,6 +90,8 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
 
+import org.litepal.crud.DataSupport;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -460,6 +462,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
 
+                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
+
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
                 } else {
@@ -477,6 +481,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineFailed(ErrorObjectInterface reason) {
                 ZLogger.w(LOG_TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
+
+                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
+
             }
         };
     }
@@ -715,7 +722,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (mRecipeFragment != null) {
 
-            getAllRecipes(jobId);
+            getAllRecipes(jobId, true);
         }
     }
 
@@ -829,6 +836,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void clearData() {
 
+        DataSupport.deleteAll(Event.class);
 
         String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
 
@@ -996,6 +1004,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onCroutonDismiss() {
 
         mActionBarAndEventsFragment.openNextDialog();
+        mActionBarAndEventsFragment.setAlertChecked();
     }
 
     @Override
@@ -1173,11 +1182,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initRecipeFragment() {
 
-//        getAllRecipes(PersistenceManager.getInstance().getJobId());
-        getAllRecipes(2);
+        getAllRecipes(PersistenceManager.getInstance().getJobId(), false);
+//        getAllRecipes(2, false);
     }
 
-    private void getAllRecipes(Integer jobId) {
+    private void getAllRecipes(Integer jobId, final boolean isUpdate) {
 
         PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -1188,17 +1197,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onGetAllRecipeSuccess(Object response) {
 
-                        addFragmentsToViewPager((RecipeResponse) response);
+                        if (isUpdate) {
 
-                    }
+                            showRecipeFragment((RecipeResponse) response);
 
-                    @Override
-                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
+                        } else{
 
-                    }
-                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+                            addFragmentsToViewPager((RecipeResponse) response);
 
-    }
+                        }
+                }
+
+        @Override
+        public void onGetAllRecipeFailed (ErrorObjectInterface reason){
+
+        }
+    },NetworkManager.getInstance(),persistanceManager.getTotalRetries(),persistanceManager.getRequestTimeout());
+
+}
 
     private void addFragmentsToViewPager(RecipeResponse response) {
 
@@ -1219,19 +1235,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        if (recipeResponse.getRecipeData() != null && recipeResponse.getRecipeData().size() > 0) {
+        if (mRecipeFragment == null) {
 
-            if (mRecipeFragment == null) {
+            mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
-                mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
+            mViewPagerfragment.addFragment(mRecipeFragment);
 
-                mViewPagerfragment.addFragment(mRecipeFragment);
+        } else {
 
-            } else {
-
-                mRecipeFragment.updateRecipeResponse(recipeResponse);
-            }
+            mRecipeFragment.updateRecipeResponse(recipeResponse);
         }
+
     }
 
     @Override
@@ -1257,7 +1271,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
 
             mGalleryIntent = null;
         }

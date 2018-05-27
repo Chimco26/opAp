@@ -100,41 +100,11 @@ public class OperatorApplication extends MultiDexApplication {
 
         initImageLoading();
 
-        getVersion();
-
         if (BuildConfig.DEBUG) {
             ZLogger.DEBUG = true;
         }
     }
 
-    private void getVersion() {
-
-        SimpleRequests simpleRequests = new SimpleRequests();
-
-        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
-
-        simpleRequests.getVersion(persistanceManager.getSiteUrl(), new GetVersionCallback() {
-            @Override
-            public void onGetVersionSuccess(Object response) {
-
-                List<VersionResponse> versionResponses = (List<VersionResponse>) response;
-
-                if (versionResponses != null && versionResponses.get(0) != null) {
-
-                    persistanceManager.setVersion(Float.parseFloat((String) (versionResponses.get(0).getVersion().subSequence(0, 3))));
-
-                }
-
-            }
-
-            @Override
-            public void onGetVersionFailed(ErrorObjectInterface reason) {
-
-            }
-
-        }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
-
-    }
 
     private void initImageLoading() {
 

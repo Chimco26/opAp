@@ -85,13 +85,12 @@ public class CroutonCreator {
 
         if (!mCurrentCrouton.isEmpty()) {
 
-            if (mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)) {
+            if (mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)
+                    || mCurrentCrouton.getCroutonType().equals(CroutonType.ALERT_DIALOG)
+                    || mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR) ){
 
                 mCurrentCrouton.getCrouton().hide();
 
-            } else if (mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR)) {
-
-                mCurrentCrouton.getCrouton().hide();
             }
         }
     }
@@ -117,27 +116,27 @@ public class CroutonCreator {
             case ALERT_DIALOG:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
                 setOnClickListener(croutonView);
-                setProgressCountDown(croutonView,PersistenceManager.getInstance().getTimeToDownParameterDialog());
+                setProgressCountDown(croutonView, PersistenceManager.getInstance().getTimeToDownParameterDialog());
                 break;
 
             case CREDENTIALS_ERROR:
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
-                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
+                setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             case CONNECTIVITY:
             case NETWORK_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
-                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
+                setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             default:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
-                setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
+                setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
         }
         TextView croutonText = croutonView.findViewById(R.id.crouton_text);
         croutonText.setText(croutonMessage);
 
-        setProgressCountDown(croutonView,DEFAULT_CROUTON_TIME);
+        setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
 
         return Crouton.make(activity, croutonView, viewGroup, configuration);
     }

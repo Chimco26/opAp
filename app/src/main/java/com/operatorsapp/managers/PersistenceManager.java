@@ -61,6 +61,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
     private static final int MAX_EVENT_SIZE = 200;
     private static final String PREFS_VERSION = "PREFS_VERSION";
+    private static final float DEFAULT_VERSION = 1.6f;
 
 
     private static PersistenceManager msInstance;
@@ -355,6 +356,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public float getVersion() {
 
-        return SecurePreferences.getInstance().getFloat(PREFS_VERSION);
+        float version = SecurePreferences.getInstance().getFloat(PREFS_VERSION);
+
+        if (version == 0){
+
+            version = DEFAULT_VERSION;
+        }
+        return version;
     }
 }

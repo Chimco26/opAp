@@ -27,12 +27,10 @@ import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -61,10 +59,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private boolean mGetShiftLogFinish;
 
     private TimeToEndCounter mTimeToEndCounter;
-
-
-    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    int c = 0;
 
 
     public AllDashboardDataCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge, MachineStatusPersistenceManagerInterface machineStatusPersistenceManager, GetMachineDataNetworkBridgeInterface getMachineDataNetworkBridgeInterface, MachineDataPersistenceManagerInterface machineDataPersistenceManagerInterface, ShiftLogPersistenceManagerInterface shiftLogPersistenceManagerInterface, ShiftLogNetworkBridgeInterface shiftLogNetworkBridgeInterface) {
@@ -104,9 +98,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     }
 
     public void startPolling() {
-        Date date = new Date();
 
-        Log.d("DAVID_TAG  startPolling", dateFormat.format(date));
 
         mJob = null;
 
@@ -114,11 +106,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                Date date = new Date();
-
-                Log.d("DAVID_TAG  executeJob ", "num =" + c + " " + dateFormat.format(date));
-
-                c++;
+                // TODO: 27/05/2018 Natan call me!
                 getMachineData(onJobFinishedListener);
                 getMachineStatus(onJobFinishedListener);
                 getShiftLogs(onJobFinishedListener);
@@ -131,9 +119,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     }
 
     public void stopPolling() {
-        Date date = new Date();
 
-        Log.d("DAVID_TAG  stopPolling", dateFormat.format(date));
 
         if (mJob != null) {
             mJob.stopJob();
@@ -245,7 +231,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     @Override
                     public void onShiftLogSucceeded(ArrayList<Event> events) {
                         if (mShiftLogUICallback != null) {
-                            mShiftLogUICallback.onGetShiftLogSucceeded(clearEvents(events));
+                            mShiftLogUICallback.onGetShiftLogSucceeded(events);
                         } else {
                             ZLogger.w(LOG_TAG, "getShiftLogs() mShiftLogUICallback is null");
                         }
@@ -267,25 +253,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
     }
 
-    private ArrayList<Event> clearEvents(ArrayList<Event> events) {
-
-        HashMap<Integer, Event> items = new HashMap<>();
-
-
-        ArrayList<Event> duplicates = new ArrayList<>();
-
-        for (Event item : events) {
-
-            if (!items.containsKey(item.getEventID())) {
-
-                items.put(item.getEventID(), item);
-            }
-        }
-
-        duplicates.addAll(items.values());
-
-        return duplicates;
-    }
 
 
     private void setJobFinishToAll(JobBase.OnJobFinishedListener onJobFinishedListener) {

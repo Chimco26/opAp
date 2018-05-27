@@ -93,6 +93,11 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
                 (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
                 (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
             }
+
+        }else if (mType == TYPE_CHANNEL_100) {
+
+            (viewHolder.itemView.findViewById(R.id.IP_vertical_separator)).setVisibility(View.GONE);
+            (viewHolder.itemView.findViewById(R.id.IP_img)).setVisibility(View.GONE);
         }
     }
 

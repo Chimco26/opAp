@@ -1,51 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/C0L_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/C0L_title_tv"
+            style="@style/BreeSerifRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/channel_0"
+            android:textColor="@color/dismiss_dialog"
+            android:textSize="25sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/C0L_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:text="@string/channel_0"
-                style="@style/BreeSerifRegular"
-                android:textColor="@color/dismiss_dialog"
-                android:textSize="25sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
 
-                <include
-                    android:id="@+id/C0L_item"
-                    layout="@layout/item_product_0" />
+            <include
+                android:id="@+id/C0L_item"
+                layout="@layout/item_product_0" />
 
-                <View
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent" />
+            <View
+                android:layout_width="60dp"
+                android:layout_height="match_parent" />
 
-                <ImageView
-                    android:id="@+id/C0L_img"
-                    android:layout_width="450dp"
-                    android:layout_height="380dp"
-                    android:background="@drawable/combined_shape"
-                    android:padding="10dp" />
+            <ImageView
+                android:id="@+id/C0L_img"
+                android:layout_width="450dp"
+                android:layout_height="380dp"
+                android:background="@drawable/combined_shape"
+                android:padding="10dp" />
 
 
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/C0L_no_data_img"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_cloud"
+        android:visibility="gone"/>
+
+</RelativeLayout>

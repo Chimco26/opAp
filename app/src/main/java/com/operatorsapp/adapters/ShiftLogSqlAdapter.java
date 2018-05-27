@@ -132,86 +132,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         }
     }
 
-//    private class ShiftLogStoppedViewHolder extends RecyclerView.ViewHolder {
-//
-//        private LinearLayout mStoppedParentLayout;
-//        private LinearLayout mStoppedTitleLayout;
-//        private AutofitTextView mStoppedTitle;
-//        private ImageView mStoppedIcon;
-//        private TextView mStoppedStart;
-//        private TextView mStoppedStartDate;
-//        private TextView mStoppedDuration;
-//        private TextView mStoppedEnd;
-//        private TextView mStoppedEndDate;
-//        private TextView mStoppedTime;
-//        private View mStoppedDivider;
-//        private View mStoppedBottomDivider;
-//        private LinearLayout mStoppedSubtitle;
-//
-//        ShiftLogStoppedViewHolder(View itemView) {
-//            super(itemView);
-//            mStoppedParentLayout = itemView.findViewById(R.id.event_stopped_parent_layout);
-//            mStoppedTitleLayout = itemView.findViewById(R.id.event_stopped_title_layout);
-//            mStoppedTitle = itemView.findViewById(R.id.event_stopped_shift_log_item_title);
-//            mStoppedIcon = itemView.findViewById(R.id.event_stopped_shift_log_item_icon);
-//            mStoppedTime = itemView.findViewById(R.id.event_stopped_shift_log_item_time);
-//            mStoppedStart = itemView.findViewById(R.id.event_stopped_shift_log_item_start);
-//            mStoppedStartDate = itemView.findViewById(R.id.event_stopped_shift_log_item_start_date);
-//            mStoppedDuration = itemView.findViewById(R.id.event_stopped_shift_log_item_duration);
-//            mStoppedEnd = itemView.findViewById(R.id.event_stopped_shift_log_item_end);
-//            mStoppedEndDate = itemView.findViewById(R.id.event_stopped_shift_log_item_end_date);
-//            mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
-//            mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
-//            mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
-//        }
-//    }
-
-//    private class ShiftLogParameterViewHolder extends RecyclerView.ViewHolder {
-//
-//        private LinearLayout mParameterParentLayout;
-//        private LinearLayout mParameterTitleLayout;
-//        private AutofitTextView mParameterTitle;
-//        private ImageView mParameterIcon;
-//        private TextView mParameterSubtitleText;
-//        private TextView mParameterSubTitleValue;
-//        private TextView mParameterStandard;
-//        private TextView mParameterMin;
-//        private TextView mParameterMax;
-//        private TextView mParameterTime;
-//        private View mParameterDivider;
-//        private LinearLayout mParameterSubtitle;
-//        private View mParameterBottomDivider;
-//
-//        ShiftLogParameterViewHolder(View itemView) {
-//            super(itemView);
-//            mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
-//            mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
-//            mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
-//            mParameterIcon = itemView.findViewById(R.id.event_parameter_shift_log_item_icon);
-//            mParameterSubtitleText = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle_text);
-//            mParameterSubTitleValue = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle_value);
-//            mParameterStandard = itemView.findViewById(R.id.event_parameter_shift_log_item_standard);
-//            mParameterMax = itemView.findViewById(R.id.event_parameter_shift_log_item_max);
-//            mParameterMin = itemView.findViewById(R.id.event_parameter_shift_log_item_min);
-//            mParameterTime = itemView.findViewById(R.id.event_parameter_shift_log_item_time);
-//            mParameterDivider = itemView.findViewById(R.id.event_parameter_shift_log_divider);
-//            mParameterSubtitle = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle);
-//            mParameterBottomDivider = itemView.findViewById(R.id.event_parameter_shift_log_bottom_divider);
-//        }
-//    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//        switch (viewType) {
-//            case STOPPED: {
-//                return new ShiftLogStoppedViewHolder(inflater.inflate(R.layout.event_stopped_cardview, parent, false));
-//            }
-//            case PARAMETER: {
-//                return new ShiftLogParameterViewHolder(inflater.inflate(R.layout.event_parameter_cardview, parent, false));
-//            }
-//        }
+
         return new ShiftLogViewHolder(inflater.inflate(R.layout.event_cardview, parent, false));
     }
 

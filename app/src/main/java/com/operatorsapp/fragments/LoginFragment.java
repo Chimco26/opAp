@@ -28,15 +28,20 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
+import com.operators.reportrejectinfra.GetVersionCallback;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SimpleRequests;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -242,13 +247,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
-                dismissProgressDialog();
-                if (mNavigationCallback != null) {
 
-                    mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
-
-                    mNavigationCallback.isTryToLogin(false);
-                }
+                getVersion(machines, true);
             }
 
             @Override
@@ -261,6 +261,16 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    private void tryToLoginSuccess(ArrayList<Machine> machines) {
+        dismissProgressDialog();
+        if (mNavigationCallback != null) {
+
+            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
+
+            mNavigationCallback.isTryToLogin(false);
+        }
+    }
+
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
         mNavigationCallback.isTryToLogin(true);
@@ -269,12 +279,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
                 ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                dismissProgressDialog();
-                if (mNavigationCallback != null) {
-                    mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
 
-                    mNavigationCallback.isTryToLogin(false);
-                }
+                getVersion(machines, false);
             }
 
             @Override
@@ -285,6 +291,63 @@ public class LoginFragment extends Fragment {
                 mNavigationCallback.isTryToLogin(false);
             }
         });
+    }
+
+    private void loginSuccess() {
+        dismissProgressDialog();
+        if (mNavigationCallback != null) {
+            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
+
+            mNavigationCallback.isTryToLogin(false);
+        }
+    }
+
+    private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin) {
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        simpleRequests.getVersion(persistanceManager.getSiteUrl(), new GetVersionCallback() {
+            @Override
+            public void onGetVersionSuccess(Object response) {
+
+                List<VersionResponse> versionResponses = (List<VersionResponse>) response;
+
+                if (versionResponses != null && versionResponses.get(0) != null) {
+
+                    persistanceManager.setVersion(Float.parseFloat((String) (versionResponses.get(0).getVersion().subSequence(0, 3))));
+                }
+
+                if (isTryTologin) {
+
+                    tryToLoginSuccess(machines);
+
+                } else {
+
+                    loginSuccess();
+
+                }
+
+            }
+
+            @Override
+            public void onGetVersionFailed(ErrorObjectInterface reason) {
+
+                if (isTryTologin) {
+
+                    tryToLoginSuccess(machines);
+
+                } else {
+
+                    loginSuccess();
+
+                }
+
+            }
+
+        }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
     }
 
     private void dismissProgressDialog() {

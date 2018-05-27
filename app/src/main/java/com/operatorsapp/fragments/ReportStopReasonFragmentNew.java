@@ -121,10 +121,6 @@ public class ReportStopReasonFragmentNew extends BackStackAwareFragment implemen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
 
-        if(getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            view.setRotationY(180);
-        }
-
         setActionBar();
 //        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;

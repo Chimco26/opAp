@@ -88,6 +88,18 @@ public class ViewPagerFragment extends Fragment {
 
     }
 
+    public void removeFragment(Fragment fragment) {
+
+        if (mPagerAdapter != null) {
+
+            mFragmentList.remove(fragment);
+
+            mPagerAdapter.notifyDataSetChanged();
+
+        }
+
+    }
+
     private void updateDirection(){
 
         if (getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {

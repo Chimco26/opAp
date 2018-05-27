@@ -39,7 +39,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mLayoutChannel0Item;
     private TextView mLayoutChannel0ItemTitleTv;
     private TextView mLayoutChannel0ItemSubTitleTv;
-    private RecyclerView mLayoutChannel0ItemRv;
     private LinearLayout mLayoutChannel0ItemSplitLy;
     private View mMainView;
     private View mLayoutChannel100;
@@ -47,8 +46,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private RecyclerView mLayoutChannel100Rv;
     private No0ChanneAdapter mNo0ChanneAdapter;
     private LinearLayout mlayoutChannel1_99;
-    private int mChannel0Counter;
-    private float x1, x2;
+    private View mLayoutChannel0NoDataImage;
+    private View mLayoutChannel100NoDataImage;
+    private View mChannel1_99NoDataImage;
+    private View mLayoutChannel0Mainlayout;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -100,7 +101,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         super.onViewCreated(view, savedInstanceState);
 
         initVars(view);
-        initView(view);
+        initView();
         initListener(view);
     }
 
@@ -123,6 +124,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private void initChannel1_99Vars(View view) {
 
         mlayoutChannel1_99 = view.findViewById(R.id.FR_channel_1_99_ly);
+
+        mChannel1_99NoDataImage = view.findViewById(R.id.FR_C1_99_no_data_img);
     }
 
     private void initChannel100Vars(View view) {
@@ -132,11 +135,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mLayoutChannel100Title = mLayoutChannel100.findViewById(R.id.C100_tv);
 
         mLayoutChannel100Rv = mLayoutChannel100.findViewById(R.id.channel_100_rv);
+
+        mLayoutChannel100NoDataImage = mLayoutChannel100.findViewById(R.id.C100_no_data_img);
     }
 
     private void initChannel0Vars(View view) {
 
         mLayoutChannel0 = view.findViewById(R.id.FR_channel_0_ly);
+
+        mLayoutChannel0Mainlayout = view.findViewById(R.id.C0L_layout);
 
         mLayoutChannel0Title = mLayoutChannel0.findViewById(R.id.C0L_title_tv);
 
@@ -144,29 +151,35 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0Item = mLayoutChannel0.findViewById(R.id.C0L_item);
 
+        mLayoutChannel0NoDataImage = mLayoutChannel0.findViewById(R.id.C0L_no_data_img);
+
         mLayoutChannel0ItemTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_title);
 
         mLayoutChannel0ItemSubTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_sub_title);
 
         mLayoutChannel0ItemSplitLy = mLayoutChannel0Item.findViewById(R.id.IP_split_ly);
 
+
     }
 
-    private void initView(View view) {
+    private void initView() {
 
-        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0) {
+        initChannel0View();
 
-            initChannel0View();
+        initChannel100View();
 
-            initChannel100View();
+        initChanne1_1_99_View();
 
-            initChanne1_1_99_View();
-        }
     }
 
     private void initChannel100View() {
 
-        if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
+                && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null &&
+                mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+
+            mLayoutChannel100NoDataImage.setVisibility(View.GONE);
+            mLayoutChannel100.setVisibility(View.VISIBLE);
 
             mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
@@ -179,47 +192,61 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel100Rv.setLayoutManager(layoutManager);
 
             mLayoutChannel100Rv.setAdapter(mNo0ChanneAdapter);
+
+        } else {
+
+            mLayoutChannel100NoDataImage.setVisibility(View.VISIBLE);
+            mLayoutChannel100.setVisibility(View.GONE);
         }
     }
 
     private void initChannel0View() {
 
-        RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
+        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
+                && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null) {
 
-        mLayoutChannel0Title.setText(recipeChannel0.getName());
+            mLayoutChannel0Mainlayout.setVisibility(View.VISIBLE);
+            mLayoutChannel0NoDataImage.setVisibility(View.GONE);
 
-        ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
+            RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
 
-        mLayoutChannel0ItemTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getName());
+            mLayoutChannel0Title.setText(recipeChannel0.getName());
 
-        if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
+            ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
 
-            mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getMaterialInformation().getCatalogID());
+            mLayoutChannel0ItemTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getName());
 
-        }
+            if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 
-        if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
-
-            for (BaseSplits baseSplits : recipeChannel0.getChannelSplits().get(0).getBaseSplits()) {
-
-                LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                View itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
-
-                ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
-
-                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
-
-                ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
-
-                mLayoutChannel0ItemSplitLy.addView(itemView);
+                mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getMaterialInformation().getCatalogID());
 
             }
 
+            if (recipeChannel0.getChannelSplits().get(0).getBaseSplits() != null) {
+
+                for (BaseSplits baseSplits : recipeChannel0.getChannelSplits().get(0).getBaseSplits()) {
+
+                    LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    View itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
+
+                    ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
+
+                    ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+
+                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
+
+                    mLayoutChannel0ItemSplitLy.addView(itemView);
+
+                }
+
+            }
+
+        } else {
+
+            mLayoutChannel0Mainlayout.setVisibility(View.GONE);
+            mLayoutChannel0NoDataImage.setVisibility(View.VISIBLE);
         }
-
-        mChannel0Counter = 0;
-
 
     }
 
@@ -247,21 +274,36 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
 
-        if (mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
+        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0 &&
+                mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
 
             recipeResponse_1_99.remove(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1));
         }
-        recipeResponse_1_99.remove(0);
 
-        for (RecipeData recipeData : recipeResponse_1_99) {
-
-            ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
-
-            ViewTagsHelper.addRv(getContext(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
-
-            ViewTagsHelper.addSeparator(getContext(), mlayoutChannel1_99);
+        if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0) {
+            recipeResponse_1_99.remove(0);
         }
 
+        if (recipeResponse_1_99 != null && recipeResponse_1_99.size() > 0) {
+
+            mChannel1_99NoDataImage.setVisibility(View.GONE);
+
+            for (RecipeData recipeData : recipeResponse_1_99) {
+
+                ViewTagsHelper.addTitle(getActivity(), recipeData.getName(), mlayoutChannel1_99);
+
+                ViewTagsHelper.addRv(getActivity(), recipeData.getChannelSplits(), mlayoutChannel1_99, this);
+
+                ViewTagsHelper.addSeparator(getActivity(), mlayoutChannel1_99);
+            }
+
+        }else {
+
+            mlayoutChannel1_99.removeAllViews();
+
+            mlayoutChannel1_99.addView(mChannel1_99NoDataImage);
+            mChannel1_99NoDataImage.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -341,7 +383,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mRecipeResponse = recipeResponse;
 
-        initView(mMainView);
+        initView();
     }
 
     @Override
