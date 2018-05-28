@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:text="@string/no_data"
             android:textColor="@color/divider_gray"
-            android:textSize="30sp"
+            android:textSize="50sp"
             android:visibility="gone" />
 
     </LinearLayout>
