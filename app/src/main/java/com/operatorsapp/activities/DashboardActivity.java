@@ -1202,20 +1202,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                             showRecipeFragment((RecipeResponse) response);
 
-                        } else{
+                        } else {
 
                             addFragmentsToViewPager((RecipeResponse) response);
 
                         }
-                }
+                    }
 
-        @Override
-        public void onGetAllRecipeFailed (ErrorObjectInterface reason){
+                    @Override
+                    public void onGetAllRecipeFailed(ErrorObjectInterface reason) {
 
-        }
-    },NetworkManager.getInstance(),persistanceManager.getTotalRetries(),persistanceManager.getRequestTimeout());
+                        if (!isUpdate) {
+                            addFragmentsToViewPager(null);
+                        }
+                    }
+                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
-}
+    }
 
     private void addFragmentsToViewPager(RecipeResponse response) {
 

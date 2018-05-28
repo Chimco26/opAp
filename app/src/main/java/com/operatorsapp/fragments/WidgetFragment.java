@@ -54,7 +54,7 @@ public class WidgetFragment extends Fragment implements
     private int mRecyclersHeight;
     private int mMiddleWidth;
     private TextView mNoNotificationsText;
-//    private LinearLayout mNoDataView;
+    //    private LinearLayout mNoDataView;
     private TextView mLoadingDataText;
     private LinearLayout mLoadingDataView;
     private RecyclerView mWidgetRecycler;
@@ -198,11 +198,15 @@ public class WidgetFragment extends Fragment implements
     }
 
     public void setSpanCount(int span) {
-        mGridLayoutManager.setSpanCount(span);
+        if (mGridLayoutManager != null) {
+            mGridLayoutManager.setSpanCount(span);
+        }
     }
 
     public void setWidgetState(boolean state) {
-        mWidgetAdapter.changeState(state);
+        if (mWidgetAdapter != null) {
+            mWidgetAdapter.changeState(state);
+        }
     }
 
     @Override
