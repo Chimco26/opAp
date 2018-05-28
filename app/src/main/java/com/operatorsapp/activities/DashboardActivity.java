@@ -141,6 +141,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ViewPagerFragment mViewPagerfragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
+    private Integer mSelectJobId;
 
 
     @Override
@@ -172,7 +173,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
-//        mDashboardFragment = DashboardFragmentSql.newInstance();
+
         ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
@@ -197,16 +198,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
-//        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mWidgetFragment).commit();
     }
 
     private void initViewPagerFragment() {
 
         mViewPagerfragment = ViewPagerFragment.newInstance();
-
-//        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-//            mContainer3.setRotationY(180);
-//        }
 
         getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
     }
@@ -375,6 +371,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
+                    if (machineStatus != null && machineStatus.getAllMachinesData() != null &&
+                            machineStatus.getAllMachinesData().size() > 0) {
+
+                        PersistenceManager.getInstance().setJobId(machineStatus.getAllMachinesData().get(0).getCurrentJobID());
+                        getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
+
+                    }
+
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                         dashboardUICallbackListener.onDeviceStatusChanged(machineStatus); // disable the button at least until next polling cycle
@@ -424,8 +428,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
 
-                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
-
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -440,9 +442,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
-
-                getAllRecipes(PersistenceManager.getInstance().getJobId(), true);
-
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -692,6 +691,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 NetworkManager.getInstance().clearPollingRequest();
 
                 mAllDashboardDataCore.startPolling();
+
+                PersistenceManager.getInstance().setJobId(mSelectJobId);
+
+                if (mRecipeFragment != null) {
+
+                    getAllRecipes(mSelectJobId, true);
+
+                }
             }
 
 
@@ -719,12 +726,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void startJobForMachine(int jobId) {
         Log.i(LOG_TAG, "startJobForMachine(), Job Id: " + jobId);
         PersistenceManager.getInstance().setJobId(jobId);
+
+        mSelectJobId = jobId;
+
         mJobsCore.startJobForMachine(jobId);
 
-        if (mRecipeFragment != null) {
-
-            getAllRecipes(jobId, true);
-        }
     }
 
     @Override

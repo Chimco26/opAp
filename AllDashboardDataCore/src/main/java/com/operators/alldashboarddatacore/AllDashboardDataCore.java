@@ -99,14 +99,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     public void startPolling() {
 
-
         mJob = null;
 
         mJob = new EmeraldJobBase() {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                // TODO: 27/05/2018 Natan call me!
                 getMachineData(onJobFinishedListener);
                 getMachineStatus(onJobFinishedListener);
                 getShiftLogs(onJobFinishedListener);

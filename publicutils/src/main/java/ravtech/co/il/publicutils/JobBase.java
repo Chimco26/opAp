@@ -30,6 +30,7 @@ public abstract class JobBase implements Runnable {
             this.mIntervalDelay = intervalDelay;
             this.mTimeUnit = timeUnit;
             this.attachToPolling(startDelay);
+
         }
 
     }
