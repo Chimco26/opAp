@@ -5,25 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.app.operatorinfra.Operator;
-import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
@@ -97,7 +93,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 ZLogger.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
-                if (count > 0) {
+                if (start + count > 0) {
                     mSignInButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
                     mSignInButton.setClickable(true);
                 } else {
