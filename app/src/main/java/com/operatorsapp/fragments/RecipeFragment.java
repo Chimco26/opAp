@@ -304,7 +304,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             public void onClick(View v) {
 
                 if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null) {
-                    mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl());
+                    mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl(), mRecipeResponse.getRecipeData().get(0).getName());
                 }
             }
         });
@@ -449,13 +449,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     }
 
     @Override
-    public void onImageProductClick(List<String> fileUrls) {
+    public void onImageProductClick(List<String> fileUrls, String name) {
 
-        mListener.onImageProductClick(fileUrls);
+        mListener.onImageProductClick(fileUrls, name);
     }
 
     public interface OnRecipeFragmentListener {
 
-        void onImageProductClick(List<String> fileUrl);
+        void onImageProductClick(List<String> fileUrl, String name);
     }
 }

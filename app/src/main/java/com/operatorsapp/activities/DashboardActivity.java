@@ -114,6 +114,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
     private static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
     private static final int EXTRA_GALLERY_CODE = 123;
+    private static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
 
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -1259,18 +1260,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onImageProductClick(List<String> fileUrl) {
+    public void onImageProductClick(List<String> fileUrl, String name) {
 
-        startGalleryActivity(fileUrl);
+        startGalleryActivity(fileUrl, name);
     }
 
-    private void startGalleryActivity(List<String> fileUrl) {
+    private void startGalleryActivity(List<String> fileUrl, String name) {
 
         if (fileUrl != null && fileUrl.size() > 0) {
 
             mGalleryIntent = new Intent(DashboardActivity.this, GalleryActivity.class);
 
             mGalleryIntent.putExtra(EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
+
+            mGalleryIntent.putExtra(EXTRA_RECIPE_FILES_TITLE, name);
 
             startActivityForResult(mGalleryIntent, EXTRA_GALLERY_CODE);
 

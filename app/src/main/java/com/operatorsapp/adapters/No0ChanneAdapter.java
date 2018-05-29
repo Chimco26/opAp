@@ -76,7 +76,7 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
                 viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onImageProductClick(mChannelSplits.get(position).getMaterialInformation().getFileUrl());
+                        mListener.onImageProductClick(mChannelSplits.get(position).getMaterialInformation().getFileUrl(), mChannelSplits.get(position).getMaterialInformation().getName() + "");
 
                     }
                 });
@@ -160,6 +160,6 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
     public interface Channel100AdapterListener {
 
 
-        void onImageProductClick(List<String> fileUrl);
+        void onImageProductClick(List<String> fileUrl, String s);
     }
 }
