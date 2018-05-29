@@ -52,13 +52,6 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
 
                     ZLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
 
-                    if(events != null)
-                    {
-                        for (Event event : events)
-                        {
-                            ZLogger.d(LOG_TAG, "getShiftLog , new event with ID: " + event.getEventID() + " " + event.getEventEndTime());
-                        }
-                    }
 
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
                 }

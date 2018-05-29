@@ -235,7 +235,7 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
 
         for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-            eventsId[0] = mSelectedEvents.get(i);
+            eventsId[i] = mSelectedEvents.get(i);
 
             SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReasonId, mEnName, mILName, mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
 

@@ -832,10 +832,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (events != null && events.size() > 0) {
 
-                for (Event event : events) {
-                    Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
-                }
-
 
                 mEventsQueue.clear();
 

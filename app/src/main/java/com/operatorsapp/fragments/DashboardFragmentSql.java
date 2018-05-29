@@ -883,12 +883,6 @@ public class DashboardFragmentSql extends Fragment implements DialogFragment.OnD
 
         if (events != null && events.size() > 0) {
 
-            Log.e(LOG_TAG, "new events to add to shift log: " + events.size() + " new events list size: " + mNewEventsList.size());
-
-            for (Event event : events) {
-                Log.e(LOG_TAG, "new events to add to shift log: " + event.getEventID());
-            }
-
             mNewEventsList.clear();
 
             mEventsQueue.clear();
