@@ -183,6 +183,8 @@
     <string name="channel_1_99">Channel 1–99</string>
     <string name="channel_100">Channel 100</string>
     <string name="events_selected">Events selected:</string>
+    <string name="loading_file">Loading File...</string>
+    <string name="loading_error">Loading error</string>
 
 
 </resources>

@@ -37,6 +37,12 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
 
+
+        <activity android:name=".activities.GalleryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustNothing"/>
+
         <receiver
             android:name=".utils.broadcast.SelectStopReasonBroadcast"
             android:enabled="true"
@@ -50,7 +56,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activities.GalleryActivity"></activity>
     </application>
 
 </manifest>

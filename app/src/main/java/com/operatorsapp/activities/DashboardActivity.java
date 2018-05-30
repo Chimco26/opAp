@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -57,6 +58,7 @@ import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
@@ -115,6 +117,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
     private static final int EXTRA_GALLERY_CODE = 123;
     private static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
+    private static final String EXTRA_RECIPE_PDF_FILES = "EXTRA_RECIPE_PDF_FILES";
+
 
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -143,6 +147,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
+    private ArrayList<PdfObject> mPdfList = new ArrayList<>();
 
 
     @Override
@@ -698,6 +703,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mRecipeFragment != null) {
 
                     getAllRecipes(mSelectJobId, true);
+
+                    mPdfList = new ArrayList<>();
 
                 }
             }
@@ -1275,6 +1282,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mGalleryIntent.putExtra(EXTRA_RECIPE_FILES_TITLE, name);
 
+            mGalleryIntent.putExtra(EXTRA_RECIPE_PDF_FILES, mPdfList);
+
             startActivityForResult(mGalleryIntent, EXTRA_GALLERY_CODE);
 
         }
@@ -1284,9 +1293,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+        mGalleryIntent = null;
 
-            mGalleryIntent = null;
+        ChangeLang.changeLanguage(this);
+
+        if (resultCode == RESULT_OK && requestCode == EXTRA_GALLERY_CODE) {
+
+            mPdfList = data.getParcelableArrayListExtra(EXTRA_RECIPE_PDF_FILES);
         }
     }
 }

@@ -45,64 +45,50 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final GalleryAdapter.ViewHolder viewHolder, final int position) {
 
-        if (mGalleryModels.get(position).isSelected()){
+        if (mGalleryModels.get(position).isSelected()) {
 
             viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
-            viewHolder.mPdfWebViewLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
 
-        }else {
+        } else {
 
             viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery));
-            viewHolder.mPdfWebViewLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery));
         }
 
-        if (!mGalleryModels.get(position).getUrl().endsWith("pdf")) {
+        if (mGalleryModels.get(position).getUrl().endsWith("pdf")) {
 
-            viewHolder.mImgLy.setVisibility(View.VISIBLE);
-            viewHolder.mPdfWebViewLy.setVisibility(View.GONE);
+            viewHolder.mImg.setImageResource(R.drawable.ic_pdf);
+        }
 
-            ImageLoader.getInstance().displayImage(mGalleryModels.get(position).getUrl(), viewHolder.mImg);
+        ImageLoader.getInstance().displayImage(mGalleryModels.get(position).getUrl(), viewHolder.mImg);
 
-            viewHolder.mImgLy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        viewHolder.mImgLy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
+                viewHolder.mImgLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
 
-                    resetSelectedItems();
+                resetSelectedItems();
 
-                    mGalleryModels.get(position).setSelected(true);
+                mGalleryModels.get(position).setSelected(true);
+
+                if (!mGalleryModels.get(position).getUrl().endsWith("pdf")) {
 
                     mListener.onImageClick(mGalleryModels.get(position));
 
-                }
-            });
-
-        }else {
-
-            viewHolder.mImgLy.setVisibility(View.GONE);
-            viewHolder.mPdfWebViewLy.setVisibility(View.VISIBLE);
-
-            viewHolder.mPdfWebViewLy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    viewHolder.mPdfWebViewLy.setBackground(mContext.getResources().getDrawable(R.drawable.background_item_gallery_selected));
-
-                    resetSelectedItems();
-
-                    mGalleryModels.get(position).setSelected(true);
+                } else {
 
                     mListener.onPdfClick(mGalleryModels.get(position));
+
                 }
-            });
-        }
+            }
+        });
+
 
     }
 
     private void resetSelectedItems() {
 
-        for (GalleryModel galleryModel: mGalleryModels){
+        for (GalleryModel galleryModel : mGalleryModels) {
 
             galleryModel.setSelected(false);
         }
@@ -119,10 +105,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         private final ImageView mImg;
 
-        private final WebView mPdfWebView;
-
-        private final View mPdfWebViewLy;
-
         private final View mImgLy;
 
         ViewHolder(View itemView) {
@@ -130,17 +112,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
             mImg = itemView.findViewById(R.id.IG_img);
 
-            mPdfWebView = itemView.findViewById(R.id.IG_pdf);
-
-            mPdfWebViewLy = itemView.findViewById(R.id.IG_pdf_ly);
-
             mImgLy = itemView.findViewById(R.id.IG_image_ly);
 
         }
 
     }
 
-    public interface GalleryAdapterListener{
+    public interface GalleryAdapterListener {
 
         void onImageClick(GalleryModel galleryModel);
 

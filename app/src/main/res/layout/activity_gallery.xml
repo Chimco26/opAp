@@ -27,7 +27,7 @@
             <ImageView
                 android:id="@+id/AG_close_btn"
                 android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
                 android:paddingBottom="5dp"
                 android:paddingEnd="20dp"
@@ -49,6 +49,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/AG_center_layout"
         android:layout_width="match_parent"
         android:layout_height="500dp">
 
@@ -58,20 +59,69 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true" />
 
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/AG_pdf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/AG_scale_tv"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@color/default_gray"
+            android:background="@drawable/background_item_gallery"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/AG_loading_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:id="@+id/AG_loading_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/C16"
+                android:indeterminateTintMode="src_atop" />
+
+            <TextView
+                android:id="@+id/AG_loading_tv"
+                style="@style/FontStyle_T7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/loading_file"
+                android:textColor="@color/divider_gray"
+                android:textSize="50sp" />
+        </LinearLayout>
+
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:background="@color/default_gray" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/AG_rv"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:paddingEnd="50dp"
-        android:paddingStart="50dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"/>
 

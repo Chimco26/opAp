@@ -503,7 +503,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @SuppressLint("InflateParams")
     public void setActionBar() {
 
-
         ActionBar actionBar = null;
         if ((getActivity()) != null) {
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -518,7 +517,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, spannableString.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
-
 
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
@@ -807,7 +805,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
-
 
         mCurrentMachineStatus = machineStatus;
 
