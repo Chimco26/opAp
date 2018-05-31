@@ -22,6 +22,7 @@ import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -65,6 +66,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private View mLoadingProgress;
     private TextView mLoadingTv;
     private boolean isLoad;
+    private View mScaleLy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mPdfList = getIntent().getParcelableArrayListExtra(EXTRA_RECIPE_PDF_FILES);
 
-        if (mPdfList == null){ mPdfList = new ArrayList<>();}
+        if (mPdfList == null) {
+            mPdfList = new ArrayList<>();
+        }
 
         initVars();
 
@@ -98,6 +102,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mScaleTv = findViewById(R.id.AG_scale_tv);
 
+        mScaleLy = findViewById(R.id.AG_scale_ly);
+
         mLoadingLy = findViewById(R.id.AG_loading_ly);
 
         mLoadingProgress = findViewById(R.id.AG_loading_progress);
@@ -108,6 +114,34 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
 
+        initTest();
+
+        mImage.setMaximumScale((float) 9.75);
+
+        mImage.setMinimumScale((float) 0.25);
+
+        mPdfViewer.setMaxZoom((float) 9.75);
+
+        mPdfViewer.setMinZoom((float) 0.25);
+
+        Constants.Pinch.MINIMUM_ZOOM = 0.25f;
+
+        ImageLoader.getInstance().displayImage(mFileUrls.get(0), mImage);
+
+        mTitleTv.setText(mTitle);
+
+        initRv();
+
+        mImage.getAttacher().setOnScaleChangeListener(this);
+
+        Typeface tf = Typeface.createFromAsset(this.getAssets(),
+                "fonts/BreeSerif-Regular.ttf");
+
+        mLoadingTv.setTypeface(tf);
+
+    }
+
+    private void initTest() {
         mFileUrls.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
 
         mFileUrls.add(mFileUrls.get(0));
@@ -124,20 +158,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         mFileUrls.add(mFileUrls.get(0));
         mFileUrls.add(mFileUrls.get(0));
         mFileUrls.add(mFileUrls.get(0));
-
-        ImageLoader.getInstance().displayImage(mFileUrls.get(0), mImage);
-
-        mTitleTv.setText(mTitle);
-
-        initRv();
-
-        mImage.getAttacher().setOnScaleChangeListener(this);
-
-        Typeface tf = Typeface.createFromAsset(this.getAssets(),
-                "fonts/BreeSerif-Regular.ttf");
-
-        mLoadingTv.setTypeface(tf);
-
     }
 
     private void initRv() {
@@ -165,32 +185,34 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         findViewById(R.id.AG_close_btn).setOnClickListener(this);
 
+        findViewById(R.id.AG_scale_minus).setOnClickListener(this);
+
+        findViewById(R.id.AG_scale_plus).setOnClickListener(this);
+
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
+        updatePdfViewer(mPdfViewer.getZoom());
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private void updatePdfViewer(float zoom) {
+
         if (isPdflastClick) {
 
-            if (mPdfViewer.getZoom() > 1.1) {
+            if (zoom * 100 != 100) {
 
-                mScaleTv.setVisibility(View.VISIBLE);
+                mScaleTv.setText(String.valueOf((int) (zoom * 100)) + "%");
 
-                mScaleTv.setText("x: " + String.valueOf(mPdfViewer.getZoom()).subSequence(0, 3));
+            } else {
 
-                if (mScaleTv.getText().charAt(5) == ".".charAt(0)){
-
-                    mScaleTv.setText(mScaleTv.getText().toString().replace(".", ""));
-                }
-
-            }else {
-
-                mScaleTv.setVisibility(View.GONE);
+                mScaleTv.setText("100%");
             }
 
         }
-
-        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -208,6 +230,100 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
 
                 break;
+
+            case R.id.AG_scale_minus:
+
+                updateScale(false);
+
+                break;
+
+            case R.id.AG_scale_plus:
+
+                updateScale(true);
+
+                break;
+        }
+    }
+
+    private void updateScale(boolean isPositive) {
+
+        if (!isPdflastClick) {
+
+            int scaleBase25 = ((int) (mImage.getScale() * 100) / 25) * 25;
+
+            if (isPositive) {
+
+                float scale = (scaleBase25 + 25) / 100f;
+
+                scaleImage(scale);
+
+            } else {
+
+                float scale;
+
+                if ((((mImage.getScale() * 100) / 25) * 25) % 25 == 0) {
+
+                    scale = ((scaleBase25) - 25) / 100f;
+
+                } else {
+
+                    scale = ((scaleBase25)) / 100f;
+                }
+
+                scaleImage(scale);
+
+            }
+
+        } else {
+
+            int scaleBase25 = ((int) (mPdfViewer.getZoom() * 100) / 25) * 25;
+
+            if (isPositive) {
+
+                float scale = (scaleBase25 + 25) / 100f;
+
+                scalePdf(scale);
+
+            } else {
+
+                float scale;
+
+                if ((((mPdfViewer.getZoom() * 100) / 25) * 25) % 25 == 0) {
+
+                    scale = ((scaleBase25) - 25) / 100f;
+
+                } else {
+
+                    scale = ((scaleBase25)) / 100f;
+                }
+
+                scalePdf(scale);
+            }
+
+        }
+    }
+
+    private void scalePdf(float scale) {
+
+        if (scale <= mPdfViewer.getMaxZoom() && scale >= mPdfViewer.getMinZoom()) {
+
+            if (!isLoad) {
+
+                mPdfViewer.zoomWithAnimation(scale);
+
+                updatePdfViewer(scale);
+
+            }
+        }
+    }
+
+    private void scaleImage(float scale) {
+        if (scale <= mImage.getMaximumScale() && scale >= mImage.getMinimumScale()) {
+
+            mImage.setScale(scale);
+
+            updateImageScale(scale);
+
         }
     }
 
@@ -216,6 +332,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
+        mScaleTv.setText(String.valueOf((int) (1 * 100)) + "%");
+
         isPdflastClick = false;
 
         mPdfViewer.recycle();
@@ -223,7 +341,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         mImage.setVisibility(View.VISIBLE);
         mPdfViewer.setVisibility(View.GONE);
         mLoadingLy.setVisibility(View.GONE);
-        mScaleTv.setVisibility(View.GONE);
 
         ImageLoader.getInstance().displayImage(galleryModel.getUrl(), mImage);
 
@@ -236,11 +353,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
+        mScaleTv.setText(String.valueOf((int) (1 * 100)) + "%");
+
         isPdflastClick = true;
 
         mImage.setVisibility(View.GONE);
-
-        mScaleTv.setVisibility(View.GONE);
 
         mAdapter.notifyDataSetChanged();
 
@@ -283,7 +400,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
                 isLoad = true;
             }
-        }else {
+        } else {
 
             mPdfViewer.setVisibility(View.VISIBLE);
         }
@@ -292,20 +409,18 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onScaleChange(float scaleFactor, float focusX, float focusY) {
 
-        if (mImage.getScale() > 1.1) {
+        updateImageScale(mImage.getScale());
+    }
 
-            mScaleTv.setVisibility(View.VISIBLE);
+    private void updateImageScale(float scale) {
 
-            mScaleTv.setText("x: " + String.valueOf(mImage.getScale()).subSequence(0, 3));
+        if (mImage.getScale() * 100 != 100) {
 
-            if (mScaleTv.getText().charAt(5) == ".".charAt(0)){
+            mScaleTv.setText(String.valueOf((int) (scale * 100)) + "%");
 
-                mScaleTv.setText(mScaleTv.getText().toString().replace(".", ""));
-            }
+        } else {
 
-        }else {
-
-            mScaleTv.setVisibility(View.GONE);
+            mScaleTv.setText("100%");
         }
     }
 
