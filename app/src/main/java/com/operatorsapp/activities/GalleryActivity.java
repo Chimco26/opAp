@@ -403,6 +403,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         } else {
 
             mPdfViewer.setVisibility(View.VISIBLE);
+
+            mLoadingLy.setVisibility(View.VISIBLE);
         }
     }
 
@@ -506,11 +508,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void loadComplete(int nbPages) {
 
+        mLoadingLy.setVisibility(View.GONE);
+
+        isLoad = false;
+
         if (isPdflastClick) {
-
-            isLoad = false;
-
-            mLoadingLy.setVisibility(View.GONE);
 
             PdfDocument.Meta meta = mPdfViewer.getDocumentMeta();
             printBookmarksTree(mPdfViewer.getTableOfContents(), "-");
