@@ -172,10 +172,11 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
                 public void onClick(View v) {
 
                     KeyboardUtils.closeKeyboard(getActivity());
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if (fragmentManager != null) {
-                        fragmentManager.popBackStack();
-                    }
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if (fragmentManager != null) {
+//                        fragmentManager.popBackStack();
+//                    }
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);

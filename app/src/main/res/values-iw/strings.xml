@@ -187,5 +187,7 @@
     <string name="channel_1_99">ערוץ 99–1</string>
     <string name="channel_100">ערוץ 100</string>
     <string name="events_selected">אירועים שנבחרו:</string>
+    <string name="production_parameters"> נתוני ייצור</string>
+
 
 </resources>

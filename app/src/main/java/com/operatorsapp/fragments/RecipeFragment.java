@@ -20,6 +20,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
@@ -230,14 +231,21 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
 
-            mLayoutChannel0Title.setText(recipeChannel0.getName());
+            if (PersistenceManager.getInstance().getCurrentLang() == "en"){
+
+                mLayoutChannel0Title.setText(recipeChannel0.getName());
+
+            }else {
+
+                mLayoutChannel0Title.setText(recipeChannel0.getName());
+            }
 
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            mLayoutChannel0ItemTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getName());
+            mLayoutChannel0ItemTitleTv.setText(getResources().getString(R.string.production_parameters));
 
             if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 
@@ -356,7 +364,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                 mlayoutChannel1_99NoDataLayout.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
 
             mlayoutChannel1_99.removeAllViews();
 

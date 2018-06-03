@@ -53,6 +53,7 @@ import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
@@ -148,6 +149,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
+    private JobsFragment mJobsFragment;
 
 
     @Override
@@ -633,6 +635,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mChartFragment = fragment;
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
             return;
+        }
+        if (fragment instanceof JobsFragment){
+
+            mJobsFragment = (JobsFragment) fragment;
         }
 //        if (addToBackStack) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
@@ -1157,12 +1163,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 mChartFragment = null;
 
-                if (mActionBarAndEventsFragment != null) {
-
-                    mActionBarAndEventsFragment.setActionBar();
-
-                }
             }
+            if (mJobsFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mJobsFragment).commit();
+
+                mJobsFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+
         } else {
             super.onBackPressed();
         }

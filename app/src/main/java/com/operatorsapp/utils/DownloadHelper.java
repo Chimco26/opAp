@@ -143,7 +143,7 @@ public class DownloadHelper {
 
             dismissDialog();
 
-            mListener.onPostExecute(mFile);
+            mListener.onPostExecute(mFile, url);
 
         }
 
@@ -171,7 +171,7 @@ public class DownloadHelper {
 
     public interface DownloadFileListener {
 
-        void onPostExecute(File file);
+        void onPostExecute(File file, String url);
 
         void onLoadFileError();
     }

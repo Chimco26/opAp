@@ -185,6 +185,7 @@
     <string name="events_selected">Events selected:</string>
     <string name="loading_file">Loading File...</string>
     <string name="loading_error">Loading error</string>
+    <string name="production_parameters">Production parameters</string>
 
 
 </resources>

@@ -114,8 +114,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
 
-        initTest();
-
         mImage.setMaximumScale((float) 9.75);
 
         mImage.setMinimumScale((float) 0.25);
@@ -139,25 +137,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mLoadingTv.setTypeface(tf);
 
-    }
-
-    private void initTest() {
-        mFileUrls.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
-
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
-        mFileUrls.add(mFileUrls.get(0));
     }
 
     private void initRv() {
@@ -433,7 +412,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         DownloadHelper helper = new DownloadHelper(this, this);
 
-        helper.downloadFile(url, "operatorAppPdf");
+        helper.downloadFile(url, url);
 
     }
 
@@ -472,7 +451,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    public void onPostExecute(File file) {
+    public void onPostExecute(File file, String url) {
 
         mSelectedPdf.setUri(Uri.fromFile(file));
 
@@ -516,7 +495,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             PdfDocument.Meta meta = mPdfViewer.getDocumentMeta();
             printBookmarksTree(mPdfViewer.getTableOfContents(), "-");
-
         }
     }
 

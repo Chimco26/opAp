@@ -46,7 +46,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
 
-    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth, OnStopClickListener onStopClickListener, int openWidth, int height, int type, boolean selectMode, int eventID) {
+    public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
+                              OnStopClickListener onStopClickListener, int openWidth, int height,
+                              int type, boolean selectMode, int eventID, ArrayList<Integer> selectedEvents) {
         super(context, cursor);
         mContext = context;
         mClosedState = closedState;
@@ -57,6 +59,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mIsSelectionMode = selectMode;
         mType = type;
         mSelectedEventId = eventID;
+        mSelectedEvents = selectedEvents;
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
@@ -245,13 +248,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     holder.mStoppedTime.setTextColor(Color.RED);
                 } else {
                     holder.mStoppedIcon.setImageResource(R.drawable.ic_hand_blue);
-                    holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                     holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                     holder.mStoppedTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
                 holder.mStoppedIcon.setImageResource(ReasonImage.getImageForStopReasonShiftLog(event.getEventGroupID()));
-                holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
             }
@@ -303,7 +306,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 //                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
 
                         v.setTag(true);
-                        holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                         holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
 //                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
@@ -340,13 +343,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     holder.mParameterTime.setTextColor(Color.RED);
                 } else {
                     holder.mParameterIcon.setImageResource(R.drawable.ic_sun_blue);
-                    holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                    holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                     holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                     holder.mParameterTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
                 holder.mParameterIcon.setImageResource(R.drawable.ic_sun_grey);
-                holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 holder.mParameterTime.setTypeface(null, Typeface.NORMAL);
             }
@@ -381,7 +384,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 public void onClick(View v) {
                     if (!event.isTreated()) {
                         holder.mParameterIcon.setImageResource(R.drawable.ic_sun_grey);
-                        holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                        holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                         holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         holder.mParameterTime.setTypeface(null, Typeface.NORMAL);
                         event.setTreated(true);
@@ -392,7 +395,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                             holder.mParameterTime.setTextColor(Color.RED);
                         } else {
                             holder.mParameterIcon.setImageResource(R.drawable.ic_sun_blue);
-                            holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray));
+                            holder.mParameterTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                             holder.mParameterTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         }
                         holder.mParameterTime.setTypeface(null, Typeface.BOLD);
