@@ -132,7 +132,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean thereAlreadyRequest = false;
     public DatabaseHelper mDatabaseHelper;
     private boolean mNoData;
-    private DashBoard2Listener mListener;
+    private ActionBarAndEventsFragmentListener mListener;
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
@@ -142,6 +142,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mConfigTextView;
     private View mSelectedNumberLy;
     private Event mLastEvent;
+    private View mParentLy;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -202,6 +203,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mListener.onResize(mCloseWidth, statusBarParams.height);
 
+        mParentLy = view.findViewById(R.id.parent_layouts);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
@@ -435,14 +437,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             //            openNextDialog();
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();//
-                if (event.getEventGroupID() == TYPE_STOP) {
-                    // TODO Oren - doing this here before we have all the data causes an issue, figure out how to wait for the data or suppress this event
-                    //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
-
-                    //openDialog(event, true); // to show pop up dialog, disabled for now
-                } else if (event.getEventGroupID() == TYPE_ALERT) {
-                    openDialog(event, false);
-                }
+//                if (event.getEventGroupID() == TYPE_STOP) {Disable by nathan to don't show more all the alert when open app
+//                    // TODO Oren - doing this here before we have all the data causes an issue, figure out how to wait for the data or suppress this event
+//                    //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
+//
+//                    //openDialog(event, true); // to show pop up dialog, disabled for now
+//                } else if (event.getEventGroupID() == TYPE_ALERT) {
+//                    openDialog(event, false);
+//                }
 
 
             }
@@ -479,7 +481,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
-            mListener = (DashBoard2Listener) context;
+            mListener = (ActionBarAndEventsFragmentListener) context;
             OperatorCoreToDashboardActivityCallback operatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
@@ -693,12 +695,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onDismissClick(DialogInterface dialog, int requestCode) {
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
-            openNextDialog();
+           // openNextDialog();
         }
 
     }
 
-    public void openNextDialog() {
+    public void openNextDialog() {//TODO disable by nathan in all the places it's called because it's cause process of show / dismiss alerts too many times
         ZLogger.d(LOG_TAG, "openNextDialog(), start ");
         if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
             Event event = mEventsQueue.pop();
@@ -766,7 +768,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 iterator.remove();
             }
         }
-        openNextDialog();
+//        openNextDialog();
     }
 
     @Override
@@ -872,9 +874,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mNoNotificationsText.setVisibility(View.GONE);
 
 
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth,
-                    this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
-            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+            if (mIsSelectionMode){
+
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth,
+                        this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+            }else {
+
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth,
+                        this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+
+            }
 
                /* else {
                     mShiftLogAdapter.notifyDataSetChanged();
@@ -1133,7 +1145,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public int getCroutonRoot() {
-        return R.id.parent_layouts;
+
+        if (mParentLy != null) {
+
+            return mParentLy.getId();
+
+        }else {
+
+            return R.id.parent_layouts;
+        }
     }
 
     private void dismissProgressDialog() {
@@ -1224,13 +1244,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             case R.id.FAAE_unselect_all:
 
-                getActivity().onBackPressed();
+                mListener.onClearAllSelectedEvents();
 
                 break;
         }
     }
 
-    public interface DashBoard2Listener {
+    public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
 
         void onWidgetUpdateSpane(int span);
@@ -1240,6 +1260,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
 
         void onEventSelected(Integer event, boolean b);
+
+        void onClearAllSelectedEvents();
     }
 
 }

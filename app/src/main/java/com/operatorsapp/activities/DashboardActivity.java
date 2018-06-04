@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -109,7 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
-        ActionBarAndEventsFragment.DashBoard2Listener,
+        ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
         ReportStopReasonFragmentNew.ReportStopReasonFragmentListener,
         ViewPagerFragment.OnViewPagerListener,
         RecipeFragment.OnRecipeFragmentListener {
@@ -598,7 +597,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
-        if (mCroutonCreator != null) {
+        if (mCroutonCreator != null && mActionBarAndEventsFragment != null) {
             mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
         }
@@ -964,11 +963,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
-            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+//        Fragment currentFragment = getCurrentFragment();
+//        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+//            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+//        }
+        if (mActionBarAndEventsFragment != null){
+
+            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
+
         }
-        return R.id.parent_layouts;
+        return 0;
     }
 
     @Override
@@ -1024,7 +1028,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onCroutonDismiss() {
 
-        mActionBarAndEventsFragment.openNextDialog();
+//        mActionBarAndEventsFragment.openNextDialog();
         mActionBarAndEventsFragment.setAlertChecked();
     }
 
@@ -1126,6 +1130,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onClearAllSelectedEvents() {
+
+        if (mReportStopReasonFragmentNew != null ) {
+
+            removeReportStopReasonFragment();
+
+        }
+        if (mSelectStopReasonFragmentNew != null) {
+
+            removeSelectStopReasonFragment();
+
+        }
+    }
+
+    @Override
     public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew selectStopReasonFragmentNew) {
 
         mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
@@ -1145,9 +1164,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        super.onBackPressed();
 
         if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
-                mChartFragment != null) {
+                mChartFragment != null || mJobsFragment != null) {
 
-            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
+            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null
+                    && mJobsFragment == null) {
 
                 removeReportStopReasonFragment();
 
@@ -1162,6 +1182,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
 
                 mChartFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
 
             }
             if (mJobsFragment != null) {
