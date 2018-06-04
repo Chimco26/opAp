@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
-import com.operatorsapp.R;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,11 +25,11 @@ public class DownloadHelper {
 
     private Context mContext;
 
-    private String folderName;
-
     private File mFile;
 
     private DownloadFileListener mListener;
+
+    private DownloadFileFromURL mDownloadFileFromURL;
 
     public DownloadHelper(Context context, DownloadFileListener listener) {
 
@@ -39,21 +37,21 @@ public class DownloadHelper {
 
         this.mListener = listener;
 
-    }
-
-
-    /**
-     * @param url        The link of the file
-     * @param folderName If is null the file will be saved on cache folder
-     */
-    public void downloadFile(String url, String folderName) {
-
-        this.folderName = folderName;
-
-        new DownloadFileFromURL().execute(url);
+        mDownloadFileFromURL = new DownloadFileFromURL();
 
     }
 
+    public void downloadFileFromUrl(String url) {
+
+        mDownloadFileFromURL.execute(url);
+
+    }
+
+    public boolean cancelDownloadFileFromUrl() {
+
+        return mDownloadFileFromURL.cancel(true);
+
+    }
 
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
@@ -64,6 +62,13 @@ public class DownloadHelper {
 //            showDialog();
         }
 
+        @Override
+        protected void onCancelled(String s) {
+
+            mListener.onCancel();
+
+            super.onCancelled();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -76,9 +81,9 @@ public class DownloadHelper {
 
                 URL url = new URL(params[0]);
 
-                if (folderName != null) {
+                if (url.toString() != null) {
 
-                    folder = new File(Environment.getExternalStorageDirectory().toString(), folderName);
+                    folder = new File(Environment.getExternalStorageDirectory().toString(), String.valueOf(url));
 
                     if (!folder.exists()) {
 
@@ -91,11 +96,11 @@ public class DownloadHelper {
 
                 mFile = new File(folder, url.getPath().substring(url.getPath().lastIndexOf("/")));
 
-                URLConnection conection = url.openConnection();
+                URLConnection connection = url.openConnection();
 
-                conection.connect();
+                connection.connect();
 
-                int lenghtOfFile = conection.getContentLength();
+                int lenghtOfFile = connection.getContentLength();
 
                 InputStream input = new BufferedInputStream(url.openStream(), 1024);
 
@@ -137,13 +142,12 @@ public class DownloadHelper {
 //            mDialog.setProgress(Integer.parseInt(progress[0]));
         }
 
-
         @Override
         protected void onPostExecute(String url) {
 
             dismissDialog();
 
-            mListener.onPostExecute(mFile, url);
+            mListener.onPostExecute(mFile);
 
         }
 
@@ -171,9 +175,11 @@ public class DownloadHelper {
 
     public interface DownloadFileListener {
 
-        void onPostExecute(File file, String url);
+        void onPostExecute(File file);
 
         void onLoadFileError();
+
+        void onCancel();
     }
 
 }

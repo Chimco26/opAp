@@ -102,7 +102,7 @@ public class ViewPagerFragment extends Fragment {
 
     private void updateDirection(){
 
-        if (getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (getActivity() != null && getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
         }
     }

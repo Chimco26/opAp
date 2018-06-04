@@ -67,6 +67,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mLoadingTv;
     private boolean isLoad;
     private View mScaleLy;
+    private DownloadHelper mDownloadHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
 
+        initTest();
+
         mImage.setMaximumScale((float) 9.75);
 
         mImage.setMinimumScale((float) 0.25);
@@ -137,6 +140,28 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mLoadingTv.setTypeface(tf);
 
+    }
+
+    private void initTest() {
+        mFileUrls.add("https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf");
+
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+
+        mFileUrls.add("https://s1.q4cdn.com/806093406/files/doc_downloads/test.pdf");
+
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
+        mFileUrls.add(mFileUrls.get(0));
     }
 
     private void initRv() {
@@ -311,7 +336,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
-        mScaleTv.setText(String.valueOf((int) (1 * 100)) + "%");
+        mScaleTv.setText(String.valueOf((int) (100)) + "%");
 
         isPdflastClick = false;
 
@@ -332,7 +357,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
-        mScaleTv.setText(String.valueOf((int) (1 * 100)) + "%");
+        mScaleTv.setText(String.valueOf((int) (100)) + "%");
 
         isPdflastClick = true;
 
@@ -355,7 +380,23 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void openPdf(GalleryModel galleryModel) {
 
-        mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
+        if (mSelectedPdf != null && mDownloadHelper != null){
+
+            mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
+
+            mDownloadHelper.cancelDownloadFileFromUrl();
+
+        }else {
+
+            mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
+
+            initLoading(galleryModel.getUrl());
+
+        }
+
+    }
+
+    private void initLoading(String url) {
 
         if (!isLoad) {
 
@@ -375,9 +416,10 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             if (isStoragePermissionGranted()) {
 
-                downLoadFile(galleryModel.getUrl());
-
                 isLoad = true;
+
+                downLoadFile(url);
+
             }
         } else {
 
@@ -410,9 +452,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         mPdfViewer.setVisibility(View.VISIBLE);
         mLoadingLy.setVisibility(View.VISIBLE);
 
-        DownloadHelper helper = new DownloadHelper(this, this);
-
-        helper.downloadFile(url, url);
+        mDownloadHelper = new DownloadHelper(this, this);
+        mDownloadHelper.downloadFileFromUrl(url);
 
     }
 
@@ -451,14 +492,19 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    public void onPostExecute(File file, String url) {
+    public void onPostExecute(File file) {
 
-        mSelectedPdf.setUri(Uri.fromFile(file));
+        if (file.exists()) {
+            mSelectedPdf.setUri(Uri.fromFile(file));
 
-        mPdfList.add(mSelectedPdf);
+            mPdfList.add(mSelectedPdf);
 
-        loadPdfView(mSelectedPdf.getUri());
+            loadPdfView(mSelectedPdf.getUri());
 
+        }else {
+
+            //TODO
+        }
     }
 
     private void loadPdfView(Uri uri) {
@@ -486,6 +532,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void loadComplete(int nbPages) {
+
+        mSelectedPdf = null;
 
         mLoadingLy.setVisibility(View.GONE);
 
@@ -516,9 +564,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void run() {
 
-                mLoadingProgress.setVisibility(View.GONE);
-
-                mLoadingTv.setText(getResources().getString(R.string.loading_error));
+                showLoadingError();
             }
         });
 
@@ -531,11 +577,34 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void run() {
 
-                mLoadingProgress.setVisibility(View.GONE);
-
-                mLoadingTv.setText(getResources().getString(R.string.loading_error));
+                showLoadingError();
             }
         });
+    }
+
+    @Override
+    public void onCancel() {
+
+        isLoad = false;
+
+        if (mSelectedPdf != null){
+
+            mPdfViewer.recycle();
+
+            initLoading(mSelectedPdf.getUrl());
+
+        }else if (isPdflastClick){
+
+            showLoadingError();
+        }
+
+    }
+
+    private void showLoadingError() {
+
+        mLoadingProgress.setVisibility(View.GONE);
+
+        mLoadingTv.setText(getResources().getString(R.string.loading_error));
     }
 
 }
