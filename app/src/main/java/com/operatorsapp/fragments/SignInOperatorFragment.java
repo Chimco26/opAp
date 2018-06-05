@@ -36,8 +36,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SignInOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
-{
+public class SignInOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
@@ -78,7 +77,6 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     }
 
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,11 +112,11 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
         public void onOperatorDataReceived(Operator operator) {
             removePhoneKeypad();
             if (operator != null) {
-                if(operator.getOperatorName().equals("")){
+                if (operator.getOperatorName().equals("")) {
                     ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
                     ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
-                }else {
+                } else {
                     ZLogger.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
                     SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
@@ -181,11 +179,9 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser)
-        {
+        if (isVisibleToUser) {
             setActionBar();
         }
     }
@@ -214,11 +210,12 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
-                    }
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if (fragmentManager != null) {
+//                        fragmentManager.popBackStack();
+//                    }
+
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);
@@ -258,20 +255,15 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.operator_screen;
     }
 
-    private void dismissProgressDialog()
-    {
-        if (getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });

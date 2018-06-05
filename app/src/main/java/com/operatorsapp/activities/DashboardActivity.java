@@ -51,11 +51,17 @@ import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineN
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.ApproveFirstItemFragment;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
+import com.operatorsapp.fragments.ReportCycleUnitsFragment;
+import com.operatorsapp.fragments.ReportInventoryFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
+import com.operatorsapp.fragments.SelectedJobFragment;
+import com.operatorsapp.fragments.SelectedOperatorFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.utils.ChangeLang;
@@ -149,6 +155,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private JobsFragment mJobsFragment;
+    private SelectedJobFragment mSelectedJobFragment;
+    private SignInOperatorFragment mSignInOperatorFragment;
+    private AdvancedSettingsFragment mAdvancedSettingsFragment;
+    private SelectedOperatorFragment mSelectedOperatorFragment;
+    private SettingsFragment mSettingsFragment;
+    private ReportCycleUnitsFragment mReportCycleUnitsFragment;
+    private ReportRejectsFragment mReportRejectsFragment;
+    private ReportInventoryFragment mReportInventoryFragment;
+    private ApproveFirstItemFragment mApproveFirstItemFragment;
 
 
     @Override
@@ -217,14 +232,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mWidgetFragment).commit();
-        }
-        if (mActionBarAndEventsFragment != null) {
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
-        }
+//        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
+//            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//            fm.beginTransaction().remove(mWidgetFragment).commit();
+//        }
+//        if (mActionBarAndEventsFragment != null) {
+//            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+//        }
 //        if (mDashboardFragment != null) {
 //            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 //            fm.beginTransaction().remove(mDashboardFragment).commit();
@@ -247,7 +262,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
-                            fragment instanceof WidgetFragment) {
+                            fragment instanceof WidgetFragment||
+                            fragment instanceof SelectStopReasonFragmentNew||
+                            fragment instanceof ReportStopReasonFragmentNew) {
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -635,9 +652,50 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
             return;
         }
-        if (fragment instanceof JobsFragment){
+        if (fragment instanceof JobsFragment) {
 
             mJobsFragment = (JobsFragment) fragment;
+        }
+
+        if (fragment instanceof SelectedJobFragment) {
+
+            mSelectedJobFragment = (SelectedJobFragment) fragment;
+        }
+
+        if (fragment instanceof SignInOperatorFragment) {
+
+            mSignInOperatorFragment = (SignInOperatorFragment) fragment;
+        }
+
+        if (fragment instanceof AdvancedSettingsFragment) {
+
+            mAdvancedSettingsFragment = (AdvancedSettingsFragment) fragment;
+        }
+
+        if (fragment instanceof SettingsFragment) {
+
+            mSettingsFragment = (SettingsFragment) fragment;
+        }
+
+        if (fragment instanceof SelectedOperatorFragment) {
+
+            mSelectedOperatorFragment = (SelectedOperatorFragment) fragment;
+        }
+        if (fragment instanceof ReportCycleUnitsFragment) {
+
+            mReportCycleUnitsFragment = (ReportCycleUnitsFragment) fragment;
+        }
+        if (fragment instanceof ReportRejectsFragment) {
+
+            mReportRejectsFragment = (ReportRejectsFragment) fragment;
+        }
+        if (fragment instanceof ReportInventoryFragment) {
+
+            mReportInventoryFragment = (ReportInventoryFragment) fragment;
+        }
+        if (fragment instanceof ApproveFirstItemFragment) {
+
+            mApproveFirstItemFragment = (ApproveFirstItemFragment) fragment;
         }
 //        if (addToBackStack) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
@@ -743,6 +801,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mSelectJobId = jobId;
 
         mJobsCore.startJobForMachine(jobId);
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setActionBar();
+        }
 
     }
 
@@ -967,7 +1030,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
 //        }
-        if (mActionBarAndEventsFragment != null){
+        if (mActionBarAndEventsFragment != null) {
 
             return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
 
@@ -983,6 +1046,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
         mAllDashboardDataCore.startPolling();
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setActionBar();
+        }
 
     }
 
@@ -1010,6 +1078,41 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
         dashboardDataStartPolling();
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.setActionBar();
+        }
+
+        if (mReportCycleUnitsFragment != null) {
+
+            getSupportFragmentManager().beginTransaction().remove(mReportCycleUnitsFragment).commit();
+
+            mReportCycleUnitsFragment = null;
+
+        }
+        if (mReportRejectsFragment != null) {
+
+            getSupportFragmentManager().beginTransaction().remove(mReportRejectsFragment).commit();
+
+            mReportRejectsFragment = null;
+
+        }
+        if (mReportInventoryFragment != null) {
+
+            getSupportFragmentManager().beginTransaction().remove(mReportInventoryFragment).commit();
+
+            mReportInventoryFragment = null;
+
+        }
+        if (mApproveFirstItemFragment != null) {
+
+            getSupportFragmentManager().beginTransaction().remove(mApproveFirstItemFragment).commit();
+
+            mApproveFirstItemFragment = null;
+
+        }
+
     }
 
     @Override
@@ -1132,7 +1235,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onClearAllSelectedEvents() {
 
-        if (mReportStopReasonFragmentNew != null ) {
+        if (mReportStopReasonFragmentNew != null) {
 
             removeReportStopReasonFragment();
 
@@ -1162,17 +1265,32 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-
         if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
-                mChartFragment != null || mJobsFragment != null) {
+                mChartFragment != null || mJobsFragment != null ||
+                mSignInOperatorFragment != null || mSelectedOperatorFragment != null ||
+                mSelectedJobFragment != null ||
+                mAdvancedSettingsFragment != null || mSettingsFragment != null ||
+                mReportCycleUnitsFragment != null || mReportRejectsFragment != null
+                || mReportInventoryFragment != null || mApproveFirstItemFragment != null) {
 
             if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null
-                    && mJobsFragment == null) {
+                    && mJobsFragment == null && mSignInOperatorFragment == null
+                    && mSelectedOperatorFragment == null &&
+                    mSelectedJobFragment == null &&
+                    mAdvancedSettingsFragment == null && mSettingsFragment == null &&
+                    mReportCycleUnitsFragment == null && mReportRejectsFragment == null
+                    && mReportInventoryFragment == null && mApproveFirstItemFragment == null) {
 
                 removeReportStopReasonFragment();
 
             }
-            if (mSelectStopReasonFragmentNew != null) {
+            if (mSelectStopReasonFragmentNew != null &&
+                    mJobsFragment == null && mSignInOperatorFragment == null
+                    && mSelectedOperatorFragment == null &&
+                    mSelectedJobFragment == null &&
+                    mAdvancedSettingsFragment == null && mSettingsFragment == null &&
+                    mReportCycleUnitsFragment == null && mReportRejectsFragment == null
+                    && mReportInventoryFragment == null && mApproveFirstItemFragment == null) {
 
                 removeSelectStopReasonFragment();
 
@@ -1186,7 +1304,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mActionBarAndEventsFragment.setActionBar();
 
             }
-            if (mJobsFragment != null) {
+            if (mJobsFragment != null && mSelectedJobFragment == null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mJobsFragment).commit();
 
@@ -1195,6 +1313,89 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mActionBarAndEventsFragment.setActionBar();
 
             }
+
+            if (mSelectedJobFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mSelectedJobFragment).commit();
+
+                mSelectedJobFragment = null;
+
+            }
+
+            if (mSettingsFragment != null && mAdvancedSettingsFragment == null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mSettingsFragment).commit();
+
+                mSettingsFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+
+            if (mAdvancedSettingsFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mAdvancedSettingsFragment).commit();
+
+                mAdvancedSettingsFragment = null;
+
+            }
+
+            if (mSignInOperatorFragment != null && mSelectedOperatorFragment == null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mSignInOperatorFragment).commit();
+
+                mSignInOperatorFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+
+            if (mSelectedOperatorFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mSelectedOperatorFragment).commit();
+
+                mSelectedOperatorFragment = null;
+
+            }
+
+            if (mReportCycleUnitsFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mReportCycleUnitsFragment).commit();
+
+                mReportCycleUnitsFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+
+            if (mReportRejectsFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mReportRejectsFragment).commit();
+
+                mReportRejectsFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+            if (mReportInventoryFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mReportInventoryFragment).commit();
+
+                mReportInventoryFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+            if (mApproveFirstItemFragment != null) {
+
+                getSupportFragmentManager().beginTransaction().remove(mApproveFirstItemFragment).commit();
+
+                mApproveFirstItemFragment = null;
+
+                mActionBarAndEventsFragment.setActionBar();
+
+            }
+
 
         } else {
             super.onBackPressed();

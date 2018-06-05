@@ -380,10 +380,12 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguage);
                     mSettingsInterface.onRefreshApplicationRequest();
                 } else {
-                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getActivity().onBackPressed();
                 }
             } else {
-                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getActivity().onBackPressed();
+//                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
 

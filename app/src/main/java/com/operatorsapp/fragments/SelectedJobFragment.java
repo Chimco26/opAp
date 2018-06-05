@@ -129,10 +129,11 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
                 @Override
                 public void onClick(View v) {
 
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if (fragmentManager != null) {
-                        fragmentManager.popBackStack();
-                    }
+                    getActivity().onBackPressed();
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if (fragmentManager != null) {
+//                        fragmentManager.popBackStack();
+//                    }
                     //getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             });
@@ -144,8 +145,11 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                if (getFragmentManager() != null)
-                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                if (getFragmentManager() != null)
+////                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    getFragmentManager().popBackStack();
+
+                getActivity().onBackPressed();
                 break;
             }
             case R.id.button_activate_new_job: {

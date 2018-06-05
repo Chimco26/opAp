@@ -123,11 +123,12 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
-                    }
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if(fragmentManager != null)
+//                    {
+//                        fragmentManager.popBackStack();
+//                    }
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);

@@ -62,6 +62,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final int MAX_EVENT_SIZE = 200;
     private static final String PREFS_VERSION = "PREFS_VERSION";
     private static final float DEFAULT_VERSION = 1.6f;
+    private static final String PREF_CHECKED_ALARM_IDS = "PREF_CHECKED_ALARM_IDS";
 
 
     private static PersistenceManager msInstance;
@@ -363,5 +364,19 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
             version = DEFAULT_VERSION;
         }
         return version;
+    }
+
+    public void setCheckedAlarms(ArrayList<Integer> checkedAlarmList) {
+
+        SecurePreferences.getInstance().setString(PREF_CHECKED_ALARM_IDS, mGson.toJson(checkedAlarmList));
+    }
+
+    public ArrayList<Integer> getCheckedAlarms() {
+
+        String ids = SecurePreferences.getInstance().getString(PREF_CHECKED_ALARM_IDS, mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+
+        return mGson.fromJson(ids, listType);
     }
 }

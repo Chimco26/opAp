@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -36,10 +37,15 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 
 import com.operatorsapp.utils.NetworkAvailable;
+import com.ravtech.david.sqlcore.DatabaseHelper;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
-public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
-{
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+
+public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
@@ -182,8 +188,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 @Override
                 public void onClick(View v) {
                     FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
+                    if (fragmentManager != null) {
                         fragmentManager.popBackStack();
                     }
                 }
@@ -207,6 +212,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     getActivity().onBackPressed();
                 } else {
+                    saveAlarmsCheckedLocaly();
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
                     mSettingsInterface.onRefreshApplicationRequest();
@@ -214,8 +220,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.refresh_button: {
-                if(NetworkAvailable.isNetworkAvailable(getActivity()))
-                {
+                if (NetworkAvailable.isNetworkAvailable(getActivity())) {
                     ProgressDialogManager.show(getActivity());
                     mSettingsInterface.onRefreshReportFieldsRequest(this);
                 }
@@ -226,6 +231,32 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
         }
+    }
+
+    private void saveAlarmsCheckedLocaly() {
+        //because alarms status not saved in sever side,
+        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
+        //and update the alarms if checked
+
+        ArrayList<Integer> checkedAlarmList = new ArrayList<>();
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+
+        Cursor mTempCursor = databaseHelper.getCursorOrderByTime();
+
+        while (mTempCursor.isLast()) {
+
+            if (mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_CHECKED)) == 1) {
+
+                checkedAlarmList.add(mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
+            }
+
+            mTempCursor.moveToNext();
+        }
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmList);
     }
 
     @Override
@@ -247,8 +278,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.settings_crouton_root;
     }
 }

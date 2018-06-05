@@ -363,22 +363,29 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         @Override
         public void onOperatorDataReceived(Operator operator) {
 
+            setActionBar();
         }
 
         @Override
         public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
 
+            setActionBar();
         }
 
         @Override
         public void onSetOperatorSuccess() {
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             //            Zloger.clearPollingRequest(LOG_TAG, "onSetOperatorSuccess() ");
+
+            setActionBar();
         }
 
         @Override
         public void onSetOperatorFailed(ErrorObjectInterface reason) {
             ZLogger.d(LOG_TAG, "onSetOperatorFailed() " + reason.getError());
+
+            setActionBar();
+
         }
 
     };
@@ -675,6 +682,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
+                view.getViewTreeObserver().removeOnPreDrawListener(this);
                 ZLogger.d(LOG_TAG, "onPreDraw(), start ");
                 if (view.getViewTreeObserver().isAlive()) {
                     view.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -686,16 +694,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 view.requestLayout();
                 ZLogger.d(LOG_TAG, "onPreDraw(), end ");
 //        TODO        dismissProgressDialog();
-                return false;
+                return true;
             }
-        });
+        });;
     }
 
     @Override
     public void onDismissClick(DialogInterface dialog, int requestCode) {
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
-           // openNextDialog();
+            // openNextDialog();
         }
 
     }
@@ -839,6 +847,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (events != null && events.size() > 0) {
 
+            ArrayList<Integer> checkedAlarms = PersistenceManager.getInstance().getCheckedAlarms();
 
             mEventsQueue.clear();
 
@@ -867,6 +876,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                 } else {
 
+                    if (checkedAlarms != null) {
+
+                        for (Integer integer : checkedAlarms) {
+
+                            if (integer == event.getEventID()) {
+
+                                event.setChecked(true);
+                            }
+
+                        }
+                    }
+
+                    PersistenceManager.getInstance().setCheckedAlarms(null);
+
                     event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                 }
             }
@@ -874,13 +897,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mNoNotificationsText.setVisibility(View.GONE);
 
 
-            if (mIsSelectionMode){
+            if (mIsSelectionMode) {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-            }else {
+            } else {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
@@ -1150,7 +1173,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             return mParentLy.getId();
 
-        }else {
+        } else {
 
             return R.id.parent_layouts;
         }

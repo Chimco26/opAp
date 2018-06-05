@@ -174,6 +174,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         );
 
 
+
+
         final int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {

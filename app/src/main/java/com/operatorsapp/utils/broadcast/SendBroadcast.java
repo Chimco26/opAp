@@ -43,7 +43,6 @@ public class SendBroadcast {
 
     public static void refreshPolling(Context context) {
 
-
         Intent intent = new Intent();
 
         intent.setAction(ACTION_REFRESH_POLLING);
