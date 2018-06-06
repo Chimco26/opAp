@@ -839,6 +839,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (events != null && events.size() > 0) {
 
+            ArrayList<Integer> checkedAlarms = PersistenceManager.getInstance().getCheckedAlarms();
 
             mEventsQueue.clear();
 
@@ -866,6 +867,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mEventsQueue.add(event);
                     }
                 } else {
+
+                    if (checkedAlarms != null) {
+
+                        for (Integer integer : checkedAlarms) {
+
+                            if (integer == event.getEventID()) {
+
+                                event.setChecked(true);
+                            }
+
+                        }
+                    }
+
+                    PersistenceManager.getInstance().setCheckedAlarms(null);
+
+
 
                     event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                 }
