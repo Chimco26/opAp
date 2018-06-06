@@ -686,7 +686,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 view.requestLayout();
                 ZLogger.d(LOG_TAG, "onPreDraw(), end ");
 //        TODO        dismissProgressDialog();
-                return false;
+                return true;
             }
         });
     }
@@ -730,6 +730,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTime(),
                     !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0,
                     false, 0, null);
+
             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         }
@@ -874,7 +875,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                             if (integer == event.getEventID()) {
 
-                                event.setChecked(true);
+                                event.setTreated(true);
                             }
 
                         }
@@ -1163,14 +1164,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public int getCroutonRoot() {
 
-        if (mParentLy != null) {
+        return R.id.parent_layouts;
 
-            return mParentLy.getId();
-
-        }else {
-
-            return R.id.parent_layouts;
-        }
     }
 
     private void dismissProgressDialog() {

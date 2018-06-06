@@ -58,6 +58,7 @@ import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
@@ -247,7 +248,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
-                            fragment instanceof WidgetFragment) {
+                            fragment instanceof WidgetFragment ||
+                            fragment instanceof ReportStopReasonFragmentNew ||
+                            fragment instanceof SelectStopReasonFragmentNew) {
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -597,7 +600,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
-        if (mCroutonCreator != null && mActionBarAndEventsFragment != null) {
+        if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
         }
@@ -630,15 +633,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
-        if (fragment instanceof ChartFragment) {
-            mChartFragment = fragment;
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-            return;
-        }
-        if (fragment instanceof JobsFragment){
-
-            mJobsFragment = (JobsFragment) fragment;
-        }
+//        if (fragment instanceof ChartFragment) {
+//            mChartFragment = fragment;
+//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
+//            return;
+//        }
+//        if (fragment instanceof JobsFragment) {
+//
+//            mJobsFragment = (JobsFragment) fragment;
+//        }
 //        if (addToBackStack) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //        } else {
@@ -695,7 +698,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
 
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (getSupportFragmentManager() != null) {
+
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                }
 
                 mAllDashboardDataCore.stopPolling();
 
@@ -771,8 +778,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+        if (getSupportFragmentManager() != null) {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
     public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
@@ -963,16 +971,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+        }
 //        Fragment currentFragment = getCurrentFragment();
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
 //        }
-        if (mActionBarAndEventsFragment != null){
 
-            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
-
-        }
-        return 0;
+//        if (mActionBarAndEventsFragment != null) {
+//
+//            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
+//
+//        }
+        return R.id.parent_layouts;
     }
 
     @Override
@@ -1010,6 +1023,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
         dashboardDataStartPolling();
+
+        if (getSupportFragmentManager() != null) {
+
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        }
+
+        ProgressDialogManager.dismiss();
     }
 
     @Override
@@ -1132,7 +1153,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onClearAllSelectedEvents() {
 
-        if (mReportStopReasonFragmentNew != null ) {
+        if (mReportStopReasonFragmentNew != null) {
 
             removeReportStopReasonFragment();
 
@@ -1161,13 +1182,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ) {
 
-        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
-                mChartFragment != null || mJobsFragment != null) {
-
-            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null
-                    && mJobsFragment == null) {
+            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 
                 removeReportStopReasonFragment();
 
@@ -1177,6 +1194,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 removeSelectStopReasonFragment();
 
             }
+
+        } else {
+            super.onBackPressed();
+        }
+/*
+
             if (mChartFragment != null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
@@ -1198,7 +1221,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     private void removeSelectStopReasonFragment() {

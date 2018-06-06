@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -36,7 +37,10 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 
 import com.operatorsapp.utils.NetworkAvailable;
+import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.zemingo.logrecorder.ZLogger;
+
+import java.util.ArrayList;
 
 public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
 {
@@ -207,6 +211,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
                     getActivity().onBackPressed();
                 } else {
+                    saveAlarmsCheckedLocaly();
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
                     mSettingsInterface.onRefreshApplicationRequest();
@@ -227,6 +232,34 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
         }
     }
+
+
+    private void saveAlarmsCheckedLocaly() {
+        //because alarms status not saved in sever side,
+        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
+        //and update the alarms if checked
+
+        ArrayList<Integer> checkedAlarmList = new ArrayList<>();
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+
+        Cursor mTempCursor = databaseHelper.getCursorOrderByTime();
+
+        while (mTempCursor.isLast()) {
+
+            if (mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) == 1) {
+
+                checkedAlarmList.add(mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
+            }
+
+            mTempCursor.moveToNext();
+        }
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmList);
+    }
+
 
     @Override
     public void onReportUpdatedSuccess() {
