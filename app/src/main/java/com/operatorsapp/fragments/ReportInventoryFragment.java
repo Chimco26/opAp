@@ -235,11 +235,13 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
-                    }
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if(fragmentManager != null)
+//                    {
+//                        fragmentManager.popBackStack();
+//                    }
+
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);
@@ -258,7 +260,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                 break;
             }
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack();
+//                getFragmentManager().popBackStack();
+
+                getActivity().onBackPressed();
                 break;
             }
             case R.id.button_report: {

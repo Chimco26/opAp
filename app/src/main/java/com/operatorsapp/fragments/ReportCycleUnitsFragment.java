@@ -268,11 +268,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                 @Override
                 public void onClick(View v)
                 {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
-                    }
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    if(fragmentManager != null)
+//                    {
+//                        fragmentManager.popBackStack();
+//                    }
+                    getActivity().onBackPressed();
                 }
             });
             actionBar.setCustomView(view);
@@ -296,7 +297,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             }
             case R.id.button_cancel:
             {
-                getFragmentManager().popBackStack();
+//                getFragmentManager().popBackStack();
+                getActivity().onBackPressed();
+
                 break;
             }
             case R.id.button_report:

@@ -58,6 +58,7 @@ import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
 import com.operatorsapp.fragments.ReportInventoryFragment;
+import com.operatorsapp.fragments.ReportRejectSelectParametersFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectedJobFragment;
@@ -164,6 +165,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportRejectsFragment mReportRejectsFragment;
     private ReportInventoryFragment mReportInventoryFragment;
     private ApproveFirstItemFragment mApproveFirstItemFragment;
+    private ReportRejectSelectParametersFragment mReportRejectSelectParametersFragment;
 
 
     @Override
@@ -265,6 +267,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             fragment instanceof WidgetFragment||
                             fragment instanceof SelectStopReasonFragmentNew||
                             fragment instanceof ReportStopReasonFragmentNew) {
+
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -696,6 +699,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (fragment instanceof ApproveFirstItemFragment) {
 
             mApproveFirstItemFragment = (ApproveFirstItemFragment) fragment;
+        }
+
+        if (fragment instanceof ReportRejectSelectParametersFragment) {
+
+            mReportRejectSelectParametersFragment = (ReportRejectSelectParametersFragment) fragment;
         }
 //        if (addToBackStack) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
@@ -1368,7 +1376,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }
 
-            if (mReportRejectsFragment != null) {
+            if (mReportRejectsFragment != null && mReportRejectSelectParametersFragment == null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mReportRejectsFragment).commit();
 
@@ -1377,6 +1385,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mActionBarAndEventsFragment.setActionBar();
 
             }
+            if (mReportRejectSelectParametersFragment != null){
+
+                getSupportFragmentManager().beginTransaction().remove(mReportRejectSelectParametersFragment).commit();
+
+                mReportRejectSelectParametersFragment = null;
+
+            }
+
             if (mReportInventoryFragment != null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mReportInventoryFragment).commit();

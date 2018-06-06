@@ -305,7 +305,13 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
             }
             case R.id.button_cancel:
             {
-                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                if(fragmentManager != null)
+                {
+                    fragmentManager.popBackStack();
+                }
                 break;
             }
         }
