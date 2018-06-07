@@ -336,7 +336,11 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
-            getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            if (getFragmentManager() != null){
+
+                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
         }
 
         @Override

@@ -308,7 +308,11 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            if (getFragmentManager() != null){
+
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
         }
 
         @Override

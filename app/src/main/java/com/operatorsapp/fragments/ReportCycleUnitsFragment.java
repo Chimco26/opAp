@@ -377,7 +377,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         {
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            if (getFragmentManager() != null){
+
+                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }
             dismissProgressDialog();
         }
 

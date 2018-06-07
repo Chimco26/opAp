@@ -128,12 +128,11 @@ public class ChartFragment extends BackStackAwareFragment {
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    if(fragmentManager != null)
-//                    {
-//                        fragmentManager.popBackStack();
-//                    }
-                    getActivity().onBackPressed();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);

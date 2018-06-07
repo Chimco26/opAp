@@ -26,6 +26,7 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -45,6 +46,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     public LayoutInflater inflater;
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Event> mUpdatedAlarms;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
@@ -60,6 +62,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mType = type;
         mSelectedEventId = eventID;
         mSelectedEvents = selectedEvents;
+        mUpdatedAlarms = new ArrayList<>();
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
@@ -209,8 +212,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             if (mIsSelectionMode && event.isChecked()) {
 
                 holder.mStopEventCheckBox.setChecked(true);
-            }
-            else {
+            } else {
                 holder.mStopEventCheckBox.setChecked(false);
             }
 
@@ -264,15 +266,15 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             String groupName = OperatorApplication.isEnglishLang() ? event.getEventGroupEname() : event.getEventGroupLname();
             holder.mStoppedTitle.setText(groupName);
             String subtitleNameByLang = event.getSubtitleEname();
-            if (subtitleNameByLang != null){
+            if (subtitleNameByLang != null) {
 
                 if (subtitleNameByLang.length() > 15) {
                     holder.mStopEventSubReasonTv.setText(subtitleNameByLang.substring(0, 15) + "...");
-                }else {
+                } else {
                     holder.mStopEventSubReasonTv.setText(subtitleNameByLang);
                 }
                 holder.mStopEventSubReasonTv.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 holder.mStopEventSubReasonTv.setVisibility(View.GONE);
             }
             holder.mStoppedStart.setText(TimeUtils.getTimeFromString(event.getTime()));
@@ -315,7 +317,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                     } else {
 
-                            holder.mStopEventCheckBox.setChecked(!event.isChecked());
+                        holder.mStopEventCheckBox.setChecked(!event.isChecked());
                     }
                 }
             });
@@ -327,6 +329,15 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 //                return;
 //            }
             holder.mParameterCard.setVisibility(View.VISIBLE);
+
+            if (mUpdatedAlarms != null) {
+                for (Event event1 : mUpdatedAlarms) {
+                    if (event.getEventID() == event1.getEventID()) {
+                        event.setTreated(event1.isTreated());
+                        break;
+                    }
+                }
+            }
 
             ViewGroup.LayoutParams mItemViewParams;
             mItemViewParams = holder.mParameterCard.getLayoutParams();
@@ -404,6 +415,27 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         event.setTreated(false);
                     }
                     event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+
+                    if (mUpdatedAlarms == null) {
+
+                        mUpdatedAlarms = new ArrayList<>();
+                    }
+
+                    Event eventToUpdate = null;
+
+                    for (Event updatedAlarm : mUpdatedAlarms) {
+                        if (event.getEventID() == updatedAlarm.getEventID()) {
+                            eventToUpdate = updatedAlarm;
+                            updatedAlarm.setTreated(event.isTreated());
+                            break;
+                        }
+                    }
+                    if (eventToUpdate == null){
+
+                        mUpdatedAlarms.add(event);
+
+                    }
+
                 }
             });
         }

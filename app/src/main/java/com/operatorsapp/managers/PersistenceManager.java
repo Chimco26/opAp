@@ -366,6 +366,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return version;
     }
 
+
     public void setCheckedAlarms(ArrayList<Integer> checkedAlarmList) {
 
         SecurePreferences.getInstance().setString(PREF_CHECKED_ALARM_IDS, mGson.toJson(checkedAlarmList));
@@ -379,4 +380,5 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
         return mGson.fromJson(ids, listType);
     }
+
 }

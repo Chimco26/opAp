@@ -38,14 +38,12 @@ import com.operatorsapp.managers.ProgressDialogManager;
 
 import com.operatorsapp.utils.NetworkAvailable;
 import com.ravtech.david.sqlcore.DatabaseHelper;
-import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 
-public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider {
+public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
+{
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
@@ -187,11 +185,11 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    if (fragmentManager != null) {
-//                        fragmentManager.popBackStack();
-//                    }
-                    getActivity().onBackPressed();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    if(fragmentManager != null)
+                    {
+                        fragmentManager.popBackStack();
+                    }
                 }
             });
             actionBar.setCustomView(view);
@@ -221,7 +219,8 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.refresh_button: {
-                if (NetworkAvailable.isNetworkAvailable(getActivity())) {
+                if(NetworkAvailable.isNetworkAvailable(getActivity()))
+                {
                     ProgressDialogManager.show(getActivity());
                     mSettingsInterface.onRefreshReportFieldsRequest(this);
                 }
@@ -233,6 +232,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
         }
     }
+
 
     private void saveAlarmsCheckedLocaly() {
         //because alarms status not saved in sever side,
@@ -249,7 +249,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         while (mTempCursor.isLast()) {
 
-            if (mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_CHECKED)) == 1) {
+            if (mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) == 1) {
 
                 checkedAlarmList.add(mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
             }
@@ -259,6 +259,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmList);
     }
+
 
     @Override
     public void onReportUpdatedSuccess() {
@@ -279,7 +280,8 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     }
 
     @Override
-    public int getCroutonRoot() {
+    public int getCroutonRoot()
+    {
         return R.id.settings_crouton_root;
     }
 }

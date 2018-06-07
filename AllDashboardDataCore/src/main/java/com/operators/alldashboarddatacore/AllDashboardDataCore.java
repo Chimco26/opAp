@@ -118,7 +118,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     public void stopPolling() {
 
-
         if (mJob != null) {
             mJob.stopJob();
         }

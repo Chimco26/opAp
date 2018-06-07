@@ -217,6 +217,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         mButtonSave.setOnClickListener(this);
         mSendLogButton.setOnClickListener(this);
         registerReceiver();
+
+
     }
 
     @Override
@@ -299,12 +301,10 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
     private void sendLogToEmail() {
 
-
         ProgressDialogManager.show(getActivity());
         ZLogger.d(LOG_TAG, "start sendLogToEmail(), ");
         LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
         try {
-            LogRecorder lr = LogRecorder.getInstance();
             LogRecorder.getInstance().requestSendLogsIntent(true, new LogRecorder.SendLogsListener() {
                 @Override
                 public void onCompleted(final Intent intent) {

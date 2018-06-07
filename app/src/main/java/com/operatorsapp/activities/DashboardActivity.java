@@ -52,19 +52,12 @@ import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
-import com.operatorsapp.fragments.ApproveFirstItemFragment;
-import com.operatorsapp.fragments.ChartFragment;
-import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
-import com.operatorsapp.fragments.ReportCycleUnitsFragment;
-import com.operatorsapp.fragments.ReportInventoryFragment;
-import com.operatorsapp.fragments.ReportRejectSelectParametersFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
-import com.operatorsapp.fragments.SelectedJobFragment;
-import com.operatorsapp.fragments.SelectedOperatorFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
@@ -73,7 +66,6 @@ import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
-import com.operatorsapp.fragments.DashboardFragmentSql;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
@@ -112,7 +104,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
         OperatorCoreToDashboardActivityCallback,
-        /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
+        ReportFieldsFragmentCallbackListener, SettingsInterface,
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
@@ -137,7 +129,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
-    private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
@@ -148,24 +139,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
     private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
     private View mContainer3;
-    private Fragment mChartFragment;
-    private int mSpan = 3;
     private ViewPagerFragment mViewPagerfragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
-    private JobsFragment mJobsFragment;
-    private SelectedJobFragment mSelectedJobFragment;
-    private SignInOperatorFragment mSignInOperatorFragment;
-    private AdvancedSettingsFragment mAdvancedSettingsFragment;
-    private SelectedOperatorFragment mSelectedOperatorFragment;
-    private SettingsFragment mSettingsFragment;
-    private ReportCycleUnitsFragment mReportCycleUnitsFragment;
-    private ReportRejectsFragment mReportRejectsFragment;
-    private ReportInventoryFragment mReportInventoryFragment;
-    private ApproveFirstItemFragment mApproveFirstItemFragment;
-    private ReportRejectSelectParametersFragment mReportRejectSelectParametersFragment;
+    private boolean isOnDashboard;
 
 
     @Override
@@ -175,7 +154,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
@@ -234,14 +213,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
-//            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-//            fm.beginTransaction().remove(mWidgetFragment).commit();
-//        }
-//        if (mActionBarAndEventsFragment != null) {
-//            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-//            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
-//        }
+        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mWidgetFragment).commit();
+        }
+        if (mActionBarAndEventsFragment != null) {
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+        }
 //        if (mDashboardFragment != null) {
 //            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 //            fm.beginTransaction().remove(mDashboardFragment).commit();
@@ -257,6 +236,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onBackStackChanged() {
 
                 Fragment fragment = getVisibleFragment();
+
+//                if (mActionBarAndEventsFragment != null){
+//
+//                    mActionBarAndEventsFragment.setVisiblefragment(fragment);
+//                }
+
                 if (fragment != null) {
                     if (fragment instanceof ReportRejectsFragment) {
                         ((ReportRejectsFragment) fragment).setActionBar();
@@ -264,10 +249,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         ((SettingsFragment) fragment).setActionBar();
                     } else if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
-                            fragment instanceof WidgetFragment||
-                            fragment instanceof SelectStopReasonFragmentNew||
-                            fragment instanceof ReportStopReasonFragmentNew) {
-
+                            fragment instanceof WidgetFragment ||
+                            fragment instanceof ReportStopReasonFragmentNew ||
+                            fragment instanceof SelectStopReasonFragmentNew) {
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -325,9 +309,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (!ignoreFromOnPause) {
 
-            registerReceiver();
+//            if (mActionBarAndEventsFragment != null){
+//
+//                mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
+//            }
 
-            ZLogger.d(LOG_TAG, "onResume(), start ");
+            registerReceiver();
 
             super.onResume();
 
@@ -339,7 +326,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mReportFieldsForMachineCore.startPolling();
 
-            ZLogger.d(LOG_TAG, "onResume(), end ");
         }
 
     }
@@ -617,7 +603,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
-        if (mCroutonCreator != null && mActionBarAndEventsFragment != null) {
+        if (croutonType == CroutonCreator.CroutonType.ALERT_DIALOG) {
+            {
+                if (!(getVisibleFragment() instanceof ActionBarAndEventsFragment) || !(getVisibleFragment() instanceof WidgetFragment)
+                        || !(getVisibleFragment() instanceof RecipeFragment) || !(getVisibleFragment() instanceof ViewPagerFragment)) {
+                    return;
+                }
+            }
+        }
+        if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
         }
@@ -650,66 +644,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
-        if (fragment instanceof ChartFragment) {
-            mChartFragment = fragment;
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-            return;
-        }
-        if (fragment instanceof JobsFragment) {
 
-            mJobsFragment = (JobsFragment) fragment;
-        }
-
-        if (fragment instanceof SelectedJobFragment) {
-
-            mSelectedJobFragment = (SelectedJobFragment) fragment;
-        }
-
-        if (fragment instanceof SignInOperatorFragment) {
-
-            mSignInOperatorFragment = (SignInOperatorFragment) fragment;
-        }
-
-        if (fragment instanceof AdvancedSettingsFragment) {
-
-            mAdvancedSettingsFragment = (AdvancedSettingsFragment) fragment;
-        }
-
-        if (fragment instanceof SettingsFragment) {
-
-            mSettingsFragment = (SettingsFragment) fragment;
-        }
-
-        if (fragment instanceof SelectedOperatorFragment) {
-
-            mSelectedOperatorFragment = (SelectedOperatorFragment) fragment;
-        }
-        if (fragment instanceof ReportCycleUnitsFragment) {
-
-            mReportCycleUnitsFragment = (ReportCycleUnitsFragment) fragment;
-        }
-        if (fragment instanceof ReportRejectsFragment) {
-
-            mReportRejectsFragment = (ReportRejectsFragment) fragment;
-        }
-        if (fragment instanceof ReportInventoryFragment) {
-
-            mReportInventoryFragment = (ReportInventoryFragment) fragment;
-        }
-        if (fragment instanceof ApproveFirstItemFragment) {
-
-            mApproveFirstItemFragment = (ApproveFirstItemFragment) fragment;
-        }
-
-        if (fragment instanceof ReportRejectSelectParametersFragment) {
-
-            mReportRejectSelectParametersFragment = (ReportRejectSelectParametersFragment) fragment;
-        }
-//        if (addToBackStack) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-//        }
+
     }
 
     @Override
@@ -761,7 +698,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 mDashboardActivityToSelectedJobFragmentCallback.onStartJobSuccess();
 
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (getSupportFragmentManager() != null) {
+
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                }
 
                 mAllDashboardDataCore.stopPolling();
 
@@ -810,11 +751,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mJobsCore.startJobForMachine(jobId);
 
-        if (mActionBarAndEventsFragment != null) {
-
-            mActionBarAndEventsFragment.setActionBar();
-        }
-
     }
 
     @Override
@@ -842,8 +778,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+        if (getSupportFragmentManager() != null) {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
     public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
@@ -1034,16 +971,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public int getCroutonRoot() {
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
+            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
+        }
 //        Fragment currentFragment = getCurrentFragment();
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
 //        }
-        if (mActionBarAndEventsFragment != null) {
 
-            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
-
-        }
-        return 0;
+//        if (mActionBarAndEventsFragment != null) {
+//
+//            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
+//
+//        }
+        return R.id.parent_layouts;
     }
 
     @Override
@@ -1054,11 +996,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
         mAllDashboardDataCore.startPolling();
-
-        if (mActionBarAndEventsFragment != null) {
-
-            mActionBarAndEventsFragment.setActionBar();
-        }
 
     }
 
@@ -1087,40 +1024,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         dashboardDataStartPolling();
 
-        if (mActionBarAndEventsFragment != null) {
+        if (getSupportFragmentManager() != null) {
 
-            mActionBarAndEventsFragment.setActionBar();
-        }
-
-        if (mReportCycleUnitsFragment != null) {
-
-            getSupportFragmentManager().beginTransaction().remove(mReportCycleUnitsFragment).commit();
-
-            mReportCycleUnitsFragment = null;
-
-        }
-        if (mReportRejectsFragment != null) {
-
-            getSupportFragmentManager().beginTransaction().remove(mReportRejectsFragment).commit();
-
-            mReportRejectsFragment = null;
-
-        }
-        if (mReportInventoryFragment != null) {
-
-            getSupportFragmentManager().beginTransaction().remove(mReportInventoryFragment).commit();
-
-            mReportInventoryFragment = null;
-
-        }
-        if (mApproveFirstItemFragment != null) {
-
-            getSupportFragmentManager().beginTransaction().remove(mApproveFirstItemFragment).commit();
-
-            mApproveFirstItemFragment = null;
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         }
 
+        ProgressDialogManager.dismiss();
     }
 
     @Override
@@ -1152,7 +1062,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onWidgetUpdateSpane(int span) {
-        mSpan = span;
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(span);
         }
@@ -1272,37 +1181,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ||
-                mChartFragment != null || mJobsFragment != null ||
-                mSignInOperatorFragment != null || mSelectedOperatorFragment != null ||
-                mSelectedJobFragment != null ||
-                mAdvancedSettingsFragment != null || mSettingsFragment != null ||
-                mReportCycleUnitsFragment != null || mReportRejectsFragment != null
-                || mReportInventoryFragment != null || mApproveFirstItemFragment != null) {
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
 
-            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null
-                    && mJobsFragment == null && mSignInOperatorFragment == null
-                    && mSelectedOperatorFragment == null &&
-                    mSelectedJobFragment == null &&
-                    mAdvancedSettingsFragment == null && mSettingsFragment == null &&
-                    mReportCycleUnitsFragment == null && mReportRejectsFragment == null
-                    && mReportInventoryFragment == null && mApproveFirstItemFragment == null) {
+            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 
                 removeReportStopReasonFragment();
 
             }
-            if (mSelectStopReasonFragmentNew != null &&
-                    mJobsFragment == null && mSignInOperatorFragment == null
-                    && mSelectedOperatorFragment == null &&
-                    mSelectedJobFragment == null &&
-                    mAdvancedSettingsFragment == null && mSettingsFragment == null &&
-                    mReportCycleUnitsFragment == null && mReportRejectsFragment == null
-                    && mReportInventoryFragment == null && mApproveFirstItemFragment == null) {
+            if (mSelectStopReasonFragmentNew != null) {
 
                 removeSelectStopReasonFragment();
 
             }
+
+        } else {
+            super.onBackPressed();
+        }
+/*
+
             if (mChartFragment != null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
@@ -1312,7 +1208,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mActionBarAndEventsFragment.setActionBar();
 
             }
-            if (mJobsFragment != null && mSelectedJobFragment == null) {
+            if (mJobsFragment != null) {
 
                 getSupportFragmentManager().beginTransaction().remove(mJobsFragment).commit();
 
@@ -1322,100 +1218,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }
 
-            if (mSelectedJobFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mSelectedJobFragment).commit();
-
-                mSelectedJobFragment = null;
-
-            }
-
-            if (mSettingsFragment != null && mAdvancedSettingsFragment == null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mSettingsFragment).commit();
-
-                mSettingsFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-
-            if (mAdvancedSettingsFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mAdvancedSettingsFragment).commit();
-
-                mAdvancedSettingsFragment = null;
-
-            }
-
-            if (mSignInOperatorFragment != null && mSelectedOperatorFragment == null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mSignInOperatorFragment).commit();
-
-                mSignInOperatorFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-
-            if (mSelectedOperatorFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mSelectedOperatorFragment).commit();
-
-                mSelectedOperatorFragment = null;
-
-            }
-
-            if (mReportCycleUnitsFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mReportCycleUnitsFragment).commit();
-
-                mReportCycleUnitsFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-
-            if (mReportRejectsFragment != null && mReportRejectSelectParametersFragment == null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mReportRejectsFragment).commit();
-
-                mReportRejectsFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-            if (mReportRejectSelectParametersFragment != null){
-
-                getSupportFragmentManager().beginTransaction().remove(mReportRejectSelectParametersFragment).commit();
-
-                mReportRejectSelectParametersFragment = null;
-
-            }
-
-            if (mReportInventoryFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mReportInventoryFragment).commit();
-
-                mReportInventoryFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-            if (mApproveFirstItemFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mApproveFirstItemFragment).commit();
-
-                mApproveFirstItemFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-
-
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     private void removeSelectStopReasonFragment() {

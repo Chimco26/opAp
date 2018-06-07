@@ -16,13 +16,13 @@ public class BaseSplits implements Parcelable {
   private Integer DisplayOrder;
   @SerializedName("FValue")
   @Expose
-  private Float FValue;
+  private String FValue;
   @SerializedName("Range")
   @Expose
   private String Range;
   public BaseSplits(){
   }
-  public BaseSplits(String PropertyName,Integer DisplayOrder,Float FValue,String Range){
+  public BaseSplits(String PropertyName,Integer DisplayOrder,String FValue,String Range){
    this.PropertyName=PropertyName;
    this.DisplayOrder=DisplayOrder;
    this.FValue=FValue;
@@ -40,10 +40,10 @@ public class BaseSplits implements Parcelable {
   public Integer getDisplayOrder(){
    return DisplayOrder;
   }
-  public void setFValue(Float FValue){
+  public void setFValue(String FValue){
    this.FValue=FValue;
   }
-  public Float getFValue(){
+  public String getFValue(){
    return FValue;
   }
   public void setRange(String Range){
@@ -69,7 +69,7 @@ public class BaseSplits implements Parcelable {
     protected BaseSplits(Parcel in) {
         this.PropertyName = in.readString();
         this.DisplayOrder = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.FValue = (Float) in.readValue(Float.class.getClassLoader());
+        this.FValue = (String) in.readValue(Float.class.getClassLoader());
         this.Range = in.readString();
     }
 
