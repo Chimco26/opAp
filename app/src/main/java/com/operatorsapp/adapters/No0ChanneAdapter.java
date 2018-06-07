@@ -112,7 +112,7 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
 
                 ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
 
                 if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0) {
 

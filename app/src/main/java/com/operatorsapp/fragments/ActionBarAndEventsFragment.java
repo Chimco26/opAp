@@ -86,7 +86,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener {
 
-    private static final String LOG_TAG = DashboardFragmentSql.class.getSimpleName();
+    private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     private static final int THIRTY_SECONDS = 30 * 1000;
     public static final int TYPE_STOP = 6;
@@ -143,6 +143,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mSelectedNumberLy;
     private Event mLastEvent;
     private View mParentLy;
+    private Fragment mVisiblefragment;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -513,7 +514,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if ((getActivity()) != null) {
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         }
-        if (actionBar != null) {
+        if (actionBar != null ) {//&& !(mVisiblefragment instanceof AdvancedSettingsFragment...)
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
@@ -1195,18 +1196,28 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     event.setEventGroupID(reasonId);
                     event.setEventGroupLname(il);
                     event.setmEventGroupEname(en);
-                    event.setEventSubTitleEname(eSubTitle);
-                    event.setEventSubTitleLname(lSubtitle);
+
+                    if (OperatorApplication.isEnglishLang()){
+
+                        event.setEventSubTitleEname(eSubTitle);
+
+                    }else {
+
+                        event.setEventSubTitleEname(lSubtitle);
+                    }
+
+
+
                     event.updateAll("meventid = ?", String.valueOf(eventId));
                 }
 
 
-                if (mShiftLogAdapter != null) {
-
-                    mShiftLogAdapter.notifyDataSetChanged();
-
-
-                }
+//                if (mShiftLogAdapter != null) {
+//
+//                    mShiftLogAdapter.notifyDataSetChanged();
+//
+//
+//                }
             }
 
         }
@@ -1260,6 +1271,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 break;
         }
+    }
+
+    public void setVisiblefragment(Fragment visibleFragment) {
+
+        mVisiblefragment = visibleFragment;
     }
 
     public interface ActionBarAndEventsFragmentListener {

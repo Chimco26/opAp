@@ -51,8 +51,7 @@ import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineN
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
-import com.operatorsapp.fragments.ChartFragment;
-import com.operatorsapp.fragments.JobsFragment;
+import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
 import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
@@ -67,7 +66,6 @@ import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
-import com.operatorsapp.fragments.DashboardFragmentSql;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
@@ -106,7 +104,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
         OperatorCoreToDashboardActivityCallback,
-        /*DialogsShiftLogListener,*/ ReportFieldsFragmentCallbackListener, SettingsInterface,
+        ReportFieldsFragmentCallbackListener, SettingsInterface,
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
@@ -131,7 +129,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportFieldsForMachineCore mReportFieldsForMachineCore;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private OnReportFieldsUpdatedCallbackListener mOnReportFieldsUpdatedCallbackListener;
-    private DashboardFragmentSql mDashboardFragment;
     private AllDashboardDataCore mAllDashboardDataCore;
     private RefreshPollingBroadcast mRefreshBroadcast = null;
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
@@ -142,14 +139,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
     private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
     private View mContainer3;
-    private Fragment mChartFragment;
-    private int mSpan = 3;
     private ViewPagerFragment mViewPagerfragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
-    private JobsFragment mJobsFragment;
+    private boolean isOnDashboard;
 
 
     @Override
@@ -159,7 +154,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
@@ -241,6 +236,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onBackStackChanged() {
 
                 Fragment fragment = getVisibleFragment();
+
+//                if (mActionBarAndEventsFragment != null){
+//
+//                    mActionBarAndEventsFragment.setVisiblefragment(fragment);
+//                }
+
                 if (fragment != null) {
                     if (fragment instanceof ReportRejectsFragment) {
                         ((ReportRejectsFragment) fragment).setActionBar();
@@ -308,9 +309,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (!ignoreFromOnPause) {
 
-            registerReceiver();
+//            if (mActionBarAndEventsFragment != null){
+//
+//                mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
+//            }
 
-            ZLogger.d(LOG_TAG, "onResume(), start ");
+            registerReceiver();
 
             super.onResume();
 
@@ -322,7 +326,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mReportFieldsForMachineCore.startPolling();
 
-            ZLogger.d(LOG_TAG, "onResume(), end ");
         }
 
     }
@@ -600,6 +603,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+        if (croutonType == CroutonCreator.CroutonType.ALERT_DIALOG) {
+            {
+                if (!(getVisibleFragment() instanceof ActionBarAndEventsFragment) || !(getVisibleFragment() instanceof WidgetFragment)
+                        || !(getVisibleFragment() instanceof RecipeFragment) || !(getVisibleFragment() instanceof ViewPagerFragment)) {
+                    return;
+                }
+            }
+        }
         if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, getCroutonRoot(), croutonType, this);
 
@@ -633,20 +644,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
-//        if (fragment instanceof ChartFragment) {
-//            mChartFragment = fragment;
-//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-//            return;
-//        }
-//        if (fragment instanceof JobsFragment) {
-//
-//            mJobsFragment = (JobsFragment) fragment;
-//        }
-//        if (addToBackStack) {
+
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).commit();
-//        }
+
     }
 
     @Override
@@ -1062,7 +1062,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onWidgetUpdateSpane(int span) {
-        mSpan = span;
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(span);
         }
@@ -1182,7 +1181,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null ) {
+        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
 
             if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
 

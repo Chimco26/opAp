@@ -217,6 +217,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         mButtonSave.setOnClickListener(this);
         mSendLogButton.setOnClickListener(this);
         registerReceiver();
+
+
     }
 
     @Override

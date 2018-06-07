@@ -272,7 +272,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
                     ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-                    ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+                    ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
 
                     ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
 

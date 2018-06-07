@@ -71,10 +71,9 @@ public class Channel1_99Adapter extends RecyclerView.Adapter<Channel1_99Adapter.
 
                 ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue() + "");
+                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
 
                 viewHolder.mSplitLy.addView(itemView);
-
             }
 
         }
