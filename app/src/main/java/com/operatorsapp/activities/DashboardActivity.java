@@ -237,10 +237,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 Fragment fragment = getVisibleFragment();
 
-//                if (mActionBarAndEventsFragment != null){
-//
-//                    mActionBarAndEventsFragment.setVisiblefragment(fragment);
-//                }
+                if (mActionBarAndEventsFragment != null){
+
+                    mActionBarAndEventsFragment.setVisiblefragment(fragment);
+                }
 
                 if (fragment != null) {
                     if (fragment instanceof ReportRejectsFragment) {
@@ -309,10 +309,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (!ignoreFromOnPause) {
 
-//            if (mActionBarAndEventsFragment != null){
-//
-//                mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
-//            }
+            if (mActionBarAndEventsFragment != null){
+
+                mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
+            }
 
             registerReceiver();
 

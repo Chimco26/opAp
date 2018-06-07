@@ -514,7 +514,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if ((getActivity()) != null) {
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         }
-        if (actionBar != null ) {//&& !(mVisiblefragment instanceof AdvancedSettingsFragment...)
+        if (actionBar != null ) {
+
+            if (mVisiblefragment != null && !(mVisiblefragment instanceof ActionBarAndEventsFragment
+                    || mVisiblefragment instanceof WidgetFragment
+                    || mVisiblefragment instanceof RecipeFragment
+                    || mVisiblefragment instanceof SelectStopReasonFragmentNew
+                    || mVisiblefragment instanceof ReportStopReasonFragmentNew)){
+                return;
+            }
+
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
