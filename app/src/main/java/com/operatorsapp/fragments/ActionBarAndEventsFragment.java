@@ -519,8 +519,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (mVisiblefragment != null && !(mVisiblefragment instanceof ActionBarAndEventsFragment
                     || mVisiblefragment instanceof WidgetFragment
                     || mVisiblefragment instanceof RecipeFragment
-                    || mVisiblefragment instanceof SelectStopReasonFragmentNew
-                    || mVisiblefragment instanceof ReportStopReasonFragmentNew)){
+                    || mVisiblefragment instanceof SelectStopReasonFragment
+                    || mVisiblefragment instanceof ReportStopReasonFragment)){
                 return;
             }
 
@@ -807,7 +807,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void startSelectMode(int type, int eventID) {
 
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragmentNew.newInstance(mIsOpen));
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen));
 
         mIsSelectionMode = true;
 
@@ -1294,7 +1294,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onResize(int width, int statusBarsHeight);
 
-        void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew);
+        void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment);
 
         void onEventSelected(Integer event, boolean b);
 

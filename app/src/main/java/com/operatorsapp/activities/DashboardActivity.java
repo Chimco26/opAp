@@ -51,13 +51,13 @@ import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineN
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
-import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
-import com.operatorsapp.fragments.ReportStopReasonFragmentNew;
-import com.operatorsapp.fragments.SelectStopReasonFragmentNew;
+import com.operatorsapp.fragments.ReportStopReasonFragment;
+import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
@@ -108,7 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OnTimeToEndChangedListener, CroutonRootProvider, ApproveFirstItemFragmentCallbackListener,
         RefreshPollingBroadcast.RefreshPollingListener, CroutonCreator.CroutonListener,
         ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
-        ReportStopReasonFragmentNew.ReportStopReasonFragmentListener,
+        ReportStopReasonFragment.ReportStopReasonFragmentListener,
         ViewPagerFragment.OnViewPagerListener,
         RecipeFragment.OnRecipeFragmentListener {
 
@@ -136,8 +136,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer2;
     private ArrayList<Integer> mSelectedEvents;
-    private ReportStopReasonFragmentNew mReportStopReasonFragmentNew;
-    private SelectStopReasonFragmentNew mSelectStopReasonFragmentNew;
+    private ReportStopReasonFragment mReportStopReasonFragment;
+    private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
     private ViewPagerFragment mViewPagerfragment;
     private RecipeFragment mRecipeFragment;
@@ -250,8 +250,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     } else if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
                             fragment instanceof WidgetFragment ||
-                            fragment instanceof ReportStopReasonFragmentNew ||
-                            fragment instanceof SelectStopReasonFragmentNew) {
+                            fragment instanceof ReportStopReasonFragment ||
+                            fragment instanceof SelectStopReasonFragment) {
                         mActionBarAndEventsFragment.setActionBar();
 //                        mDashboardFragment.setActionBar();
                         if (first) {
@@ -605,8 +605,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (croutonType == CroutonCreator.CroutonType.ALERT_DIALOG) {
             {
-                if (!(getVisibleFragment() instanceof ActionBarAndEventsFragment) || !(getVisibleFragment() instanceof WidgetFragment)
-                        || !(getVisibleFragment() instanceof RecipeFragment) || !(getVisibleFragment() instanceof ViewPagerFragment)) {
+                if (!((getVisibleFragment() instanceof ActionBarAndEventsFragment) || (getVisibleFragment() instanceof WidgetFragment)
+                        || (getVisibleFragment() instanceof RecipeFragment) || (getVisibleFragment() instanceof ViewPagerFragment))) {
                     return;
                 }
             }
@@ -979,12 +979,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        if (currentFragment != null && currentFragment instanceof CroutonRootProvider) {
 //            return ((CroutonRootProvider) currentFragment).getCroutonRoot();
 //        }
+        Fragment visible = getVisibleFragment();
+        if (mActionBarAndEventsFragment != null &&
+                visible != null && (visible instanceof ActionBarAndEventsFragment
+                || visible instanceof WidgetFragment
+                || visible instanceof RecipeFragment
+                || visible instanceof SelectStopReasonFragment
+                || visible instanceof ReportStopReasonFragment)) {
 
-//        if (mActionBarAndEventsFragment != null) {
-//
-//            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
-//
-//        }
+            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
+
+        }
         return R.id.parent_layouts;
     }
 
@@ -1065,11 +1070,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(span);
         }
-        if (mSelectStopReasonFragmentNew != null) {
-            mSelectStopReasonFragmentNew.setSpanCount(span != 3);
+        if (mSelectStopReasonFragment != null) {
+            mSelectStopReasonFragment.setSpanCount(span != 3);
         }
-        if (mReportStopReasonFragmentNew != null) {
-            mReportStopReasonFragmentNew.setSpanCount(span != 3);
+        if (mReportStopReasonFragment != null) {
+            mReportStopReasonFragment.setSpanCount(span != 3);
         }
 
     }
@@ -1096,11 +1101,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenReportStopReasonFragment(ReportStopReasonFragmentNew reportStopReasonFragmentNew) {
+    public void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment) {
 
-        mReportStopReasonFragmentNew = reportStopReasonFragmentNew;
+        mReportStopReasonFragment = reportStopReasonFragment;
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
 
     }
 
@@ -1129,20 +1134,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }
 
-        if (mSelectStopReasonFragmentNew != null) {
+        if (mSelectStopReasonFragment != null) {
 
-            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+            mSelectStopReasonFragment.setSelectedEvents(mSelectedEvents);
         }
         if (mActionBarAndEventsFragment != null) {
 
             mActionBarAndEventsFragment.setSelectedEvents(mSelectedEvents);
         }
         if (mSelectedEvents.size() == 0) {
-            if (mSelectStopReasonFragmentNew != null) {
+            if (mSelectStopReasonFragment != null) {
 
                 onBackPressed();
             }
-            if (mReportStopReasonFragmentNew != null) {
+            if (mReportStopReasonFragment != null) {
 
                 onBackPressed();
             }
@@ -1152,12 +1157,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onClearAllSelectedEvents() {
 
-        if (mReportStopReasonFragmentNew != null) {
+        if (mReportStopReasonFragment != null) {
 
             removeReportStopReasonFragment();
 
         }
-        if (mSelectStopReasonFragmentNew != null) {
+        if (mSelectStopReasonFragment != null) {
 
             removeSelectStopReasonFragment();
 
@@ -1165,15 +1170,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragmentNew selectStopReasonFragmentNew) {
+    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment) {
 
-        mSelectStopReasonFragmentNew = selectStopReasonFragmentNew;
+        mSelectStopReasonFragment = selectStopReasonFragment;
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragment).commit();
 
-        if (mSelectStopReasonFragmentNew != null) {
+        if (mSelectStopReasonFragment != null) {
 
-            mSelectStopReasonFragmentNew.setSelectedEvents(mSelectedEvents);
+            mSelectStopReasonFragment.setSelectedEvents(mSelectedEvents);
 
         }
 
@@ -1181,14 +1186,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-        if (mReportStopReasonFragmentNew != null || mSelectStopReasonFragmentNew != null) {
+        if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
 
-            if (mReportStopReasonFragmentNew != null && mSelectStopReasonFragmentNew == null) {
+            if (mReportStopReasonFragment != null && mSelectStopReasonFragment == null) {
 
                 removeReportStopReasonFragment();
 
             }
-            if (mSelectStopReasonFragmentNew != null) {
+            if (mSelectStopReasonFragment != null) {
 
                 removeSelectStopReasonFragment();
 
@@ -1224,16 +1229,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void removeSelectStopReasonFragment() {
-        getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragment).commit();
 
-        mSelectStopReasonFragmentNew = null;
+        mSelectStopReasonFragment = null;
 
     }
 
     private void removeReportStopReasonFragment() {
-        getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragment).commit();
 
-        mReportStopReasonFragmentNew = null;
+        mReportStopReasonFragment = null;
 
         if (mActionBarAndEventsFragment != null) {
 

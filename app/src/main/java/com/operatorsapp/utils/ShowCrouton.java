@@ -97,9 +97,7 @@ public class ShowCrouton {
     }
 
     public static void jobsLoadingAlertCrouton(OnCroutonRequestListener onCroutonRequestListener, String msg) {
-
         final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(msg);
-
         spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, msg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         showJobsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.ALERT_DIALOG);

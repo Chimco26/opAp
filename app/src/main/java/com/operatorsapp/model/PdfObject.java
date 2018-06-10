@@ -1,10 +1,10 @@
-package com.operatorsapp.activities;
+package com.operatorsapp.model;
 
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class PdfObject implements Parcelable {
+public class PdfObject implements Parcelable {
 
     private Uri uri;
 

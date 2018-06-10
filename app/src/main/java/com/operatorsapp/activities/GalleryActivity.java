@@ -29,6 +29,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
 import com.operatorsapp.model.GalleryModel;
+import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.utils.DownloadHelper;
 import com.shockwave.pdfium.PdfDocument;
 

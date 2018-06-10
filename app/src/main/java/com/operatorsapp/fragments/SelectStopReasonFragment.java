@@ -44,9 +44,9 @@ import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.EN_NAME
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.IL_NAME;
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.REASON_ID;
 
-public class SelectStopReasonFragmentNew extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider {
+public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider {
 
-    public static final String LOG_TAG = SelectStopReasonFragmentNew.class.getSimpleName();
+    public static final String LOG_TAG = SelectStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
     private static final String CURRENT_JOB_ID = "current_job_id";
     private static final String IS_OPEN = "IS_OPEN";
@@ -74,8 +74,8 @@ public class SelectStopReasonFragmentNew extends BackStackAwareFragment implemen
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
 
-    public static SelectStopReasonFragmentNew newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
-        SelectStopReasonFragmentNew selectedStopReasonFragment = new SelectStopReasonFragmentNew();
+    public static SelectStopReasonFragment newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
+        SelectStopReasonFragment selectedStopReasonFragment = new SelectStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
         bundle.putInt(CURRENT_JOB_ID, jobId);
