@@ -37,7 +37,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation(name: 'pollingmachanaim-release', ext: 'aar')
-    implementation(name: 'logrecorder', ext: 'aar')
+    compile(name: 'logrecorder', ext: 'aar')
     implementation('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         exclude group: 'com.google.android', module: 'support-v4'
     }

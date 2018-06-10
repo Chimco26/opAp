@@ -37,6 +37,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.PUT;
+
 public class GalleryActivity extends AppCompatActivity implements View.OnClickListener,
         GalleryAdapter.GalleryAdapterListener,
         OnScaleChangedListener,
@@ -47,9 +49,10 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private static final String TAG = GalleryActivity.class.getSimpleName();
 
-    private static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
-    private static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
-    private static final String EXTRA_RECIPE_PDF_FILES = "EXTRA_RECIPE_PDF_FILES";
+    public static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
+    public static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
+    public static final String EXTRA_RECIPE_PDF_FILES = "EXTRA_RECIPE_PDF_FILES";
+    public static final int EXTRA_GALLERY_CODE = 123;
 
     private RecyclerView mRv;
     private ArrayList<String> mFileUrls;
@@ -227,12 +230,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.AG_close_btn:
 
-                Intent intent = getIntent();
-                intent.putExtra(EXTRA_RECIPE_PDF_FILES, mPdfList);
-
-                setResult(RESULT_OK, intent);
-
-                finish();
+                finishActivity();
 
                 break;
 
@@ -248,6 +246,20 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishActivity();
+    }
+
+    public void finishActivity() {
+        Intent intent = getIntent();
+        intent.putExtra(EXTRA_RECIPE_PDF_FILES, mPdfList);
+
+        setResult(RESULT_OK, intent);
+
+        finish();
     }
 
     private void updateScale(boolean isPositive) {

@@ -64,7 +64,6 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     private SendLogsBroadcast mSendLogsBroadcast = null;
 
 
-
     public static AdvancedSettingsFragment newInstance(String selectedLanguage) {
         AdvancedSettingsFragment advancedSettingsFragment = new AdvancedSettingsFragment();
         Bundle bundle = new Bundle();
@@ -305,28 +304,22 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         ZLogger.d(LOG_TAG, "start sendLogToEmail(), ");
         LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
         try {
-            LogRecorder.getInstance().requestSendLogsIntent(true, new LogRecorder.SendLogsListener() {
+            LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
                 @Override
                 public void onCompleted(final Intent intent) {
                     ProgressDialogManager.dismiss();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                ZLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
-                            }
-
-                        }
-                    });
+                    try {
+                        getActivity().startActivity(intent);
+                    } catch (Exception e) {
+                        ZLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
+                    }
                 }
             });
             ZLogger.d(LOG_TAG, "end sendLogToEmail(), ");
         } catch (Exception e) {
             ProgressDialogManager.dismiss();
             e.printStackTrace();
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
                 Log.e(LOG_TAG, e.getMessage());
         }
@@ -408,8 +401,6 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
         }
 
     }
-
-
 
 
     @Override

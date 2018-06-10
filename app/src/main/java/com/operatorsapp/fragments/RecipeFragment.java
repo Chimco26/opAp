@@ -311,7 +311,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             @Override
             public void onClick(View v) {
 
-                if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null) {
+                if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null && mRecipeResponse.getProductData().getFileUrl().size() > 0 &&
+                        mRecipeResponse.getRecipeData().size() > 0) {
                     mListener.onImageProductClick(mRecipeResponse.getProductData().getFileUrl(), mRecipeResponse.getRecipeData().get(0).getName());
                 }
             }

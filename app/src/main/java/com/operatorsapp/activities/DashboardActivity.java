@@ -113,11 +113,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         RecipeFragment.OnRecipeFragmentListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
-    private static final String EXTRA_FILE_URL = "EXTRA_FILE_URL";
-    private static final int EXTRA_GALLERY_CODE = 123;
-    private static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
-    private static final String EXTRA_RECIPE_PDF_FILES = "EXTRA_RECIPE_PDF_FILES";
-
 
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -237,7 +232,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 Fragment fragment = getVisibleFragment();
 
-                if (mActionBarAndEventsFragment != null){
+                if (mActionBarAndEventsFragment != null) {
 
                     mActionBarAndEventsFragment.setVisiblefragment(fragment);
                 }
@@ -309,7 +304,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (!ignoreFromOnPause) {
 
-            if (mActionBarAndEventsFragment != null){
+            if (mActionBarAndEventsFragment != null) {
 
                 mActionBarAndEventsFragment.setVisiblefragment(getVisibleFragment());
             }
@@ -326,6 +321,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mReportFieldsForMachineCore.startPolling();
 
+        } else {
+            super.onResume();
         }
 
     }
@@ -1338,13 +1335,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mGalleryIntent = new Intent(DashboardActivity.this, GalleryActivity.class);
 
-            mGalleryIntent.putExtra(EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
 
-            mGalleryIntent.putExtra(EXTRA_RECIPE_FILES_TITLE, name);
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_FILES_TITLE, name);
 
-            mGalleryIntent.putExtra(EXTRA_RECIPE_PDF_FILES, mPdfList);
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES, mPdfList);
 
-            startActivityForResult(mGalleryIntent, EXTRA_GALLERY_CODE);
+            startActivityForResult(mGalleryIntent, GalleryActivity.EXTRA_GALLERY_CODE);
 
         }
     }
@@ -1353,13 +1350,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
+            ignoreFromOnPause = true;
+
+            mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
+
+        }
+
         mGalleryIntent = null;
 
         ChangeLang.changeLanguage(this);
-
-        if (resultCode == RESULT_OK && requestCode == EXTRA_GALLERY_CODE) {
-
-            mPdfList = data.getParcelableArrayListExtra(EXTRA_RECIPE_PDF_FILES);
-        }
     }
 }

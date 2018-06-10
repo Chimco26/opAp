@@ -257,7 +257,11 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-                getFragmentManager().popBackStack();
+                FragmentManager fragmentManager = getFragmentManager();
+                if(fragmentManager != null)
+                {
+                    fragmentManager.popBackStack();
+                }
                 break;
             }
             case R.id.button_approve: {
@@ -291,7 +295,11 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             {
                 mCallbackListener.onApproveFirstItemComplete();
             }
-            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager != null)
+            {
+                fragmentManager.popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
 
         }
 

@@ -607,7 +607,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 4: {
 
-
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
                                     mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
                                 } else {
