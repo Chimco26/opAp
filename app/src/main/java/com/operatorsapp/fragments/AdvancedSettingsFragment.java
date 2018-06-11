@@ -62,6 +62,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
     private TextView mSendLogButton;
     private SendLogsBroadcast mSendLogsBroadcast = null;
+    private AdvancedSettingsListener mListener;
 
 
     public static AdvancedSettingsFragment newInstance(String selectedLanguage) {
@@ -77,6 +78,15 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public void onAttach(Context context) {
         super.onAttach(context);
         mSettingsInterface = (SettingsInterface) getActivity();
+
+        if (context instanceof AdvancedSettingsListener){
+
+            mListener = (AdvancedSettingsListener) context;
+
+        }else {
+
+            Log.d(LOG_TAG, "onAttach: Activity need to implement AdvancedSettingsListener");
+        }
     }
 
     @Override
@@ -309,7 +319,8 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                 public void onCompleted(final Intent intent) {
                     ProgressDialogManager.dismiss();
                     try {
-                        getActivity().startActivity(intent);
+                        mListener.onIgnoreOnPauseFromAdvancedSettings();
+                        startActivity(intent);
                     } catch (Exception e) {
                         ZLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
                     }
@@ -407,5 +418,10 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     public void onPermissionGranted() {
 
         sendLogToEmail();
+    }
+
+    public interface AdvancedSettingsListener{
+
+        void onIgnoreOnPauseFromAdvancedSettings();
     }
 }

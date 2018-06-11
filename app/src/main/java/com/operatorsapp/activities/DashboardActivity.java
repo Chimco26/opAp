@@ -51,6 +51,7 @@ import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineN
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
@@ -110,7 +111,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ActionBarAndEventsFragment.ActionBarAndEventsFragmentListener,
         ReportStopReasonFragment.ReportStopReasonFragmentListener,
         ViewPagerFragment.OnViewPagerListener,
-        RecipeFragment.OnRecipeFragmentListener {
+        RecipeFragment.OnRecipeFragmentListener,
+        AdvancedSettingsFragment.AdvancedSettingsListener{
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -281,7 +283,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onPause() {
         super.onPause();
 
-
         if (!ignoreFromOnPause && mGalleryIntent == null) {
 
             mAllDashboardDataCore.stopPolling();
@@ -323,7 +324,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } else {
             
-            ignoreFromOnPause =false;
+            ignoreFromOnPause = false;
             // TODO: 6/11/2018 שלח לאוהד גירסה לבדיקה על זה
             super.onResume();
 
@@ -1372,5 +1373,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
+    }
+
+    @Override
+    public void onIgnoreOnPauseFromAdvancedSettings() {
+
+        ignoreFromOnPause = true;
     }
 }
