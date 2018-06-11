@@ -144,6 +144,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Event mLastEvent;
     private View mParentLy;
     private Fragment mVisiblefragment;
+    private boolean mFromGallery;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -393,69 +394,71 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+
     @Override
     public void onResume() {
         ZLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
 
-        mDatabaseHelper = new DatabaseHelper(getContext());
+        if(mFromGallery){
 
-        Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTime();
+            mFromGallery = false;
 
-        if (mTempCursor.moveToFirst()) {
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
-                    this, mOpenWidth, mRecyclersHeight, 0,
-                    false, 0, null);
-            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
-
-            mShiftLogAdapter.notifyDataSetChanged();
+            return;
         }
 
-        if (DataSupport.count(Event.class) > 0) {
-            mNoData = false;
-            mNoNotificationsText.setVisibility(View.GONE);
-            mLoadingDataText.setVisibility(View.GONE);
-        } else {
-            mNoData = true;
-            mNoNotificationsText.setVisibility(View.VISIBLE);
-            mLoadingDataText.setVisibility(View.VISIBLE);
-        }
+            mDatabaseHelper = new DatabaseHelper(getContext());
 
-        registerReceiver();
-        setActionBar();
-        if (mCurrentMachineStatus != null) {
-            initStatusLayout(mCurrentMachineStatus);
-        }
-        if (DataSupport.count(Event.class) > 0) {
+            Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTime();
 
-            for (Event event : DataSupport.where(DatabaseHelper.KEY_IS_DISMISS + " = 0").find(Event.class)) {
+            if (mTempCursor.moveToFirst()) {
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
+                        this, mOpenWidth, mRecyclersHeight, 0,
+                        false, 0, null);
+                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                Log.d(LOG_TAG, "EVENT " + event.isIsDismiss());
-                event.setTimeOfAdded(System.currentTimeMillis());
-                mEventsQueue.add(event);
-
+                mShiftLogAdapter.notifyDataSetChanged();
             }
-            //            openNextDialog();
-            if (mEventsQueue.size() > 0) {
-                Event event = mEventsQueue.peek();//
-//                if (event.getEventGroupID() == TYPE_STOP) {Disable by nathan to don't show more all the alert when open app
-//                    // TODO Oren - doing this here before we have all the data causes an issue, figure out how to wait for the data or suppress this event
-//                    //openStopReportScreen(event.getEventID(),event.getEventStartTime(),event.getEventEndTime(),event.getDuration());
-//
-//                    //openDialog(event, true); // to show pop up dialog, disabled for now
-//                } else if (event.getEventGroupID() == TYPE_ALERT) {
-//                    openDialog(event, false);
-//                }
 
-
+            if (DataSupport.count(Event.class) > 0) {
+                mNoData = false;
+                mNoNotificationsText.setVisibility(View.GONE);
+                mLoadingDataText.setVisibility(View.GONE);
+            } else {
+                mNoData = true;
+                mNoNotificationsText.setVisibility(View.VISIBLE);
+                mLoadingDataText.setVisibility(View.VISIBLE);
             }
-        } else {
-            mNoData = true;
-            mNoNotificationsText.setVisibility(View.VISIBLE);
-            mLoadingDataText.setVisibility(View.VISIBLE);
-        }
 
-        ZLogger.d(LOG_TAG, "onResume(), end ");
+            registerReceiver();
+            setActionBar();
+            if (mCurrentMachineStatus != null) {
+                initStatusLayout(mCurrentMachineStatus);
+            }
+            if (DataSupport.count(Event.class) > 0) {
+
+                for (Event event : DataSupport.where(DatabaseHelper.KEY_IS_DISMISS + " = 0").find(Event.class)) {
+
+                    Log.d(LOG_TAG, "EVENT " + event.isIsDismiss());
+                    event.setTimeOfAdded(System.currentTimeMillis());
+                    mEventsQueue.add(event);
+
+                }
+                //            openNextDialog();
+                if (mEventsQueue.size() > 0) {
+                    Event event = mEventsQueue.peek();//
+
+
+                }
+            } else {
+                mNoData = true;
+                mNoNotificationsText.setVisibility(View.VISIBLE);
+                mLoadingDataText.setVisibility(View.VISIBLE);
+            }
+
+            ZLogger.d(LOG_TAG, "onResume(), end ");
+
+
 
     }
 
@@ -1284,6 +1287,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void setVisiblefragment(Fragment visibleFragment) {
 
         mVisiblefragment = visibleFragment;
+    }
+
+    public void setFromGallery(boolean fromGallery) {
+        this.mFromGallery = fromGallery;
     }
 
     public interface ActionBarAndEventsFragmentListener {

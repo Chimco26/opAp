@@ -322,7 +322,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mReportFieldsForMachineCore.startPolling();
 
         } else {
+            
+            ignoreFromOnPause =false;
+            // TODO: 6/11/2018 שלח לאוהד גירסה לבדיקה על זה
             super.onResume();
+
         }
 
     }
@@ -1343,12 +1347,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             startActivityForResult(mGalleryIntent, GalleryActivity.EXTRA_GALLERY_CODE);
 
+            ignoreFromOnPause = true;
+
+            if (mActionBarAndEventsFragment != null){
+
+                mActionBarAndEventsFragment.setFromGallery(true);
+            }
+
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        mGalleryIntent = null;
+
+        ChangeLang.changeLanguage(this);
 
         if (resultCode == RESULT_OK && requestCode == GalleryActivity.EXTRA_GALLERY_CODE) {
             ignoreFromOnPause = true;
@@ -1357,8 +1372,5 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-        mGalleryIntent = null;
-
-        ChangeLang.changeLanguage(this);
     }
 }
