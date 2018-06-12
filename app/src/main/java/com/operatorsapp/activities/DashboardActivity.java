@@ -1200,6 +1200,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 removeSelectStopReasonFragment();
 
             }
+            Fragment visible = getVisibleFragment();
+
+            if (!(visible instanceof ActionBarAndEventsFragment
+                    || visible instanceof WidgetFragment
+                    || visible instanceof RecipeFragment
+                    || visible instanceof SelectStopReasonFragment
+                    || visible instanceof ReportStopReasonFragment)){
+
+                getSupportFragmentManager().popBackStack();
+            }
 
         } else {
             super.onBackPressed();
