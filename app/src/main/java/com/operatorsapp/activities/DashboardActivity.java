@@ -390,6 +390,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             machineStatus.getAllMachinesData().size() > 0) {
 
                         PersistenceManager.getInstance().setJobId(machineStatus.getAllMachinesData().get(0).getCurrentJobID());
+                        PersistenceManager.getInstance().setDisplayRejectFactor(machineStatus.getAllMachinesData().get(0).isDisplayRejectFactor());
+                        PersistenceManager.getInstance().setAddRejectsOnSetupEnd(machineStatus.getAllMachinesData().get(0).isAddRejectsOnSetupEnd());
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                     }

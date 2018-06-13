@@ -117,6 +117,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             }
 
         });
+        mSearchField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchField.showDropDown();
+            }
+        });
 
         mGoButton = (RelativeLayout) rootView.findViewById(R.id.goBtn);
         mGoButton.setEnabled(false);

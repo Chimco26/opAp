@@ -204,6 +204,7 @@
                             </RelativeLayout>
 
                             <TextView
+                                android:id="@+id/cause_tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="7dp"
@@ -213,6 +214,7 @@
                                 android:textSize="22sp"/>
 
                             <RelativeLayout
+                                android:id="@+id/cause_rl"
                                 android:layout_width="300dp"
                                 android:layout_height="52dp"
                                 android:background="@drawable/edit_text_background_selector">

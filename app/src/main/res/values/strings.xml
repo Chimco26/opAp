@@ -186,6 +186,7 @@
     <string name="loading_file">Loading File...</string>
     <string name="loading_error">Loading error</string>
     <string name="production_parameters">Production parameters</string>
+    <string name="reject_reason_setup">Setup</string>
 
 
 </resources>

@@ -102,6 +102,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!PersistenceManager.getInstance().getDisplayRejectFactor()){
+            view.findViewById(R.id.cause_tv).setVisibility(View.GONE);
+            view.findViewById(R.id.cause_spinner).setVisibility(View.GONE);
+            view.findViewById(R.id.cause_rl).setVisibility(View.GONE);
+        }
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         getActiveJobs();
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
@@ -156,29 +161,31 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 }
             });
 
+            if (PersistenceManager.getInstance().getDisplayRejectFactor()) {
+                Spinner causeSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
+                final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
+                causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                causeSpinner.setAdapter(causeSpinnerArrayAdapter);
+                causeSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            Spinner causeSpinner = (Spinner) view.findViewById(R.id.cause_spinner);
-            final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
-            causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            causeSpinner.setAdapter(causeSpinnerArrayAdapter);
-            causeSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                causeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            causeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    if (mReportFieldsForMachine.getRejectCauses().size() > 0)
-                    {
-                        mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                        if (mReportFieldsForMachine.getRejectCauses().size() > 0) {
+                            mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                        }
+                        causeSpinnerArrayAdapter.setTitle(position);
                     }
-                    causeSpinnerArrayAdapter.setTitle(position);
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
+                    }
+                });
+            }else {
+                mSelectedCauseId = 0;
+            }
         }
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
         mNextButton = (Button) view.findViewById(R.id.button_report);

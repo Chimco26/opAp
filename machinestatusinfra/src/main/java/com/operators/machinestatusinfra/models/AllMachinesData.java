@@ -64,6 +64,18 @@ public class AllMachinesData {
     private int shiftEndingIn;
     @SerializedName("SetupEnd")
     private boolean setupEnd;
+    @SerializedName("DisplayRejectFactor")
+    private boolean displayRejectFactor;
+    @SerializedName("AddRejectsOnSetupEnd")
+    private boolean addRejectsOnSetupEnd;
+
+    public boolean isAddRejectsOnSetupEnd(){
+        return addRejectsOnSetupEnd;
+    }
+
+    public boolean isDisplayRejectFactor(){
+        return displayRejectFactor;
+    }
 
     public int getCurrentJobID() {
         return currentJobID;

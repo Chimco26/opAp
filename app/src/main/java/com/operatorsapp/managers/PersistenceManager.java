@@ -39,6 +39,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SESSION_ID = "pref.PREF_SESSION_ID";
     private static final String PREF_MACHINE_ID = "pref.PREF_MACHINE_ID";
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
+    private static final String PREF_DISPLAY_REJECTED_FACTOR = "pref.PREF_DISPLAY_REJECTED_FACTOR";
+    private static final String PREF_ADD_REJECTS_ON_SETUP = "pref.PREF_ADD_REJECTS_ON_SETUP";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
@@ -180,6 +182,22 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setSelectedMachine(boolean selected) {
         SecurePreferences.getInstance().setBoolean(PREF_SELECTED_MACHINE, selected);
+    }
+
+    public void setDisplayRejectFactor(boolean displayRejectFactor) {
+        SecurePreferences.getInstance().setBoolean(PREF_DISPLAY_REJECTED_FACTOR, displayRejectFactor);
+    }
+
+    public boolean getDisplayRejectFactor() {
+        return SecurePreferences.getInstance().getBoolean(PREF_DISPLAY_REJECTED_FACTOR, false);
+    }
+
+    public void setAddRejectsOnSetupEnd(boolean addRejectsOnSetupEnd) {
+        SecurePreferences.getInstance().setBoolean(PREF_ADD_REJECTS_ON_SETUP, addRejectsOnSetupEnd);
+    }
+
+    public boolean getAddRejectsOnSetupEnd() {
+        return SecurePreferences.getInstance().getBoolean(PREF_ADD_REJECTS_ON_SETUP, true);
     }
 
     @Override
@@ -380,5 +398,4 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
         return mGson.fromJson(ids, listType);
     }
-
 }

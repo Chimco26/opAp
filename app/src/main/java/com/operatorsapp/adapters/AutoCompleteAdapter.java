@@ -96,22 +96,37 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
                 machinesResults.clear();
                 machinesResults.addAll(mMachines);
                 FilterResults filterResults = new FilterResults();
-                if (constraint != null) {
 
-                    Iterator<Machine> iterator = machinesResults.iterator();
-                    while (iterator.hasNext()) {
-                        Machine machine = iterator.next();
-                        int machineId = machine.getId();
-                        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineEName() : machine.getMachineLName();
-                        String machineName = nameByLang == null ? "" : nameByLang;
-                        if (!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase())) {
-                            iterator.remove();
-                        }
+                Iterator<Machine> iterator = machinesResults.iterator();
+                while (iterator.hasNext()) {
+                    Machine machine = iterator.next();
+                    int machineId = machine.getId();
+                    String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineEName() : machine.getMachineLName();
+                    String machineName = nameByLang == null ? "" : nameByLang;
+                    if (!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        iterator.remove();
                     }
-
-                    filterResults.values = machinesResults;
-                    filterResults.count = machinesResults.size();
                 }
+
+                filterResults.values = machinesResults;
+                filterResults.count = machinesResults.size();
+
+//                if (constraint != null) {
+//
+//                    Iterator<Machine> iterator = machinesResults.iterator();
+//                    while (iterator.hasNext()) {
+//                        Machine machine = iterator.next();
+//                        int machineId = machine.getId();
+//                        String nameByLang = OperatorApplication.isEnglishLang() ? machine.getMachineEName() : machine.getMachineLName();
+//                        String machineName = nameByLang == null ? "" : nameByLang;
+//                        if (!(machineId + " - " + machineName).toLowerCase().contains(constraint.toString().toLowerCase())) {
+//                            iterator.remove();
+//                        }
+//                    }
+//
+//                    filterResults.values = machinesResults;
+//                    filterResults.count = machinesResults.size();
+//                }
                 return filterResults;
             }
 
