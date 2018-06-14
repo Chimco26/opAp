@@ -581,7 +581,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         switch (position) {
                             case 0: {
                                 ZLogger.d(LOG_TAG, "New Job");
-                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+//                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                                mListener.onJobActionItemClick();
                                 break;
                             }
                             case 1: {
@@ -1305,6 +1306,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onEventSelected(Integer event, boolean b);
 
         void onClearAllSelectedEvents();
+
+        void onJobActionItemClick();
     }
 
 }

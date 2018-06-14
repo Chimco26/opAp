@@ -9,7 +9,7 @@
         android:topLeftRadius="0dp"
         android:topRightRadius="30dp" />
 
-    <solid android:color="@color/dismiss_dialog" />
+    <solid android:color="@color/blue1" />
 
     <padding
         android:bottom="0dp"

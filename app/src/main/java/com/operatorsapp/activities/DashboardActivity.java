@@ -1172,6 +1172,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onJobActionItemClick() {
+
+        Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
+
+        startActivity(intent);
+    }
+
+    @Override
     public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment) {
 
         mSelectStopReasonFragment = selectStopReasonFragment;

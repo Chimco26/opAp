@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/login_dialog_dismiss"
-            android:textColor="@color/dismiss_dialog"
+            android:textColor="@color/blue1"
             android:textSize="20sp" />
     </LinearLayout>
 

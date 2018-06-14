@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="83dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/ISJAM_tv1"
+            android:layout_width="250dp"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:text="@string/name"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/ISJAM_tv2"
+            android:layout_width="193dp"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:text="@string/catalog"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/ISJAM_tv3"
+            android:layout_width="256dp"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:text="@string/amount"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:alpha="0.5"
+        android:background="@color/default_gray" />
+
+</LinearLayout>

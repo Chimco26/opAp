@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="606dp"
+    android:layout_height="492dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/combined_shape"
+        android:orientation="vertical"
+        android:paddingBottom="19dp"
+        android:paddingEnd="19dp"
+        android:paddingStart="19dp"
+        android:paddingTop="17dp">
+
+        <LinearLayout
+            android:id="@+id/JAMI_title_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/JAMI_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:id="@+id/JAMI_sub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/name"
+                    android:textColor="@color/default_gray"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="193dp"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/catalog"
+                    android:textColor="@color/default_gray"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="256dp"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/amount"
+                    android:textColor="@color/default_gray"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/default_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/JAMI_split_ly"
+                    android:layout_width="match_parent"
+                    android:layout_height="380dp"
+                    android:orientation="vertical" />
+
+            </ScrollView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="match_parent" />
+</LinearLayout>
