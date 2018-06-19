@@ -3,14 +3,17 @@ package com.operatorsapp.utils;
 import android.support.annotation.NonNull;
 
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
-import com.operatorsapp.server.NetworkManager;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.List;
@@ -114,6 +117,52 @@ public class SimpleRequests {
                     }
                 } else {
                     ZLogger.w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public void getPendingJobList(String siteUrl, final GetPendingJobListCallback callback, GetPendingJobListNetworkManager getPendingJobListNetworkManager,
+                                  ActivateJobRequest activateJobRequest, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<PendingJobResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(activateJobRequest);
+
+        call.enqueue(new Callback<PendingJobResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<PendingJobResponse> call, @NonNull Response<PendingJobResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onGetPendingJobListSuccess(response.body());
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "getPendingJobList(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PendingJobResponse> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getPendingJobList_Failed Error");
+                        callback.onGetPendingJobListFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "getPendingJobList(), onFailure() callback is null");
 
                 }
             }

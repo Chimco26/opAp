@@ -2,18 +2,29 @@ package com.operatorsapp.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.reportrejectinfra.GetPendingJobListCallback;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.JobHeadersAdaper;
+import com.operatorsapp.adapters.PendingJobsAdapter;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.SimpleRequests;
 
 import java.util.ArrayList;
 
-public class JobActionActivity extends AppCompatActivity implements View.OnClickListener {
+public class JobActionActivity extends AppCompatActivity implements View.OnClickListener, JobHeadersAdaper.JobHeadersAdaperListener, PendingJobsAdapter.PendingJobsAdapterListener {
 
     private static final String TAG = JobActionActivity.class.getSimpleName();
     private TextView mTitleTv;
@@ -30,8 +41,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private TextView mTit2Line1Tv5;
     private TextView mTit2Line1Tv6;
     private EditText mSearchViewEt;
-    private RecyclerView mSearchViewRv;
-    private RecyclerView mResultProductRv;
+    private RecyclerView mHeadersRv;
+    private RecyclerView mPendingJobsRv;
     private ImageView mProductShema;
     private ImageView mProductImage;
     private View mProductShemaNoImageLy;
@@ -45,6 +56,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView mMoldItemRv;
     private RecyclerView mActionRv;
     private View mActionItemLy;
+    private PendingJobResponse mPendingJobs;
+    private JobHeadersAdaper mHeadersAdapter;
+    private PendingJobsAdapter mPendingJobsAdaper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +67,35 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         initVars();
 
-        initView();
-
         initListener();
+
+        getPendingJoblist();
+    }
+
+    private void getPendingJoblist() {
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        simpleRequests.getPendingJobList(persistanceManager.getSiteUrl(), new GetPendingJobListCallback() {
+
+            @Override
+            public void onGetPendingJobListSuccess(Object response) {
+
+                mPendingJobs = (PendingJobResponse) response;
+
+                initView();
+
+            }
+
+            @Override
+            public void onGetPendingJobListFailed(ErrorObjectInterface reason) {
+
+            }
+        }, NetworkManager.getInstance(), new ActivateJobRequest(persistanceManager.getSessionId(), persistanceManager.getMachineId()), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+
     }
 
     private void initVars() {
@@ -127,11 +167,22 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initVarsSearch() {
         mSearchViewEt = findViewById(R.id.AJA_search_et);
-        mSearchViewRv = findViewById(R.id.AJA_search_rv);
-        mResultProductRv = findViewById(R.id.AJA_product_rv);
+        mHeadersRv = findViewById(R.id.AJA_search_rv);
+        mPendingJobsRv = findViewById(R.id.AJA_product_rv);
+
     }
 
     private void initView() {
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mHeadersAdapter = new JobHeadersAdaper((ArrayList<Header>) mPendingJobs.getHeaders(), this, this);
+        mHeadersRv.setLayoutManager(layoutManager);
+        mHeadersRv.setAdapter(mHeadersAdapter);
+
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mPendingJobsAdaper = new PendingJobsAdapter((ArrayList<PandingJob>) mPendingJobs.getPandingJobs(), this, this);
+        mPendingJobsRv.setLayoutManager(layoutManager2);
+        mPendingJobsRv.setAdapter(mPendingJobsAdaper);
 
     }
 
@@ -158,5 +209,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
 
         return "";
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
