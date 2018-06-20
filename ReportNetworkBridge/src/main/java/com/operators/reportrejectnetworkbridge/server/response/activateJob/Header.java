@@ -25,6 +25,16 @@ public class Header implements Parcelable {
     @Expose
     private Boolean showOnHeader;
 
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public String getDisplayName() {
         return displayName;
     }
@@ -101,4 +111,6 @@ public class Header implements Parcelable {
             return new Header[size];
         }
     };
+
+
 }

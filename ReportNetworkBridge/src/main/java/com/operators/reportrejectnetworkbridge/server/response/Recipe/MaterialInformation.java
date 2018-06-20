@@ -1,41 +1,61 @@
 package com.operators.reportrejectnetworkbridge.server.response.Recipe;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
+
 /**
  * Awesome Pojo Generator
- * */
+ */
 public class MaterialInformation implements Parcelable {
-  @SerializedName("FileUrl")
-  @Expose
-  private List<String> FileUrl;
-  @SerializedName("CatalogID")
-  @Expose
-  private String CatalogID;
-  @SerializedName("Name")
-  @Expose
-  private String Name;
-  public void setFileUrl(List<String> FileUrl){
-   this.FileUrl=FileUrl;
-  }
-  public List<String> getFileUrl(){
-   return FileUrl;
-  }
-  public void setCatalogID(String CatalogID){
-   this.CatalogID=CatalogID;
-  }
-  public String getCatalogID(){
-   return CatalogID;
-  }
-  public void setName(String Name){
-   this.Name=Name;
-  }
-  public String getName(){
-   return Name;
-  }
+    @SerializedName("FileUrl")
+    @Expose
+    private List<String> FileUrl;
+    @SerializedName("CatalogID")
+    @Expose
+    private String CatalogID;
+    @SerializedName("Name")
+    @Expose
+    private String Name;
+    @SerializedName("MaterialGroup")
+    @Expose
+    private String materialGroup;
+
+    public String getMaterialGroup() {
+        return materialGroup;
+    }
+
+    public void setMaterialGroup(String materialGroup) {
+        this.materialGroup = materialGroup;
+    }
+
+    public void setFileUrl(List<String> FileUrl) {
+        this.FileUrl = FileUrl;
+    }
+
+    public List<String> getFileUrl() {
+        return FileUrl;
+    }
+
+    public void setCatalogID(String CatalogID) {
+        this.CatalogID = CatalogID;
+    }
+
+    public String getCatalogID() {
+        return CatalogID;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    public String getName() {
+        return Name;
+    }
 
     @Override
     public int describeContents() {
@@ -47,6 +67,7 @@ public class MaterialInformation implements Parcelable {
         dest.writeStringList(this.FileUrl);
         dest.writeString(this.CatalogID);
         dest.writeString(this.Name);
+        dest.writeString(this.materialGroup);
     }
 
     public MaterialInformation() {
@@ -56,6 +77,7 @@ public class MaterialInformation implements Parcelable {
         this.FileUrl = in.createStringArrayList();
         this.CatalogID = in.readString();
         this.Name = in.readString();
+        this.materialGroup = in.readString();
     }
 
     public static final Parcelable.Creator<MaterialInformation> CREATOR = new Parcelable.Creator<MaterialInformation>() {

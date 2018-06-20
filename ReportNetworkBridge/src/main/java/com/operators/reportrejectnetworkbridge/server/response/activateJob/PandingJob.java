@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PandingJob implements Parcelable {
+public class PandingJob implements Parcelable{
 
 
     @SerializedName("ID")
@@ -17,6 +17,16 @@ public class PandingJob implements Parcelable {
     @SerializedName("Properties")
     @Expose
     private List<Property> properties = null;
+
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public Integer getID() {
         return iD;
@@ -64,4 +74,5 @@ public class PandingJob implements Parcelable {
             return new PandingJob[size];
         }
     };
+
 }

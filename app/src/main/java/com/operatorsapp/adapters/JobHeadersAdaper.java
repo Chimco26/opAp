@@ -12,22 +12,27 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Heade
 import com.operatorsapp.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.ViewHolder> {
 
     private final Context mContext;
     private final ArrayList<Header> mHeaders;
+    private final HashMap<String, Header> mHashMapHeader;
 
     private JobHeadersAdaperListener mListener;
 
 
-    public JobHeadersAdaper(ArrayList<Header> list, JobHeadersAdaperListener listener, Context context) {
+    public JobHeadersAdaper(ArrayList<Header> list, HashMap<String, Header> hashMapHeaders, JobHeadersAdaperListener listener, Context context) {
 
         mListener = listener;
 
         mContext = context;
 
         mHeaders = list;
+
+        mHashMapHeader = hashMapHeaders;
+
     }
 
 
@@ -42,13 +47,43 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
     @Override
     public void onBindViewHolder(@NonNull final JobHeadersAdaper.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mTv.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        viewHolder.mTv.setTextColor(mContext.getResources().getColor(R.color.blue1));
-
-//   TODO     viewHolder.mTv.setBackgroundColor(mContext.getResources().getColor(R.color.blue1));
-//        viewHolder.mTv.setTextColor(mContext.getResources().getColor(R.color.white));
-
         viewHolder.mTv.setText(mHeaders.get(position).getDisplayName());
+
+        if (mHashMapHeader.get(mHeaders.get(position).getName()).isSelected()) {
+
+            updateView(viewHolder, R.color.blue1, R.color.white);
+
+        }else {
+
+            updateView(viewHolder, R.color.white, R.color.blue1);
+
+        }
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mHashMapHeader.get(mHeaders.get(position).getName()).isSelected()){
+
+                    mHashMapHeader.get(mHeaders.get(position).getName()).setSelected(false);
+                    updateView(viewHolder, R.color.white, R.color.blue1);
+
+                }else {
+
+                    mHashMapHeader.get(mHeaders.get(position).getName()).setSelected(true);
+                    updateView(viewHolder, R.color.blue1, R.color.white);
+
+                }
+                notifyDataSetChanged();
+                mListener.onHeaderSelected(mHashMapHeader);
+            }
+        });
+
+    }
+
+    public void updateView(@NonNull ViewHolder viewHolder, int blue1, int white) {
+        viewHolder.mTv.setBackgroundColor(mContext.getResources().getColor(blue1));
+        viewHolder.mTv.setTextColor(mContext.getResources().getColor(white));
     }
 
     @Override
@@ -56,7 +91,7 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
         if (mHeaders != null) {
             return mHeaders.size();
         } else
-        return 0;
+            return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,5 +109,6 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
 
     public interface JobHeadersAdaperListener {
 
+        void onHeaderSelected(HashMap<String, Header> mHashMapHeader);
     }
 }

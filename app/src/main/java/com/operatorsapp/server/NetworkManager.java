@@ -25,6 +25,7 @@ import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFie
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetAllRecipe;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetJobDetails;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetPendingJobList;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetVersion;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendApproveFirstItem;
@@ -33,6 +34,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInven
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
@@ -74,7 +76,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         ApproveFirstItemNetworkManagerInterface,
         GetAllRecipeNetworkManagerInterface,
         GetVersionNetworkManager,
-        GetPendingJobListNetworkManager{
+        GetPendingJobListNetworkManager,
+        GetJobDetailsNetworkManager{
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -668,5 +671,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "approveEmeraldGetPendingJobListRequests");
         }
         return mRetrofit.create(EmeraldGetPendingJobList.class);
+    }
+
+    @Override
+    public EmeraldGetJobDetails emeraldGetJobDetails(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldGetJobDetails.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldGetJobDetailsRequests");
+        }
+        return mRetrofit.create(EmeraldGetJobDetails.class);
     }
 }

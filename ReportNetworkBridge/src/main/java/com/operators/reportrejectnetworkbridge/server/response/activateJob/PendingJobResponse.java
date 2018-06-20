@@ -2,14 +2,16 @@ package com.operators.reportrejectnetworkbridge.server.response.activateJob;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.service.autofill.Dataset;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-public class PendingJobResponse extends Response implements Parcelable {
+public class PendingJobResponse extends Response implements Parcelable{
 
     @SerializedName("PandingJobs")
     @Expose
@@ -46,6 +48,7 @@ public class PendingJobResponse extends Response implements Parcelable {
     }
 
     public PendingJobResponse() {
+
     }
 
     protected PendingJobResponse(Parcel in) {

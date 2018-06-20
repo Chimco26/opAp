@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Property implements Parcelable {
+public class Property implements Parcelable{
 
 
     @SerializedName("Key")
@@ -46,6 +46,11 @@ public class Property implements Parcelable {
     public Property() {
     }
 
+    public Property(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
     protected Property(Parcel in) {
         this.key = in.readString();
         this.value = in.readString();
@@ -62,4 +67,6 @@ public class Property implements Parcelable {
             return new Property[size];
         }
     };
+
+
 }

@@ -3,9 +3,11 @@ package com.operatorsapp.utils;
 import android.support.annotation.NonNull;
 
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
@@ -13,6 +15,8 @@ import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesReque
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -27,7 +31,7 @@ public class SimpleRequests {
 
     private static final String LOG_TAG = SimpleRequests.class.getSimpleName();
 
-    public SimpleRequests(){
+    public SimpleRequests() {
 
     }
 
@@ -138,6 +142,7 @@ public class SimpleRequests {
                     if (callback != null) {
 
                         callback.onGetPendingJobListSuccess(response.body());
+
                     } else {
 
                         ZLogger.w(LOG_TAG, "getPendingJobList(), onResponse() callback is null");
@@ -163,6 +168,53 @@ public class SimpleRequests {
                     }
                 } else {
                     ZLogger.w(LOG_TAG, "getPendingJobList(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public void getJobDetails(String siteUrl, final GetJobDetailsCallback callback, GetJobDetailsNetworkManager getJobDetailsNetworkManager,
+                              JobDetailsRequest jobDetailsRequest, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<JobDetailsResponse> call = getJobDetailsNetworkManager.emeraldGetJobDetails(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(jobDetailsRequest);
+
+        call.enqueue(new Callback<JobDetailsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<JobDetailsResponse> call, @NonNull Response<JobDetailsResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onGetJobDetailsSuccess(response.body());
+
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "getJobDetails(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JobDetailsResponse> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getJobDeatils_Failed Error");
+                        callback.onGetJobDetailsFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "getJobDetails(), onFailure() callback is null");
 
                 }
             }

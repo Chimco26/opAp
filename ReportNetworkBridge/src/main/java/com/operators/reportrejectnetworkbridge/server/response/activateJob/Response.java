@@ -62,15 +62,4 @@ public class Response implements Parcelable {
         this.leaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
-    public static final Creator<Response> CREATOR = new Creator<Response>() {
-        @Override
-        public Response createFromParcel(Parcel source) {
-            return new Response(source);
-        }
-
-        @Override
-        public Response[] newArray(int size) {
-            return new Response[size];
-        }
-    };
 }
