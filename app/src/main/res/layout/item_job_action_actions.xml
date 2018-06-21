@@ -8,8 +8,9 @@
     
     <CheckBox
         android:id="@+id/IJAA_checkbox"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:gravity="center_vertical"
         android:button="@drawable/selector_item_job_action_actions"/>
 
     <TextView
@@ -17,7 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:gravity="center_vertical"
-        android:textSize="35sp"
+        android:maxLines="1"
+        android:textSize="25sp"
         android:textColor="@color/black"
         android:layout_marginStart="17dp"/>
 

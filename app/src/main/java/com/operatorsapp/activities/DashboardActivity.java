@@ -1177,6 +1177,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         startActivity(intent);
+
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null){
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
     }
 
     @Override
@@ -1370,7 +1377,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (mActionBarAndEventsFragment != null){
 
-                mActionBarAndEventsFragment.setFromGallery(true);
+                mActionBarAndEventsFragment.setFromAnotherActivity(true);
             }
 
         }

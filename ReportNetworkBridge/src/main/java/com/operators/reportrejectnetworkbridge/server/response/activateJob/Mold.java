@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class Mold implements Parcelable {
+public class Mold implements Parcelable {
 
     @SerializedName("Catalog")
     @Expose

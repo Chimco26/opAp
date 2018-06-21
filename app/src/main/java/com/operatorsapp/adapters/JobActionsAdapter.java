@@ -6,29 +6,31 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operatorsapp.R;
-import com.operatorsapp.model.GalleryModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.ViewHolder> {
 
     private final Context mContext;
+    private final ArrayList<Action> mActions;
 
     private JobActionsAdapterListener mListener;
 
 
-    public JobActionsAdapter(ArrayList<String> list, JobActionsAdapterListener listener, Context context) {
+    public JobActionsAdapter(List<Action> list, JobActionsAdapterListener listener, Context context) {
 
         mListener = listener;
 
         mContext = context;
+
+        mActions = (ArrayList<Action>) list;
     }
 
 
@@ -43,15 +45,40 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final JobActionsAdapter.ViewHolder viewHolder, final int position) {
 
+        updateCheckBox(viewHolder, position);
 
+        viewHolder.mTv.setText(mActions.get(position).getText());
+
+        viewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                mActions.get(position).setIsSelected(isChecked);
+
+                updateCheckBox(viewHolder, position);
+
+                mListener.onActionChecked(mActions.get(position));
+            }
+        });
+    }
+
+    public void updateCheckBox(@NonNull ViewHolder viewHolder, int position) {
+        if (mActions.get(position).getIsSelected()){
+
+            viewHolder.mCheckBox.setChecked(true);
+
+        }else {
+
+            viewHolder.mCheckBox.setChecked(false);
+        }
     }
 
     @Override
     public int getItemCount() {
-//        if (mGalleryModels != null) {
-//            return mGalleryModels.size();
-//        } else
- return 0;
+        if (mActions != null) {
+            return mActions.size();
+        } else
+            return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,5 +100,6 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
 
     public interface JobActionsAdapterListener {
 
+        void onActionChecked(Action action);
     }
 }

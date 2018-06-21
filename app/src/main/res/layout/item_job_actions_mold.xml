@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="395dp"
+    android:layout_width="420dp"
     android:layout_height="340dp"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@drawable/combined_shape"
+        android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingEnd="24dp"
         android:paddingStart="24dp"
@@ -22,10 +22,10 @@
                 android:id="@+id/IJAM_title"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:layout_centerVertical="true"/>
+                android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/IJAM_img"
@@ -43,10 +43,114 @@
             android:layout_marginTop="14dp"
             android:background="@color/default_gray" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/IJAM_rv"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="61dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/IJAM_mold1_tv1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:text="@string/name"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/IJAM_mold1_tv2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/IJAM_mold2_tv1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:text="@string/mold_catalog"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/IJAM_mold2_tv2"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/IJAM_mold3_tv1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:text="@string/cavities_actual"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/IJAM_mold3_tv2"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/IJAM_mold4_tv1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:text="@string/cavities_standard"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/IJAM_mold4_tv2"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

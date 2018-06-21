@@ -8,22 +8,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Material;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.JobActionActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsSplitAdapter.ViewHolder> {
 
     private final Context mContext;
+    private final List<Material> mMaterials;
 
     private JobMaterialsSplitAdapterListener mListener;
 
 
-    public JobMaterialsSplitAdapter(ArrayList<String> list, JobMaterialsSplitAdapterListener listener, Context context) {
+    public JobMaterialsSplitAdapter(List<Material> list, JobMaterialsSplitAdapterListener listener, Context context) {
 
         mListener = listener;
 
         mContext = context;
+
+        mMaterials = list;
     }
 
 
@@ -38,14 +44,18 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
     @Override
     public void onBindViewHolder(@NonNull final JobMaterialsSplitAdapter.ViewHolder viewHolder, final int position) {
 
+        viewHolder.mNameTv.setText(mMaterials.get(position).getName());
 
+        viewHolder.mCatalogTv.setText(mMaterials.get(position).getCatalog());
+
+        viewHolder.mAmountTv.setText(String.format("%s %d", mMaterials.get(position).getAmount(), mMaterials.get(position).getAmountUnits()));
     }
 
     @Override
     public int getItemCount() {
-//        if (mGalleryModels != null) {
-//            return mGalleryModels.size();
-//        } else
+        if (mMaterials != null) {
+            return mMaterials.size();
+        } else
         return 0;
     }
 

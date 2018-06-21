@@ -2,6 +2,7 @@ package com.operators.reportrejectnetworkbridge.server.response.activateJob;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Job {
     private List<String> productFiles = null;
     @SerializedName("Recipe")
     @Expose
-    private Recipe recipe;
+    private RecipeResponse recipe;
 
     public List<Action> getActions() {
         return actions;
@@ -66,11 +67,11 @@ public class Job {
         this.productFiles = productFiles;
     }
 
-    public Recipe getRecipe() {
+    public RecipeResponse getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(Recipe recipe) {
+    public void setRecipe(RecipeResponse recipe) {
         this.recipe = recipe;
     }
 }

@@ -1,20 +1,33 @@
 package com.operatorsapp.activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnErrorListener;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
@@ -23,22 +36,36 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Pandi
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdaper;
+import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
+import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.DownloadHelper;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.shockwave.pdfium.PdfDocument;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JobActionActivity extends AppCompatActivity implements View.OnClickListener, JobHeadersAdaper.JobHeadersAdaperListener, PendingJobsAdapter.PendingJobsAdapterListener {
+public class JobActionActivity extends AppCompatActivity implements View.OnClickListener,
+        JobHeadersAdaper.JobHeadersAdaperListener,
+        PendingJobsAdapter.PendingJobsAdapterListener,
+        DownloadHelper.DownloadFileListener,
+        JobMaterialsSplitAdapter.JobMaterialsSplitAdapterListener,
+        JobActionsAdapter.JobActionsAdapterListener,
+        RecipeFragment.OnRecipeFragmentListener {
 
     private static final String TAG = JobActionActivity.class.getSimpleName();
+    private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
     private TextView mTitleTv;
     private TextView mTitlLine1Tv1;
     private TextView mTitlLine1Tv2;
@@ -52,9 +79,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private TextView mTit2Line1Tv4;
     private TextView mTit2Line1Tv5;
     private TextView mTit2Line1Tv6;
-    private ImageView mProductShema;
+    private PDFView mProductPdfView;
     private ImageView mProductImage;
-    private View mProductShemaNoImageLy;
+    private View mProductPdfNoImageLy;
     private View mProductImageNoImageLy;
     private TextView mMaterialItemTitleTv;
     private RecyclerView mMaterialItemRv;
@@ -75,6 +102,20 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<Header> mHeaders = new ArrayList<>();
     private ArrayList<PandingJob> mPandingJobs = new ArrayList<>();
     private ArrayList<PandingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
+    private JobDetailsResponse mCurrentJobDetails;
+    private PandingJob mCurrentPendingJob;
+    private DownloadHelper mDownloadHelper;
+    private String mFirstPdf;
+    private JobMaterialsSplitAdapter mMaterialAdapter;
+    private TextView mMoldNameTv;
+    private TextView mMoldMoldCatalogTv;
+    private TextView mMoldcavitiesActualTv;
+    private TextView mMoldCavitiesStandardTv;
+    private JobActionsAdapter mActionsAdapter;
+    private TextView mActionsTitleTv;
+    private RecipeFragment mRecipefragment;
+    private Intent mGalleryIntent;
+    private ArrayList<PdfObject> mPdfList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +126,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         initListener();
 
+        mDownloadHelper = new DownloadHelper(this, this);
+
         getPendingJoblist();
+
+        SoftKeyboardUtil.hideKeyboard(this);
+
     }
 
     private void getPendingJoblist() {
@@ -113,7 +159,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                     sortHeaders();
 
-                    initView();
+                    initLeftView();
+
+                    mCurrentPendingJob = mPendingJobsResponse.getPandingJobs().get(0);
 
                     ArrayList<Integer> jobIds = new ArrayList<>();
                     jobIds.add(mPendingJobsResponse.getPandingJobs().get(0).getID());
@@ -143,7 +191,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onGetJobDetailsSuccess(Object response) {
 
-                mTitleTv.setText(String.valueOf(((JobDetailsResponse) response).getJobs().get(0).getID()));
+                mCurrentJobDetails = (JobDetailsResponse) response;
+                initRightView();
             }
 
             @Override
@@ -153,6 +202,175 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
 
+    }
+
+    public void initRightView() {
+
+        mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+
+        initImagesViews();
+
+        initViewsTitleLine();
+
+        initViewsMaterialItem();
+
+        initViewsMoldItem();
+
+        initActionsItemView();
+    }
+
+    private void initActionsItemView() {
+
+        if (mCurrentJobDetails.getJobs().get(0).getActions() != null) {
+
+            mActionsTitleTv.setText(getString(R.string.actions));
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+            mActionRv.setLayoutManager(layoutManager);
+
+            mActionsAdapter = new JobActionsAdapter(mCurrentJobDetails.getJobs().get(0).getActions(), this, this);
+
+            mActionRv.setAdapter(mActionsAdapter);
+
+        } else {
+
+            mActionItemLy.setVisibility(View.GONE);
+        }
+    }
+
+    private void initViewsMoldItem() {
+
+        if (mCurrentJobDetails.getJobs().get(0).getMold() != null) {
+
+
+            mMoldItemTitleTv.setText(R.string.mold);
+
+            for (String url : mCurrentJobDetails.getJobs().get(0).getMold().getFiles()) {
+
+                if (!url.endsWith("pdf")) {
+
+                    ImageLoader.getInstance().displayImage(url, mMoldItemImg);
+
+                    break;
+                }
+            }
+
+            mMoldNameTv.setText(mCurrentJobDetails.getJobs().get(0).getMold().getName());
+
+            mMoldMoldCatalogTv.setText(mCurrentJobDetails.getJobs().get(0).getMold().getCatalog());
+
+            mMoldcavitiesActualTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getCavitiesActual()));
+
+            mMoldCavitiesStandardTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getCavitiesStandard()));
+
+        } else {
+
+            mMoldItem.setVisibility(View.GONE);
+        }
+    }
+
+    public void initImagesViews() {
+
+        String firstImage = null;
+        mFirstPdf = null;
+
+        for (String url : mCurrentJobDetails.getJobs().get(0).getProductFiles()) {
+
+            if (url.endsWith("pdf")) {
+
+                if (mFirstPdf == null) {
+
+                    mFirstPdf = url;
+
+                }
+            } else {
+
+                if (firstImage == null) {
+
+                    firstImage = url;
+                }
+            }
+        }
+
+        if (mFirstPdf != null) {
+
+            if (isStoragePermissionGranted()) {
+
+                mDownloadHelper.downloadFileFromUrl(mFirstPdf);
+            }
+
+        } else {
+
+            mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+            mProductPdfView.setVisibility(View.INVISIBLE);
+
+        }
+
+        if (firstImage != null) {
+
+            ImageLoader.getInstance().displayImage(firstImage, mProductImage);
+
+            mProductImageNoImageLy.setVisibility(View.INVISIBLE);
+            mProductImage.setVisibility(View.VISIBLE);
+
+        } else {
+
+            mProductImageNoImageLy.setVisibility(View.VISIBLE);
+            mProductImage.setVisibility(View.INVISIBLE);
+
+        }
+
+    }
+
+    private void initViewsMaterialItem() {
+
+        if (mCurrentJobDetails.getJobs().get(0).getMaterials() != null) {
+
+            mMaterialItemTitleTv.setText(R.string.materials);
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+            mMaterialItemRv.setLayoutManager(layoutManager);
+
+            mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), this, this);
+
+            mMaterialItemRv.setAdapter(mMaterialAdapter);
+
+        } else {
+
+            mMaterialItem.setVisibility(View.GONE);
+        }
+    }
+
+    private void initViewsTitleLine() {
+
+        if (mCurrentPendingJob.getProperties() != null) {
+            if (mCurrentPendingJob.getProperties().size() > 0) {
+                mTitlLine1Tv1.setText(mCurrentPendingJob.getProperties().get(0).getKey());
+                mTitlLine1Tv2.setText(mCurrentPendingJob.getProperties().get(0).getValue());
+            }
+            if (mCurrentPendingJob.getProperties().size() > 1) {
+                mTitlLine1Tv3.setText(mCurrentPendingJob.getProperties().get(1).getKey());
+                mTitlLine1Tv4.setText(mCurrentPendingJob.getProperties().get(1).getValue());
+            }
+            if (mCurrentPendingJob.getProperties().size() > 2) {
+                mTitlLine1Tv5.setText(mCurrentPendingJob.getProperties().get(2).getKey());
+                mTitlLine1Tv6.setText(mCurrentPendingJob.getProperties().get(2).getValue());
+            }
+            if (mCurrentPendingJob.getProperties().size() > 3) {
+                mTit2Line1Tv1.setText(mCurrentPendingJob.getProperties().get(3).getKey());
+                mTit2Line1Tv2.setText(mCurrentPendingJob.getProperties().get(3).getValue());
+            }
+            if (mCurrentPendingJob.getProperties().size() > 4) {
+                mTit2Line1Tv3.setText(mCurrentPendingJob.getProperties().get(4).getKey());
+                mTit2Line1Tv4.setText(mCurrentPendingJob.getProperties().get(4).getValue());
+            }
+            if (mCurrentPendingJob.getProperties().size() > 5) {
+                mTit2Line1Tv5.setText(mCurrentPendingJob.getProperties().get(5).getKey());
+                mTit2Line1Tv6.setText(mCurrentPendingJob.getProperties().get(5).getValue());
+            }
+        }
     }
 
     private void headerListToHashMap(List<Header> headers) {
@@ -170,11 +388,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mTitleTv = findViewById(R.id.AJA_job_id_tv);
 
-        mProductShema = findViewById(R.id.AJA_img1);
+        mProductPdfView = findViewById(R.id.AJA_img1);
 
         mProductImage = findViewById(R.id.AJA_img2);
 
-        mProductShemaNoImageLy = findViewById(R.id.AJA_img1_no_image);
+        mProductPdfNoImageLy = findViewById(R.id.AJA_img1_no_image);
 
         mProductImageNoImageLy = findViewById(R.id.AJA_img2_no_image);
 
@@ -195,6 +413,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mActionItemLy = findViewById(R.id.AJA_actions_ly);
 
         mActionRv = findViewById(R.id.AJA_actions_rv);
+
+        mActionsTitleTv = findViewById(R.id.AJA_actions_tv);
     }
 
     private void initVarsMoldItem() {
@@ -205,7 +425,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mMoldItemImg = mMoldItem.findViewById(R.id.IJAM_img);
 
-        mMoldItemRv = mMoldItem.findViewById(R.id.IJAM_rv);
+        mMoldNameTv = mMoldItem.findViewById(R.id.IJAM_mold1_tv2);
+
+        mMoldMoldCatalogTv = mMoldItem.findViewById(R.id.IJAM_mold2_tv2);
+
+        mMoldcavitiesActualTv = mMoldItem.findViewById(R.id.IJAM_mold3_tv2);
+
+        mMoldCavitiesStandardTv = mMoldItem.findViewById(R.id.IJAM_mold4_tv2);
     }
 
     private void initVarsMaterialItem() {
@@ -240,7 +466,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void initView() {
+    private void initLeftView() {
 
         initRecyclerViews();
 
@@ -254,6 +480,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mHeadersRv.setLayoutManager(layoutManager);
         mHeadersRv.setAdapter(mHeadersAdapter);
 
+        mPandingJobs.get(0).setSelected(true);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mPandingJobsAdaper = new PendingJobsAdapter(mPandingJobs, mHashMapHeaders, this, this);
         mPendingJobsRv.setLayoutManager(layoutManager2);
@@ -265,6 +492,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.AJA_back_btn).setOnClickListener(this);
         findViewById(R.id.AJA_search_btn).setOnClickListener(this);
         findViewById(R.id.AJA_job_activate_btn).setOnClickListener(this);
+        findViewById(R.id.AJA_item_material).setOnClickListener(this);
+        findViewById(R.id.AJA_img1).setOnClickListener(this);
+        findViewById(R.id.AJA_img2).setOnClickListener(this);
 
         mSearchViewEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -332,9 +562,87 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public boolean isStoragePermissionGranted() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+
+            } else {
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+                return false;
+            }
+        } else {
+
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            mDownloadHelper.downloadFileFromUrl(mFirstPdf);
+
+        } else {
+
+            mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+
+            case R.id.AJA_back_btn:
+
+                onBackPressed();
+
+                break;
+
+            case R.id.AJA_search_btn:
+
+                break;
+
+            case R.id.AJA_job_activate_btn:
+
+                break;
+
+            case R.id.AJA_item_material:
+
+                showRecipeFragment();
+
+                break;
+
+            case R.id.AJA_img1:
+
+                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
+                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+
+                break;
+
+            case R.id.AJA_img2:
+
+                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
+                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+                
+                break;
+        }
+    }
+
+    private void showRecipeFragment() {
+
+        mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
+
+        getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(JOB_ACTION_FRAGMENT).commit();
     }
 
     @Override
@@ -392,8 +700,106 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onPandingJobSelected(PandingJob pandingJob) {
 
+        mCurrentPendingJob = pandingJob;
         ArrayList<Integer> jobIds = new ArrayList<>();
-        jobIds.add(mPendingJobsResponse.getPandingJobs().get(0).getID());
+        jobIds.add(pandingJob.getID());
         getJobDetails(jobIds);
+    }
+
+    @Override
+    public void onPostExecute(File file) {
+
+        loadPdfView(Uri.fromFile(file));
+    }
+
+    private void loadPdfView(Uri uri) {
+
+        mProductPdfView.fromUri(uri)
+                .defaultPage(0)
+                .enableSwipe(true)
+                .swipeHorizontal(false)
+                .enableAnnotationRendering(true)
+                .onLoad(new OnLoadCompleteListener() {
+                    @Override
+                    public void loadComplete(int nbPages) {
+
+                        mProductPdfNoImageLy.setVisibility(View.INVISIBLE);
+                        mProductPdfView.setVisibility(View.VISIBLE);
+
+                        PdfDocument.Meta meta = mProductPdfView.getDocumentMeta();
+                        printBookmarksTree(mProductPdfView.getTableOfContents(), "-");
+
+                    }
+                })
+                .onError(new OnErrorListener() {
+                    @Override
+                    public void onError(Throwable t) {
+
+
+                    }
+                })
+                .scrollHandle(new DefaultScrollHandle(this))
+                .load();
+    }
+
+    public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
+        for (PdfDocument.Bookmark b : tree) {
+
+            Log.e(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
+
+            if (b.hasChildren()) {
+                printBookmarksTree(b.getChildren(), sep + "-");
+            }
+        }
+    }
+
+    @Override
+    public void onLoadFileError() {
+
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onActionChecked(Action action) {
+
+    }
+
+    @Override
+    public void onImageProductClick(List<String> fileUrl, String name) {
+
+        startGalleryActivity(fileUrl, name);
+    }
+
+    private void startGalleryActivity(List<String> fileUrl, String name) {
+
+        if (fileUrl != null && fileUrl.size() > 0) {
+
+            mGalleryIntent = new Intent(JobActionActivity.this, GalleryActivity.class);
+
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
+
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_FILES_TITLE, name);
+
+            mGalleryIntent.putExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES, mPdfList);
+
+            startActivityForResult(mGalleryIntent, GalleryActivity.EXTRA_GALLERY_CODE);
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

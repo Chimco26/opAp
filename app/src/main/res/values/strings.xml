@@ -195,6 +195,12 @@
     <string name="name">Name</string>
     <string name="catalog">Catalog</string>
     <string name="amount">Amount</string>
+    <string name="materials">Materials</string>
+    <string name="mold">Mold</string>
+    <string name="mold_catalog">Mold Catalog</string>
+    <string name="cavities_actual">Cavities Actual</string>
+    <string name="cavities_standard">Cavities Standard</string>
+    <string name="actions">Actions</string>
 
 
 </resources>

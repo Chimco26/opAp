@@ -12,12 +12,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="72dp"
             android:background="@drawable/rectangle_11_copy_2">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
+                android:layout_height="68dp"
                 android:background="@color/dark_blue_two"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -30,7 +30,7 @@
                     android:gravity="center"
                     android:text="@string/smaller_than_symbole"
                     android:textColor="@color/white"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -44,6 +44,10 @@
             </LinearLayout>
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="20dp"
-                    android:paddingEnd="23dp"
-                    android:paddingStart="24dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
                     android:paddingTop="8dp">
 
                     <TextView
@@ -135,10 +139,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="31dp"
-                android:paddingEnd="23dp"
-                android:paddingStart="53dp"
-                android:paddingTop="26dp">
+                android:paddingBottom="15dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -160,8 +164,8 @@
 
                         <Button
                             android:id="@+id/AJA-job_activate_btn"
-                            android:layout_width="241dp"
-                            android:layout_height="56dp"
+                            android:layout_width="220dp"
+                            android:layout_height="50dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:background="@color/dark_blue_two"
@@ -174,7 +178,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="15dp"
                         android:background="@color/divider_gray" />
 
                     <LinearLayout
@@ -186,7 +190,7 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv1"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp"
@@ -194,14 +198,14 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv2"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv3"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:layout_marginStart="30dp"
@@ -210,14 +214,14 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv4"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv5"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="30dp"
                             android:textColor="@color/default_gray"
@@ -226,7 +230,7 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line1_tv6"
-                            android:layout_width="120dp"
+                            android:layout_width="130dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp" />
@@ -241,7 +245,7 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv1"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp"
@@ -249,14 +253,14 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv2"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv3"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:layout_marginStart="30dp"
@@ -265,14 +269,14 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv4"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
                             android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv5"
-                            android:layout_width="120dp"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="30dp"
                             android:textColor="@color/default_gray"
@@ -281,17 +285,17 @@
 
                         <TextView
                             android:id="@+id/AJA_title_line2_tv6"
-                            android:layout_width="120dp"
+                            android:layout_width="130dp"
                             android:layout_height="match_parent"
                             android:textColor="@color/default_gray"
-                            android:textSize="25sp" />
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:layout_marginTop="27dp"
+                        android:layout_marginTop="12dp"
                         android:background="@color/divider_gray" />
 
                     <ScrollView
@@ -307,22 +311,24 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:gravity="center_horizontal"
                                 android:layout_marginTop="28dp">
 
                                 <RelativeLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/combined_shape">
 
-                                    <ImageView
+                                    <com.github.barteksc.pdfviewer.PDFView
                                         android:id="@+id/AJA_img1"
-                                        android:layout_width="390dp"
+                                        android:layout_width="420dp"
                                         android:layout_height="244dp"
-                                        android:background="@drawable/combined_shape"
-                                        android:padding="10dp" />
+                                        android:padding="10dp"
+                                        android:background="@color/transparentColor"/>
 
                                     <LinearLayout
                                         android:id="@+id/AJA_img1_no_image"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="420dp"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:layout_centerInParent="true"
@@ -347,16 +353,21 @@
 
                                 </RelativeLayout>
 
+                                <View
+                                    android:layout_width="29dp"
+                                    android:layout_height="match_parent" />
+
                                 <RelativeLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content">
+                                    android:layout_width="420dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/combined_shape"
+                                    >
 
                                     <ImageView
                                         android:id="@+id/AJA_img2"
-                                        android:layout_width="390dp"
+                                        android:layout_width="420dp"
                                         android:layout_height="244dp"
                                         android:layout_marginStart="29dp"
-                                        android:background="@drawable/combined_shape"
                                         android:padding="10dp" />
 
                                     <LinearLayout
@@ -392,6 +403,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:gravity="center_horizontal"
                                 android:layout_marginTop="52dp">
 
                                 <include
@@ -418,6 +430,7 @@
                                 android:padding="24dp">
 
                                 <TextView
+                                    android:id="@+id/AJA_actions_tv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="42dp"
                                     android:textSize="25sp"
@@ -445,6 +458,12 @@
 
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/AJA_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>
