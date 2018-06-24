@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,10 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -27,30 +30,41 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
+import com.operators.reportrejectinfra.PostActivateJobCallback;
+import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
+import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdaper;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.fragments.RecipeFragment;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DownloadHelper;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
-import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -62,10 +76,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         DownloadHelper.DownloadFileListener,
         JobMaterialsSplitAdapter.JobMaterialsSplitAdapterListener,
         JobActionsAdapter.JobActionsAdapterListener,
-        RecipeFragment.OnRecipeFragmentListener {
+        RecipeFragment.OnRecipeFragmentListener, OnCroutonRequestListener, CroutonCreator.CroutonListener {
 
     private static final String TAG = JobActionActivity.class.getSimpleName();
     private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
+    public static final String EXTRA_ACTIVATE_JOB_RESPONSE = "EXTRA_ACTIVATE_JOB_RESPONSE";
+    public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
+    public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
     private TextView mTitleTv;
     private TextView mTitlLine1Tv1;
     private TextView mTitlLine1Tv2;
@@ -116,11 +133,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private RecipeFragment mRecipefragment;
     private Intent mGalleryIntent;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
+    private CroutonCreator mCroutonCreator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_action);
+
+        mCroutonCreator = new CroutonCreator();
 
         initVars();
 
@@ -130,8 +150,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         getPendingJoblist();
 
-        SoftKeyboardUtil.hideKeyboard(this);
-
     }
 
     private void getPendingJoblist() {
@@ -139,6 +157,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         SimpleRequests simpleRequests = new SimpleRequests();
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        ProgressDialogManager.show(this);
 
         simpleRequests.getPendingJobList(persistanceManager.getSiteUrl(), new GetPendingJobListCallback() {
 
@@ -167,6 +187,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     jobIds.add(mPendingJobsResponse.getPandingJobs().get(0).getID());
                     getJobDetails(jobIds);
 
+                    ProgressDialogManager.dismiss();
+
                 }
 
             }
@@ -174,8 +196,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onGetPendingJobListFailed(ErrorObjectInterface reason) {
 
+                ProgressDialogManager.dismiss();
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
+                ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
             }
-        }, NetworkManager.getInstance(), new ActivateJobRequest(persistanceManager.getSessionId(), persistanceManager.getMachineId()), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+        }, NetworkManager.getInstance(), new GetPendingJobListRequest(persistanceManager.getSessionId(), persistanceManager.getMachineId()), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
 
     }
@@ -186,11 +212,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
+        ProgressDialogManager.show(this);
+
         simpleRequests.getJobDetails(persistanceManager.getSiteUrl(), new GetJobDetailsCallback() {
 
             @Override
             public void onGetJobDetailsSuccess(Object response) {
 
+                ProgressDialogManager.dismiss();
                 mCurrentJobDetails = (JobDetailsResponse) response;
                 initRightView();
             }
@@ -198,15 +227,85 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onGetJobDetailsFailed(ErrorObjectInterface reason) {
 
+                ProgressDialogManager.dismiss();
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
+                ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), new JobDetailsRequest(persistanceManager.getSessionId(), jobIds), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
 
     }
 
+    private void postUpdateActions(Action action) {
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        ActionsUpdateRequest actionsUpdateRequest = new ActionsUpdateRequest(persistanceManager.getSessionId(), null);
+
+        actionsUpdateRequest.setActions(new ActionsByJob(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()), persistanceManager.getOperatorId(), null));
+
+        actionsUpdateRequest.getActions().setActions(Collections.singletonList(action));
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        simpleRequests.postUpdtaeActions(persistanceManager.getSiteUrl(), new PostUpdtaeActionsCallback() {
+
+            @Override
+            public void onPostUpdtaeActionsSuccess(Object response) {
+
+            }
+
+            @Override
+            public void onPostUpdtaeActionsFailed(ErrorObjectInterface reason) {
+
+            }
+        }, NetworkManager.getInstance(), actionsUpdateRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+
+    }
+
+    private void postActivateJob(ActivateJobRequest activateJobRequest) {
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        ProgressDialogManager.show(this);
+
+        simpleRequests.postActivateJob(persistanceManager.getSiteUrl(), new PostActivateJobCallback() {
+
+            @Override
+            public void onPostActivateJobSuccess(Object response) {
+
+                finishActivity((Response)response);
+            }
+
+            @Override
+            public void onPostActivateJobFailed(ErrorObjectInterface reason) {
+
+                finishActivity(null);
+            }
+        }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+
+    }
+
+    public void finishActivity(Response response) {
+        Intent intent = getIntent();
+        intent.putExtra(EXTRA_ACTIVATE_JOB_RESPONSE, response);
+        intent.putExtra(EXTRA_ACTIVATE_JOB_ID, mCurrentJobDetails.getJobs().get(0).getID());
+
+        setResult(RESULT_OK, intent);
+
+        ProgressDialogManager.dismiss();
+
+        finish();
+    }
+
     public void initRightView() {
 
-        mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+        initTitleView();
 
         initImagesViews();
 
@@ -219,7 +318,23 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         initActionsItemView();
     }
 
+    public void initTitleView() {
+
+        mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+
+        for (Property property: mCurrentPendingJob.getProperties()){
+
+            if (property.getKey().equals("ERPJobID")){
+
+                mTitleTv.setText(String.format("ERPJobID (%s)", String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
+
+            }
+        }
+    }
+
     private void initActionsItemView() {
+
+        mCurrentJobDetails.getJobs().get(0).setActions(sortActions(mCurrentJobDetails.getJobs().get(0).getActions()));
 
         if (mCurrentJobDetails.getJobs().get(0).getActions() != null) {
 
@@ -237,6 +352,26 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mActionItemLy.setVisibility(View.GONE);
         }
+    }
+
+    private List<Action> sortActions(List<Action> actions) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            actions.sort(new Comparator<Action>() {
+                @Override
+                public int compare(Action o1, Action o2) {
+                    if (o1.getOrder().equals(o2.getOrder())) {
+                        return 0;
+                    } else if (o1.getOrder() <
+                            o2.getOrder()) {
+                        return -1;
+                    }
+                    return 1;
+                }
+            });
+        }
+
+        return actions;
     }
 
     private void initViewsMoldItem() {
@@ -345,32 +480,41 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initViewsTitleLine() {
 
-        if (mCurrentPendingJob.getProperties() != null) {
-            if (mCurrentPendingJob.getProperties().size() > 0) {
-                mTitlLine1Tv1.setText(mCurrentPendingJob.getProperties().get(0).getKey());
-                mTitlLine1Tv2.setText(mCurrentPendingJob.getProperties().get(0).getValue());
-            }
-            if (mCurrentPendingJob.getProperties().size() > 1) {
-                mTitlLine1Tv3.setText(mCurrentPendingJob.getProperties().get(1).getKey());
-                mTitlLine1Tv4.setText(mCurrentPendingJob.getProperties().get(1).getValue());
-            }
-            if (mCurrentPendingJob.getProperties().size() > 2) {
-                mTitlLine1Tv5.setText(mCurrentPendingJob.getProperties().get(2).getKey());
-                mTitlLine1Tv6.setText(mCurrentPendingJob.getProperties().get(2).getValue());
-            }
-            if (mCurrentPendingJob.getProperties().size() > 3) {
-                mTit2Line1Tv1.setText(mCurrentPendingJob.getProperties().get(3).getKey());
-                mTit2Line1Tv2.setText(mCurrentPendingJob.getProperties().get(3).getValue());
-            }
-            if (mCurrentPendingJob.getProperties().size() > 4) {
-                mTit2Line1Tv3.setText(mCurrentPendingJob.getProperties().get(4).getKey());
-                mTit2Line1Tv4.setText(mCurrentPendingJob.getProperties().get(4).getValue());
-            }
-            if (mCurrentPendingJob.getProperties().size() > 5) {
-                mTit2Line1Tv5.setText(mCurrentPendingJob.getProperties().get(5).getKey());
-                mTit2Line1Tv6.setText(mCurrentPendingJob.getProperties().get(5).getValue());
+        ArrayList<Property> properties = new ArrayList<>();
+
+        for (Property property : mCurrentPendingJob.getProperties()) {
+
+            if (mHashMapHeaders.get(property.getKey()).getShowOnHeader()) {
+
+                properties.add(property);
             }
         }
+
+        if (properties.size() > 0) {
+            mTitlLine1Tv1.setText(properties.get(0).getKey());
+            mTitlLine1Tv2.setText(properties.get(0).getValue());
+        }
+        if (properties.size() > 1) {
+            mTitlLine1Tv3.setText(properties.get(1).getKey());
+            mTitlLine1Tv4.setText(properties.get(1).getValue());
+        }
+        if (properties.size() > 2) {
+            mTitlLine1Tv5.setText(properties.get(2).getKey());
+            mTitlLine1Tv6.setText(properties.get(2).getValue());
+        }
+        if (properties.size() > 3) {
+            mTit2Line1Tv1.setText(properties.get(3).getKey());
+            mTit2Line1Tv2.setText(properties.get(3).getValue());
+        }
+        if (properties.size() > 4) {
+            mTit2Line1Tv3.setText(properties.get(4).getKey());
+            mTit2Line1Tv4.setText(properties.get(4).getValue());
+        }
+        if (properties.size() > 5) {
+            mTit2Line1Tv5.setText(properties.get(5).getKey());
+            mTit2Line1Tv6.setText(properties.get(5).getValue());
+        }
+
     }
 
     private void headerListToHashMap(List<Header> headers) {
@@ -614,6 +758,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
+                PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                        String.valueOf(persistenceManager.getMachineId()),
+                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+                        persistenceManager.getOperatorId()));
+
                 break;
 
             case R.id.AJA_item_material:
@@ -633,7 +783,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
                         String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
-                
+
                 break;
         }
     }
@@ -766,6 +916,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onActionChecked(Action action) {
 
+        postUpdateActions(action);
+    }
+
+    @Override
+    public void onOpenActionDetails(Action action) {
+
+        showActionDialog(action);
     }
 
     @Override
@@ -801,5 +958,57 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    private void showActionDialog(final Action action) {
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        final EditText editText = new EditText(this);
+        editText.setHint(R.string.you_can_add_a_note);
+        alert.setTitle(R.string.action_details);
+        alert.setMessage(action.getText());
+
+        alert.setView(editText);
+
+        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                action.setNotes(editText.getText().toString());
+                postUpdateActions(action);
+            }
+        });
+
+        alert.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                dialog.dismiss();
+
+            }
+        });
+
+        alert.show();
+    }
+
+    @Override
+    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+
+        mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_ly, croutonType, this);
+
+    }
+
+    @Override
+    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+
+    }
+
+    @Override
+    public void onHideConnectivityCroutonRequest() {
+
+    }
+
+    @Override
+    public void onCroutonDismiss() {
+
     }
 }

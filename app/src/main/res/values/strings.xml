@@ -201,6 +201,13 @@
     <string name="cavities_actual">Cavities Actual</string>
     <string name="cavities_standard">Cavities Standard</string>
     <string name="actions">Actions</string>
+    <string name="action_details">Action details</string>
+    <string name="you_can_add_a_note">You can add a note</string>
+    <string name="close">Close</string>
+    <string name="add">Add</string>
+    <string name="start_job_success">Start Job Success</string>
+    <string name="get_panding_jobs_failed_error">Get Panding Jobs Failed Error</string>
+    <string name="get_jobs_details_failed_error">Get Job Details Failed Error</string>
 
 
 </resources>

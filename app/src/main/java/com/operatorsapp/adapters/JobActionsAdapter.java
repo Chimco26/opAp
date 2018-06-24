@@ -60,6 +60,14 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
                 mListener.onActionChecked(mActions.get(position));
             }
         });
+
+        viewHolder.mOpenBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mListener.onOpenActionDetails(mActions.get(position));
+            }
+        });
     }
 
     public void updateCheckBox(@NonNull ViewHolder viewHolder, int position) {
@@ -87,12 +95,16 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
 
         private final TextView mTv;
 
+        private final View mOpenBtn;
+
         ViewHolder(View itemView) {
             super(itemView);
 
             mCheckBox = itemView.findViewById(R.id.IJAA_checkbox);
 
             mTv = itemView.findViewById(R.id.IJAA_tv);
+
+            mOpenBtn = itemView.findViewById(R.id.IJAA_open_btn);
 
         }
 
@@ -101,5 +113,7 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
     public interface JobActionsAdapterListener {
 
         void onActionChecked(Action action);
+
+        void onOpenActionDetails(Action action);
     }
 }

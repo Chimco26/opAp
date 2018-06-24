@@ -6,15 +6,21 @@ import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
+import com.operators.reportrejectinfra.PostActivateJobCallback;
+import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
@@ -128,11 +134,11 @@ public class SimpleRequests {
     }
 
     public void getPendingJobList(String siteUrl, final GetPendingJobListCallback callback, GetPendingJobListNetworkManager getPendingJobListNetworkManager,
-                                  ActivateJobRequest activateJobRequest, final int totalRetries, int requestTimeout) {
+                                  GetPendingJobListRequest getPendingJobListRequest, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
 
-        Call<PendingJobResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(activateJobRequest);
+        Call<PendingJobResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
 
         call.enqueue(new Callback<PendingJobResponse>() {
             @Override
@@ -220,4 +226,101 @@ public class SimpleRequests {
             }
         });
     }
+
+    public void postUpdtaeActions(String siteUrl, final PostUpdtaeActionsCallback callback, PostUpdtaeActionsNetworkManager postUpdateActionsNetworkManager,
+                                  ActionsUpdateRequest actionsUpdateRequest, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call = postUpdateActionsNetworkManager.emeraldpostUpdateActions(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdtaeActionsRequest(actionsUpdateRequest);
+
+        call.enqueue(new Callback<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response>() {
+            @Override
+            public void onResponse(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call,
+                                   @NonNull Response<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onPostUpdtaeActionsSuccess(response.body());
+
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "postUpdtaeActions(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "postUpdtaeActions_Failed Error");
+                        callback.onPostUpdtaeActionsFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "postUpdtaeActions(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public void postActivateJob(String siteUrl, final PostActivateJobCallback callback, PostActivateJobNetworkManager postActivateJobNetworkManager,
+                                ActivateJobRequest activateJobRequest, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call = postActivateJobNetworkManager.emeraldPostActivateJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postActivateJobRequest(activateJobRequest);
+
+        call.enqueue(new Callback<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response>() {
+            @Override
+            public void onResponse(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call,
+                                   @NonNull Response<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onPostActivateJobSuccess(response.body());
+
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "PostActivateJob(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                        callback.onPostActivateJobFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "PostActivateJob(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
 }

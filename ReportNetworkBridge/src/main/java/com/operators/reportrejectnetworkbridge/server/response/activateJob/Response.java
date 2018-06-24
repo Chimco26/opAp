@@ -18,6 +18,18 @@ public class Response implements Parcelable {
     @Expose
     private Integer leaderRecordID;
 
+    public static final Creator<Response> CREATOR = new Creator<Response>() {
+        @Override
+        public Response createFromParcel(Parcel in) {
+            return new Response(in);
+        }
+
+        @Override
+        public Response[] newArray(int size) {
+            return new Response[size];
+        }
+    };
+
     public Boolean getFunctionSucceed() {
         return functionSucceed;
     }
