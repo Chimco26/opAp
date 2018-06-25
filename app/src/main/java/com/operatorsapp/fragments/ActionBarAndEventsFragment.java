@@ -144,7 +144,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Event mLastEvent;
     private View mParentLy;
     private Fragment mVisiblefragment;
-    private boolean mFromGallery;
+    private boolean mFromAnotherActivity;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -400,9 +400,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ZLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
 
-        if(mFromGallery){
+        if(mFromAnotherActivity){
 
-            mFromGallery = false;
+            mFromAnotherActivity = false;
 
             return;
         }
@@ -581,7 +581,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         switch (position) {
                             case 0: {
                                 ZLogger.d(LOG_TAG, "New Job");
-                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+//                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+                                mListener.onJobActionItemClick();
                                 break;
                             }
                             case 1: {
@@ -1289,8 +1290,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mVisiblefragment = visibleFragment;
     }
 
-    public void setFromGallery(boolean fromGallery) {
-        this.mFromGallery = fromGallery;
+    public void setFromAnotherActivity(boolean fromAnotherActivity) {
+        this.mFromAnotherActivity = fromAnotherActivity;
     }
 
     public interface ActionBarAndEventsFragmentListener {
@@ -1305,6 +1306,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onEventSelected(Integer event, boolean b);
 
         void onClearAllSelectedEvents();
+
+        void onJobActionItemClick();
     }
 
 }

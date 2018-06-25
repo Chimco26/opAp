@@ -2,11 +2,9 @@ package com.operatorsapp.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -42,7 +40,7 @@ public class ViewTagsHelper {
 
         TextView textView = new TextView(context);
 
-        textView.setTextColor(context.getResources().getColor(R.color.dismiss_dialog));
+        textView.setTextColor(context.getResources().getColor(R.color.blue1));
 
         textView.setGravity(Gravity.CENTER_VERTICAL);
 

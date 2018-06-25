@@ -36,9 +36,13 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".activities.GalleryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustNothing" />
 
-
-        <activity android:name=".activities.GalleryActivity"
+        <activity android:name=".activities.JobActionActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing"/>

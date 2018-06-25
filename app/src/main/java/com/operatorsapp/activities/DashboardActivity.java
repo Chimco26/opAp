@@ -49,7 +49,9 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
@@ -708,21 +710,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 }
 
-                mAllDashboardDataCore.stopPolling();
-
-                NetworkManager.getInstance().clearPollingRequest();
-
-                mAllDashboardDataCore.startPolling();
-
-                PersistenceManager.getInstance().setJobId(mSelectJobId);
-
-                if (mRecipeFragment != null) {
-
-                    getAllRecipes(mSelectJobId, true);
-
-                    mPdfList = new ArrayList<>();
-
-                }
+                startJob();
             }
 
 
@@ -733,6 +721,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
             }
         });
+    }
+
+    public void startJob() {
+        mAllDashboardDataCore.stopPolling();
+
+        NetworkManager.getInstance().clearPollingRequest();
+
+        mAllDashboardDataCore.startPolling();
+
+        PersistenceManager.getInstance().setJobId(mSelectJobId);
+
+        if (mRecipeFragment != null) {
+
+            getAllRecipes(mSelectJobId, true);
+
+            mPdfList = new ArrayList<>();
+
+        }
     }
 
     @Override
@@ -1174,6 +1180,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onJobActionItemClick() {
+
+        Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
+
+        startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
+
+        ignoreFromOnPause = true;
+
+        if (mActionBarAndEventsFragment != null){
+
+            mActionBarAndEventsFragment.setFromAnotherActivity(true);
+        }
+    }
+
+    @Override
     public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment) {
 
         mSelectStopReasonFragment = selectStopReasonFragment;
@@ -1364,7 +1385,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             if (mActionBarAndEventsFragment != null){
 
-                mActionBarAndEventsFragment.setFromGallery(true);
+                mActionBarAndEventsFragment.setFromAnotherActivity(true);
             }
 
         }
@@ -1382,6 +1403,33 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ignoreFromOnPause = true;
 
             mPdfList = data.getParcelableArrayListExtra(GalleryActivity.EXTRA_RECIPE_PDF_FILES);
+
+        }
+
+        if (resultCode == RESULT_OK && requestCode == JobActionActivity.EXTRA_ACTIVATE_JOB_CODE){
+            ignoreFromOnPause = true;
+            Object response = data.getParcelableExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
+
+            if (response == null){
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+
+            }else if (((Response)response).getError() != null){
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+
+
+            }else if (response != null && ((Response)response).getError() == null){
+
+                mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
+
+                startJob();
+
+                ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, getString(R.string.start_job_success));
+
+            }
 
         }
 

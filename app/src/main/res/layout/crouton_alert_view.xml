@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/login_dialog_dismiss"
-                android:textColor="@color/dismiss_dialog"
+                android:textColor="@color/blue1"
                 android:textSize="14sp" />
 
         </LinearLayout>

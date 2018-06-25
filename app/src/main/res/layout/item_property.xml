@@ -27,7 +27,7 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textColor="@color/dismiss_dialog"
+            android:textColor="@color/blue1"
             android:textSize="25sp" />
 
     </LinearLayout>

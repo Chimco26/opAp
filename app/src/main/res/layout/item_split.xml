@@ -30,7 +30,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/dismiss_dialog"
+            android:textColor="@color/blue1"
             android:textSize="20sp" />
 
         <TextView

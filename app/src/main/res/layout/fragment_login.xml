@@ -25,7 +25,7 @@
             android:id="@+id/ravtech_test"
             android:layout_width="10dp"
             android:layout_height="50dp"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
