@@ -367,7 +367,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
 
-        SendBroadcast.refreshPolling(getContext());
+//        SendBroadcast.refreshPolling(getContext());
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
@@ -375,6 +375,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportSuccess()
         {
+            SendBroadcast.refreshPolling(getContext());
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 

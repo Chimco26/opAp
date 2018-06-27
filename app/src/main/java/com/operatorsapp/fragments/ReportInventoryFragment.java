@@ -299,12 +299,13 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
 
-        SendBroadcast.refreshPolling(getContext());
+//        SendBroadcast.refreshPolling(getContext());
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess() {
+            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

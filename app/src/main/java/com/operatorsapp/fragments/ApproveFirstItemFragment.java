@@ -295,7 +295,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         mReportCore.sendApproveFirstItem(mSelectedReasonId, mSelectedTechnicianId, mJobId);
-        SendBroadcast.refreshPolling(getContext());
+//        SendBroadcast.refreshPolling(getContext());
 
     }
 
@@ -304,6 +304,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportSuccess()
         {
+            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

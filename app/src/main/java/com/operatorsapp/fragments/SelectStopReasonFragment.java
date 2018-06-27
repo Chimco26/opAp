@@ -205,7 +205,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             sendReport();
 
-            SendBroadcast.refreshPolling(getContext());
+//            SendBroadcast.refreshPolling(getContext());
 
         } else {
 
@@ -262,6 +262,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess() {
+            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");

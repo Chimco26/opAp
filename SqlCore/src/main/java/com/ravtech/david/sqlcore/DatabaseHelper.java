@@ -18,6 +18,9 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static final long MIN_EVENT_DURATION_MILLIS = 1000 * 60 * 2;
+
+
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
@@ -226,6 +229,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return c;
 
+    }
+
+    public  Cursor getCursorOrderByTimeFilterByDuration() {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE "+ KEY_GROUP_ID + " = 20" +
+                " OR (" + KEY_GROUP_ID + " !=20" + " AND " + KEY_DURATION + " > " + getMinimumDurationLimit() + ")" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(countQuery, null);
+
+        return c;
+
+    }
+
+    private String getMinimumDurationLimit() {
+        return String.valueOf(MIN_EVENT_DURATION_MILLIS / (60 * 1000));
     }
 
     public  Cursor getStopTypeShiftOrderByTime() {

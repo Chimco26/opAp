@@ -213,18 +213,18 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
     }
 
     private void refreshSendButtonState()
+{
+    if(canSendReport())
     {
-        if(canSendReport())
-        {
-            mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-            mReportButton.setEnabled(true);
-        }
-        else
-        {
-            mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
-            mReportButton.setEnabled(false);
-        }
+        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
+        mReportButton.setEnabled(true);
     }
+    else
+    {
+        mReportButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_bg_disabled));
+        mReportButton.setEnabled(false);
+    }
+}
 
     @Override
     public void onPause()
@@ -325,7 +325,8 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         mReportCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, mUnitsData, mWeightData, mJobId);
-        SendBroadcast.refreshPolling(getContext());
+        // TODO: 25/06/2018 check all instances and make the call after response
+//        SendBroadcast.refreshPolling(getContext());
     }
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
@@ -333,6 +334,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         @Override
         public void sendReportSuccess()
         {
+            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

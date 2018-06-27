@@ -80,6 +80,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
 
             @Override
             public void onSetOperatorSuccess() {
+                SendBroadcast.refreshPolling(getContext());
                 ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             }
@@ -141,7 +142,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             case R.id.button_selected_operator_sign_in: {
                 ProgressDialogManager.show(getActivity());
                 mOperatorCore.setOperatorForMachine(mSelectedOperator.getOperatorId());
-                SendBroadcast.refreshPolling(getContext());
+//                SendBroadcast.refreshPolling(getContext());
                 break;
             }
         }
