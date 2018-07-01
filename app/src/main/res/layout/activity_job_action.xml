@@ -8,6 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -49,420 +51,421 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/AJA_root_ly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
             <LinearLayout
-                android:id="@+id/AJA_left_layout"
-                android:layout_width="358dp"
+                android:id="@+id/AJA_root_ly"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey_transparent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingStart="20dp"
-                    android:paddingTop="8dp">
+                    android:id="@+id/AJA_left_layout"
+                    android:layout_width="358dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_transparent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="22dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/search_job_id_or_product_name"
-                        android:textColor="@color/grey1"
-                        android:textSize="18sp" />
-
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/box_strok_grey"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="12dp"
-                        android:paddingStart="8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingStart="20dp"
                         android:paddingTop="8dp">
 
-                        <EditText
-                            android:id="@+id/AJA_search_et"
-                            android:layout_width="250dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/transparentColor"
-                            android:gravity="center_vertical"
-                            android:hint="@string/search"
-                            android:textColor="@color/grey1"
-                            android:textSize="18sp" />
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="22dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="@string/search_job_id_or_product_name"-->
+                            <!--android:textColor="@color/grey1"-->
+                            <!--android:textSize="18sp" />-->
 
-                        <ImageView
-                            android:id="@+id/AJA_search_btn"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_alignParentEnd="true"
-                            android:src="@drawable/search" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@drawable/box_strok_grey"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="12dp"
+                            android:paddingStart="8dp"
+                            android:paddingTop="8dp">
 
-                    </RelativeLayout>
+                            <EditText
+                                android:id="@+id/AJA_search_et"
+                                android:layout_width="250dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/transparentColor"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search"
+                                android:textColor="@color/grey1"
+                                android:textSize="18sp" />
 
+                            <ImageView
+                                android:id="@+id/AJA_search_btn"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/search" />
+
+                        </RelativeLayout>
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/AJA_search_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="15dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider_gray" />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/AJA_search_rv"
+                        android:id="@+id/AJA_product_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_marginTop="15dp" />
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical" />
 
                 </LinearLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider_gray" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/AJA_product_rv"
-                    android:layout_width="match_parent"
+                    android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical"/>
-
-            </LinearLayout>
-            
-            <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/divider_gray"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="15dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="15dp">
+                    android:background="@color/divider_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp">
-
-                        <TextView
-                            android:id="@+id/AJA_job_id_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/blue1"
-                            android:textSize="35sp" />
-
-                        <Button
-                            android:id="@+id/AJA-job_activate_btn"
-                            android:layout_width="220dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@color/dark_blue_two"
-                            android:text="@string/activate"
-                            android:textColor="@color/white"
-                            android:textSize="25sp" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/divider_gray" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="15dp"
+                    android:paddingTop="15dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv1"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp">
 
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv2"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/AJA_job_id_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:textColor="@color/blue1"
+                                android:textSize="35sp" />
 
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv3"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:layout_marginStart="30dp"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            <Button
+                                android:id="@+id/AJA-job_activate_btn"
+                                android:layout_width="220dp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:background="@color/dark_blue_two"
+                                android:text="@string/activate"
+                                android:textColor="@color/white"
+                                android:textSize="25sp" />
 
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv4"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
+                        </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv5"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="30dp"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line1_tv6"
-                            android:layout_width="130dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv1"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv2"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv3"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:layout_marginStart="30dp"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv4"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv5"
-                            android:layout_width="140dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="30dp"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/AJA_title_line2_tv6"
-                            android:layout_width="130dp"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/default_gray"
-                            android:textSize="20sp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="12dp"
-                        android:background="@color/divider_gray" />
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@color/divider_gray" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_height="35dp"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_horizontal"
-                                android:layout_marginTop="28dp">
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv1"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
-                                <RelativeLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/combined_shape">
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv2"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
 
-                                    <com.github.barteksc.pdfviewer.PDFView
-                                        android:id="@+id/AJA_img1"
-                                        android:layout_width="420dp"
-                                        android:layout_height="244dp"
-                                        android:padding="10dp"
-                                        android:background="@color/transparentColor"/>
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv3"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="30dp"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
-                                    <LinearLayout
-                                        android:id="@+id/AJA_img1_no_image"
-                                        android:layout_width="420dp"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        android:layout_centerInParent="true"
-                                        android:gravity="center"
-                                        android:visibility="gone">
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv4"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
 
-                                        <ImageView
-                                            android:layout_width="60dp"
-                                            android:layout_height="60dp"
-                                            android:src="@drawable/default_image"/>
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv5"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="30dp"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:layout_marginTop="10dp"
-                                            android:text="@string/no_available_image"
-                                            android:textColor="@color/default_gray"
-                                            android:textSize="20sp"/>
-
-                                    </LinearLayout>
-
-                                </RelativeLayout>
-
-                                <View
-                                    android:layout_width="29dp"
-                                    android:layout_height="match_parent" />
-
-                                <RelativeLayout
-                                    android:layout_width="420dp"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/combined_shape"
-                                    >
-
-                                    <ImageView
-                                        android:id="@+id/AJA_img2"
-                                        android:layout_width="420dp"
-                                        android:layout_height="244dp"
-                                        android:layout_marginStart="29dp"
-                                        android:padding="10dp" />
-
-                                    <LinearLayout
-                                        android:id="@+id/AJA_img2_no_image"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        android:layout_centerInParent="true"
-                                        android:gravity="center"
-                                        android:visibility="gone">
-
-                                        <ImageView
-                                            android:layout_width="60dp"
-                                            android:layout_height="60dp"
-                                            android:src="@drawable/default_image"/>
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:layout_marginTop="10dp"
-                                            android:text="@string/no_available_image"
-                                            android:textColor="@color/default_gray"
-                                            android:textSize="20sp"/>
-
-                                    </LinearLayout>
-
-                                </RelativeLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_horizontal"
-                                android:layout_marginTop="52dp">
-
-                                <include
-                                    android:id="@+id/AJA_item_material"
-                                    layout="@layout/job_actions_materials_item" />
-
-                                <View
-                                    android:layout_width="29dp"
-                                    android:layout_height="match_parent" />
-
-                                <include
-                                    android:id="@+id/AJA_item_mold"
-                                    layout="@layout/item_job_actions_mold" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/AJA_actions_ly"
-                                android:layout_width="match_parent"
-                                android:layout_height="380dp"
-                                android:layout_marginTop="63dp"
-                                android:background="@drawable/combined_shape"
-                                android:orientation="vertical"
-                                android:padding="24dp">
-
-                                <TextView
-                                    android:id="@+id/AJA_actions_tv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="42dp"
-                                    android:textSize="25sp"
-                                    android:textColor="@color/black" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="2dp"
-                                    android:background="@color/divider_gray"/>
-
-                                <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/AJA_actions_rv"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/AJA_title_line1_tv6"
+                                android:layout_width="130dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
 
                         </LinearLayout>
 
-                    </ScrollView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv1"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv2"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv3"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="30dp"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv4"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv5"
+                                android:layout_width="140dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="30dp"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/AJA_title_line2_tv6"
+                                android:layout_width="130dp"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/default_gray"
+                                android:textSize="20sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@color/divider_gray" />
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="420dp"
+                                        android:layout_height="244dp"
+                                        android:background="@drawable/combined_shape">
+
+                                        <com.github.barteksc.pdfviewer.PDFView
+                                            android:id="@+id/AJA_img1"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/transparentColor"
+                                            android:padding="10dp" />
+
+                                        <LinearLayout
+                                            android:id="@+id/AJA_img1_no_image"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:gravity="center"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
+
+                                            <ImageView
+                                                android:layout_width="60dp"
+                                                android:layout_height="60dp"
+                                                android:src="@drawable/default_image" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="10dp"
+                                                android:gravity="center"
+                                                android:text="@string/no_available_pdf"
+                                                android:textColor="@color/default_gray"
+                                                android:textSize="20sp" />
+
+                                        </LinearLayout>
+
+                                    </RelativeLayout>
+
+                                    <View
+                                        android:layout_width="29dp"
+                                        android:layout_height="match_parent" />
+
+                                    <RelativeLayout
+                                        android:layout_width="420dp"
+                                        android:layout_height="244dp"
+                                        android:background="@drawable/combined_shape">
+
+                                        <ImageView
+                                            android:id="@+id/AJA_img2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:padding="10dp" />
+
+                                        <LinearLayout
+                                            android:id="@+id/AJA_img2_no_image"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:gravity="center"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
+
+                                            <ImageView
+                                                android:layout_width="60dp"
+                                                android:layout_height="60dp"
+                                                android:src="@drawable/default_image" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="10dp"
+                                                android:gravity="center"
+                                                android:text="@string/no_available_image"
+                                                android:textColor="@color/default_gray"
+                                                android:textSize="20sp" />
+
+                                        </LinearLayout>
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="32dp"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="horizontal">
+
+                                    <include
+                                        android:id="@+id/AJA_item_material"
+                                        layout="@layout/job_actions_materials_item" />
+
+                                    <View
+                                        android:layout_width="29dp"
+                                        android:layout_height="match_parent" />
+
+                                    <include
+                                        android:id="@+id/AJA_item_mold"
+                                        layout="@layout/item_job_actions_mold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/AJA_actions_ly"
+                                    android:layout_width="869dp"
+                                    android:layout_height="300dp"
+                                    android:layout_marginTop="33dp"
+                                    android:background="@drawable/combined_shape"
+                                    android:orientation="vertical"
+                                    android:layout_gravity="center_horizontal"
+                                    android:padding="24dp">
+
+                                    <TextView
+                                        android:id="@+id/AJA_actions_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="42dp"
+                                        android:textColor="@color/black"
+                                        android:textSize="25sp" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="2dp"
+                                        android:background="@color/divider_gray" />
+
+                                    <android.support.v7.widget.RecyclerView
+                                        android:id="@+id/AJA_actions_rv"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="250dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </ScrollView>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/AJA_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <FrameLayout
+                android:id="@+id/AJA_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true" />
 
         </RelativeLayout>
     </LinearLayout>

@@ -39,8 +39,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
-public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider
-{
+public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String IS_OPEN = "IS_OPEN";
@@ -116,17 +115,16 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             ZLogger.i(LOG_TAG, "No Reasons in list");
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
-        }
-        else {
+        } else {
 
             mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
             int spacing = 0;//40
 
             Configuration config = getResources().getConfiguration();
-            if(config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
-            }else {
+            } else {
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
             }
             initStopReasons();
@@ -138,12 +136,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     public void setSpanCount(boolean isOpen) {
-        if (isOpen) {
-            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
-        } else {
-            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+        if (mGridLayoutManager != null) {
+            if (isOpen) {
+                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
+            } else {
+                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+            }
+            mIsOpen = isOpen;
         }
-        mIsOpen = isOpen;
     }
 
     private void initStopReasons() {
@@ -158,18 +158,17 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         try {
 
-            for(StopReasons reasons: stopReasons){
+            for (StopReasons reasons : stopReasons) {
 
                 // TODO: DAVID VARDI Sprint 1.5: add if for filter
                 stopReasons.add(reasons);
             }
 
-        }catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
 
-            if(e.getMessage()!=null)
-                Log.e(LOG_TAG,e.getMessage());
+            if (e.getMessage() != null)
+                Log.e(LOG_TAG, e.getMessage());
         }
-
 
 
         return stopReasonsList;
@@ -199,11 +198,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
                     mReportFieldsForMachine.getStopReasons().get(position).getId(),
                     mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getLName(),mIsOpen));
+                    mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
 
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
 
-            SendReportUtil.sendAcraExeption(e,"onStopReasonSelected");
+            SendReportUtil.sendAcraExeption(e, "onStopReasonSelected");
         }
 
     }
@@ -224,8 +223,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mActiveJobsListForMachine = activeJobsListForMachine;
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 mJobId = 0;
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
@@ -245,12 +243,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.report_stop_reason_crouton_root;
     }
 
-    public interface ReportStopReasonFragmentListener{
+    public interface ReportStopReasonFragmentListener {
 
         void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment);
     }

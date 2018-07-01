@@ -45,7 +45,7 @@
         <activity android:name=".activities.JobActionActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <receiver
             android:name=".utils.broadcast.SelectStopReasonBroadcast"

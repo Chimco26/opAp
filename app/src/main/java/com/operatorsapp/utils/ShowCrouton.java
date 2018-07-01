@@ -103,6 +103,13 @@ public class ShowCrouton {
         showJobsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.ALERT_DIALOG);
     }
 
+    public static void jobsLoadingSuccessCrouton(OnCroutonRequestListener onCroutonRequestListener, String msg) {
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(msg);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, msg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        showJobsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.SUCCESS);
+    }
+
     private static void showCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {
         if (onCroutonRequestListener != null) {
             onCroutonRequestListener.onShowCroutonRequest(str, CROUTON_DURATION, R.id.parent_layouts, credentialsError);

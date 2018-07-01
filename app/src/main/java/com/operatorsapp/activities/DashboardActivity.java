@@ -189,9 +189,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         initViewPagerFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+        try {
 
-        getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+
+            getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+        }catch (IllegalStateException e){}
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
 
@@ -206,19 +209,30 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mViewPagerfragment = ViewPagerFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
+        }catch (IllegalStateException e){}
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mWidgetFragment).commit();
+
+            try {
+
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().remove(mWidgetFragment).commit();
+            }catch (IllegalStateException e){}
         }
         if (mActionBarAndEventsFragment != null) {
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+
+            try {
+
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
+            }catch (IllegalStateException e){}
         }
 //        if (mDashboardFragment != null) {
 //            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -649,7 +663,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+        }catch (IllegalStateException e){}
 
     }
 
@@ -704,7 +721,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 if (getSupportFragmentManager() != null) {
 
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    try {
+
+                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }catch (IllegalStateException e){}
 
                 }
 
@@ -787,7 +807,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore.startPolling();
 
         if (getSupportFragmentManager() != null) {
-            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            try {
+
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }catch (IllegalStateException e){}
         }
     }
 
@@ -1039,7 +1062,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         if (getSupportFragmentManager() != null) {
 
-            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            try {
+
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            }catch (IllegalStateException e){
+
+            }
 
         }
 
@@ -1113,7 +1142,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportStopReasonFragment = reportStopReasonFragment;
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
+        }catch (IllegalStateException e){}
 
     }
 
@@ -1197,7 +1229,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectStopReasonFragment = selectStopReasonFragment;
 
-        getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragment).commit();
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragment).commit();
+        }catch (IllegalStateException e){}
 
         if (mSelectStopReasonFragment != null) {
 
@@ -1229,7 +1264,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     || visible instanceof SelectStopReasonFragment
                     || visible instanceof ReportStopReasonFragment)){
 
-                getSupportFragmentManager().popBackStack();
+                try {
+
+                    getSupportFragmentManager().popBackStack();
+                }catch (IllegalStateException e){}
             }
 
         } else {
@@ -1262,24 +1300,32 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void removeSelectStopReasonFragment() {
-        getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragment).commit();
 
-        mSelectStopReasonFragment = null;
+        try {
+
+            getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragment).commit();
+
+            mSelectStopReasonFragment = null;
+        }catch (IllegalStateException e){}
 
     }
 
     private void removeReportStopReasonFragment() {
-        getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragment).commit();
 
-        mReportStopReasonFragment = null;
+        try {
 
-        if (mActionBarAndEventsFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(mReportStopReasonFragment).commit();
 
-            mActionBarAndEventsFragment.disableSelectMode();
-        }
-        if (mSelectedEvents != null) {
-            mSelectedEvents = null;
-        }
+            mReportStopReasonFragment = null;
+
+            if (mActionBarAndEventsFragment != null) {
+
+                mActionBarAndEventsFragment.disableSelectMode();
+            }
+            if (mSelectedEvents != null) {
+                mSelectedEvents = null;
+            }
+        }catch (IllegalStateException e){}
     }
 
     @Override
@@ -1415,17 +1461,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }else if (((Response)response).getError() != null){
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
 
 
-            }else if (response != null && ((Response)response).getError() == null){
+            }else if (((Response)response).getError() == null){
 
                 mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
 
                 startJob();
 
-                ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, getString(R.string.start_job_success));
+                ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
 
             }
 

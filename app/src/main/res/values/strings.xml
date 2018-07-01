@@ -208,6 +208,7 @@
     <string name="start_job_success">Start Job Success</string>
     <string name="get_panding_jobs_failed_error">Get Panding Jobs Failed Error</string>
     <string name="get_jobs_details_failed_error">Get Job Details Failed Error</string>
+    <string name="no_available_pdf">No Available Pdf</string>
 
 
 </resources>

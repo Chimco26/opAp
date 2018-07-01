@@ -18,6 +18,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DownloadHelper;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.shockwave.pdfium.PdfDocument;
@@ -324,9 +326,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         for (Property property: mCurrentPendingJob.getProperties()){
 
-            if (property.getKey().equals("ERPJobID")){
+            if (property.getKey().equals("ERPJobID") && property.getValue() != null && property.getValue().length() > 0){
 
-                mTitleTv.setText(String.format("ERPJobID (%s)", String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
+                mTitleTv.setText(String.format("%s (%s)", property.getValue(), String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
 
             }
         }
@@ -491,27 +493,27 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
 
         if (properties.size() > 0) {
-            mTitlLine1Tv1.setText(properties.get(0).getKey());
+            mTitlLine1Tv1.setText(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName());
             mTitlLine1Tv2.setText(properties.get(0).getValue());
         }
         if (properties.size() > 1) {
-            mTitlLine1Tv3.setText(properties.get(1).getKey());
+            mTitlLine1Tv3.setText(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName());
             mTitlLine1Tv4.setText(properties.get(1).getValue());
         }
         if (properties.size() > 2) {
-            mTitlLine1Tv5.setText(properties.get(2).getKey());
+            mTitlLine1Tv5.setText(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName());
             mTitlLine1Tv6.setText(properties.get(2).getValue());
         }
         if (properties.size() > 3) {
-            mTit2Line1Tv1.setText(properties.get(3).getKey());
+            mTit2Line1Tv1.setText(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName());
             mTit2Line1Tv2.setText(properties.get(3).getValue());
         }
         if (properties.size() > 4) {
-            mTit2Line1Tv3.setText(properties.get(4).getKey());
+            mTit2Line1Tv3.setText(mHashMapHeaders.get(properties.get(4).getKey()).getDisplayName());
             mTit2Line1Tv4.setText(properties.get(4).getValue());
         }
         if (properties.size() > 5) {
-            mTit2Line1Tv5.setText(properties.get(5).getKey());
+            mTit2Line1Tv5.setText(mHashMapHeaders.get(properties.get(5).getKey()).getDisplayName());
             mTit2Line1Tv6.setText(properties.get(5).getValue());
         }
 
@@ -669,7 +671,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             for (Property property : pandingJob.getProperties()) {
 
-                if (property.getValue() != null && property.getValue().contains(mSearchViewEt.getText())) {
+                if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
                     if (!mPandingJobs.contains(pandingJob)) {
                         mPandingJobs.add(pandingJob);
@@ -976,6 +978,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 action.setNotes(editText.getText().toString());
                 postUpdateActions(action);
+
             }
         });
 
