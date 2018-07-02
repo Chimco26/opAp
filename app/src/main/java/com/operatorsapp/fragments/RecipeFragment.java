@@ -231,11 +231,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
 
-            if (PersistenceManager.getInstance().getCurrentLang() == "en"){
+            if (PersistenceManager.getInstance().getCurrentLang() == "en") {
 
                 mLayoutChannel0Title.setText(recipeChannel0.getName());
 
-            }else {
+            } else {
 
                 mLayoutChannel0Title.setText(recipeChannel0.getName());
             }
@@ -454,7 +454,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mRecipeResponse = recipeResponse;
 
-        initView();
+        if (mLayoutChannel0Mainlayout != null) {
+            initView();
+        }
     }
 
     @Override

@@ -496,30 +496,39 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
 
         if (properties.size() > 0) {
-            mTitlLine1Tv1.setText(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName());
-            mTitlLine1Tv2.setText(properties.get(0).getValue());
+            mTitlLine1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName()));
+            mTitlLine1Tv2.setText(getResizedString(properties.get(0).getValue()));
         }
         if (properties.size() > 1) {
-            mTitlLine1Tv3.setText(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName());
-            mTitlLine1Tv4.setText(properties.get(1).getValue());
+            mTitlLine1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName()));
+            mTitlLine1Tv4.setText(getResizedString(properties.get(1).getValue()));
         }
         if (properties.size() > 2) {
-            mTitlLine1Tv5.setText(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName());
-            mTitlLine1Tv6.setText(properties.get(2).getValue());
+            mTitlLine1Tv5.setText(getResizedString(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName()));
+            mTitlLine1Tv6.setText(getResizedString(properties.get(2).getValue()));
         }
         if (properties.size() > 3) {
-            mTit2Line1Tv1.setText(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName());
-            mTit2Line1Tv2.setText(properties.get(3).getValue());
+            mTit2Line1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName()));
+            mTit2Line1Tv2.setText(getResizedString(properties.get(3).getValue()));
         }
         if (properties.size() > 4) {
-            mTit2Line1Tv3.setText(mHashMapHeaders.get(properties.get(4).getKey()).getDisplayName());
-            mTit2Line1Tv4.setText(properties.get(4).getValue());
+            mTit2Line1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(4).getKey()).getDisplayName()));
+            mTit2Line1Tv4.setText(getResizedString(properties.get(4).getValue()));
         }
         if (properties.size() > 5) {
-            mTit2Line1Tv5.setText(mHashMapHeaders.get(properties.get(5).getKey()).getDisplayName());
-            mTit2Line1Tv6.setText(properties.get(5).getValue());
+            mTit2Line1Tv5.setText(getResizedString(mHashMapHeaders.get(properties.get(5).getKey()).getDisplayName()));
+            mTit2Line1Tv6.setText(getResizedString(properties.get(5).getValue()));
         }
 
+    }
+
+    private String getResizedString(String s){
+
+        if (s != null && s.length() > 10) {
+           return s.substring(0, 10) + "...";
+        } else {
+            return s;
+        }
     }
 
     private void headerListToHashMap(List<Header> headers) {
