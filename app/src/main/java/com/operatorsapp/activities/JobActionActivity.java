@@ -14,10 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -868,9 +870,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mProductPdfView.fromUri(uri)
                 .defaultPage(0)
-                .enableSwipe(true)
+                .enableSwipe(false)
                 .swipeHorizontal(false)
-                .enableAnnotationRendering(true)
+                .enableAnnotationRendering(false)
                 .onLoad(new OnLoadCompleteListener() {
                     @Override
                     public void loadComplete(int nbPages) {
@@ -968,6 +970,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         final EditText editText = new EditText(this);
         editText.setHint(R.string.you_can_add_a_note);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
         alert.setTitle(R.string.action_details);
         alert.setMessage(action.getText());
 

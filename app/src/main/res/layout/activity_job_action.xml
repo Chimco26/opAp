@@ -99,6 +99,9 @@
                                 android:background="@color/transparentColor"
                                 android:gravity="center_vertical"
                                 android:hint="@string/search"
+                                android:maxLines="1"
+                                android:inputType="text"
+                                android:imeOptions="actionSearch"
                                 android:textColor="@color/grey1"
                                 android:textSize="18sp" />
 
