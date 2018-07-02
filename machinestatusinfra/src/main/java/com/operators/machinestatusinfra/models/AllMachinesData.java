@@ -69,6 +69,8 @@ public class AllMachinesData {
     @SerializedName("AddRejectsOnSetupEnd")
     private boolean addRejectsOnSetupEnd;
 
+    // TODO: 02/07/2018 add minimum duration
+
     public boolean isAddRejectsOnSetupEnd(){
         return addRejectsOnSetupEnd;
     }
