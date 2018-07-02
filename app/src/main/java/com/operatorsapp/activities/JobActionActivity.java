@@ -18,9 +18,10 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -282,7 +283,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onPostActivateJobSuccess(Object response) {
 
-                finishActivity((Response)response);
+                finishActivity((Response) response);
             }
 
             @Override
@@ -326,9 +327,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
 
-        for (Property property: mCurrentPendingJob.getProperties()){
+        for (Property property : mCurrentPendingJob.getProperties()) {
 
-            if (property.getKey().equals("ERPJobID") && property.getValue() != null && property.getValue().length() > 0){
+            if (property.getKey().equals("ERPJobID") && property.getValue() != null && property.getValue().length() > 0) {
 
                 mTitleTv.setText(String.format("%s (%s)", property.getValue(), String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
 
@@ -966,19 +967,19 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void showActionDialog(final Action action) {
 
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final EditText editText = new EditText(this);
         editText.setHint(R.string.you_can_add_a_note);
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        alert.setTitle(R.string.action_details);
-        alert.setMessage(action.getText());
+        builder.setTitle(R.string.action_details);
+        builder.setMessage(action.getText());
 
-        alert.setView(editText);
+        builder.setView(editText);
 
-        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 action.setNotes(editText.getText().toString());
@@ -987,7 +988,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        alert.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 dialog.dismiss();
@@ -995,7 +996,24 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        final AlertDialog alert = builder.create();
         alert.show();
+
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    action.setNotes(editText.getText().toString());
+                    postUpdateActions(action);
+
+                    alert.dismiss();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
