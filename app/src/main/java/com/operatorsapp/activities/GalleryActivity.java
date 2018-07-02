@@ -131,7 +131,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         Constants.Pinch.MINIMUM_ZOOM = 0.25f;
 
-        ImageLoader.getInstance().displayImage(mFileUrls.get(0), mImage);
 
         mTitleTv.setText(mTitle);
 
@@ -143,6 +142,21 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
                 "fonts/BreeSerif-Regular.ttf");
 
         mLoadingTv.setTypeface(tf);
+
+        initShowedFile();
+    }
+
+    private void initShowedFile() {
+
+        if (!mFileUrls.get(0).endsWith("pdf")) {
+
+            ImageLoader.getInstance().displayImage(mFileUrls.get(0), mImage);
+
+        }else {
+
+            openPdf(new GalleryModel(mFileUrls.get(0), true));
+
+        }
 
     }
 
