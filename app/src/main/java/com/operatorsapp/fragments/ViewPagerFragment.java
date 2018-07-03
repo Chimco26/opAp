@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ public class ViewPagerFragment extends Fragment {
     private ScreenSlidePagerAdapter mPagerAdapter;
     private OnViewPagerListener mListener;
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
+    private boolean mIsDirectionUpdated;
 
     public static ViewPagerFragment newInstance() {
         ViewPagerFragment viewPagerFragment = new ViewPagerFragment();
@@ -102,9 +102,12 @@ public class ViewPagerFragment extends Fragment {
 
     private void updateDirection(){
 
-        if (getActivity() != null && getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (!mIsDirectionUpdated && getActivity() != null && getActivity().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL){
+
             mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
         }
+
+        mIsDirectionUpdated = true;
     }
 
     public interface OnViewPagerListener {

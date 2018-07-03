@@ -65,11 +65,16 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
 
                 if (mHashMapHeader.get(mHeaders.get(position).getName()).isSelected()){
 
-                    mHashMapHeader.get(mHeaders.get(position).getName()).setSelected(false);
-                    updateView(viewHolder, R.color.white, R.color.blue1);
-
+                    for (Header header: mHeaders) {
+                        mHashMapHeader.get(header.getName()).setSelected(false);
+                        updateView(viewHolder, R.color.white, R.color.blue1);
+                    }
                 }else {
 
+                    for (Header header: mHeaders) {
+                        mHashMapHeader.get(header.getName()).setSelected(false);
+                        updateView(viewHolder, R.color.white, R.color.blue1);
+                    }
                     mHashMapHeader.get(mHeaders.get(position).getName()).setSelected(true);
                     updateView(viewHolder, R.color.blue1, R.color.white);
 

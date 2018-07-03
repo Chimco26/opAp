@@ -20,7 +20,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -62,7 +61,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DownloadHelper;
-import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.shockwave.pdfium.PdfDocument;
@@ -81,7 +79,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         DownloadHelper.DownloadFileListener,
         JobMaterialsSplitAdapter.JobMaterialsSplitAdapterListener,
         JobActionsAdapter.JobActionsAdapterListener,
-        RecipeFragment.OnRecipeFragmentListener, OnCroutonRequestListener, CroutonCreator.CroutonListener {
+        RecipeFragment.OnRecipeFragmentListener,
+        OnCroutonRequestListener,
+        CroutonCreator.CroutonListener {
 
     private static final String TAG = JobActionActivity.class.getSimpleName();
     private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
@@ -109,7 +109,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView mMaterialItemRv;
     private TextView mMoldItemTitleTv;
     private ImageView mMoldItemImg;
-    private RecyclerView mMoldItemRv;
     private RecyclerView mActionRv;
     private View mActionItemLy;
     private EditText mSearchViewEt;
@@ -283,13 +282,31 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onPostActivateJobSuccess(Object response) {
 
-                finishActivity((Response) response);
+                ProgressDialogManager.dismiss();
+
+                if (response == null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
+                } else if (((Response) response).getError() != null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
+
+                } else {
+
+                    finishActivity((Response) response);
+                }
             }
 
             @Override
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
-                finishActivity(null);
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
@@ -522,10 +539,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private String getResizedString(String s){
+    private String getResizedString(String s) {
 
         if (s != null && s.length() > 10) {
-           return s.substring(0, 10) + "...";
+            return s.substring(0, 10) + "...";
         } else {
             return s;
         }
@@ -849,7 +866,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             for (Property property : pandingJob.getProperties()) {
 
-                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()) {
+                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()
+                        && property.getValue() != null && mSearchViewEt.getText() != null &&
+                        property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
                     if (!mPandingJobs.contains(pandingJob)) {
                         mPandingJobs.add(pandingJob);
@@ -1028,13 +1047,17 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
-        mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_ly, croutonType, this);
+        mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_relative_ly, croutonType, this);
 
     }
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
+        if (mCroutonCreator != null) {
+            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds,  R.id.AJA_root_relative_ly, croutonType, this);
+
+        }
     }
 
     @Override

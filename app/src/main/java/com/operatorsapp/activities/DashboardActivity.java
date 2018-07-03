@@ -1454,18 +1454,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ignoreFromOnPause = true;
             Object response = data.getParcelableExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
-            if (response == null){
-
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
-
-            }else if (((Response)response).getError() != null){
-
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
-
-
-            }else if (((Response)response).getError() == null){
+            if (((Response)response).getError() == null){
 
                 mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
 

@@ -48,6 +48,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/AJA_root_relative_ly"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -432,7 +433,10 @@
                                     android:background="@drawable/combined_shape"
                                     android:orientation="vertical"
                                     android:layout_gravity="center_horizontal"
-                                    android:padding="24dp">
+                                    android:paddingStart="24dp"
+                                    android:paddingEnd="24dp"
+                                    android:paddingTop="24dp"
+                                    >
 
                                     <TextView
                                         android:id="@+id/AJA_actions_tv"
@@ -449,7 +453,7 @@
                                     <android.support.v7.widget.RecyclerView
                                         android:id="@+id/AJA_actions_rv"
                                         android:layout_width="match_parent"
-                                        android:layout_height="250dp" />
+                                        android:layout_height="232dp" />
 
                                 </LinearLayout>
 
