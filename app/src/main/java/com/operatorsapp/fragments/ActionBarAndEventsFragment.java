@@ -190,8 +190,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         display.getSize(size);
         int width = size.x;
         float height = size.y;
-        mOpenWidth = (int) (width * 0.4);
-        mCloseWidth = (int) (width * 0.2);
+        mOpenWidth = (int) (width * 0.33);
+        mCloseWidth = (int) (width * 0.14);
         mTollBarsHeight = (int) (height * 0.25);
         mRecyclersHeight = (int) ((1 - (mTollBarsHeight / height)) * height);
 

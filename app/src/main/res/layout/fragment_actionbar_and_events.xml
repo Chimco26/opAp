@@ -183,7 +183,7 @@
 
         <LinearLayout
             android:id="@+id/fragment_dashboard_shiftlog"
-            android:layout_width="164dp"
+            android:layout_width="124dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@drawable/side_menu"

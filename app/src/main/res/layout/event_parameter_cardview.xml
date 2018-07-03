@@ -8,13 +8,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/event_parameter_title_layout"
-            android:layout_width="154dp"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -57,6 +57,21 @@
                 android:maxLines="1"
                 android:textSize="18sp"
                 autofit:minTextSize="18sp" />
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/event_parameter_shift_log_item_sub_reason"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                autofit:minTextSize="14sp"
+                android:visibility="visible"/>
 
 
         </LinearLayout>

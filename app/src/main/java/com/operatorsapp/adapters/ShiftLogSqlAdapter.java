@@ -73,6 +73,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
         private final CheckBox mStopEventCheckBox;
+        private TextView mParameterSubReasonTv;
         //    private LinearLayout mStoppedParentLayout;
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
@@ -135,6 +136,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mParameterDivider = itemView.findViewById(R.id.event_parameter_shift_log_divider);
             mParameterSubtitle = itemView.findViewById(R.id.event_parameter_shift_log_item_subtitle);
             mParameterBottomDivider = itemView.findViewById(R.id.event_parameter_shift_log_bottom_divider);
+            mParameterSubReasonTv = itemView.findViewById(R.id.event_parameter_shift_log_item_sub_reason);
         }
     }
 
@@ -375,6 +377,18 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             holder.mParameterMin.setText(String.valueOf(event.getAlarmLValue()));
             holder.mParameterMax.setText(String.valueOf(event.getAlarmHValue()));
             holder.mParameterStandard.setText(String.valueOf(event.getAlarmStandardValue()));
+            String subtitleParameterNameByLang = event.getSubtitleEname();
+            if (subtitleNameByLang != null) {
+
+                if (subtitleNameByLang.length() > 15) {
+                    holder.mParameterSubReasonTv.setText(subtitleParameterNameByLang.substring(0, 15) + "...");
+                } else {
+                    holder.mParameterSubReasonTv.setText(subtitleParameterNameByLang);
+                }
+                holder.mParameterSubReasonTv.setVisibility(View.VISIBLE);
+            } else {
+                holder.mParameterSubReasonTv.setVisibility(View.GONE);
+            }
             if (mClosedState) {
                 holder.mParameterDivider.setVisibility(View.GONE);
                 holder.mParameterSubtitle.setVisibility(View.INVISIBLE);
