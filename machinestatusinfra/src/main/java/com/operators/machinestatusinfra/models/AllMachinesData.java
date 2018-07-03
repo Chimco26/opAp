@@ -68,6 +68,8 @@ public class AllMachinesData {
     private boolean displayRejectFactor;
     @SerializedName("AddRejectsOnSetupEnd")
     private boolean addRejectsOnSetupEnd;
+    @SerializedName("minEventDuration")
+    private int minEventDuration;
 
     // TODO: 02/07/2018 add minimum duration
 
@@ -204,5 +206,13 @@ public class AllMachinesData {
 
     public void setConfigName(String pConfigName) {
         this.pConfigName = pConfigName;
+    }
+
+    public int getMinEventDuration() {
+        return minEventDuration;
+    }
+
+    public void setMinEventDuration(int minEventDuration) {
+        this.minEventDuration = minEventDuration;
     }
 }

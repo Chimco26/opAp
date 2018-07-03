@@ -18,7 +18,7 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final long MIN_EVENT_DURATION_MILLIS = 1000 * 60 * 2;
+    //private static final long MIN_EVENT_DURATION_MILLIS = 1000 * 60 * 2;
 
 
     // Logcat tag
@@ -231,10 +231,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public  Cursor getCursorOrderByTimeFilterByDuration() {
+    public  Cursor getCursorOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE "+ KEY_GROUP_ID + " = 20" +
-                " OR (" + KEY_GROUP_ID + " !=20" + " AND " + KEY_DURATION + " > " + getMinimumDurationLimit() + ")" +
+                " OR (" + KEY_GROUP_ID + " !=20" + " AND " + KEY_DURATION + " > " + minEventDuration + ")" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -245,9 +245,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    private String getMinimumDurationLimit() {
-        return String.valueOf(MIN_EVENT_DURATION_MILLIS / (60 * 1000));
-    }
+//    private String getMinimumDurationLimit() {
+//        return String.valueOf(MIN_EVENT_DURATION_MILLIS / (60 * 1000));
+//    }
 
     public  Cursor getStopTypeShiftOrderByTime() {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +  " WHERE NOT "+ KEY_GROUP_ID + " = 20" +

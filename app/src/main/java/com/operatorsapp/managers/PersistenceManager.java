@@ -41,6 +41,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SELECTED_MACHINE = "pref.PREF_SELECTED_MACHINE";
     private static final String PREF_DISPLAY_REJECTED_FACTOR = "pref.PREF_DISPLAY_REJECTED_FACTOR";
     private static final String PREF_ADD_REJECTS_ON_SETUP = "pref.PREF_ADD_REJECTS_ON_SETUP";
+    private static final String PREF_MIN_EVENT_DURATION = "pref.PREF_MIN_EVENT_DURATION";
     private static final String PREF_TOTAL_RETRIES = "pref.PREF_TOTAL_RETRIES";
     private static final String PREF_REQUEST_TIMEOUT = "pref.PREF_REQUEST_TIMEOUT";
     private static final String PREF_ARRAY_SHIFT_LOGS = "pref.PREF_ARRAY_SHIFT_LOGS";
@@ -397,5 +398,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }.getType();
 
         return mGson.fromJson(ids, listType);
+    }
+
+    public void setMinEventDuration(int minEventDuration) {
+        SecurePreferences.getInstance().setInt(PREF_MIN_EVENT_DURATION, minEventDuration);
+    }
+
+    public int getMinEventDuration(){
+        return SecurePreferences.getInstance().getInt(PREF_MIN_EVENT_DURATION, 0);
     }
 }

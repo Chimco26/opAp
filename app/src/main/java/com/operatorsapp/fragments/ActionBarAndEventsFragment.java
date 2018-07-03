@@ -409,7 +409,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mDatabaseHelper = new DatabaseHelper(getContext());
 
-            Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration();
+            Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 
             if (mTempCursor.moveToFirst()) {
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
@@ -740,7 +740,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mLastEvent.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(mLastEvent.getEventID()));
 
-            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(),
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
                     !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0,
                     false, 0, null);
 
@@ -913,7 +913,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }else {
 
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(), !mIsOpen, mCloseWidth,
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
@@ -1237,7 +1237,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void disableSelectMode() {
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(),
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0,
                 false, 0, null);
 
