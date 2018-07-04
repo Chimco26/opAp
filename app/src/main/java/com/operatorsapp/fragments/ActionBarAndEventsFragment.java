@@ -191,7 +191,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         int width = size.x;
         float height = size.y;
         mOpenWidth = (int) (width * 0.33);
-        mCloseWidth = (int) (width * 0.14);
+        mCloseWidth = (int) (width * 0.16);
         mTollBarsHeight = (int) (height * 0.25);
         mRecyclersHeight = (int) ((1 - (mTollBarsHeight / height)) * height);
 
@@ -814,7 +814,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mIsSelectionMode = true;
 
-        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(),
+        mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
                 !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type,
                 true, eventID, null);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
@@ -907,7 +907,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (mIsSelectionMode){
 
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTime(), !mIsOpen, mCloseWidth,
+                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
