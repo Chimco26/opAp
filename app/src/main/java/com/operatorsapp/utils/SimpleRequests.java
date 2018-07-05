@@ -312,7 +312,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed Error");
                         callback.onPostActivateJobFailed(errorObject);
                     }
                 } else {

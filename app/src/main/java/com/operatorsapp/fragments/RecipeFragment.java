@@ -45,12 +45,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mLayoutChannel100;
     private TextView mLayoutChannel100Title;
     private RecyclerView mLayoutChannel100Rv;
-    private No0ChanneAdapter mNo0ChanneAdapter;
+    private No0ChanneAdapter mNo0ChannelAdapter;
     private LinearLayout mlayoutChannel1_99;
     private View mLayoutChannel0NoDataImage;
     private View mLayoutChannel100NoDataImage;
     private View mChannel1_99NoDataImage;
-    private View mLayoutChannel0Mainlayout;
+    private View mLayoutChannel0MainLayout;
     private View mChannel1_99NoDataTv;
     private View mLayoutChannel100NoDataTv;
     private View mLayoutChannel0NoDataTv;
@@ -160,7 +160,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0 = view.findViewById(R.id.FR_channel_0_ly);
 
-        mLayoutChannel0Mainlayout = view.findViewById(R.id.C0L_layout);
+        mLayoutChannel0MainLayout = view.findViewById(R.id.C0L_layout);
 
         mLayoutChannel0Title = mLayoutChannel0.findViewById(R.id.C0L_title_tv);
 
@@ -202,7 +202,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             mLayoutChannel100Title.setText(mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getName());
 
-            mNo0ChanneAdapter = new No0ChanneAdapter(getActivity(), this,
+            mNo0ChannelAdapter = new No0ChanneAdapter(getActivity(), this,
                     (ArrayList<ChannelSplits>) mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelSplits(), No0ChanneAdapter.TYPE_CHANNEL_100);
 
             LinearLayoutManager layoutManager
@@ -210,7 +210,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             mLayoutChannel100Rv.setLayoutManager(layoutManager);
 
-            mLayoutChannel100Rv.setAdapter(mNo0ChanneAdapter);
+            mLayoutChannel100Rv.setAdapter(mNo0ChannelAdapter);
 
         } else {
 
@@ -225,7 +225,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null
                 && mRecipeResponse.getRecipeData().size() > 0 && mRecipeResponse.getRecipeData().get(0) != null) {
 
-            mLayoutChannel0Mainlayout.setVisibility(View.VISIBLE);
+            mLayoutChannel0MainLayout.setVisibility(View.VISIBLE);
             mLayoutChannel0NoDataImage.setVisibility(View.GONE);
             mLayoutChannel0NoDataTv.setVisibility(View.GONE);
 
@@ -287,7 +287,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         } else {
 
-            mLayoutChannel0Mainlayout.setVisibility(View.GONE);
+            mLayoutChannel0MainLayout.setVisibility(View.GONE);
             mLayoutChannel0NoDataImage.setVisibility(View.VISIBLE);
             mLayoutChannel0NoDataTv.setVisibility(View.VISIBLE);
 
@@ -323,7 +323,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private void initChanne1_1_99_View() {
 
         if (mRecipeResponse != null) {
-            List<RecipeData> recipeResponse_1_99 = mRecipeResponse.getRecipeData();
+            List<RecipeData> recipeResponse_1_99 = new ArrayList<>();
+            recipeResponse_1_99.addAll(mRecipeResponse.getRecipeData());
 
             if (mRecipeResponse != null && mRecipeResponse.getRecipeData() != null && mRecipeResponse.getRecipeData().size() > 0 &&
                     mRecipeResponse.getRecipeData().get(mRecipeResponse.getRecipeData().size() - 1).getChannelNumber() == 100) {
@@ -335,7 +336,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 recipeResponse_1_99.remove(0);
             }
 
-            if (recipeResponse_1_99 != null && recipeResponse_1_99.size() > 0) {
+            if (recipeResponse_1_99.size() > 0) {
 
                 mChannel1_99NoDataImage.setVisibility(View.GONE);
                 mChannel1_99NoDataTv.setVisibility(View.GONE);
@@ -454,7 +455,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mRecipeResponse = recipeResponse;
 
-        if (mLayoutChannel0Mainlayout != null) {
+        if (mLayoutChannel0MainLayout != null) {
             initView();
         }
     }

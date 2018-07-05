@@ -13,8 +13,9 @@ import com.operatorsapp.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.ViewHolder> {
+public class JobHeadersAdapter extends RecyclerView.Adapter<JobHeadersAdapter.ViewHolder> {
 
     private final Context mContext;
     private final ArrayList<Header> mHeaders;
@@ -23,7 +24,7 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
     private JobHeadersAdaperListener mListener;
 
 
-    public JobHeadersAdaper(ArrayList<Header> list, HashMap<String, Header> hashMapHeaders, JobHeadersAdaperListener listener, Context context) {
+    public JobHeadersAdapter(ArrayList<Header> list, HashMap<String, Header> hashMapHeaders, JobHeadersAdaperListener listener, Context context) {
 
         mListener = listener;
 
@@ -38,14 +39,14 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
 
     @NonNull
     @Override
-    public JobHeadersAdaper.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public JobHeadersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new JobHeadersAdaper.ViewHolder(inflater.inflate(R.layout.item_product_search, parent, false));
+        return new JobHeadersAdapter.ViewHolder(inflater.inflate(R.layout.item_product_search, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final JobHeadersAdaper.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final JobHeadersAdapter.ViewHolder viewHolder, final int position) {
 
         viewHolder.mTv.setText(mHeaders.get(position).getDisplayName());
 
@@ -65,14 +66,14 @@ public class JobHeadersAdaper extends RecyclerView.Adapter<JobHeadersAdaper.View
 
                 if (mHashMapHeader.get(mHeaders.get(position).getName()).isSelected()){
 
-                    for (Header header: mHeaders) {
-                        mHashMapHeader.get(header.getName()).setSelected(false);
+                    for (Map.Entry<String, Header> headerEntry : mHashMapHeader.entrySet()) {
+                        mHashMapHeader.get(headerEntry.getValue().getName()).setSelected(false);
                         updateView(viewHolder, R.color.white, R.color.blue1);
                     }
                 }else {
 
-                    for (Header header: mHeaders) {
-                        mHashMapHeader.get(header.getName()).setSelected(false);
+                    for (Map.Entry<String, Header> headerEntry : mHashMapHeader.entrySet()) {
+                        mHashMapHeader.get(headerEntry.getValue().getName()).setSelected(false);
                         updateView(viewHolder, R.color.white, R.color.blue1);
                     }
                     mHashMapHeader.get(mHeaders.get(position).getName()).setSelected(true);
