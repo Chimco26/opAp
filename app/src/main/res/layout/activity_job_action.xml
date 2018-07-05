@@ -31,8 +31,7 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="25dp"
                     android:gravity="center"
-                    android:src="@drawable/arrow_back"
-                    />
+                    android:src="@drawable/arrow_back" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -75,12 +74,12 @@
                         android:paddingTop="8dp">
 
                         <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="22dp"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:text="@string/search_job_id_or_product_name"-->
-                            <!--android:textColor="@color/grey1"-->
-                            <!--android:textSize="18sp" />-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="22dp"-->
+                        <!--android:gravity="center_vertical"-->
+                        <!--android:text="@string/search_job_id_or_product_name"-->
+                        <!--android:textColor="@color/grey1"-->
+                        <!--android:textSize="18sp" />-->
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -100,9 +99,9 @@
                                 android:background="@color/transparentColor"
                                 android:gravity="center_vertical"
                                 android:hint="@string/search"
-                                android:maxLines="1"
-                                android:inputType="text"
                                 android:imeOptions="actionDone"
+                                android:inputType="text"
+                                android:maxLines="1"
                                 android:textColor="@color/grey1"
                                 android:textSize="18sp" />
 
@@ -203,12 +202,18 @@
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/AJA_title_line1_tv2"
+                            <LinearLayout
                                 android:layout_width="250dp"
                                 android:layout_height="match_parent"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/AJA_title_line1_tv2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/AJA_title_line1_tv3"
@@ -219,12 +224,18 @@
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/AJA_title_line1_tv4"
+                            <LinearLayout
                                 android:layout_width="250dp"
                                 android:layout_height="match_parent"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/AJA_title_line1_tv4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -242,12 +253,18 @@
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/AJA_title_line2_tv2"
+                            <LinearLayout
                                 android:layout_width="250dp"
                                 android:layout_height="match_parent"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/AJA_title_line2_tv2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/AJA_title_line2_tv3"
@@ -258,13 +275,19 @@
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/AJA_title_line2_tv4"
+                            <LinearLayout
                                 android:layout_width="250dp"
                                 android:layout_height="match_parent"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
+                                android:orientation="horizontal">
 
+                                <TextView
+                                    android:id="@+id/AJA_title_line2_tv4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                         <View
@@ -397,15 +420,14 @@
                                     android:id="@+id/AJA_actions_ly"
                                     android:layout_width="869dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="33dp"
                                     android:background="@drawable/combined_shape"
                                     android:orientation="vertical"
-                                    android:layout_gravity="center_horizontal"
-                                    android:paddingStart="24dp"
                                     android:paddingEnd="24dp"
+                                    android:paddingStart="24dp"
                                     android:paddingTop="24dp"
-                                    android:visibility="gone"
-                                    >
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:id="@+id/AJA_actions_tv"

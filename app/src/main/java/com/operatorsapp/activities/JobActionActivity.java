@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -505,17 +506,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initViewsTitleLine() {
 
-        ArrayList<Property> properties = new ArrayList<>();
+//        ArrayList<Property> properties = new ArrayList<>();
+        ArrayList<Property> properties = (ArrayList<Property>) mCurrentPendingJob.getProperties();
 
-        for (Property property : mCurrentPendingJob.getProperties()) {
-
-            if (property.getKey() != null && property.getKey().length() > 0 &&
-                    mHashMapHeaders.get(property.getKey()).getShowOnHeader() &&
-                    property.getValue() != null &&  property.getValue().length() > 0) {
-
-                properties.add(property);
-            }
-        }
+//        for (Property property : mCurrentPendingJob.getProperties()) {
+//
+//            if (property.getKey() != null && property.getKey().length() > 0 &&
+//                    mHashMapHeaders.get(property.getKey()).getShowOnHeader() &&
+//                    property.getValue() != null &&  property.getValue().length() > 0) {
+//
+//                properties.add(property);
+//            }
+//        }
 
         if (properties.size() > 0) {
             mTitleLine1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName(), 1));
@@ -654,6 +656,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private void initLeftView() {
 
         initRecyclerViews();
+
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+
+            findViewById(R.id.AJA_back_btn).setRotationY(180);
+        }
 
     }
 
@@ -898,6 +905,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onPandingJobSelected(PandingJob pandingJob) {
 
+        for (PandingJob pandingJob1 : mPendingJobsResponse.getPandingJobs()) {
+
+            if (pandingJob.equals(pandingJob1)) {
+
+                pandingJob1.setSelected(pandingJob.isSelected());
+
+            } else {
+
+                pandingJob1.setSelected(false);
+            }
+        }
+
         mCurrentPendingJob = pandingJob;
         ArrayList<Integer> jobIds = new ArrayList<>();
         jobIds.add(pandingJob.getID());
@@ -1027,7 +1046,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_action, null);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_action, null);
         builder.setView(dialogView);
 
         TextView textView = dialogView.findViewById(R.id.DA_text);
