@@ -68,6 +68,12 @@ public class ShowCrouton {
         }
     }
 
+    public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, ErrorObjectInterface reason) {
+        if (reason != null) {
+            createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR, null, reason.getDetailedDescription(), null);
+        }
+    }
+
     private static void createCrouton(OnCroutonRequestListener onCroutonRequestListener, CroutonCreator.CroutonType croutonType, String prefix, String message, String suffix)
     {
         if(TextUtils.isEmpty(prefix))

@@ -218,8 +218,23 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onGetJobDetailsSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
-                mCurrentJobDetails = (JobDetailsResponse) response;
-                initRightView();
+
+                if (response == null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
+                } else if (((Response) response).getError() != null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
+
+
+                }else {
+
+                    mCurrentJobDetails = (JobDetailsResponse) response;
+                    initRightView();
+                }
             }
 
             @Override
@@ -291,7 +306,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                 } else if (((Response) response).getError() != null) {
 
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
-                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+                    ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
                 } else {
@@ -702,7 +717,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (s.length() < 1) {
+                    for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                        mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                    }
+                }
+
                 updateRvBySearchResult();
+
             }
         });
     }
