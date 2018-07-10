@@ -21,29 +21,51 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/config" />
+
             <TextView
                 style="@style/Roboto_Regular_Status_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/product"
                 android:textColor="@color/status_bar"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/text_view_product_name_and_id"
-                style="@style/Roboto_Regular_Status_Data"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/text_view_product_name_and_id"
+                    style="@style/Roboto_Regular_Status_Data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="visible"/>
+
+                <Spinner
+                    android:id="@+id/FAAE_product_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
         </LinearLayout>
 
         <View
@@ -251,7 +273,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
-                          android:src="@drawable/close" />
+                            android:src="@drawable/close" />
 
                     </RelativeLayout>
 
@@ -279,8 +301,8 @@
             android:layout_width="45dp"
             android:layout_height="400dp"
             android:layout_alignEnd="@id/fragment_dashboard_shiftlog"
-            android:layout_marginEnd="-25dp"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="-25dp"
             android:background="@android:color/transparent"
             android:clickable="true" />
 

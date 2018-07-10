@@ -37,12 +37,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
+import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
+import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
+import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
+import com.operatorsapp.server.NetworkManager;
 import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -146,6 +152,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mParentLy;
     private Fragment mVisiblefragment;
     private boolean mFromAnotherActivity;
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Spinner mProductSpinner;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -208,6 +217,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mParentLy = view.findViewById(R.id.parent_layouts);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
+        mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
@@ -491,6 +501,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
             }
+            getActiveJobs();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -509,6 +520,79 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOperatorCore = null;
         mListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
+    }
+
+    private void getActiveJobs() {
+        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
+        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
+        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+    }
+
+
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+        @Override
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+            if (activeJobsListForMachine != null) {
+                mActiveJobsListForMachine = activeJobsListForMachine;
+                if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1){
+
+                    mProductNameTextView.setVisibility(View.GONE);
+                    mProductSpinner.setVisibility(View.VISIBLE);
+                    initJobsSpinner(mActiveJobsListForMachine);
+
+                }else {
+
+                    mProductNameTextView.setVisibility(View.VISIBLE);
+                    mProductSpinner.setVisibility(View.GONE);
+
+                    initStatusLayout(mCurrentMachineStatus);
+
+                }
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+            }
+            else {
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            }
+        }
+
+        @Override
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+//            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+        }
+    };
+
+
+    private void initJobsSpinner(ActiveJobsListForMachine mActiveJobsListForMachine) {
+  //TODO
+        if(getActivity() != null)
+        {
+            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null)
+            {
+                mProductSpinner.setVisibility(View.VISIBLE);
+                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, this.mActiveJobsListForMachine.getActiveJobs());
+                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mProductSpinner.setAdapter(activeJobsSpinnerAdapter);
+                mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        activeJobsSpinnerAdapter.setTitle(position);
+                     //TODO   mJobId = ActionBarAndEventsFragment.this.mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
+
+                    }
+                });
+            }
+        }
     }
 
     @SuppressLint("InflateParams")
