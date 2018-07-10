@@ -328,6 +328,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
+
         }
     };
 

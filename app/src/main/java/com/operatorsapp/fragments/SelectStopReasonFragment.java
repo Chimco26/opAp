@@ -269,7 +269,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(Object o) {
-            //TODO crouton error
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
@@ -318,6 +317,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
+
         }
     };
 
