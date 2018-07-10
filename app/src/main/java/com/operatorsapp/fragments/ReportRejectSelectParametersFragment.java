@@ -25,8 +25,10 @@ import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -63,6 +65,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
     private int mCurrentProductId;
     private Double mUnitsData = null;
     private Double mWeightData = null;
+    private ShowDashboardCroutonListener mDashboardCroutonListener;
 
 
     public static ReportRejectSelectParametersFragment newInstance(int selectedReasonId, int selectedCauseId, String selectedReasonName, Integer jobId, String currentProductName, int currentProductId)
@@ -84,6 +87,10 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
     {
         super.onAttach(context);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+
+        if (context instanceof ShowDashboardCroutonListener) {
+            mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
+        }
     }
 
     @Override
@@ -334,6 +341,11 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
         public void sendReportSuccess(Object o)
         {//TODO crouton error
             dismissProgressDialog();
+
+            if (o != null){
+
+                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            }
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 

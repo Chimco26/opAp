@@ -52,6 +52,7 @@ import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
@@ -114,7 +115,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ReportStopReasonFragment.ReportStopReasonFragmentListener,
         ViewPagerFragment.OnViewPagerListener,
         RecipeFragment.OnRecipeFragmentListener,
-        AdvancedSettingsFragment.AdvancedSettingsListener{
+        AdvancedSettingsFragment.AdvancedSettingsListener,
+        ShowDashboardCroutonListener{
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -1472,5 +1474,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onIgnoreOnPauseFromAdvancedSettings() {
 
         ignoreFromOnPause = true;
+    }
+
+    @Override
+    public void onShowCrouton(String errorResponse) {
+
+        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, errorResponse);
+        ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
+
     }
 }

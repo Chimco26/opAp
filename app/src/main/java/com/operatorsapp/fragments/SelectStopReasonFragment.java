@@ -19,8 +19,10 @@ import com.operators.reportfieldsformachineinfra.SubReasons;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -73,6 +75,8 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private String mILName;
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
+    private ShowDashboardCroutonListener mDashboardCroutonListener;
+
 
     public static SelectStopReasonFragment newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
         SelectStopReasonFragment selectedStopReasonFragment = new SelectStopReasonFragment();
@@ -107,6 +111,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+        if (context instanceof ShowDashboardCroutonListener) {
+            mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
+        }
     }
 
     @Override
@@ -267,6 +274,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
+            if (o != null){
+
+                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            }
             try {
 
                 mReportCore.unregisterListener();

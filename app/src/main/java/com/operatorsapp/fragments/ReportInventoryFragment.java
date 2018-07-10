@@ -35,7 +35,9 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -74,7 +76,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
-
+    private ShowDashboardCroutonListener mDashboardCroutonListener;
     private View mTopView;
 
 
@@ -93,7 +95,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
-
+        if (context instanceof ShowDashboardCroutonListener) {
+            mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
+        }
     }
 
     @Override
@@ -309,10 +313,15 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
+            if (o != null){
+
+                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            }
             if (getFragmentManager() != null){
 
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
+
         }
 
         @Override
