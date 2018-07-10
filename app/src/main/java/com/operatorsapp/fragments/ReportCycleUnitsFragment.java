@@ -373,8 +373,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
     {
         @Override
-        public void sendReportSuccess()
+        public void sendReportSuccess(Object o)
         {
+            //TODO crouton error
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 

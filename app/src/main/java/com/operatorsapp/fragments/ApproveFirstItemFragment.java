@@ -286,8 +286,8 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
     {
         @Override
-        public void sendReportSuccess()
-        {
+        public void sendReportSuccess(Object o)
+        {//TODO crouton error
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

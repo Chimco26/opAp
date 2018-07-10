@@ -303,8 +303,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     }
 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
-        @Override
-        public void sendReportSuccess() {
+        @Override//TODO crouton error
+        public void sendReportSuccess(Object o) {
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

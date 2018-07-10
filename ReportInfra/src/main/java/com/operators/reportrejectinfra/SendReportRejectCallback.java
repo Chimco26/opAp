@@ -7,7 +7,7 @@ import com.operators.errorobject.ErrorObjectInterface;
  */
 public interface SendReportRejectCallback {
 
-    void onSendReportSuccess();
+    void onSendReportSuccess(Object errorResponse);
 
     void onSendReportFailed(ErrorObjectInterface reason);
 }
