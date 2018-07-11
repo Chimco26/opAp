@@ -18,6 +18,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -49,7 +50,10 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.PostSplitEventCallback;
+import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
+import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
@@ -717,9 +721,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onStartJobFailed(ErrorObjectInterface reason) {
-                ZLogger.i(LOG_TAG, "onStartJobFailed()");
-                mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this);
+                if (reason.getDetailedDescription().contains("Job started successfully")){
+                    ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, reason.getDetailedDescription());
+                }else {
+                    ZLogger.i(LOG_TAG, "onStartJobFailed()");
+                    mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
+                    ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
+                }
             }
         });
     }
@@ -1193,6 +1201,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
+    }
+
+    @Override
+    public void onSplitEventPressed(int eventID) {
+        // TODO: 05/07/2018 call server
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        SimpleRequests simpleRequests = new SimpleRequests();
+        simpleRequests.postSplitEvent(persistenceManager.getSiteUrl(), new PostSplitEventCallback() {
+            @Override
+            public void onPostSplitEventSuccess(Object response) {
+                Toast.makeText(DashboardActivity.this, "onPostSplitEventSuccess", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPostSplitEventFailed(ErrorObjectInterface reason) {
+                Toast.makeText(DashboardActivity.this, "onPostSplitEventFailed", Toast.LENGTH_SHORT).show();
+
+            }
+        },NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+
     }
 
     @Override

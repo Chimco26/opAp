@@ -29,6 +29,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetJobDetails;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetPendingJobList;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetVersion;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostActivateJob;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostSplitEvent;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostUpdateActions;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendApproveFirstItem;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
@@ -40,6 +41,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkMa
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
@@ -83,7 +85,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         GetPendingJobListNetworkManager,
         GetJobDetailsNetworkManager,
         PostUpdtaeActionsNetworkManager,
-        PostActivateJobNetworkManager{
+        PostActivateJobNetworkManager,
+        PostSplitEventNetworkManager{
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -720,5 +723,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "approveEmeraldPostActivateJob");
         }
         return mRetrofit.create(EmeraldPostActivateJob.class);
+    }
+
+    @Override
+    public EmeraldPostSplitEvent emeraldPostSplitEvent(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldPostSplitEvent.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldPostSplitEvent");
+        }
+        return mRetrofit.create(EmeraldPostSplitEvent.class);
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +27,6 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -47,6 +47,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
     private ArrayList<Event> mUpdatedAlarms;
+    private int mFirstStopEventPosition = 9999;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
@@ -78,6 +79,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
         private ImageView mStoppedIcon;
+        private ImageView mSplitEvent;
         private TextView mStopEventSubReasonTv;
         private TextView mStoppedStart;
         private TextView mStoppedStartDate;
@@ -123,6 +125,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
             mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
             mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
+            mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
             //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
             mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
@@ -185,8 +188,28 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
         if (type == STOPPED) {
 
+            if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()){
+
+                mFirstStopEventPosition = viewHolder.getAdapterPosition();
+                holder.mSplitEvent.setVisibility(View.VISIBLE);
+                holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: 05/07/2018 split event
+                        mOnStopClickListener.onSplitEventPressed(event.getEventID());
+                    }
+                });
+
+            }else {
+                holder.mSplitEvent.setVisibility(View.GONE);
+                holder.mSplitEvent.setOnClickListener(null);
+            }
+
+
+
             if (mIsSelectionMode) {
 
+                holder.mSplitEvent.setVisibility(View.GONE);
                 holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
                 holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override

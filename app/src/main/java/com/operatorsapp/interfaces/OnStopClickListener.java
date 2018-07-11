@@ -8,4 +8,6 @@ public interface OnStopClickListener {
     void onSelectMode(int type, int eventID);
 
     void onStopEventSelected(Integer event, boolean b);
+
+    void onSplitEventPressed(int eventID);
 }

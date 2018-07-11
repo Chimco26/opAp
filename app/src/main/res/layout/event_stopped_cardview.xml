@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-                
+
                 <CheckBox
                     android:id="@+id/event_stop_checkbox"
                     android:layout_width="25dp"
@@ -53,13 +53,12 @@
 
             </LinearLayout>
 
-            <me.grantland.widget.AutofitTextView
+             <me.grantland.widget.AutofitTextView
                 android:id="@+id/event_stopped_shift_log_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black"
@@ -72,7 +71,6 @@
                 android:layout_height="28dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/black"
@@ -80,6 +78,18 @@
                 android:textSize="12sp"
                 autofit:minTextSize="14sp"
                 android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/event_stopped_shift_log_item_split_event"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
+                android:layout_marginEnd="3dp"
+                android:visibility="gone"
+                android:src="@drawable/scissors"/>
 
 
         </LinearLayout>
@@ -227,6 +237,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
     <View

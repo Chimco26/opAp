@@ -537,11 +537,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             LayoutInflater inflator = LayoutInflater.from(getActivity());
 
+            // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
-            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
-            title.setText(spannableString);
-            title.setVisibility(View.VISIBLE);
+//            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
+//            title.setText(spannableString);
+//            title.setVisibility(View.VISIBLE);
 
             final Spinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
@@ -634,6 +635,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             } else {
                 mOperatorsSpinnerArray[0] = getResources().getString(R.string.operator_sign_in_action_bar);
             }
+
+            EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
+            String [] items = {"Production Status", "Production Status2"};
+            final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, "Production Status");
+            productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
+            productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
 
             EmeraldSpinner operatorsSpinner = mToolBarView.findViewById(R.id.toolbar_operator_spinner);
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, PersistenceManager.getInstance().getOperatorName());
@@ -800,6 +808,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onStopEventSelected(Integer event, boolean b) {
         mListener.onEventSelected(event, b);
+    }
+
+    @Override
+    public void onSplitEventPressed(int eventID){
+        // TODO: 05/07/2018 call server split event
+        mListener.onSplitEventPressed(eventID);
+
     }
 
     @Override
@@ -1308,6 +1323,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onClearAllSelectedEvents();
 
         void onJobActionItemClick();
+
+        void onSplitEventPressed(int eventID);
     }
 
 }

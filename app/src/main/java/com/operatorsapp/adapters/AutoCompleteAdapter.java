@@ -93,11 +93,11 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                machinesResults.clear();
-                machinesResults.addAll(mMachines);
+//                machinesResults.clear();
+//                machinesResults.addAll(mMachines);
                 FilterResults filterResults = new FilterResults();
-
-                Iterator<Machine> iterator = machinesResults.iterator();
+                ArrayList<Machine> tempArray = new ArrayList<>(mMachines);
+                Iterator<Machine> iterator = tempArray.iterator();
                 while (iterator.hasNext()) {
                     Machine machine = iterator.next();
                     int machineId = machine.getId();
@@ -108,8 +108,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
                     }
                 }
 
-                filterResults.values = machinesResults;
-                filterResults.count = machinesResults.size();
+                filterResults.values = tempArray;
+                filterResults.count = tempArray.size();
 
 //                if (constraint != null) {
 //
@@ -132,9 +132,12 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
 
             @Override
             protected void publishResults(CharSequence contraint, FilterResults results) {
+                machinesResults.clear();
                 if (results != null && results.count > 0) {
+                    machinesResults.addAll((ArrayList<Machine>)results.values);
                     notifyDataSetChanged();
                 } else {
+                    machinesResults.addAll(mMachines);
                     notifyDataSetInvalidated();
                 }
             }
