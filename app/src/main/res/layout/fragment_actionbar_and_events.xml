@@ -63,7 +63,9 @@
                     android:id="@+id/FAAE_product_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:dropDownVerticalOffset="60dp"
+                    android:spinnerMode="dropdown"/>
 
             </RelativeLayout>
         </LinearLayout>

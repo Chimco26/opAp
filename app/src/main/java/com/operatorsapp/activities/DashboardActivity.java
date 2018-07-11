@@ -460,6 +460,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
+                ProgressDialogManager.dismiss();
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -475,6 +476,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+                ProgressDialogManager.dismiss();
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -484,6 +486,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
+
     }
 
     private void shiftForMachineTimer() {
@@ -1224,6 +1227,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
+    }
+
+    @Override
+    public void onJoshProductSelected(Integer joshID) {
+
+        dashboardDataStartPolling();
+
+        ProgressDialogManager.show(this);
     }
 
     @Override

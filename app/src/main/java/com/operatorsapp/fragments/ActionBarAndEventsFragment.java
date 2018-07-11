@@ -48,6 +48,7 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
+import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.server.NetworkManager;
 import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
@@ -540,7 +541,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mProductNameTextView.setVisibility(View.GONE);
                     mProductSpinner.setVisibility(View.VISIBLE);
-                    initJobsSpinner(mActiveJobsListForMachine);
+                    initJobsSpinner();
 
                 }else {
 
@@ -565,24 +566,28 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     };
 
 
-    private void initJobsSpinner(ActiveJobsListForMachine mActiveJobsListForMachine) {
+    private void initJobsSpinner() {
   //TODO
         if(getActivity() != null)
         {
             if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null)
             {
                 mProductSpinner.setVisibility(View.VISIBLE);
-                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, this.mActiveJobsListForMachine.getActiveJobs());
-                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mProductSpinner.setAdapter(activeJobsSpinnerAdapter);
+                final JoshProductNameSpinnerAdapter joshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
+                joshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
+                mProductSpinner.setAdapter(joshProductNameSpinnerAdapter);
                 mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        activeJobsSpinnerAdapter.setTitle(position);
-                     //TODO   mJobId = ActionBarAndEventsFragment.this.mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        joshProductNameSpinnerAdapter.setTitle(position);
+
+                        mListener.onJoshProductSelected(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID());
+
+//                        if (mJobIdTextView != null) {
+//                            mJobIdTextView.setText(String.valueOf(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID()));
+//                        }
                     }
 
                     @Override
@@ -1401,6 +1406,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onClearAllSelectedEvents();
 
         void onJobActionItemClick();
+
+        void onJoshProductSelected(Integer joshID);
     }
 
 }
