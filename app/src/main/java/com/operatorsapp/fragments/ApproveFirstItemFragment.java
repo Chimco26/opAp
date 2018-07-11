@@ -31,9 +31,11 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
@@ -72,6 +74,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private ReportCore mReportCore;
     private int mSelectedTechnicianId;
     private ApproveFirstItemFragmentCallbackListener mCallbackListener;
+    private ShowDashboardCroutonListener mDashboardCroutonListener;
 
     public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
         ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
@@ -92,6 +95,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         if(context instanceof ApproveFirstItemFragmentCallbackListener)
         {
             mCallbackListener = (ApproveFirstItemFragmentCallbackListener) context;
+        }
+        if (context instanceof ShowDashboardCroutonListener) {
+            mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
         }
     }
 
@@ -302,10 +308,15 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
     {
         @Override
-        public void sendReportSuccess()
-        {
+        public void sendReportSuccess(Object o)
+        {//TODO crouton error
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
+
+            if (o != null){
+
+                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            }
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             if(mCallbackListener != null)

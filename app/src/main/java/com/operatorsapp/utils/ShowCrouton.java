@@ -68,6 +68,12 @@ public class ShowCrouton {
         }
     }
 
+    public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, ErrorObjectInterface reason) {
+        if (reason != null) {
+            createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR, null, reason.getDetailedDescription(), null);
+        }
+    }
+
     private static void createCrouton(OnCroutonRequestListener onCroutonRequestListener, CroutonCreator.CroutonType croutonType, String prefix, String message, String suffix)
     {
         if(TextUtils.isEmpty(prefix))
@@ -101,6 +107,13 @@ public class ShowCrouton {
         spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, msg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         showJobsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.ALERT_DIALOG);
+    }
+
+    public static void jobsLoadingSuccessCrouton(OnCroutonRequestListener onCroutonRequestListener, String msg) {
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(msg);
+        spannableStringBuilder.setSpan(new StyleSpan(R.style.DroidSansBold), 0, msg.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        showJobsCrouton(onCroutonRequestListener, spannableStringBuilder, CroutonCreator.CroutonType.SUCCESS);
     }
 
     private static void showCrouton(final OnCroutonRequestListener onCroutonRequestListener, final SpannableStringBuilder str, final CroutonCreator.CroutonType credentialsError) {

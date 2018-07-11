@@ -78,7 +78,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
-                        callback.onSendStopReportSuccess();
+                        callback.onSendStopReportSuccess(response.body());
                     } else {
 
                         ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
@@ -126,7 +126,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
-                        callback.onSendStopReportSuccess();
+                        callback.onSendStopReportSuccess(response.body());
                     } else {
 
                         ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
@@ -170,7 +170,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response != null) {
                     if (response.isSuccessful()) {
                         if (callback != null) {
-                            callback.onSendReportSuccess();
+                            callback.onSendReportSuccess(response.body());
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
@@ -211,7 +211,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response != null) {
                     if (response.isSuccessful()) {
                         if (callback != null) {
-                            callback.onSendReportSuccess();
+                            callback.onSendReportSuccess(response.body());
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
@@ -253,7 +253,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response != null) {
                     if (response.isSuccessful()) {
                         if (callback != null) {
-                            callback.onSendReportSuccess();
+                            callback.onSendReportSuccess(response.body());
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
@@ -294,7 +294,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                 if (response != null) {
                     if (response.isSuccessful()) {
                         if (callback != null) {
-                            callback.onSendReportSuccess();
+                            callback.onSendReportSuccess(response.body());
                         } else {
                             ZLogger.w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
                         }

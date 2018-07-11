@@ -189,5 +189,28 @@
     <string name="events_selected">אירועים שנבחרו:</string>
     <string name="production_parameters"> נתוני ייצור</string>
 
+    <string name="actionnable_jobs">פק״עות ממתינות</string>
+    <string name="search">חיפוש</string>
+    <string name="activate">הפעלה</string>
+    <string name="no_available_image">אין תמונה זמינה</string>
+    <string name="name">שם</string>
+    <string name="catalog">מק״ט</string>
+    <string name="amount">כמות</string>
+    <string name="materials">חומרים</string>
+    <string name="mold">תבנית</string>
+    <string name="mold_catalog">מק״ט תבנית</string>
+    <string name="cavities_actual">חללים בפועל</string>
+    <string name="cavities_standard">תקן חללים</string>
+    <string name="actions">פעולות</string>
+    <string name="action_details">פרטי פעולה</string>
+    <string name="you_can_add_a_note">ניתן להוסיף הערה</string>
+    <string name="close">סגור</string>
+    <string name="add">הוסף</string>
+    <string name="start_job_success">התחל הצלחה בעבודה</string>
+    <string name="get_panding_jobs_failed_error">פק״עות ממתינות  שגיאה נכשלה</string>
+    <string name="get_jobs_details_failed_error">פרטי העבודה נכשלה שגיאה</string>
+    <string name="no_available_pdf">אין Pdf זמין</string>
+
+
 
 </resources>

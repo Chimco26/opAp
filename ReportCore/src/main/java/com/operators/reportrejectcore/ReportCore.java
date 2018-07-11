@@ -37,9 +37,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, rejectReasonCause, units, weight, jobId, new SendReportRejectCallback() {
                         @Override
-                        public void onSendReportSuccess() {
+                        public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
@@ -63,9 +63,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, approvingTechnicianID, jobId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess() {
+                        public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onApproveFirstItemSuccess() mReportCallbackListener is null ");
                             }
@@ -89,9 +89,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
                         @Override
-                        public void onSendStopReportSuccess() {
+                        public void onSendStopReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
@@ -116,9 +116,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
                         @Override
-                        public void onSendStopReportSuccess() {
+                        public void onSendStopReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
@@ -143,9 +143,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), unitsPerCycle, jobId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess() {
+                        public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
@@ -169,9 +169,9 @@ public class ReportCore {
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
                     , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, jobId, new SendReportCallback() {
                         @Override
-                        public void onSendReportSuccess() {
+                        public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
-                                mReportCallbackListener.sendReportSuccess();
+                                mReportCallbackListener.sendReportSuccess(o);
                             } else {
                                 ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }

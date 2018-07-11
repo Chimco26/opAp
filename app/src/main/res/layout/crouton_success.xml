@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/green_subreason">
+
+
+    <TextView
+        android:id="@+id/crouton_text"
+        style="@style/DroidSans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="11dp"
+        android:layout_marginTop="11dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        tools:text="cruton text"/>
+
+    <ProgressBar
+        android:id="@+id/PT_progressbar_time_left"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="40dp"
+        android:max="100"
+        android:progress="0"
+        android:theme="@style/LinearErrorProgress"/>
+
+
+</FrameLayout>

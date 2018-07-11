@@ -1,7 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,8 +17,13 @@ import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,7 +52,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Prope
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
-import com.operatorsapp.adapters.JobHeadersAdaper;
+import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.fragments.RecipeFragment;
@@ -64,19 +69,20 @@ import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JobActionActivity extends AppCompatActivity implements View.OnClickListener,
-        JobHeadersAdaper.JobHeadersAdaperListener,
+        JobHeadersAdapter.JobHeadersAdaperListener,
         PendingJobsAdapter.PendingJobsAdapterListener,
         DownloadHelper.DownloadFileListener,
         JobMaterialsSplitAdapter.JobMaterialsSplitAdapterListener,
         JobActionsAdapter.JobActionsAdapterListener,
-        RecipeFragment.OnRecipeFragmentListener, OnCroutonRequestListener, CroutonCreator.CroutonListener {
+        RecipeFragment.OnRecipeFragmentListener,
+        OnCroutonRequestListener,
+        CroutonCreator.CroutonListener {
 
     private static final String TAG = JobActionActivity.class.getSimpleName();
     private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
@@ -84,18 +90,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
     private TextView mTitleTv;
-    private TextView mTitlLine1Tv1;
-    private TextView mTitlLine1Tv2;
-    private TextView mTitlLine1Tv3;
-    private TextView mTitlLine1Tv4;
-    private TextView mTitlLine1Tv5;
-    private TextView mTitlLine1Tv6;
+    private TextView mTitleLine1Tv1;
+    private TextView mTitleLine1Tv2;
+    private TextView mTitleLine1Tv3;
+    private TextView mTitleLine1Tv4;
     private TextView mTit2Line1Tv1;
     private TextView mTit2Line1Tv2;
     private TextView mTit2Line1Tv3;
     private TextView mTit2Line1Tv4;
-    private TextView mTit2Line1Tv5;
-    private TextView mTit2Line1Tv6;
     private PDFView mProductPdfView;
     private ImageView mProductImage;
     private View mProductPdfNoImageLy;
@@ -104,7 +106,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView mMaterialItemRv;
     private TextView mMoldItemTitleTv;
     private ImageView mMoldItemImg;
-    private RecyclerView mMoldItemRv;
     private RecyclerView mActionRv;
     private View mActionItemLy;
     private EditText mSearchViewEt;
@@ -113,27 +114,24 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private View mMaterialItem;
     private View mMoldItem;
     private PendingJobResponse mPendingJobsResponse;
-    private JobHeadersAdaper mHeadersAdapter;
-    private PendingJobsAdapter mPandingJobsAdaper;
+    private JobHeadersAdapter mHeadersAdapter;
+    private PendingJobsAdapter mPendingJobsAdapter;
     private HashMap<String, Header> mHashMapHeaders;
     private ArrayList<Header> mHeaders = new ArrayList<>();
-    private ArrayList<PandingJob> mPandingJobs = new ArrayList<>();
+    private ArrayList<PandingJob> mPendingJobs = new ArrayList<>();
     private ArrayList<PandingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
     private JobDetailsResponse mCurrentJobDetails;
     private PandingJob mCurrentPendingJob;
     private DownloadHelper mDownloadHelper;
     private String mFirstPdf;
-    private JobMaterialsSplitAdapter mMaterialAdapter;
     private TextView mMoldNameTv;
     private TextView mMoldMoldCatalogTv;
-    private TextView mMoldcavitiesActualTv;
+    private TextView mMoldCavitiesActualTv;
     private TextView mMoldCavitiesStandardTv;
-    private JobActionsAdapter mActionsAdapter;
     private TextView mActionsTitleTv;
-    private RecipeFragment mRecipefragment;
-    private Intent mGalleryIntent;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private CroutonCreator mCroutonCreator;
+    private ArrayList<Action> mUpdatedActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,11 +169,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                     mHeaders.addAll(mPendingJobsResponse.getHeaders());
 
-                    mPandingJobs.addAll(mPendingJobsResponse.getPandingJobs());
+                    mPendingJobs.addAll(mPendingJobsResponse.getPandingJobs());
 
                     headerListToHashMap(mPendingJobsResponse.getHeaders());
 
-                    mPendingJobsNoHeadersFiltered.addAll(mPandingJobs);
+                    mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
 
                     sortHeaders();
 
@@ -220,8 +218,23 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onGetJobDetailsSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
-                mCurrentJobDetails = (JobDetailsResponse) response;
-                initRightView();
+
+                if (response == null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
+                } else if (((Response) response).getError() != null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
+
+
+                }else {
+
+                    mCurrentJobDetails = (JobDetailsResponse) response;
+                    initRightView();
+                }
             }
 
             @Override
@@ -237,7 +250,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void postUpdateActions(Action action) {
+    private void postUpdateActions(ArrayList<Action> actions) {
+
+        if (mCurrentJobDetails == null){
+
+            return;
+        }
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -245,7 +263,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         actionsUpdateRequest.setActions(new ActionsByJob(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()), persistanceManager.getOperatorId(), null));
 
-        actionsUpdateRequest.getActions().setActions(Collections.singletonList(action));
+        actionsUpdateRequest.getActions().setActions(actions);
 
         SimpleRequests simpleRequests = new SimpleRequests();
 
@@ -278,13 +296,31 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onPostActivateJobSuccess(Object response) {
 
-                finishActivity((Response)response);
+                ProgressDialogManager.dismiss();
+
+                if (response == null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
+
+                } else if (((Response) response).getError() != null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
+
+
+                } else {
+
+                    finishActivity((Response) response);
+                }
             }
 
             @Override
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
-                finishActivity(null);
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
+                ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
@@ -322,11 +358,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
 
-        for (Property property: mCurrentPendingJob.getProperties()){
+        for (Property property : mCurrentPendingJob.getProperties()) {
 
-            if (property.getKey().equals("ERPJobID")){
+            if (property.getKey().equals("ERPJobID") && property.getValue() != null && property.getValue().length() > 0) {
 
-                mTitleTv.setText(String.format("ERPJobID (%s)", String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
+                mTitleTv.setText(String.format("%s (%s)", property.getValue(), String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
 
             }
         }
@@ -334,9 +370,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initActionsItemView() {
 
+        mActionRv.setNestedScrollingEnabled(false);
+
         mCurrentJobDetails.getJobs().get(0).setActions(sortActions(mCurrentJobDetails.getJobs().get(0).getActions()));
 
-        if (mCurrentJobDetails.getJobs().get(0).getActions() != null) {
+        if (mCurrentJobDetails.getJobs().get(0).getActions() != null &&
+                mCurrentJobDetails.getJobs().get(0).getActions().size() > 0) {
+
+            mActionItemLy.setVisibility(View.VISIBLE);
 
             mActionsTitleTv.setText(getString(R.string.actions));
 
@@ -344,7 +385,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mActionRv.setLayoutManager(layoutManager);
 
-            mActionsAdapter = new JobActionsAdapter(mCurrentJobDetails.getJobs().get(0).getActions(), this, this);
+            JobActionsAdapter mActionsAdapter = new JobActionsAdapter(mCurrentJobDetails.getJobs().get(0).getActions(), this, this);
 
             mActionRv.setAdapter(mActionsAdapter);
 
@@ -395,7 +436,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mMoldMoldCatalogTv.setText(mCurrentJobDetails.getJobs().get(0).getMold().getCatalog());
 
-            mMoldcavitiesActualTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getCavitiesActual()));
+            mMoldCavitiesActualTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getCavitiesActual()));
 
             mMoldCavitiesStandardTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getCavitiesStandard()));
 
@@ -468,7 +509,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mMaterialItemRv.setLayoutManager(layoutManager);
 
-            mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), this, this);
+            JobMaterialsSplitAdapter mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), this, this);
 
             mMaterialItemRv.setAdapter(mMaterialAdapter);
 
@@ -480,41 +521,61 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initViewsTitleLine() {
 
-        ArrayList<Property> properties = new ArrayList<>();
+//        ArrayList<Property> properties = new ArrayList<>();
+        ArrayList<Property> properties = (ArrayList<Property>) mCurrentPendingJob.getProperties();
 
-        for (Property property : mCurrentPendingJob.getProperties()) {
-
-            if (mHashMapHeaders.get(property.getKey()).getShowOnHeader()) {
-
-                properties.add(property);
-            }
-        }
+//        for (Property property : mCurrentPendingJob.getProperties()) {
+//
+//            if (property.getKey() != null && property.getKey().length() > 0 &&
+//                    mHashMapHeaders.get(property.getKey()).getShowOnHeader() &&
+//                    property.getValue() != null &&  property.getValue().length() > 0) {
+//
+//                properties.add(property);
+//            }
+//        }
 
         if (properties.size() > 0) {
-            mTitlLine1Tv1.setText(properties.get(0).getKey());
-            mTitlLine1Tv2.setText(properties.get(0).getValue());
+            mTitleLine1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName(), 1));
+            mTitleLine1Tv2.setText(getResizedString(properties.get(0).getValue(), 2));
         }
         if (properties.size() > 1) {
-            mTitlLine1Tv3.setText(properties.get(1).getKey());
-            mTitlLine1Tv4.setText(properties.get(1).getValue());
-        }
-        if (properties.size() > 2) {
-            mTitlLine1Tv5.setText(properties.get(2).getKey());
-            mTitlLine1Tv6.setText(properties.get(2).getValue());
-        }
-        if (properties.size() > 3) {
-            mTit2Line1Tv1.setText(properties.get(3).getKey());
-            mTit2Line1Tv2.setText(properties.get(3).getValue());
-        }
-        if (properties.size() > 4) {
-            mTit2Line1Tv3.setText(properties.get(4).getKey());
-            mTit2Line1Tv4.setText(properties.get(4).getValue());
-        }
-        if (properties.size() > 5) {
-            mTit2Line1Tv5.setText(properties.get(5).getKey());
-            mTit2Line1Tv6.setText(properties.get(5).getValue());
+            mTitleLine1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName(), 1));
+            mTitleLine1Tv4.setText(getResizedString(properties.get(1).getValue(), 2));
         }
 
+        if (properties.size() > 2) {
+            mTit2Line1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName(), 1));
+            mTit2Line1Tv2.setText(getResizedString(properties.get(2).getValue(), 2));
+        }
+        if (properties.size() > 3) {
+            mTit2Line1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName(), 1));
+            mTit2Line1Tv4.setText(getResizedString(properties.get(3).getValue(), 2));
+        }
+
+    }
+
+    private String getResizedString(String s, int type) {
+
+        if (s == null || s.length() <= 20) {
+            return s;
+
+        } else {
+
+            switch (type) {
+
+                case 1:
+
+                    return s.substring(0, 30) + "...";
+
+                case 2:
+
+                    return s.substring(0, 20) + "...";
+
+                default:
+                    return s;
+            }
+
+        }
     }
 
     private void headerListToHashMap(List<Header> headers) {
@@ -573,7 +634,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mMoldMoldCatalogTv = mMoldItem.findViewById(R.id.IJAM_mold2_tv2);
 
-        mMoldcavitiesActualTv = mMoldItem.findViewById(R.id.IJAM_mold3_tv2);
+        mMoldCavitiesActualTv = mMoldItem.findViewById(R.id.IJAM_mold3_tv2);
 
         mMoldCavitiesStandardTv = mMoldItem.findViewById(R.id.IJAM_mold4_tv2);
     }
@@ -588,19 +649,16 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initVarsTitleLine() {
-        mTitlLine1Tv1 = findViewById(R.id.AJA_title_line1_tv1);
-        mTitlLine1Tv2 = findViewById(R.id.AJA_title_line1_tv2);
-        mTitlLine1Tv3 = findViewById(R.id.AJA_title_line1_tv3);
-        mTitlLine1Tv4 = findViewById(R.id.AJA_title_line1_tv4);
-        mTitlLine1Tv5 = findViewById(R.id.AJA_title_line1_tv5);
-        mTitlLine1Tv6 = findViewById(R.id.AJA_title_line1_tv6);
+        mTitleLine1Tv1 = findViewById(R.id.AJA_title_line1_tv1);
+        mTitleLine1Tv2 = findViewById(R.id.AJA_title_line1_tv2);
+        mTitleLine1Tv3 = findViewById(R.id.AJA_title_line1_tv3);
+        mTitleLine1Tv4 = findViewById(R.id.AJA_title_line1_tv4);
 
         mTit2Line1Tv1 = findViewById(R.id.AJA_title_line2_tv1);
         mTit2Line1Tv2 = findViewById(R.id.AJA_title_line2_tv2);
         mTit2Line1Tv3 = findViewById(R.id.AJA_title_line2_tv3);
         mTit2Line1Tv4 = findViewById(R.id.AJA_title_line2_tv4);
-        mTit2Line1Tv5 = findViewById(R.id.AJA_title_line2_tv5);
-        mTit2Line1Tv6 = findViewById(R.id.AJA_title_line2_tv6);
+
     }
 
     private void initVarsSearch() {
@@ -614,21 +672,26 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         initRecyclerViews();
 
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+
+            findViewById(R.id.AJA_back_btn).setRotationY(180);
+        }
+
     }
 
     private void initRecyclerViews() {
 
         sortHeaders();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mHeadersAdapter = new JobHeadersAdaper(mHeaders, mHashMapHeaders, this, this);
+        mHeadersAdapter = new JobHeadersAdapter(mHeaders, mHashMapHeaders, this, this);
         mHeadersRv.setLayoutManager(layoutManager);
         mHeadersRv.setAdapter(mHeadersAdapter);
 
-        mPandingJobs.get(0).setSelected(true);
+        mPendingJobs.get(0).setSelected(true);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mPandingJobsAdaper = new PendingJobsAdapter(mPandingJobs, mHashMapHeaders, this, this);
+        mPendingJobsAdapter = new PendingJobsAdapter(mPendingJobs, mHashMapHeaders, this, this);
         mPendingJobsRv.setLayoutManager(layoutManager2);
-        mPendingJobsRv.setAdapter(mPandingJobsAdaper);
+        mPendingJobsRv.setAdapter(mPendingJobsAdapter);
     }
 
     private void initListener() {
@@ -654,14 +717,21 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (s.length() < 1) {
+                    for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                        mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                    }
+                }
+
                 updateRvBySearchResult();
+
             }
         });
     }
 
     public void updateRvBySearchResult() {
 
-        mPandingJobs.clear();
+        mPendingJobs.clear();
 
         mHeaders.clear();
 
@@ -669,10 +739,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             for (Property property : pandingJob.getProperties()) {
 
-                if (property.getValue() != null && property.getValue().contains(mSearchViewEt.getText())) {
+                if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
-                    if (!mPandingJobs.contains(pandingJob)) {
-                        mPandingJobs.add(pandingJob);
+                    if (!mPendingJobs.contains(pandingJob)) {
+                        mPendingJobs.add(pandingJob);
                     }
 
                     if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())))
@@ -682,11 +752,55 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
 
         mPendingJobsNoHeadersFiltered.clear();
-        mPendingJobsNoHeadersFiltered.addAll(mPandingJobs);
+        mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
         sortHeaders();
         mHeadersAdapter.notifyDataSetChanged();
-        mPandingJobsAdaper.notifyDataSetChanged();
+        mPendingJobsAdapter.notifyDataSetChanged();
+
+        filterPendingJobsByHeaders();
     }
+
+    public void filterPendingJobsByHeaders() {
+
+        boolean isSelectedByUser = false;
+
+        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+
+            if (headerEntry.getValue().isSelected()) {
+
+                isSelectedByUser = true;
+            }
+        }
+
+        if (!isSelectedByUser) {
+
+            mPendingJobs.clear();
+            mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
+            mPendingJobsAdapter.notifyDataSetChanged();
+
+            return;
+        }
+
+        mPendingJobs.clear();
+
+        for (PandingJob pandingJob : mPendingJobsNoHeadersFiltered) {
+
+            for (Property property : pandingJob.getProperties()) {
+
+                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()
+                        && property.getValue() != null && mSearchViewEt.getText() != null &&
+                        property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
+
+                    if (!mPendingJobs.contains(pandingJob)) {
+                        mPendingJobs.add(pandingJob);
+                    }
+                }
+            }
+        }
+
+        mPendingJobsAdapter.notifyDataSetChanged();
+    }
+
 
     private void sortHeaders() {
 
@@ -758,6 +872,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
+                postUpdateActions(mUpdatedActions);
+
                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
                 postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
                         String.valueOf(persistenceManager.getMachineId()),
@@ -790,7 +906,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void showRecipeFragment() {
 
-        mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
+        RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(JOB_ACTION_FRAGMENT).commit();
     }
@@ -803,52 +919,25 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onHeaderSelected(HashMap<String, Header> hashMapHeader) {
 
-        filterPandingJobsByHeaders(hashMapHeader);
-    }
-
-    public void filterPandingJobsByHeaders(HashMap<String, Header> hashMapHeader) {
-
         mHashMapHeaders = hashMapHeader;
 
-        boolean isSelectedByUser = false;
-
-        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
-
-            if (headerEntry.getValue().isSelected()) {
-
-                isSelectedByUser = true;
-            }
-        }
-
-        if (!isSelectedByUser) {
-
-            mPandingJobs.clear();
-            mPandingJobs.addAll(mPendingJobsNoHeadersFiltered);
-            mPandingJobsAdaper.notifyDataSetChanged();
-
-            return;
-        }
-
-        mPandingJobs.clear();
-
-        for (PandingJob pandingJob : mPendingJobsNoHeadersFiltered) {
-
-            for (Property property : pandingJob.getProperties()) {
-
-                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()) {
-
-                    if (!mPandingJobs.contains(pandingJob)) {
-                        mPandingJobs.add(pandingJob);
-                    }
-                }
-            }
-        }
-
-        mPandingJobsAdaper.notifyDataSetChanged();
+        filterPendingJobsByHeaders();
     }
 
     @Override
     public void onPandingJobSelected(PandingJob pandingJob) {
+
+        for (PandingJob pandingJob1 : mPendingJobsResponse.getPandingJobs()) {
+
+            if (pandingJob.equals(pandingJob1)) {
+
+                pandingJob1.setSelected(pandingJob.isSelected());
+
+            } else {
+
+                pandingJob1.setSelected(false);
+            }
+        }
 
         mCurrentPendingJob = pandingJob;
         ArrayList<Integer> jobIds = new ArrayList<>();
@@ -866,9 +955,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mProductPdfView.fromUri(uri)
                 .defaultPage(0)
-                .enableSwipe(true)
+                .enableSwipe(false)
                 .swipeHorizontal(false)
-                .enableAnnotationRendering(true)
+                .enableAnnotationRendering(false)
                 .onLoad(new OnLoadCompleteListener() {
                     @Override
                     public void loadComplete(int nbPages) {
@@ -876,7 +965,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                         mProductPdfNoImageLy.setVisibility(View.INVISIBLE);
                         mProductPdfView.setVisibility(View.VISIBLE);
 
-                        PdfDocument.Meta meta = mProductPdfView.getDocumentMeta();
                         printBookmarksTree(mProductPdfView.getTableOfContents(), "-");
 
                     }
@@ -916,7 +1004,22 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onActionChecked(Action action) {
 
-        postUpdateActions(action);
+        updateActionList(action);
+
+    }
+
+    public void updateActionList(Action action) {
+        if (mUpdatedActions == null) {
+
+            mUpdatedActions = new ArrayList<>();
+        }
+
+        if (mUpdatedActions.contains(action)){
+
+            mUpdatedActions.remove(action);
+        }
+
+        mUpdatedActions.add(action);
     }
 
     @Override
@@ -935,7 +1038,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         if (fileUrl != null && fileUrl.size() > 0) {
 
-            mGalleryIntent = new Intent(JobActionActivity.this, GalleryActivity.class);
+            Intent mGalleryIntent = new Intent(JobActionActivity.this, GalleryActivity.class);
 
             mGalleryIntent.putExtra(GalleryActivity.EXTRA_FILE_URL, (ArrayList<String>) fileUrl);
 
@@ -962,44 +1065,73 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void showActionDialog(final Action action) {
 
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        final EditText editText = new EditText(this);
-        editText.setHint(R.string.you_can_add_a_note);
-        alert.setTitle(R.string.action_details);
-        alert.setMessage(action.getText());
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_action, null);
+        builder.setView(dialogView);
 
-        alert.setView(editText);
+        TextView textView = dialogView.findViewById(R.id.DA_text);
+        textView.setText(action.getText());
 
-        alert.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+        final EditText editText = dialogView.findViewById(R.id.DA_note);
+
+        Button button = dialogView.findViewById(R.id.DA_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DA_close_btn);
+
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                 action.setNotes(editText.getText().toString());
-                postUpdateActions(action);
+                updateActionList(action);
+                alert.dismiss();
             }
         });
 
-        alert.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                dialog.dismiss();
-
+                alert.dismiss();
             }
         });
 
-        alert.show();
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    action.setNotes(editText.getText().toString());
+                    updateActionList(action);
+
+                    alert.dismiss();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
-        mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_ly, croutonType, this);
+        mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_relative_ly, croutonType, this);
 
     }
 
     @Override
     public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
+        if (mCroutonCreator != null) {
+            mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_relative_ly, croutonType, this);
+
+        }
     }
 
     @Override

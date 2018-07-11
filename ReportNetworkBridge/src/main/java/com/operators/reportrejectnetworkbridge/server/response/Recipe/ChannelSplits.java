@@ -73,7 +73,7 @@ public class ChannelSplits implements Parcelable {
         this.SplitNumber = (Integer) in.readValue(Integer.class.getClassLoader());
         this.BaseSplits = new ArrayList<com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits>();
         in.readList(this.BaseSplits, com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits.class.getClassLoader());
-        this.materialInformation = in.readParcelable(Object.class.getClassLoader());
+        this.materialInformation = in.readParcelable(MaterialInformation.class.getClassLoader());
         this.Name = in.readString();
     }
 

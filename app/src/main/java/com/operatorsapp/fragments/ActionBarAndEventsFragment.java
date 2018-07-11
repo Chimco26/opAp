@@ -92,6 +92,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int TYPE_STOP = 6;
     public static final int TYPE_ALERT = 20;
     private static final int STOPPED = 2;
+    private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -582,8 +583,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         switch (position) {
                             case 0: {
                                 ZLogger.d(LOG_TAG, "New Job");
-//                                mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
-                                mListener.onJobActionItemClick();
+
+                                if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
+
+                                    mListener.onJobActionItemClick();
+
+                                }else {
+
+                                    mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+
+                                }
                                 break;
                             }
                             case 1: {

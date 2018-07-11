@@ -19,7 +19,7 @@ public class ErrorResponse implements Parcelable {
     private int mErrorLine;
 
     @SerializedName("ErrorFunction")
-    private int mErrorFunction;
+    private String mErrorFunction;
 
     public String getErrorDesc() {
         return mErrorDesc;
@@ -40,7 +40,7 @@ public class ErrorResponse implements Parcelable {
         dest.writeString(this.mErrorMessage);
         dest.writeInt(this.mErrorCode);
         dest.writeInt(this.mErrorLine);
-        dest.writeInt(this.mErrorFunction);
+        dest.writeString(this.mErrorFunction);
     }
 
     public ErrorResponse() {
@@ -51,7 +51,7 @@ public class ErrorResponse implements Parcelable {
         this.mErrorMessage = in.readString();
         this.mErrorCode = in.readInt();
         this.mErrorLine = in.readInt();
-        this.mErrorFunction = in.readInt();
+        this.mErrorFunction = in.readString();
     }
 
     public static final Parcelable.Creator<ErrorResponse> CREATOR = new Parcelable.Creator<ErrorResponse>() {

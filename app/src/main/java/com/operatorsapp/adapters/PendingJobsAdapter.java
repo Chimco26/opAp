@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
 import java.util.ArrayList;
@@ -48,39 +49,54 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
     @Override
     public void onBindViewHolder(@NonNull final PendingJobsAdapter.ViewHolder viewHolder, final int position) {
 
-        if (mPandingjobs.get(position).isSelected()){
+        ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(position).getProperties();
+//        ArrayList<Property> properties = new ArrayList<>();
+//
+//        for (Property property: mPandingjobs.get(position).getProperties()){
+//
+//            if (property.getValue() != null && property.getValue().length() > 0){
+//
+//                properties.add(property);
+//            }
+//        }
+
+        if (mPandingjobs.get(position).isSelected()) {
 
             viewHolder.mSelectedBarView.setVisibility(View.VISIBLE);
             viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
-        }else {
+        } else {
 
             viewHolder.mSelectedBarView.setVisibility(View.INVISIBLE);
             viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
         }
 
-        if (mPandingjobs.get(position).getProperties().size() > 0) {
-            viewHolder.mTv1.setText(String.format("%s %s", mPandingjobs.get(position).getProperties().get(0).getKey(), mPandingjobs.get(position).getProperties().get(0).getValue()));
-            viewHolder.mTv1.setTextColor(Color.parseColor(mHashMapHeaders.get(mPandingjobs.get(position).getProperties().get(0).getKey()).getColor().replace("\t","")));
+        if (properties.size() > 0) {
+            viewHolder.mTv1.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName()));
+            viewHolder.mTv1Value.setText(properties.get(0).getValue());
+            viewHolder.mTv1.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(0).getKey()).getColor().replace("\t", "")));
         }
 
-        if (mPandingjobs.get(position).getProperties().size() > 1) {
+        if (properties.size() > 1) {
 
-            viewHolder.mTv2.setText(String.format("%s %s", mPandingjobs.get(position).getProperties().get(1).getKey(), mPandingjobs.get(position).getProperties().get(1).getValue()));
-            viewHolder.mTv2.setTextColor(Color.parseColor(mHashMapHeaders.get(mPandingjobs.get(position).getProperties().get(1).getKey()).getColor().replace("\t","")));
-
-        }
-        if (mPandingjobs.get(position).getProperties().size() > 2) {
-
-            viewHolder.mTv3.setText(String.format("%s %s", mPandingjobs.get(position).getProperties().get(2).getKey(), mPandingjobs.get(position).getProperties().get(2).getValue()));
-            viewHolder.mTv3.setTextColor(Color.parseColor(mHashMapHeaders.get(mPandingjobs.get(position).getProperties().get(2).getKey()).getColor().replace("\t","")));
+            viewHolder.mTv2.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName()));
+            viewHolder.mTv2Value.setText(properties.get(1).getValue());
+            viewHolder.mTv2.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(1).getKey()).getColor().replace("\t", "")));
 
         }
+        if (properties.size() > 2) {
 
-        if (mPandingjobs.get(position).getProperties().size() > 3) {
+            viewHolder.mTv3.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName()));
+            viewHolder.mTv3Value.setText(properties.get(2).getValue());
+            viewHolder.mTv3.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(2).getKey()).getColor().replace("\t", "")));
 
-            viewHolder.mTv4.setText(String.format("%s %s", mPandingjobs.get(position).getProperties().get(3).getKey(), mPandingjobs.get(position).getProperties().get(3).getValue()));
-            viewHolder.mTv4.setTextColor(Color.parseColor(mHashMapHeaders.get(mPandingjobs.get(position).getProperties().get(3).getKey()).getColor().replace("\t","")));
+        }
+
+        if (properties.size() > 3) {
+
+            viewHolder.mTv4.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName()));
+            viewHolder.mTv4Value.setText(properties.get(3).getValue());
+            viewHolder.mTv4.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(3).getKey()).getColor().replace("\t", "")));
 
         }
 
@@ -88,21 +104,17 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
             @Override
             public void onClick(View v) {
 
-                if (mPandingjobs.get(position).isSelected()){
-
-                    mPandingjobs.get(position).setSelected(false);
-
-                }else {
+                if (!mPandingjobs.get(position).isSelected()) {
 
                     resetSelectedItem();
                     mPandingjobs.get(position).setSelected(true);
 
+                    updateView(viewHolder, mPandingjobs.get(position).isSelected());
+
+                    notifyDataSetChanged();
+                    mListener.onPandingJobSelected(mPandingjobs.get(position));
                 }
 
-                updateView(viewHolder, mPandingjobs.get(position).isSelected());
-
-                notifyDataSetChanged();
-                mListener.onPandingJobSelected(mPandingjobs.get(position));
             }
         });
 
@@ -110,7 +122,7 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
 
     private void resetSelectedItem() {
 
-        for (PandingJob pandingJob: mPandingjobs){
+        for (PandingJob pandingJob : mPandingjobs) {
 
             pandingJob.setSelected(false);
         }
@@ -118,12 +130,12 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
 
     private void updateView(ViewHolder viewHolder, boolean selected) {
 
-        if (selected){
+        if (selected) {
 
             viewHolder.mSelectedBarView.setVisibility(View.VISIBLE);
             viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
-        }else {
+        } else {
 
             viewHolder.mSelectedBarView.setVisibility(View.INVISIBLE);
             viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
@@ -147,6 +159,10 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
         private final TextView mTv4;
         private final View mSelectedBarView;
         private final View mLayout;
+        private final TextView mTv1Value;
+        private final TextView mTv2Value;
+        private final TextView mTv3Value;
+        private final TextView mTv4Value;
 
 
         ViewHolder(View itemView) {
@@ -158,6 +174,11 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
             mTv2 = itemView.findViewById(R.id.PI_tv2);
             mTv3 = itemView.findViewById(R.id.PI_tv3);
             mTv4 = itemView.findViewById(R.id.PI_tv4);
+
+            mTv1Value = itemView.findViewById(R.id.PI_tv1_value);
+            mTv2Value = itemView.findViewById(R.id.PI_tv2_value);
+            mTv3Value = itemView.findViewById(R.id.PI_tv3_value);
+            mTv4Value = itemView.findViewById(R.id.PI_tv4_value);
 
             mSelectedBarView = itemView.findViewById(R.id.PI_selected_bar);
 

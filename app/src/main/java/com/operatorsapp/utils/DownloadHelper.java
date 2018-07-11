@@ -37,20 +37,25 @@ public class DownloadHelper {
 
         this.mListener = listener;
 
-        mDownloadFileFromURL = new DownloadFileFromURL();
-
     }
 
     public void downloadFileFromUrl(String url) {
 
+        mDownloadFileFromURL = new DownloadFileFromURL();
         mDownloadFileFromURL.execute(url);
 
     }
 
     public boolean cancelDownloadFileFromUrl() {
 
-        return mDownloadFileFromURL.cancel(true);
+        if (mDownloadFileFromURL != null) {
 
+            return mDownloadFileFromURL.cancel(true);
+
+        }else {
+
+            return false;
+        }
     }
 
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {

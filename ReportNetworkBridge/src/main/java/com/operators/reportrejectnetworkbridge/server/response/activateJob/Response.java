@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 
 public class Response implements Parcelable {
 
@@ -13,7 +14,7 @@ public class Response implements Parcelable {
     private Boolean functionSucceed;
     @SerializedName("error")
     @Expose
-    private String error;
+    private ErrorResponse error;
     @SerializedName("LeaderRecordID")
     @Expose
     private Integer leaderRecordID;
@@ -37,11 +38,11 @@ public class Response implements Parcelable {
     public void setFunctionSucceed(Boolean functionSucceed) {
         this.functionSucceed = functionSucceed;
     }
-    public String getError() {
+    public ErrorResponse getError() {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(ErrorResponse error) {
         this.error = error;
     }
 
@@ -61,7 +62,7 @@ public class Response implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.functionSucceed);
-        dest.writeString(this.error);
+        dest.writeParcelable(this.error, 0);
         dest.writeValue(this.leaderRecordID);
     }
 
@@ -70,7 +71,7 @@ public class Response implements Parcelable {
 
     protected Response(Parcel in) {
         this.functionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.error = in.readString();
+        this.error = in.readParcelable(ErrorResponse.class.getClassLoader());
         this.leaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 

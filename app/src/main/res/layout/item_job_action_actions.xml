@@ -35,10 +35,10 @@
 
     <ImageView
         android:id="@+id/IJAA_open_btn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/grey_600" />
+        android:src="@drawable/note" />
 
 </RelativeLayout>

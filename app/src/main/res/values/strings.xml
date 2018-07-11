@@ -209,5 +209,8 @@
     <string name="get_panding_jobs_failed_error">Get Panding Jobs Failed Error</string>
     <string name="get_jobs_details_failed_error">Get Job Details Failed Error</string>
     <string name="reject_reason_setup">Setup</string>
+    <string name="no_available_pdf">No Available Pdf</string>
+    <string name="add_note">Add Note</string>
+
 
 </resources>

@@ -48,6 +48,7 @@ public class CroutonCreator {
                 break;
             case CREDENTIALS_ERROR:
             case URL_ERROR:
+            case SUCCESS:
                 crouton = createCrouton(activity, croutonMessage, croutonDurationInMilliseconds, viewGroup, croutonType);
                 break;
             case CONNECTIVITY:
@@ -87,7 +88,7 @@ public class CroutonCreator {
 
             if (mCurrentCrouton.getCroutonType().equals(CroutonType.CONNECTIVITY)
                     || mCurrentCrouton.getCroutonType().equals(CroutonType.ALERT_DIALOG)
-                    || mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR) ){
+                    || mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR)) {
 
                 mCurrentCrouton.getCrouton().hide();
 
@@ -129,6 +130,10 @@ public class CroutonCreator {
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
+            case SUCCESS:
+                croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_success, null);
+                setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
+                break;
             default:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
@@ -159,7 +164,7 @@ public class CroutonCreator {
     }
 
     public enum CroutonType {
-        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR, ALERT_DIALOG
+        CONNECTIVITY, NETWORK_ERROR, CREDENTIALS_ERROR, URL_ERROR, ALERT_DIALOG, SUCCESS
     }
 
     private void setProgressCountDown(View view, int croutonTime) {
