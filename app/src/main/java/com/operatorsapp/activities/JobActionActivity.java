@@ -697,9 +697,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private void initListener() {
 
         findViewById(R.id.AJA_back_btn).setOnClickListener(this);
+        findViewById(R.id.AJA_title).setOnClickListener(this);
         findViewById(R.id.AJA_search_btn).setOnClickListener(this);
         findViewById(R.id.AJA_job_activate_btn).setOnClickListener(this);
         findViewById(R.id.AJA_item_material).setOnClickListener(this);
+        mMoldItemImg.setOnClickListener(this);
         findViewById(R.id.AJA_img1).setOnClickListener(this);
         findViewById(R.id.AJA_img2).setOnClickListener(this);
 
@@ -861,6 +863,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
 
             case R.id.AJA_back_btn:
+            case R.id.AJA_title:
 
                 onBackPressed();
 
@@ -899,6 +902,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
                         String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+
+                break;
+
+                case R.id.IJAM_img:
+
+                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getMold().getFiles(),
+                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getName()));
 
                 break;
         }

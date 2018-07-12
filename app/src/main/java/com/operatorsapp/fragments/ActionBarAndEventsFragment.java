@@ -1149,6 +1149,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initStatusLayout(MachineStatus machineStatus) {
 
+        if (machineStatus == null){
+
+            return;
+        }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
