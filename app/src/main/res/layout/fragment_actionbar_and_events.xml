@@ -181,45 +181,86 @@
         android:layout_height="match_parent"
         android:layout_below="@id/status_layout">
 
+
+
+
         <LinearLayout
             android:id="@+id/fragment_dashboard_shiftlog"
             android:layout_width="124dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@drawable/side_menu"
-            android:orientation="horizontal">
-
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/fragment_dashboard_no_notif"
-                style="@style/FontStyle_T7"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:maxLines="1"
-                android:text="@string/no_notifications"
-                android:textColor="@color/divider_gray"
-                android:textSize="30sp"
-                android:visibility="gone"
-                app:minTextSize="15dp" />
-
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/fragment_dashboard_loading_data_shiftlog"
-                style="@style/FontStyle_T7"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:maxLines="1"
-                android:text="@string/loading_data"
-                android:textColor="@color/divider_gray"
-                android:textSize="30sp"
-                android:visibility="gone"
-                app:minTextSize="15dp" />
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/fragment_dashboard_min_duration_lil"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:text="@string/min_duration_shiftlog"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/fragment_dashboard_min_duration_tv"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|start"
+                    android:layout_width="0dp"
+                    android:paddingStart="3dp"
+                    android:textAlignment="textStart"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/fragment_dashboard_no_notif"
+                    style="@style/FontStyle_T7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:maxLines="1"
+                    android:text="@string/no_notifications"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="30sp"
+                    android:visibility="gone"
+                    app:minTextSize="15dp" />
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/fragment_dashboard_loading_data_shiftlog"
+                    style="@style/FontStyle_T7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:maxLines="1"
+                    android:text="@string/loading_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="30sp"
+                    android:visibility="gone"
+                    app:minTextSize="15dp" />
+
+                <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -269,6 +310,8 @@
                     android:layout_height="match_parent"
                     android:scrollbarFadeDuration="0"
                     android:scrollbars="vertical" />
+
+            </LinearLayout>
 
             </LinearLayout>
 

@@ -376,9 +376,9 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
     {
+
         @Override
-        public void sendReportSuccess()
-        {
+        public void sendReportSuccess(Object errorResponse) {
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");

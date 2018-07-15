@@ -33,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -146,6 +147,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mParentLy;
     private Fragment mVisiblefragment;
     private boolean mFromAnotherActivity;
+    private TextView mMinDurationText;
+    private LinearLayout mMinDurationLil;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -231,6 +234,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
+        mMinDurationText = (TextView) view.findViewById(R.id.fragment_dashboard_min_duration_tv);
+       // mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
+
+        mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
+       // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
         view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
@@ -647,7 +656,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
             String [] items = {"Production Status", "Production Status2"};
-            final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, "Production Status");
+            final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
             productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
             productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 

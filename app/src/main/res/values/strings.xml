@@ -211,6 +211,8 @@
     <string name="reject_reason_setup">Setup</string>
     <string name="no_available_pdf">No Available Pdf</string>
     <string name="add_note">Add Note</string>
+    <string name="min_duration_shiftlog">Min. Event Duration: </string>
+    <string name="minutes">Min.</string>
 
 
 </resources>

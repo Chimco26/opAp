@@ -235,6 +235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE "+ KEY_GROUP_ID + " = 20" +
                 " OR (" + KEY_GROUP_ID + " !=20 AND " + KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_GROUP_ID + " !=20 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= '')" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -252,6 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public  Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +  " WHERE "+ KEY_GROUP_ID + " != 20 AND " +
                 KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_GROUP_ID + " !=20 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= '')" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
