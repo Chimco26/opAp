@@ -48,7 +48,7 @@
                     android:id="@+id/text_view_product_name_and_id"
                     style="@style/Roboto_Regular_Status_Data"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -62,7 +62,7 @@
                 <Spinner
                     android:id="@+id/FAAE_product_spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="30dp"
                     android:visibility="gone"
                     android:dropDownVerticalOffset="60dp"
                     android:spinnerMode="dropdown"/>
