@@ -939,7 +939,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList, Integer mSelectJobId) {
 
-        //todo update object with id
+        //todo update object
         initStatusLayout(mCurrentMachineStatus);
     }
 
