@@ -97,7 +97,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    public void startPolling() {
+    public void startPolling(final Integer joshID) {
 
         mJob = null;
 
@@ -105,7 +105,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                getMachineData(onJobFinishedListener);
+                getMachineData(onJobFinishedListener, joshID);
                 getMachineStatus(onJobFinishedListener);
                 getShiftLogs(onJobFinishedListener);
             }
@@ -169,13 +169,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    private void getMachineData(final JobBase.OnJobFinishedListener onJobFinishedListener) {
+    private void getMachineData(final JobBase.OnJobFinishedListener onJobFinishedListener, Integer joshID) {
         if (mMachineDataPersistenceManagerInterface != null) {
             mGetMachineDataNetworkBridgeInterface.getMachineData(mMachineDataPersistenceManagerInterface.getSiteUrl(), mMachineDataPersistenceManagerInterface.getSessionId(), mMachineDataPersistenceManagerInterface.getMachineId(), mMachineDataPersistenceManagerInterface.getMachineDataStartingFrom(), new GetMachineDataCallback<Widget>() {
                 @Override
                 public void onGetMachineDataSucceeded(ArrayList<Widget> widgetList) {
                     if (mMachineDataUICallback != null) {
-
 
                         mMachineDataUICallback.onDataReceivedSuccessfully(widgetList);
                     } else {
@@ -196,7 +195,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                         mMachineDataUICallback.onDataReceiveFailed(reason);
                     }
                 }
-            }, mMachineDataPersistenceManagerInterface.getTotalRetries(), mMachineDataPersistenceManagerInterface.getRequestTimeout());
+            }, mMachineDataPersistenceManagerInterface.getTotalRetries(), mMachineDataPersistenceManagerInterface.getRequestTimeout(), joshID);
         }
     }
 

@@ -1,9 +1,6 @@
 package com.operators.machinedatanetworkbridge;
 
 
-import android.util.Log;
-
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.models.Widget;
@@ -35,9 +32,9 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
     }
 
     @Override
-    public void getMachineData(String siteUrl, String sessionId, int machineId, String startingFrom, final GetMachineDataCallback getMachineDataCallback, final int totalRetries, int specificRequestTimeout)
+    public void getMachineData(String siteUrl, String sessionId, int machineId, String startingFrom, final GetMachineDataCallback getMachineDataCallback, final int totalRetries, int specificRequestTimeout, Integer joshID)
     {
-        GetMachineDataDataRequest getMachineDataDataRequest = new GetMachineDataDataRequest(sessionId, machineId, startingFrom);
+        GetMachineDataDataRequest getMachineDataDataRequest = new GetMachineDataDataRequest(sessionId, machineId, startingFrom, String.valueOf(joshID));
         Call<MachineDataDataResponse> call = mGetMachineDataNetworkManagerInterface.getMachineDataRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineData(getMachineDataDataRequest);
         call.enqueue(new Callback<MachineDataDataResponse>()
         {

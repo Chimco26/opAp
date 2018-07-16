@@ -47,7 +47,6 @@ import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
-import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.server.NetworkManager;
 import com.ravtech.david.sqlcore.Event;
@@ -938,8 +937,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList, Integer mSelectJobId) {
 
+        //todo update object with id
+        initStatusLayout(mCurrentMachineStatus);
     }
 
 
