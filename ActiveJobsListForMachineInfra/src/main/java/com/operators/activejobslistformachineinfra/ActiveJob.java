@@ -27,6 +27,16 @@ public class ActiveJob {
     private String productName;
     @SerializedName("ProductCatalogID")
     private String productCatalogId;
+    @SerializedName("JobName")
+    private String jobName;
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
 
     public void setCavitiesActual(Integer cavitiesActual) {
         this.cavitiesActual = cavitiesActual;

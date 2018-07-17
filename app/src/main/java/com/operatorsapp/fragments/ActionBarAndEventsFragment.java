@@ -582,7 +582,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         joshProductNameSpinnerAdapter.setTitle(position);
 
-                        mListener.onJoshProductSelected(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID());
+                        mListener.onJoshProductSelected(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID(),
+                                mActiveJobsListForMachine.getActiveJobs().get(position).getJobName());
 
 //                        if (mJobIdTextView != null) {
 //                            mJobIdTextView.setText(String.valueOf(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID()));
@@ -919,10 +920,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         onStopEventSelected(eventID, true);
     }
 
-//    private void openStopReportScreen(int eventId, String start, String end, long duration) {
-//   aa     mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
-//    }
-
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
@@ -937,17 +934,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList, Integer mSelectJobId) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobName) {
 
         //todo update object
+        mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
         initStatusLayout(mCurrentMachineStatus);
+
     }
 
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
-//        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
 
         if (events != null && events.size() > 0) {
@@ -1018,10 +1016,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-               /* else {
-                    mShiftLogAdapter.notifyDataSetChanged();
-                }*/
-            if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
+            if (mEventsQueue.size() > 0)
             {
                 Event event = mEventsQueue.peek();
                 // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
@@ -1051,7 +1046,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogAdapter != null)
             mShiftLogAdapter.notifyDataSetChanged();
-//        }
     }
 
     @Override
@@ -1412,7 +1406,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onJobActionItemClick();
 
-        void onJoshProductSelected(Integer joshID);
+        void onJoshProductSelected(Integer joshID, String jobName);
     }
 
 }

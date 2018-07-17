@@ -65,6 +65,10 @@ public class AllMachinesData {
     @SerializedName("SetupEnd")
     private boolean setupEnd;
 
+    public void setCurrentJobName(String currentJobName) {
+        this.currentJobName = currentJobName;
+    }
+
     public int getCurrentJobID() {
         return currentJobID;
     }

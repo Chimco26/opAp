@@ -146,6 +146,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private boolean isOnDashboard;
+    private String mSelectedJobName;
 
 
     @Override
@@ -466,7 +467,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onMachineDataReceived(widgetList, mSelectJobId);
+                        dashboardUICallbackListener.onMachineDataReceived(widgetList, mSelectedJobName);
                     }
                 } else {
 
@@ -1231,9 +1232,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJoshProductSelected(Integer joshID) {
+    public void onJoshProductSelected(Integer joshID, String jobName) {
 
         mSelectJobId = joshID;
+
+        mSelectedJobName = jobName;
 
         dashboardDataStartPolling(joshID);
 

@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:visibility="gone"
-                    android:dropDownVerticalOffset="40dp"
+                    android:dropDownVerticalOffset="43dp"
                     android:spinnerMode="dropdown"/>
 
             </RelativeLayout>
