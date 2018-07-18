@@ -20,4 +20,12 @@ public class ErrorResponse {
         return mErrorCode;
     }
 
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(String mErrorDesc, String mErrorMessage, int mErrorCode) {
+        this.mErrorDesc = mErrorDesc;
+        this.mErrorMessage = mErrorMessage;
+        this.mErrorCode = mErrorCode;
+    }
 }

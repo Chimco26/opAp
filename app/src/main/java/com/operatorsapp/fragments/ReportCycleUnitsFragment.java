@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -32,11 +34,13 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -339,15 +343,24 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(Object o) {
-            //TODO crouton error
+
+            ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
-            if (o != null){
-
-                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            if (response.isFunctionSucceed()){
+                // TODO: 17/07/2018 add crouton for success
+               // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+            }else {
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
+
+//            if (o != null){
+//
+//                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+//            }
             if (getFragmentManager() != null) {
 
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -365,6 +378,23 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
         }
     };
+
+    private ErrorResponseNewVersion objectToNewError(Object o) {
+        ErrorResponseNewVersion responseNewVersion;
+        if (o instanceof ErrorResponseNewVersion){
+            responseNewVersion = (ErrorResponseNewVersion)o;
+        }else {
+            Gson gson = new GsonBuilder().create();
+
+            ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
+
+            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            if (responseNewVersion.getmError().getErrorCode() != 0){
+                responseNewVersion.setFunctionSucceed(false);
+            }
+        }
+        return responseNewVersion;
+    }
 
     private void dismissProgressDialog() {
         if (getActivity() != null) {

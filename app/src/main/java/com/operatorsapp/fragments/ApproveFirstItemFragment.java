@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -32,6 +34,8 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -45,6 +49,7 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -310,13 +315,26 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportSuccess(Object o)
         {//TODO crouton error
+            ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (o != null){
-
-                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            if (response.isFunctionSucceed()){
+                // TODO: 17/07/2018 add crouton for success
+                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+            }else {
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
+
+
+//            if (((SendApproveFirstItemResponse) o).getErrorResponse() != null){
+//
+//                mDashboardCroutonListener.onShowCrouton(((SendApproveFirstItemResponse) o).getErrorResponse().getErrorDesc());
+//            }else{
+//                // TODO: 15/07/2018 add another constructor for success
+//                mDashboardCroutonListener.onShowCrouton(getString(R.string.end_setup_success));
+//            }
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             if(mCallbackListener != null)
@@ -364,6 +382,23 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             }
         }
     };
+
+    private ErrorResponseNewVersion objectToNewError(Object o) {
+        ErrorResponseNewVersion responseNewVersion;
+        if (o instanceof ErrorResponseNewVersion){
+            responseNewVersion = (ErrorResponseNewVersion)o;
+        }else {
+            Gson gson = new GsonBuilder().create();
+
+            ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
+
+            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            if (responseNewVersion.getmError().getErrorCode() != 0){
+                responseNewVersion.setFunctionSucceed(false);
+            }
+        }
+        return responseNewVersion;
+    }
 
     private void dismissProgressDialog()
     {

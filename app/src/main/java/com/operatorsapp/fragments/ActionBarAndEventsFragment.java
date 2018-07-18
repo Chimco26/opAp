@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +39,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
@@ -149,6 +152,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mFromAnotherActivity;
     private TextView mMinDurationText;
     private LinearLayout mMinDurationLil;
+    private ImageView tutorialIv;
+    private SwipeRefreshLayout mShiftLogSwipeRefresh;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -210,6 +215,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mListener.onResize(mCloseWidth, statusBarParams.height);
 
         mParentLy = view.findViewById(R.id.parent_layouts);
+        //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
@@ -231,6 +237,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
+        mShiftLogSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.shift_log_swipe_refresh);
+        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SendBroadcast.refreshPolling(getActivity());
+            }
+        });
+
+
         mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
@@ -243,6 +258,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
         view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
+
+//        mSwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                SendBroadcast.refreshPolling(getContext());
+//                //mSwipeToRefresh.setRefreshing(true);
+//            }
+//        });
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
@@ -554,6 +577,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            title.setText(spannableString);
 //            title.setVisibility(View.VISIBLE);
 
+            tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
+            tutorialIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startToolbarTutorial();
+//                    if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
+//                    }
+                }
+            });
+
             final Spinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
 
@@ -708,6 +741,38 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
+        if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
+            startToolbarTutorial();
+        }
+
+    }
+
+    private void startToolbarTutorial() {
+        //if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
+            TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(
+                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_operator_spinner), "Here is where you sign in with your id number").targetRadius(100),
+                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner), "Here you can preform different actions in the current Job ").targetRadius(100),
+                    TapTarget.forView(mToolBarView.findViewById(R.id.settings_button), "Press here for 'Settings' screen").targetRadius(50),
+                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_tutorial_iv), "Press here to toggle tutorial").targetRadius(30)
+            ).listener(new TapTargetSequence.Listener() {
+                @Override
+                public void onSequenceFinish() {
+                    PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
+                }
+
+                @Override
+                public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                }
+
+                @Override
+                public void onSequenceCanceled(TapTarget lastTarget) {
+                    PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
+                }
+            });
+
+            tapSeq.start();
+       // }
     }
 
     private void setToolBarHeight(final View view) {
@@ -869,17 +934,27 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
 
+//        if (mSwipeToRefresh.isRefreshing()){
+//            mSwipeToRefresh.setRefreshing(false);
+//        }
 
     }
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
+        if (mShiftLogSwipeRefresh.isRefreshing()){
+            mShiftLogSwipeRefresh.setRefreshing(false);
+        }
     }
 
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
+
+        if (mShiftLogSwipeRefresh.isRefreshing()){
+            mShiftLogSwipeRefresh.setRefreshing(false);
+        }
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
@@ -1023,6 +1098,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
+
+        if (mShiftLogSwipeRefresh.isRefreshing()){
+            mShiftLogSwipeRefresh.setRefreshing(false);
+        }
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onDataFailure");
 

@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -33,6 +35,8 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -44,6 +48,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -379,11 +384,17 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
         @Override
         public void sendReportSuccess(Object errorResponse) {
+            ErrorResponseNewVersion response = objectToNewError(errorResponse);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
+            if (response.isFunctionSucceed()){
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+            }else {
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
             if (getFragmentManager() != null){
 
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -423,6 +434,23 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
     };
+
+    private ErrorResponseNewVersion objectToNewError(Object o) {
+        ErrorResponseNewVersion responseNewVersion;
+        if (o instanceof ErrorResponseNewVersion){
+            responseNewVersion = (ErrorResponseNewVersion)o;
+        }else {
+            Gson gson = new GsonBuilder().create();
+
+            ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
+
+            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            if (responseNewVersion.getmError().getErrorCode() != 0){
+                responseNewVersion.setFunctionSucceed(false);
+            }
+        }
+        return responseNewVersion;
+    }
 
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();

@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -20,6 +22,7 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -269,15 +272,27 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(Object o) {
+            ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
-            ZLogger.i(LOG_TAG, "sendReportSuccess()");
-            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
-            if (o != null){
-
-                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+            if (response.isFunctionSucceed()){
+                // TODO: 17/07/2018 add crouton for success
+                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                ZLogger.i(LOG_TAG, "sendReportSuccess()");
+                Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+            }else {
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
+
+//            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+//            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+//
+//            if (o != null){
+//
+//                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+//            }
             try {
 
                 mReportCore.unregisterListener();
@@ -321,6 +336,23 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         }
     };
+
+    private ErrorResponseNewVersion objectToNewError(Object o) {
+        ErrorResponseNewVersion responseNewVersion;
+        if (o instanceof ErrorResponseNewVersion){
+            responseNewVersion = (ErrorResponseNewVersion)o;
+        }else {
+            Gson gson = new GsonBuilder().create();
+
+            ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
+
+            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            if (responseNewVersion.getmError().getErrorCode() != 0){
+                responseNewVersion.setFunctionSucceed(false);
+            }
+        }
+        return responseNewVersion;
+    }
 
     private void dismissProgressDialog() {
         if (getActivity() != null) {

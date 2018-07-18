@@ -40,7 +40,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
             else {
                 spinnerTitle.setText(mCurrentOperatorName);
             }
-            spinnerTitle.setTextSize(18);
+            spinnerTitle.setTextSize(20);
         }
         return row;
     }

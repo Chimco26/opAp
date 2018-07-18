@@ -21,6 +21,22 @@ public class ErrorResponse implements Parcelable {
     @SerializedName("ErrorFunction")
     private String mErrorFunction;
 
+    public int getmErrorCode() {
+        return mErrorCode;
+    }
+
+    public int getmErrorLine() {
+        return mErrorLine;
+    }
+
+    public String getmErrorFunction() {
+        return mErrorFunction;
+    }
+
+    public String getmErrorMessage() {
+        return mErrorMessage;
+    }
+
     public String getErrorDesc() {
         return mErrorDesc;
     }

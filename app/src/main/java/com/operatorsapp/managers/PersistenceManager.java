@@ -55,6 +55,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_FORCE_LOCAL_NAME = "pref.PREF_FORCE_LOCAL_NAME";
     private static final String PREF_POLLING_FREQUENCY = "pref.PREF_POLLING_FREQUENCY";
     private static final String PREF_NEW_SHIFTLOG = "pref.PREF_NEW_SHIFTLOG";
+    private static final String PREF_TOOLBAR_TUTORIAL = "pref.PREF_TOOLBAR_TUTORIAL";
     private static final String PREF_TIME_PARAMETER_DIALOG = "pref.PREF_TIME_PARAMETER_DIALOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
@@ -406,5 +407,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public int getMinEventDuration(){
         return SecurePreferences.getInstance().getInt(PREF_MIN_EVENT_DURATION, 0);
+    }
+
+    public boolean isDisplayToolbarTutorial() {
+        return SecurePreferences.getInstance().getBoolean(PREF_TOOLBAR_TUTORIAL, true);
+    }
+
+    public void setDisplayToolbarTutorial(boolean isNew) {
+        SecurePreferences.getInstance().setBoolean(PREF_TOOLBAR_TUTORIAL, isNew);
     }
 }

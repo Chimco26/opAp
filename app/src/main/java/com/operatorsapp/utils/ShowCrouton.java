@@ -74,6 +74,12 @@ public class ShowCrouton {
         }
     }
 
+    public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, String reason, CroutonCreator.CroutonType croutonType) {
+        if (reason != null) {
+            createCrouton(onCroutonRequestListener, croutonType, null, reason, null);
+        }
+    }
+
     private static void createCrouton(OnCroutonRequestListener onCroutonRequestListener, CroutonCreator.CroutonType croutonType, String prefix, String message, String suffix)
     {
         if(TextUtils.isEmpty(prefix))

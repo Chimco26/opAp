@@ -2,6 +2,9 @@ package com.operators.reportrejectnetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
@@ -19,6 +22,8 @@ import com.operators.reportrejectnetworkbridge.server.request.SendReportCycleUni
 import com.operators.reportrejectnetworkbridge.server.request.SendReportInventoryRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportRejectRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SendReportStopRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operators.reportrejectnetworkbridge.server.response.SendReportCycleUnitsResponse;
@@ -27,6 +32,7 @@ import com.operators.reportrejectnetworkbridge.server.response.SendReportRejectR
 import com.operators.reportrejectnetworkbridge.server.response.SendReportStopResponse;
 import com.zemingo.logrecorder.ZLogger;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
