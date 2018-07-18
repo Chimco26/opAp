@@ -81,6 +81,10 @@ public class AllMachinesData {
         return displayRejectFactor;
     }
 
+    public void setCurrentJobName(String currentJobName) {
+        this.currentJobName = currentJobName;
+    }
+
     public int getCurrentJobID() {
         return currentJobID;
     }

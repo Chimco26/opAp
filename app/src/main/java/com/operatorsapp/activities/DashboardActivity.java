@@ -150,6 +150,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private boolean isOnDashboard;
+    private String mSelectedJobName;
 
 
     @Override
@@ -336,7 +337,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             super.onResume();
 
-            dashboardDataStartPolling();
+            dashboardDataStartPolling(null);
 
             shiftForMachineTimer();
 
@@ -389,7 +390,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
-    public void dashboardDataStartPolling() {
+    public void dashboardDataStartPolling(Integer joshID) {
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
 
@@ -397,7 +398,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling();
+        mAllDashboardDataCore.startPolling(joshID);
     }
 
 
@@ -467,11 +468,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
+                ProgressDialogManager.dismiss();
 
+                PersistenceManager.getInstance().setJobId(mSelectJobId);
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onMachineDataReceived(widgetList);
+                        dashboardUICallbackListener.onMachineDataReceived(widgetList, mSelectedJobName);
                     }
                 } else {
 
@@ -482,6 +485,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.i(LOG_TAG, "onDataReceivedSuccessfully() reason: " + reason.getDetailedDescription());
+                ProgressDialogManager.dismiss();
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -491,6 +495,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
+
     }
 
     private void shiftForMachineTimer() {
@@ -759,7 +764,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling();
+        mAllDashboardDataCore.startPolling(null);
 
         PersistenceManager.getInstance().setJobId(mSelectJobId);
 
@@ -817,7 +822,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling();
+        mAllDashboardDataCore.startPolling(null);
 
         if (getSupportFragmentManager() != null) {
             try {
@@ -1044,7 +1049,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore.stopPolling();
 
         NetworkManager.getInstance().clearPollingRequest();
-        mAllDashboardDataCore.startPolling();
+        mAllDashboardDataCore.startPolling(null);
 
     }
 
@@ -1071,7 +1076,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
-        dashboardDataStartPolling();
+        dashboardDataStartPolling(null);
 
         if (getSupportFragmentManager() != null) {
 
@@ -1235,6 +1240,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
+    }
+
+    @Override
+    public void onJoshProductSelected(Integer joshID, String jobName) {
+
+        mSelectJobId = joshID;
+
+        mSelectedJobName = jobName;
+
+        dashboardDataStartPolling(joshID);
+
+        ProgressDialogManager.show(this);
     }
 
     @Override

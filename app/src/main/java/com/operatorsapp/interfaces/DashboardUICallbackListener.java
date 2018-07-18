@@ -16,7 +16,7 @@ public interface DashboardUICallbackListener {
 
     void onDeviceStatusChanged(MachineStatus machineStatus);
 
-    void onMachineDataReceived(ArrayList<Widget> widgetList);
+    void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobId);
 
     void onShiftLogDataReceived(ArrayList<Event> events);
 

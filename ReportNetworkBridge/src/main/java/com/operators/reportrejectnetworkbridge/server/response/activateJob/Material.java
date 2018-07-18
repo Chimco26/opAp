@@ -14,7 +14,7 @@ public class Material implements Parcelable {
     private String amount;
     @SerializedName("AmountUnits")
     @Expose
-    private Integer amountUnits;
+    private String amountUnits;
     @SerializedName("Catalog")
     @Expose
     private String catalog;
@@ -30,11 +30,11 @@ public class Material implements Parcelable {
         this.amount = amount;
     }
 
-    public Integer getAmountUnits() {
+    public String getAmountUnits() {
         return amountUnits;
     }
 
-    public void setAmountUnits(Integer amountUnits) {
+    public void setAmountUnits(String amountUnits) {
         this.amountUnits = amountUnits;
     }
 
@@ -72,7 +72,7 @@ public class Material implements Parcelable {
 
     protected Material(Parcel in) {
         this.amount = in.readString();
-        this.amountUnits = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.amountUnits = in.readString();
         this.catalog = in.readString();
         this.name = in.readString();
     }

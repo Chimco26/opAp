@@ -41,12 +41,18 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
+import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
+import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
+import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
+import com.operatorsapp.server.NetworkManager;
 import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -154,6 +160,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LinearLayout mMinDurationLil;
     private ImageView tutorialIv;
     private SwipeRefreshLayout mShiftLogSwipeRefresh;
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Spinner mProductSpinner;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -217,6 +226,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mParentLy = view.findViewById(R.id.parent_layouts);
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
+        mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
         mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
@@ -523,6 +533,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
             }
+            getActiveJobs();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -541,6 +552,84 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOperatorCore = null;
         mListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
+    }
+
+    private void getActiveJobs() {
+        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
+        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
+        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+    }
+
+
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+        @Override
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+            if (activeJobsListForMachine != null) {
+                mActiveJobsListForMachine = activeJobsListForMachine;
+                if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1){
+
+                    mProductNameTextView.setVisibility(View.GONE);
+                    mProductSpinner.setVisibility(View.VISIBLE);
+                    initJobsSpinner();
+
+                }else {
+
+                    mProductNameTextView.setVisibility(View.VISIBLE);
+                    mProductSpinner.setVisibility(View.GONE);
+
+                    initStatusLayout(mCurrentMachineStatus);
+
+                }
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+            }
+            else {
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            }
+        }
+
+        @Override
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+//            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+        }
+    };
+
+
+    private void initJobsSpinner() {
+  //TODO
+        if(getActivity() != null)
+        {
+            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null)
+            {
+                mProductSpinner.setVisibility(View.VISIBLE);
+                final JoshProductNameSpinnerAdapter joshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
+                joshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
+                mProductSpinner.setAdapter(joshProductNameSpinnerAdapter);
+                mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        joshProductNameSpinnerAdapter.setTitle(position);
+
+                        mListener.onJoshProductSelected(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID(),
+                                mActiveJobsListForMachine.getActiveJobs().get(position).getJobName());
+
+//                        if (mJobIdTextView != null) {
+//                            mJobIdTextView.setText(String.valueOf(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID()));
+//                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
+
+                    }
+                });
+            }
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -920,10 +1009,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         onStopEventSelected(eventID, true);
     }
 
-//    private void openStopReportScreen(int eventId, String start, String end, long duration) {
-//   aa     mOnGoToScreenListener.goToFragment(ReportStopReasonFragment.newInstance(start, end, duration, eventId), true);
-//    }
-
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         ZLogger.i(LOG_TAG, "onDeviceStatusChanged()");
@@ -941,7 +1026,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobName) {
+
+        //todo update object
+        mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
+        initStatusLayout(mCurrentMachineStatus);
 
         if (mShiftLogSwipeRefresh.isRefreshing()){
             mShiftLogSwipeRefresh.setRefreshing(false);
@@ -1027,10 +1116,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-               /* else {
-                    mShiftLogAdapter.notifyDataSetChanged();
-                }*/
-            if (mEventsQueue.size() > 0) // was !mIsdDialogOpen here.
+            if (mEventsQueue.size() > 0)
             {
                 Event event = mEventsQueue.peek();
                 // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
@@ -1060,7 +1146,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogAdapter != null)
             mShiftLogAdapter.notifyDataSetChanged();
-//        }
     }
 
     @Override
@@ -1163,6 +1248,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initStatusLayout(MachineStatus machineStatus) {
 
+        if (machineStatus == null){
+
+            return;
+        }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
@@ -1422,6 +1511,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onJobActionItemClick();
 
         void onSplitEventPressed(int eventID);
+
+        void onJoshProductSelected(Integer joshID, String jobName);
     }
 
 }

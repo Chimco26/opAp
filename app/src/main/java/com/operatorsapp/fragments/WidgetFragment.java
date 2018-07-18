@@ -24,7 +24,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.Event;
@@ -164,7 +163,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobId) {
 
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {

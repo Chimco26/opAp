@@ -25,30 +25,25 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+
+                <ImageView
                     android:id="@+id/AJA_back_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="25dp"
+                    android:gravity="center"
+                    android:src="@drawable/arrow_back" />
+
+                <TextView
+                    android:id="@+id/AJA_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21dp"
+                    android:gravity="center"
+                    android:text="@string/actionnable_jobs"
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="25dp"
-                        android:gravity="center"
-                        android:src="@drawable/arrow_back" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="21dp"
-                        android:gravity="center"
-                        android:text="@string/actionnable_jobs"
-                        android:textColor="@color/white"
-                        android:textSize="35sp" />
-
-                </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>

@@ -40,4 +40,35 @@ public class MachineStatus {
         }
     }
 
+    public List<Object> getmDepartmentMachinePC() {
+        return mDepartmentMachinePC;
+    }
+
+    public void setmDepartmentMachinePC(List<Object> mDepartmentMachinePC) {
+        this.mDepartmentMachinePC = mDepartmentMachinePC;
+    }
+
+    public List<Object> getmDepartmentOeePee() {
+        return mDepartmentOeePee;
+    }
+
+    public void setmDepartmentOeePee(List<Object> mDepartmentOeePee) {
+        this.mDepartmentOeePee = mDepartmentOeePee;
+    }
+
+    public Object getmMissingMachineIds() {
+        return mMissingMachineIds;
+    }
+
+    public void setmMissingMachineIds(Object mMissingMachineIds) {
+        this.mMissingMachineIds = mMissingMachineIds;
+    }
+
+    public List<AllMachinesData> getmAllMachinesData() {
+        return mAllMachinesData;
+    }
+
+    public void setmAllMachinesData(List<AllMachinesData> mAllMachinesData) {
+        this.mAllMachinesData = mAllMachinesData;
+    }
 }

@@ -9,11 +9,14 @@ public class GetMachineDataDataRequest {
     private int mMachineId;
     @SerializedName("StartingFrom")
     private String mStartingFrom;
+    @SerializedName("JobID")
+    private String mJobId;
 
-    public GetMachineDataDataRequest(String sessionId, int machineId, String startingFrom) {
+    public GetMachineDataDataRequest(String sessionId, int machineId, String startingFrom, String jobId) {
         mSessionId = sessionId;
         mMachineId = machineId;
         mStartingFrom = startingFrom;
+        mJobId = jobId;
     }
 
 }

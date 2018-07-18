@@ -23,6 +23,68 @@ public class ActiveJob {
     private Integer joshID;
     @SerializedName("joshName")
     private String joshName;
+    @SerializedName("ProductName")
+    private String productName;
+    @SerializedName("ProductCatalogID")
+    private String productCatalogId;
+    @SerializedName("JobName")
+    private String jobName;
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public void setCavitiesActual(Integer cavitiesActual) {
+        this.cavitiesActual = cavitiesActual;
+    }
+
+    public void setCavitiesStandard(Integer cavitiesStandard) {
+        this.cavitiesStandard = cavitiesStandard;
+    }
+
+    public void setDepartment(Integer department) {
+        this.department = department;
+    }
+
+    public void setJobID(Integer jobID) {
+        this.jobID = jobID;
+    }
+
+    public void setMachineID(Integer machineID) {
+        this.machineID = machineID;
+    }
+
+    public void setShiftID(Integer shiftID) {
+        this.shiftID = shiftID;
+    }
+
+    public void setJoshID(Integer joshID) {
+        this.joshID = joshID;
+    }
+
+    public void setJoshName(String joshName) {
+        this.joshName = joshName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductCatalogId() {
+        return productCatalogId;
+    }
+
+    public void setProductCatalogId(String productCatalogId) {
+        this.productCatalogId = productCatalogId;
+    }
 
     public Integer getCavitiesStandard()
     {
