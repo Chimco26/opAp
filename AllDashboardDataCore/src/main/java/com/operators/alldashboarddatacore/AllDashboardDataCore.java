@@ -106,7 +106,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
                 getMachineData(onJobFinishedListener, joshID);
-                getMachineStatus(onJobFinishedListener);
+                getMachineStatus(onJobFinishedListener, joshID);
                 getShiftLogs(onJobFinishedListener);
             }
         };
@@ -123,12 +123,11 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    private void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener) {
+    private void getMachineStatus(final JobBase.OnJobFinishedListener onJobFinishedListener, Integer joshID) {
         if (mMachineStatusPersistenceManagerInterface != null) {
             mGetMachineStatusNetworkBridgeInterface.getMachineStatus(mMachineStatusPersistenceManagerInterface.getSiteUrl(), mMachineStatusPersistenceManagerInterface.getSessionId(), mMachineStatusPersistenceManagerInterface.getMachineId(), new GetMachineStatusCallback() {
                 @Override
                 public void onGetMachineStatusSucceeded(MachineStatus machineStatus) {
-
 
                     int timeToEndInSeconds;
                     if (machineStatus != null) {
@@ -165,7 +164,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                     mGetMachineStatusFinish = true;
                     setJobFinishToAll(onJobFinishedListener);
                 }
-            }, mMachineStatusPersistenceManagerInterface.getTotalRetries(), mMachineStatusPersistenceManagerInterface.getRequestTimeout());
+            }, mMachineStatusPersistenceManagerInterface.getTotalRetries(), mMachineStatusPersistenceManagerInterface.getRequestTimeout(), joshID);
         }
     }
 
