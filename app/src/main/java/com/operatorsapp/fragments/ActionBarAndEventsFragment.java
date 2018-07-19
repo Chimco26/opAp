@@ -260,7 +260,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
         mMinDurationText = (TextView) view.findViewById(R.id.fragment_dashboard_min_duration_tv);
-       // mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
+        mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
         mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -838,12 +838,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void startToolbarTutorial() {
         //if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
-            TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(
-                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_operator_spinner), "Here is where you sign in with your id number").targetRadius(100),
-                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner), "Here you can preform different actions in the current Job ").targetRadius(100),
-                    TapTarget.forView(mToolBarView.findViewById(R.id.settings_button), "Press here for 'Settings' screen").targetRadius(50),
-                    TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_tutorial_iv), "Press here to toggle tutorial").targetRadius(30)
-            ).listener(new TapTargetSequence.Listener() {
+        List<TapTarget> targets = new ArrayList<>();
+        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner),getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
+        targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts),   getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
+        targets.add(TapTarget.forView(mMinDurationLil, getString(R.string.stop_event), getString(R.string.tutorial_event_log_desc)).targetRadius(100));
+//        if (mShiftLogAdapter.getItemCount() > 0 && mShiftLogAdapter.getmFirstStopEventPosition() < 9999){
+//            mShiftLogRecycler.scrollToPosition(mShiftLogAdapter.getmFirstStopEventPosition());
+//            ShiftLogSqlAdapter.ShiftLogViewHolder holder = (ShiftLogSqlAdapter.ShiftLogViewHolder) mShiftLogRecycler.getChildViewHolder(mShiftLogRecycler.getChildAt(mShiftLogAdapter.getmFirstStopEventPosition()));
+//            targets.add(TapTarget.forView(holder.mSplitEvent,  getString(R.string.tutorial_split_event_title), getString(R.string.tutorial_split_event_Desc)).targetRadius(50));
+//        }
+
+            TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(targets).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {
                     PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
@@ -851,7 +856,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-
                 }
 
                 @Override

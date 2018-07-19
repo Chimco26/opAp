@@ -71,7 +71,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     }
 
 
-    private class ShiftLogViewHolder extends RecyclerView.ViewHolder {
+    public class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
         private final CheckBox mStopEventCheckBox;
         private TextView mParameterSubReasonTv;
@@ -79,7 +79,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
         private ImageView mStoppedIcon;
-        private ImageView mSplitEvent;
+        public ImageView mSplitEvent;
         private TextView mStopEventSubReasonTv;
         private TextView mStoppedStart;
         private TextView mStoppedStartDate;
@@ -500,5 +500,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     }
 
-
+    public int getmFirstStopEventPosition() {
+        return mFirstStopEventPosition;
+    }
 }

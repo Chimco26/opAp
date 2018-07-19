@@ -214,6 +214,13 @@
     <string name="add_note">Add Note</string>
     <string name="min_duration_shiftlog">Min. Event Duration: </string>
     <string name="minutes">Min.</string>
+    <string name="tutorial_job_actions">Job Actions - New Job</string>
+    <string name="tutorial_job_actions_desc">Begin prep for the next job ahead of time</string>
+    <string name="tutorial_swipe">Swipe the dashboard sideways to view the recipe for the current job</string>
+    <string name="tutorial_event_log_title">Event Log</string>
+    <string name="tutorial_event_log_desc">Report single or several stops together when they share the same reason. Check them all off before selecting the category and reason.</string>
+    <string name="tutorial_split_event_title">Split Event</string>
+    <string name="tutorial_split_event_Desc">Use the scissors to split an event. That way, you can report a different reason for each stretch.</string>
 
 
 </resources>
