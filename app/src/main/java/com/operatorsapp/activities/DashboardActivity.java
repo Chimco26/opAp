@@ -337,7 +337,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             super.onResume();
 
-            dashboardDataStartPolling(null);
+            dashboardDataStartPolling();
 
             shiftForMachineTimer();
 
@@ -390,7 +390,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
-    public void dashboardDataStartPolling(Integer joshID) {
+    public void dashboardDataStartPolling() {
+
+        final Integer joshId;
+
+        if (mSelectJobId == null){
+
+            joshId = 0;
+
+        }else {
+
+            joshId = mSelectJobId;
+        }
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
 
@@ -398,7 +409,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling(joshID);
+        mAllDashboardDataCore.startPolling(joshId);
     }
 
 
@@ -470,7 +481,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 ProgressDialogManager.dismiss();
 
-                PersistenceManager.getInstance().setJobId(mSelectJobId);
+                if (mSelectJobId != null) {
+                    PersistenceManager.getInstance().setJobId(mSelectJobId);
+                }
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -1076,7 +1089,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
-        dashboardDataStartPolling(null);
+        dashboardDataStartPolling();
 
         if (getSupportFragmentManager() != null) {
 
@@ -1249,7 +1262,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectedJobName = jobName;
 
-        dashboardDataStartPolling(joshID);
+        dashboardDataStartPolling();
 
         ProgressDialogManager.show(this);
     }

@@ -163,6 +163,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mProductSpinner;
+    private View mMultipleProductImg;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -226,6 +227,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mParentLy = view.findViewById(R.id.parent_layouts);
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
+        mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
         mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
         mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
         mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
@@ -572,12 +574,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mProductNameTextView.setVisibility(View.GONE);
                     mProductSpinner.setVisibility(View.VISIBLE);
+                    mMultipleProductImg.setVisibility(View.VISIBLE);
                     initJobsSpinner();
 
                 }else {
 
                     mProductNameTextView.setVisibility(View.VISIBLE);
                     mProductSpinner.setVisibility(View.GONE);
+                    mMultipleProductImg.setVisibility(View.GONE);
 
                     initStatusLayout(mCurrentMachineStatus);
 
@@ -1033,6 +1037,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobName) {
 
         //todo update object
+        if (mCurrentMachineStatus != null) {
+//            mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
+            initStatusLayout(mCurrentMachineStatus);
+        }
         mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
         initStatusLayout(mCurrentMachineStatus);
 
