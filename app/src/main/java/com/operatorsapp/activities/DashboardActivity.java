@@ -394,7 +394,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         final Integer joshId;
 
-        if (mSelectJobId == null){
+        if (mSelectJobId == null || mSelectedJobName == null){
 
             joshId = 0;
 

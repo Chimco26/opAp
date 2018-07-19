@@ -28,5 +28,5 @@ dependencies {
     implementation project(':OperatorInfra')
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
-    compile project(path: ':ReportNetworkBridge')
+    implementation project(path: ':ReportNetworkBridge')
 }

@@ -34,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -1035,14 +1034,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobName) {
-
-        //todo update object
-        if (mCurrentMachineStatus != null) {
-//            mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
-            initStatusLayout(mCurrentMachineStatus);
-        }
-        mCurrentMachineStatus.getAllMachinesData().get(0).setCurrentJobName(mSelectJobName);
-        initStatusLayout(mCurrentMachineStatus);
 
         if (mShiftLogSwipeRefresh.isRefreshing()){
             mShiftLogSwipeRefresh.setRefreshing(false);
