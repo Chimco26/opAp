@@ -264,7 +264,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMinDurationText = (TextView) view.findViewById(R.id.fragment_dashboard_min_duration_tv);
         mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
-        mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
+        //mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
@@ -605,7 +605,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
   //TODO
         if(getActivity() != null)
         {
-            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null)
+            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null && this.mActiveJobsListForMachine.getActiveJobs().size() > 0)
             {
                 mProductSpinner.setVisibility(View.VISIBLE);
                 final JoshProductNameSpinnerAdapter joshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
@@ -1027,6 +1027,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
 
+        mMinDurationText.setText(machineStatus.getAllMachinesData().get(0).getMinEventDuration() + " " + getString(R.string.minutes));
 //        if (mSwipeToRefresh.isRefreshing()){
 //            mSwipeToRefresh.setRefreshing(false);
 //        }

@@ -227,7 +227,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.button_change: {
+                boolean isShowTutorial = PersistenceManager.getInstance().isDisplayToolbarTutorial();
                 mSettingsInterface.onClearAppDataRequest();
+                PersistenceManager.getInstance().setDisplayToolbarTutorial(isShowTutorial);
                 break;
             }
         }
