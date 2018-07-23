@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -161,7 +160,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
         }
 
         @Override
-        public void onSetOperatorSuccess() {
+        public void onSetOperatorSuccess(String operatorId) {
             dismissProgressDialog();
         }
 

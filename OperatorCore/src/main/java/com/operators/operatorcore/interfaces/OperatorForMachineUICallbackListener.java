@@ -9,7 +9,7 @@ public interface OperatorForMachineUICallbackListener {
 
     void onOperatorDataReceiveFailure(ErrorObjectInterface reason);
 
-    void onSetOperatorSuccess();
+    void onSetOperatorSuccess(String operatorId);
 
     void onSetOperatorFailed(ErrorObjectInterface reason);
 }

@@ -4,11 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +76,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             }
 
             @Override
-            public void onSetOperatorSuccess() {
+            public void onSetOperatorSuccess(String operatorId) {
                 SendBroadcast.refreshPolling(getContext());
                 ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());

@@ -165,7 +165,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 mPendingJobsResponse = ((PendingJobResponse) response);
 
-                if (mPendingJobsResponse != null) {
+                if (mPendingJobsResponse != null && mPendingJobsResponse.getPandingJobs() != null && mPendingJobsResponse.getPandingJobs().size() > 0) {
 
                     mHeaders.addAll(mPendingJobsResponse.getHeaders());
 
@@ -187,6 +187,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                     ProgressDialogManager.dismiss();
 
+                }else {
+                    ProgressDialogManager.dismiss();
                 }
 
             }
@@ -681,17 +683,19 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initRecyclerViews() {
 
-        sortHeaders();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mHeadersAdapter = new JobHeadersAdapter(mHeaders, mHashMapHeaders, this, this);
-        mHeadersRv.setLayoutManager(layoutManager);
-        mHeadersRv.setAdapter(mHeadersAdapter);
+        if (mPendingJobs != null && mPendingJobs.size() > 0) {
+            sortHeaders();
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            mHeadersAdapter = new JobHeadersAdapter(mHeaders, mHashMapHeaders, this, this);
+            mHeadersRv.setLayoutManager(layoutManager);
+            mHeadersRv.setAdapter(mHeadersAdapter);
 
-        mPendingJobs.get(0).setSelected(true);
-        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mPendingJobsAdapter = new PendingJobsAdapter(mPendingJobs, mHashMapHeaders, this, this);
-        mPendingJobsRv.setLayoutManager(layoutManager2);
-        mPendingJobsRv.setAdapter(mPendingJobsAdapter);
+            mPendingJobs.get(0).setSelected(true);
+            RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mPendingJobsAdapter = new PendingJobsAdapter(mPendingJobs, mHashMapHeaders, this, this);
+            mPendingJobsRv.setLayoutManager(layoutManager2);
+            mPendingJobsRv.setAdapter(mPendingJobsAdapter);
+        }
     }
 
     private void initListener() {

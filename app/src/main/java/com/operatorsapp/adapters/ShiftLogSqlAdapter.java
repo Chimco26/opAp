@@ -79,7 +79,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         private LinearLayout mStoppedTitleLayout;
         private AutofitTextView mStoppedTitle;
         private ImageView mStoppedIcon;
-        public ImageView mSplitEvent;
+        private ImageView mSplitEvent;
         private TextView mStopEventSubReasonTv;
         private TextView mStoppedStart;
         private TextView mStoppedStartDate;

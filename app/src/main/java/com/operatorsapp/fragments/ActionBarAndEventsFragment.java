@@ -32,8 +32,10 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -120,7 +122,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mCloseWidth;
     private int mOpenWidth;
     private float mTollBarsHeight;
-    private String[] mOperatorsSpinnerArray = {"Operator Sign In"};
+    private ArrayList<String> mOperatorsSpinnerArray = new ArrayList<String>();
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
@@ -417,7 +419,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         @Override
-        public void onSetOperatorSuccess() {
+        public void onSetOperatorSuccess(String operatorId) {
+            if (operatorId == null || operatorId.isEmpty()){
+                PersistenceManager.getInstance().setOperatorId("");
+                PersistenceManager.getInstance().setOperatorName("");
+            }
+            setupOperatorSpinner();
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             //            Zloger.clearPollingRequest(LOG_TAG, "onSetOperatorSuccess() ");
         }
@@ -773,38 +780,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            if (PersistenceManager.getInstance().getOperatorName() != null) {
-                mOperatorsSpinnerArray[0] = getResources().getString(R.string.switch_user);
-            } else {
-                mOperatorsSpinnerArray[0] = getResources().getString(R.string.operator_sign_in_action_bar);
-            }
 
+            setupOperatorSpinner();
             EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
-            String [] items = {"Production Status", "Production Status2"};
+            String [] items = {"Production", "No Order", "Preventive Maintenance", "Shutdown"};
             final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
             productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
             productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
 
-            EmeraldSpinner operatorsSpinner = mToolBarView.findViewById(R.id.toolbar_operator_spinner);
-            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray, PersistenceManager.getInstance().getOperatorName());
-            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
-            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
-            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
 
             mMachineIdStatusBarTextView = mToolBarView.findViewById(R.id.text_view_machine_id_name);
             mMachineIdStatusBarTextView.setSelected(true);
@@ -839,11 +824,63 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    private void setupOperatorSpinner() {
+
+        mOperatorsSpinnerArray.clear();
+        EmeraldSpinner operatorsSpinner = mToolBarView.findViewById(R.id.toolbar_operator_spinner);
+        TextView operatorTitle = mToolBarView.findViewById(R.id.toolbar_operator_tv);
+
+        if (PersistenceManager.getInstance().getOperatorName() == null ||  PersistenceManager.getInstance().getOperatorName().isEmpty()) {
+
+            FrameLayout operatorFl = mToolBarView.findViewById(R.id.toolbar_operator_fl);
+
+            operatorTitle.setVisibility(View.VISIBLE);
+            operatorsSpinner.setVisibility(View.GONE);
+
+            operatorFl.setMinimumWidth(operatorTitle.getWidth());
+
+            operatorFl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
+                }
+            });
+        } else {
+            operatorTitle.setVisibility(View.GONE);
+            operatorsSpinner.setVisibility(View.VISIBLE);
+
+            mOperatorsSpinnerArray.add(getResources().getString(R.string.switch_user));
+            mOperatorsSpinnerArray.add(getResources().getString(R.string.sign_out));
+
+            final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray.toArray(new String[mOperatorsSpinnerArray.size()]), PersistenceManager.getInstance().getOperatorName());
+            operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            operatorsSpinner.setAdapter(operatorSpinnerAdapter);
+            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) {
+                        mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
+                    } else if (position == 1) {
+                        mOperatorCore.setOperatorForMachine("");
+                        //mOperatorCore.getOperatorById("");
+                        // TODO: 22/07/2018 sign out  send sign in api with string-""
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+    }
+
     private void startToolbarTutorial() {
         //if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
         List<TapTarget> targets = new ArrayList<>();
-        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner),getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
         targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts),   getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
+        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner),getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
         targets.add(TapTarget.forView(mMinDurationLil, getString(R.string.stop_event), getString(R.string.tutorial_event_log_desc)).targetRadius(100));
 //        if (mShiftLogAdapter.getItemCount() > 0 && mShiftLogAdapter.getmFirstStopEventPosition() < 9999){
 //            mShiftLogRecycler.scrollToPosition(mShiftLogAdapter.getmFirstStopEventPosition());

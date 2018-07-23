@@ -367,7 +367,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public void setTimeToDownParameterDialog(int time) {
-        SecurePreferences.getInstance().setInt(PREF_TIME_PARAMETER_DIALOG, time);
+        SecurePreferences.getInstance().setInt(PREF_TIME_PARAMETER_DIALOG, time * 1000);
     }
 
     public void setVersion(float version) {

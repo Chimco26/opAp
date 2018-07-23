@@ -121,11 +121,13 @@ public class CroutonCreator {
                 break;
 
             case CREDENTIALS_ERROR:
+
             case URL_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_error_view, null);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);
                 break;
             case CONNECTIVITY:
+
             case NETWORK_ERROR:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.cruton_network_error_view, null);
                 setProgressCountDown(croutonView, DEFAULT_CROUTON_TIME);

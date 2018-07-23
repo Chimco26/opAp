@@ -66,13 +66,13 @@ public class OperatorCore {
         }
     }
 
-    public void setOperatorForMachine(String operatorId) {
+    public void setOperatorForMachine(final String operatorId) {
         if (mOperatorPersistenceManagerInterface != null) {
             mOperatorNetworkBridgeInterface.setOperatorForMachine(mOperatorPersistenceManagerInterface.getSiteUrl(), mOperatorPersistenceManagerInterface.getSessionId(), String.valueOf(mOperatorPersistenceManagerInterface.getMachineId()), operatorId, new SetOperatorForMachineCallback() {
                 @Override
                 public void onSetOperatorForMachineSuccess() {
                     if (mOperatorForMachineUICallbackListener != null) {
-                        mOperatorForMachineUICallbackListener.onSetOperatorSuccess();
+                        mOperatorForMachineUICallbackListener.onSetOperatorSuccess(operatorId);
                     }
                     else {
                         ZLogger.w(LOG_TAG, "onSetOperatorForMachineSuccess() UI Callback is null");
