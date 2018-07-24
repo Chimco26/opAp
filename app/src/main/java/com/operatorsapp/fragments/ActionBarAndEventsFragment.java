@@ -50,14 +50,12 @@ import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
-import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
-import com.operatorsapp.server.NetworkManager;
-import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
+import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -71,6 +69,7 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
+import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
@@ -79,6 +78,7 @@ import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.ravtech.david.sqlcore.DatabaseHelper;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import org.litepal.crud.DataSupport;
@@ -163,6 +163,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mProductSpinner;
     private View mMultipleProductImg;
+    private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -264,7 +265,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
         mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
-       // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
         final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
 
@@ -339,6 +340,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mOperatorCore.registerListener(mOperatorForMachineUICallbackListener);
 
         ZLogger.d(LOG_TAG, "onViewCreated(), end ");
+
+        initJobsSpinner();
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
@@ -444,64 +447,63 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ZLogger.d(LOG_TAG, "onResume(), Start ");
         super.onResume();
 
-        if(mFromAnotherActivity){
+        if (mFromAnotherActivity) {
 
             mFromAnotherActivity = false;
 
             return;
         }
 
-            mDatabaseHelper = new DatabaseHelper(getContext());
+        mDatabaseHelper = new DatabaseHelper(getContext());
 
-            Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 
-            if (mTempCursor.moveToFirst()) {
-                mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
-                        this, mOpenWidth, mRecyclersHeight, 0,
-                        false, 0, null);
-                mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+        if (mTempCursor.moveToFirst()) {
+            mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
+                    this, mOpenWidth, mRecyclersHeight, 0,
+                    false, 0, null);
+            mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-                mShiftLogAdapter.notifyDataSetChanged();
+            mShiftLogAdapter.notifyDataSetChanged();
+        }
+
+        if (DataSupport.count(Event.class) > 0) {
+            mNoData = false;
+            mNoNotificationsText.setVisibility(View.GONE);
+            mLoadingDataText.setVisibility(View.GONE);
+        } else {
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mLoadingDataText.setVisibility(View.VISIBLE);
+        }
+
+        registerReceiver();
+        setActionBar();
+        if (mCurrentMachineStatus != null) {
+            initStatusLayout(mCurrentMachineStatus);
+        }
+        if (DataSupport.count(Event.class) > 0) {
+
+            for (Event event : DataSupport.where(DatabaseHelper.KEY_IS_DISMISS + " = 0").find(Event.class)) {
+
+                Log.d(LOG_TAG, "EVENT " + event.isIsDismiss());
+                event.setTimeOfAdded(System.currentTimeMillis());
+                mEventsQueue.add(event);
+
             }
+            //            openNextDialog();
+            if (mEventsQueue.size() > 0) {
+                Event event = mEventsQueue.peek();//
 
-            if (DataSupport.count(Event.class) > 0) {
-                mNoData = false;
-                mNoNotificationsText.setVisibility(View.GONE);
-                mLoadingDataText.setVisibility(View.GONE);
-            } else {
-                mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
-                mLoadingDataText.setVisibility(View.VISIBLE);
+
             }
+        } else {
+            mNoData = true;
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+            mLoadingDataText.setVisibility(View.VISIBLE);
+        }
 
-            registerReceiver();
-            setActionBar();
-            if (mCurrentMachineStatus != null) {
-                initStatusLayout(mCurrentMachineStatus);
-            }
-            if (DataSupport.count(Event.class) > 0) {
-
-                for (Event event : DataSupport.where(DatabaseHelper.KEY_IS_DISMISS + " = 0").find(Event.class)) {
-
-                    Log.d(LOG_TAG, "EVENT " + event.isIsDismiss());
-                    event.setTimeOfAdded(System.currentTimeMillis());
-                    mEventsQueue.add(event);
-
-                }
-                //            openNextDialog();
-                if (mEventsQueue.size() > 0) {
-                    Event event = mEventsQueue.peek();//
-
-
-                }
-            } else {
-                mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
-                mLoadingDataText.setVisibility(View.VISIBLE);
-            }
-
-            ZLogger.d(LOG_TAG, "onResume(), end ");
-
+        ZLogger.d(LOG_TAG, "onResume(), end ");
 
 
     }
@@ -568,26 +570,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         @Override
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1){
-
-                    mProductNameTextView.setVisibility(View.GONE);
-                    mProductSpinner.setVisibility(View.VISIBLE);
-                    mMultipleProductImg.setVisibility(View.VISIBLE);
-                    initJobsSpinner();
-
-                }else {
-
-                    mProductNameTextView.setVisibility(View.VISIBLE);
-                    mProductSpinner.setVisibility(View.GONE);
-                    mMultipleProductImg.setVisibility(View.GONE);
-
-                    initStatusLayout(mCurrentMachineStatus);
-
-                }
+                initProductView(activeJobsListForMachine);
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
         }
@@ -599,35 +584,54 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     };
 
+    public void initProductView(ActiveJobsListForMachine activeJobsListForMachine) {
+        mActiveJobsListForMachine = activeJobsListForMachine;
+        if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1) {
+
+            mProductNameTextView.setVisibility(View.GONE);
+            mProductSpinner.setVisibility(View.VISIBLE);
+            mMultipleProductImg.setVisibility(View.VISIBLE);
+            mProductSpinner.setVisibility(View.VISIBLE);
+
+            if (mJoshProductNameSpinnerAdapter != null) {
+                mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
+                mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
+                mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
+            }
+        } else {
+
+            mProductNameTextView.setVisibility(View.VISIBLE);
+            mProductSpinner.setVisibility(View.GONE);
+            mMultipleProductImg.setVisibility(View.GONE);
+
+            initStatusLayout(mCurrentMachineStatus);
+
+        }
+    }
+
 
     private void initJobsSpinner() {
-  //TODO
-        if(getActivity() != null)
-        {
-            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null)
-            {
-                mProductSpinner.setVisibility(View.VISIBLE);
-                final JoshProductNameSpinnerAdapter joshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
-                joshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
-                mProductSpinner.setAdapter(joshProductNameSpinnerAdapter);
+        //TODO
+        if (getActivity() != null) {
+            if (this.mActiveJobsListForMachine != null && this.mActiveJobsListForMachine.getActiveJobs() != null) {
+                mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
+                mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
+                mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
                 mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-                mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+
+                mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        joshProductNameSpinnerAdapter.setTitle(position);
+
+                        mJoshProductNameSpinnerAdapter.setTitle(position);
 
                         mListener.onJoshProductSelected(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID(),
                                 mActiveJobsListForMachine.getActiveJobs().get(position).getJobName());
 
-//                        if (mJobIdTextView != null) {
-//                            mJobIdTextView.setText(String.valueOf(mActiveJobsListForMachine.getActiveJobs().get(position).getJobID()));
-//                        }
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
+                    public void onNothingSelected(AdapterView<?> parent) {
 
                     }
                 });
@@ -642,13 +646,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if ((getActivity()) != null) {
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         }
-        if (actionBar != null ) {
+        if (actionBar != null) {
 
             if (mVisiblefragment != null && !(mVisiblefragment instanceof ActionBarAndEventsFragment
                     || mVisiblefragment instanceof WidgetFragment
                     || mVisiblefragment instanceof RecipeFragment
                     || mVisiblefragment instanceof SelectStopReasonFragment
-                    || mVisiblefragment instanceof ReportStopReasonFragment)){
+                    || mVisiblefragment instanceof ReportStopReasonFragment)) {
                 return;
             }
 
@@ -722,7 +726,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                                     mListener.onJobActionItemClick();
 
-                                }else {
+                                } else {
 
                                     mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
 
@@ -780,7 +784,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
-            String [] items = {"Production Status", "Production Status2"};
+            String[] items = {"Production Status", "Production Status2"};
             final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
             productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
             productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -833,7 +837,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
-        if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
+        if (PersistenceManager.getInstance().isDisplayToolbarTutorial()) {
             startToolbarTutorial();
         }
 
@@ -842,8 +846,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void startToolbarTutorial() {
         //if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
         List<TapTarget> targets = new ArrayList<>();
-        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner),getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
-        targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts),   getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
+        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner), getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
+        targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts), getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
         targets.add(TapTarget.forView(mMinDurationLil, getString(R.string.stop_event), getString(R.string.tutorial_event_log_desc)).targetRadius(100));
 //        if (mShiftLogAdapter.getItemCount() > 0 && mShiftLogAdapter.getmFirstStopEventPosition() < 9999){
 //            mShiftLogRecycler.scrollToPosition(mShiftLogAdapter.getmFirstStopEventPosition());
@@ -851,24 +855,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            targets.add(TapTarget.forView(holder.mSplitEvent,  getString(R.string.tutorial_split_event_title), getString(R.string.tutorial_split_event_Desc)).targetRadius(50));
 //        }
 
-            TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(targets).listener(new TapTargetSequence.Listener() {
-                @Override
-                public void onSequenceFinish() {
-                    PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
-                }
+        TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(targets).listener(new TapTargetSequence.Listener() {
+            @Override
+            public void onSequenceFinish() {
+                PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
+            }
 
-                @Override
-                public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-                }
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+            }
 
-                @Override
-                public void onSequenceCanceled(TapTarget lastTarget) {
-                    PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
-                }
-            });
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+                PersistenceManager.getInstance().setDisplayToolbarTutorial(false);
+            }
+        });
 
-            tapSeq.start();
-       // }
+        tapSeq.start();
+        // }
     }
 
     private void setToolBarHeight(final View view) {
@@ -895,7 +899,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onDismissClick(DialogInterface dialog, int requestCode) {
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
-           // openNextDialog();
+            // openNextDialog();
         }
 
     }
@@ -990,7 +994,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onSplitEventPressed(int eventID){
+    public void onSplitEventPressed(int eventID) {
         // TODO: 05/07/2018 call server split event
         mListener.onSplitEventPressed(eventID);
 
@@ -1035,7 +1039,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobName) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
+        if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
     }
@@ -1044,7 +1048,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
+        if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
 
@@ -1097,7 +1101,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setCheckedAlarms(null);
 
 
-
                     event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
                 }
             }
@@ -1105,13 +1108,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mNoNotificationsText.setVisibility(View.GONE);
 
 
-            if (mIsSelectionMode){
+            if (mIsSelectionMode) {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
-            }else {
+            } else {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
                         this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
@@ -1119,8 +1122,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-            if (mEventsQueue.size() > 0)
-            {
+            if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
                 // we only need to show the stop report when the event is open (no end time) and hase no event reason ( == 0).
                 if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
@@ -1187,7 +1189,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onDataFailure(final ErrorObjectInterface reason, CallType callType) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
+        if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
 
@@ -1251,7 +1253,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initStatusLayout(MachineStatus machineStatus) {
 
-        if (machineStatus == null){
+        if (machineStatus == null) {
 
             return;
         }
@@ -1413,15 +1415,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     event.setEventGroupLname(il);
                     event.setmEventGroupEname(en);
 
-                    if (OperatorApplication.isEnglishLang()){
+                    if (OperatorApplication.isEnglishLang()) {
 
                         event.setEventSubTitleEname(eSubTitle);
 
-                    }else {
+                    } else {
 
                         event.setEventSubTitleEname(lSubtitle);
                     }
-
 
 
                     event.updateAll("meventid = ?", String.valueOf(eventId));

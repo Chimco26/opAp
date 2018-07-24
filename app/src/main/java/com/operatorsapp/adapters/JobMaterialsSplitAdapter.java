@@ -48,7 +48,7 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
 
         viewHolder.mCatalogTv.setText(mMaterials.get(position).getCatalog());
 
-        viewHolder.mAmountTv.setText(String.format("%s %d", mMaterials.get(position).getAmount(), mMaterials.get(position).getAmountUnits()));
+        viewHolder.mAmountTv.setText(String.format("%s %s", mMaterials.get(position).getAmount(), mMaterials.get(position).getAmountUnits()));
     }
 
     @Override
