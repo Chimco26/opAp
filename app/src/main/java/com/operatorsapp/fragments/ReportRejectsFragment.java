@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -63,6 +64,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
+    private static final int REFRESH_DELAY_MILLIS = 3000;
     private TextView mCancelButton;
     private Button mNextButton;
     //    private boolean mIsFirstReasonSpinnerSelection = true;
@@ -385,7 +387,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         @Override
         public void sendReportSuccess(Object errorResponse) {
             ErrorResponseNewVersion response = objectToNewError(errorResponse);
-            SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
@@ -399,6 +400,15 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SendBroadcast.refreshPolling(getContext());
+                }
+            }, REFRESH_DELAY_MILLIS);
+
         }
 
         @Override
