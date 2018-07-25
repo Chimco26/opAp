@@ -6,7 +6,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 
-public class EmeraldSpinner extends Spinner {
+public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {
    AdapterView.OnItemSelectedListener listener;
 
     public EmeraldSpinner(Context context, AttributeSet attrs)
@@ -36,7 +36,7 @@ public class EmeraldSpinner extends Spinner {
     {
         super.setSelection(position);
 
-        if (position == getSelectedItemPosition())
+        if (position == getSelectedItemPosition() && listener != null)
         {
             listener.onItemSelected(null, null, position, 0);
         }

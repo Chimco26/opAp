@@ -174,7 +174,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobId) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
         if (mShiftLogSwipeRefresh.isRefreshing()){
             mShiftLogSwipeRefresh.setRefreshing(false);

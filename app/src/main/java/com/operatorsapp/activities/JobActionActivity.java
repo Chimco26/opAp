@@ -881,12 +881,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 postUpdateActions(mUpdatedActions);
 
-                PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-                        String.valueOf(persistenceManager.getMachineId()),
-                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-                        persistenceManager.getOperatorId()));
-
+                if (mCurrentJobDetails != null) {
+                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                    postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                            String.valueOf(persistenceManager.getMachineId()),
+                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+                            persistenceManager.getOperatorId()));
+                }
                 break;
 
             case R.id.AJA_item_material:

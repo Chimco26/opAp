@@ -20,6 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
+import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
+import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
@@ -150,7 +154,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private boolean isOnDashboard;
-    private String mSelectedJobName;
+    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Integer mSelectProductJobId;
 
 
     @Override
@@ -337,7 +342,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             super.onResume();
 
-            dashboardDataStartPolling();
+            getActiveJobs();
 
             shiftForMachineTimer();
 
@@ -390,17 +395,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
-    public void dashboardDataStartPolling() {
+    public void dashboardDataStartPolling(Integer joshId) {
 
-        final Integer joshId;
+        if (mSelectProductJobId != null){
 
-        if (mSelectJobId == null || mSelectedJobName == null){
+            joshId = mSelectProductJobId;
 
-            joshId = 0;
-
-        }else {
-
-            joshId = mSelectJobId;
         }
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
@@ -410,8 +410,45 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         NetworkManager.getInstance().clearPollingRequest();
 
         mAllDashboardDataCore.startPolling(joshId);
+
+        mSelectProductJobId = null;
     }
 
+    private void getActiveJobs() {
+        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
+        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
+        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
+        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
+    }
+
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
+        @Override
+        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+            if (activeJobsListForMachine != null) {
+                mActiveJobsListForMachine = activeJobsListForMachine;
+
+                //todo actionbar
+                if (mActionBarAndEventsFragment != null){
+
+                    mActionBarAndEventsFragment.initProductView(mActiveJobsListForMachine);
+                }
+                dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
+
+                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+            }
+            else {
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+            }
+        }
+
+        @Override
+        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+//            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+        }
+    };
 
     @NonNull
     private MachineStatusUICallback getMachineStatusUICallback() {
@@ -487,7 +524,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onMachineDataReceived(widgetList, mSelectedJobName);
+                        dashboardUICallbackListener.onMachineDataReceived(widgetList);
                     }
                 } else {
 
@@ -1089,7 +1126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
-        dashboardDataStartPolling();
+        getActiveJobs();
 
         if (getSupportFragmentManager() != null) {
 
@@ -1258,11 +1295,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onJoshProductSelected(Integer joshID, String jobName) {
 
-        mSelectJobId = joshID;
+        mSelectProductJobId = joshID;
 
-        mSelectedJobName = jobName;
-
-        dashboardDataStartPolling();
+        getActiveJobs();
 
         ProgressDialogManager.show(this);
     }
@@ -1525,6 +1560,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
 
+                getActiveJobs();
             }
 
         }
