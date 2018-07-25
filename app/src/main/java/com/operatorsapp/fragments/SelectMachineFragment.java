@@ -32,6 +32,9 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener
 {
@@ -97,6 +100,18 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
+
+        Collections.sort(mMachinesList, new Comparator<Machine>() {
+            @Override
+            public int compare(Machine o1, Machine o2) {
+                if (OperatorApplication.isEnglishLang()){
+                    return o1.getMachineEName().compareTo(o2.getMachineEName());
+                }else {
+                    return o1.getMachineLName().compareTo(o2.getMachineLName());
+                }
+            }
+        });
+
 
         mSearchField = (AppCompatAutoCompleteTextView) rootView.findViewById(R.id.machine_id_name);
         mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mMachinesList);

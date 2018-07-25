@@ -296,7 +296,8 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private boolean canSendReport()
     {
 
-        return ((mUnitsData != null || mWeightData != null) && mNextButton.isEnabled());
+        //return ((mUnitsData != null || mWeightData != null) && mNextButton.isEnabled());
+        return (mUnitsData != null || mWeightData != null);
     }
 
     @Override

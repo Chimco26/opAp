@@ -423,6 +423,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (operatorId == null || operatorId.isEmpty()){
                 PersistenceManager.getInstance().setOperatorId("");
                 PersistenceManager.getInstance().setOperatorName("");
+
+                // TODO: 25/07/2018 sign out success
+                //ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, message);
+                ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, "Signed-out Successfully");
+            }else {
+                // TODO: 25/07/2018 sign in success
+                //ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, "Signed-in Successfully");
             }
             setupOperatorSpinner();
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
