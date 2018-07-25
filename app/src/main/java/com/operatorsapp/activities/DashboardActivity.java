@@ -154,8 +154,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private boolean isOnDashboard;
-    private String mSelectedJobName;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
+    private Integer mSelectProductJobId;
 
 
     @Override
@@ -395,17 +395,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
-    public void dashboardDataStartPolling() {
+    public void dashboardDataStartPolling(Integer joshId) {
 
-        final Integer joshId;
+        if (mSelectProductJobId != null){
 
-        if (mSelectJobId == null || mSelectedJobName == null){
+            joshId = mSelectProductJobId;
 
-            joshId = 0;
-
-        }else {
-
-            joshId = mSelectJobId;
         }
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
@@ -415,6 +410,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         NetworkManager.getInstance().clearPollingRequest();
 
         mAllDashboardDataCore.startPolling(joshId);
+
+        mSelectProductJobId = null;
     }
 
     private void getActiveJobs() {
@@ -437,7 +434,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     mActionBarAndEventsFragment.initProductView(mActiveJobsListForMachine);
                 }
-                dashboardDataStartPolling();
+                dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
 
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
@@ -527,7 +524,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onMachineDataReceived(widgetList, mSelectedJobName);
+                        dashboardUICallbackListener.onMachineDataReceived(widgetList);
                     }
                 } else {
 
@@ -1298,9 +1295,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onJoshProductSelected(Integer joshID, String jobName) {
 
-        mSelectJobId = joshID;
-
-        mSelectedJobName = jobName;
+        mSelectProductJobId = joshID;
 
         getActiveJobs();
 

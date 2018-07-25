@@ -163,7 +163,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList, String mSelectJobId) {
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
