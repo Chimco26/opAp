@@ -30,6 +30,8 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -40,20 +42,24 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Locale;
 
-public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
+public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, DashboardUICallbackListener {
 
     public static final String LOG_TAG = ReportCycleUnitsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -77,6 +83,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
+    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
@@ -91,6 +98,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
+        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
 
         if (context instanceof ShowDashboardCroutonListener) {
@@ -99,9 +108,16 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered = null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActiveJobs();
+//        getActiveJobs();
     }
 
     @Nullable
@@ -123,7 +139,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
-        getActiveJobs();
+//        getActiveJobs();
 
         if (getArguments() != null) {
             mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
@@ -446,6 +462,25 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         }
     };
 
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+
+        if (activeJobsListForMachine != null) {
+            mActiveJobsListForMachine = activeJobsListForMachine;
+            mJoshId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
+            mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard();
+            mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesActual();
+            mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
+            initJobsSpinner();
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        } else {
+            mJoshId = null;
+            mMaxUnits = 0;
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+        }
+        disableProgressBar();
+    }
+
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
@@ -480,4 +515,40 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     public int getCroutonRoot() {
         return R.id.top_layout;
     }
+
+    @Override
+    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+
+    }
+
+    @Override
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours) {
+
+    }
+
+    @Override
+    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+
+    }
+
+    @Override
+    public void onShiftForMachineEnded() {
+
+    }
+
+    @Override
+    public void onApproveFirstItemEnabledChanged(boolean enabled) {
+
+    }
+
 }

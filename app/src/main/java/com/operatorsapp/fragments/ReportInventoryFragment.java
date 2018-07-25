@@ -5,8 +5,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +31,8 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -46,6 +46,8 @@ import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -54,9 +56,12 @@ import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
+import java.util.ArrayList;
+
+public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener, DashboardUICallbackListener {
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -81,6 +86,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private Spinner mJobsSpinner;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private View mTopView;
+    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
 
     public static ReportInventoryFragment newInstance(String currentProductName, int currentProductId) {
@@ -95,12 +101,21 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
+        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered = null;
     }
 
     @Override
@@ -126,7 +141,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
 
-        getActiveJobs();
+//        getActiveJobs();
 
         mButtonReport = (Button) view.findViewById(R.id.button_report);
 
@@ -423,6 +438,22 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         }
     };
 
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+
+        if (activeJobsListForMachine != null) {
+            mActiveJobsListForMachine = activeJobsListForMachine;
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
+            initJobsSpinner();
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        }
+        else {
+            mJobId = null;
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+        }
+        disableProgressBar();
+    }
+
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
@@ -486,6 +517,41 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"onKeyboardHidden");
 
+
+    }
+
+    @Override
+    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+
+    }
+
+    @Override
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours) {
+
+    }
+
+    @Override
+    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+
+    }
+
+    @Override
+    public void onShiftForMachineEnded() {
+
+    }
+
+    @Override
+    public void onApproveFirstItemEnabledChanged(boolean enabled) {
 
     }
 }

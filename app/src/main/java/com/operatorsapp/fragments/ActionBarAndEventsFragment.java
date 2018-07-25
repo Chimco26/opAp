@@ -35,7 +35,6 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -552,7 +551,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
             }
-            getActiveJobs();
+//            getActiveJobs();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -1232,6 +1231,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             }
             mJobsSpinnerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+
+        if (activeJobsListForMachine != null) {
+            initProductView(activeJobsListForMachine);
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        } else {
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
         }
     }
 

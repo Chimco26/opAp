@@ -1,5 +1,6 @@
 package com.operatorsapp.interfaces;
 
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -27,4 +28,6 @@ public interface DashboardUICallbackListener {
     void onShiftForMachineEnded();
 
     void onApproveFirstItemEnabledChanged(boolean enabled);
+
+    void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine);
 }

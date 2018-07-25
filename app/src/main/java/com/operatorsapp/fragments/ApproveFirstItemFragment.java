@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -28,6 +27,8 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
@@ -35,10 +36,8 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
-import com.operators.reportrejectnetworkbridge.server.response.SendApproveFirstItemResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
-import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
@@ -48,19 +47,20 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
-public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
-{
+public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, DashboardUICallbackListener {
 
     private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -80,6 +80,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private int mSelectedTechnicianId;
     private ApproveFirstItemFragmentCallbackListener mCallbackListener;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
+    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     public static ApproveFirstItemFragment newInstance(String currentProductName, int currentProductId) {
         ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
@@ -93,6 +94,8 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
+        mOnActivityCallbackRegistered.onFragmentAttached(this);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
@@ -112,6 +115,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         super.onDetach();
         mCallbackListener = null;
         mOnCroutonRequestListener = null;
+
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered = null;
     }
 
     @Override
@@ -141,7 +147,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
         }
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
-        getActiveJobs();
+//        getActiveJobs();
         mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
         mNextButton = (Button) view.findViewById(R.id.button_approve);
 
@@ -447,6 +453,20 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         }
     };
 
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+        if (activeJobsListForMachine != null) {
+            mActiveJobsListForMachine = activeJobsListForMachine;
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
+            initJobsSpinner();
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        } else {
+            mJobId = 0;
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+        }
+        disableProgressBar();
+    }
+
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
@@ -484,5 +504,40 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     public int getCroutonRoot()
     {
         return R.id.parent_layouts;
+    }
+
+    @Override
+    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+
+    }
+
+    @Override
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours) {
+
+    }
+
+    @Override
+    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+
+    }
+
+    @Override
+    public void onShiftForMachineEnded() {
+
+    }
+
+    @Override
+    public void onApproveFirstItemEnabledChanged(boolean enabled) {
+
     }
 }

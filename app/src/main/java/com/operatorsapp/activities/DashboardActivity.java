@@ -436,6 +436,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
 
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener: mDashboardUICallbackListenerList){
+
+                        dashboardUICallbackListener.onActiveJobsListForMachineUICallbackListener(mActiveJobsListForMachine);
+                    }
+
+                }
+
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else {

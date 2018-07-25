@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +31,8 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -48,6 +49,8 @@ import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
@@ -55,10 +58,12 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
-{
+import java.util.ArrayList;
+
+public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, DashboardUICallbackListener {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
@@ -86,6 +91,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private Double mUnitsData = null;
     private Double mWeightData = null;
     private ReportCore mReportCore;
+    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     public static ReportRejectsFragment newInstance(String currentProductName, int currentProductId) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
@@ -99,12 +105,20 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
+        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mGoToScreenListener = (GoToScreenListener) getActivity();
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mOnActivityCallbackRegistered.onFragmentDetached(this);
+        mOnActivityCallbackRegistered = null;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +157,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        getActiveJobs();
+//        getActiveJobs();
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
@@ -495,6 +509,21 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
     };
 
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+
+        if (activeJobsListForMachine != null) {
+            mActiveJobsListForMachine = activeJobsListForMachine;
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
+            initJobsSpinner();
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        } else {
+            mJobId = 0;
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
+        }
+        disableProgressBar();
+    }
+
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
@@ -547,5 +576,40 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     public int getCroutonRoot()
     {
         return R.id.parent_layouts;
+    }
+
+    @Override
+    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+
+    }
+
+    @Override
+    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
+
+    }
+
+    @Override
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
+
+    }
+
+    @Override
+    public void onTimerChanged(String timeToEndInHours) {
+
+    }
+
+    @Override
+    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
+
+    }
+
+    @Override
+    public void onShiftForMachineEnded() {
+
+    }
+
+    @Override
+    public void onApproveFirstItemEnabledChanged(boolean enabled) {
+
     }
 }
