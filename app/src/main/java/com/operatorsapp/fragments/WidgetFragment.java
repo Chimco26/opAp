@@ -67,7 +67,6 @@ public class WidgetFragment extends Fragment implements
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
     private int mWidth;
     private int mHeight;
-    private SwipeRefreshLayout mShiftLogSwipeRefresh;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
@@ -123,13 +122,6 @@ public class WidgetFragment extends Fragment implements
         mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
         mLoadingDataView.setVisibility(View.VISIBLE);
 
-        mShiftLogSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_dashboard_swipe_refresh);
-        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
-            }
-        });
 
     }
 
@@ -176,9 +168,6 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
-        }
 
         // if we can't fill any reports, show no data, client defined this behavior.
         if (mReportFieldsFragmentCallbackListener != null && mReportFieldsFragmentCallbackListener.getReportForMachine() == null) {
@@ -226,9 +215,6 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
-        }
     }
 
     @Override
@@ -239,9 +225,6 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
 
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
-        }
 
         mLoadingDataView.setVisibility(View.GONE);
 
