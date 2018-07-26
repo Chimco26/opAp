@@ -1,11 +1,14 @@
 package com.operators.activejobslistformachineinfra;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Sergey on 14/08/2016.
  */
-public class ActiveJob {
+public class ActiveJob implements Parcelable {
 
     @SerializedName("CavitiesActual")
     private Integer cavitiesActual;
@@ -123,4 +126,53 @@ public class ActiveJob {
     public String getJoshName() {
         return joshName;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.cavitiesActual);
+        dest.writeValue(this.cavitiesStandard);
+        dest.writeValue(this.department);
+        dest.writeValue(this.jobID);
+        dest.writeValue(this.machineID);
+        dest.writeValue(this.shiftID);
+        dest.writeValue(this.joshID);
+        dest.writeString(this.joshName);
+        dest.writeString(this.productName);
+        dest.writeString(this.productCatalogId);
+        dest.writeString(this.jobName);
+    }
+
+    public ActiveJob() {
+    }
+
+    protected ActiveJob(Parcel in) {
+        this.cavitiesActual = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.cavitiesStandard = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.department = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.jobID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.machineID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.shiftID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.joshID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.joshName = in.readString();
+        this.productName = in.readString();
+        this.productCatalogId = in.readString();
+        this.jobName = in.readString();
+    }
+
+    public static final Parcelable.Creator<ActiveJob> CREATOR = new Parcelable.Creator<ActiveJob>() {
+        @Override
+        public ActiveJob createFromParcel(Parcel source) {
+            return new ActiveJob(source);
+        }
+
+        @Override
+        public ActiveJob[] newArray(int size) {
+            return new ActiveJob[size];
+        }
+    };
 }

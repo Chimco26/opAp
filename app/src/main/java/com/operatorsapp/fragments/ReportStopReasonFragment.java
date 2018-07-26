@@ -44,10 +44,12 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
-public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider, DashboardUICallbackListener {
+public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String IS_OPEN = "IS_OPEN";
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     //    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
 //    private static final String CURRENT_JOB_ID = "current_job_id";
 
@@ -65,12 +67,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
     private StopReasonsAdapter mStopReasonsAdapter;
-    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private int mSelectedPosition;
 
-    public static ReportStopReasonFragment newInstance(boolean isOpen) {
+    public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(IS_OPEN, isOpen);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportStopReasonFragment.setArguments(bundle);
         return reportStopReasonFragment;
     }
@@ -78,8 +82,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mGoToScreenListener = (GoToScreenListener) context;
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
@@ -90,9 +92,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
-        mOnActivityCallbackRegistered = null;
-
         mGoToScreenListener = null;
 
     }
@@ -104,6 +103,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         if (getArguments() != null) {
 //            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
 //        getActiveJobs();
     }
@@ -219,49 +221,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     }
 
-
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                mJobId = 0;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-//            disableProgressBar();
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-//            disableProgressBar();
-        }
-    };
-
-    @Override
-    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
-        if (activeJobsListForMachine != null) {
-            mActiveJobsListForMachine = activeJobsListForMachine;
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-        } else {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-        }
-    }
-
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
@@ -269,41 +228,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public int getCroutonRoot() {
         return R.id.report_stop_reason_crouton_root;
-    }
-
-    @Override
-    public void onDeviceStatusChanged(MachineStatus machineStatus) {
-
-    }
-
-    @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-
-    }
-
-    @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
-
-    }
-
-    @Override
-    public void onTimerChanged(String timeToEndInHours) {
-
-    }
-
-    @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
-
-    }
-
-    @Override
-    public void onShiftForMachineEnded() {
-
-    }
-
-    @Override
-    public void onApproveFirstItemEnabledChanged(boolean enabled) {
-
     }
 
     public interface ReportStopReasonFragmentListener {

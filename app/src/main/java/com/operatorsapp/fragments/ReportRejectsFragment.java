@@ -25,14 +25,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
-import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -49,8 +44,6 @@ import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.DashboardUICallbackListener;
-import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
@@ -58,18 +51,17 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
-import java.util.ArrayList;
-
-public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, DashboardUICallbackListener {
+public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private static final int REFRESH_DELAY_MILLIS = 3000;
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private TextView mCancelButton;
     private Button mNextButton;
     //    private boolean mIsFirstReasonSpinnerSelection = true;
@@ -80,7 +72,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private int mSelectedCauseId;
     private String mSelectedReasonName;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private String mCurrentProductName;
     private int mCurrentProductId;
     private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
@@ -91,13 +82,14 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private Double mUnitsData = null;
     private Double mWeightData = null;
     private ReportCore mReportCore;
-    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private int mSelectedPosition;
 
-    public static ReportRejectsFragment newInstance(String currentProductName, int currentProductId) {
+    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportRejectsFragment.setArguments(bundle);
         return reportRejectsFragment;
     }
@@ -105,8 +97,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mGoToScreenListener = (GoToScreenListener) getActivity();
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
         mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
@@ -116,15 +106,17 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
-        mOnActivityCallbackRegistered = null;
+
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+
         }
     }
 
@@ -227,7 +219,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
 
-        productNameTextView.setText(new StringBuilder(mCurrentProductName).append(","));
+        productNameTextView.setText(new StringBuilder(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName()).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsEditText.setFocusableInTouchMode(true);
@@ -290,6 +282,9 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 refreshSendButtonState();
             }
         });
+
+        initJobsSpinner();
+        disableSpinnerProgressBar();
 
     }
 
@@ -477,54 +472,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         return responseNewVersion;
     }
 
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        ActiveJobsListForMachineCore activeJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        activeJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        activeJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                initJobsSpinner();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                mJobId = 0;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-            disableProgressBar();
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-            disableProgressBar();
-        }
-    };
-
-    @Override
-    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
-
-        if (activeJobsListForMachine != null) {
-            mActiveJobsListForMachine = activeJobsListForMachine;
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-            initJobsSpinner();
-            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-        } else {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-        }
-        disableProgressBar();
-    }
-
-    private void disableProgressBar() {
+    private void disableSpinnerProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
 
@@ -538,6 +486,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
@@ -576,40 +525,5 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     public int getCroutonRoot()
     {
         return R.id.parent_layouts;
-    }
-
-    @Override
-    public void onDeviceStatusChanged(MachineStatus machineStatus) {
-
-    }
-
-    @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-
-    }
-
-    @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
-
-    }
-
-    @Override
-    public void onTimerChanged(String timeToEndInHours) {
-
-    }
-
-    @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
-
-    }
-
-    @Override
-    public void onShiftForMachineEnded() {
-
-    }
-
-    @Override
-    public void onApproveFirstItemEnabledChanged(boolean enabled) {
-
     }
 }

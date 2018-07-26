@@ -25,13 +25,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -42,29 +37,24 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.DashboardUICallbackListener;
-import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Locale;
 
-public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, DashboardUICallbackListener {
+public class ReportCycleUnitsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     public static final String LOG_TAG = ReportCycleUnitsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
-    private String mCurrentProductName;
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private int mCurrentProductId;
 
     private ImageView mPlusButton;
@@ -76,20 +66,21 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
     private double mUnitsCounter = 1;
     private ReportCore mReportCore;
-    private Integer mJoshId = null;
+    private Integer mJobId = null;
     private int mMaxUnits = 0;
 
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private Spinner mJobsSpinner;
     private ProgressBar mActiveJobsProgressBar;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
-    private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private int mSelectedPosition;
 
-    public static ReportCycleUnitsFragment newInstance(String currentProductName, int currentProductId) {
+    public static ReportCycleUnitsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportCycleUnitsFragment.setArguments(bundle);
         return reportCycleUnitsFragment;
     }
@@ -98,8 +89,6 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
-        mOnActivityCallbackRegistered.onFragmentAttached(this);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
 
         if (context instanceof ShowDashboardCroutonListener) {
@@ -110,8 +99,6 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public void onDetach() {
         super.onDetach();
-        mOnActivityCallbackRegistered.onFragmentDetached(this);
-        mOnActivityCallbackRegistered = null;
     }
 
     @Override
@@ -142,15 +129,17 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 //        getActiveJobs();
 
         if (getArguments() != null) {
-            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
 
 
         TextView mProductTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView mProductIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        mProductTitleTextView.setText(mCurrentProductName);
+        mProductTitleTextView.setText(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName());
         mProductIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsCounterTextView = (TextView) view.findViewById(R.id.units_text_view);
@@ -210,6 +199,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
 
+        initJobsSpinner();
+        disableSpinnerProgressBar();
     }
 
     private Number convertNumericStringToNumberObject(String strValue) {
@@ -349,9 +340,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         reportNetworkBridge.inject(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJoshId);
+        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
 
-        mReportCore.sendCycleUnitsReport(mUnitsCounter, mJoshId);
+        mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -423,65 +414,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         }
     }
 
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard();
-                mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesActual();
-                mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-                initJobsSpinner();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                mJoshId = null;
-                mMaxUnits = 0;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-            disableProgressBar();
-
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJoshId = null;
-            mMaxUnits = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-            disableProgressBar();
-
-        }
-    };
-
-    @Override
-    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
-
-        if (activeJobsListForMachine != null) {
-            mActiveJobsListForMachine = activeJobsListForMachine;
-            mJoshId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-            mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard();
-            mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesActual();
-            mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
-            initJobsSpinner();
-            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-        } else {
-            mJoshId = null;
-            mMaxUnits = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-        }
-        disableProgressBar();
-    }
-
-    private void disableProgressBar() {
+    private void disableSpinnerProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
 
@@ -494,11 +427,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                         mMaxUnits = mActiveJobsListForMachine.getActiveJobs().get(position).getCavitiesStandard();
                     }
 
@@ -514,41 +448,6 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public int getCroutonRoot() {
         return R.id.top_layout;
-    }
-
-    @Override
-    public void onDeviceStatusChanged(MachineStatus machineStatus) {
-
-    }
-
-    @Override
-    public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-
-    }
-
-    @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
-
-    }
-
-    @Override
-    public void onTimerChanged(String timeToEndInHours) {
-
-    }
-
-    @Override
-    public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
-
-    }
-
-    @Override
-    public void onShiftForMachineEnded() {
-
-    }
-
-    @Override
-    public void onApproveFirstItemEnabledChanged(boolean enabled) {
-
     }
 
 }
