@@ -35,7 +35,6 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,10 +42,8 @@ import com.app.operatorinfra.Operator;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
@@ -72,7 +69,6 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
-import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
@@ -168,6 +164,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mMultipleProductImg;
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
+    private int mSelectedPosition;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -553,7 +550,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (operatorCoreToDashboardActivityCallback != null) {
                 mOperatorCore = operatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
             }
-            getActiveJobs();
+//            getActiveJobs();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -574,33 +571,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                initProductView(activeJobsListForMachine);
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-//            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-        }
-    };
-
     public void initProductView(ActiveJobsListForMachine activeJobsListForMachine) {
         mActiveJobsListForMachine = activeJobsListForMachine;
         if (mActiveJobsListForMachine.getActiveJobs() != null && mActiveJobsListForMachine.getActiveJobs().size() > 1) {
@@ -611,14 +581,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mProductSpinner.setVisibility(View.VISIBLE);
 
             if (mJoshProductNameSpinnerAdapter != null) {
-//                mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobsListForMachine.getActiveJobs());
-//                mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
-//                mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
                 mActiveJobs.clear();
                 mActiveJobs.addAll(mActiveJobsListForMachine.getActiveJobs());
                 mJoshProductNameSpinnerAdapter.notifyDataSetChanged();
             }
         } else {
+
+            mSelectedPosition = 0;
+
+            mProductSpinner.setSelection(0);
 
             mProductNameTextView.setVisibility(View.VISIBLE);
             mProductSpinner.setVisibility(View.GONE);
@@ -644,6 +615,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                     mJoshProductNameSpinnerAdapter.setTitle(position);
+
+                    mSelectedPosition = position;
 
                     mListener.onJoshProductSelected(mActiveJobs.get(position).getJobID(),
                             mActiveJobs.get(position).getJobName());
@@ -734,7 +707,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         ZLogger.w(LOG_TAG, "missing machine status data in job spinner");
                         return;
                     }
-                    String nameByLang = OperatorApplication.isEnglishLang() ? mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductEname() : mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductName();
                     if (mJobActionsSpinnerItems.get(position).isEnabled()) {
                         // TODO: 5/10/2018 NATAN
                         switch (position) {
@@ -754,34 +726,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 1: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance("--", 0), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
                                 break;
                             }
                             case 2: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance("--", 0), true);
+                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),  mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
                                 break;
                             }
                             case 3: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance("--", 0), true);
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
                                 break;
                             }
                             case 4: {
 
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance("--", 0), true);
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(nameByLang, mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID()), true);
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
 
                                 break;
@@ -1057,7 +1029,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void startSelectMode(int type, int eventID) {
 
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen));
+        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
 
         mIsSelectionMode = true;
 
@@ -1233,6 +1205,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             }
             mJobsSpinnerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+
+        if (activeJobsListForMachine != null) {
+            initProductView(activeJobsListForMachine);
+            ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
+        } else {
+            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
         }
     }
 

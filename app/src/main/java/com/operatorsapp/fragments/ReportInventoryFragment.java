@@ -5,8 +5,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,9 +26,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -61,7 +57,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
-    private String mCurrentProductName;
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private int mCurrentProductId;
     private ReportCore mReportCore;
     private ImageView mPlusButton;
@@ -81,13 +78,15 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private Spinner mJobsSpinner;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private View mTopView;
+    private int mSelectedPosition;
 
 
-    public static ReportInventoryFragment newInstance(String currentProductName, int currentProductId) {
+    public static ReportInventoryFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportInventoryFragment reportInventoryFragment = new ReportInventoryFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportInventoryFragment.setArguments(bundle);
         return reportInventoryFragment;
     }
@@ -104,11 +103,18 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
     }
 
@@ -126,7 +132,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
 
-        getActiveJobs();
+//        getActiveJobs();
 
         mButtonReport = (Button) view.findViewById(R.id.button_report);
 
@@ -152,7 +158,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         TextView productTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        productTitleTextView.setText(mCurrentProductName);
+        productTitleTextView.setText(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName());
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsCounterTextView = (EditText) view.findViewById(R.id.units_text_view);
@@ -212,6 +218,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         KeyboardUtils.keyboardIsShownC(getActivity(),this);
 
+        initJobsSpinner();
+
+        disableSpinnerProgressBar();
     }
 
     @Override
@@ -390,47 +399,17 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         }
     }
 
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
-    }
 
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                initJobsSpinner();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
-                mJobId = null;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-            disableProgressBar();
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = null;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            disableProgressBar();
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-        }
-    };
-
-    private void disableProgressBar() {
+    private void disableSpinnerProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mActiveJobsListForMachineCore.unregisterListener();
+        if (mActiveJobsListForMachineCore != null) {
+            mActiveJobsListForMachineCore.unregisterListener();
+        }
         mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
@@ -444,6 +423,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
@@ -488,4 +468,5 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
 
     }
+
 }

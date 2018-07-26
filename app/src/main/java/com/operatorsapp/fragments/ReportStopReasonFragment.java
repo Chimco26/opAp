@@ -18,6 +18,8 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
+import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
@@ -26,6 +28,8 @@ import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.interfaces.DashboardUICallbackListener;
+import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
@@ -33,6 +37,7 @@ import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -43,6 +48,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String IS_OPEN = "IS_OPEN";
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     //    private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
 //    private static final String CURRENT_JOB_ID = "current_job_id";
 
@@ -60,11 +67,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
     private StopReasonsAdapter mStopReasonsAdapter;
+    private int mSelectedPosition;
 
-    public static ReportStopReasonFragment newInstance(boolean isOpen) {
+    public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(IS_OPEN, isOpen);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportStopReasonFragment.setArguments(bundle);
         return reportStopReasonFragment;
     }
@@ -82,9 +92,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onDetach() {
         super.onDetach();
-
         mGoToScreenListener = null;
+
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +103,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         if (getArguments() != null) {
 //            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
 //        getActiveJobs();
     }
@@ -183,7 +197,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onResume() {
         super.onResume();
-        getActiveJobs();
+//        getActiveJobs();
     }
 
     protected void setActionBar() {
@@ -206,37 +220,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         }
 
     }
-
-
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        mActiveJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                mJobId = 0;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-//            disableProgressBar();
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-//            disableProgressBar();
-        }
-    };
 
     private void disableProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);

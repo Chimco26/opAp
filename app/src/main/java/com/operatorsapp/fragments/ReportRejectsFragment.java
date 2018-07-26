@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +25,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -57,14 +53,15 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
-public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
-{
+public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = ReportRejectsFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private static final int REFRESH_DELAY_MILLIS = 3000;
+    private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
+    private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private TextView mCancelButton;
     private Button mNextButton;
     //    private boolean mIsFirstReasonSpinnerSelection = true;
@@ -75,7 +72,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private int mSelectedCauseId;
     private String mSelectedReasonName;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private String mCurrentProductName;
     private int mCurrentProductId;
     private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
@@ -86,12 +82,14 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private Double mUnitsData = null;
     private Double mWeightData = null;
     private ReportCore mReportCore;
+    private int mSelectedPosition;
 
-    public static ReportRejectsFragment newInstance(String currentProductName, int currentProductId) {
+    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CURRENT_PRODUCT_NAME, currentProductName);
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
+        bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
+        bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
         reportRejectsFragment.setArguments(bundle);
         return reportRejectsFragment;
     }
@@ -106,11 +104,19 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCurrentProductName = getArguments().getString(CURRENT_PRODUCT_NAME);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
+            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+
         }
     }
 
@@ -143,7 +149,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
 
-        getActiveJobs();
+//        getActiveJobs();
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
@@ -213,7 +219,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
 
-        productNameTextView.setText(new StringBuilder(mCurrentProductName).append(","));
+        productNameTextView.setText(new StringBuilder(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName()).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsEditText.setFocusableInTouchMode(true);
@@ -276,6 +282,9 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 refreshSendButtonState();
             }
         });
+
+        initJobsSpinner();
+        disableSpinnerProgressBar();
 
     }
 
@@ -463,39 +472,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         return responseNewVersion;
     }
 
-    private void getActiveJobs() {
-        ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
-        activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        ActiveJobsListForMachineCore activeJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
-        activeJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
-        activeJobsListForMachineCore.getActiveJobsListForMachine();
-    }
-
-    private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
-        @Override
-        public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
-            if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(0).getJoshID();
-                initJobsSpinner();
-                ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            } else {
-                mJobId = 0;
-                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
-            }
-            disableProgressBar();
-        }
-
-        @Override
-        public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            mJobId = 0;
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
-            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-            disableProgressBar();
-        }
-    };
-
-    private void disableProgressBar() {
+    private void disableSpinnerProgressBar() {
         mActiveJobsProgressBar.setVisibility(View.GONE);
     }
 
@@ -509,6 +486,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
