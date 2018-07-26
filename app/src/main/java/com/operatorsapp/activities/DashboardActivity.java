@@ -401,6 +401,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             joshId = mSelectProductJobId;
 
+        }else if (joshId == null){
+            joshId = 0;
         }
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());

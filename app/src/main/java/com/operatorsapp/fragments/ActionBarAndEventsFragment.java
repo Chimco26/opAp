@@ -436,6 +436,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 // TODO: 25/07/2018 sign in success
                 ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, "Signed-in Successfully");
             }
+            SendBroadcast.refreshPolling(getActivity());
             setupOperatorSpinner();
             //            mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             //            Zloger.clearPollingRequest(LOG_TAG, "onSetOperatorSuccess() ");
