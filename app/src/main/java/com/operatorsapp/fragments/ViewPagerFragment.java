@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -174,6 +175,13 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
 
+    }
+
+    @Override
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine) {
+        if (mShiftLogSwipeRefresh.isRefreshing()){
+            mShiftLogSwipeRefresh.setRefreshing(false);
+        }
     }
 
     public interface OnViewPagerListener {
