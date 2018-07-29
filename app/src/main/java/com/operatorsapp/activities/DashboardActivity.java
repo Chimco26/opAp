@@ -353,7 +353,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } else {
             
             ignoreFromOnPause = false;
-            // TODO: 6/11/2018 שלח לאוהד גירסה לבדיקה על זה
+
             super.onResume();
 
         }
@@ -411,7 +411,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling(joshId);
 
-        mSelectProductJobId = null;
     }
 
     private void getActiveJobs() {
@@ -435,6 +434,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                    mActionBarAndEventsFragment.initProductView(mActiveJobsListForMachine);
 //                }
                 dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
+
+                if (mActiveJobsListForMachine.getActiveJobs().size() <= 1){
+
+                    mSelectProductJobId = null;
+                }
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
@@ -823,7 +827,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling(null);
+//        mAllDashboardDataCore.startPolling(null);
+
+        getActiveJobs();
 
         PersistenceManager.getInstance().setJobId(mSelectJobId);
 
@@ -881,7 +887,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling(null);
+//        mAllDashboardDataCore.startPolling(null);
+
+        getActiveJobs();
 
         if (getSupportFragmentManager() != null) {
             try {
@@ -1108,7 +1116,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mAllDashboardDataCore.stopPolling();
 
         NetworkManager.getInstance().clearPollingRequest();
-        mAllDashboardDataCore.startPolling(null);
+//        mAllDashboardDataCore.startPolling(null);
+
+        getActiveJobs();
 
     }
 
