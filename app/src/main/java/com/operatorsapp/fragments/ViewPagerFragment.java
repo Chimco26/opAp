@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,7 +30,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     private ScreenSlidePagerAdapter mPagerAdapter;
     private OnViewPagerListener mListener;
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
-    private SwipeRefreshLayout mShiftLogSwipeRefresh;
+    private SwipeRefreshLayout mSwipeRefresh;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     public static ViewPagerFragment newInstance() {
@@ -93,11 +94,25 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mShiftLogSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_viewpager_swipe_refresh);
-        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_viewpager_swipe_refresh);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 SendBroadcast.refreshPolling(getActivity());
+            }
+        });
+
+        mPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                mSwipeRefresh.setEnabled(false);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        mSwipeRefresh.setEnabled(true);
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -143,15 +158,15 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
+        if (mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.setRefreshing(false);
         }
     }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
+        if (mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.setRefreshing(false);
         }
     }
 
@@ -162,8 +177,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
+        if (mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.setRefreshing(false);
         }
     }
 
@@ -179,8 +194,8 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine) {
-        if (mShiftLogSwipeRefresh.isRefreshing()){
-            mShiftLogSwipeRefresh.setRefreshing(false);
+        if (mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.setRefreshing(false);
         }
     }
 
