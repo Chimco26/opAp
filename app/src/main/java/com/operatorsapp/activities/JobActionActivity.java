@@ -68,10 +68,14 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class JobActionActivity extends AppCompatActivity implements View.OnClickListener,
@@ -167,6 +171,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPandingJobs() != null && mPendingJobsResponse.getPandingJobs().size() > 0) {
 
+                    SimpleDateFormat actualFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+
+                    for (PandingJob pandingJob : mPendingJobsResponse.getPandingJobs()) {
+                        for (Property property : pandingJob.getProperties()) {
+
+                            property.setValue(updateDateForRtl(property, actualFormat, dateFormat));
+
+                        }
+                    }
+
                     mHeaders.addAll(mPendingJobsResponse.getHeaders());
 
                     mPendingJobs.addAll(mPendingJobsResponse.getPandingJobs());
@@ -187,7 +203,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                     ProgressDialogManager.dismiss();
 
-                }else {
+                } else {
                     ProgressDialogManager.dismiss();
                 }
 
@@ -232,7 +248,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     ShowCrouton.showSimpleCrouton(JobActionActivity.this, errorObject);
 
 
-                }else {
+                } else {
 
                     mCurrentJobDetails = (JobDetailsResponse) response;
                     initRightView();
@@ -254,7 +270,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void postUpdateActions(ArrayList<Action> actions) {
 
-        if (mCurrentJobDetails == null){
+        if (mCurrentJobDetails == null) {
 
             return;
         }
@@ -369,6 +385,22 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             }
         }
     }
+
+    private String updateDateForRtl(Property property, SimpleDateFormat actualFormat, SimpleDateFormat newFormat) {
+
+        if (property.getKey().contains("Time") && property.getValue() != null && property.getValue().length() > 0) {
+
+            try {
+                Date date = actualFormat.parse(property.getValue());
+                return newFormat.format(date);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return property.getValue();
+    }
+
 
     private void initActionsItemView() {
 
@@ -523,35 +555,44 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void initViewsTitleLine() {
 
-//        ArrayList<Property> properties = new ArrayList<>();
         ArrayList<Property> properties = (ArrayList<Property>) mCurrentPendingJob.getProperties();
 
-//        for (Property property : mCurrentPendingJob.getProperties()) {
-//
-//            if (property.getKey() != null && property.getKey().length() > 0 &&
-//                    mHashMapHeaders.get(property.getKey()).getShowOnHeader() &&
-//                    property.getValue() != null &&  property.getValue().length() > 0) {
-//
-//                properties.add(property);
-//            }
-//        }
+        SimpleDateFormat actualFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
 
         if (properties.size() > 0) {
             mTitleLine1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName(), 1));
-            mTitleLine1Tv2.setText(getResizedString(properties.get(0).getValue(), 2));
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mTitleLine1Tv2.setText(getResizedString(updateDateForRtl(properties.get(0), actualFormat, dateFormat), 2));
+            } else {
+                mTitleLine1Tv2.setText(getResizedString(properties.get(0).getValue(), 2));
+            }
         }
         if (properties.size() > 1) {
             mTitleLine1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName(), 1));
-            mTitleLine1Tv4.setText(getResizedString(properties.get(1).getValue(), 2));
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mTitleLine1Tv4.setText(getResizedString(updateDateForRtl(properties.get(1), actualFormat, dateFormat), 2));
+            } else {
+                mTitleLine1Tv4.setText(getResizedString(properties.get(1).getValue(), 2));
+            }
         }
 
         if (properties.size() > 2) {
             mTit2Line1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName(), 1));
-            mTit2Line1Tv2.setText(getResizedString(properties.get(2).getValue(), 2));
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mTit2Line1Tv2.setText(getResizedString(updateDateForRtl(properties.get(2), actualFormat, dateFormat), 2));
+            } else {
+                mTit2Line1Tv2.setText(getResizedString(properties.get(2).getValue(), 2));
+            }
         }
         if (properties.size() > 3) {
             mTit2Line1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName(), 1));
-            mTit2Line1Tv4.setText(getResizedString(properties.get(3).getValue(), 2));
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mTit2Line1Tv4.setText(getResizedString(updateDateForRtl(properties.get(3), actualFormat, dateFormat), 2));
+            } else {
+                mTit2Line1Tv4.setText(getResizedString(properties.get(3).getValue(), 2));
+            }
         }
 
     }
@@ -847,7 +888,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -910,7 +952,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 break;
 
-                case R.id.IJAM_img:
+            case R.id.IJAM_img:
 
                 startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getMold().getFiles(),
                         String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getName()));
@@ -941,6 +983,14 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onPandingJobSelected(PandingJob pandingJob) {
+
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+//
+//        SimpleDateFormat actualFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
+//
+//        for (Property property : mCurrentPendingJob.getProperties()) {
+//            updateDateForRtl(property, actualFormat, dateFormat);
+//        }
 
         for (PandingJob pandingJob1 : mPendingJobsResponse.getPandingJobs()) {
 
@@ -1029,7 +1079,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             mUpdatedActions = new ArrayList<>();
         }
 
-        if (mUpdatedActions.contains(action)){
+        if (mUpdatedActions.contains(action)) {
 
             mUpdatedActions.remove(action);
         }
@@ -1134,14 +1184,16 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds,
+                                     int viewGroup, CroutonCreator.CroutonType croutonType) {
 
         mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_relative_ly, croutonType, this);
 
     }
 
     @Override
-    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage,
+                                     int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
         if (mCroutonCreator != null) {
             mCroutonCreator.showCrouton(this, String.valueOf(croutonMessage), croutonDurationInMilliseconds, R.id.AJA_root_relative_ly, croutonType, this);
