@@ -25,7 +25,7 @@ public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
     private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
     @SerializedName("Technicians")
     private List<Technician> technicians = new ArrayList<Technician>();
-    @SerializedName("ProductionStatus")
+    @SerializedName("ProductionModes")
     private List<PackageTypes> productionStatus = new ArrayList<PackageTypes>();
 
 

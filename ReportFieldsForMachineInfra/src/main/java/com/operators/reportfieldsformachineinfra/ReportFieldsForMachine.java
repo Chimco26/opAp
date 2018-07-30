@@ -19,7 +19,7 @@ public class ReportFieldsForMachine {
     private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
     @SerializedName("Technicians")
     private List<Technician> technicians = new ArrayList<Technician>();
-    @SerializedName("PackageTypes")
+    @SerializedName("ProductionStatus")
     private List<PackageTypes> productionStatus = new ArrayList<PackageTypes>();
 
     public ReportFieldsForMachine(List<StopReasons> stopReasons, List<RejectReasons> rejectReasons, List<RejectCauses> rejectCauses, List<PackageTypes> packageTypes, List<Technician> technicians, List<PackageTypes> productionStatus) {

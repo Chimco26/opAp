@@ -62,6 +62,7 @@ import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
+import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -92,7 +93,7 @@ import java.util.TimerTask;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
-        DashboardUICallbackListener,
+        DashboardUICallbackListener, OnReportFieldsUpdatedCallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
@@ -771,7 +772,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
             setupOperatorSpinner();
-            setupProductionStatusSpinner();
+            //setupProductionStatusSpinner();
 
 
 
@@ -1558,6 +1559,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setFromAnotherActivity(boolean fromAnotherActivity) {
         this.mFromAnotherActivity = fromAnotherActivity;
+    }
+
+    @Override
+    public void onReportUpdatedSuccess() {
+        setupProductionStatusSpinner();
+    }
+
+    @Override
+    public void onReportUpdateFailure() {
+
     }
 
     public interface ActionBarAndEventsFragmentListener {
