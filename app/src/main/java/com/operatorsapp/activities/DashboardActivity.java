@@ -462,6 +462,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
+            dashboardDataStartPolling(null);
         }
     };
 

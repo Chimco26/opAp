@@ -115,8 +115,10 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
 
+            if (mActiveJobsListForMachine != null) {
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            }
         }
     }
 
