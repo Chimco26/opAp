@@ -50,6 +50,7 @@ import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
+import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -770,11 +771,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
             setupOperatorSpinner();
-            EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
-            String [] items = {"Production", "No Order", "Preventive Maintenance", "Shutdown"};
-            final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
-            productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
-            productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            setupProductionStatusSpinner();
 
 
 
@@ -810,6 +807,37 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             startToolbarTutorial();
         }
 
+    }
+
+    private void setupProductionStatusSpinner() {
+        EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
+        final List<PackageTypes> statusList = ((DashboardActivity) getActivity()).getReportForMachine().getProductionStatus();
+
+        String[] items;
+        if (statusList != null && statusList.size() > 0) {
+            items = new String[statusList.size()];
+            for (int i = 0; i < statusList.size(); i++) {
+                items[i] = OperatorApplication.isEnglishLang() ? statusList.get(i).getEName() : statusList.get(i).getLName();
+            }
+        }else {
+            items = new String[]{""};
+        }
+
+        final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
+        productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
+        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+        productionStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void setupOperatorSpinner() {

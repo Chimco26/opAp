@@ -210,7 +210,7 @@
     <string name="get_panding_jobs_failed_error">פק״עות ממתינות  שגיאה נכשלה</string>
     <string name="get_jobs_details_failed_error">פרטי העבודה נכשלה שגיאה</string>
     <string name="no_available_pdf">אין Pdf זמין</string>
-
+    <string name="min_duration_shiftlog">זמן אירוע מינמלי</string>
 
 
 </resources>

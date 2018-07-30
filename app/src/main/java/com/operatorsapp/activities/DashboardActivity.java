@@ -475,6 +475,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setDisplayRejectFactor(machineStatus.getAllMachinesData().get(0).isDisplayRejectFactor());
                         PersistenceManager.getInstance().setAddRejectsOnSetupEnd(machineStatus.getAllMachinesData().get(0).isAddRejectsOnSetupEnd());
                         PersistenceManager.getInstance().setMinEventDuration(machineStatus.getAllMachinesData().get(0).getMinEventDuration());
+
+                        // TODO: 29/07/2018 unComent when api is ready
+//                        String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
+//                        String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
+//
+//                        if (opId != null && opId != "" && opName != null && opName != ""){
+//
+//                            PersistenceManager.getInstance().setOperatorName(opName);
+//                            PersistenceManager.getInstance().setOperatorId(opId);
+//                        }else {
+//                            PersistenceManager.getInstance().setOperatorName("");
+//                            PersistenceManager.getInstance().setOperatorId("");
+//                        }
+//
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                     }
@@ -622,6 +636,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                    int minDuration = PersistenceManager.getInstance().getMinEventDuration();
+                    if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
+                        for (Event event : events) {
+                            for (int i=0; i< mSelectedEvents.size(); i++) {
+
+                                if (event.getEventID() == mSelectedEvents.get(i)) {
+                                    if (event.getDuration() < minDuration) {
+                                        mSelectedEvents.remove(i);
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);

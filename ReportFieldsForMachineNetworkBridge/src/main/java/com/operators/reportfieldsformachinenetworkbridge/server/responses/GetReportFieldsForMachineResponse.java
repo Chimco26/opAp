@@ -25,11 +25,13 @@ public class GetReportFieldsForMachineResponse extends ErrorBaseResponse {
     private List<PackageTypes> packageTypes = new ArrayList<PackageTypes>();
     @SerializedName("Technicians")
     private List<Technician> technicians = new ArrayList<Technician>();
+    @SerializedName("ProductionStatus")
+    private List<PackageTypes> productionStatus = new ArrayList<PackageTypes>();
 
 
 
     public ReportFieldsForMachine getReportFieldsForMachine() {
-        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses,packageTypes, technicians);
+        return new ReportFieldsForMachine(stopReasons, rejectReasons, rejectCauses,packageTypes, technicians, productionStatus);
     }
 
 

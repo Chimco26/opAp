@@ -70,8 +70,21 @@ public class AllMachinesData {
     private boolean addRejectsOnSetupEnd;
     @SerializedName("minEventDuration")
     private int minEventDuration;
+    @SerializedName("OperatorName")
+    private String operatorName;
+    @SerializedName("OperatorId")
+    private String OperatorId;
 
-    // TODO: 02/07/2018 add minimum duration
+    // TODO: 29/07/2018 worker sign in name + number
+
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public String getOperatorId() {
+        return OperatorId;
+    }
 
     public boolean isAddRejectsOnSetupEnd(){
         return addRejectsOnSetupEnd;
