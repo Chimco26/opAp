@@ -14,8 +14,12 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Pandi
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.ViewHolder> {
 
@@ -50,15 +54,6 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
     public void onBindViewHolder(@NonNull final PendingJobsAdapter.ViewHolder viewHolder, final int position) {
 
         ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(position).getProperties();
-//        ArrayList<Property> properties = new ArrayList<>();
-//
-//        for (Property property: mPandingjobs.get(position).getProperties()){
-//
-//            if (property.getValue() != null && property.getValue().length() > 0){
-//
-//                properties.add(property);
-//            }
-//        }
 
         if (mPandingjobs.get(position).isSelected()) {
 
@@ -119,6 +114,7 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
         });
 
     }
+
 
     private void resetSelectedItem() {
 
