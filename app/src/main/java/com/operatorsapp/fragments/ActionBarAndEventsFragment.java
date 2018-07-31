@@ -51,6 +51,7 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -93,7 +94,7 @@ import java.util.TimerTask;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
-        DashboardUICallbackListener, OnReportFieldsUpdatedCallbackListener,
+        DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
@@ -810,27 +811,45 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    private void setupProductionStatusSpinner() {
-        EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
-        final List<PackageTypes> statusList = ((DashboardActivity) getActivity()).getReportForMachine().getProductionStatus();
+    public void setupProductionStatusSpinner() {
 
+        int selected = 0;
+
+        final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
+        ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
         String[] items;
-        if (statusList != null && statusList.size() > 0) {
+        String newTitle = "";
+        List<PackageTypes> statusList = new ArrayList<>();
+        if (reportForMachine != null && reportForMachine.getProductionStatus() != null){
+
+            statusList = ((DashboardActivity) getActivity()).getReportForMachine().getProductionStatus();
             items = new String[statusList.size()];
             for (int i = 0; i < statusList.size(); i++) {
                 items[i] = OperatorApplication.isEnglishLang() ? statusList.get(i).getEName() : statusList.get(i).getLName();
+                if (statusList.get(i).getId() == mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID()){
+                    selected = i;
+                }
             }
+            newTitle = OperatorApplication.isEnglishLang() ? statusList.get(selected).getEName() : statusList.get(selected).getLName();
         }else {
             items = new String[]{""};
         }
 
-        final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, "Production Status");
+        final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, newTitle);
         productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
         productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
+        final List<PackageTypes> finalStatusList = statusList;
         productionStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() != finalStatusList.get(position).getId()) {
+                    String newTitle = OperatorApplication.isEnglishLang() ? finalStatusList.get(position).getEName() : finalStatusList.get(position).getLName();
+                    ((OperatorSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
+                    // TODO: 30/07/2018 update server and refresh
+                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId());
+                }
 
             }
 
@@ -880,8 +899,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true);
                     } else if (position == 1) {
                         mOperatorCore.setOperatorForMachine("");
-                        //mOperatorCore.getOperatorById("");
-                        // TODO: 22/07/2018 sign out  send sign in api with string-""
                     }
                 }
 
@@ -1084,6 +1101,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        if (mSwipeToRefresh.isRefreshing()){
 //            mSwipeToRefresh.setRefreshing(false);
 //        }
+        setupProductionStatusSpinner();
 
     }
 
@@ -1561,16 +1579,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         this.mFromAnotherActivity = fromAnotherActivity;
     }
 
-    @Override
-    public void onReportUpdatedSuccess() {
-        setupProductionStatusSpinner();
-    }
-
-    @Override
-    public void onReportUpdateFailure() {
-
-    }
-
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
 
@@ -1589,6 +1597,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onSplitEventPressed(int eventID);
 
         void onJoshProductSelected(Integer joshID, String jobName);
+
+        void onProductionStatusChanged(int id);
     }
 
 }

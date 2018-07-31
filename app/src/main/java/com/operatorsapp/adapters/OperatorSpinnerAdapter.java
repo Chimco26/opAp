@@ -16,6 +16,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
     private Activity mContext;
     private String[] mSpinnerItems = null;
     private String mCurrentOperatorName;
+    private TextView spinnerTitle;
 
     public OperatorSpinnerAdapter(Activity context, int resource, String[] operators, String currentOperator) {
         super(context, resource, operators);
@@ -30,7 +31,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_operator_item, parent, false);
-            TextView spinnerTitle = (TextView) row.findViewById(R.id.spinner_operator_item_name);
+            spinnerTitle = (TextView) row.findViewById(R.id.spinner_operator_item_name);
             if (mCurrentOperatorName == null  ) {
                 spinnerTitle.setText(mSpinnerItems[0]);
             }
@@ -63,4 +64,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         return row;
     }
 
+    public void updateTitle(String newTitle){
+        spinnerTitle.setText(newTitle);
+    }
 }

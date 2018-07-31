@@ -4,12 +4,15 @@ package com.operators.getmachinesstatusnetworkbridge;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.GetMachineStatusDataRequest;
+import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
+import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorBaseResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStatusDataResponse;
 
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
@@ -92,6 +95,25 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Get_machines_failed Error");
                     getMachineStatusCallback.onGetMachineStatusFailed(errorObject);
                 }
+            }
+        });
+    }
+
+    @Override
+    public void setProductionModeForMachine(String siteUrl,int specificRequestTimeout, String sessionId, int machineId, int productionModeId)
+    {
+        SetProductionModeForMachineRequest setProductionModeForMachineRequest = new SetProductionModeForMachineRequest(sessionId, machineId, productionModeId);
+        Call<ErrorResponseNewVersion> call = mGetMachineStatusNetworkManagerInterface.postProductionModeForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).postProductionModeForMachine(setProductionModeForMachineRequest);
+        call.enqueue(new Callback<ErrorResponseNewVersion>(){
+
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+
             }
         });
     }

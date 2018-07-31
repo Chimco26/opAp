@@ -7,6 +7,7 @@ import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGet
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachinesStatusServiceRequest;
+import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldSetProductionModeForMachineRequest;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.jobsnetworkbridge.interfaces.EmeraldGetJobsListServiceRequests;
 import com.operators.jobsnetworkbridge.interfaces.EmeraldStartJobServiceRequests;
@@ -329,6 +330,33 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "getMachineStatusRetroFitServiceRequests");
         }
         return mRetrofit.create(EmeraldGetMachinesStatusServiceRequest.class);
+    }
+
+    @Override
+    public EmeraldSetProductionModeForMachineRequest postProductionModeForMachineRetroFitServiceRequests(String siteUrl) {
+        try {
+
+            return postProductionModeForMachineRetroFitServiceRequests(siteUrl, -1, null);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "postProductionModeForMachineRetroFitServiceRequests");
+        }
+        return postProductionModeForMachineRetroFitServiceRequests(siteUrl, -1, null);
+    }
+
+    @Override
+    public EmeraldSetProductionModeForMachineRequest postProductionModeForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldSetProductionModeForMachineRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "postProductionModeForMachineRetroFitServiceRequests");
+        }
+        return mRetrofit.create(EmeraldSetProductionModeForMachineRequest.class);
     }
 
     @Override

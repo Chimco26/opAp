@@ -2,6 +2,9 @@ package com.operatorsapp.utils;
 
 import android.support.annotation.NonNull;
 
+import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
+import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
+import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
@@ -19,6 +22,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetwo
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
@@ -27,6 +31,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.List;
@@ -372,4 +377,54 @@ public class SimpleRequests {
         });
 
     }
+
+    public void postProductionMode(String siteUrl, final PostProductionModeCallback callback, GetMachineStatusNetworkManagerInterface machineStatusNetworkBridge,
+                                   SetProductionModeForMachineRequest productionModeForMachineRequest, final int totalRetries){
+
+        final int[] retryCount = {0};
+
+        Call<ErrorResponseNewVersion> call = machineStatusNetworkBridge.postProductionModeForMachineRetroFitServiceRequests(siteUrl).postProductionModeForMachine(productionModeForMachineRequest);
+
+        call.enqueue(new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onPostProductionModeSuccess(response.body());
+
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "PostProductionMode(), onResponse() callback is null");
+                    }
+                } else {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
+                    callback.onPostProductionModeFailed(errorObject);
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
+                        callback.onPostProductionModeFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "PostProductionMode(), onFailure() callback is null");
+
+                }
+            }
+        });
+
+    }
+
 }

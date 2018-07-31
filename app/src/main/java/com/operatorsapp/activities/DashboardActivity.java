@@ -37,6 +37,7 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
+import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
 import com.operators.jobscore.JobsCore;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
@@ -70,6 +71,7 @@ import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
+import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
@@ -1349,6 +1351,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         getActiveJobs();
 
         ProgressDialogManager.show(this);
+    }
+
+    @Override
+    public void onProductionStatusChanged(int id) {
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        SimpleRequests simpleRequests = new SimpleRequests();
+        simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
+            @Override
+            public void onPostProductionModeSuccess(Object response) {
+                getActiveJobs();
+                Toast.makeText(DashboardActivity.this, "onProductionStatusChanged", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPostProductionModeFailed(ErrorObjectInterface reason) {
+                Toast.makeText(DashboardActivity.this, "onProductionStatusChanged", Toast.LENGTH_SHORT).show();
+
+            }
+        },NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
+
     }
 
     @Override

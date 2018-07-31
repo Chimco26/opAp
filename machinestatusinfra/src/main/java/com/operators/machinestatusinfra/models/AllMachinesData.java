@@ -74,6 +74,8 @@ public class AllMachinesData {
     private String operatorName;
     @SerializedName("OperatorId")
     private String OperatorId;
+    @SerializedName("ProductionModeID")
+    private int mProductionModeID;
 
     // TODO: 29/07/2018 worker sign in name + number
 
@@ -231,5 +233,13 @@ public class AllMachinesData {
 
     public void setMinEventDuration(int minEventDuration) {
         this.minEventDuration = minEventDuration;
+    }
+
+    public int getmProductionModeID() {
+        return mProductionModeID;
+    }
+
+    public void setmProductionModeID(int mProductionModeID) {
+        this.mProductionModeID = mProductionModeID;
     }
 }

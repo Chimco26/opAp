@@ -9,4 +9,8 @@ public interface GetMachineStatusNetworkManagerInterface {
     EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl);
 
     EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
+
+    EmeraldSetProductionModeForMachineRequest postProductionModeForMachineRetroFitServiceRequests(String siteUrl);
+
+    EmeraldSetProductionModeForMachineRequest postProductionModeForMachineRetroFitServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
 }
