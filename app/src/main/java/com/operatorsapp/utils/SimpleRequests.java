@@ -2,7 +2,6 @@ package com.operatorsapp.utils;
 
 import android.support.annotation.NonNull;
 
-import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
@@ -18,9 +17,11 @@ import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetwo
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesRequest;
+import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
@@ -32,6 +33,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.List;
@@ -139,6 +141,62 @@ public class SimpleRequests {
                 }
             }
         });
+    }
+
+    public void postUpdateNotesForJob(String siteUrl, final PostUpdateNotesForJobCallback callback, PostUpdateNotesForJobNetworkManager postUpdateNotesForJobNetworkManager,
+                                      PostUpdateNotesForJobRequest postUpdateNotesForJobRequest, final int totalRetries, int requestTimeout){
+
+        final int[] retryCount = {0};
+
+        Call<ErrorResponseNewVersion> call = postUpdateNotesForJobNetworkManager.emeraldPostUpdateNotesForJob(siteUrl, requestTimeout, TimeUnit.SECONDS).postUpdateNotesForJobRequest(postUpdateNotesForJobRequest);
+
+        call.enqueue(new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+
+                if (response.isSuccessful() && response.body().isFunctionSucceed()) {
+                    if (callback != null) {
+
+                        callback.onUpdateNotesSuccess(response.body());
+
+                    } else {
+
+                        ZLogger.w(LOG_TAG, "postUpdateNotesForJob(), onResponse() callback is null");
+                    }
+                } else {
+
+                    if (callback != null){
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, response.body().getmError().getErrorDesc());
+
+                        callback.onUpdateNotesFailed(errorObject);
+                    }
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "postUpdateNotesForJob Error");
+                        callback.onUpdateNotesFailed(errorObject);
+                    }
+                } else {
+                    ZLogger.w(LOG_TAG, "postUpdateNotesForJob(), onFailure() callback is null");
+
+                }
+            }
+        });
+
+
+
     }
 
     public void getPendingJobList(String siteUrl, final GetPendingJobListCallback callback, GetPendingJobListNetworkManager getPendingJobListNetworkManager,
@@ -388,7 +446,7 @@ public class SimpleRequests {
         call.enqueue(new Callback<ErrorResponseNewVersion>() {
             @Override
             public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && response.body().getmError() != null) {
                     if (callback != null) {
 
                         callback.onPostProductionModeSuccess(response.body());
@@ -399,7 +457,7 @@ public class SimpleRequests {
                     }
                 } else {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostProductionMode_Failed Error");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Production Mode Update Failed");
                     callback.onPostProductionModeFailed(errorObject);
                     onFailure(call, new Exception("response not successful"));
                 }

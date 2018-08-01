@@ -70,9 +70,9 @@ public class AllMachinesData {
     private boolean addRejectsOnSetupEnd;
     @SerializedName("minEventDuration")
     private int minEventDuration;
-    @SerializedName("OperatorName")
+    @SerializedName("WorkerName")
     private String operatorName;
-    @SerializedName("OperatorId")
+    @SerializedName("WorkerID")
     private String OperatorId;
     @SerializedName("ProductionModeID")
     private int mProductionModeID;

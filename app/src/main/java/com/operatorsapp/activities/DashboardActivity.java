@@ -59,6 +59,7 @@ import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -483,19 +484,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setAddRejectsOnSetupEnd(machineStatus.getAllMachinesData().get(0).isAddRejectsOnSetupEnd());
                         PersistenceManager.getInstance().setMinEventDuration(machineStatus.getAllMachinesData().get(0).getMinEventDuration());
 
-                        // TODO: 29/07/2018 unComent when api is ready
-//                        String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
-//                        String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
-//
-//                        if (opId != null && opId != "" && opName != null && opName != ""){
-//
-//                            PersistenceManager.getInstance().setOperatorName(opName);
-//                            PersistenceManager.getInstance().setOperatorId(opId);
-//                        }else {
-//                            PersistenceManager.getInstance().setOperatorName("");
-//                            PersistenceManager.getInstance().setOperatorId("");
-//                        }
-//
+                        String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
+                        String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
+
+                        if (opId != null && opId != "" && opName != null && opName != ""){
+
+                            PersistenceManager.getInstance().setOperatorName(opName);
+                            PersistenceManager.getInstance().setOperatorId(opId);
+                        }else {
+                            PersistenceManager.getInstance().setOperatorName("");
+                            PersistenceManager.getInstance().setOperatorId("");
+                        }
+
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                     }
@@ -1360,14 +1360,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         SimpleRequests simpleRequests = new SimpleRequests();
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
             @Override
-            public void onPostProductionModeSuccess(Object response) {
-                getActiveJobs();
-                Toast.makeText(DashboardActivity.this, "onProductionStatusChanged", Toast.LENGTH_SHORT).show();
+            public void onPostProductionModeSuccess(ErrorResponseNewVersion response) {
+                // TODO: 31/07/2018 display cruton
+                if (response.isFunctionSucceed() && response.getmError() != null && response.getmError().getErrorCode() == 0) {
+                    getActiveJobs();
+                }else {
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                }
             }
 
             @Override
             public void onPostProductionModeFailed(ErrorObjectInterface reason) {
-                Toast.makeText(DashboardActivity.this, "onProductionStatusChanged", Toast.LENGTH_SHORT).show();
+                // TODO: 31/07/2018 set error message
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
             }
         },NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());

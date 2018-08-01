@@ -39,6 +39,10 @@ public class ReportFieldsForMachine {
         return rejectReasons;
     }
 
+    public void setRejectReasons(List<RejectReasons> rejectReasons){
+        this.rejectReasons = rejectReasons;
+    }
+
     public List<RejectCauses> getRejectCauses() {
         return rejectCauses;
     }

@@ -32,6 +32,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetVersion;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostActivateJob;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostSplitEvent;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostUpdateActions;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldPostUpdateNotesForJob;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendApproveFirstItem;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportCycleUnits;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInventory;
@@ -43,11 +44,13 @@ import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetwo
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostActivateJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
+import com.operators.reportrejectnetworkbridge.interfaces.PostUpdateNotesForJobNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.PostUpdtaeActionsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
@@ -87,6 +90,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         GetJobDetailsNetworkManager,
         PostUpdtaeActionsNetworkManager,
         PostActivateJobNetworkManager,
+        PostUpdateNotesForJobNetworkManager,
         PostSplitEventNetworkManager{
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
@@ -765,5 +769,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "approveEmeraldPostSplitEvent");
         }
         return mRetrofit.create(EmeraldPostSplitEvent.class);
+    }
+
+    @Override
+    public EmeraldPostUpdateNotesForJob emeraldPostUpdateNotesForJob(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldPostUpdateNotesForJob.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldPostUpdateNotesForJob");
+        }
+        return mRetrofit.create(EmeraldPostUpdateNotesForJob.class);
     }
 }

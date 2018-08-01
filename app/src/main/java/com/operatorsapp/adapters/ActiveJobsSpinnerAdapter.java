@@ -40,7 +40,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
             mRowName.setText(String.valueOf(mSpinnerItems.get(position).getJoshName()));
             //mRowName.setText(String.valueOf(mSpinnerItems.get(0).getJoshID()));
-            mRowName.setTextSize(20);
+            mRowName.setTextSize(16);
         }
         return row;
     }
@@ -58,7 +58,7 @@ public class ActiveJobsSpinnerAdapter extends ArrayAdapter<ActiveJob>
         name.setText(String.valueOf(mSpinnerItems.get(position).getJoshName()));
         //name.setText(String.valueOf(mSpinnerItems.get(position).getJoshID()));
         name.setTextColor(ContextCompat.getColor(mContext, R.color.default_gray_status));
-        name.setTextSize(20);
+        name.setTextSize(16);
 
         return row;
     }

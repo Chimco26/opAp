@@ -26,6 +26,9 @@ public class Job {
     @SerializedName("Recipe")
     @Expose
     private RecipeResponse recipe;
+    @SerializedName("Notes")
+    @Expose
+    private String notes;
 
     public List<Action> getActions() {
         return actions;
@@ -73,5 +76,13 @@ public class Job {
 
     public void setRecipe(RecipeResponse recipe) {
         this.recipe = recipe;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

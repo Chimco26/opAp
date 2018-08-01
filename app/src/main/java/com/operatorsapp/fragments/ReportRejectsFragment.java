@@ -451,8 +451,13 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             else
             {
 
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
-                ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                if (getFragmentManager() != null){
+
+                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                //ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
         }
     };

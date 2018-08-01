@@ -224,6 +224,12 @@
     <string name="kg">kg</string>
     <string name="gram">gr</string>
     <string name="sign_out">Sign Out</string>
+    <string name="signed_out_successfully">Signed-out Successfully</string>
+    <string name="signed_in_successfully">Signed-in Successfully</string>
+    <string name="notes">Notes</string>
+    <string name="submit">submit</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="enter_note_here">Enter Your Note Here</string>
 
 
 </resources>

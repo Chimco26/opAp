@@ -431,10 +431,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 // TODO: 25/07/2018 sign out success
                 //ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, message);
-                ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, "Signed-out Successfully");
+                ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, getString(R.string.signed_out_successfully));
             }else {
                 // TODO: 25/07/2018 sign in success
-                ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, "Signed-in Successfully");
+                ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, getString(R.string.signed_in_successfully));
             }
             SendBroadcast.refreshPolling(getActivity());
             setupOperatorSpinner();
@@ -1102,6 +1102,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            mSwipeToRefresh.setRefreshing(false);
 //        }
         setupProductionStatusSpinner();
+
+        setupOperatorSpinner();
 
     }
 

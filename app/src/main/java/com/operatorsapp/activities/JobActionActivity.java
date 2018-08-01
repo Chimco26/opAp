@@ -38,12 +38,15 @@ import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
+import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Job;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
@@ -62,6 +65,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.operatorsapp.utils.DownloadHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
@@ -136,6 +140,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private CroutonCreator mCroutonCreator;
     private ArrayList<Action> mUpdatedActions;
+    private TextView mProductNoteTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -370,6 +375,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         initViewsMoldItem();
 
         initActionsItemView();
+
+        initNotesView();
+    }
+
+    private void initNotesView() {
+        mProductNoteTv.setText("");
+        for (Job job : mCurrentJobDetails.getJobs()) {
+            if (mCurrentPendingJob.getID().equals(job.getID())){
+
+                mProductNoteTv.setText(job.getNotes());
+            }
+        }
     }
 
     public void initTitleView() {
@@ -425,7 +442,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         } else {
 
-            mActionItemLy.setVisibility(View.GONE);
+            //mActionItemLy.setVisibility(View.GONE);
         }
     }
 
@@ -644,6 +661,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mProductImageNoImageLy = findViewById(R.id.AJA_img2_no_image);
 
+        mProductNoteTv = findViewById(R.id.AJA_notes_tv);
+
         initVarsSearch();
 
         initVarsTitleLine();
@@ -749,6 +768,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mMoldItemImg.setOnClickListener(this);
         findViewById(R.id.AJA_img1).setOnClickListener(this);
         findViewById(R.id.AJA_img2).setOnClickListener(this);
+        findViewById(R.id.AJA_open_edit_text_btn).setOnClickListener(this);
 
         mSearchViewEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -958,7 +978,81 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                         String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getName()));
 
                 break;
+
+            case R.id.AJA_open_edit_text_btn:
+
+                openNotesDialog();
+                break;
         }
+    }
+
+    private void openNotesDialog() {
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+        builder.setView(dialogView);
+
+        TextView noteTitleTv = dialogView.findViewById(R.id.DN_note_title);
+        final EditText noteEt = dialogView.findViewById(R.id.DN_note);
+        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+
+        if (mProductNoteTv.getText().length() > 0){
+
+            noteTitleTv.setText(getString(R.string.edit_note));
+            noteEt.setText(mProductNoteTv.getText());
+        }else {
+            noteTitleTv.setText(getString(R.string.add_note));
+            noteEt.setHint(getString(R.string.enter_note_here));
+        }
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                updateNotes(alert, noteEt.getText().toString());
+
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                alert.dismiss();
+            }
+        });
+
+    }
+
+    private void updateNotes(final AlertDialog alert, final String note) {
+
+        ProgressDialogManager.show(this);
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+        PersistenceManager pm  = PersistenceManager.getInstance();
+        PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), mCurrentPendingJob.getID(), note);
+        simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
+            @Override
+            public void onUpdateNotesSuccess(ErrorResponseNewVersion responseNewVersion) {
+                mProductNoteTv.setText(note);
+                ProgressDialogManager.dismiss();
+                alert.dismiss();
+            }
+
+            @Override
+            public void onUpdateNotesFailed(ErrorObjectInterface reason) {
+                ProgressDialogManager.dismiss();
+            }
+        }, NetworkManager.getInstance(), updateNotesRequest, pm.getTotalRetries(), pm.getRequestTimeout());
+
+
     }
 
     private void showRecipeFragment() {

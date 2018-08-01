@@ -50,6 +50,10 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
@@ -161,6 +165,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
 
         if (mReportFieldsForMachine != null) {
 
+            sortRejectReasons();
             if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
                 Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
 
@@ -229,6 +234,27 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         initJobsSpinner();
 
         disableSpinnerProgressBar();
+    }
+
+    private void sortRejectReasons() {
+        List<RejectReasons> list = mReportFieldsForMachine.getRejectReasons();
+        Collections.sort(list, new Comparator<RejectReasons>() {
+            public int compare(RejectReasons o1, RejectReasons o2) {
+                if (OperatorApplication.isEnglishLang()){
+                    return o1.getEName().compareTo(o2.getEName());
+                }else {
+                    return o1.getLName().compareTo(o2.getLName());
+                }
+            }
+        });
+        for (RejectReasons rr : list) {
+            if (rr.getEName().equals("Setup")){
+                list.remove(rr);
+                list.add(0,rr);
+                break;
+            }
+        }
+        mReportFieldsForMachine.setRejectReasons(list);
     }
 
     @Override
