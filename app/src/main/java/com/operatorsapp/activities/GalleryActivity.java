@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,8 +37,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.PUT;
-
 public class GalleryActivity extends AppCompatActivity implements View.OnClickListener,
         GalleryAdapter.GalleryAdapterListener,
         OnScaleChangedListener,
@@ -59,7 +57,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private GalleryAdapter mAdapter;
     private TextView mTitleTv;
     private PhotoView mImage;
-    private ArrayList<GalleryModel> mGalleryModels;
     private String mTitle;
     private TextView mScaleTv;
     private PDFView mPdfViewer;
@@ -70,7 +67,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private View mLoadingProgress;
     private TextView mLoadingTv;
     private boolean isLoad;
-    private View mScaleLy;
     private DownloadHelper mDownloadHelper;
 
     @Override
@@ -106,8 +102,6 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         mPdfViewer = findViewById(R.id.AG_pdf);
 
         mScaleTv = findViewById(R.id.AG_scale_tv);
-
-        mScaleLy = findViewById(R.id.AG_scale_ly);
 
         mLoadingLy = findViewById(R.id.AG_loading_ly);
 
@@ -152,7 +146,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             ImageLoader.getInstance().displayImage(mFileUrls.get(0), mImage);
 
-        }else {
+        } else {
 
             openPdf(new GalleryModel(mFileUrls.get(0), true));
 
@@ -184,7 +178,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initRv() {
 
-        mGalleryModels = new ArrayList<>();
+        ArrayList<GalleryModel> mGalleryModels = new ArrayList<>();
 
         for (String s : mFileUrls) {
 
@@ -227,11 +221,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             if (zoom * 100 != 100) {
 
-                mScaleTv.setText(String.valueOf((int) (zoom * 100)) + "%");
+                mScaleTv.setText(String.format("%s%%", String.valueOf((int) (zoom * 100))));
 
             } else {
 
-                mScaleTv.setText("100%");
+                mScaleTv.setText(R.string.one_hundred_percent);
             }
 
         }
@@ -363,7 +357,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
-        mScaleTv.setText(String.valueOf((int) (100)) + "%");
+        mScaleTv.setText(String.format("%s%%", String.valueOf(100)));
 
         isPdflastClick = false;
 
@@ -384,7 +378,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         resetDialog();
 
-        mScaleTv.setText(String.valueOf((int) (100)) + "%");
+        mPdfViewer.recycle();
+
+        mScaleTv.setText(String.format("%s%%", String.valueOf(100)));
 
         isPdflastClick = true;
 
@@ -407,13 +403,13 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void openPdf(GalleryModel galleryModel) {
 
-        if (mSelectedPdf != null && mDownloadHelper != null){
+        if (mSelectedPdf != null && mDownloadHelper != null) {
 
             mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
 
             mDownloadHelper.cancelDownloadFileFromUrl();
 
-        }else {
+        } else {
 
             mSelectedPdf = new PdfObject(null, galleryModel.getUrl());
 
@@ -466,11 +462,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         if (mImage.getScale() * 100 != 100) {
 
-            mScaleTv.setText(String.valueOf((int) (scale * 100)) + "%");
+            mScaleTv.setText(String.format("%s%%", String.valueOf((int) (scale * 100))));
 
         } else {
 
-            mScaleTv.setText("100%");
+            mScaleTv.setText(getString(R.string.one_hundred_percent));
         }
     }
 
@@ -528,9 +524,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             loadPdfView(mSelectedPdf.getUri());
 
-        }else {
+        } else {
 
-            //TODO
+            showLoadingError();
         }
     }
 
@@ -568,7 +564,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         if (isPdflastClick) {
 
-            PdfDocument.Meta meta = mPdfViewer.getDocumentMeta();
+//            PdfDocument.Meta meta = mPdfViewer.getDocumentMeta();
             printBookmarksTree(mPdfViewer.getTableOfContents(), "-");
         }
     }
@@ -614,17 +610,25 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         isLoad = false;
 
-        if (mSelectedPdf != null){
+        if (mSelectedPdf != null) {
 
             mPdfViewer.recycle();
 
             initLoading(mSelectedPdf.getUrl());
 
-        }else if (isPdflastClick){
+        } else if (isPdflastClick) {
 
             showLoadingError();
         }
 
+    }
+
+    @Override
+    public void onLoadFileProgress() {
+
+        if (mLoadingTv.getText() != getString(R.string.loading_file)) {
+            mLoadingTv.setText(getResources().getString(R.string.loading_file));
+        }
     }
 
     private void showLoadingError() {

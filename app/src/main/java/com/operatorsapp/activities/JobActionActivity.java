@@ -136,6 +136,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private CroutonCreator mCroutonCreator;
     private ArrayList<Action> mUpdatedActions;
+    private TextView mProductPdfNoImageTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -485,6 +486,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         String firstImage = null;
         mFirstPdf = null;
 
+        mProductPdfNoImageTv.setText(getString(R.string.no_available_pdf));
+
         for (String url : mCurrentJobDetails.getJobs().get(0).getProductFiles()) {
 
             if (url.endsWith("pdf")) {
@@ -641,6 +644,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mProductImage = findViewById(R.id.AJA_img2);
 
         mProductPdfNoImageLy = findViewById(R.id.AJA_img1_no_image);
+
+        mProductPdfNoImageTv = findViewById(R.id.AJA_img1_no_image_tv);
 
         mProductImageNoImageLy = findViewById(R.id.AJA_img2_no_image);
 
@@ -1008,6 +1013,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         ArrayList<Integer> jobIds = new ArrayList<>();
         jobIds.add(pandingJob.getID());
         getJobDetails(jobIds);
+        mProductPdfView.recycle();
     }
 
     @Override
@@ -1038,7 +1044,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onError(Throwable t) {
 
-
+                        mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+                        mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+                        mProductPdfView.setVisibility(View.INVISIBLE);
                     }
                 })
                 .scrollHandle(new DefaultScrollHandle(this))
@@ -1059,10 +1067,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onLoadFileError() {
 
+        mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+        mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+        mProductPdfView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onCancel() {
+
+    }
+
+    @Override
+    public void onLoadFileProgress() {
 
     }
 
