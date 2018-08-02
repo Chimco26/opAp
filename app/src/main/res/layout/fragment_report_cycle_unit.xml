@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/id_title"
-            style="@style/Roboto_Regular_Status_Data"
+            style="@style/Roboto_Regular_Status_Title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/report_cycle_u_product_name_text_view"

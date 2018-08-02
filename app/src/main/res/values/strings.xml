@@ -198,8 +198,8 @@
     <string name="materials">Materials</string>
     <string name="mold">Mold</string>
     <string name="mold_catalog">Mold Catalog</string>
-    <string name="cavities_actual">Cavities Actual</string>
-    <string name="cavities_standard">Cavities Standard</string>
+    <string name="cavities_actual">Units In Cycle Actual</string>
+    <string name="cavities_standard">Units In Cycle STD</string>
     <string name="actions">Actions</string>
     <string name="action_details">Action details</string>
     <string name="you_can_add_a_note">You can add a note</string>

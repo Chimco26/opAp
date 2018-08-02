@@ -214,6 +214,12 @@
     <string name="minutes">דקות</string>
     <string name="signed_out_successfully">התנתקות בוצעה בהצלחה</string>
     <string name="signed_in_successfully">התחברות בוצעה בהצלחה</string>
+    <string name="notes">הערות</string>
+    <string name="enter_note_here">הכנס/י הערה כאן</string>
+    <string name="edit_note">עריכת הערה</string>
+    <string name="submit">שמור</string>
+    <string name="sign_out">התנתקות</string>
+    <string name="add_note">הוספת הערה</string>
 
 
 </resources>

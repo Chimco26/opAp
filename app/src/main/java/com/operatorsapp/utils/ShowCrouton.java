@@ -69,13 +69,13 @@ public class ShowCrouton {
     }
 
     public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, ErrorObjectInterface reason) {
-        if (reason != null) {
+        if (reason != null && reason.getDetailedDescription() != null && reason.getDetailedDescription().length() > 0) {
             createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR, null, reason.getDetailedDescription(), null);
         }
     }
 
     public static void showSimpleCrouton(OnCroutonRequestListener onCroutonRequestListener, String reason, CroutonCreator.CroutonType croutonType) {
-        if (reason != null) {
+        if (reason != null && reason.length() > 0) {
             createCrouton(onCroutonRequestListener, croutonType, null, reason, null);
         }
     }

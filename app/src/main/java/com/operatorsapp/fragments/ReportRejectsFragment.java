@@ -389,7 +389,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         mReportCore.sendReportReject(mSelectedReasonId, mSelectedCauseId, mUnitsData, mWeightData, mJobId);
-        // TODO: 25/06/2018 check all instances and make the call after response
 //        SendBroadcast.refreshPolling(getContext());
     }
 

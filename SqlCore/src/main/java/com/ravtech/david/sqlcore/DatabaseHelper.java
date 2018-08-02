@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.TimeUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,7 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //private static final long MIN_EVENT_DURATION_MILLIS = 1000 * 60 * 2;
+    private static final long LOG_DURATION_MILLIS = 1000 * 60 * 60 * 24;
 
 
     // Logcat tag

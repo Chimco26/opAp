@@ -457,6 +457,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
             }
             else {
+                ProgressDialogManager.dismiss();
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
         }
@@ -505,7 +506,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         dashboardUICallbackListener.onDeviceStatusChanged(machineStatus); // disable the button at least until next polling cycle
 
                     }
+                    ProgressDialogManager.dismiss();
                 } else {
+                    ProgressDialogManager.dismiss();
                     ZLogger.w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
             }
@@ -529,6 +532,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onStatusReceiveFailed(ErrorObjectInterface reason) {
 
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -562,6 +568,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     ZLogger.w(LOG_TAG, " onDataReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
             }
 
             @Override
@@ -574,6 +583,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.MachineData);
                     }
+                }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
                 }
             }
         };
@@ -604,6 +616,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                     }, PersistenceManager.getInstance().getPollingFrequency() * 1000);
                 }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
             }
 
             @Override
@@ -611,6 +626,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ZLogger.w(LOG_TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
 
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
             }
         };
     }
@@ -661,7 +679,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
                     }
+                    if (ProgressDialogManager.isShowing()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 } else {
+                    if (ProgressDialogManager.isShowing()) {
+                        ProgressDialogManager.dismiss();
+                    }
                     ZLogger.w(LOG_TAG, " shiftLogStartPolling() - DashboardUICallbackListener is null");
                 }
             }
@@ -679,6 +703,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             dashboardUICallbackListener.onDataFailure(reason, DashboardUICallbackListener.CallType.ShiftLog);
                         }
                     }
+                }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
                 }
             }
         };
@@ -698,6 +725,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (mOnReportFieldsUpdatedCallbackListener != null) {
                     mOnReportFieldsUpdatedCallbackListener.onReportUpdateFailure();
                 }
+            }
+            if (ProgressDialogManager.isShowing()) {
+                ProgressDialogManager.dismiss();
             }
         }
 
@@ -719,6 +749,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             } else {
                 mReportFieldsForMachineCore.stopPolling();
                 mRetries = 0;
+            }
+            if (ProgressDialogManager.isShowing()) {
+                ProgressDialogManager.dismiss();
             }
 
         }
@@ -815,12 +848,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
                 }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
             }
 
             @Override
             public void onJobListReceiveFailed(ErrorObjectInterface reason) {
                 ZLogger.w(LOG_TAG, "onJobListReceiveFailed() " + reason.getError());
                 mDashboardActivityToJobsFragmentCallback.onJobsListReceiveFailed();
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
             }
 
             @Override
@@ -838,6 +877,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 }
 
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
+                }
                 startJob();
             }
 
@@ -850,6 +892,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ZLogger.i(LOG_TAG, "onStartJobFailed()");
                     mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
+                }
+                if (ProgressDialogManager.isShowing()) {
+                    ProgressDialogManager.dismiss();
                 }
             }
         });
@@ -1365,12 +1410,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (response.isFunctionSucceed() && response.getmError() != null && response.getmError().getErrorCode() == 0) {
                     getActiveJobs();
                 }else {
+                    ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 }
             }
 
             @Override
             public void onPostProductionModeFailed(ErrorObjectInterface reason) {
+                ProgressDialogManager.dismiss();
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 

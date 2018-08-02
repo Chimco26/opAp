@@ -845,9 +845,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() != finalStatusList.get(position).getId()) {
+                    ProgressDialogManager.show(getActivity());
                     String newTitle = OperatorApplication.isEnglishLang() ? finalStatusList.get(position).getEName() : finalStatusList.get(position).getLName();
                     ((OperatorSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
-                    // TODO: 30/07/2018 update server and refresh
                     mListener.onProductionStatusChanged(finalStatusList.get(position).getId());
                 }
 

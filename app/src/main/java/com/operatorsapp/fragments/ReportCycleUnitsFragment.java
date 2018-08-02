@@ -344,6 +344,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
+        if (getFragmentManager() != null) {
+
+            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        }
+
 //        SendBroadcast.refreshPolling(getContext());
     }
 
@@ -356,10 +362,17 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
+//            if (getFragmentManager() != null) {
+//
+//                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//            }
+            dismissProgressDialog();
             if (response.isFunctionSucceed()){
                 // TODO: 17/07/2018 add crouton for success
-               // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+
+                //mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
@@ -368,12 +381,6 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 //
 //                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
 //            }
-            if (getFragmentManager() != null) {
-
-                getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            }
-            dismissProgressDialog();
 
         }
 
