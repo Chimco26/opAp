@@ -446,7 +446,7 @@ public class SimpleRequests {
         call.enqueue(new Callback<ErrorResponseNewVersion>() {
             @Override
             public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getmError() != null) {
+                if (response.isSuccessful() && response.body() != null && response.body().isFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostProductionModeSuccess(response.body());
@@ -457,7 +457,11 @@ public class SimpleRequests {
                     }
                 } else {
 
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Production Mode Update Failed");
+                    String msg = "Production Mode Update Failed";
+                    if (response.body() != null && response.body().getmError() != null){
+                        msg = response.body().getmError().getErrorDesc();
+                    }
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, msg);
                     callback.onPostProductionModeFailed(errorObject);
                     onFailure(call, new Exception("response not successful"));
                 }

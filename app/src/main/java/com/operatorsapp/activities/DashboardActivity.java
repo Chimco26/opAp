@@ -1407,7 +1407,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostProductionModeSuccess(ErrorResponseNewVersion response) {
                 // TODO: 31/07/2018 display cruton
-                if (response.isFunctionSucceed() && response.getmError() != null && response.getmError().getErrorCode() == 0) {
+                if (response.isFunctionSucceed() ) {
                     getActiveJobs();
                 }else {
                     ProgressDialogManager.dismiss();
