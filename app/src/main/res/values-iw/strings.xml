@@ -220,6 +220,7 @@
     <string name="submit">שמור</string>
     <string name="sign_out">התנתקות</string>
     <string name="add_note">הוספת הערה</string>
+    <string name="fill_units_or_weight">* נא להזין יחידות או משקל</string>
 
 
 </resources>

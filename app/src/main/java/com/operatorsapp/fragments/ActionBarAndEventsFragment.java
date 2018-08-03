@@ -63,7 +63,6 @@ import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
-import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -168,6 +167,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
     private int mSelectedPosition;
+    private SwipeRefreshLayout mToolbarSwipeRefresh;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -664,6 +664,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
+            mToolbarSwipeRefresh = (SwipeRefreshLayout) mToolBarView.findViewById(R.id.toolbar_swipe_refresh);
+            mToolbarSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    SendBroadcast.refreshPolling(getActivity());
+                }
+            });
+
 //            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
 //            title.setText(spannableString);
 //            title.setVisibility(View.VISIBLE);
@@ -1113,6 +1121,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
+        if (mToolbarSwipeRefresh.isRefreshing()){
+            mToolbarSwipeRefresh.setRefreshing(false);
+        }
     }
 
 
@@ -1121,6 +1132,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
+        }
+        if (mToolbarSwipeRefresh.isRefreshing()){
+            mToolbarSwipeRefresh.setRefreshing(false);
         }
 
 //        if (!mIsSelectionMode) {
@@ -1273,6 +1287,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
+        }
+        if (mToolbarSwipeRefresh.isRefreshing()){
+            mToolbarSwipeRefresh.setRefreshing(false);
         }
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onDataFailure");

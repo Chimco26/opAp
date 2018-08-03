@@ -30,7 +30,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     private ScreenSlidePagerAdapter mPagerAdapter;
     private OnViewPagerListener mListener;
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
-    private SwipeRefreshLayout mSwipeRefresh;
+//    private SwipeRefreshLayout mSwipeRefresh;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
 
     public static ViewPagerFragment newInstance() {
@@ -93,28 +93,28 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//
+//        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_viewpager_swipe_refresh);
+//        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                SendBroadcast.refreshPolling(getActivity());
+//            }
+//        });
 
-        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_viewpager_swipe_refresh);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
-            }
-        });
-
-        mPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                mSwipeRefresh.setEnabled(false);
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-                        mSwipeRefresh.setEnabled(true);
-                        break;
-                }
-                return false;
-            }
-        });
+//        mPager.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                mSwipeRefresh.setEnabled(false);
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_UP:
+//                        mSwipeRefresh.setEnabled(true);
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     public void addFragment(Fragment fragment) {
@@ -158,16 +158,16 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        if (mSwipeRefresh.isRefreshing()){
-            mSwipeRefresh.setRefreshing(false);
-        }
+//        if (mSwipeRefresh.isRefreshing()){
+//            mSwipeRefresh.setRefreshing(false);
+//        }
     }
 
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
-        if (mSwipeRefresh.isRefreshing()){
-            mSwipeRefresh.setRefreshing(false);
-        }
+//        if (mSwipeRefresh.isRefreshing()){
+//            mSwipeRefresh.setRefreshing(false);
+//        }
     }
 
     @Override
@@ -177,9 +177,9 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
-        if (mSwipeRefresh.isRefreshing()){
-            mSwipeRefresh.setRefreshing(false);
-        }
+//        if (mSwipeRefresh.isRefreshing()){
+//            mSwipeRefresh.setRefreshing(false);
+//        }
     }
 
     @Override
@@ -194,9 +194,9 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Override
     public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine) {
-        if (mSwipeRefresh.isRefreshing()){
-            mSwipeRefresh.setRefreshing(false);
-        }
+//        if (mSwipeRefresh.isRefreshing()){
+//            mSwipeRefresh.setRefreshing(false);
+//        }
     }
 
     public interface OnViewPagerListener {

@@ -230,6 +230,7 @@
     <string name="submit">submit</string>
     <string name="edit_note">Edit Note</string>
     <string name="enter_note_here">Enter Your Note Here</string>
+    <string name="fill_units_or_weight">* Please report Units or Weight</string>
 
 
 </resources>
