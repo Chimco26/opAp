@@ -1,6 +1,5 @@
 package com.operatorsapp.utils;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -20,8 +19,6 @@ import java.net.URLConnection;
 public class DownloadHelper {
 
     private static final String TAG = DownloadHelper.class.getSimpleName();
-
-    private ProgressDialog mDialog;
 
     private Context mContext;
 
@@ -46,15 +43,10 @@ public class DownloadHelper {
 
     }
 
-    public boolean cancelDownloadFileFromUrl() {
+    public void cancelDownloadFileFromUrl() {
 
         if (mDownloadFileFromURL != null) {
-
-            return mDownloadFileFromURL.cancel(true);
-
-        }else {
-
-            return false;
+            mDownloadFileFromURL.cancel(true);
         }
     }
 
@@ -103,6 +95,8 @@ public class DownloadHelper {
 
                 URLConnection connection = url.openConnection();
 
+                connection.setConnectTimeout(10000);
+
                 connection.connect();
 
                 int lenghtOfFile = connection.getContentLength();
@@ -145,6 +139,7 @@ public class DownloadHelper {
         protected void onProgressUpdate(String... progress) {
 
 //            mDialog.setProgress(Integer.parseInt(progress[0]));
+            mListener.onLoadFileProgress();
         }
 
         @Override
@@ -160,23 +155,8 @@ public class DownloadHelper {
 
     private void dismissDialog() {
 
-//        mDialog.dismiss();
-
     }
 
-    private void showDialog() {
-
-//        mDialog = new ProgressDialog(mContext);
-
-//        mDialog.setMessage(mContext.getString(R.string.download_file));
-//
-//        mDialog.setMax(100);
-//
-//        mDialog.setCancelable(true);
-//
-//        mDialog.show();
-
-    }
 
     public interface DownloadFileListener {
 
@@ -185,6 +165,8 @@ public class DownloadHelper {
         void onLoadFileError();
 
         void onCancel();
+
+        void onLoadFileProgress();
     }
 
 }

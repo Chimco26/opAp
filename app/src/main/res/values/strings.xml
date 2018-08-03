@@ -183,7 +183,7 @@
     <string name="channel_1_99">Channel 1–99</string>
     <string name="channel_100">Channel 100</string>
     <string name="events_selected">Events selected:</string>
-    <string name="loading_file">Loading File...</string>
+    <string name="loading_file">Loading File…</string>
     <string name="loading_error">Loading error</string>
     <string name="production_parameters">Production parameters</string>
     <string name="smaller_than_symbole"><![CDATA[<]]></string>
@@ -224,6 +224,7 @@
     <string name="kg">kg</string>
     <string name="gram">gr</string>
     <string name="sign_out">Sign Out</string>
+    <string name="one_hundred_percent">100%</string>
     <string name="signed_out_successfully">Signed-out Successfully</string>
     <string name="signed_in_successfully">Signed-in Successfully</string>
     <string name="notes">Notes</string>
