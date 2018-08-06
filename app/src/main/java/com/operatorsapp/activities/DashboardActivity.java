@@ -150,7 +150,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
-    private ViewPagerFragment mViewPagerfragment;
+    private ViewPagerFragment mViewPagerFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
@@ -221,11 +221,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initViewPagerFragment() {
 
-        mViewPagerfragment = ViewPagerFragment.newInstance();
+        mViewPagerFragment = ViewPagerFragment.newInstance();
 
         try {
 
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerFragment).commit();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -233,7 +233,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if (mWidgetFragment != null) {//TODO check becasue viewpagerfragment
+        if (mWidgetFragment != null) {//TODO check because viewpagerFragment
 
             try {
 
@@ -1391,7 +1391,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
             @Override
             public void onPostProductionModeSuccess(ErrorResponseNewVersion response) {
-                // TODO: 31/07/2018 display cruton
+                // TODO: 31/07/2018 display crouton
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
                 } else {
@@ -1590,11 +1590,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             showRecipeFragment(response);
 
-            mViewPagerfragment.addFragment(mWidgetFragment);
+            mViewPagerFragment.addFragment(mWidgetFragment);
 
         } else {
 
-            mViewPagerfragment.addFragment(mWidgetFragment);
+            mViewPagerFragment.addFragment(mWidgetFragment);
 
             showRecipeFragment(response);
 
@@ -1607,7 +1607,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
-            mViewPagerfragment.addFragment(mRecipeFragment);
+            mViewPagerFragment.addFragment(mRecipeFragment);
 
         } else {
 

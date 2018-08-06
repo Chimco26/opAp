@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -25,7 +26,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
@@ -39,7 +39,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectInventorySpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -52,15 +51,15 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
+import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
+
 public class ReportInventoryFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider, KeyboardUtils.KeyboardListener {
 
     public static final String LOG_TAG = ReportInventoryFragment.class.getSimpleName();
-    private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private int mCurrentProductId;
-    private ReportCore mReportCore;
     private ImageView mPlusButton;
     private ImageView mMinusButton;
     private EditText mUnitsCounterTextView;
@@ -74,10 +73,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private int mSelectedPackageTypeId;
     private String mSelectedPackageTypeName;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mJobsSpinner;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
-    private View mTopView;
     private int mSelectedPosition;
 
 
@@ -96,7 +93,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         super.onAttach(context);
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        if (mReportFieldsFragmentCallbackListener != null) {
+            mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        }
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
         }
@@ -120,27 +119,25 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
         setActionBar();
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
+        mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
 
 //        getActiveJobs();
 
-        mButtonReport = (Button) view.findViewById(R.id.button_report);
+        mButtonReport = view.findViewById(R.id.button_report);
 
-        mPlusButton = (ImageView) view.findViewById(R.id.button_plus);
+        mPlusButton = view.findViewById(R.id.button_plus);
 
-        mMinusButton = (ImageView) view.findViewById(R.id.button_minus);
-
-        mTopView = view.findViewById(R.id.FRI_top_view);
+        mMinusButton = view.findViewById(R.id.button_minus);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getPackageTypes() == null || mReportFieldsForMachine.getPackageTypes().size() == 0) {
 
@@ -155,13 +152,13 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             mMinusButton.setEnabled(true);
             mPlusButton.setEnabled(true);
         }
-        TextView productTitleTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
-        TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
+        TextView productTitleTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
+        TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
         productTitleTextView.setText(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName());
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
-        mUnitsCounterTextView = (EditText) view.findViewById(R.id.units_text_view);
+        mUnitsCounterTextView = view.findViewById(R.id.units_text_view);
 
         mUnitsCounterTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -187,23 +184,22 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         mUnitsCounterTextView.setText(String.valueOf(mUnitsCounter));
 
-        mButtonCancel = (TextView) view.findViewById(R.id.button_cancel);
+        mButtonCancel = view.findViewById(R.id.button_cancel);
 
-        mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
+        mJobsSpinner = view.findViewById(R.id.report_job_spinner);
 
-        Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.package_type_spinner);
-        if (mReportFieldsForMachine != null) {
+        Spinner rejectReasonSpinner = view.findViewById(R.id.package_type_spinner);
+        if (mReportFieldsForMachine != null && getActivity() != null) {
             final RejectInventorySpinnerAdapter reasonSpinnerArrayAdapter = new RejectInventorySpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getPackageTypes());
             reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     reasonSpinnerArrayAdapter.setTitle(position);
-                    String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getPackageTypes().get(position).getEName() : mReportFieldsForMachine.getPackageTypes().get(position).getLName();
-                    mSelectedPackageTypeName = nameByLang;
+                    mSelectedPackageTypeName = isEnglishLang() ? mReportFieldsForMachine.getPackageTypes().get(position).getEName() : mReportFieldsForMachine.getPackageTypes().get(position).getLName();
                     mSelectedPackageTypeId = mReportFieldsForMachine.getPackageTypes().get(position).getId();
                 }
 
@@ -216,7 +212,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
         Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5,"keyboardIsShown");
 
-        KeyboardUtils.keyboardIsShownC(getActivity(),this);
+        if (getActivity() != null) {
+            KeyboardUtils.keyboardIsShownC(getActivity(), this);
+        }
 
         initJobsSpinner();
 
@@ -235,32 +233,34 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
 
     protected void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.action_bar_report_inventory, null);
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.action_bar_report_inventory, null);
 
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 //                    FragmentManager fragmentManager = getFragmentManager();
 //                    if(fragmentManager != null)
 //                    {
 //                        fragmentManager.popBackStack();
 //                    }
 
-                    getActivity().onBackPressed();
-                }
-            });
-            actionBar.setCustomView(view);
+                        getActivity().onBackPressed();
+                    }
+                });
+                actionBar.setCustomView(view);
+            }
         }
     }
 
@@ -276,9 +276,11 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                 break;
             }
             case R.id.button_cancel: {
-//                getFragmentManager().popBackStack();
 
-                getActivity().onBackPressed();
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+
                 break;
             }
             case R.id.button_report: {
@@ -309,7 +311,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         ProgressDialogManager.show(getActivity());
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
         reportNetworkBridge.injectInventory(NetworkManager.getInstance());
-        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
@@ -407,9 +409,6 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Override
     public void onPause() {
         super.onPause();
-        if (mActiveJobsListForMachineCore != null) {
-            mActiveJobsListForMachineCore.unregisterListener();
-        }
         mOnCroutonRequestListener.onHideConnectivityCroutonRequest();
     }
 
@@ -422,7 +421,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {

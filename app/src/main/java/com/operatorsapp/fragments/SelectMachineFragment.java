@@ -4,8 +4,8 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
@@ -32,7 +32,6 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -97,7 +96,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
 
@@ -113,7 +112,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         });
 
 
-        mSearchField = (AppCompatAutoCompleteTextView) rootView.findViewById(R.id.machine_id_name);
+        mSearchField = rootView.findViewById(R.id.machine_id_name);
         mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mMachinesList);
         mSearchField.setAdapter(mAutoCompleteAdapter);
         mSearchField.setOnItemClickListener(this);
@@ -139,7 +138,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             }
         });
 
-        mGoButton = (RelativeLayout) rootView.findViewById(R.id.goBtn);
+        mGoButton = rootView.findViewById(R.id.goBtn);
         mGoButton.setEnabled(false);
         mGoButton.setOnClickListener(new View.OnClickListener()
         {
@@ -154,56 +153,61 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 }
             }
         });
-        mGoButtonBackground = (ImageView) rootView.findViewById(R.id.goBtn_background);
+        mGoButtonBackground = rootView.findViewById(R.id.goBtn_background);
 
         setActionBar();
-        SoftKeyboardUtil.showKeyboard(getActivity());
+        if (getActivity() != null) {
+            SoftKeyboardUtil.showKeyboard(getActivity());
+        }
+
         return rootView;
     }
 
     protected void setActionBar()
     {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null)
-        {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflator = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
-            ImageView backButton = (ImageView) view.findViewById(R.id.action_bar_back_btn);
-            backButton.setVisibility(View.VISIBLE);
-            backButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    getActivity().onBackPressed();
-                }
-            });
-            ((TextView) view.findViewById(R.id.title)).setText(getActivity().getResources().getString(R.string.link_machine));
-            actionBar.setCustomView(view);
-            actionBar.setIcon(null);
+        if (getActivity() != null) {
 
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflator = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
+                ImageView backButton = view.findViewById(R.id.action_bar_back_btn);
+                backButton.setVisibility(View.VISIBLE);
+                backButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().onBackPressed();
+                    }
+                });
+                ((TextView) view.findViewById(R.id.title)).setText(getString(R.string.link_machine));
+                actionBar.setCustomView(view);
+                actionBar.setIcon(null);
+
+            }
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
-        mMachineId = mAutoCompleteAdapter.getItem(position).getId();
-        String nameByLang = OperatorApplication.isEnglishLang() ? mAutoCompleteAdapter.getItem(position).getMachineEName() : mAutoCompleteAdapter.getItem(position).getMachineLName();
-        String machineName = nameByLang == null ? "" : nameByLang;
-        mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(machineName));
-        mSearchField.setSelection(mSearchField.length());
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mAutoCompleteAdapter != null && mAutoCompleteAdapter.getItem(position) != null) {
+            mMachineId = mAutoCompleteAdapter.getItem(position).getId();
+            String nameByLang = OperatorApplication.isEnglishLang() ? mAutoCompleteAdapter.getItem(position).getMachineEName() : mAutoCompleteAdapter.getItem(position).getMachineLName();
+            String machineName = nameByLang == null ? "" : nameByLang;
+            mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(machineName));
+            mSearchField.setSelection(mSearchField.length());
 
-        canGoNext = true;
-        mGoButton.setEnabled(true);
-        mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
-        mSearchField.dismissDropDown();
+            canGoNext = true;
+            mGoButton.setEnabled(true);
+            mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
+            mSearchField.dismissDropDown();
+        }
     }
 
     private TextWatcher mTextWatcher = new TextWatcher()

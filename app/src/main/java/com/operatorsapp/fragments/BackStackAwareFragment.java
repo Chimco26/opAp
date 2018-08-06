@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,17 +17,22 @@ public abstract class BackStackAwareFragment extends Fragment implements Fragmen
     protected int m_initialBackStackCount = 0;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getFragmentManager().addOnBackStackChangedListener(this);
+        if (getFragmentManager() != null) {
+            getFragmentManager().addOnBackStackChangedListener(this);
+        }
         m_initialBackStackCount = getFragmentManager().getBackStackEntryCount() + 1;
     }
 
     @Override
     public void onBackStackChanged()
     {
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = 0;
+        if (getFragmentManager() != null) {
+            count = getFragmentManager().getBackStackEntryCount();
+        }
         if(count == m_initialBackStackCount)
         {
             setActionBar();

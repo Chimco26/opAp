@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,7 +58,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private static final String IS_OPEN = "IS_OPEN";
 
     private static final int NUMBER_OF_COLUMNS = 5;
-    public static final String SAMSUNG = "samsung";
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
     private ReportFieldsForMachine mReportFieldsForMachine;
@@ -112,7 +112,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void onAttach(Context context) {
         super.onAttach(context);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
+        if (reportFieldsFragmentCallbackListener != null) {
+            mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
+        }
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
@@ -135,7 +137,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_select_stop_reason_new, container, false);
 
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
@@ -143,15 +145,15 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.selected_stop_recycler_view);
+        mRecyclerView = view.findViewById(R.id.selected_stop_recycler_view);
         mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         int spacing;
-        String strManufacturer = android.os.Build.MANUFACTURER;
-
+//        String strManufacturer = android.os.Build.MANUFACTURER;
+//
 //        if (strManufacturer.equals(SAMSUNG)) {
 //            spacing = 80;
 //        } else {
@@ -297,8 +299,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
                 mReportCore.unregisterListener();
 
-                getActivity().onBackPressed();
-                getActivity().onBackPressed();
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                    getActivity().onBackPressed();
+                }
 
             } catch (NullPointerException e) {
 
@@ -314,7 +318,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {

@@ -441,9 +441,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mActionRv.setAdapter(mActionsAdapter);
 
-        } else {
-
-            //mActionItemLy.setVisibility(View.GONE);
         }
     }
 

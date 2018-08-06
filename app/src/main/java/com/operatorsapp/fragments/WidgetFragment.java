@@ -3,9 +3,9 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -27,7 +26,6 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
-import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
@@ -45,19 +43,11 @@ import static org.acra.ACRA.LOG_TAG;
 public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener {
 
-    private ViewGroup mWidgetsLayout;
-    private ViewGroup.MarginLayoutParams mWidgetsParams;
-    private int mCloseWidth;
     private boolean mIsOpen;
-    private boolean mIsNewShiftLogs;
     //    private int mOpenWidth;
     private int mWidgetsLayoutWidth;
     //    private int mTollBarsHeight;
     private int mRecyclersHeight;
-    private int mMiddleWidth;
-    private TextView mNoNotificationsText;
-    //    private LinearLayout mNoDataView;
-    private TextView mLoadingDataText;
     private LinearLayout mLoadingDataView;
     private RecyclerView mWidgetRecycler;
     private GridLayoutManager mGridLayoutManager;
@@ -66,15 +56,13 @@ public class WidgetFragment extends Fragment implements
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
-    private int mWidth;
-    private int mHeight;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        ProgressDialogManager.show(getActivity());
         View inflate = inflater.inflate(R.layout.fragment_widgets, container, false);
 
@@ -87,42 +75,37 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ZLogger.d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
         mIsOpen = false;
-        mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
         // get screen parameters
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        mWidth = size.x;
-        mHeight = size.y;
-        mWidgetsLayoutWidth = (int) (mWidth * 0.8);
-        mRecyclersHeight = (int) (mHeight * 0.75);
-        mMiddleWidth = (int) (mWidth * 0.3);
+        if (getActivity() != null) {
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int mWidth = size.x;
+            int mHeight = size.y;
 
-        mWidgetsLayout = (ViewGroup) view.findViewById(R.id.fragment_dashboard_widgets_layout);
-        mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
-        mWidgetsParams.setMarginStart(mCloseWidth);
-        mWidgetsLayout.setLayoutParams(mWidgetsParams);
+            mWidgetsLayoutWidth = (int) (mWidth * 0.8);
+            mRecyclersHeight = (int) (mHeight * 0.75);
 
-        mWidgetRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_widgets);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-        GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
-        mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-        mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
-        mWidgetRecycler.setAdapter(mWidgetAdapter);
+            ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
+            ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
+            mWidgetsLayout.setLayoutParams(mWidgetsParams);
 
-        mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
-//        mNoDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_no_data);
-
-        mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mLoadingDataView = (LinearLayout) view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
-        mLoadingDataView.setVisibility(View.VISIBLE);
-
+            mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
+            mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
+            mWidgetRecycler.setLayoutManager(mGridLayoutManager);
+            GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
+            mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
+            mWidgetRecycler.setAdapter(mWidgetAdapter);
+            
+            mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
+            mLoadingDataView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -156,9 +139,6 @@ public class WidgetFragment extends Fragment implements
     public void onResume() {
         super.onResume();
 
-        if (mWidgets == null || mWidgets.size() == 0) {
-//            mNoDataView.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -226,14 +206,8 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onDataFailure(ErrorObjectInterface reason, CallType callType) {
 
-
         mLoadingDataView.setVisibility(View.GONE);
 
-        if (callType == CallType.MachineData) {
-            if (mWidgets == null || mWidgets.size() == 0) {
-//                mNoDataView.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override

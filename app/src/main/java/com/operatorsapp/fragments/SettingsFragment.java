@@ -10,19 +10,17 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,7 +33,6 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
-
 import com.operatorsapp.utils.NetworkAvailable;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.zemingo.logrecorder.ZLogger;
@@ -72,7 +69,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_settings, container, false);
         setActionBar();
 
@@ -83,13 +80,16 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mLanguagesSpinner = (Spinner) view.findViewById(R.id.languages_spinner);
+        mLanguagesSpinner = view.findViewById(R.id.languages_spinner);
         final LanguagesSpinnerAdapter spinnerArrayAdapter = new LanguagesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
-        mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+        if (getActivity() != null) {
+            mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        }
 
         mLanguagesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -114,7 +114,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
         });
 
-        TextView mFactoryUrlTextView = (TextView) view.findViewById(R.id.url_text_view);
+        TextView mFactoryUrlTextView = view.findViewById(R.id.url_text_view);
         String siteUrl = PersistenceManager.getInstance().getSiteUrl();
         if (siteUrl != null) {
             mFactoryUrlTextView.setText(PersistenceManager.getInstance().getSiteUrl());
@@ -122,13 +122,13 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             mFactoryUrlTextView.setText(R.string.dashes);
         }
 
-        mRefreshStatusTextView = (TextView) view.findViewById(R.id.refresh_status_text_view);
+        mRefreshStatusTextView = view.findViewById(R.id.refresh_status_text_view);
         mRefreshStatusTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_checkmark, 0);
         mRefreshStatusTextView.setVisibility(View.GONE);
 
-        mAdvancedSettingsButton = (TextView) view.findViewById(R.id.advanced_settings_button);
+        mAdvancedSettingsButton = view.findViewById(R.id.advanced_settings_button);
 
-        mRefreshButton = (Button) view.findViewById(R.id.refresh_button);
+        mRefreshButton = view.findViewById(R.id.refresh_button);
         Drawable drawable = getActivity().getDrawable(R.drawable.button_refresh_reportind_data_selector);
         if (drawable != null) {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -143,9 +143,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         }
 
-        mSaveButton = (Button) view.findViewById(R.id.button_save);
-        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mButtonChange = (Button) view.findViewById(R.id.button_change);
+        mSaveButton = view.findViewById(R.id.button_save);
+        mCancelButton = view.findViewById(R.id.button_cancel);
+        mButtonChange = view.findViewById(R.id.button_change);
     }
 
     @Override
@@ -169,30 +169,32 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     }
 
     public void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.settings_action_bar, null);
 
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.settings_action_bar, null);
+
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fragmentManager = getFragmentManager();
+                        if (fragmentManager != null) {
+                            fragmentManager.popBackStack();
+                        }
                     }
-                }
-            });
-            actionBar.setCustomView(view);
+                });
+                actionBar.setCustomView(view);
+            }
         }
     }
 
@@ -204,12 +206,16 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.button_cancel: {
-                getActivity().onBackPressed();
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
                 break;
             }
             case R.id.button_save: {
                 if (mSelectedLanguageCode == null || mSelectedLanguageCode.equals(PersistenceManager.getInstance().getCurrentLang())) {
-                    getActivity().onBackPressed();
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
                 } else {
                     saveAlarmsCheckedLocaly();
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);

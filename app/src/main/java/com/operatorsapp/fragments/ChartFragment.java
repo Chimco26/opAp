@@ -4,8 +4,8 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -74,29 +74,29 @@ public class ChartFragment extends BackStackAwareFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chart, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Context context = getContext();
         if(context != null)
         {
-            TextView mMin = (TextView) view.findViewById(R.id.fragment_chart_min);
+            TextView mMin = view.findViewById(R.id.fragment_chart_min);
             StringBuilder minText = new StringBuilder(context.getString(R.string.chart_min_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMinVal));
 
-            TextView mStandard = (TextView) view.findViewById(R.id.fragment_chart_standard);
+            TextView mStandard = view.findViewById(R.id.fragment_chart_standard);
             StringBuilder standardText = new StringBuilder(context.getString(R.string.chart_standard_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mStandardVal));
 
-            TextView mMax = (TextView) view.findViewById(R.id.fragment_chart_max);
+            TextView mMax = view.findViewById(R.id.fragment_chart_max);
             StringBuilder maxText = new StringBuilder(context.getString(R.string.chart_max_)).append(context.getString(R.string.space)).append(String.format(java.util.Locale.US,"%.2f", mMaxVal));
 
-            LineChartTimeLarge mChart = (LineChartTimeLarge) view.findViewById(R.id.fragment_chart_chart);
+            LineChartTimeLarge mChart = view.findViewById(R.id.fragment_chart_chart);
 
             mMin.setText(minText);
             mStandard.setText(standardText);
@@ -111,31 +111,32 @@ public class ChartFragment extends BackStackAwareFragment {
 
 
     protected void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
-            TextView title = (TextView) view.findViewById(R.id.new_job_title);
-            title.setText(mFieldName);
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
+                TextView title = view.findViewById(R.id.new_job_title);
+                title.setText(mFieldName);
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fragmentManager = getFragmentManager();
+                        if (fragmentManager != null) {
+                            fragmentManager.popBackStack();
+                        }
                     }
-                }
-            });
-            actionBar.setCustomView(view);
+                });
+                actionBar.setCustomView(view);
+            }
         }
     }
 

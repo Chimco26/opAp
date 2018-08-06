@@ -3,9 +3,8 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,14 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -87,8 +84,12 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
             mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
             mJobsFragmentToDashboardActivityCallback = (JobsFragmentToDashboardActivityCallback) getActivity();
-            mJobsFragmentToDashboardActivityCallback.onJobFragmentAttached(this);
-            mJobsFragmentToDashboardActivityCallback.initJobsCore();
+            if (mJobsFragmentToDashboardActivityCallback != null) {
+                mJobsFragmentToDashboardActivityCallback.onJobFragmentAttached(this);
+            }
+            if (mJobsFragmentToDashboardActivityCallback != null) {
+                mJobsFragmentToDashboardActivityCallback.initJobsCore();
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement required interface");
         }
@@ -102,7 +103,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_jobs, container, false);
         setActionBar();
         return rootView;
@@ -121,25 +122,25 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ProgressDialogManager.show(getActivity());
         super.onViewCreated(view, savedInstanceState);
-        mJobsRecyclerView = (RecyclerView) view.findViewById(R.id.job_recycler_view);
-        mErrorFrameLayout = (FrameLayout) view.findViewById(R.id.error_job_frame_layout);
+        mJobsRecyclerView = view.findViewById(R.id.job_recycler_view);
+        mErrorFrameLayout = view.findViewById(R.id.error_job_frame_layout);
 
-        mFirstHeader = (TextView) view.findViewById(R.id.first_header_text_view);
-        mSecondHeader = (TextView) view.findViewById(R.id.second_header_text_view);
-        mThirdHeader = (TextView) view.findViewById(R.id.third_header_text_view);
-        mFourthHeader = (TextView) view.findViewById(R.id.fourth_header_text_view);
-        mFifthHeader = (TextView) view.findViewById(R.id.fifth_header_text_view);
+        mFirstHeader = view.findViewById(R.id.first_header_text_view);
+        mSecondHeader = view.findViewById(R.id.second_header_text_view);
+        mThirdHeader = view.findViewById(R.id.third_header_text_view);
+        mFourthHeader = view.findViewById(R.id.fourth_header_text_view);
+        mFifthHeader = view.findViewById(R.id.fifth_header_text_view);
 
-        mFirstFilter = (EditText) view.findViewById(R.id.FJ_ET_first_header);
-        mSecondFilter = (EditText) view.findViewById(R.id.FJ_ET_second_header);
-        mThirdFilter = (EditText) view.findViewById(R.id.FJ_ET_third_header);
-        mFourthFilter = (EditText) view.findViewById(R.id.FJ_ET_fourth_header);
-        mFifthFilter = (EditText) view.findViewById(R.id.FJ_ET_fifth_header);
+        mFirstFilter = view.findViewById(R.id.FJ_ET_first_header);
+        mSecondFilter = view.findViewById(R.id.FJ_ET_second_header);
+        mThirdFilter = view.findViewById(R.id.FJ_ET_third_header);
+        mFourthFilter = view.findViewById(R.id.FJ_ET_fourth_header);
+        mFifthFilter = view.findViewById(R.id.FJ_ET_fifth_header);
 
-        mRetryButton = (Button) view.findViewById(R.id.button_retry);
+        mRetryButton = view.findViewById(R.id.button_retry);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mJobsRecyclerView.setLayoutManager(mLayoutManager);
         mJobsFragmentToDashboardActivityCallback.getJobsForMachineList();
@@ -154,32 +155,34 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     }
 
     protected void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.jobs_fragment_action_bar, null);
 
-            LinearLayout buttonClose = view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    KeyboardUtils.closeKeyboard(getActivity());
+                        KeyboardUtils.closeKeyboard(getActivity());
 //                    FragmentManager fragmentManager = getFragmentManager();
 //                    if (fragmentManager != null) {
 //                        fragmentManager.popBackStack();
 //                    }
-                    getActivity().onBackPressed();
-                }
-            });
-            actionBar.setCustomView(view);
+                        getActivity().onBackPressed();
+                    }
+                });
+                actionBar.setCustomView(view);
+            }
         }
     }
 
@@ -210,7 +213,6 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         mErrorFrameLayout.setVisibility(View.GONE);
         mHeaderList = jobListForMachine.getHeaders();
         List<HashMap<String, Object>> mJobsDataList = jobListForMachine.getData();
-        jobListForMachine.getData();
         initHeaders();
         mJobsRecyclerViewAdapter = new JobsRecyclerViewAdapter(this, mHeaderList, mJobsDataList);
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
@@ -305,12 +307,14 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     }
 
     private void dismissProgressDialog() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ProgressDialogManager.dismiss();
-            }
-        });
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ProgressDialogManager.dismiss();
+                }
+            });
+        }
     }
 
     @Override

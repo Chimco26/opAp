@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
 
     private static final String LOG_TAG = SelectedJobFragment.class.getSimpleName();
     private static final String SELECTED_JOB = "selected_job";
-    public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private TextView mCancelButton;
     private Button mActivateNewJobButton;
     private JobsFragmentToDashboardActivityCallback mJobsFragmentToDashboardActivityCallback;
@@ -145,11 +143,10 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_cancel: {
-//                if (getFragmentManager() != null)
-////                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    getFragmentManager().popBackStack();
 
-                getActivity().onBackPressed();
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
                 break;
             }
             case R.id.button_activate_new_job: {

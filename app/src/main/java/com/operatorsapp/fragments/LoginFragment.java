@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -77,14 +78,14 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        mSiteUrl = (EditText) rootView.findViewById(R.id.factory_url);
+        mSiteUrl = rootView.findViewById(R.id.factory_url);
         mSiteUrl.setText(PersistenceManager.getInstance().getSiteUrl());
-        mUserName = (EditText) rootView.findViewById(R.id.user_name);
-        mPassword = (EditText) rootView.findViewById(R.id.password);
-        mLoginBtnBackground = (ImageView) rootView.findViewById(R.id.loginBtn_background);
+        mUserName = rootView.findViewById(R.id.user_name);
+        mPassword = rootView.findViewById(R.id.password);
+        mLoginBtnBackground = rootView.findViewById(R.id.loginBtn_background);
 
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -100,7 +101,7 @@ public class LoginFragment extends Fragment {
         mSiteUrl.addTextChangedListener(mTextWatcher);
         mUserName.addTextChangedListener(mTextWatcher);
         mPassword.addTextChangedListener(mTextWatcher);
-        mShowHidePass = (ImageView) rootView.findViewById(R.id.show_hide_pass);
+        mShowHidePass = rootView.findViewById(R.id.show_hide_pass);
         mShowHidePass.setEnabled(false);
         mShowHidePass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +137,7 @@ public class LoginFragment extends Fragment {
     private void ravtechTest(View rootView) {
 
         rootView.findViewById(R.id.ravtech_test).setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
                 mSiteUrl.setText("dev");
@@ -146,9 +148,9 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mLoginButton = (RelativeLayout) view.findViewById(R.id.loginBtn);
+        mLoginButton = view.findViewById(R.id.loginBtn);
         mLoginButton.setEnabled(false);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,22 +200,24 @@ public class LoginFragment extends Fragment {
     };
 
     private void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString s = new SpannableString(getString(R.string.screen_title));
-            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            LayoutInflater inflator = LayoutInflater.from(getActivity());
-            /* rootView null*/
-            @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
-            ((TextView) view.findViewById(R.id.title)).setText(s);
-            actionBar.setCustomView(view);
-            actionBar.setIcon(R.drawable.logo);
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                SpannableString s = new SpannableString(getString(R.string.screen_title));
+                s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                LayoutInflater inflator = LayoutInflater.from(getActivity());
+                /* rootView null*/
+                @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
+                ((TextView) view.findViewById(R.id.title)).setText(s);
+                actionBar.setCustomView(view);
+                actionBar.setIcon(R.drawable.logo);
+            }
         }
     }
 

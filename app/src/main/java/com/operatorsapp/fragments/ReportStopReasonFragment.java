@@ -3,46 +3,28 @@ package com.operatorsapp.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
-import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
-import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
-import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.DashboardUICallbackListener;
-import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
-import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
-import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
-
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.List;
 
 public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
@@ -57,17 +39,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     private RecyclerView mRecyclerView;
 
-    private GoToScreenListener mGoToScreenListener;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
 
-    private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ProgressBar mActiveJobsProgressBar;
     private ReportStopReasonFragmentListener mListener;
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
-    private StopReasonsAdapter mStopReasonsAdapter;
-    private int mSelectedPosition;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
@@ -82,9 +59,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mGoToScreenListener = (GoToScreenListener) context;
         ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        if (mReportFieldsFragmentCallbackListener != null) {
+            mReportFieldsForMachine = mReportFieldsFragmentCallbackListener.getReportForMachine();
+        }
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
         mListener = (ReportStopReasonFragmentListener) context;
     }
@@ -92,7 +70,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     @Override
     public void onDetach() {
         super.onDetach();
-        mGoToScreenListener = null;
 
     }
 
@@ -103,16 +80,18 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         if (getArguments() != null) {
 //            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
-            mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
-            mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
+            int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            if (mActiveJobsListForMachine != null) {
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            }
         }
 //        getActiveJobs();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
 
         setActionBar();
@@ -121,9 +100,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.stop_recycler_view);
+        mRecyclerView = view.findViewById(R.id.stop_recycler_view);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             ZLogger.i(LOG_TAG, "No Reasons in list");
@@ -162,31 +141,31 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     private void initStopReasons() {
 
-        mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
+        StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
 
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
 
-    private List<StopReasons> getFilterReasone(List<StopReasons> stopReasons) {
-        List<StopReasons> stopReasonsList = new ArrayList<>();
-
-        try {
-
-            for (StopReasons reasons : stopReasons) {
-
-                // TODO: DAVID VARDI Sprint 1.5: add if for filter
-                stopReasons.add(reasons);
-            }
-
-        } catch (ConcurrentModificationException e) {
-
-            if (e.getMessage() != null)
-                Log.e(LOG_TAG, e.getMessage());
-        }
-
-
-        return stopReasonsList;
-    }
+//    private List<StopReasons> getFilterReasone(List<StopReasons> stopReasons) {
+//        List<StopReasons> stopReasonsList = new ArrayList<>();
+//
+//        try {
+//
+//            for (StopReasons reasons : stopReasons) {
+//
+//                // TODO: DAVID VARDI Sprint 1.5: add if for filter
+//                stopReasons.add(reasons);
+//            }
+//
+//        } catch (ConcurrentModificationException e) {
+//
+//            if (e.getMessage() != null)
+//                Log.e(LOG_TAG, e.getMessage());
+//        }
+//
+//
+//        return stopReasonsList;
+//    }
 
     @Override
     public void onPause() {
@@ -221,9 +200,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     }
 
-    private void disableProgressBar() {
-        mActiveJobsProgressBar.setVisibility(View.GONE);
-    }
+//    private void disableProgressBar() {
+//        mActiveJobsProgressBar.setVisibility(View.GONE);
+//    }
 
     @Override
     public int getCroutonRoot() {

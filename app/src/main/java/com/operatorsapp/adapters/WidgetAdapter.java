@@ -2,8 +2,8 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ChartFragment;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
@@ -31,7 +30,10 @@ import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
-public class WidgetAdapter extends RecyclerView.Adapter {
+import static android.support.v7.widget.RecyclerView.Adapter;
+import static android.support.v7.widget.RecyclerView.ViewHolder;
+
+public class WidgetAdapter extends Adapter {
     private static final long FOUR_HOURS = 60000L * 60 * 4;
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private Context mContext;
@@ -73,7 +75,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    private class NumericViewHolder extends RecyclerView.ViewHolder {
+    private class NumericViewHolder extends ViewHolder {
 
         private RelativeLayout mParentLayout;
         private View mDivider;
@@ -82,20 +84,20 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mValue;
         private TextView mChangeMaterial;
 
-        public NumericViewHolder(View itemView) {
+        NumericViewHolder(View itemView) {
             super(itemView);
 
-            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
             mDivider = itemView.findViewById(R.id.divider);
-            mTitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_title);
-            mSubtitle = (AutofitTextView) itemView.findViewById(R.id.numeric_widget_subtitle);
-            mValue = (TextView) itemView.findViewById(R.id.numeric_widget_value);
-            mChangeMaterial = (TextView) itemView.findViewById(R.id.numeric_widget_change_material);
+            mTitle = itemView.findViewById(R.id.numeric_widget_title);
+            mSubtitle = itemView.findViewById(R.id.numeric_widget_subtitle);
+            mValue = itemView.findViewById(R.id.numeric_widget_value);
+            mChangeMaterial = itemView.findViewById(R.id.numeric_widget_change_material);
 
         }
     }
 
-    private class RangeViewHolder extends RecyclerView.ViewHolder {
+    private class RangeViewHolder extends ViewHolder {
 
         private RelativeLayout mParentLayout;
         private View mDivider;
@@ -111,27 +113,27 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mStandard;
         private TextView mMax;
 
-        public RangeViewHolder(View itemView) {
+        RangeViewHolder(View itemView) {
             super(itemView);
 
-            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
             mDivider = itemView.findViewById(R.id.divider);
-            mTitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_title);
-            mSubtitle = (AutofitTextView) itemView.findViewById(R.id.range_widget_subtitle);
-            mValue = (TextView) itemView.findViewById(R.id.range_widget_current_value);
+            mTitle = itemView.findViewById(R.id.range_widget_title);
+            mSubtitle = itemView.findViewById(R.id.range_widget_subtitle);
+            mValue = itemView.findViewById(R.id.range_widget_current_value);
             mCapsule = itemView.findViewById(R.id.range_widget_oval);
-            mRangeViewBlue = (RangeView) itemView.findViewById(R.id.range_widget_range_view_blue);
-            mCurrentValue = (TextView) itemView.findViewById(R.id.range_widget_current_value_in_chart);
-            mRangeViewRed = (RangeView) itemView.findViewById(R.id.range_widget_range_view_red);
-            mRedMark = (ImageView) itemView.findViewById(R.id.range_widget_red_mark);
-            mMin = (TextView) itemView.findViewById(R.id.range_widget_min);
-            mStandard = (TextView) itemView.findViewById(R.id.range_widget_standard);
-            mMax = (TextView) itemView.findViewById(R.id.range_widget_max);
+            mRangeViewBlue = itemView.findViewById(R.id.range_widget_range_view_blue);
+            mCurrentValue = itemView.findViewById(R.id.range_widget_current_value_in_chart);
+            mRangeViewRed = itemView.findViewById(R.id.range_widget_range_view_red);
+            mRedMark = itemView.findViewById(R.id.range_widget_red_mark);
+            mMin = itemView.findViewById(R.id.range_widget_min);
+            mStandard = itemView.findViewById(R.id.range_widget_standard);
+            mMax = itemView.findViewById(R.id.range_widget_max);
 
         }
     }
 
-    private class ProjectionViewHolder extends RecyclerView.ViewHolder {
+    private class ProjectionViewHolder extends ViewHolder {
 
         private RelativeLayout mParentLayout;
         private View mDivider;
@@ -151,30 +153,30 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private TextView mMin;
         private TextView mMax;
 
-        public ProjectionViewHolder(View itemView) {
+        ProjectionViewHolder(View itemView) {
             super(itemView);
 
-            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
             mDivider = itemView.findViewById(R.id.divider);
-            mTitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_title);
-            mSubtitle = (AutofitTextView) itemView.findViewById(R.id.projection_widget_subtitle);
-            mValue = (TextView) itemView.findViewById(R.id.projection_widget_current_value);
+            mTitle = itemView.findViewById(R.id.projection_widget_title);
+            mSubtitle = itemView.findViewById(R.id.projection_widget_subtitle);
+            mValue = itemView.findViewById(R.id.projection_widget_current_value);
             mCapsule = itemView.findViewById(R.id.projection_widget_oval);
             mEndDivider = itemView.findViewById(R.id.projection_widget_end_divider);
-            mProjectionView = (ProjectionView) itemView.findViewById(R.id.projection_widget_projectionView);
-            mRangeView = (RangeView) itemView.findViewById(R.id.projection_widget_range_view);
-            mProjectionViewStart = (ProjectionViewStart) itemView.findViewById(R.id.projection_widget_projectionView_start);
-            mProjectionViewEnd = (ProjectionViewEnd) itemView.findViewById(R.id.projection_widget_projectionView_end);
-            mCurrentValueInChart = (TextView) itemView.findViewById(R.id.projection_widget_current_value_in_chart);
-            mGrayValueInChart = (TextView) itemView.findViewById(R.id.projection_widget_gray_value_in_chart);
-            mGrayValueInEndChart = (TextView) itemView.findViewById(R.id.projection_widget_gray_value_in_end_chart);
-            mBluePlus = (LinearLayout) itemView.findViewById(R.id.projection_widget_blue_plus);
-            mMin = (TextView) itemView.findViewById(R.id.projection_widget_min);
-            mMax = (TextView) itemView.findViewById(R.id.projection_widget_max);
+            mProjectionView = itemView.findViewById(R.id.projection_widget_projectionView);
+            mRangeView = itemView.findViewById(R.id.projection_widget_range_view);
+            mProjectionViewStart = itemView.findViewById(R.id.projection_widget_projectionView_start);
+            mProjectionViewEnd = itemView.findViewById(R.id.projection_widget_projectionView_end);
+            mCurrentValueInChart = itemView.findViewById(R.id.projection_widget_current_value_in_chart);
+            mGrayValueInChart = itemView.findViewById(R.id.projection_widget_gray_value_in_chart);
+            mGrayValueInEndChart = itemView.findViewById(R.id.projection_widget_gray_value_in_end_chart);
+            mBluePlus = itemView.findViewById(R.id.projection_widget_blue_plus);
+            mMin = itemView.findViewById(R.id.projection_widget_min);
+            mMax = itemView.findViewById(R.id.projection_widget_max);
         }
     }
 
-    private class TimeViewHolder extends RecyclerView.ViewHolder {
+    private class TimeViewHolder extends ViewHolder {
 
         private RelativeLayout mParentLayout;
         private View mDivider;
@@ -183,20 +185,21 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         private AutofitTextView mSubtitle;
         private TextView mValue;
 
-        public TimeViewHolder(View itemView) {
+        TimeViewHolder(View itemView) {
             super(itemView);
 
-            mParentLayout = (RelativeLayout) itemView.findViewById(R.id.widget_parent_layout);
+            mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
             mDivider = itemView.findViewById(R.id.divider);
-            mTitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_title);
-            mSubtitle = (AutofitTextView) itemView.findViewById(R.id.time_widget_subtitle);
-            mValue = (TextView) itemView.findViewById(R.id.time_widget_current_value);
-            mChart = (LineChartTimeSmall) itemView.findViewById(R.id.lineChart_time);
+            mTitle = itemView.findViewById(R.id.time_widget_title);
+            mSubtitle = itemView.findViewById(R.id.time_widget_subtitle);
+            mValue = itemView.findViewById(R.id.time_widget_current_value);
+            mChart = itemView.findViewById(R.id.lineChart_time);
         }
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case NUMERIC: {
@@ -217,7 +220,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     @SuppressLint("SimpleDateFormat")
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int type = getItemViewType(position);
         final Widget widget = mWidgets.get(position);
         switch (type) {
@@ -417,23 +420,6 @@ public class WidgetAdapter extends RecyclerView.Adapter {
 
     }
 
-    private void setByHeight(final RelativeLayout parent) {
-        ViewGroup.LayoutParams layoutParams;
-        layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.38);
-        layoutParams.width = (int) (layoutParams.height * 1.45);
-        parent.requestLayout();
-
-    }
-
-    private void setByWidth(RelativeLayout parent) {
-        ViewGroup.LayoutParams layoutParams;
-        layoutParams = parent.getLayoutParams();
-        layoutParams.width = (int) (mHeight * 0.3);
-        layoutParams.height = (int) (layoutParams.width * 0.69);
-        parent.requestLayout();
-    }
-
     private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget, float finalCurrentFloat) {
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         projectionViewHolder.mTitle.setText(nameByLang4);
@@ -466,9 +452,8 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
             if (mClosedState) {
                 rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.84)/*max location*/);
-            } else {
-                //todo
-            }
+            }  //todo
+
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
             rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
@@ -477,9 +462,8 @@ public class WidgetAdapter extends RecyclerView.Adapter {
             rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
             if (mClosedState) {
                 rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.001)/*min location*/);
-            } else {
-                //todo
-            }
+            }  //todo
+
             rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
         } else {
             rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
@@ -549,7 +533,7 @@ public class WidgetAdapter extends RecyclerView.Adapter {
         INT, FLOAT
     }
 
-    public float tryParse(String value, StringParse stringParse) {
+    private float tryParse(String value, StringParse stringParse) {
         try {
             if (stringParse == StringParse.INT) {
                 return Integer.parseInt(value);

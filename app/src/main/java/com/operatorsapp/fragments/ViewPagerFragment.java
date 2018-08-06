@@ -2,12 +2,11 @@ package com.operatorsapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,7 +18,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
-import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
@@ -43,9 +41,6 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
@@ -78,20 +73,23 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.frament_view_pager, container, false);
 
-        mPager = (ViewPager) view.findViewById(R.id.FVP_view_pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
-        mPager.setAdapter(mPagerAdapter);
+        if (getActivity() != null) {
 
-        mListener.onViewPagerCreated();
+            mPager = view.findViewById(R.id.FVP_view_pager);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
+            mPager.setAdapter(mPagerAdapter);
 
+            mListener.onViewPagerCreated();
+
+        }
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //
 //        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fragment_viewpager_swipe_refresh);
@@ -130,17 +128,17 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
     }
 
-    public void removeFragment(Fragment fragment) {
-
-        if (mPagerAdapter != null) {
-
-            mFragmentList.remove(fragment);
-
-            mPagerAdapter.notifyDataSetChanged();
-
-        }
-
-    }
+//    public void removeFragment(Fragment fragment) {
+//
+//        if (mPagerAdapter != null) {
+//
+//            mFragmentList.remove(fragment);
+//
+//            mPagerAdapter.notifyDataSetChanged();
+//
+//        }
+//
+//    }
 
     private void updateDirection(){
 

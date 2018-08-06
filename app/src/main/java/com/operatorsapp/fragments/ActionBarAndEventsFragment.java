@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -41,7 +42,6 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -88,6 +88,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -98,8 +99,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
-    private static final int THIRTY_SECONDS = 30 * 1000;
-    public static final int TYPE_STOP = 6;
+    //    public static final int TYPE_STOP = 6;
     public static final int TYPE_ALERT = 20;
     private static final int STOPPED = 2;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
@@ -121,7 +121,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mCloseWidth;
     private int mOpenWidth;
     private float mTollBarsHeight;
-    private ArrayList<String> mOperatorsSpinnerArray = new ArrayList<String>();
+    private ArrayList<String> mOperatorsSpinnerArray = new ArrayList<>();
     private TextView mProductNameTextView;
     private TextView mJobIdTextView;
     private TextView mShiftIdTextView;
@@ -129,11 +129,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mMachineIdStatusBarTextView;
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
-    private DialogFragment mDialogFragment;
     private ViewGroup.LayoutParams mShiftLogParams;
     private boolean mIsNewShiftLogs;
     private MachineStatus mCurrentMachineStatus;
-    private ArrayList<Event> mEventsListToUpdate = new ArrayList<>();
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
     private List<JobActionsSpinnerItem> mJobActionsSpinnerItems;
     private int mApproveItemID;
@@ -153,15 +151,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mConfigTextView;
     private View mSelectedNumberLy;
     private Event mLastEvent;
-    private View mParentLy;
     private Fragment mVisiblefragment;
     private boolean mFromAnotherActivity;
     private TextView mMinDurationText;
     private LinearLayout mMinDurationLil;
-    private ImageView tutorialIv;
     private SwipeRefreshLayout mShiftLogSwipeRefresh;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Spinner mProductSpinner;
     private View mMultipleProductImg;
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
@@ -183,14 +178,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             filter.addAction(SelectStopReasonBroadcast.ACTION_SELECT_REASON);
 
-            LocalBroadcastManager.getInstance(getContext()).registerReceiver(mReasonBroadcast, filter);
-
+            if (getActivity() != null) {
+                LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReasonBroadcast, filter);
+            }
         }
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        ProgressDialogManager.show(getActivity()); TODO in dismiss ther are conflict with widgetFragment
 // TODO because ProgessDialogManager support only one progress management in same time
         View inflate = inflater.inflate(R.layout.fragment_actionbar_and_events, container, false);
@@ -199,7 +195,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ZLogger.d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
@@ -207,14 +203,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
         // get screen parameters
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
-        display.getSize(size);
+
+        if (getActivity() != null) {
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            display.getSize(size);
+        }
+
         int width = size.x;
         float height = size.y;
         mOpenWidth = (int) (width * 0.33);
         mCloseWidth = (int) (width * 0.16);
         mTollBarsHeight = (int) (height * 0.25);
+
+        if (height == 0) {
+            height = 1;
+        }
         mRecyclersHeight = (int) ((1 - (mTollBarsHeight / height)) * height);
 
         final int middleWidth = (int) (width * 0.3);
@@ -227,32 +231,31 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mListener.onResize(mCloseWidth, statusBarParams.height);
 
-        mParentLy = view.findViewById(R.id.parent_layouts);
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
         mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
-        mJobIdTextView = (TextView) view.findViewById(R.id.text_view_job_id);
-        mShiftIdTextView = (TextView) view.findViewById(R.id.text_view_shift_id);
-        mTimerTextView = (TextView) view.findViewById(R.id.text_view_timer);
+        mJobIdTextView = view.findViewById(R.id.text_view_job_id);
+        mShiftIdTextView = view.findViewById(R.id.text_view_shift_id);
+        mTimerTextView = view.findViewById(R.id.text_view_timer);
         mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
 
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
 
         mConfigLayout = view.findViewById(R.id.pConfig_layout);
         mConfigView = view.findViewById(R.id.pConfig_view);
-        mConfigTextView = (TextView) view.findViewById(R.id.text_view_config);
+        mConfigTextView = view.findViewById(R.id.text_view_config);
         mConfigTextView.setSelected(true);
-        mShiftLogLayout = (LinearLayout) view.findViewById(R.id.fragment_dashboard_shiftlog);
+        mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
-        mShiftLogRecycler = (RecyclerView) view.findViewById(R.id.fragment_dashboard_shift_log);
+        mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
-        mShiftLogSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.shift_log_swipe_refresh);
+        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
         mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -261,16 +264,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
 
-        mNoNotificationsText = (TextView) view.findViewById(R.id.fragment_dashboard_no_notif);
+        mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
-        mLoadingDataText = (TextView) view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mMinDurationText = (TextView) view.findViewById(R.id.fragment_dashboard_min_duration_tv);
-        mMinDurationLil = (LinearLayout) view.findViewById(R.id.fragment_dashboard_min_duration_lil);
+        mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
+        mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
+        mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
         //mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
-       // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-        final ImageView shiftLogHandle = (ImageView) view.findViewById(R.id.fragment_dashboard_left_btn);
+        final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
 
         view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
 
@@ -314,21 +317,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (event.getRawX() - mDownX > 5 || event.getRawX() - mDownX < -5) {
                                 if (mShiftLogParams.width < middleWidth) {
                                     mIsOpen = false;
-                                    toggleWoopList(mShiftLogParams, mCloseWidth, null, false);
+                                    toggleWoopList(mShiftLogParams, mCloseWidth, false);
                                     mListener.onWidgetChangeState(true);
                                     mListener.onWidgetUpdateSpane(3);
                                 } else {
                                     mIsOpen = true;
-                                    toggleWoopList(mShiftLogParams, mOpenWidth, null, true);
+                                    toggleWoopList(mShiftLogParams, mOpenWidth, true);
                                     mListener.onWidgetChangeState(false);
                                     mListener.onWidgetUpdateSpane(2);
 
                                 }
 
                             } else {
-                                onButtonClick(mShiftLogParams, null);
+                                onButtonClick(mShiftLogParams);
                             }
                         }
+                        v.performClick();
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     default:
@@ -347,7 +351,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         initJobsSpinner();
     }
 
-    private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
+    private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams) {
         if (!mIsOpen) {
             if (!mNoData) {
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
@@ -361,7 +365,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        toggleWoopList(leftLayoutParams, mOpenWidth, null, true);
+                        toggleWoopList(leftLayoutParams, mOpenWidth, true);
                         if (mShiftLogAdapter != null) {
                             mShiftLogAdapter.notifyDataSetChanged();
                         }
@@ -379,12 +383,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         } else {
 
-            closeWoopList(leftLayoutParams, null);
+            closeWoopList(leftLayoutParams);
         }
 
     }
 
-    private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams, final ViewGroup.MarginLayoutParams rightLayoutParams) {
+    private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
         mShiftLogLayout.startAnimation(anim);
@@ -397,7 +401,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                toggleWoopList(leftLayoutParams, mCloseWidth, rightLayoutParams, false);
+                toggleWoopList(leftLayoutParams, mCloseWidth, false);
                 mListener.onWidgetChangeState(true);
                 mListener.onWidgetUpdateSpane(3);
 
@@ -424,14 +428,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         public void onSetOperatorSuccess(String operatorId) {
-            if (operatorId == null || operatorId.isEmpty()){
+            if (operatorId == null || operatorId.isEmpty()) {
                 PersistenceManager.getInstance().setOperatorId("");
                 PersistenceManager.getInstance().setOperatorName("");
 
                 // TODO: 25/07/2018 sign out success
                 //ShowCrouton.jobsLoadingAlertCrouton(mCroutonCallback, message);
                 ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, getString(R.string.signed_out_successfully));
-            }else {
+            } else {
                 // TODO: 25/07/2018 sign in success
                 ShowCrouton.jobsLoadingSuccessCrouton(mCroutonCallback, getString(R.string.signed_in_successfully));
             }
@@ -452,9 +456,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onPause() {
         super.onPause();
-        if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
-        }
     }
 
 
@@ -507,12 +508,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mEventsQueue.add(event);
 
             }
-            //            openNextDialog();
-            if (mEventsQueue.size() > 0) {
-                Event event = mEventsQueue.peek();//
-
-
-            }
         } else {
             mNoData = true;
             mNoNotificationsText.setVisibility(View.VISIBLE);
@@ -525,7 +520,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, ViewGroup.MarginLayoutParams mRightLayoutParams, boolean isOpen) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
@@ -610,7 +605,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobs);
             mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
             mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
-            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -668,7 +663,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            title.setText(spannableString);
 //            title.setVisibility(View.VISIBLE);
 
-            tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
+            ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -700,7 +695,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             jobsSpinner.setAdapter(mJobsSpinnerAdapter);
 
-            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -739,7 +734,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
                                     mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),  mActiveJobsListForMachine, mSelectedPosition), true);
+                                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
                                 break;
                             }
@@ -776,19 +771,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             //setupProductionStatusSpinner();
 
 
-
-
             mMachineIdStatusBarTextView = mToolBarView.findViewById(R.id.text_view_machine_id_name);
             mMachineIdStatusBarTextView.setSelected(true);
-            mMachineStatusStatusBarTextView = (TextView) mToolBarView.findViewById(R.id.text_view_machine_status);
+            mMachineStatusStatusBarTextView = mToolBarView.findViewById(R.id.text_view_machine_status);
             mMachineStatusStatusBarTextView.setSelected(true);
-            mStatusIndicatorImageView = (ImageView) mToolBarView.findViewById(R.id.job_indicator);
+            mStatusIndicatorImageView = mToolBarView.findViewById(R.id.job_indicator);
 
             if (mMachineStatusLayout == null) {
-                mMachineStatusLayout = (ViewGroup) mToolBarView.findViewById(R.id.linearLayout2);
+                mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
                 mMachineStatusLayout.setVisibility(View.INVISIBLE);
             }
-            ImageView settingsButton = (ImageView) mToolBarView.findViewById(R.id.settings_button);
+            ImageView settingsButton = mToolBarView.findViewById(R.id.settings_button);
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -813,6 +806,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setupProductionStatusSpinner() {
 
+        if (getActivity() == null) {
+            return;
+        }
+
         int selected = 0;
 
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
@@ -820,24 +817,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         String[] items;
         String newTitle = "";
         List<PackageTypes> statusList = new ArrayList<>();
-        if (reportForMachine != null && reportForMachine.getProductionStatus() != null){
+        if (reportForMachine != null && reportForMachine.getProductionStatus() != null) {
 
             statusList = ((DashboardActivity) getActivity()).getReportForMachine().getProductionStatus();
             items = new String[statusList.size()];
             for (int i = 0; i < statusList.size(); i++) {
                 items[i] = OperatorApplication.isEnglishLang() ? statusList.get(i).getEName() : statusList.get(i).getLName();
-                if (statusList.get(i).getId() == mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID()){
+                if (statusList.get(i).getId() == mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID()) {
                     selected = i;
                 }
             }
             newTitle = OperatorApplication.isEnglishLang() ? statusList.get(selected).getEName() : statusList.get(selected).getLName();
-        }else {
+        } else {
             items = new String[]{""};
         }
 
         final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, newTitle);
         productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
-        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
         final List<PackageTypes> finalStatusList = statusList;
         productionStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -862,11 +859,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void setupOperatorSpinner() {
 
+        if (getActivity() == null) {
+            return;
+        }
+
         mOperatorsSpinnerArray.clear();
         EmeraldSpinner operatorsSpinner = mToolBarView.findViewById(R.id.toolbar_operator_spinner);
         TextView operatorTitle = mToolBarView.findViewById(R.id.toolbar_operator_tv);
 
-        if (PersistenceManager.getInstance().getOperatorName() == null ||  PersistenceManager.getInstance().getOperatorName().isEmpty()) {
+        if (PersistenceManager.getInstance().getOperatorName() == null || PersistenceManager.getInstance().getOperatorName().isEmpty()) {
 
             FrameLayout operatorFl = mToolBarView.findViewById(R.id.toolbar_operator_fl);
 
@@ -891,7 +892,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray.toArray(new String[mOperatorsSpinnerArray.size()]), PersistenceManager.getInstance().getOperatorName());
             operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
-            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
             operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -913,8 +914,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void startToolbarTutorial() {
         //if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
         List<TapTarget> targets = new ArrayList<>();
-        targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts),   getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
-        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner),getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
+
+        if (getView() != null) {
+
+            targets.add(TapTarget.forView(getView().findViewById(R.id.parent_layouts), getString(R.string.tutorial_swipe)).targetRadius(100).icon(getResources().getDrawable(R.drawable.swipe_arrows)));
+
+        }
+
+        targets.add(TapTarget.forView(mToolBarView.findViewById(R.id.toolbar_job_spinner), getString(R.string.tutorial_job_actions), getString(R.string.tutorial_job_actions_desc)).targetRadius(100));
         targets.add(TapTarget.forView(mMinDurationLil, getString(R.string.stop_event), getString(R.string.tutorial_event_log_desc)).targetRadius(100));
 //        if (mShiftLogAdapter.getItemCount() > 0 && mShiftLogAdapter.getmFirstStopEventPosition() < 9999){
 //            mShiftLogRecycler.scrollToPosition(mShiftLogAdapter.getmFirstStopEventPosition());
@@ -922,6 +929,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            targets.add(TapTarget.forView(holder.mSplitEvent,  getString(R.string.tutorial_split_event_title), getString(R.string.tutorial_split_event_Desc)).targetRadius(50));
 //        }
 
+        if (getActivity() == null) {
+            return;
+        }
         TapTargetSequence tapSeq = new TapTargetSequence(getActivity()).targets(targets).listener(new TapTargetSequence.Listener() {
             @Override
             public void onSequenceFinish() {
@@ -939,7 +949,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         tapSeq.start();
-        // }
+
     }
 
     private void setToolBarHeight(final View view) {
@@ -964,31 +974,27 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onDismissClick(DialogInterface dialog, int requestCode) {
-        if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
-            // openNextDialog();
-        }
 
     }
 
-    public void openNextDialog() {//TODO disable by nathan in all the places it's called because it's cause process of show / dismiss alerts too many times
-        ZLogger.d(LOG_TAG, "openNextDialog(), start ");
-        if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
-            Event event = mEventsQueue.pop();
-            //            event.setAlarmDismissed(true);
-            event.setIsDismiss(true);
-
-            if (event.getEventGroupID() == TYPE_STOP) {
-                //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
-                startSelectMode(STOPPED, event.getEventID());
-
-
-            } else if (event.getEventGroupID() == TYPE_ALERT) {
-                openDialog(event, false);
-            }
-        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
-        }
-    }
+//    public void openNextDialog() {//TODO disable by nathan in all the places it's called because it's cause process of show / dismiss alerts too many times
+//        ZLogger.d(LOG_TAG, "openNextDialog(), start ");
+//        if (mEventsQueue.peek() != null && (System.currentTimeMillis() - mEventsQueue.peek().getTimeOfAdded()) < THIRTY_SECONDS) {
+//            Event event = mEventsQueue.pop();
+//            //            event.setAlarmDismissed(true);
+//            event.setIsDismiss(true);
+//
+//            if (event.getEventGroupID() == TYPE_STOP) {
+//                //TODO              openStopReportScreen(event.getEventID(), null, null, event.getDuration());
+//                startSelectMode(STOPPED, event.getEventID());
+//
+//
+//            } else if (event.getEventGroupID() == TYPE_ALERT) {
+//                openDialog(event, false);
+//            }
+//        } else if (mEventsQueue.peek() == null || mEventsQueue.size() == 0) {
+//        }
+//    }
 
     public void setAlertChecked() {
 
@@ -1007,7 +1013,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void openDialog(Event event, boolean isStopDialog) {
+    private void openDialog(Event event) {
 
         String message;
 
@@ -1020,7 +1026,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             message = event.getSubtitleLname();
         }
 
-        message += " " + getActivity().getResources().getString(R.string.alarm);
+
+        message += " " + getString(R.string.alarm);
 
         message += " " + event.getAlarmValue();
 
@@ -1097,7 +1104,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
 
-        mMinDurationText.setText(machineStatus.getAllMachinesData().get(0).getMinEventDuration() + " " + getString(R.string.minutes));
+        mMinDurationText.setText(String.format(Locale.getDefault(), "%d %s", machineStatus.getAllMachinesData().get(0).getMinEventDuration(), getString(R.string.minutes)));
 //        if (mSwipeToRefresh.isRefreshing()){
 //            mSwipeToRefresh.setRefreshing(false);
 //        }
@@ -1204,7 +1211,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsQueue.pop();
 
                 } else if (event.getEventGroupID() == TYPE_ALERT) {
-                    openDialog(event, false);
+                    openDialog(event);
                     mLastEvent = event;
                     mEventsQueue.pop();
                 }
@@ -1297,7 +1304,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void silentLogin(ErrorObjectInterface reason) {
 
-        if (!thereAlreadyRequest) {
+        if (!thereAlreadyRequest && getActivity() != null) {
 
             thereAlreadyRequest = true;
 
@@ -1380,7 +1387,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mConfigTextView.setText("");
         mConfigView.setVisibility(View.GONE);
         mConfigLayout.setVisibility(View.GONE);
-        mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_no_data));
+
+        if (getActivity() != null) {
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_data));
+        }
     }
 
     @Override
@@ -1398,21 +1408,27 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void removeBroadcasts() {
 
-        try {
+        if (getActivity() != null) {
+            try {
 
-            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mReasonBroadcast);
+                LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReasonBroadcast);
 
-        } catch (Exception e) {
+            } catch (Exception e) {
 
-            if (e.getMessage() != null)
-                Log.e(LOG_TAG, e.getMessage());
+                if (e.getMessage() != null)
+                    Log.e(LOG_TAG, e.getMessage());
 
+            }
         }
-
     }
 
 
     private void statusAggregation(MachineStatus machineStatus) {
+
+        if (getActivity() == null) {
+
+            return;
+        }
 
         int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
 
@@ -1420,44 +1436,44 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
 
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.working));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.working));
         } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
 
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.stopped));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.stopped));
 
         } else if (status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.communication_failure));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.communication_failure));
 
         } else if (status == MachineStatus.MachineServerStatus.SETUP_COMMUNICATION_FAILURE.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.communication_failure));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.communication_failure));
 
         } else if (status == MachineStatus.MachineServerStatus.NO_JOB.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.no_job));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.no_job));
 
         } else if (status == MachineStatus.MachineServerStatus.SETUP_WORKING.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.ic_indicator_setup));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.ic_indicator_setup));
 
         } else if (status == MachineStatus.MachineServerStatus.SETUP_STOPPED.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.setup_stopped));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.setup_stopped));
 
         } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.parameter_deviation));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.parameter_deviation));
 
         } else if (status == MachineStatus.MachineServerStatus.STOP_IDLE.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.mipmap.stop_idle));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.mipmap.stop_idle));
 
         } else {
             ZLogger.w(LOG_TAG, "Undefined parameter");
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_no_data));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_data));
         }
 
     }
@@ -1469,17 +1485,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    private void dismissProgressDialog() {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ProgressDialogManager.dismiss();
-                }
-            });
-        }
-
-    }
+//    private void dismissProgressDialog() {
+//        if (getActivity() != null) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ProgressDialogManager.dismiss();
+//                }
+//            });
+//        }
+//
+//    }
 
     @Override
     public void onSelectStopReason(int eventId, int reasonId, String en, String il, String eSubTitle, String lSubtitle) {
@@ -1551,7 +1567,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-            mSelectedNumberTv.setText(getActivity().getResources().getString(R.string.events_selected) + " " + mSelectedEvents.size());
+            mSelectedNumberTv.setText(String.format(Locale.getDefault(), "%s %d", getString(R.string.events_selected), mSelectedEvents.size()));
 
         } else {
 

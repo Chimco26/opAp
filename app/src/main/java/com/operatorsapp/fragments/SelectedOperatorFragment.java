@@ -3,6 +3,7 @@ package com.operatorsapp.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,23 +40,27 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     public void onAttach(Context context) {
         super.onAttach(context);
         mOperatorCoreToDashboardActivityCallback = (OperatorCoreToDashboardActivityCallback) getActivity();
-        mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        if (mOperatorCoreToDashboardActivityCallback != null) {
+            mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
+        }
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_operator, container, false);
         Bundle bundle = this.getArguments();
         Gson gson = new Gson();
-        mSelectedOperator = gson.fromJson(bundle.getString(SELECTED_OPERATOR), Operator.class);
+        if (bundle != null) {
+            mSelectedOperator = gson.fromJson(bundle.getString(SELECTED_OPERATOR), Operator.class);
+        }
 
-        mSignInButton = (Button) view.findViewById(R.id.button_selected_operator_sign_in);
+        mSignInButton = view.findViewById(R.id.button_selected_operator_sign_in);
 
-        TextView selectedOperatorID = (TextView) view.findViewById(R.id.operator_id_text_view);
+        TextView selectedOperatorID = view.findViewById(R.id.operator_id_text_view);
         selectedOperatorID.setText(mSelectedOperator.getOperatorId());
 
-        TextView selectedOperatorName = (TextView) view.findViewById(R.id.operator_name_text_view);
+        TextView selectedOperatorName = view.findViewById(R.id.operator_name_text_view);
         selectedOperatorName.setText(mSelectedOperator.getOperatorName());
 
         setActionBar();
@@ -63,7 +68,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         mOperatorCore.registerListener(new OperatorForMachineUICallbackListener() {
             @Override
             public void onOperatorDataReceived(Operator operator) {
@@ -105,31 +110,30 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     }
 
     protected void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.operator_fragment_action_bar, null);
+        if (getActivity() != null) {
 
-            ImageView buttonClose = (ImageView) view.findViewById(R.id.arrow_back);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    if(fragmentManager != null)
-//                    {
-//                        fragmentManager.popBackStack();
-//                    }
-                    getActivity().onBackPressed();
-                }
-            });
-            actionBar.setCustomView(view);
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.operator_fragment_action_bar, null);
+
+                ImageView buttonClose = view.findViewById(R.id.arrow_back);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        getActivity().onBackPressed();
+                    }
+                });
+                actionBar.setCustomView(view);
+            }
         }
     }
 

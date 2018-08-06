@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -57,7 +58,6 @@ import java.util.List;
 public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
-    private static final String CURRENT_PRODUCT_NAME = "current_product_name";
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
@@ -66,7 +66,6 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private int mSelectedReasonId;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private String mCurrentProductName;
     private int mCurrentProductId;
     private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
@@ -77,6 +76,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private ApproveFirstItemFragmentCallbackListener mCallbackListener;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private int mSelectedPosition;
+
+    public ApproveFirstItemFragment() {
+    }
 
     public static ApproveFirstItemFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ApproveFirstItemFragment reportRejectsFragment = new ApproveFirstItemFragment();
@@ -92,7 +94,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     public void onAttach(Context context) {
         super.onAttach(context);
         ReportFieldsFragmentCallbackListener reportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
-        mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
+        if (reportFieldsFragmentCallbackListener != null) {
+            mReportFieldsForMachine = reportFieldsFragmentCallbackListener.getReportForMachine();
+        }
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
 
         if(context instanceof ApproveFirstItemFragmentCallbackListener)
@@ -125,7 +129,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_approve_first_item, container, false);
         setActionBar();
 
@@ -133,17 +137,17 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!PersistenceManager.getInstance().getAddRejectsOnSetupEnd()){
             view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
         }
-        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
+        mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
 //        getActiveJobs();
-        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        mNextButton = (Button) view.findViewById(R.id.button_approve);
+        mCancelButton = view.findViewById(R.id.button_cancel);
+        mNextButton = view.findViewById(R.id.button_approve);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getRejectCauses() == null || mReportFieldsForMachine.getRejectReasons() == null || mReportFieldsForMachine.getRejectCauses().size() == 0 || mReportFieldsForMachine.getRejectReasons().size() == 0) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
@@ -154,41 +158,33 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             mNextButton.setEnabled(true);
         }
 
-        TextView productNameTextView = (TextView) view.findViewById(R.id.report_cycle_u_product_name_text_view);
-        TextView productIdTextView = (TextView) view.findViewById(R.id.report_cycle_id_text_view);
+        TextView productNameTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
+        TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
         productNameTextView.setText(new StringBuilder(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName()).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
-        mJobsSpinner = (Spinner) view.findViewById(R.id.report_job_spinner);
+        mJobsSpinner = view.findViewById(R.id.report_job_spinner);
 
 
         if (mReportFieldsForMachine != null) {
 
             sortRejectReasons();
-            if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
-                Spinner rejectReasonSpinner = (Spinner) view.findViewById(R.id.reject_reason_spinner);
+            if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd() && getActivity() != null) {
+                Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
 
                 final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
                 reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-                rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
                 rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    if (mIsFirstReasonSpinnerSelection) {
-//                        mIsFirstReasonSpinnerSelection = false;
-//                        mIsReasonSelected = false;
-//
-//                    }
-//                    else {
-//                        mIsReasonSelected = true;
+
                         mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                        String nameByLang = OperatorApplication.isEnglishLang() ? mReportFieldsForMachine.getRejectReasons().get(position).getEName() : mReportFieldsForMachine.getRejectReasons().get(position).getLName();
                         reasonSpinnerArrayAdapter.setTitle(position);
-//                        mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
-//                    }
+
                     }
 
                     @Override
@@ -198,18 +194,19 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             }else {
                 for (RejectReasons rejectReason : mReportFieldsForMachine.getRejectReasons()) {
                     String nameByLang = OperatorApplication.isEnglishLang() ? rejectReason.getEName() : rejectReason.getLName();
-                    if (nameByLang.equals(R.string.reject_reason_setup)){
+                    if (nameByLang.equals(getString(R.string.reject_reason_setup))){
                         mSelectedReasonId = rejectReason.getId();
                         break;
                     }
                 }
             }
 
-            Spinner technicianSpinner = (Spinner) view.findViewById(R.id.technician_spinner);
+            Spinner technicianSpinner = view.findViewById(R.id.technician_spinner);
             final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
             technicianSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             technicianSpinner.setAdapter(technicianSpinnerAdapter);
-            technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+            technicianSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
             technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -228,8 +225,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
                 }
             });
         }
-        mCancelButton = (TextView) view.findViewById(R.id.button_cancel);
-        //mNextButton = (Button) view.findViewById(R.id.button_next);
+        mCancelButton = view.findViewById(R.id.button_cancel);
 
         initJobsSpinner();
 
@@ -275,33 +271,34 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     }
 
     protected void setActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.report_resects_action_bar, null);
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.report_resects_action_bar, null);
 
-            LinearLayout buttonClose = (LinearLayout) view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if(fragmentManager != null)
-                    {
-                        fragmentManager.popBackStack();
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fragmentManager = getFragmentManager();
+                        if (fragmentManager != null) {
+                            fragmentManager.popBackStack();
+                        }
                     }
-                }
-            });
+                });
 
-            ((TextView)view.findViewById(R.id.new_job_title)).setText(R.string.first_item_approval);
+                ((TextView) view.findViewById(R.id.new_job_title)).setText(R.string.first_item_approval);
 
-            actionBar.setCustomView(view);
+                actionBar.setCustomView(view);
+            }
         }
     }
 
@@ -379,7 +376,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch)
+            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null)
             {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
                 {
@@ -453,7 +450,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
                 mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
