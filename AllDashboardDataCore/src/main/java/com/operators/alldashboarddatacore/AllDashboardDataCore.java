@@ -40,6 +40,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
     private static final int START_DELAY = 0;
+    private final AllDashboardDataCoreListener mListener;
     private EmeraldJobBase mJob;
 
     private GetMachineStatusNetworkBridgeInterface mGetMachineStatusNetworkBridgeInterface;
@@ -61,7 +62,13 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private TimeToEndCounter mTimeToEndCounter;
 
 
-    public AllDashboardDataCore(GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge, MachineStatusPersistenceManagerInterface machineStatusPersistenceManager, GetMachineDataNetworkBridgeInterface getMachineDataNetworkBridgeInterface, MachineDataPersistenceManagerInterface machineDataPersistenceManagerInterface, ShiftLogPersistenceManagerInterface shiftLogPersistenceManagerInterface, ShiftLogNetworkBridgeInterface shiftLogNetworkBridgeInterface) {
+    public AllDashboardDataCore(AllDashboardDataCoreListener listener, GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge,
+                                MachineStatusPersistenceManagerInterface machineStatusPersistenceManager,
+                                GetMachineDataNetworkBridgeInterface getMachineDataNetworkBridgeInterface,
+                                MachineDataPersistenceManagerInterface machineDataPersistenceManagerInterface,
+                                ShiftLogPersistenceManagerInterface shiftLogPersistenceManagerInterface,
+                                ShiftLogNetworkBridgeInterface shiftLogNetworkBridgeInterface) {
+
         mGetMachineStatusNetworkBridgeInterface = getMachineStatusNetworkBridge;
         mMachineStatusPersistenceManagerInterface = machineStatusPersistenceManager;
 
@@ -70,6 +77,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
         mShiftLogPersistenceManagerInterface = shiftLogPersistenceManagerInterface;
         mShiftLogNetworkBridgeInterface = shiftLogNetworkBridgeInterface;
+
+        mListener = listener;
 
     }
 
@@ -97,7 +106,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    public void startPolling(final Integer joshID) {
+    public void startPolling() {
 
         mJob = null;
 
@@ -105,21 +114,30 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             @Override
             protected void executeJob(final JobBase.OnJobFinishedListener onJobFinishedListener) {
 
-                int jobId = 0;
-
-                if (joshID != null){
-
-                    jobId = joshID;
-                }
-                getMachineData(onJobFinishedListener, jobId);
-                getMachineStatus(onJobFinishedListener, jobId);
-                getShiftLogs(onJobFinishedListener);
+                mListener.onExecuteJob(onJobFinishedListener);
+                //sendRequestForPolling(onJobFinishedListener, jobId);
             }
         };
         // getPollingFrequency for all
         ZLogger.d(LOG_TAG, "startPolling(), Frequency: " + mMachineStatusPersistenceManagerInterface.getPollingFrequency());
         mJob.startJob(START_DELAY, mMachineStatusPersistenceManagerInterface.getPollingFrequency(), TimeUnit.SECONDS);
 
+    }
+
+    public void sendRequestForPolling(JobBase.OnJobFinishedListener onJobFinishedListener, Integer jobId, Integer selectProductJobId) {
+
+        if (selectProductJobId != null) {
+
+            jobId = selectProductJobId;
+
+        } else if (jobId == null) {
+
+            jobId = 0;
+        }
+
+        getMachineData(onJobFinishedListener, jobId);
+        getMachineStatus(onJobFinishedListener, jobId);
+        getShiftLogs(onJobFinishedListener);
     }
 
     public void stopPolling() {
@@ -299,5 +317,10 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         } else {
             ZLogger.w(LOG_TAG, "onTimeToEndChanged() mMachineStatusUICallback is null");
         }
+    }
+
+    public interface AllDashboardDataCoreListener{
+
+        void onExecuteJob(JobBase.OnJobFinishedListener onJobFinishedListener);
     }
 }

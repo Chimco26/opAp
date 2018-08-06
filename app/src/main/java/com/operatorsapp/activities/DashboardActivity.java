@@ -20,6 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -30,10 +34,6 @@ import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
 import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
 import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
 import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
@@ -56,55 +56,53 @@ import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
-import com.operators.reportrejectnetworkbridge.interfaces.PostSplitEventNetworkManager;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
-import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
-import com.operatorsapp.fragments.ActionBarAndEventsFragment;
-import com.operatorsapp.fragments.AdvancedSettingsFragment;
-import com.operatorsapp.fragments.RecipeFragment;
-import com.operatorsapp.fragments.ReportStopReasonFragment;
-import com.operatorsapp.fragments.SelectStopReasonFragment;
-import com.operatorsapp.fragments.ViewPagerFragment;
-import com.operatorsapp.fragments.WidgetFragment;
-import com.operatorsapp.managers.ProgressDialogManager;
-import com.operatorsapp.model.PdfObject;
-import com.operatorsapp.server.callback.PostProductionModeCallback;
-import com.operatorsapp.utils.ChangeLang;
-import com.operatorsapp.utils.SimpleRequests;
-import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
+import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.fragments.ActionBarAndEventsFragment;
+import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
+import com.operatorsapp.fragments.ReportStopReasonFragment;
+import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
+import com.operatorsapp.fragments.ViewPagerFragment;
+import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
-import com.operatorsapp.interfaces.SettingsInterface;
-import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashBoardActivityToSelectedJobFragmentCallback;
+import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ShowCrouton;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
-
 
 import org.litepal.crud.DataSupport;
 
@@ -114,6 +112,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import ravtech.co.il.publicutils.JobBase;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -127,7 +126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ViewPagerFragment.OnViewPagerListener,
         RecipeFragment.OnRecipeFragmentListener,
         AdvancedSettingsFragment.AdvancedSettingsListener,
-        ShowDashboardCroutonListener{
+        ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -159,6 +158,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private boolean isOnDashboard;
     private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Integer mSelectProductJobId;
+    private JobBase.OnJobFinishedListener mOnJobFinishedListener;
 
 
     @Override
@@ -187,7 +187,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         shiftLogNetworkBridge.inject(NetworkManager.getInstance());
 
-        mAllDashboardDataCore = new AllDashboardDataCore(getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
+        mAllDashboardDataCore = new AllDashboardDataCore(this, getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
 
@@ -209,7 +209,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
 
             getSupportFragmentManager().addOnBackStackChangedListener(getListener());
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
 
@@ -227,7 +228,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
     }
 
 
@@ -239,7 +241,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mWidgetFragment).commit();
-            }catch (IllegalStateException e){}
+            } catch (IllegalStateException e) {
+            }
         }
         if (mActionBarAndEventsFragment != null) {
 
@@ -247,7 +250,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
-            }catch (IllegalStateException e){}
+            } catch (IllegalStateException e) {
+            }
         }
 //        if (mDashboardFragment != null) {
 //            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -345,7 +349,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             super.onResume();
 
-            getActiveJobs();
+            dashboardDataStartPolling();
 
             shiftForMachineTimer();
 
@@ -354,7 +358,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mReportFieldsForMachineCore.startPolling();
 
         } else {
-            
+
             ignoreFromOnPause = false;
 
             super.onResume();
@@ -398,15 +402,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
-    public void dashboardDataStartPolling(Integer joshId) {
-
-        if (mSelectProductJobId != null){
-
-            joshId = mSelectProductJobId;
-
-        }else if (joshId == null){
-            joshId = 0;
-        }
+    public void dashboardDataStartPolling() {
 
         mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
 
@@ -414,7 +410,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         NetworkManager.getInstance().clearPollingRequest();
 
-        mAllDashboardDataCore.startPolling(joshId);
+        mAllDashboardDataCore.startPolling();
 
     }
 
@@ -438,16 +434,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //
 //                    mActionBarAndEventsFragment.initProductView(mActiveJobsListForMachine);
 //                }
-                dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
+                //dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
 
-                if (mActiveJobsListForMachine.getActiveJobs().size() <= 1){
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
+
+                if (mActiveJobsListForMachine.getActiveJobs().size() <= 1) {
 
                     mSelectProductJobId = null;
                 }
 
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
-                    for (DashboardUICallbackListener dashboardUICallbackListener: mDashboardUICallbackListenerList){
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                         dashboardUICallbackListener.onActiveJobsListForMachineUICallbackListener(mActiveJobsListForMachine);
                     }
@@ -455,8 +453,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
 
                 ZLogger.i(LOG_TAG, "onActiveJobsListForMachineReceived() list size is: " + activeJobsListForMachine.getActiveJobs().size());
-            }
-            else {
+            } else {
                 ProgressDialogManager.dismiss();
                 ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceived() activeJobsListForMachine is null");
             }
@@ -466,7 +463,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
             ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-            dashboardDataStartPolling(null);
+            mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId);
         }
     };
 
@@ -488,11 +485,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
 
-                        if (opId != null && opId != "" && opName != null && opName != ""){
+                        if (opId != null && opId != "" && opName != null && opName != "") {
 
                             PersistenceManager.getInstance().setOperatorName(opName);
                             PersistenceManager.getInstance().setOperatorId(opId);
-                        }else {
+                        } else {
                             PersistenceManager.getInstance().setOperatorName("");
                             PersistenceManager.getInstance().setOperatorId("");
                         }
@@ -665,7 +662,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     int minDuration = PersistenceManager.getInstance().getMinEventDuration();
                     if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
                         for (Event event : events) {
-                            for (int i=0; i< mSelectedEvents.size(); i++) {
+                            for (int i = 0; i < mSelectedEvents.size(); i++) {
 
                                 if (event.getEventID() == mSelectedEvents.get(i)) {
                                     if (event.getDuration() < minDuration) {
@@ -809,7 +806,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
 
     }
 
@@ -873,7 +871,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     try {
 
                         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }catch (IllegalStateException e){}
+                    } catch (IllegalStateException e) {
+                    }
 
                 }
 
@@ -886,9 +885,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onStartJobFailed(ErrorObjectInterface reason) {
-                if (reason.getDetailedDescription().contains("Job started successfully")){
+                if (reason.getDetailedDescription().contains("Job started successfully")) {
                     ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, reason.getDetailedDescription());
-                }else {
+                } else {
                     ZLogger.i(LOG_TAG, "onStartJobFailed()");
                     mDashboardActivityToSelectedJobFragmentCallback.onStartJobFailure();
                     ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
@@ -907,7 +906,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 //        mAllDashboardDataCore.startPolling(null);
 
-        getActiveJobs();
+        dashboardDataStartPolling();
 
         PersistenceManager.getInstance().setJobId(mSelectJobId);
 
@@ -967,13 +966,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 //        mAllDashboardDataCore.startPolling(null);
 
-        getActiveJobs();
+        dashboardDataStartPolling();
 
         if (getSupportFragmentManager() != null) {
             try {
 
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }catch (IllegalStateException e){}
+            } catch (IllegalStateException e) {
+            }
         }
     }
 
@@ -1196,7 +1196,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         NetworkManager.getInstance().clearPollingRequest();
 //        mAllDashboardDataCore.startPolling(null);
 
-        getActiveJobs();
+        dashboardDataStartPolling();
 
     }
 
@@ -1223,7 +1223,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
-        getActiveJobs();
+        dashboardDataStartPolling();
 
         if (getSupportFragmentManager() != null) {
 
@@ -1231,7 +1231,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-            }catch (IllegalStateException e){
+            } catch (IllegalStateException e) {
 
             }
 
@@ -1310,7 +1310,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
 
     }
 
@@ -1383,7 +1384,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         ignoreFromOnPause = true;
 
-        if (mActionBarAndEventsFragment != null){
+        if (mActionBarAndEventsFragment != null) {
 
             mActionBarAndEventsFragment.setFromAnotherActivity(true);
         }
@@ -1394,7 +1395,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mSelectProductJobId = joshID;
 
-        getActiveJobs();
+        dashboardDataStartPolling();
 
         ProgressDialogManager.show(this);
     }
@@ -1407,9 +1408,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostProductionModeSuccess(ErrorResponseNewVersion response) {
                 // TODO: 31/07/2018 display cruton
-                if (response.isFunctionSucceed() ) {
-                    getActiveJobs();
-                }else {
+                if (response.isFunctionSucceed()) {
+                    dashboardDataStartPolling();
+                } else {
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 }
@@ -1422,7 +1423,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
             }
-        },NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
+        }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
 
     }
 
@@ -1442,7 +1443,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 Toast.makeText(DashboardActivity.this, "onPostSplitEventFailed", Toast.LENGTH_SHORT).show();
 
             }
-        },NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+        }, NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
 
     }
 
@@ -1454,7 +1455,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragment).commit();
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
 
         if (mSelectStopReasonFragment != null) {
 
@@ -1484,12 +1486,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     || visible instanceof WidgetFragment
                     || visible instanceof RecipeFragment
                     || visible instanceof SelectStopReasonFragment
-                    || visible instanceof ReportStopReasonFragment)){
+                    || visible instanceof ReportStopReasonFragment)) {
 
                 try {
 
                     getSupportFragmentManager().popBackStack();
-                }catch (IllegalStateException e){}
+                } catch (IllegalStateException e) {
+                }
             }
 
         } else {
@@ -1528,7 +1531,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragment).commit();
 
             mSelectStopReasonFragment = null;
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
 
     }
 
@@ -1547,7 +1551,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (mSelectedEvents != null) {
                 mSelectedEvents = null;
             }
-        }catch (IllegalStateException e){}
+        } catch (IllegalStateException e) {
+        }
     }
 
     @Override
@@ -1649,7 +1654,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             ignoreFromOnPause = true;
 
-            if (mActionBarAndEventsFragment != null){
+            if (mActionBarAndEventsFragment != null) {
 
                 mActionBarAndEventsFragment.setFromAnotherActivity(true);
             }
@@ -1672,11 +1677,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-        if (resultCode == RESULT_OK && requestCode == JobActionActivity.EXTRA_ACTIVATE_JOB_CODE){
+        if (resultCode == RESULT_OK && requestCode == JobActionActivity.EXTRA_ACTIVATE_JOB_CODE) {
             ignoreFromOnPause = true;
             Object response = data.getParcelableExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
-            if (((Response)response).getError() == null){
+            if (((Response) response).getError() == null) {
 
                 mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
 
@@ -1684,7 +1689,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.start_job_success));
 
-                getActiveJobs();
+                dashboardDataStartPolling();
             }
 
         }
@@ -1703,5 +1708,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, errorResponse);
         ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
 
+    }
+
+    @Override
+    public void onExecuteJob(JobBase.OnJobFinishedListener onJobFinishedListener) {
+
+        mOnJobFinishedListener = onJobFinishedListener;
+
+        getActiveJobs();
     }
 }
