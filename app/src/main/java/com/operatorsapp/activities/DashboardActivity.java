@@ -155,8 +155,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
-    private boolean isOnDashboard;
-    private ActiveJobsListForMachineCore mActiveJobsListForMachineCore;
     private Integer mSelectProductJobId;
     private JobBase.OnJobFinishedListener mOnJobFinishedListener;
 
@@ -209,7 +207,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
 
             getSupportFragmentManager().addOnBackStackChangedListener(getListener());
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
@@ -228,7 +226,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerfragment).commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
     }
 
@@ -241,7 +239,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mWidgetFragment).commit();
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException ignored) {
             }
         }
         if (mActionBarAndEventsFragment != null) {
@@ -250,7 +248,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(mActionBarAndEventsFragment).commit();
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException ignored) {
             }
         }
 //        if (mDashboardFragment != null) {
@@ -284,14 +282,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             fragment instanceof WidgetFragment ||
                             fragment instanceof ReportStopReasonFragment ||
                             fragment instanceof SelectStopReasonFragment) {
-                        mActionBarAndEventsFragment.setActionBar();
-//                        mDashboardFragment.setActionBar();
-                        if (first) {
-                            first = false;
-
-                        } else {
-                            first = true;
+                        if (mActionBarAndEventsFragment != null) {
+                            mActionBarAndEventsFragment.setActionBar();
                         }
+                        first = !first;
                     }
                 }
             }
@@ -417,28 +411,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void getActiveJobs() {
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
-        mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
+        ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
         mActiveJobsListForMachineCore.registerListener(mActiveJobsListForMachineUICallbackListener);
         mActiveJobsListForMachineCore.getActiveJobsListForMachine();
     }
 
-    private ActiveJobsListForMachine mActiveJobsListForMachine;
     private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
         @Override
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
             if (activeJobsListForMachine != null) {
-                mActiveJobsListForMachine = activeJobsListForMachine;
-
-                //todo actionbar
-//                if (mActionBarAndEventsFragment != null){
-//
-//                    mActionBarAndEventsFragment.initProductView(mActiveJobsListForMachine);
-//                }
-                //dashboardDataStartPolling(activeJobsListForMachine.getActiveJobs().get(0).getJobID());
 
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
 
-                if (mActiveJobsListForMachine.getActiveJobs().size() <= 1) {
+                if (activeJobsListForMachine.getActiveJobs().size() <= 1) {
 
                     mSelectProductJobId = null;
                 }
@@ -447,7 +432,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
-                        dashboardUICallbackListener.onActiveJobsListForMachineUICallbackListener(mActiveJobsListForMachine);
+                        dashboardUICallbackListener.onActiveJobsListForMachineUICallbackListener(activeJobsListForMachine);
                     }
 
                 }
@@ -485,7 +470,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
 
-                        if (opId != null && opId != "" && opName != null && opName != "") {
+                        if (opId != null && !opId.equals("") && opName != null && !opName.equals("")) {
 
                             PersistenceManager.getInstance().setOperatorName(opName);
                             PersistenceManager.getInstance().setOperatorId(opId);
@@ -804,9 +789,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
 
         try {
-
             getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
 
     }
@@ -871,7 +855,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     try {
 
                         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    } catch (IllegalStateException e) {
+                    } catch (IllegalStateException ignored) {
                     }
 
                 }
@@ -972,7 +956,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             try {
 
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException ignored) {
             }
         }
     }
@@ -1181,7 +1165,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 || visible instanceof SelectStopReasonFragment
                 || visible instanceof ReportStopReasonFragment)) {
 
-            return ((CroutonRootProvider) mActionBarAndEventsFragment).getCroutonRoot();
+            return mActionBarAndEventsFragment.getCroutonRoot();
 
         }
         return R.id.parent_layouts;
@@ -1231,7 +1215,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException ignored) {
 
             }
 
@@ -1310,7 +1294,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
 
     }
@@ -1455,7 +1439,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), selectStopReasonFragment).commit();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
 
         if (mSelectStopReasonFragment != null) {
@@ -1491,7 +1475,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 try {
 
                     getSupportFragmentManager().popBackStack();
-                } catch (IllegalStateException e) {
+                } catch (IllegalStateException ignored) {
                 }
             }
 
@@ -1531,7 +1515,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             getSupportFragmentManager().beginTransaction().remove(mSelectStopReasonFragment).commit();
 
             mSelectStopReasonFragment = null;
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
 
     }
@@ -1551,7 +1535,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (mSelectedEvents != null) {
                 mSelectedEvents = null;
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException ignored) {
         }
     }
 
