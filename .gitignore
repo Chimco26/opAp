@@ -1389,3 +1389,4 @@ app/.idea/libraries/javax_inject_javax_inject_1_jar.xml
 app/.idea/libraries/javax_annotation_javax_annotation_api_1_2_jar.xml
 app/.idea/libraries/io_reactivex_rxjava2_rxjava_2_1_3_jar.xml
 app/.idea/libraries/io_reactivex_rxjava2_rxandroid_2_0_1.xml
+/app/release
