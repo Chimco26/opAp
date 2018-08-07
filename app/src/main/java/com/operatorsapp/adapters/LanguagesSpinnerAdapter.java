@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import com.operatorsapp.managers.PersistenceManager;
 
 public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     private Activity mContext;
-    private String[] mSpinnerItems = null;
+    private String[] mSpinnerItems;
     private TextView mRowName;
 //    private View mView;
     private boolean mIsFirst = true;
@@ -24,14 +25,15 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         this.mSpinnerItems = spinnerItems;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
 //            mView = row;
-            mRowName = (TextView) row.findViewById(R.id.spinner_language_item_name);
+            mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
             if (mIsFirst) {
                 setTitle(PersistenceManager.getInstance().getCurrentLanguageName());
@@ -47,7 +49,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
@@ -57,7 +59,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
 
         String item = mSpinnerItems[position];
         if (item != null) {
-            mRowName = (TextView) row.findViewById(R.id.spinner_language_item_name);
+            mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setText(item);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
             mRowName.setTextSize(17);

@@ -3,6 +3,7 @@ package com.operatorsapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,8 +34,9 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
         mOnSelectedSubReasonListener = onSelectedSubReasonListener;
     }
 
+    @NonNull
     @Override
-    public StopSubReasonAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public StopSubReasonAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sub_stop_reason_grid_item, parent, false);
 
@@ -43,7 +45,7 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
     @SuppressLint("NewApi")
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         if (mSelectedPosition == position) {
             holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
@@ -91,9 +93,9 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         public ViewHolder(View view) {
             super(view);
-            mStopTitle = (TextView) view.findViewById(R.id.stop_reason_title);
-            mReasonImage = (ImageView) view.findViewById(R.id.grid_reason_image_view);
-            mImageTitle = (TextView) view.findViewById(R.id.stop_reason_image_title);
+            mStopTitle = view.findViewById(R.id.stop_reason_title);
+            mReasonImage = view.findViewById(R.id.grid_reason_image_view);
+            mImageTitle = view.findViewById(R.id.stop_reason_image_title);
         }
     }
 

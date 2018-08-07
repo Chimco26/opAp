@@ -33,8 +33,10 @@ public class ProgressDialogFragment extends DialogFragment {
         super.onResume();
 
         try {
-            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            getDialog().setCanceledOnTouchOutside(false);
+            if (getDialog().getWindow() != null) {
+                getDialog().getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                getDialog().setCanceledOnTouchOutside(false);
+            }
         } catch (Exception e) {
             ZLogger.d(LOG_TAG, "onResume():" + e.getMessage());
         }

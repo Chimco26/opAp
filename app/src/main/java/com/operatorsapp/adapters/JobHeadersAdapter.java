@@ -87,7 +87,7 @@ public class JobHeadersAdapter extends RecyclerView.Adapter<JobHeadersAdapter.Vi
 
     }
 
-    public void updateView(@NonNull ViewHolder viewHolder, int blue1, int white) {
+    private void updateView(@NonNull ViewHolder viewHolder, int blue1, int white) {
         viewHolder.mTv.setBackgroundColor(mContext.getResources().getColor(blue1));
         viewHolder.mTv.setTextColor(mContext.getResources().getColor(white));
     }

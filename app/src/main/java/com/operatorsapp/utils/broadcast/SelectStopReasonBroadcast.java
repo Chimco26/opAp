@@ -22,10 +22,6 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
     private SelectStopReasonListener mListener;
 
-    public SelectStopReasonBroadcast() {
-
-    }
-
     public SelectStopReasonBroadcast(SelectStopReasonListener listener) {
 
         mListener = listener;
@@ -35,7 +31,7 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getExtras() != null) {
 
-            if (intent.getAction().equals(ACTION_SELECT_REASON)) {
+            if (intent.getAction() != null && intent.getAction().equals(ACTION_SELECT_REASON)) {
 
                 mListener.onSelectStopReason(intent.getExtras().getInt(EVENT_ID),
                         intent.getExtras().getInt(REASON_ID),

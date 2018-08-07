@@ -1,7 +1,5 @@
 package com.operatorsapp.utils;
 
-import android.util.Log;
-
 import com.operatorsapp.managers.PersistenceManager;
 
 import org.acra.ACRA;
@@ -18,6 +16,7 @@ public class SendReportUtil {
 
     public static final String MACHINE_ID  = "MACHINE_ID";
 
+    @SuppressWarnings("unused")
     public static final String CURRENT_STORAGE_SIZE  = "CURRENT_STORAGE_SIZE ";
 
     public static final String METHOD_NAME = "METHOD_NAME";

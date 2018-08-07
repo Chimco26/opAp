@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 public class LineChartTimeSmall extends FrameLayout {
 
-    public static final String SAMSUNG = "samsung";
-
     private LineChart mChart;
     private Context mContext;
     protected Typeface mTfRegular;
@@ -63,7 +61,7 @@ public class LineChartTimeSmall extends FrameLayout {
         mTfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf");
         mTfLight = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf");
 
-        mChart = (LineChart) view.findViewById(R.id.chart1);
+        mChart = view.findViewById(R.id.chart1);
 
         // no description text
         mChart.setDescription("");
@@ -174,7 +172,7 @@ public class LineChartTimeSmall extends FrameLayout {
         rightAxis.setEnabled(false);
     }
 
-    public void setData(final ArrayList<Entry> values, String[] xValues, final Float lowLimit, Float standardValue, final Float highLimit) {
+    public void setData(final ArrayList<Entry> values, String[] xValues, final Float lowLimit, final Float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
@@ -217,7 +215,7 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart.resetViewPortOffsets();
         mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
 
-        setLimitLines(lowLimit,highLimit,standardValue);
+//        setLimitLines(lowLimit,highLimit,standardValue);
 
 
         mChart.post(new Runnable() {
@@ -274,22 +272,23 @@ public class LineChartTimeSmall extends FrameLayout {
         });
     }
 
-    private void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
-    {
+//    private void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
+//    {
+//
+//        /* // zero line, removed due to performance cost
+//        YAxis leftAxis = mChart.getAxisLeft();
+//        LimitLine limitLine1 = new LimitLine(0f, "");
+//        limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
+//        limitLine1.setLineWidth(1f);
+//        leftAxis.addLimitLine(limitLine1);
+//        */
+//
+//
+//        //addStandardLine(standardValue); // standard line, removed due to performance cost
+//        //addLimitLines(lowLimit, highLimit);
+//    }
 
-        /* // zero line, removed due to performance cost
-        YAxis leftAxis = mChart.getAxisLeft();
-        LimitLine limitLine1 = new LimitLine(0f, "");
-        limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
-        limitLine1.setLineWidth(1f);
-        leftAxis.addLimitLine(limitLine1);
-        */
-
-
-        //addStandardLine(standardValue); // standard line, removed due to performance cost
-        //addLimitLines(lowLimit, highLimit);
-    }
-
+    @SuppressWarnings("unused")
     private void addStandardLine(Float standardValue)
     {
         YAxis leftAxis = mChart.getAxisLeft();
@@ -302,6 +301,7 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.addLimitLine(limitLine2);
     }
 
+    @SuppressWarnings("unused")
     private void addLimitLines(Float lowLimit, Float highLimit)
     {
         YAxis leftAxis = mChart.getAxisLeft();

@@ -56,14 +56,14 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final No0ChanneAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final No0ChanneAdapter.ViewHolder viewHolder, int position) {
 
         initSplits(viewHolder, position);
 
         viewHolder.mTitle.setText(mChannelSplits.get(position).getName());
 
         if (mChannelSplits.get(position).getMaterialInformation() != null) {
-            viewHolder.mSubTitle.setText(mChannelSplits.get(position).getMaterialInformation().getName() + "");
+            viewHolder.mSubTitle.setText(String.format("%s", mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getName()));
 
             if (mType == TYPE_CHANNEL_100) {
                 ((TextView) viewHolder.itemView.findViewById(R.id.IP_sub_title_id)).setText(mChannelSplits.get(position).getMaterialInformation().getCatalogID());
@@ -76,7 +76,7 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
                 viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onImageProductClick(mChannelSplits.get(position).getMaterialInformation().getFileUrl(), mChannelSplits.get(position).getMaterialInformation().getName() + "");
+                        mListener.onImageProductClick(mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getFileUrl(), mChannelSplits.get(viewHolder.getAdapterPosition()).getMaterialInformation().getName() + "");
 
                     }
                 });
@@ -108,24 +108,27 @@ public class No0ChanneAdapter extends RecyclerView.Adapter<No0ChanneAdapter.View
 
                 LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                View itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
+                View itemView;
+                if (layoutInflater != null) {
+                    itemView = layoutInflater.inflate((R.layout.item_split), (ViewGroup) mMainView, false);
+                    ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
 
-                ((TextView) itemView.findViewById(R.id.IS_tv)).setText(baseSplits.getPropertyName());
+                    ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
 
-                ((TextView) itemView.findViewById(R.id.IS_tv_2)).setText(baseSplits.getFValue());
+                    if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0) {
 
-                if (baseSplits.getRange() != null && baseSplits.getRange().length() > 0) {
+                        itemView.findViewById(R.id.IS_range_tv).setVisibility(View.VISIBLE);
 
-                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.VISIBLE);
+                        ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
 
-                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setText(baseSplits.getRange());
+                    } else {
 
-                } else {
+                        itemView.findViewById(R.id.IS_range_tv).setVisibility(View.GONE);
+                    }
 
-                    ((TextView) itemView.findViewById(R.id.IS_range_tv)).setVisibility(View.GONE);
+                    viewHolder.mSplitLy.addView(itemView);
                 }
 
-                viewHolder.mSplitLy.addView(itemView);
 
             }
 

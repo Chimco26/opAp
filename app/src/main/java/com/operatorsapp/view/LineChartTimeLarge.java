@@ -61,7 +61,7 @@ public class LineChartTimeLarge extends FrameLayout {
         mTfRegular = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf");
         mTfLight = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf");
 
-        mChart = (LineChart) view.findViewById(R.id.chart1);
+        mChart = view.findViewById(R.id.chart1);
 
         // no description text
         mChart.setDescription("");

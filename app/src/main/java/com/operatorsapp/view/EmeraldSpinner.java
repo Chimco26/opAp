@@ -3,7 +3,6 @@ package com.operatorsapp.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.AdapterView;
-import android.widget.Spinner;
 
 
 public class EmeraldSpinner extends android.support.v7.widget.AppCompatSpinner {

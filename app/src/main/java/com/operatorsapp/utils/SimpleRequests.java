@@ -79,7 +79,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<RecipeResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<RecipeResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -124,7 +124,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<List<VersionResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<VersionResponse>> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -154,7 +154,8 @@ public class SimpleRequests {
             @Override
             public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
 
-                if (response.isSuccessful() && response.body().isFunctionSucceed()) {
+                if (response.isSuccessful() && response.body() != null &&
+                        response.body().isFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onUpdateNotesSuccess(response.body());
@@ -166,7 +167,10 @@ public class SimpleRequests {
                 } else {
 
                     if (callback != null){
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, response.body().getmError().getErrorDesc());
+                        ErrorObject errorObject = null;
+                        if (response.body() != null) {
+                            errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, response.body().getmError().getErrorDesc());
+                        }
 
                         callback.onUpdateNotesFailed(errorObject);
                     }
@@ -177,7 +181,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -227,7 +231,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<PendingJobResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PendingJobResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -274,7 +278,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<JobDetailsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<JobDetailsResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -322,7 +326,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, Throwable t) {
+            public void onFailure(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -370,7 +374,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, Throwable t) {
+            public void onFailure(@NonNull Call<com.operators.reportrejectnetworkbridge.server.response.activateJob.Response> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -398,7 +402,7 @@ public class SimpleRequests {
 
         call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
@@ -416,7 +420,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
@@ -445,7 +449,7 @@ public class SimpleRequests {
 
         call.enqueue(new Callback<ErrorResponseNewVersion>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isFunctionSucceed()) {
                     if (callback != null) {
 
@@ -469,7 +473,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

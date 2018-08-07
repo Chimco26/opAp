@@ -4,15 +4,13 @@ package com.operatorsapp.adapters;
  * Created by david vardi on Ravtech.
  */
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-
-    private Context mContext;
 
     private Cursor mCursor;
 
@@ -22,8 +20,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private DataSetObserver mDataSetObserver;
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
-        mContext = context;
+    public CursorRecyclerViewAdapter(Cursor cursor) {
         mCursor = cursor;
         mDataValid = cursor != null;
         mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
@@ -33,6 +30,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         }
     }
 
+    @SuppressWarnings("unused")
     public Cursor getCursor() {
         return mCursor;
     }
@@ -63,7 +61,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
 
     @Override
-    public void onBindViewHolder(VH viewHolder, int position) {
+    public void onBindViewHolder(@NonNull VH viewHolder, int position) {
         if (!mDataValid) {
             throw new IllegalStateException("this should only be called when the cursor is valid");
         }
@@ -77,6 +75,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
      * Change the underlying cursor to a new cursor. If there is an existing cursor it will be
      * closed.
      */
+    @SuppressWarnings("unused")
     public void changeCursor(Cursor cursor) {
         Cursor old = swapCursor(cursor);
         if (old != null) {

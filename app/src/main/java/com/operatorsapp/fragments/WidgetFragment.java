@@ -102,7 +102,7 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
             mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
-            
+
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
             mLoadingDataView.setVisibility(View.VISIBLE);
         }

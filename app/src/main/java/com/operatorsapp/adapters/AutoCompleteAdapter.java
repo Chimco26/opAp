@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SendReportUtil;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_view_item_layout, parent, false);
             ViewHolder holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.search_view_item_text);
+            holder.text = convertView.findViewById(R.id.search_view_item_text);
             convertView.setTag(holder);
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
@@ -88,6 +87,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
         return convertView;
     }
 
+    @NonNull
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -134,6 +134,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<Machine> implements Filter
             protected void publishResults(CharSequence contraint, FilterResults results) {
                 machinesResults.clear();
                 if (results != null && results.count > 0) {
+                    //noinspection unchecked
                     machinesResults.addAll((ArrayList<Machine>)results.values);
                     notifyDataSetChanged();
                 } else {

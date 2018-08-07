@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Material;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.JobActionActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsSplitAdapter.ViewHolder> {
@@ -20,12 +18,8 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
     private final Context mContext;
     private final List<Material> mMaterials;
 
-    private JobMaterialsSplitAdapterListener mListener;
 
-
-    public JobMaterialsSplitAdapter(List<Material> list, JobMaterialsSplitAdapterListener listener, Context context) {
-
-        mListener = listener;
+    public JobMaterialsSplitAdapter(List<Material> list, Context context) {
 
         mContext = context;
 
@@ -83,10 +77,6 @@ public class JobMaterialsSplitAdapter extends RecyclerView.Adapter<JobMaterialsS
             mAmountTv = itemView.findViewById(R.id.ISJAM_tv3);
 
         }
-
-    }
-
-    public interface JobMaterialsSplitAdapterListener {
 
     }
 }

@@ -112,7 +112,7 @@ public class CroutonCreator {
             croutonDurationInMilliseconds = DEFAULT_CROUTON_TIME;
         }
         Configuration configuration = new Configuration.Builder().setDuration(croutonDurationInMilliseconds).build();
-        View croutonView = null;
+        View croutonView;
         switch (croutonType) {
             case ALERT_DIALOG:
                 croutonView = activity.getLayoutInflater().inflate(R.layout.crouton_alert_view, null);
@@ -212,6 +212,7 @@ public class CroutonCreator {
 
         private CroutonType mCroutonType;
 
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
         boolean isEmpty() {
             return mCrouton == null;
         }

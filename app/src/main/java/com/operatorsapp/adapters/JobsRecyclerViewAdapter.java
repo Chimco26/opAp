@@ -1,7 +1,7 @@
 package com.operatorsapp.adapters;
 
 
-import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,8 +41,9 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
     }
 
+    @NonNull
     @Override
-    public JobsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public JobsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.job_recycler_item, parent, false);
 
@@ -50,7 +51,7 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final JobsRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull final JobsRecyclerViewAdapter.ViewHolder holder, final int position) {
 
         BigDecimal bigDecimal = new BigDecimal(mJobsList.get(position).get(ID).toString());
         int jobId = bigDecimal.intValue();
@@ -148,12 +149,12 @@ public class JobsRecyclerViewAdapter extends RecyclerView.Adapter<JobsRecyclerVi
 
         public ViewHolder(View view) {
             super(view);
-            mJobRowLayout = (LinearLayout) view.findViewById(R.id.job_row_layout);
-            mFirstTextView = (TextView) view.findViewById(R.id.text_view_job_id);
-            mSecondTextView = (TextView) view.findViewById(R.id.adapter_text_view_product_name);
-            mThirdTextView = (TextView) view.findViewById(R.id.adapter_text_view_ERP);
-            mFourthTextView = (TextView) view.findViewById(R.id.adapter_text_planned_start);
-            mFifthTextView = (TextView) view.findViewById(R.id.adapter_text_view_number_of_units);
+            mJobRowLayout = view.findViewById(R.id.job_row_layout);
+            mFirstTextView = view.findViewById(R.id.text_view_job_id);
+            mSecondTextView = view.findViewById(R.id.adapter_text_view_product_name);
+            mThirdTextView = view.findViewById(R.id.adapter_text_view_ERP);
+            mFourthTextView = view.findViewById(R.id.adapter_text_planned_start);
+            mFifthTextView = view.findViewById(R.id.adapter_text_view_number_of_units);
         }
     }
 

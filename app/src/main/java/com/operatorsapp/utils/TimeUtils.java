@@ -15,11 +15,12 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
-    public static final int ONE_MINUTE_IN_SECONDS = 60;
-    public static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
-    public static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
+    private static final int ONE_MINUTE_IN_SECONDS = 60;
+    private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
+    private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
     private static final String LOG_TAG = TimeUtils.class.getSimpleName();
 
+    @SuppressWarnings("unused")
     public static String getStoppedTimeToDisplay(long timeInSeconds) {
 
         if (timeInSeconds < ONE_MINUTE_IN_SECONDS) {
@@ -43,7 +44,7 @@ public class TimeUtils {
 
     public static String getDate(long milliSeconds, String dateFormat) {
         // Create a DateFormatter object for displaying date in specified format.
-        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat, Locale.getDefault());
 
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         Calendar calendar = Calendar.getInstance();

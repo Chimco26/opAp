@@ -42,7 +42,7 @@ public class PdfObject implements Parcelable {
         dest.writeString(this.url);
     }
 
-    protected PdfObject(Parcel in) {
+    private PdfObject(Parcel in) {
         this.uri = in.readParcelable(Uri.class.getClassLoader());
         this.url = in.readString();
     }

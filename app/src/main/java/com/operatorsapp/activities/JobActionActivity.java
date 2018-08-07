@@ -86,7 +86,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         JobHeadersAdapter.JobHeadersAdaperListener,
         PendingJobsAdapter.PendingJobsAdapterListener,
         DownloadHelper.DownloadFileListener,
-        JobMaterialsSplitAdapter.JobMaterialsSplitAdapterListener,
         JobActionsAdapter.JobActionsAdapterListener,
         RecipeFragment.OnRecipeFragmentListener,
         OnCroutonRequestListener,
@@ -437,7 +436,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mActionRv.setLayoutManager(layoutManager);
 
-            JobActionsAdapter mActionsAdapter = new JobActionsAdapter(mCurrentJobDetails.getJobs().get(0).getActions(), this, this);
+            JobActionsAdapter mActionsAdapter = new JobActionsAdapter(mCurrentJobDetails.getJobs().get(0).getActions(), this);
 
             mActionRv.setAdapter(mActionsAdapter);
 
@@ -560,7 +559,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             mMaterialItemRv.setLayoutManager(layoutManager);
 
-            JobMaterialsSplitAdapter mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), this, this);
+            JobMaterialsSplitAdapter mMaterialAdapter = new JobMaterialsSplitAdapter(mCurrentJobDetails.getJobs().get(0).getMaterials(), this);
 
             mMaterialItemRv.setAdapter(mMaterialAdapter);
 

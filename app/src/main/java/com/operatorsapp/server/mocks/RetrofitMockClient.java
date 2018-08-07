@@ -1,5 +1,6 @@
 package com.operatorsapp.server.mocks;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.operatorsapp.application.OperatorApplication;
@@ -19,7 +20,7 @@ public class RetrofitMockClient implements Interceptor {
     private static final String MIME_TYPE = "application/json";
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Response response;
         boolean isStatusMock = !NetworkAvailable.isNetworkAvailable(OperatorApplication.getAppContext());
         if (isStatusMock) {

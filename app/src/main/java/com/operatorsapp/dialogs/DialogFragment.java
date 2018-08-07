@@ -30,13 +30,11 @@ import java.lang.reflect.Type;
 
 public class DialogFragment extends android.support.v4.app.DialogFragment {
     private final static String TYPE = "type";
-    public final static String DIALOG = "dialog";
     private final static String EVENT = "event";
     //    public static final int DAY_MILLIS = 86400000;
     private OnDialogButtonsListener mListener;
     private boolean mIsStopDialog;
     private Event mEvent;
-    private ProgressBar mProgressBar;
 
     public static DialogFragment newInstance(Event event, boolean isStopDialog) {
         DialogFragment dialogFragment = new DialogFragment();
@@ -68,19 +66,21 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     @Override
     public void onResume() {
 
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        if (getActivity() != null &&  getDialog().getWindow() != null) {
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
 
-        Point size = new Point();
+            Point size = new Point();
 
-        display.getSize(size);
+            display.getSize(size);
 
-        int width = size.x;
+            int width = size.x;
 
-        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+            WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
 
-        params.width = (int) (width * 0.35);
+            params.width = (int) (width * 0.35);
 
-        getDialog().getWindow().setAttributes(params);
+            getDialog().getWindow().setAttributes(params);
+        }
 
         super.onResume();
     }
@@ -89,28 +89,30 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        //noinspection ConstantConditions
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view;
         if (mIsStopDialog) {
             view = inflater.inflate(R.layout.stop_dialog, null);
 
-            TextView title = (TextView) view.findViewById(R.id.dialog_title);
+            TextView title = view.findViewById(R.id.dialog_title);
             String titleByLang = OperatorApplication.isEnglishLang() ? mEvent.getEventETitle() : mEvent.getEventLTitle();
             title.setText(titleByLang);
 
-            TextView start = (TextView) view.findViewById(R.id.dialog_start);
+            TextView start = view.findViewById(R.id.dialog_start);
             if (mEvent.getTime() != null && !mEvent.getTime().equals("")) {
                 start.setText(TimeUtils.getTimeFromString(mEvent.getTime()));
             }
-            TextView end = (TextView) view.findViewById(R.id.dialog_end);
+            TextView end = view.findViewById(R.id.dialog_end);
             if (mEvent.getEventEndTime() != null && !mEvent.getEventEndTime().equals("")) {
                 end.setText(TimeUtils.getTimeFromString(mEvent.getEventEndTime()));
             }
 
-            TextView duration = (TextView) view.findViewById(R.id.dialog_duration);
+            TextView duration = view.findViewById(R.id.dialog_duration);
             duration.setText(TimeUtils.getDurationTime(getActivity(), mEvent.getDuration()));
 
-            TextView dismiss = (TextView) view.findViewById(R.id.dialog_dismiss);
+            TextView dismiss = view.findViewById(R.id.dialog_dismiss);
             dismiss.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,7 +122,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                 }
             });
 
-            TextView report = (TextView) view.findViewById(R.id.dialog_report);
+            TextView report = view.findViewById(R.id.dialog_report);
             report.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -136,47 +138,45 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
 
             setProgressCountDown(view);
 
-            TextView title = (TextView) view.findViewById(R.id.dialog_title);
+            TextView title = view.findViewById(R.id.dialog_title);
             String subtitleNameByLang = OperatorApplication.isEnglishLang() ? mEvent.getSubtitleEname() : mEvent.getSubtitleLname();
             title.setText(new StringBuilder(subtitleNameByLang).append(" ").append(getString(R.string.alarm)));
 
-            TextView reason = (TextView) view.findViewById(R.id.dialog_reason);
+            TextView reason = view.findViewById(R.id.dialog_reason);
             String titleByLang = OperatorApplication.isEnglishLang() ? mEvent.getEventETitle() : mEvent.getEventLTitle();
             reason.setText(titleByLang);
 
-            TextView reasonVal = (TextView) view.findViewById(R.id.dialog_reason_val);
+            TextView reasonVal = view.findViewById(R.id.dialog_reason_val);
             reasonVal.setText(String.valueOf(mEvent.getAlarmValue()));
 
-            TextView standard = (TextView) view.findViewById(R.id.dialog_standard);
+            TextView standard = view.findViewById(R.id.dialog_standard);
             standard.setText(String.valueOf(mEvent.getAlarmStandardValue()));
 
-            TextView low = (TextView) view.findViewById(R.id.dialog_low);
+            TextView low = view.findViewById(R.id.dialog_low);
             low.setText(String.valueOf(mEvent.getAlarmLValue()));
 
-            TextView high = (TextView) view.findViewById(R.id.dialog_high);
+            TextView high = view.findViewById(R.id.dialog_high);
             high.setText(String.valueOf(mEvent.getAlarmHValue()));
 
-            TextView dismiss = (TextView) view.findViewById(R.id.dialog_dismiss);
+            TextView dismiss = view.findViewById(R.id.dialog_dismiss);
             dismiss.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
                         mListener.onDismissClick(getDialog(), getTargetRequestCode());
-                    } else {
-                        //todo
-                    }
+                    }  //todo
+
                 }
             });
 
-            TextView dismissForShift = (TextView) view.findViewById(R.id.dialog_dismiss_all);
+            TextView dismissForShift = view.findViewById(R.id.dialog_dismiss_all);
             dismissForShift.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
                         mListener.onDismissAllClick(getDialog(), mEvent.getEventGroupID(), getTargetRequestCode());
-                    } else {
-                        //todo
-                    }
+                    }  //todo
+
                 }
             });
         }
@@ -189,7 +189,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
 
     private void setProgressCountDown(View view) {
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.PT_progressbar_time_left);
+        ProgressBar mProgressBar = view.findViewById(R.id.PT_progressbar_time_left);
 
         ObjectAnimator animation = ObjectAnimator.ofInt(mProgressBar, "progress", 0, 100);
 

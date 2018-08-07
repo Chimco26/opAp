@@ -10,9 +10,6 @@ public class RefreshPollingBroadcast extends BroadcastReceiver {
 
     private RefreshPollingListener mListener;
 
-    public RefreshPollingBroadcast() {
-    }
-
     public RefreshPollingBroadcast(RefreshPollingListener listener) {
 
         mListener = listener;
@@ -21,7 +18,8 @@ public class RefreshPollingBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-            if (intent.getAction().equals(ACTION_REFRESH_POLLING)) {
+            if (intent != null && intent.getAction() != null &&
+                    intent.getAction().equals(ACTION_REFRESH_POLLING)) {
 
                 mListener.onRefreshPolling();
             }

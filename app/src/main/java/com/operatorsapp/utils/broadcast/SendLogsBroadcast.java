@@ -11,9 +11,6 @@ public class SendLogsBroadcast extends BroadcastReceiver {
     private SendLogsListener mListener;
 
 
-    public SendLogsBroadcast() {
-    }
-
     public SendLogsBroadcast(SendLogsListener listener) {
 
         mListener = listener;
@@ -22,7 +19,8 @@ public class SendLogsBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.getAction().equals(ACTION_SEND_LOGS)) {
+        if (intent != null && intent.getAction() != null &&
+                intent.getAction().equals(ACTION_SEND_LOGS)) {
 
             mListener.onPermissionGranted();
         }

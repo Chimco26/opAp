@@ -74,10 +74,9 @@ public class OperatorApplication extends MultiDexApplication {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
         PersistenceManager.initInstance(msApplicationContext);
-        NetworkManager.initInstance();
 
         GetMachinesNetworkBridge getMachinesNetworkBridge = new GetMachinesNetworkBridge();
-        getMachinesNetworkBridge.inject(NetworkManager.getInstance());
+        getMachinesNetworkBridge.inject(NetworkManager.initInstance());
 
         LoginNetworkBridge loginNetworkBridge = new LoginNetworkBridge();
         loginNetworkBridge.inject(NetworkManager.getInstance());

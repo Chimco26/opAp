@@ -29,6 +29,7 @@ public class KeyboardUtils {
     }
 
 
+    @SuppressWarnings("unused")
     public static void closeKeyboard(Context context) {
 
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -39,6 +40,7 @@ public class KeyboardUtils {
         }
     }
 
+    @SuppressWarnings("unused")
     public static void keyboardIsShownA(Activity activity, final KeyboardListener listener) {
 
         final View decorView = activity.getWindow().getDecorView();
@@ -89,6 +91,7 @@ public class KeyboardUtils {
     }
 
 
+    @SuppressWarnings("unused")
     public static void keyboardIsShownB(final Context context, final View view, final KeyboardListener listener) {
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

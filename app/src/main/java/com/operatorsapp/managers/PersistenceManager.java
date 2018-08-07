@@ -1,5 +1,6 @@
 package com.operatorsapp.managers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
@@ -14,11 +15,11 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
-import com.ravtech.david.sqlcore.Event;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
+import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
 
 import org.acra.ACRA;
@@ -71,8 +72,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     private static PersistenceManager msInstance;
     private Gson mGson;
+    @SuppressLint("UseSparseArrays")
     public HashMap<Integer, Event> items = new HashMap<>();
-    ;
 
     public static void initInstance(Context context) {
         if (msInstance == null) {
@@ -98,11 +99,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 //        return SecurePreferences.getInstance().getString(PREF_SITE_URL, "https://apitest.my.leadermes.com");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setSiteUrl(String siteUrl) {
 
-       ACRA.getConfig().setFormUri(siteUrl + "/LeaderMESApi/ReportApplicationCrash");
-       // ACRA.getConfig().setFormUri("http://207.154.207.162/test/");
+        if (ACRA.getConfig() != null) {
+            ACRA.getConfig().setFormUri(siteUrl + "/LeaderMESApi/ReportApplicationCrash");
+        }
+
+        // ACRA.getConfig().setFormUri("http://207.154.207.162/test/");
 
         SecurePreferences.getInstance().setString(PREF_SITE_URL, siteUrl);
     }
@@ -257,8 +262,6 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     private ArrayList<Event> deletingDuplicate(ArrayList<Event> events) {
 
-        ArrayList<Event> duplicates = new ArrayList<Event>();
-
         int count = 0;
 
         for (Event item : events) {
@@ -273,9 +276,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
                 }
         }
 
-        duplicates.addAll(items.values());
-
-        return duplicates;
+        return new ArrayList<>(items.values());
     }
 
     @Override
@@ -284,6 +285,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         Type listType = new TypeToken<ArrayList<Event>>() {
         }.getType();
 
+        //noinspection unchecked
         return deletingDuplicate((ArrayList<Event>) mGson.fromJson(shiftLogsJsonString, listType));
     }
 
@@ -379,7 +381,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
         float version = SecurePreferences.getInstance().getFloat(PREFS_VERSION);
 
-        if (version == 0){
+        if (version == 0) {
 
             version = DEFAULT_VERSION;
         }
@@ -405,7 +407,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setInt(PREF_MIN_EVENT_DURATION, minEventDuration);
     }
 
-    public int getMinEventDuration(){
+    public int getMinEventDuration() {
         return SecurePreferences.getInstance().getInt(PREF_MIN_EVENT_DURATION, 0);
     }
 

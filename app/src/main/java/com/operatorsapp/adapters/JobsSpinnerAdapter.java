@@ -2,6 +2,7 @@ package com.operatorsapp.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
@@ -18,8 +19,7 @@ import java.util.List;
 //public class JobsSpinnerAdapter extends ArrayAdapter<JobsSpinnerAdapter.JobActionsSpinnerItem> {
 public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
     private Activity mContext;
-    private List<JobActionsSpinnerItem> mSpinnerItems = null;
-    TextView mRowName;
+    private List<JobActionsSpinnerItem> mSpinnerItems;
 
 
     public JobsSpinnerAdapter(Activity context, int resource, List<JobActionsSpinnerItem> spinnerItems)
@@ -29,13 +29,14 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         this.mSpinnerItems = spinnerItems;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_job_item, parent, false);
-            TextView rowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
+            TextView rowName = row.findViewById(R.id.spinner_job_item_name);
             rowName.setTextSize(20);
 
         }
@@ -43,7 +44,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
@@ -52,7 +53,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
 
         JobActionsSpinnerItem item = mSpinnerItems.get(position);
         if (item != null) {
-            mRowName = (TextView) row.findViewById(R.id.spinner_job_item_name);
+            TextView mRowName = row.findViewById(R.id.spinner_job_item_name);
             mRowName.setText(item.getName());
             TextViewCompat.setTextAppearance(mRowName, R.style.FontStyle_T10);
             mRowName.setTextColor(Color.BLACK);

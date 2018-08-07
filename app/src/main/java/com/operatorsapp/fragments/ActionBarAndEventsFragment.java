@@ -477,8 +477,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mTempCursor.moveToFirst()) {
             mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mTempCursor, !mIsOpen, mCloseWidth,
-                    this, mOpenWidth, mRecyclersHeight, 0,
-                    false, 0, null);
+                    this, mOpenWidth, mRecyclersHeight,
+                    false, null);
             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
             mShiftLogAdapter.notifyDataSetChanged();
@@ -1005,8 +1005,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mLastEvent.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(mLastEvent.getEventID()));
 
             mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
-                    !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0,
-                    false, 0, null);
+                    !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
+                    false, null);
 
             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
@@ -1053,7 +1053,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onReportClick(int eventId, String start, String end, long duration) {
         //TODO    openStopReportScreen(eventId, start, end, duration);
-        startSelectMode(STOPPED, eventId);
+        startSelectMode(eventId);
     }
 
     @Override
@@ -1077,18 +1077,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(int type, int eventID) {
 
-        startSelectMode(type, eventID);
+        startSelectMode(eventID);
     }
 
-    private void startSelectMode(int type, int eventID) {
+    private void startSelectMode(int eventID) {
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
 
         mIsSelectionMode = true;
 
         mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
-                !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, type,
-                true, eventID, null);
+                !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
+                true, null);
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
         onStopEventSelected(eventID, true);
@@ -1189,13 +1189,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (mIsSelectionMode) {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
-                        this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
+                        this, mOpenWidth, mRecyclersHeight, mIsSelectionMode, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
             } else {
 
                 mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()), !mIsOpen, mCloseWidth,
-                        this, mOpenWidth, mRecyclersHeight, 0, mIsSelectionMode, 0, mSelectedEvents);
+                        this, mOpenWidth, mRecyclersHeight, mIsSelectionMode, mSelectedEvents);
                 mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 
             }
@@ -1206,7 +1206,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
 
                     if (!mIsSelectionMode) {
-                        startSelectMode(STOPPED, event.getEventID());
+                        startSelectMode(event.getEventID());
                     }
                     mEventsQueue.pop();
 
@@ -1541,8 +1541,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void disableSelectMode() {
 
         mShiftLogAdapter = new ShiftLogSqlAdapter(getActivity(), mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration()),
-                !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight, 0,
-                false, 0, null);
+                !mIsOpen, mCloseWidth, this, mOpenWidth, mRecyclersHeight,
+                false, null);
 
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
 

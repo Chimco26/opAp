@@ -14,12 +14,8 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Pandi
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.ViewHolder> {
 
@@ -53,9 +49,9 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
     @Override
     public void onBindViewHolder(@NonNull final PendingJobsAdapter.ViewHolder viewHolder, final int position) {
 
-        ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(position).getProperties();
+        ArrayList<Property> properties = (ArrayList<Property>) mPandingjobs.get(viewHolder.getAdapterPosition()).getProperties();
 
-        if (mPandingjobs.get(position).isSelected()) {
+        if (mPandingjobs.get(viewHolder.getAdapterPosition()).isSelected()) {
 
             viewHolder.mSelectedBarView.setVisibility(View.VISIBLE);
             viewHolder.mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));

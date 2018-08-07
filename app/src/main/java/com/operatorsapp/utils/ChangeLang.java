@@ -13,6 +13,7 @@ import java.util.Locale;
 
 public class ChangeLang {
 
+    @SuppressWarnings("unused")
     public static void changeHebrew(final Context context) {
         new AsyncTask<Void, Void, Void>() {
 
@@ -80,7 +81,7 @@ public class ChangeLang {
 
             if (TextUtils.isEmpty(language) && lang == null) {
                 cfg.locale = Locale.getDefault();
-                String tmp_locale = "";
+                String tmp_locale;
                 tmp_locale = Locale.getDefault().toString().substring(0, 2);
                 manager.setCurrentLang(tmp_locale);
 

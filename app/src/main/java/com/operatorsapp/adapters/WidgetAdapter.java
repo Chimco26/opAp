@@ -281,7 +281,7 @@ public class WidgetAdapter extends Adapter {
                             fourHoursValues.add(entry);
                         }
                     }
-                    timeViewHolder.mChart.setData(fourHoursValues, xValues, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit());
+                    timeViewHolder.mChart.setData(fourHoursValues, xValues, widget.getLowLimit(), widget.getHighLimit());
 
                     timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override

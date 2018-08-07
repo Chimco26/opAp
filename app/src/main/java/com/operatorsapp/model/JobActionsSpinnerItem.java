@@ -6,9 +6,9 @@ package com.operatorsapp.model;
 public class JobActionsSpinnerItem
 {
 
-    int mUniqueID;
-    String mName;
-    boolean mEnabled = true;
+    private int mUniqueID;
+    private String mName;
+    private boolean mEnabled = true;
     // in the future icon will go here
     // TODO actually use this
 

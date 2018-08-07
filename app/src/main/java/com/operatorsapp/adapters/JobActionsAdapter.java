@@ -1,6 +1,5 @@
 package com.operatorsapp.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,17 +17,14 @@ import java.util.List;
 
 public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.ViewHolder> {
 
-    private final Context mContext;
     private final ArrayList<Action> mActions;
 
     private JobActionsAdapterListener mListener;
 
 
-    public JobActionsAdapter(List<Action> list, JobActionsAdapterListener listener, Context context) {
+    public JobActionsAdapter(List<Action> list, JobActionsAdapterListener listener) {
 
         mListener = listener;
-
-        mContext = context;
 
         mActions = (ArrayList<Action>) list;
     }
@@ -45,19 +41,19 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final JobActionsAdapter.ViewHolder viewHolder, final int position) {
 
-        updateCheckBox(viewHolder, position);
+        updateCheckBox(viewHolder, viewHolder.getAdapterPosition());
 
-        viewHolder.mTv.setText(mActions.get(position).getText());
+        viewHolder.mTv.setText(mActions.get(viewHolder.getAdapterPosition()).getText());
 
         viewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                mActions.get(position).setIsSelected(isChecked);
+                mActions.get(viewHolder.getAdapterPosition()).setIsSelected(isChecked);
 
-                updateCheckBox(viewHolder, position);
+                updateCheckBox(viewHolder, viewHolder.getAdapterPosition());
 
-                mListener.onActionChecked(mActions.get(position));
+                mListener.onActionChecked(mActions.get(viewHolder.getAdapterPosition()));
             }
         });
 
@@ -70,7 +66,7 @@ public class JobActionsAdapter extends RecyclerView.Adapter<JobActionsAdapter.Vi
         });
     }
 
-    public void updateCheckBox(@NonNull ViewHolder viewHolder, int position) {
+    private void updateCheckBox(@NonNull ViewHolder viewHolder, int position) {
         if (mActions.get(position).getIsSelected()){
 
             viewHolder.mCheckBox.setChecked(true);

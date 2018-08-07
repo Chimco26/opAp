@@ -1,5 +1,6 @@
 package com.operatorsapp.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -50,6 +51,7 @@ public class DownloadHelper {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")// work but can be problematic because there are non static fields in async class
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -84,6 +86,7 @@ public class DownloadHelper {
 
                     if (!folder.exists()) {
 
+                        //noinspection ResultOfMethodCallIgnored
                         folder.mkdirs();
                     }
                 } else {

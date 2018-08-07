@@ -2,6 +2,7 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,9 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
         mOnStopReasonSelectedCallbackListener = onStopReasonSelectedCallbackListener;
     }
 
+    @NonNull
     @Override
-    public StopReasonsAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public StopReasonsAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.stop_report_grid_item, parent, false);
 
@@ -49,13 +51,13 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
 
     @SuppressLint("NewApi")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(position).getEName() : mStopItemsList.get(position).getLName();
+        String nameByLang = OperatorApplication.isEnglishLang() ? mStopItemsList.get(holder.getAdapterPosition()).getEName() : mStopItemsList.get(holder.getAdapterPosition()).getLName();
 
         holder.mStopTitle.setText(nameByLang);
 
-        holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(position).getId())));
+        holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
     }
 
     @Override
@@ -69,8 +71,8 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
 
         public ViewHolder(View view) {
             super(view);
-            mStopTitle = (TextView) view.findViewById(R.id.stop_reason_title);
-            mReasonImage = (ImageView) view.findViewById(R.id.grid_reason_image_view);
+            mStopTitle = view.findViewById(R.id.stop_reason_title);
+            mReasonImage = view.findViewById(R.id.grid_reason_image_view);
         }
     }
 
