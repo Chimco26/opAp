@@ -249,7 +249,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         ArrayList<Integer> checkedAlarmList = new ArrayList<>();
 
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
+        /* reset the start time for shiftlog */
+        //PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
+        PersistenceManager.getInstance().setShiftLogStartingFrom("");
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
 
