@@ -21,6 +21,7 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.WidgetAdapter;
+import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
@@ -56,6 +57,7 @@ public class WidgetFragment extends Fragment implements
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
+    private DashboardCentralContainerListener mDashboardCentralContainerListener;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
@@ -100,7 +102,7 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.setLayoutManager(mGridLayoutManager);
             GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
+            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -118,6 +120,7 @@ public class WidgetFragment extends Fragment implements
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
+            mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -132,6 +135,7 @@ public class WidgetFragment extends Fragment implements
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
+        mDashboardCentralContainerListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
@@ -170,7 +174,7 @@ public class WidgetFragment extends Fragment implements
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {

@@ -60,6 +60,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private static final int REFRESH_DELAY_MILLIS = 3000;
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    private static final String IS_ALL_SCREEN = "IS_ALL_SCREEN";
     private TextView mCancelButton;
     private Button mNextButton;
     private OnCroutonRequestListener mOnCroutonRequestListener;
@@ -77,13 +78,15 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private Double mWeightData = null;
     private ReportCore mReportCore;
     private int mSelectedPosition;
+    private boolean mIsAllScreen = true;
 
-    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
+    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition, boolean isAllScreen) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
         bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
         bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
+        bundle.putBoolean(IS_ALL_SCREEN, isAllScreen);
         reportRejectsFragment.setArguments(bundle);
         return reportRejectsFragment;
     }
@@ -107,6 +110,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mIsAllScreen = getArguments().getBoolean(IS_ALL_SCREEN);
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
@@ -121,8 +125,10 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
-        setActionBar();
 
+        if (mIsAllScreen) {
+            setActionBar();
+        }
         return view;
     }
 

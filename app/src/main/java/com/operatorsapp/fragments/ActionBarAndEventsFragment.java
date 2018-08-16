@@ -615,7 +615,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mSelectedPosition = position;
 
-                    mListener.onJoshProductSelected(mActiveJobs.get(position).getJobID(),
+                    mListener.onJoshProductSelected(position, mActiveJobs.get(position).getJobID(),
                             mActiveJobs.get(position).getJobName());
 
                 }
@@ -724,9 +724,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 1: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition, true), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition, true), true);
                                 }
                                 break;
                             }
@@ -1614,7 +1614,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onSplitEventPressed(int eventID);
 
-        void onJoshProductSelected(Integer joshID, String jobName);
+        void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 
         void onProductionStatusChanged(int id);
     }

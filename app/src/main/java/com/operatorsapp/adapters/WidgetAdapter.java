@@ -18,6 +18,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ChartFragment;
+import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.ProjectionView;
@@ -36,6 +37,7 @@ import static android.support.v7.widget.RecyclerView.ViewHolder;
 public class WidgetAdapter extends Adapter {
     private static final long FOUR_HOURS = 60000L * 60 * 4;
     private static final long TEN_HOURS = 60000L * 60 * 10;
+    private final DashboardCentralContainerListener mDashboardCentralContainerListener;
     private Context mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
@@ -49,13 +51,14 @@ public class WidgetAdapter extends Adapter {
     private int mHeight;
     private int mWidth;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height, int width) {
+    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height, int width, DashboardCentralContainerListener dashboardCentralContainerListener) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
         mClosedState = closedState;
         mHeight = height;
         mWidth = width;
+        mDashboardCentralContainerListener = dashboardCentralContainerListener;
     }
 
     public void changeState(boolean closedState) {
@@ -77,6 +80,7 @@ public class WidgetAdapter extends Adapter {
 
     private class NumericViewHolder extends ViewHolder {
 
+        private final View mEditIc;
         private RelativeLayout mParentLayout;
         private View mDivider;
         private AutofitTextView mTitle;
@@ -93,6 +97,7 @@ public class WidgetAdapter extends Adapter {
             mSubtitle = itemView.findViewById(R.id.numeric_widget_subtitle);
             mValue = itemView.findViewById(R.id.numeric_widget_value);
             mChangeMaterial = itemView.findViewById(R.id.numeric_widget_change_material);
+            mEditIc = itemView.findViewById(R.id.numeric_widget_edit_ic);
 
         }
     }
@@ -221,6 +226,7 @@ public class WidgetAdapter extends Adapter {
     @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         int type = getItemViewType(position);
         final Widget widget = mWidgets.get(position);
         switch (type) {
@@ -245,6 +251,23 @@ public class WidgetAdapter extends Adapter {
                 numericViewHolder.mValue.setSelected(true);
 
                 numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
+
+                if (widget.getCurrentValue().equals("0")) {
+
+                    numericViewHolder.mEditIc.setVisibility(View.VISIBLE);
+
+                    numericViewHolder.mEditIc.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer("");
+                        }
+                    });
+
+                } else {
+
+                    numericViewHolder.mEditIc.setVisibility(View.GONE);
+                }
 
                 break;
             case TIME:

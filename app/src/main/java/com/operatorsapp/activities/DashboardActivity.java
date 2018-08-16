@@ -83,6 +83,7 @@ import com.operatorsapp.interfaces.ApproveFirstItemFragmentCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashBoardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.DashboardActivityToJobsFragmentCallback;
+import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -126,7 +127,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ViewPagerFragment.OnViewPagerListener,
         RecipeFragment.OnRecipeFragmentListener,
         AdvancedSettingsFragment.AdvancedSettingsListener,
-        ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener {
+        ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener,
+        DashboardCentralContainerListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -157,6 +159,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private Integer mSelectProductJobId;
     private JobBase.OnJobFinishedListener mOnJobFinishedListener;
+    private ActiveJobsListForMachine mActiveJobsListForMachine;
+    private MachineStatus mCurrentMachineStatus;
+    private int mSpinnerProductPosition;
+    private Fragment mReportFragment;
 
 
     @Override
@@ -419,6 +425,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActiveJobsListForMachineUICallbackListener mActiveJobsListForMachineUICallbackListener = new ActiveJobsListForMachineUICallbackListener() {
         @Override
         public void onActiveJobsListForMachineReceived(ActiveJobsListForMachine activeJobsListForMachine) {
+
+            mActiveJobsListForMachine = activeJobsListForMachine;
             if (activeJobsListForMachine != null) {
 
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
@@ -457,6 +465,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         return new MachineStatusUICallback() {
             @Override
             public void onStatusReceivedSuccessfully(MachineStatus machineStatus) {
+
+                mCurrentMachineStatus = machineStatus;
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     if (machineStatus != null && machineStatus.getAllMachinesData() != null &&
@@ -1375,9 +1385,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJoshProductSelected(Integer joshID, String jobName) {
+    public void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName) {
 
-        mSelectProductJobId = joshID;
+        mSpinnerProductPosition = spinnerProductPosition;
+
+        mSelectProductJobId = jobID;
 
         dashboardDataStartPolling();
 
@@ -1479,33 +1491,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else {
+        } else if (mReportFragment != null){
+
+            getSupportFragmentManager().beginTransaction().remove(mReportFragment).commit();
+
+            mReportFragment = null;
+
+        }else {
+
             super.onBackPressed();
+
         }
-/*
 
-            if (mChartFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mChartFragment).commit();
-
-                mChartFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-            if (mJobsFragment != null) {
-
-                getSupportFragmentManager().beginTransaction().remove(mJobsFragment).commit();
-
-                mJobsFragment = null;
-
-                mActionBarAndEventsFragment.setActionBar();
-
-            }
-
-        } else {
-            super.onBackPressed();
-        }*/
     }
 
     private void removeSelectStopReasonFragment() {
@@ -1700,5 +1697,70 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mOnJobFinishedListener = onJobFinishedListener;
 
         getActiveJobs();
+    }
+
+    @Override
+    public void onOpenNewFragmentInCentralDashboardContainer(String type) {
+
+        try {
+            mReportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
+                    mActiveJobsListForMachine, mSpinnerProductPosition, false);
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mReportFragment).commit();
+
+        } catch (IllegalStateException ignored) {
+        }
+//todo
+//        switch (position) {
+//            case 0: {
+//                ZLogger.d(LOG_TAG, "New Job");
+//
+//                if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
+//
+//                    mListener.onJobActionItemClick();
+//
+//                } else {
+//
+//                    mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
+//
+//                }
+//                break;
+//            }
+//            case 1: {
+//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
+//                } else {
+//                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
+//                }
+//                break;
+//            }
+//            case 2: {
+//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
+//                } else {
+//                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
+//                }
+//                break;
+//            }
+//            case 3: {
+//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
+//                } else {
+//                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
+//                }
+//                break;
+//            }
+//            case 4: {
+//
+//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
+//                } else {
+//                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
+//                }
+//
+//                break;
+//            }
+//        }
+
     }
 }
