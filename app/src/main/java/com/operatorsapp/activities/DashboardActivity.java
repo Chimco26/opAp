@@ -162,7 +162,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private MachineStatus mCurrentMachineStatus;
     private int mSpinnerProductPosition;
-    private Fragment mReportFragment;
 
 
     @Override
@@ -279,11 +278,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
 
                 if (fragment != null) {
-                    if (fragment instanceof ReportRejectsFragment) {
-                        ((ReportRejectsFragment) fragment).setActionBar();
-                    } else if (fragment instanceof SettingsFragment) {
-                        ((SettingsFragment) fragment).setActionBar();
-                    } else if (fragment instanceof ActionBarAndEventsFragment ||
+                   if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
                             fragment instanceof WidgetFragment ||
                             fragment instanceof ReportStopReasonFragment ||
@@ -1491,12 +1486,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else if (mReportFragment != null){
-
-            getSupportFragmentManager().beginTransaction().remove(mReportFragment).commit();
-
-            mReportFragment = null;
-
         }else {
 
             super.onBackPressed();
@@ -1703,10 +1692,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onOpenNewFragmentInCentralDashboardContainer(String type) {
 
         try {
-            mReportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
+            Fragment reportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
                     mActiveJobsListForMachine, mSpinnerProductPosition, false);
 
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mReportFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportFragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 
         } catch (IllegalStateException ignored) {
         }
