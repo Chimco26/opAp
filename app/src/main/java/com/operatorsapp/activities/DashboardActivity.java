@@ -70,10 +70,11 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
+import com.operatorsapp.fragments.ReportCycleUnitsFragment;
+import com.operatorsapp.fragments.ReportInventoryFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
-import com.operatorsapp.fragments.SettingsFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
@@ -278,7 +279,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
 
                 if (fragment != null) {
-                   if (fragment instanceof ActionBarAndEventsFragment ||
+                    if (fragment instanceof ActionBarAndEventsFragment ||
                             fragment instanceof RecipeFragment ||
                             fragment instanceof WidgetFragment ||
                             fragment instanceof ReportStopReasonFragment ||
@@ -794,7 +795,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void goToFragment(Fragment fragment, boolean addToBackStack) {
 
         try {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
         } catch (IllegalStateException ignored) {
         }
 
@@ -1486,7 +1487,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        }else {
+        } else {
 
             super.onBackPressed();
 
@@ -1691,14 +1692,43 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onOpenNewFragmentInCentralDashboardContainer(String type) {
 
-        try {
-            Fragment reportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
-                    mActiveJobsListForMachine, mSpinnerProductPosition, false);
+        Fragment reportFragment = null;
 
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportFragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+        if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null || mCurrentMachineStatus.getAllMachinesData().size() == 0) {
+            ZLogger.w(LOG_TAG, "missing machine status data in job spinner");
+            return;
+        }
+
+        try {
+
+            switch (type) {
+
+                case "ReportRejects":
+                    reportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
+                            mActiveJobsListForMachine, mSpinnerProductPosition);
+
+                    break;
+
+                case "ReportUnitsInCycle":
+                    reportFragment = ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
+
+                    break;
+
+                case "ReportProduction":
+                    reportFragment = ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
+
+                    break;
+
+            }
+
+            if (reportFragment != null) {
+                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportFragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+            }
 
         } catch (IllegalStateException ignored) {
         }
+
+
 //todo
 //        switch (position) {
 //            case 0: {

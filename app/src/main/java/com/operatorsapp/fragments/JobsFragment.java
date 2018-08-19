@@ -104,9 +104,8 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_jobs, container, false);
-        setActionBar();
-        return rootView;
+        //        setActionBar();
+        return inflater.inflate(R.layout.fragment_jobs, container, false);
     }
 
     @Override

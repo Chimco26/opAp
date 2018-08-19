@@ -724,9 +724,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 1: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition, true), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition, true), true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
                                 }
                                 break;
                             }
@@ -1591,6 +1591,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void setVisiblefragment(Fragment visibleFragment) {
 
         mVisiblefragment = visibleFragment;
+
+        if (mToolBarView != null){
+        if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
+                mVisiblefragment instanceof RecipeFragment ||
+                mVisiblefragment instanceof WidgetFragment){
+
+            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
+
+        }else {
+
+            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.GONE);
+        }
+        }
     }
 
     public void setFromAnotherActivity(boolean fromAnotherActivity) {

@@ -120,9 +120,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
-        setActionBar();
-        return view;
+        //        setActionBar();
+        return inflater.inflate(R.layout.fragment_report_inventory, container, false);
     }
 
     @Override

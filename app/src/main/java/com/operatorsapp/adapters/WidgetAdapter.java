@@ -252,7 +252,7 @@ public class WidgetAdapter extends Adapter {
 
                 numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
 
-                if (widget.getCurrentValue().equals("0")) {
+                if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
 
                     numericViewHolder.mEditIc.setVisibility(View.VISIBLE);
 
@@ -260,7 +260,7 @@ public class WidgetAdapter extends Adapter {
                         @Override
                         public void onClick(View v) {
 
-                            mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer("");
+                            mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
                         }
                     });
 

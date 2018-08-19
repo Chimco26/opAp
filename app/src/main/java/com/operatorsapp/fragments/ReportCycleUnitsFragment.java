@@ -106,11 +106,10 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
 
-        setActionBar();
+//        setActionBar();
 
-        return view;
+        return inflater.inflate(R.layout.fragment_report_cycle_unit, container, false);
     }
 
     @Override
