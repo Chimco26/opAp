@@ -1593,6 +1593,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mVisiblefragment = visibleFragment;
 
         if (mToolBarView != null){
+            
         if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
                 mVisiblefragment instanceof RecipeFragment ||
                 mVisiblefragment instanceof WidgetFragment){

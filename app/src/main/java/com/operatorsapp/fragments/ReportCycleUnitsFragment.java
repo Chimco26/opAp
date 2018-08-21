@@ -36,10 +36,13 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -71,6 +74,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private ProgressBar mActiveJobsProgressBar;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private int mSelectedPosition;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
 
     public static ReportCycleUnitsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportCycleUnitsFragment reportCycleUnitsFragment = new ReportCycleUnitsFragment();
@@ -89,6 +93,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
+            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+
         }
     }
 
@@ -373,7 +379,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
             if (response.isFunctionSucceed()){
                 // TODO: 17/07/2018 add crouton for success
-                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
 
                 //mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }else {

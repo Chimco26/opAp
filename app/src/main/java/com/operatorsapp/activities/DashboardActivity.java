@@ -133,6 +133,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
+    private static final String REPORT_REJECT_TAG = "ReportRejects";
+    private static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
+    private static final String REPORT_PRODUCTION_TAG = "ReportProduction";
+
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -1703,18 +1707,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             switch (type) {
 
-                case "ReportRejects":
+                case REPORT_REJECT_TAG:
                     reportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
                             mActiveJobsListForMachine, mSpinnerProductPosition);
 
                     break;
 
-                case "ReportUnitsInCycle":
+                case REPORT_UNIT_CYCLE_TAG:
                     reportFragment = ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
 
                     break;
 
-                case "ReportProduction":
+                case REPORT_PRODUCTION_TAG:
                     reportFragment = ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSpinnerProductPosition);
 
                     break;
@@ -1727,59 +1731,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } catch (IllegalStateException ignored) {
         }
-
-
-//todo
-//        switch (position) {
-//            case 0: {
-//                ZLogger.d(LOG_TAG, "New Job");
-//
-//                if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
-//
-//                    mListener.onJobActionItemClick();
-//
-//                } else {
-//
-//                    mOnGoToScreenListener.goToFragment(new JobsFragment(), true);
-//
-//                }
-//                break;
-//            }
-//            case 1: {
-//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-//                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
-//                } else {
-//                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
-//                }
-//                break;
-//            }
-//            case 2: {
-//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-//                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
-//                } else {
-//                    mOnGoToScreenListener.goToFragment(ReportCycleUnitsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
-//                }
-//                break;
-//            }
-//            case 3: {
-//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-//                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
-//                } else {
-//                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
-//                }
-//                break;
-//            }
-//            case 4: {
-//
-//                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-//                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true);
-//                } else {
-//                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true);
-//                }
-//
-//                break;
-//            }
-//        }
 
     }
 }

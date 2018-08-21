@@ -290,6 +290,7 @@
                                     android:background="@drawable/edit_text_background_selector"
                                     android:hint=" "
                                     android:inputType="numberDecimal|numberSigned"
+                                    android:imeOptions="actionNext"
                                     android:singleLine="true"
                                     android:textDirection="ltr"
                                     android:textSize="22sp" />
@@ -316,6 +317,7 @@
                                     android:layout_height="50dp"
                                     android:background="@drawable/edit_text_background_selector"
                                     android:hint=" "
+                                    android:imeOptions="actionDone"
                                     android:inputType="numberDecimal|numberSigned"
                                     android:singleLine="true"
                                     android:textDirection="ltr"

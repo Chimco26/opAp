@@ -35,7 +35,7 @@
             android:name=".activities.DashboardActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.GalleryActivity"
             android:configChanges="keyboardHidden|orientation"

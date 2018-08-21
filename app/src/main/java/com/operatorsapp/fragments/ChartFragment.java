@@ -106,7 +106,7 @@ public class ChartFragment extends BackStackAwareFragment {
             mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal);
         }
 
-        setActionBar();
+//        setActionBar();
     }
 
 
