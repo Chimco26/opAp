@@ -269,7 +269,7 @@ public class LoginFragment extends Fragment {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
-            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true);
+            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
 
             mNavigationCallback.isTryToLogin(false);
         }

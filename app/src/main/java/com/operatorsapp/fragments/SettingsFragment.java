@@ -202,7 +202,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.advanced_settings_button: {
-                mGoToScreenListener.goToFragment(AdvancedSettingsFragment.newInstance(mSelectedLanguageCode), true);
+                mGoToScreenListener.goToFragment(AdvancedSettingsFragment.newInstance(mSelectedLanguageCode), false, true);
                 break;
             }
             case R.id.button_cancel: {

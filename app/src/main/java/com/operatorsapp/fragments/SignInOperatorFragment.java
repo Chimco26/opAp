@@ -132,7 +132,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
                     bundle.putString(SELECTED_OPERATOR, jobString);
 
                     selectedOperatorFragment.setArguments(bundle);
-                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true);
+                    mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
                 }
             } else {
                 ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : ");

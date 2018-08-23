@@ -195,7 +195,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         String jobString = gson.toJson(currentJob, CurrentJob.class);
         bundle.putString(SELECTED_JOB, jobString);
         selectedJobFragment.setArguments(bundle);
-        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
+        mOnGoToScreenListener.goToFragment(selectedJobFragment, true, true);
     }
 
     @Override

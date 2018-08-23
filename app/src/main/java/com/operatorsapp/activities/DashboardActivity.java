@@ -796,10 +796,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean addToBackStack) {
+    public void goToFragment(Fragment fragment, boolean isCentralContainer, boolean addToBackStack) {
 
         try {
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+            if (isCentralContainer){
+
+                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+
+            }else {
+
+                getSupportFragmentManager().beginTransaction().add(R.id.fragments_container, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+
+            }
         } catch (IllegalStateException ignored) {
         }
 

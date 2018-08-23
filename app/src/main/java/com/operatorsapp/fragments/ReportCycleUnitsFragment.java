@@ -137,6 +137,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
         }
 
 
