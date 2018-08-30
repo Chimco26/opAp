@@ -57,9 +57,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         if (mGalleryModels.get(position).getUrl().endsWith("pdf")) {
 
             viewHolder.mImg.setImageResource(R.drawable.ic_pdf);
-        }
 
-        ImageLoader.getInstance().displayImage(mGalleryModels.get(position).getUrl(), viewHolder.mImg);
+        }else {
+
+            ImageLoader.getInstance().displayImage(mGalleryModels.get(position).getUrl(), viewHolder.mImg);
+
+        }
 
         viewHolder.mImgLy.setOnClickListener(new View.OnClickListener() {
             @Override
