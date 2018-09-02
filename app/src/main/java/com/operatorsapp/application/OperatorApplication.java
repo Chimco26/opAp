@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,6 +19,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
+import io.fabric.sdk.android.Fabric;
 import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
@@ -60,6 +62,7 @@ public class OperatorApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         LitePal.initialize(this);
 
