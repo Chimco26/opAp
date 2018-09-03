@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -125,6 +127,12 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable

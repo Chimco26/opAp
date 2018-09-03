@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
@@ -21,6 +23,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ViewTagsHelper;
 
@@ -30,6 +33,8 @@ import java.util.List;
 public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChanneAdapter.Channel100AdapterListener {
 
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
+    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
+
     private OnRecipeFragmentListener mListener;
     private RecipeResponse mRecipeResponse;
     private View mchannel0BotomView;
@@ -73,6 +78,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 mRecipeResponse = getArguments().getParcelable(RECIPE_RESPONS_KEY);
             }
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

@@ -25,9 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
@@ -65,6 +68,12 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable

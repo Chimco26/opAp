@@ -60,8 +60,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_TIME_PARAMETER_DIALOG = "pref.PREF_TIME_PARAMETER_DIALOG";
     private static final String DEFAULT_LANGUAGE_VALUE = "en";
     private static final String DEFAULT_LANGUAGE_NAME_VALUE = "English";
-    private static final int DEFAULT_POLLING_VALUE = 30;
-    private static final int DEFAULT_TIMEOUT_VALUE = 20;
+    private static final int DEFAULT_POLLING_VALUE = 60;
+    private static final int DEFAULT_TIMEOUT_VALUE = 60;
     private static final int DEFAULT_POPUP_VALUE = 5;
     private static final int DEFAULT_TOTAL_RETRIE_VALUE = 3;
     private static final int MAX_EVENT_SIZE = 200;

@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -36,6 +38,7 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -100,6 +103,11 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 //        getActiveJobs();
     }
 

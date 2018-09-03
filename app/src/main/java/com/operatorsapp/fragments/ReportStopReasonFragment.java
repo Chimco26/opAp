@@ -11,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.StopReasonsAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -86,6 +89,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
             }
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 //        getActiveJobs();
     }
 

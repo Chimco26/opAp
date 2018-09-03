@@ -31,6 +31,8 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
@@ -58,6 +60,7 @@ import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -146,6 +149,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_action);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(this.getLocalClassName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         mCroutonCreator = new CroutonCreator();
 

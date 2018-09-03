@@ -16,9 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.view.LineChartTimeLarge;
 
 import java.lang.reflect.Type;
@@ -32,6 +35,8 @@ public class ChartFragment extends BackStackAwareFragment {
     private static final String MAX = "max";
     private static final String X_VALUES = "xValues";
     private static final String FIELD_NAME = "fieldName";
+
+    private static final String LOG_TAG = ChartFragment.class.getSimpleName();
 
     private ArrayList<Entry> mValues;
     private float mMinVal;
@@ -71,6 +76,12 @@ public class ChartFragment extends BackStackAwareFragment {
             mXValues = getArguments().getStringArray(X_VALUES);
             mFieldName = getArguments().getString(FIELD_NAME);
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

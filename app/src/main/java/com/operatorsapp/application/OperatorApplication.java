@@ -6,6 +6,8 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -58,6 +60,8 @@ public class OperatorApplication extends MultiDexApplication {
     private static final String LOG_TAG = OperatorApplication.class.getSimpleName();
 
     private static Context msApplicationContext;
+    private GoogleAnalytics sAnalytics;
+    private Tracker sTracker;
 
     @Override
     public void onCreate() {
@@ -72,6 +76,7 @@ public class OperatorApplication extends MultiDexApplication {
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
 
+        sAnalytics = GoogleAnalytics.getInstance(this);
         LogRecorder.initInstance(msApplicationContext);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
@@ -99,6 +104,15 @@ public class OperatorApplication extends MultiDexApplication {
         }
     }
 
+
+    synchronized public Tracker getDefaultTracker() {
+        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        if (sTracker == null) {
+            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
+        }
+
+        return sTracker;
+    }
 
     private void initImageLoading() {
 

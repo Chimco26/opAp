@@ -25,9 +25,12 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.model.GalleryModel;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.utils.DownloadHelper;
@@ -73,6 +76,12 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(this.getLocalClassName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         mFileUrls = getIntent().getStringArrayListExtra(EXTRA_FILE_URL);
 

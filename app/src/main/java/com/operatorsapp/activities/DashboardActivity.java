@@ -1,6 +1,7 @@
 package com.operatorsapp.activities;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -67,6 +70,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.RecipeFragment;
@@ -157,6 +161,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private Integer mSelectProductJobId;
     private JobBase.OnJobFinishedListener mOnJobFinishedListener;
+    private Tracker mTracker;
 
 
     @Override
@@ -165,6 +170,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ZLogger.d(LOG_TAG, "onCreate(), start ");
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -358,6 +367,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onResume();
 
         }
+
+        mTracker.setScreenName(this.getLocalClassName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
