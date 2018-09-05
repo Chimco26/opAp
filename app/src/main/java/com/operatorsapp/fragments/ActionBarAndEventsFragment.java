@@ -845,7 +845,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     ProgressDialogManager.show(getActivity());
                     String newTitle = OperatorApplication.isEnglishLang() ? finalStatusList.get(position).getEName() : finalStatusList.get(position).getLName();
                     ((OperatorSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
-                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId());
+                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName());
                 }
 
             }
@@ -1616,7 +1616,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onJoshProductSelected(Integer joshID, String jobName);
 
-        void onProductionStatusChanged(int id);
+        void onProductionStatusChanged(int id, String newStatus);
     }
 
 }

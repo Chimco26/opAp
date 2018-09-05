@@ -1397,7 +1397,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onProductionStatusChanged(int id) {
+    public void onProductionStatusChanged(int id, final String newStatus) {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
@@ -1406,9 +1406,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 // TODO: 31/07/2018 display crouton
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
+
+                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Production Status")
+                            .setAction("Production Status Changed Successfully")
+                            .setLabel("New Status: " + newStatus)
+                            .build());
                 } else {
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+
+                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Production Status")
+                            .setAction("Production Status Changed Failed")
+                            .setLabel("Error: " + response.getmError().getErrorDesc())
+                            .build());
                 }
             }
 
@@ -1417,6 +1431,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ProgressDialogManager.dismiss();
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Production Status")
+                        .setAction("Production Status Changed Failed")
+                        .setLabel("Error: " + reason.getDetailedDescription())
+                        .build());
 
             }
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());

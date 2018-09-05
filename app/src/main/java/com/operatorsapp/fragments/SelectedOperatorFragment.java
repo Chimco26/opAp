@@ -95,11 +95,23 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
                 SendBroadcast.refreshPolling(getContext());
                 ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Operetor Sign in")
+                                .setAction("Signed in Successfully")
+                                .setLabel("Operator name: " + mSelectedOperator.getOperatorName() + ", ID: " + mSelectedOperator.getOperatorId())
+                                .build());
             }
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
                 ZLogger.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Operetor Sign in")
+                        .setAction("Signed in Failed")
+                        .setLabel("Failed Reason: " + reason.getError().toString())
+                        .build());
 
             }
         });

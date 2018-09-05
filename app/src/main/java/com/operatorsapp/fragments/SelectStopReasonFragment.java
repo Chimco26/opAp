@@ -286,6 +286,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
+            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
 
             if (response.isFunctionSucceed()){
                 // TODO: 17/07/2018 add crouton for success
@@ -293,8 +294,19 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
                 ZLogger.i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stop Reason Report")
+                        .setAction("Reported Successfully")
+                        .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
+                        .build());
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stop Reason Report")
+                        .setAction("Report Failed")
+                        .setLabel("Screen: SelectStopReasonFragment, Error: " + response.getmError().getErrorDesc())
+                        .build());
             }
 
 //            ZLogger.i(LOG_TAG, "sendReportSuccess()");
@@ -327,6 +339,13 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
+            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Stop Reason Report")
+                    .setAction("Report Failed")
+                    .setLabel("Screen: SelectStopReasonFragment, Error: " + reason.getDetailedDescription())
+                    .build());
+
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override

@@ -10,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.ravtech.david.sqlcore.Event;
@@ -83,6 +86,27 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
             mPager.setAdapter(mPagerAdapter);
 
             mListener.onViewPagerCreated();
+            mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    // Analytics
+                    OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+                    Tracker mTracker = application.getDefaultTracker();
+                    mTracker.setScreenName("ViewPager new page Selected: " + mFragmentList.get(position).getTag());
+                    mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
 
         }
         return view;
@@ -202,5 +226,11 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
         void onViewPagerCreated();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPager.clearOnPageChangeListeners();
     }
 }
