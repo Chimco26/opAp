@@ -297,10 +297,10 @@ public class WidgetAdapter extends Adapter {
                     for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
                         xValues[i] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());/*new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));*/
                         Entry entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue()/*, new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())*/);
-                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - TEN_HOURS)) {
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TEN_HOURS)) {
                             tenHoursValues.add(entry);
                         }
-                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "yyyy/MM/dd HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "yyyy/MM/dd HH:mm:ss") - FOUR_HOURS)) {
+                        if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - FOUR_HOURS)) {
                             fourHoursValues.add(entry);
                         }
                     }
