@@ -74,9 +74,9 @@
             android:id="@+id/numeric_widget_edit_ic"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/dark_blue_two"
+            android:layout_marginStart="15dp"
             android:layout_gravity="center_vertical"
+            android:src="@drawable/edit"
             android:visibility="gone"/>
 
     </LinearLayout>

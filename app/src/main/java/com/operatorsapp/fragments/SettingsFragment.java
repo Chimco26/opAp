@@ -265,6 +265,8 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             mTempCursor.moveToNext();
         }
 
+        mTempCursor.close();
+
         PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmList);
     }
 
