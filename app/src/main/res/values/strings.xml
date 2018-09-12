@@ -232,6 +232,8 @@
     <string name="edit_note">Edit Note</string>
     <string name="enter_note_here">Enter Your Note Here</string>
     <string name="fill_units_or_weight">* Please report Units or Weight</string>
+    <string name="activate_job_dialog_message">You Are About to Activate a New Job, \n Are You Sure You Want to Proceed?</string>
+    <string name="activate_job_dialog_title">Activate New Job</string>
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.operatorsapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -951,15 +952,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
-                postUpdateActions(mUpdatedActions);
+                validateDialog();
 
-                if (mCurrentJobDetails != null) {
-                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                    postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-                            String.valueOf(persistenceManager.getMachineId()),
-                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-                            persistenceManager.getOperatorId()));
-                }
                 break;
 
             case R.id.AJA_item_material:
@@ -994,6 +988,33 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                 openNotesDialog();
                 break;
         }
+    }
+
+    private void validateDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true)
+                .setMessage(R.string.activate_job_dialog_message)
+                .setTitle(R.string.activate_job_dialog_title)
+                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        postUpdateActions(mUpdatedActions);
+
+                        if (mCurrentJobDetails != null) {
+                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                    String.valueOf(persistenceManager.getMachineId()),
+                                    String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+                                    persistenceManager.getOperatorId()));
+                        }
+
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 
     private void openNotesDialog() {

@@ -230,6 +230,8 @@
     <string name="tutorial_event_log_title">יומן אירועים</string>
     <string name="tutorial_split_event_title">פיצול אירוע</string>
     <string name="tutorial_split_event_Desc">השתמש באיקון \'מספריים\' לפיצול אירוע. בדרך זו ניתן לדווח סיבה שונה עבור כל חלק.</string>
+    <string name="activate_job_dialog_message">נבחרה פק"ע חדשה, האם להמשיך בהפעלה?</string>
+    <string name="activate_job_dialog_title">הפעלת פק"ע חדשה</string>
 
 
 </resources>
