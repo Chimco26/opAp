@@ -138,10 +138,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_approve_first_item, container, false);
-        setActionBar();
+        //        setActionBar();
 
-        return view;
+        return inflater.inflate(R.layout.fragment_approve_first_item, container, false);
     }
 
     @Override

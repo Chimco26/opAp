@@ -45,6 +45,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
@@ -129,9 +130,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_inventory, container, false);
-        setActionBar();
-        return view;
+        //        setActionBar();
+        return inflater.inflate(R.layout.fragment_report_inventory, container, false);
     }
 
     @Override
@@ -338,12 +338,10 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (response.isFunctionSucceed()){
-                // TODO: 17/07/2018 add crouton for success
-                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
-            }else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+            if (response.isFunctionSucceed()) {
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+            } else {
+                ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
 
             if (getFragmentManager() != null){

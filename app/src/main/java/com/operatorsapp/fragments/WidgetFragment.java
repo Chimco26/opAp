@@ -21,11 +21,13 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.WidgetAdapter;
+import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.Event;
 import com.zemingo.logrecorder.ZLogger;
@@ -43,6 +45,7 @@ import static org.acra.ACRA.LOG_TAG;
 public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener {
 
+    private static final long TWENTY_FOUR_HOURS = 60000L * 60 * 24;
     private boolean mIsOpen;
     //    private int mOpenWidth;
     private int mWidgetsLayoutWidth;
@@ -56,6 +59,7 @@ public class WidgetFragment extends Fragment implements
     private GoToScreenListener mOnGoToScreenListener;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private ReportFieldsFragmentCallbackListener mReportFieldsFragmentCallbackListener;
+    private DashboardCentralContainerListener mDashboardCentralContainerListener;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
@@ -100,7 +104,7 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.setLayoutManager(mGridLayoutManager);
             GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth);
+            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -118,6 +122,7 @@ public class WidgetFragment extends Fragment implements
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
             mOnGoToScreenListener = (GoToScreenListener) getActivity();
+            mDashboardCentralContainerListener = (DashboardCentralContainerListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -132,6 +137,7 @@ public class WidgetFragment extends Fragment implements
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
+        mDashboardCentralContainerListener = null;
         ZLogger.d(LOG_TAG, "onDetach(), end ");
     }
 
@@ -170,7 +176,7 @@ public class WidgetFragment extends Fragment implements
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
@@ -223,15 +229,23 @@ public class WidgetFragment extends Fragment implements
     private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {
         // calls to this function were removed as saving to prefs was not needed.
         //historic data from prefs
+
         HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy = new HashMap<>();
         HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoric = PersistenceManager.getInstance().getChartHistoricData();
+
+        if (prefsHistoric != null && prefsHistoric.size() > 0) {
+            prefsHistoricCopy.putAll(prefsHistoric);
+        }
+
         for (Widget widget : widgetList) {
             // if have chart widget (field type 3)
             if (widget.getFieldType() == 3) {
                 // if have historic in prefs
-                if (prefsHistoric != null && prefsHistoric.size() > 0) {
-                    prefsHistoricCopy.putAll(prefsHistoric);
+                if (prefsHistoricCopy.size() > 0) {
 
+                    if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID()))) {
+                        cleanOver24HoursData(prefsHistoricCopy, String.valueOf(widget.getID()));
+                    }
                     // if get new data
                     if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
                         // if is old widget
@@ -242,6 +256,7 @@ public class WidgetFragment extends Fragment implements
 
                             //set all data (old + new) to widget
                             if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
+
                                 widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
                             }
                         } else {
@@ -250,7 +265,8 @@ public class WidgetFragment extends Fragment implements
                         }
                     } else {
                         // if no new data,  set old data to widget
-                        if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
+                        if (prefsHistoricCopy.containsKey(String.valueOf(widget.getID())) &&
+                                prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
                             widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
                         }
                     }
@@ -262,6 +278,28 @@ public class WidgetFragment extends Fragment implements
             }
         }
         PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
+    }
+
+    private void cleanOver24HoursData(HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy, String widgetId) {
+
+        ArrayList<Widget.HistoricData> toClean = new ArrayList<>();
+
+        for (int i = 0; i < prefsHistoricCopy.get(widgetId).size(); i++) {
+            if (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(i).getTime(), "dd/MM/yyyy HH:mm:ss") <
+                    (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(prefsHistoricCopy.get(widgetId).size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TWENTY_FOUR_HOURS)) {
+                toClean.add(prefsHistoricCopy.get(widgetId).get(i));
+            }
+        }
+        for (Widget.HistoricData toCleanItem : toClean) {
+
+            prefsHistoricCopy.get(widgetId).remove(toCleanItem);
+        }
+
+        if (prefsHistoricCopy.get(widgetId).size() < 1) {
+
+            prefsHistoricCopy.remove(widgetId);
+        }
+
     }
 
     @Override

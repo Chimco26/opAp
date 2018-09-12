@@ -60,6 +60,17 @@ public class Widget {
     @SerializedName("Target")
     private Float mTarget;
 
+    @SerializedName("TargetScreen")
+    private String mTargetScreen;
+
+
+    public String getTargetScreen() {
+        return mTargetScreen;
+    }
+
+    public void setTargetScreen(String mTargetScreen) {
+        this.mTargetScreen = mTargetScreen;
+    }
 
     public String getCurrentValue() {
         if(mCurrentValue == null){

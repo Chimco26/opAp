@@ -23,11 +23,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation project(':Infra')
     implementation project(':MachineStatusInfra')
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
-    compile project(path: ':ReportNetworkBridge')
+    implementation project(path: ':ReportNetworkBridge')
 }

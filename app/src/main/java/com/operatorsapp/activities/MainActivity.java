@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
 
         mCroutonCreator = new CroutonCreator();
-        goToFragment(LoginFragment.newInstance(), false);
+        goToFragment(LoginFragment.newInstance(), true, false);
 
         updateAndroidSecurityProvider(this);
     }
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean addToBackStack) {
+    public void goToFragment(Fragment fragment, boolean toBackStack, boolean addToBackStack) {
         ZLogger.d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         mCurrentFragment = fragment;
         if (addToBackStack) {

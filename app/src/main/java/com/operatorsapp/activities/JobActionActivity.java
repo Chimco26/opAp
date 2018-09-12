@@ -392,7 +392,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private void initNotesView() {
         mProductNoteTv.setText("");
         for (Job job : mCurrentJobDetails.getJobs()) {
-            if (mCurrentPendingJob.getID().equals(job.getID())){
+            if (mCurrentPendingJob.getID().equals(job.getID())) {
 
                 mProductNoteTv.setText(job.getNotes());
             }
@@ -813,18 +813,20 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mHeaders.clear();
 
-        for (PandingJob pandingJob : mPendingJobsResponse.getPandingJobs()) {
+        if (mPendingJobsResponse != null) {
+            for (PandingJob pandingJob : mPendingJobsResponse.getPandingJobs()) {
 
-            for (Property property : pandingJob.getProperties()) {
+                for (Property property : pandingJob.getProperties()) {
 
-                if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
+                    if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
 
-                    if (!mPendingJobs.contains(pandingJob)) {
-                        mPendingJobs.add(pandingJob);
+                        if (!mPendingJobs.contains(pandingJob)) {
+                            mPendingJobs.add(pandingJob);
+                        }
+
+                        if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())))
+                            mHeaders.add(mHashMapHeaders.get(property.getKey()));
                     }
-
-                    if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())))
-                        mHeaders.add(mHashMapHeaders.get(property.getKey()));
                 }
             }
         }
@@ -1031,11 +1033,11 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         Button submitBtn = dialogView.findViewById(R.id.DN_btn);
         ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
 
-        if (mProductNoteTv.getText().length() > 0){
+        if (mProductNoteTv.getText().length() > 0) {
 
             noteTitleTv.setText(getString(R.string.edit_note));
             noteEt.setText(mProductNoteTv.getText());
-        }else {
+        } else {
             noteTitleTv.setText(getString(R.string.add_note));
             noteEt.setHint(getString(R.string.enter_note_here));
         }
@@ -1067,7 +1069,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         ProgressDialogManager.show(this);
 
         SimpleRequests simpleRequests = new SimpleRequests();
-        PersistenceManager pm  = PersistenceManager.getInstance();
+        PersistenceManager pm = PersistenceManager.getInstance();
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), mCurrentPendingJob.getID(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
@@ -1187,9 +1189,17 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onLoadFileError() {
 
-        mProductPdfNoImageTv.setText(getString(R.string.loading_error));
-        mProductPdfNoImageLy.setVisibility(View.VISIBLE);
-        mProductPdfView.setVisibility(View.INVISIBLE);
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+                mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+                mProductPdfView.setVisibility(View.INVISIBLE);
+            }
+        });
+
     }
 
     @Override

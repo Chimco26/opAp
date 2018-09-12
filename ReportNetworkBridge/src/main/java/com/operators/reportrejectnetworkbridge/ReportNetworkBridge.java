@@ -256,16 +256,14 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
         call.enqueue(new Callback<SendReportCycleUnitsResponse>() {
             @Override
             public void onResponse(Call<SendReportCycleUnitsResponse> call, Response<SendReportCycleUnitsResponse> response) {
-                if (response != null) {
-                    if (response.isSuccessful()) {
-                        if (callback != null) {
-                            callback.onSendReportSuccess(response.body());
-                        } else {
-                            ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
-                        }
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+                        callback.onSendReportSuccess(response.body());
                     } else {
-                        onFailure(call, new Exception("response not successful"));
+                        ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
+                } else {
+                    onFailure(call, new Exception("response not successful"));
                 }
             }
 

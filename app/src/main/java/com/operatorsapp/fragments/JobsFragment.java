@@ -104,9 +104,8 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_jobs, container, false);
-        setActionBar();
-        return rootView;
+        //        setActionBar();
+        return inflater.inflate(R.layout.fragment_jobs, container, false);
     }
 
     @Override
@@ -196,7 +195,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         String jobString = gson.toJson(currentJob, CurrentJob.class);
         bundle.putString(SELECTED_JOB, jobString);
         selectedJobFragment.setArguments(bundle);
-        mOnGoToScreenListener.goToFragment(selectedJobFragment, true);
+        mOnGoToScreenListener.goToFragment(selectedJobFragment, true, true);
     }
 
     @Override

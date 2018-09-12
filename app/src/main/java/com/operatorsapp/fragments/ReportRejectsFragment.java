@@ -106,6 +106,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         super.onDetach();
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,10 +130,9 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_report_rejects, container, false);
-        setActionBar();
 
-        return view;
+//        setActionBar();
+        return inflater.inflate(R.layout.fragment_report_rejects, container, false);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
 
-        if (!PersistenceManager.getInstance().getDisplayRejectFactor()){
+        if (!PersistenceManager.getInstance().getDisplayRejectFactor()) {
             view.findViewById(R.id.cause_tv).setVisibility(View.GONE);
             view.findViewById(R.id.cause_spinner).setVisibility(View.GONE);
             view.findViewById(R.id.cause_rl).setVisibility(View.GONE);
@@ -214,7 +214,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
                     }
                 });
-            }else {
+            } else {
                 mSelectedCauseId = 0;
             }
         }
@@ -225,58 +225,44 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mUnitsEditText.setFocusableInTouchMode(true);
         mUnitsEditText.requestFocus();
 
-        mUnitsEditText.addTextChangedListener(new TextWatcher()
-        {
+        mUnitsEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
-                try
-                {
-                    mUnitsData= Double.parseDouble(s.toString());
-                }
-                catch (NumberFormatException e)
-                {
+            public void afterTextChanged(Editable s) {
+                try {
+                    mUnitsData = Double.parseDouble(s.toString());
+                } catch (NumberFormatException e) {
                     mUnitsData = null;
                 }
                 refreshSendButtonState();
             }
         });
 
-        mWeightEditText.addTextChangedListener(new TextWatcher()
-        {
+        mWeightEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
-                try
-                {
+            public void afterTextChanged(Editable s) {
+                try {
                     mWeightData = Double.parseDouble(s.toString());
-                }
-                catch (NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     mWeightData = null;
                 }
                 refreshSendButtonState();
@@ -301,8 +287,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
     }
 
-    private boolean canSendReport()
-    {
+    private boolean canSendReport() {
 
         //return ((mUnitsData != null || mWeightData != null) && mNextButton.isEnabled());
         return (mUnitsData != null || mWeightData != null);
@@ -327,30 +312,30 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
     public void setActionBar() {
 
-        if (getActivity() != null){
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            // rootView null
-            @SuppressLint("InflateParams")
-            View view = inflater.inflate(R.layout.report_resects_action_bar, null);
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayUseLogoEnabled(true);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                // rootView null
+                @SuppressLint("InflateParams")
+                View view = inflater.inflate(R.layout.report_resects_action_bar, null);
 
-            LinearLayout buttonClose = view.findViewById(R.id.close_image);
-            buttonClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+                buttonClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    getActivity().onBackPressed();
-                }
-            });
-            actionBar.setCustomView(view);
+                        getActivity().onBackPressed();
+                    }
+                });
+                actionBar.setCustomView(view);
+            }
         }
-    }
     }
 
     @Override
@@ -367,8 +352,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             case R.id.button_approve: {
 
                 ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
-                if(canSendReport())
-                {
+                if (canSendReport()) {
                     sendReport();
                 }
 
@@ -379,8 +363,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
     }
 
-    private void sendReport()
-    {
+    private void sendReport() {
         ProgressDialogManager.show(getActivity());
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
@@ -390,8 +373,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 //        SendBroadcast.refreshPolling(getContext());
     }
 
-    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
-    {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
 
         @Override
         public void sendReportSuccess(Object errorResponse) {
@@ -400,12 +382,12 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             ZLogger.i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
-            if (response.isFunctionSucceed()){
+            if (response.isFunctionSucceed()) {
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-            }else {
+            } else {
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
-            if (getFragmentManager() != null){
+            if (getFragmentManager() != null) {
 
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
@@ -421,36 +403,29 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason)
-        {
+        public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             ZLogger.w(LOG_TAG, "sendReportFailure()");
-            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null)
-            {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
-                {
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
-                    public void onSilentLoginSucceeded()
-                    {
+                    public void onSilentLoginSucceeded() {
                         sendReport();
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason)
-                    {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         ZLogger.w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
-            }
-            else
-            {
+            } else {
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
                 ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-                if (getFragmentManager() != null){
+                if (getFragmentManager() != null) {
 
                     getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
@@ -461,15 +436,15 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
     private ErrorResponseNewVersion objectToNewError(Object o) {
         ErrorResponseNewVersion responseNewVersion;
-        if (o instanceof ErrorResponseNewVersion){
-            responseNewVersion = (ErrorResponseNewVersion)o;
-        }else {
+        if (o instanceof ErrorResponseNewVersion) {
+            responseNewVersion = (ErrorResponseNewVersion) o;
+        } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
             responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            if (responseNewVersion.getmError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }
@@ -481,28 +456,23 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     }
 
     private void initJobsSpinner() {
-        if(getActivity() != null)
-        {
-            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
-            {
+        if (getActivity() != null) {
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null) {
                 mJobsSpinner.setVisibility(View.VISIBLE);
                 final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
                 activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
                 mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
                 mJobsSpinner.setSelection(mSelectedPosition);
-                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         activeJobsSpinnerAdapter.setTitle(position);
                         mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
+                    public void onNothingSelected(AdapterView<?> parent) {
 
                     }
                 });
@@ -510,15 +480,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         }
     }
 
-    private void dismissProgressDialog()
-    {
-        if(getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });
@@ -526,8 +492,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.parent_layouts;
     }
 }
