@@ -262,7 +262,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         //PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
         PersistenceManager.getInstance().setShiftLogStartingFrom("");
 
-        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        DatabaseHelper databaseHelper =DatabaseHelper.getInstance(getActivity());
 
         Cursor mTempCursor = databaseHelper.getCursorOrderByTime();
 

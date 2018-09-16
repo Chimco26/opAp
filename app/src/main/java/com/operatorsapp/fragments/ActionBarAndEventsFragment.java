@@ -471,7 +471,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        mDatabaseHelper = new DatabaseHelper(getContext());
+        mDatabaseHelper = DatabaseHelper.getInstance(getContext());
 
         Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 

@@ -26,6 +26,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
+    //Database instance
+    private static DatabaseHelper mInstance = null;
+
     // Database Version
     private static final int DATABASE_VERSION = 2;
 
@@ -95,7 +98,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ")";
 
 
-    public DatabaseHelper(Context context) {
+    public static DatabaseHelper getInstance(Context context){
+        if (mInstance == null){
+            mInstance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return mInstance;
+    }
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
