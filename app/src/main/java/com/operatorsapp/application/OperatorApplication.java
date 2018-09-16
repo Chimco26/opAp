@@ -15,6 +15,7 @@ import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.OppAppLogger;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -65,11 +66,8 @@ public class OperatorApplication extends MultiDexApplication {
 
         ACRA.init(this);
 
-
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
-
-        LogRecorder.initInstance(msApplicationContext);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
@@ -91,9 +89,6 @@ public class OperatorApplication extends MultiDexApplication {
 
         initImageLoading();
 
-        if (BuildConfig.DEBUG) {
-            ZLogger.DEBUG = true;
-        }
     }
 
 

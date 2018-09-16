@@ -40,11 +40,11 @@ public class OperatorCore {
                             mOperatorForMachineUICallbackListener.onOperatorDataReceived(operator);
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "operator is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "operator is nul");
                         }
                     }
                     else {
-                        ZLogger.w(LOG_TAG, "onGetOperatorSucceeded() UI Callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "onGetOperatorSucceeded() UI Callback is null");
                     }
                 }
 
@@ -55,11 +55,11 @@ public class OperatorCore {
                             mOperatorForMachineUICallbackListener.onOperatorDataReceiveFailure(reason);
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "reason is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "reason is nul");
                         }
                     }
                     else {
-                        ZLogger.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
                     }
                 }
             }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());
@@ -75,7 +75,7 @@ public class OperatorCore {
                         mOperatorForMachineUICallbackListener.onSetOperatorSuccess(operatorId);
                     }
                     else {
-                        ZLogger.w(LOG_TAG, "onSetOperatorForMachineSuccess() UI Callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "onSetOperatorForMachineSuccess() UI Callback is null");
                     }
                 }
 
@@ -86,11 +86,11 @@ public class OperatorCore {
                             mOperatorForMachineUICallbackListener.onSetOperatorFailed(reason);
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "reason is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "reason is nul");
                         }
                     }
                     else {
-                        ZLogger.w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "onGetOperatorFailed() UI Callback is null");
                     }
                 }
             }, mOperatorPersistenceManagerInterface.getTotalRetries(), mOperatorPersistenceManagerInterface.getRequestTimeout());

@@ -148,7 +148,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         view.findViewById(R.id.FJ_clear_filters).setOnClickListener(this);
 
 
-        ZLogger.i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
+        OppAppLogger.getInstance().i(LOG_TAG, "SessionId : " + PersistenceManager.getInstance().getSessionId() + " machineId: " + PersistenceManager.getInstance().getMachineId());
 
 
     }
@@ -201,7 +201,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
     @Override
     public void onJobsListReceiveFailed() {
         dismissProgressDialog();
-        ZLogger.i(LOG_TAG, "onJobsListReceiveFailed()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onJobsListReceiveFailed()");
         mErrorFrameLayout.setVisibility(View.VISIBLE);
         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
     }
@@ -217,7 +217,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
         mJobsRecyclerView.setAdapter(mJobsRecyclerViewAdapter);
         initTextWatcherListener();
 
-        ZLogger.i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
+        OppAppLogger.getInstance().i(LOG_TAG, "Session id" + " = " + PersistenceManager.getInstance().getSessionId() + " list size " + " = " + mJobsDataList.size() + " machine id = " + PersistenceManager.getInstance().getMachineId());
 
     }
 
@@ -271,7 +271,7 @@ public class JobsFragment extends BackStackAwareFragment implements OnJobSelecte
                 initTitles(mFieldsValues[0], mFieldsValues[1], mFieldsValues[2], mFieldsValues[3], mFieldsValues[4]);
             }
         } else {
-            ZLogger.w(LOG_TAG, "mHeaderList is null");
+            OppAppLogger.getInstance().w(LOG_TAG, "mHeaderList is null");
         }
 
     }

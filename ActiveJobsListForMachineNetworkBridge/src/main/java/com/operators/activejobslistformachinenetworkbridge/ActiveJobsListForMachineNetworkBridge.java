@@ -27,7 +27,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
     private int mRetryCount = 0;
 
     public void inject(ActiveJobsListForMachineNetworkManagerInterface activeJobsListForMachineNetworkManagerInterface) {
-        ZLogger.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
+        OppAppLogger.getInstance().i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
         mActiveJobsListForMachineNetworkManagerInterface = activeJobsListForMachineNetworkManagerInterface;
     }
 
@@ -49,7 +49,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
-                            ZLogger.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
+                            OppAppLogger.getInstance().w(LOG_TAG, "getActiveJoshForMachine() callback is null");
 
                         }
                     } else {
@@ -70,11 +70,11 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
             @Override
             public void onFailure(@NonNull Call<ActiveJobsListForMachineResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }

@@ -342,12 +342,12 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
             case R.id.button_approve: {
 
-                ZLogger.d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
+                OppAppLogger.getInstance().d(LOG_TAG, "reason: " + mSelectedReasonId + " cause: " + mSelectedCauseId + " units: " + mUnitsEditText.getText().toString() + " weight: " + mWeightEditText.getText().toString() + " jobId " + mJobId);
                 if (canSendReport()) {
                     sendReport();
                 }
 
-//                mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.newInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
+//                mGoToScreenListener.goToFragment(ReportRejectSelectParametersFragment.getInstance(mSelectedReasonId, mSelectedCauseId, mSelectedReasonName, mJobId, mCurrentProductName, mCurrentProductId), true);
 
                 break;
             }
@@ -370,7 +370,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         public void sendReportSuccess(Object errorResponse) {
             ErrorResponseNewVersion response = objectToNewError(errorResponse);
             dismissProgressDialog();
-            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
 
             if (response.isFunctionSucceed()) {
@@ -396,7 +396,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            ZLogger.w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
@@ -406,7 +406,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
-                        ZLogger.w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();

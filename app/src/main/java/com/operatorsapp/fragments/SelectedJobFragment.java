@@ -159,13 +159,13 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
 
     @Override
     public void onStartJobSuccess() {
-        ZLogger.i(LOG_TAG, "onStartJobSuccess()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onStartJobSuccess()");
         dismissProgressDialog();
     }
 
     @Override
     public void onStartJobFailure() {
-        ZLogger.i(LOG_TAG, "onStartJobFailure()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onStartJobFailure()");
         dismissProgressDialog();
     }
 

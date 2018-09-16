@@ -87,7 +87,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         callback.onSendStopReportSuccess(response.body());
                     } else {
 
-                        ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
 
@@ -100,16 +100,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<SendReportStopResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -135,7 +135,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         callback.onSendStopReportSuccess(response.body());
                     } else {
 
-                        ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
                     }
                 } else {
 
@@ -148,16 +148,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<SendMultipleStopRequest> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendMultipleReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -178,7 +178,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         if (callback != null) {
                             callback.onSendReportSuccess(response.body());
                         } else {
-                            ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                            OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
                     } else {
                         onFailure(call, new Exception(response.body().getErrorDesc()));
@@ -190,16 +190,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<ErrorResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -219,7 +219,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         if (callback != null) {
                             callback.onSendReportSuccess(response.body());
                         } else {
-                            ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                            OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                         }
                     } else {
                         onFailure(call, new Exception("response not successful"));
@@ -231,16 +231,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<SendApproveFirstItemResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -260,7 +260,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     if (callback != null) {
                         callback.onSendReportSuccess(response.body());
                     } else {
-                        ZLogger.w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
                     onFailure(call, new Exception("response not successful"));
@@ -271,16 +271,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<SendReportCycleUnitsResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onFailure() callback is null");
 
                 }
             }
@@ -300,7 +300,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         if (callback != null) {
                             callback.onSendReportSuccess(response.body());
                         } else {
-                            ZLogger.w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
+                            OppAppLogger.getInstance().w(LOG_TAG, "sendReportInventory(), onResponse() callback is null");
                         }
                     } else {
                         onFailure(call, new Exception("response not successful"));
@@ -312,16 +312,16 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             public void onFailure(Call<SendReportInventoryResponse> call, Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
                         retryCount[0] = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
                         callback.onSendReportFailed(errorObject);
                     }
                 } else {
-                    ZLogger.w(LOG_TAG, "sendReportInventory(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "sendReportInventory(), onFailure() callback is null");
 
                 }
             }

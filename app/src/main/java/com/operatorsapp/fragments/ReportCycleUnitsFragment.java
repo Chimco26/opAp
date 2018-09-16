@@ -350,7 +350,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         reportNetworkBridge.inject(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
@@ -369,7 +369,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
-            ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
 //            if (getFragmentManager() != null) {
@@ -391,7 +391,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
-            ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
 
             dismissProgressDialog();

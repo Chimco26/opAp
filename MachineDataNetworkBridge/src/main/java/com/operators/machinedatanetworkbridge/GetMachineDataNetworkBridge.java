@@ -28,7 +28,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
     public void inject(GetMachineDataNetworkManagerInterface getMachineDataNetworkManagerInterface)
     {
         mGetMachineDataNetworkManagerInterface = getMachineDataNetworkManagerInterface;
-        ZLogger.i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
+        OppAppLogger.getInstance().i(LOG_TAG, " GetMachineStatusNetworkBridge inject()");
     }
 
     @Override
@@ -45,12 +45,12 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
                 if(response.body() != null && response.body().getMachineParams() != null && response.body().getErrorResponse() == null)
                 {
                     ArrayList<Widget> widgets = response.body().getMachineParams();
-                    ZLogger.d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
+                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onResponse " + widgets.size() + " widgets");
                     getMachineDataCallback.onGetMachineDataSucceeded(response.body().getMachineParams());
                 }
                 else
                 {
-                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
+                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getMachineData failed Error");
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineData failed Error");
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
                 }
@@ -61,13 +61,13 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             {
                 if(mRetryCount++ < totalRetries)
                 {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     mRetryCount = 0;
-                    ZLogger.d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "getMachineData, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                     getMachineDataCallback.onGetMachineDataFailed(errorObject);
 

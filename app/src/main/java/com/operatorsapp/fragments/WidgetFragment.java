@@ -81,7 +81,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ZLogger.d(LOG_TAG, "onViewCreated(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
         mIsOpen = false;
@@ -116,7 +116,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onAttach(Context context) {
-        ZLogger.d(LOG_TAG, "onAttach(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
             mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
@@ -127,19 +127,19 @@ public class WidgetFragment extends Fragment implements
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
-        ZLogger.d(LOG_TAG, "onAttach(), end ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), end ");
     }
 
     @Override
     public void onDetach() {
-        ZLogger.d(LOG_TAG, "onDetach(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
         mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
         mDashboardCentralContainerListener = null;
-        ZLogger.d(LOG_TAG, "onDetach(), end ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), end ");
     }
 
     @Override

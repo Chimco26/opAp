@@ -92,7 +92,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ZLogger.i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
+                OppAppLogger.getInstance().i(LOG_TAG, "S " + s + " , start " + start + " before, " + before + " count " + count);
                 if (getActivity() != null) {
 
                     if (start + count > 0) {
@@ -119,11 +119,11 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
             removePhoneKeypad();
             if (operator != null) {
                 if (operator.getOperatorName().equals("")) {
-                    ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : Empty operator name ");
                     removePhoneKeypad();
                     ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
                 } else {
-                    ZLogger.d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
+                    OppAppLogger.getInstance().d(LOG_TAG, "Operator data received: Operator Id is:" + operator.getOperatorId() + " Operator Name Is: " + operator.getOperatorName());
 
                     SelectedOperatorFragment selectedOperatorFragment = new SelectedOperatorFragment();
                     Bundle bundle = new Bundle();
@@ -135,7 +135,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
                     mOnGoToScreenListener.goToFragment(selectedOperatorFragment, true, true);
                 }
             } else {
-                ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : ");
+                OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : ");
                 removePhoneKeypad();
                 ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "No operator found");
             }
@@ -144,13 +144,13 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
 
         @Override
         public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
-            ZLogger.d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
+            OppAppLogger.getInstance().d(LOG_TAG, "Operator data receive failed. Reason : " + reason.getError().toString());
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
                         String id = mOperatorIdEditText.getText().toString();
-                        ZLogger.i(LOG_TAG, "Operator id: " + id);
+                        OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
                         mOperatorCore.getOperatorById(id);
                     }
 
@@ -239,7 +239,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
             case R.id.button_operator_signIn: {
                 ProgressDialogManager.show(getActivity());
                 String id = mOperatorIdEditText.getText().toString();
-                ZLogger.i(LOG_TAG, "Operator id: " + id);
+                OppAppLogger.getInstance().i(LOG_TAG, "Operator id: " + id);
                 mOperatorCore.getOperatorById(id);
                 break;
             }

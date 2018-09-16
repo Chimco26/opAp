@@ -66,17 +66,17 @@ public class ReportFieldsForMachineCore {
                                     mReportFieldsForMachineUICallback.onReportFieldsReceivedSuccessfully(reportFieldsForMachine);
                                 }
                                 else {
-                                    ZLogger.w(LOG_TAG, "mReportFieldsForMachineUICallback is null");
+                                    OppAppLogger.getInstance().w(LOG_TAG, "mReportFieldsForMachineUICallback is null");
                                 }
                             }
                             else {
-                                ZLogger.e(LOG_TAG, "reportFieldsForMachine is null");
+                                OppAppLogger.getInstance().e(LOG_TAG, "reportFieldsForMachine is null");
                             }
                             if (onJobFinishedListener != null) {
                                 onJobFinishedListener.onJobFinished();
                             }
                             else {
-                                ZLogger.w(LOG_TAG, "onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onGetReportFieldsForMachineSuccess() onJobFinishedListener is null");
                             }
                         }
 
@@ -88,7 +88,7 @@ public class ReportFieldsForMachineCore {
                                 }
                             }
                             else {
-                                ZLogger.w(LOG_TAG, "getReportFieldForMachine() mReportFieldsForMachineUICallback is null");
+                                OppAppLogger.getInstance().w(LOG_TAG, "getReportFieldForMachine() mReportFieldsForMachineUICallback is null");
                             }
                             if (onJobFinishedListener != null) {
                                 onJobFinishedListener.onJobFinished();

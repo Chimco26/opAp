@@ -250,7 +250,7 @@ public class LoginFragment extends Fragment {
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
-                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
                 getVersion(machines, true);
             }
@@ -282,7 +282,7 @@ public class LoginFragment extends Fragment {
         LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
-                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
 
                 getVersion(machines, false);
             }

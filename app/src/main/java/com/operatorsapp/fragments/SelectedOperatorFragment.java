@@ -83,13 +83,13 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             @Override
             public void onSetOperatorSuccess(String operatorId) {
                 SendBroadcast.refreshPolling(getContext());
-                ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
+                OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
             }
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
-                ZLogger.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+                OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
 
             }
         });

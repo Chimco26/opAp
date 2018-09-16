@@ -78,7 +78,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            ZLogger.i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
+//            OppAppLogger.getInstance().i(LOG_TAG, "Start " + mStart + " end " + mEnd + " duration " + mDuration);
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
             ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
@@ -105,7 +105,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
-            ZLogger.i(LOG_TAG, "No Reasons in list");
+            OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         } else {

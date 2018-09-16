@@ -273,7 +273,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @Override
     public void onReportUpdatedSuccess() {
-        ZLogger.i(LOG_TAG, "onReportUpdatedSuccess()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onReportUpdatedSuccess()");
         mRefreshStatusTextView.setVisibility(View.VISIBLE);
         dismissProgressDialog();
 
@@ -281,7 +281,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @Override
     public void onReportUpdateFailure() {
-        ZLogger.i(LOG_TAG, "onReportUpdateFailure()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onReportUpdateFailure()");
         dismissProgressDialog();
     }
 

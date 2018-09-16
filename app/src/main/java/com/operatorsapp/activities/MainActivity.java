@@ -19,12 +19,16 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.OppAppLogger;
+import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -32,6 +36,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int STORAGE_REQUEST_CODE = 1;
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
     private Fragment mCurrentFragment;
@@ -65,20 +70,18 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onBackPressed() {
-        if (!mIsTryToLogin)
-        {
+        if (!mIsTryToLogin) {
             super.onBackPressed();
         }
     }
 
     @Override
     public void goToFragment(Fragment fragment, boolean toBackStack, boolean addToBackStack) {
-        ZLogger.d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+        OppAppLogger.getInstance().d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         mCurrentFragment = fragment;
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
         }
     }
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
         } catch (GooglePlayServicesNotAvailableException e) {
-            ZLogger.e("SecurityException", "Google Play Services not available.");
+            OppAppLogger.getInstance().e("SecurityException", "Google Play Services not available.");
         }
     }
 
@@ -145,11 +148,13 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
+                initZLogger();
+
                 return true;
 
             } else {
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
 
                 return false;
             }
@@ -164,7 +169,20 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
+        if (requestCode == STORAGE_REQUEST_CODE) {
+            initZLogger();
+        }
     }
+
+    public void initZLogger() {
+        LogRecorder.initInstance(this);
+
+        PersistenceManager.getInstance().setStorageGranted(true);
+
+        if (BuildConfig.DEBUG) {
+            ZLogger.DEBUG = true;
+        }
+    }
+
 
 }

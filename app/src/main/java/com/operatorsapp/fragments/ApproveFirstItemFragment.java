@@ -356,7 +356,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
 //                // TODO: 15/07/2018 add another constructor for success
 //                mDashboardCroutonListener.onShowCrouton(getString(R.string.end_setup_success));
 //            }
-            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             if(mCallbackListener != null)
             {
@@ -374,7 +374,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason)
         {
             dismissProgressDialog();
-            ZLogger.w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
             if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null)
             {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
@@ -388,7 +388,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason)
                     {
-                        ZLogger.w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
