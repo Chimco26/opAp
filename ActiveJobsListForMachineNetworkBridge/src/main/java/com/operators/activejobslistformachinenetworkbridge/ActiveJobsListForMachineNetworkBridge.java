@@ -60,9 +60,14 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                     if (response.body() != null) {
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
-                    } else {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                    } else if (response.raw() != null && response.raw().code() == 401) {
+
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.SessionInvalid, response.raw().message() + "");
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
+
+                    } else {
+                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
+                            callback.onGetActiveJobsListForMachineFailed(errorObject);
                     }
                 }
             }

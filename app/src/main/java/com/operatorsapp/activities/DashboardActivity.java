@@ -1,7 +1,6 @@
 package com.operatorsapp.activities;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -140,6 +139,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String REPORT_REJECT_TAG = "ReportRejects";
     private static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
     private static final String REPORT_PRODUCTION_TAG = "ReportProduction";
+    private static final int POOLING_BACKUP_DELAY = 1000 * 60 * 5;
 
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -172,6 +172,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private MachineStatus mCurrentMachineStatus;
     private int mSpinnerProductPosition;
     private Tracker mTracker;
+    private Handler pollingBackupHandler = new Handler();
+    private Runnable pollingBackupRunnable = new Runnable() {
+        @Override
+        public void run() {
+            getActiveJobs();
+            pollingBackup(true);
+        }
+    };
 
 
     @Override
@@ -231,6 +239,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         ZLogger.d(LOG_TAG, "onCreate(), end ");
     }
 
+    private void pollingBackup(boolean isActivate) {
+
+        if (isActivate){
+            pollingBackupHandler.removeCallbacksAndMessages(null);
+            pollingBackupHandler.postDelayed(pollingBackupRunnable, POOLING_BACKUP_DELAY);
+            Log.d(LOG_TAG, "pollingBackupHandler reset");
+        }else{
+            pollingBackupHandler.removeCallbacksAndMessages(null);
+            Log.d(LOG_TAG, "pollingBackupHandler removed");
+        }
+    }
 
     private void openWidgetFragment() {
 
@@ -327,6 +346,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     protected void onPause() {
         super.onPause();
 
+        pollingBackup(false);
         if (!ignoreFromOnPause && mGalleryIntent == null) {
 
             mAllDashboardDataCore.stopPolling();
@@ -347,6 +367,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     protected void onResume() {
 
+        pollingBackup(true);
         if (!ignoreFromOnPause) {
 
             if (mActionBarAndEventsFragment != null) {
@@ -466,9 +487,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         public void onActiveJobsListForMachineReceiveFailed(ErrorObjectInterface reason) {
-            ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+            if (reason != null && reason.getError() != null && reason.getError() == ErrorObjectInterface.ErrorCode.SessionInvalid){
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
+                silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
+                    @Override
+                    public void onSilentLoginSucceeded() {
+                        getActiveJobs();
+                    }
+
+                    @Override
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                        ShowCrouton.operatorLoadingErrorCrouton(DashboardActivity.this, reason.getError().toString());
+                    }
+                });
+            }else {
+                ZLogger.w(LOG_TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-            mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId);
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId);
+            }
         }
     };
 
@@ -502,6 +538,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
 
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
+
+                        pollingBackup(true);
 
                     }
 
