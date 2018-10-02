@@ -23,8 +23,8 @@ public class LogCacheCleaner {
         if (logsDir.exists()) {
             String[] children = logsDir.list();
 
-            for(int i = 0; i < children.length; ++i) {
-                (new File(logsDir, children[i])).delete();
+            for (String aChildren : children) {
+                (new File(logsDir, aChildren)).delete();
             }
 
 //            logsDir.delete();

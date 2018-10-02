@@ -241,6 +241,9 @@ public class WidgetFragment extends Fragment implements
         for (Widget widget : widgetList) {
             // if have chart widget (field type 3)
             if (widget.getFieldType() == 3) {
+
+                removeOver1500Points(widget);
+
                 // if have historic in prefs
                 if (prefsHistoricCopy.size() > 0) {
 
@@ -259,6 +262,7 @@ public class WidgetFragment extends Fragment implements
                             if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
 
                                 widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+
                             }
                         } else {
                             // if is new widget,  save to prefs
@@ -273,12 +277,29 @@ public class WidgetFragment extends Fragment implements
                     }
 
                 } else {
-                    // if is the firs chart data,  save to prefs
+                    // if is the first chart data,  save to prefs
                     prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
                 }
             }
         }
         PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
+    }
+
+    private void removeOver1500Points(Widget widget) {
+        int widgetParamHistoDataSize = widget.getMachineParamHistoricData().size();
+        ArrayList<Widget.HistoricData> toRemove = new ArrayList<>();
+
+        if (widgetParamHistoDataSize > CHART_POINTS_LIST_LIMIT_SIZE) {
+            for (int i = CHART_POINTS_LIST_LIMIT_SIZE + 1; i < widgetParamHistoDataSize; i++) {
+
+                toRemove.add(widget.getMachineParamHistoricData().get(i));
+            }
+        }
+
+        for (Widget.HistoricData historicDataToRemove: toRemove){
+
+            widget.getMachineParamHistoricData().remove(historicDataToRemove);
+        }
     }
 
     private void cleanOver24HoursData(HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy, String widgetId) {
