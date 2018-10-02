@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;

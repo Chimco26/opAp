@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.zemingo.logrecorder.ZLogger;
 

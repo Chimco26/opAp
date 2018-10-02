@@ -2,6 +2,7 @@ package com.operators.jobsnetworkbridge;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;

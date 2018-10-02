@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectcore.ReportCallbackListener;

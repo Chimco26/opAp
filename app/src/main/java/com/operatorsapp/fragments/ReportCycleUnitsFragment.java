@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -42,10 +43,8 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.OppAppLogger;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.text.NumberFormat;
 import java.text.ParseException;

@@ -2,6 +2,7 @@ package com.operatorsapp.utils;
 
 import android.support.annotation.NonNull;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;

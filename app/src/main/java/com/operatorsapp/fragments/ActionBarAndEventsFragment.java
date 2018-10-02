@@ -40,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.operators.activejobslistformachineinfra.ActiveJob;

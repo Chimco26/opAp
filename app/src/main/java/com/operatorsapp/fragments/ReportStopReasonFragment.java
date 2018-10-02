@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 
 import com.operators.errorobject.ErrorObjectInterface;

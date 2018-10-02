@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.operators.jobsinfra.Header;
 import com.operators.jobsinfra.JobListForMachine;

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
@@ -16,12 +17,10 @@ import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManag
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
-import com.operatorsapp.utils.OppAppLogger;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
 
 import org.acra.ACRA;
 

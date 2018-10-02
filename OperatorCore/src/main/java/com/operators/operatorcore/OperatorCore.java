@@ -7,6 +7,7 @@ import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.zemingo.logrecorder.ZLogger;

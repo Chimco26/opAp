@@ -1,11 +1,11 @@
 package com.operators.getmachinesstatusnetworkbridge;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.GetMachineStatusDataRequest;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
-import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorBaseResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.ErrorResponse;
 import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStatusDataResponse;
 
@@ -13,7 +13,6 @@ import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 

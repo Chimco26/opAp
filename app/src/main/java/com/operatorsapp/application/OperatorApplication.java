@@ -11,13 +11,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.utils.OppAppLogger;
-import com.zemingo.logrecorder.LogRecorder;
-import com.zemingo.logrecorder.ZLogger;
 
 import org.acra.ACRA;
 import org.acra.ReportField;

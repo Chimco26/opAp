@@ -2,6 +2,8 @@ package com.operatorsapp.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -27,9 +30,10 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ChangeLang;
-import com.operatorsapp.utils.OppAppLogger;
 import com.zemingo.logrecorder.LogRecorder;
 import com.zemingo.logrecorder.ZLogger;
+
+import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         setSupportActionBar(toolbar);
 
         isStoragePermissionGranted();
+
+        setupAlarm();
 
         mCroutonCreator = new CroutonCreator();
         goToFragment(LoginFragment.newInstance(), true, false);
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean toBackStack, boolean addToBackStack) {
+    public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
         OppAppLogger.getInstance().d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         mCurrentFragment = fragment;
         if (addToBackStack) {
@@ -175,14 +181,34 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     public void initZLogger() {
-        LogRecorder.initInstance(this);
 
-        PersistenceManager.getInstance().setStorageGranted(true);
+        OppAppLogger.setStorageGranted(this, true);
 
-        if (BuildConfig.DEBUG) {
-            ZLogger.DEBUG = true;
-        }
+        OppAppLogger.initInstance(this);
+
+        goToFragment(LoginFragment.newInstance(), false, false);
     }
 
+    private void setupAlarm() {
+
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(getBaseContext(), BroadcastAlarmManager.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+//                MainActivity.this, 0, intent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Calendar firingCal= Calendar.getInstance();
+//        Calendar currentCal = Calendar.getInstance();
+//
+//        firingCal.set(Calendar.HOUR_OF_DAY, 0); // At the hour you wanna fire
+//        firingCal.set(Calendar.MINUTE, 0); // Particular minute
+//        firingCal.set(Calendar.SECOND, 0); // particular second
+//
+//        if(firingCal.compareTo(currentCal) < 0) {
+//            firingCal.add(Calendar.DAY_OF_MONTH, 1);
+//        }
+//        Long intendedTime = firingCal.getTimeInMillis();
+//        alarmManager.setRepeating(AlarmManager.RTC, intendedTime , AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
 
 }

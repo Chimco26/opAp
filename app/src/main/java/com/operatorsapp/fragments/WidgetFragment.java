@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
@@ -26,12 +27,10 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.utils.OppAppLogger;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

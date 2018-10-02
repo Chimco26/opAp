@@ -2,6 +2,7 @@ package com.operatorsapp.managers;
 
 import android.app.Activity;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.zemingo.logrecorder.ZLogger;
 

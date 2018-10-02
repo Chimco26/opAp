@@ -44,4 +44,5 @@ dependencies {
     implementation project(':ShiftLogInfra')
     implementation project(path: ':publicutils')
     implementation project(path: ':SqlCore')
+    implementation project((':oppapplog'))
 }

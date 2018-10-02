@@ -2,6 +2,7 @@ package com.operators.activejobslistformachinecore;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;

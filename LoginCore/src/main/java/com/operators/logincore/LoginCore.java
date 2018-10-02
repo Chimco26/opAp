@@ -3,6 +3,7 @@ package com.operators.logincore;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;

@@ -2,6 +2,7 @@ package com.operators.reportfieldsformachinenetworkbridge;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;

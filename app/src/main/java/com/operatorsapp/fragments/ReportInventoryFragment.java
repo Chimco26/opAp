@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;

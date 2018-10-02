@@ -1,5 +1,6 @@
 package com.operators.shiftlognetworkbridge;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;

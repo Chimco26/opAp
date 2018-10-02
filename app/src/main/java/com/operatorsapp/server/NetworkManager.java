@@ -2,6 +2,7 @@ package com.operatorsapp.server;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;

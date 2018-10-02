@@ -2,6 +2,7 @@ package com.operators.jobscore;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;

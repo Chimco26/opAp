@@ -1,6 +1,7 @@
 package com.operators.machinedatanetworkbridge;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.models.Widget;

@@ -6,10 +6,9 @@ import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatornetworkbridge.interfaces.GetOperatorByIdNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.SetOperatorForMachineNetworkManagerInterface;
 import com.operators.operatornetworkbridge.server.ErrorObject;
@@ -17,9 +16,7 @@ import com.operators.operatornetworkbridge.server.requests.GetOperatorByIdReques
 import com.operators.operatornetworkbridge.server.requests.SetOperatorForMachineRequest;
 import com.operators.operatornetworkbridge.server.responses.ErrorResponse;
 import com.operators.operatornetworkbridge.server.responses.OperatorDataResponse;
-import com.operators.operatornetworkbridge.server.responses.SetOperatorForMachineResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
-import com.zemingo.logrecorder.ZLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;

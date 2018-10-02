@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -99,7 +100,6 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
-import com.operatorsapp.utils.OppAppLogger;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;

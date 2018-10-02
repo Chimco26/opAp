@@ -1,6 +1,7 @@
 package com.operators.reportfieldsformachinecore;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachinecore.polling.EmeraldJobBase;

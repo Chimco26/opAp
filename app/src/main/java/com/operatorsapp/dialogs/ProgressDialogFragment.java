@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.zemingo.logrecorder.ZLogger;
 

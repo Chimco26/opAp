@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;

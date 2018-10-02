@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;

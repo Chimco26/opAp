@@ -3,6 +3,7 @@ package com.operators.alldashboarddatacore;
 import android.net.ParseException;
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
 import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;

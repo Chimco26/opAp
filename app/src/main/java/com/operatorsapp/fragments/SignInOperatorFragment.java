@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.app.operatorinfra.Operator;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;

@@ -1,6 +1,7 @@
 package com.operators.getmachinesnetworkbridge;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;

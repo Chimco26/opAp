@@ -2,6 +2,7 @@ package com.operators.activejobslistformachinenetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;

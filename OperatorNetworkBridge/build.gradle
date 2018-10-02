@@ -28,5 +28,6 @@ dependencies {
     implementation project(':OperatorInfra')
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
-    implementation project(path: ':ReportNetworkBridge')
+    implementation project(':ReportNetworkBridge')
+    implementation project(':oppapplog')
 }
