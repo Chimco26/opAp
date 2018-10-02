@@ -42,6 +42,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.utils.OppAppLogger;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.zemingo.logrecorder.ZLogger;
@@ -93,9 +94,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
-            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-
         }
+
+        if (context instanceof OnCroutonRequestListener) {
+            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+        }
+
     }
 
     @Override
@@ -136,8 +140,13 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
-            mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
+
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                    && mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition) != null) {
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+                mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
+            }
+
         }
 
 
