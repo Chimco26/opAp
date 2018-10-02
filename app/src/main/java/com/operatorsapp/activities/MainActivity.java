@@ -35,7 +35,6 @@ import java.util.Calendar;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
-import static android.app.AlarmManager.INTERVAL_HOUR;
 
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
 
-    public boolean initLoggerAndDataStorage() {
+    public void initLoggerAndDataStorage() {
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -156,17 +155,11 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
                 initZLogger();
 
-                return true;
-
             } else {
 
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
 
-                return false;
             }
-        } else {
-
-            return true;
         }
     }
 

@@ -1,6 +1,8 @@
 package com.operators.machinedatanetworkbridge;
 
 
+import android.support.annotation.NonNull;
+
 import com.example.oppapplog.OppAppLogger;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
@@ -8,9 +10,7 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinedatanetworkbridge.interfaces.GetMachineDataNetworkManagerInterface;
 import com.operators.machinedatanetworkbridge.server.ErrorObject;
 import com.operators.machinedatanetworkbridge.server.requests.GetMachineDataDataRequest;
-import com.operators.machinedatanetworkbridge.server.responses.ErrorResponse;
 import com.operators.machinedatanetworkbridge.server.responses.MachineDataDataResponse;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +40,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
         call.enqueue(new Callback<MachineDataDataResponse>()
         {
             @Override
-            public void onResponse(Call<MachineDataDataResponse> call, Response<MachineDataDataResponse> response)
+            public void onResponse(@NonNull Call<MachineDataDataResponse> call, @NonNull Response<MachineDataDataResponse> response)
             {
 
                 if(response.body() != null && response.body().getMachineParams() != null && response.body().getErrorResponse() == null)
@@ -58,7 +58,7 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
             }
 
             @Override
-            public void onFailure(Call<MachineDataDataResponse> call, Throwable t)
+            public void onFailure(@NonNull Call<MachineDataDataResponse> call, @NonNull Throwable t)
             {
                 if(mRetryCount++ < totalRetries)
                 {
@@ -77,22 +77,22 @@ public class GetMachineDataNetworkBridge implements GetMachineDataNetworkBridgeI
         });
     }
 
-    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
-    {
-        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
-        return new ErrorObject(code, errorResponse.getErrorDesc());
-    }
-
-    private ErrorObject.ErrorCode toCode(int errorCode)
-    {
-        switch(errorCode)
-        {
-            case 101:
-                return ErrorObject.ErrorCode.Credentials_mismatch;
-            case 500:
-                return ErrorObject.ErrorCode.Server;
-        }
-        return ErrorObject.ErrorCode.Unknown;
-    }
+//    private ErrorObject errorObjectWithErrorCode(ErrorResponse errorResponse)
+//    {
+//        ErrorObject.ErrorCode code = toCode(errorResponse.getErrorCode());
+//        return new ErrorObject(code, errorResponse.getErrorDesc());
+//    }
+//
+//    private ErrorObject.ErrorCode toCode(int errorCode)
+//    {
+//        switch(errorCode)
+//        {
+//            case 101:
+//                return ErrorObject.ErrorCode.Credentials_mismatch;
+//            case 500:
+//                return ErrorObject.ErrorCode.Server;
+//        }
+//        return ErrorObject.ErrorCode.Unknown;
+//    }
 
 }
