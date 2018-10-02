@@ -15,6 +15,10 @@ public class RefreshPollingBroadcast extends BroadcastReceiver {
         mListener = listener;
     }
 
+    public RefreshPollingBroadcast() {
+
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
 

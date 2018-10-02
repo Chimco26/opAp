@@ -1,6 +1,6 @@
 package com.operators.operatornetworkbridge;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
@@ -48,9 +48,9 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
         Call<OperatorDataResponse> call = mGetOperatorByIdNetworkManagerInterface.getOperatorByIdRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getOperator(getOperatorByIdRequest);
         call.enqueue(new Callback<OperatorDataResponse>() {
             @Override
-            public void onResponse(Call<OperatorDataResponse> call, Response<OperatorDataResponse> response) {
+            public void onResponse(@NonNull Call<OperatorDataResponse> call, @NonNull Response<OperatorDataResponse> response) {
                 if (response.isSuccessful()) {
-                    Operator operator = null;
+                    Operator operator;
                     if (response.body() != null) {
                         operator = response.body().getOperator();
                         if (operator == null) {
@@ -75,7 +75,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             }
 
             @Override
-            public void onFailure(Call<OperatorDataResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<OperatorDataResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
@@ -95,7 +95,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
         Call<ResponseBody> call = mSetOperatorForMachineNetworkManagerInterface.setOperatorForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).setOperatorForMachine(setOperatorForMachineRequest);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
 
                 String str = "";
                 try {
@@ -133,7 +133,7 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
                     OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);

@@ -22,20 +22,20 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ChangeLang;
-import com.zemingo.logrecorder.LogRecorder;
-import com.zemingo.logrecorder.ZLogger;
+import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
 import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static android.app.AlarmManager.INTERVAL_DAY;
+import static android.app.AlarmManager.INTERVAL_HOUR;
 
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        isStoragePermissionGranted();
+        initLoggerAndDataStorage();
 
         setupAlarm();
 
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
 
-    public boolean isStoragePermissionGranted() {
+    public boolean initLoggerAndDataStorage() {
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -191,24 +191,26 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     private void setupAlarm() {
 
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent(getBaseContext(), BroadcastAlarmManager.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-//                MainActivity.this, 0, intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Calendar firingCal= Calendar.getInstance();
-//        Calendar currentCal = Calendar.getInstance();
-//
-//        firingCal.set(Calendar.HOUR_OF_DAY, 0); // At the hour you wanna fire
-//        firingCal.set(Calendar.MINUTE, 0); // Particular minute
-//        firingCal.set(Calendar.SECOND, 0); // particular second
-//
-//        if(firingCal.compareTo(currentCal) < 0) {
-//            firingCal.add(Calendar.DAY_OF_MONTH, 1);
-//        }
-//        Long intendedTime = firingCal.getTimeInMillis();
-//        alarmManager.setRepeating(AlarmManager.RTC, intendedTime , AlarmManager.INTERVAL_DAY, pendingIntent);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(getBaseContext(), BroadcastAlarmManager.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                MainActivity.this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar firingCal= Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+
+        firingCal.set(Calendar.HOUR_OF_DAY, 0); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE, 0); // Particular minute
+        firingCal.set(Calendar.SECOND, 0); // particular second
+
+        if(firingCal.compareTo(currentCal) < 0) {
+            firingCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        Long intendedTime = firingCal.getTimeInMillis();
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, INTERVAL_DAY, pendingIntent);
+        }
     }
 
 }
