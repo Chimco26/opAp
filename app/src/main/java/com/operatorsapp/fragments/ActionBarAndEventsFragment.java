@@ -785,7 +785,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnGoToScreenListener.goToFragment(new SettingsFragment(), false, true);
+                    mOnGoToScreenListener.goToFragment(SettingsFragment.newInstance(), false, true);
                 }
             });
             actionBar.setCustomView(mToolBarView);

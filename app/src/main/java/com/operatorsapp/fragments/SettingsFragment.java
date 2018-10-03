@@ -58,6 +58,10 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
 
+    public static SettingsFragment newInstance() {
+
+        return new SettingsFragment();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
