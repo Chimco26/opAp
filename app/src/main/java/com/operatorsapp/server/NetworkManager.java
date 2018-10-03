@@ -279,13 +279,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                     int millis = timeUnitToMillis(timeUnit, timeout);
 
                     if (millis != okHttpClient.connectTimeoutMillis()) {
-                        okHttpClient = new OkHttpClient.Builder()
-                                .connectionPool(pool)
+                        okHttpClient = okHttpClient.newBuilder()
                                 .connectTimeout(timeout, timeUnit)
                                 .writeTimeout(timeout, timeUnit)
                                 .readTimeout(timeout, timeUnit)
-                                .addInterceptor(loggingInterceptor)
-                                .dispatcher(dispatcher)
                                 .build();
                     }
                 }
