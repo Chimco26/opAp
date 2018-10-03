@@ -1163,10 +1163,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener) {
-        mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
+//        mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
 //        mReportFieldsForMachineCore.stopPolling();
 //        mReportFieldsForMachineCore.startPolling();
-        getActiveJobs();
+//        getActiveJobs();
+
+        onRefreshPolling();
         OppAppLogger.getInstance().i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
     }
 

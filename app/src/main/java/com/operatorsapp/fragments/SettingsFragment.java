@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -55,6 +56,11 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private Button mButtonChange;
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
+
+    public static Fragment newInstance() {
+
+        return new SettingsFragment();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -295,4 +301,5 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     {
         return R.id.settings_crouton_root;
     }
+
 }

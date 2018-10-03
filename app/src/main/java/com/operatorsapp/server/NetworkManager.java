@@ -54,7 +54,6 @@ import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServ
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.utils.SendReportUtil;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -90,7 +89,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         PostUpdtaeActionsNetworkManager,
         PostActivateJobNetworkManager,
         PostUpdateNotesForJobNetworkManager,
-        PostSplitEventNetworkManager{
+        PostSplitEventNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -258,24 +257,54 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
                 loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                if (timeout >= 0 && timeUnit != null) {
-                    okHttpClient = new OkHttpClient.Builder()
-                            .connectionPool(pool)
-                            .connectTimeout(timeout, timeUnit)
-                            .writeTimeout(timeout, timeUnit)
-                            .readTimeout(timeout, timeUnit)
-                            .addInterceptor(loggingInterceptor)
-                            .dispatcher(dispatcher)
-                            .build();
-                } else {
-                    okHttpClient = new OkHttpClient.Builder()
-                            .connectionPool(pool)
-                            .dispatcher(dispatcher)
-                            .addInterceptor(loggingInterceptor)
-                            .build();
+//                if (timeout >= 0 && timeUnit != null) {
+//                    okHttpClient = new OkHttpClient.Builder()
+//                            .connectionPool(pool)
+//                            .connectTimeout(timeout, timeUnit)
+//                            .writeTimeout(timeout, timeUnit)
+//                            .readTimeout(timeout, timeUnit)
+//                            .addInterceptor(loggingInterceptor)
+//                            .dispatcher(dispatcher)
+//                            .build();
+//                } else {
+//                    okHttpClient = new OkHttpClient.Builder()
+//                            .connectionPool(pool)
+//                            .dispatcher(dispatcher)
+//                            .addInterceptor(loggingInterceptor)
+//                            .build();
+//                }
+                if (okHttpClient == null) {
+                    if (timeout >= 0 && timeUnit != null) {
+                        okHttpClient = new OkHttpClient.Builder()
+                                .connectionPool(pool)
+                                .connectTimeout(timeout, timeUnit)
+                                .writeTimeout(timeout, timeUnit)
+                                .readTimeout(timeout, timeUnit)
+                                .addInterceptor(loggingInterceptor)
+                                .dispatcher(dispatcher)
+                                .build();
+                    } else {
+                        okHttpClient = new OkHttpClient.Builder()
+                                .connectionPool(pool)
+                                .dispatcher(dispatcher)
+                                .addInterceptor(loggingInterceptor)
+                                .build();
+                    }
+                } else if (timeUnit != null) {
+
+                    int millis = timeUnitToMillis(timeUnit, timeout);
+
+                    if (millis != okHttpClient.connectTimeoutMillis()) {
+                        okHttpClient = new OkHttpClient.Builder()
+                                .connectionPool(pool)
+                                .connectTimeout(timeout, timeUnit)
+                                .writeTimeout(timeout, timeUnit)
+                                .readTimeout(timeout, timeUnit)
+                                .addInterceptor(loggingInterceptor)
+                                .dispatcher(dispatcher)
+                                .build();
+                    }
                 }
-
-
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
 
@@ -294,9 +323,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             mRetrofit = new Retrofit.Builder().build();
 
         } catch (RuntimeException e) {
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
-                Log.e(LOG_TAG,e.getMessage());
+                Log.e(LOG_TAG, e.getMessage());
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
 
@@ -306,6 +335,43 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         return mRetrofit;
 
     }
+
+    private int timeUnitToMillis(TimeUnit timeUnit, int timeout) {
+
+        int millis = 0;
+        if (timeout > 0) {
+
+            switch (timeUnit) {
+
+                case DAYS:
+                    millis = timeout * 24 * 60 * 60 * 1000;
+                    break;
+                case HOURS:
+                    millis = timeout * 60 * 60 * 1000;
+                    break;
+                case MINUTES:
+                    millis = timeout * 60 * 1000;
+                    break;
+                case SECONDS:
+                    millis = timeout * 1000;
+                    break;
+                case NANOSECONDS:
+                    millis = timeout / 1000 / 1000;
+                    break;
+                case MICROSECONDS:
+                    millis = timeout / 1000;
+                    break;
+                case MILLISECONDS:
+                    millis = timeout;
+                    break;
+            }
+        }else {
+            millis = 0;
+        }
+
+        return  millis;
+    }
+
 
     @Override
     public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl) {
@@ -664,7 +730,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             okHttpClient.connectionPool().evictAll();
 
         } catch (Exception e) {
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
                 Log.e(LOG_TAG, e.getMessage());
         }
