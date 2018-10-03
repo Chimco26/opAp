@@ -257,22 +257,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
                 loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//                if (timeout >= 0 && timeUnit != null) {
-//                    okHttpClient = new OkHttpClient.Builder()
-//                            .connectionPool(pool)
-//                            .connectTimeout(timeout, timeUnit)
-//                            .writeTimeout(timeout, timeUnit)
-//                            .readTimeout(timeout, timeUnit)
-//                            .addInterceptor(loggingInterceptor)
-//                            .dispatcher(dispatcher)
-//                            .build();
-//                } else {
-//                    okHttpClient = new OkHttpClient.Builder()
-//                            .connectionPool(pool)
-//                            .dispatcher(dispatcher)
-//                            .addInterceptor(loggingInterceptor)
-//                            .build();
-//                }
                 if (okHttpClient == null) {
                     if (timeout >= 0 && timeUnit != null) {
                         okHttpClient = new OkHttpClient.Builder()
@@ -295,13 +279,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                     int millis = timeUnitToMillis(timeUnit, timeout);
 
                     if (millis != okHttpClient.connectTimeoutMillis()) {
-                        okHttpClient = new OkHttpClient.Builder()
-                                .connectionPool(pool)
+                        okHttpClient = okHttpClient.newBuilder()
                                 .connectTimeout(timeout, timeUnit)
                                 .writeTimeout(timeout, timeUnit)
                                 .readTimeout(timeout, timeUnit)
-                                .addInterceptor(loggingInterceptor)
-                                .dispatcher(dispatcher)
                                 .build();
                     }
                 }
