@@ -2,6 +2,7 @@ package com.operators.activejobslistformachinenetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;
@@ -10,6 +11,7 @@ import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.activejobslistformachinenetworkbridge.server.requests.GetActiveJobsListForMachineRequest;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
@@ -27,7 +29,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
     private int mRetryCount = 0;
 
     public void inject(ActiveJobsListForMachineNetworkManagerInterface activeJobsListForMachineNetworkManagerInterface) {
-        ZLogger.i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
+        OppAppLogger.getInstance().i(LOG_TAG, "ActiveJoshListForMachineNetworkBridge inject()");
         mActiveJobsListForMachineNetworkManagerInterface = activeJobsListForMachineNetworkManagerInterface;
     }
 
@@ -49,7 +51,7 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                                 callback.onGetActiveJobsListForMachineFailed(errorObject);
                             }
                         } else {
-                            ZLogger.w(LOG_TAG, "getActiveJoshForMachine() callback is null");
+                            OppAppLogger.getInstance().w(LOG_TAG, "getActiveJoshForMachine() callback is null");
 
                         }
                     } else {
@@ -57,29 +59,30 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
                     }
                 } else {
+
+                    ErrorObjectInterface errorObject;
+
                     if (response.body() != null) {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        callback.onGetActiveJobsListForMachineFailed(errorObject);
+                        errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                     } else if (response.raw() != null && response.raw().code() == 401) {
-
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.SessionInvalid, response.raw().message() + "");
-                        callback.onGetActiveJobsListForMachineFailed(errorObject);
-
+                        errorObject = new ErrorObject(ErrorObject.ErrorCode.SessionInvalid, response.raw().message() + "");
                     } else {
-                            ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
-                            callback.onGetActiveJobsListForMachineFailed(errorObject);
+                        errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
                     }
+
+                    callback.onGetActiveJobsListForMachineFailed(errorObject);
+
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ActiveJobsListForMachineResponse> call, @NonNull Throwable t) {
                 if (mRetryCount++ < totalRetries) {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
                     mRetryCount = 0;
-                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response failure");
                     callback.onGetActiveJobsListForMachineFailed(errorObject);
                 }

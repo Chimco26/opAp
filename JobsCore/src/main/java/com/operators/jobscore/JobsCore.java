@@ -2,6 +2,7 @@ package com.operators.jobscore;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
@@ -38,29 +39,29 @@ public class JobsCore {
                         if (mJobsForMachineUICallbackListener != null) {
                             if (jobListForMachine != null && jobListForMachine.getData().size()>0) {
                                 mJobsForMachineUICallbackListener.onJobListReceived(jobListForMachine);
-                                ZLogger.w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onGetJobsListForMachineSuccess() ");
                             } else{
-                                ZLogger.w(LOG_TAG, "onGetJobsListForMachineSuccess(), jobListForMachine null or empty");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onGetJobsListForMachineSuccess(), jobListForMachine null or empty");
                             }
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
                     }
 
                     @Override
                     public void onGetJobsListForMachineFailed(ErrorObjectInterface reason) {
-                        ZLogger.w(LOG_TAG, "Error getting job list");
+                        OppAppLogger.getInstance().w(LOG_TAG, "Error getting job list");
                         if (mJobsForMachineUICallbackListener != null) {
                             if (reason != null) {
                                 mJobsForMachineUICallbackListener.onJobListReceiveFailed(reason);
                             }
                             else {
-                                ZLogger.w(LOG_TAG, "reason is nul");
+                                OppAppLogger.getInstance().w(LOG_TAG, "reason is nul");
                             }
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "onGetJobsListForMachineFailed() UI Callback is null ");
+                            OppAppLogger.getInstance().w(LOG_TAG, "onGetJobsListForMachineFailed() UI Callback is null ");
                         }
                     }
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());
@@ -71,12 +72,12 @@ public class JobsCore {
                 mJobsPersistenceManagerInterface.getMachineId(), jobId, new StartJobForMachineCallback() {
                     @Override
                     public void onStartJobForMachineSuccess() {
-                        ZLogger.i(LOG_TAG, "Starting job success");
+                        OppAppLogger.getInstance().i(LOG_TAG, "Starting job success");
                         if (mJobsForMachineUICallbackListener != null) {
                             mJobsForMachineUICallbackListener.onStartJobSuccess();
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
                     }
 
@@ -86,9 +87,9 @@ public class JobsCore {
                             mJobsForMachineUICallbackListener.onStartJobFailed(reason);
                         }
                         else {
-                            ZLogger.w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
+                            OppAppLogger.getInstance().w(LOG_TAG, "mJobsForMachineUICallbackListener is nul");
                         }
-                        ZLogger.w(LOG_TAG, "Error starting job");
+                        OppAppLogger.getInstance().w(LOG_TAG, "Error starting job");
                     }
                 }, mJobsPersistenceManagerInterface.getTotalRetries(), mJobsPersistenceManagerInterface.getRequestTimeout());
     }

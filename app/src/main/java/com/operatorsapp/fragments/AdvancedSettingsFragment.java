@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
@@ -318,7 +319,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
     private void sendLogToEmail() {
 
         ProgressDialogManager.show(getActivity());
-        ZLogger.d(LOG_TAG, "start sendLogToEmail(), ");
+        OppAppLogger.getInstance().d(LOG_TAG, "start sendLogToEmail(), ");
         LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
         try {
             LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
@@ -329,11 +330,11 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
                         mListener.onIgnoreOnPauseFromAdvancedSettings();
                         startActivity(intent);
                     } catch (Exception e) {
-                        ZLogger.e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
+                        OppAppLogger.getInstance().e(LOG_TAG, "requestSendLogsIntent(), failed.", e);
                     }
                 }
             });
-            ZLogger.d(LOG_TAG, "end sendLogToEmail(), ");
+            OppAppLogger.getInstance().d(LOG_TAG, "end sendLogToEmail(), ");
         } catch (Exception e) {
             ProgressDialogManager.dismiss();
             e.printStackTrace();

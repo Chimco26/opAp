@@ -28,4 +28,5 @@ dependencies {
     implementation project(':ReportFieldsForMachineInfra')
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
+    implementation project((':oppapplog'))
 }

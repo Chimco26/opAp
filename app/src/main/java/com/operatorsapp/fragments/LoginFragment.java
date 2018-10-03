@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
@@ -259,7 +260,7 @@ public class LoginFragment extends Fragment {
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
-                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded() ");
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
                 getVersion(machines, true);
             }
@@ -291,7 +292,7 @@ public class LoginFragment extends Fragment {
         LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
-                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
 
                 getVersion(machines, false);
             }

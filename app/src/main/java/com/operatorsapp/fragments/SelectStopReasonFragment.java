@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -218,7 +219,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 
-            ZLogger.i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
+            OppAppLogger.getInstance().i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
 
             mSelectedSubreason = subReason;
 
@@ -292,7 +293,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 // TODO: 17/07/2018 add crouton for success
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
-                ZLogger.i(LOG_TAG, "sendReportSuccess()");
+                OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
                 tracker.send(new HitBuilders.EventBuilder()
@@ -309,7 +310,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                         .build());
             }
 
-//            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+//            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
 //            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 //
 //            if (o != null){
@@ -338,7 +339,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            ZLogger.w(LOG_TAG, "sendReportFailure()");
+            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
             Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Stop Reason Report")
@@ -355,7 +356,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
-                        ZLogger.w(LOG_TAG, "Failed silent login");
+                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                     }

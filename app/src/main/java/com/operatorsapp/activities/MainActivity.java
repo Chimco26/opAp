@@ -2,6 +2,8 @@ package com.operatorsapp.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -28,13 +31,18 @@ import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.ChangeLang;
-import com.zemingo.logrecorder.ZLogger;
+import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
+
+import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static android.app.AlarmManager.INTERVAL_DAY;
 
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int STORAGE_REQUEST_CODE = 1;
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
     private Fragment mCurrentFragment;
@@ -55,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        isStoragePermissionGranted();
+        initLoggerAndDataStorage();
 
+        setupAlarm();
 
         mCroutonCreator = new CroutonCreator();
         goToFragment(LoginFragment.newInstance(), true, false);
@@ -75,20 +84,18 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onBackPressed() {
-        if (!mIsTryToLogin)
-        {
+        if (!mIsTryToLogin) {
             super.onBackPressed();
         }
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean toBackStack, boolean addToBackStack) {
-        ZLogger.d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+    public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
+        OppAppLogger.getInstance().d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         mCurrentFragment = fragment;
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).commit();
         }
     }
@@ -113,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
             // Show dialog to allow users to install, update, or otherwise enable Google Play services.
             GoogleApiAvailability.getInstance().getErrorDialog(callingActivity, e.getConnectionStatusCode(), 0);
         } catch (GooglePlayServicesNotAvailableException e) {
-            ZLogger.e("SecurityException", "Google Play Services not available.");
+            OppAppLogger.getInstance().e("SecurityException", "Google Play Services not available.");
         }
     }
 
@@ -148,23 +155,20 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         mIsTryToLogin = isTryToLogin;
     }
 
-    public boolean isStoragePermissionGranted() {
+
+    public void initLoggerAndDataStorage() {
 
         if (Build.VERSION.SDK_INT >= 23) {
 
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                return true;
+                initZLogger();
 
             } else {
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
 
-                return false;
             }
-        } else {
-
-            return true;
         }
     }
 
@@ -173,6 +177,42 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
+        if (requestCode == STORAGE_REQUEST_CODE) {
+            initZLogger();
+        }
     }
+
+    public void initZLogger() {
+
+        OppAppLogger.setStorageGranted(this, true);
+
+        OppAppLogger.initInstance(this);
+
+        goToFragment(LoginFragment.newInstance(), false, false);
+    }
+
+    private void setupAlarm() {
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(getBaseContext(), BroadcastAlarmManager.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                MainActivity.this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar firingCal= Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+
+        firingCal.set(Calendar.HOUR_OF_DAY, 0); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE, 0); // Particular minute
+        firingCal.set(Calendar.SECOND, 0); // particular second
+
+        if(firingCal.compareTo(currentCal) < 0) {
+            firingCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        Long intendedTime = firingCal.getTimeInMillis();
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC, intendedTime, INTERVAL_DAY, pendingIntent);
+        }
+    }
+
 }

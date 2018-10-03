@@ -2,6 +2,7 @@ package com.operatorsapp.managers;
 
 import android.app.Activity;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.dialogs.ProgressDialogFragment;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -16,7 +17,7 @@ public class ProgressDialogManager {
                 mProgressDialog.show(activity.getFragmentManager(), "");
             }
         } catch (Exception e) {
-            ZLogger.e(LOG_TAG, "failed to create progress dialog, " + e.getMessage());
+            OppAppLogger.getInstance().e(LOG_TAG, "failed to create progress dialog, " + e.getMessage());
         }
     }
 
@@ -28,7 +29,7 @@ public class ProgressDialogManager {
             }
         } catch (Exception e) {
             mProgressDialog = null;
-            ZLogger.e(LOG_TAG, "failed to dismiss progress dialog, " + e.getMessage());
+            OppAppLogger.getInstance().e(LOG_TAG, "failed to dismiss progress dialog, " + e.getMessage());
         }
     }
 

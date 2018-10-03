@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -322,7 +323,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         reportNetworkBridge.injectInventory(NetworkManager.getInstance());
         ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
 
         mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
 
@@ -352,7 +353,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 //
 //            SendBroadcast.refreshPolling(getContext());
 //            dismissProgressDialog();
-//            ZLogger.i(LOG_TAG, "sendReportSuccess()");
+//            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
 //            mReportCore.unregisterListener();
 //
 //            if (o != null){
@@ -369,7 +370,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
-            ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
 
         }

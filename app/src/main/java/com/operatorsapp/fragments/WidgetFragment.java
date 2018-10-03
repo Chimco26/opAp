@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
@@ -30,7 +31,6 @@ import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +46,7 @@ public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener {
 
     private static final long TWENTY_FOUR_HOURS = 60000L * 60 * 24;
+    private static final int CHART_POINTS_LIST_LIMIT_SIZE = 1500;
     private boolean mIsOpen;
     //    private int mOpenWidth;
     private int mWidgetsLayoutWidth;
@@ -80,7 +81,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ZLogger.d(LOG_TAG, "onViewCreated(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
         mIsOpen = false;
@@ -115,7 +116,7 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onAttach(Context context) {
-        ZLogger.d(LOG_TAG, "onAttach(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), start ");
         super.onAttach(context);
         try {
             mReportFieldsFragmentCallbackListener = (ReportFieldsFragmentCallbackListener) getActivity();
@@ -126,19 +127,19 @@ public class WidgetFragment extends Fragment implements
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
-        ZLogger.d(LOG_TAG, "onAttach(), end ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onAttach(), end ");
     }
 
     @Override
     public void onDetach() {
-        ZLogger.d(LOG_TAG, "onDetach(), start ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), start ");
         super.onDetach();
         mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
         mOnGoToScreenListener = null;
         mReportFieldsFragmentCallbackListener = null;
         mDashboardCentralContainerListener = null;
-        ZLogger.d(LOG_TAG, "onDetach(), end ");
+        OppAppLogger.getInstance().d(LOG_TAG, "onDetach(), end ");
     }
 
     @Override
@@ -240,6 +241,9 @@ public class WidgetFragment extends Fragment implements
         for (Widget widget : widgetList) {
             // if have chart widget (field type 3)
             if (widget.getFieldType() == 3) {
+
+                removeOver1500Points(widget);
+
                 // if have historic in prefs
                 if (prefsHistoricCopy.size() > 0) {
 
@@ -258,6 +262,7 @@ public class WidgetFragment extends Fragment implements
                             if (prefsHistoricCopy.get(String.valueOf(widget.getID())) != null) {
 
                                 widget.getMachineParamHistoricData().addAll(prefsHistoricCopy.get(String.valueOf(widget.getID())));
+
                             }
                         } else {
                             // if is new widget,  save to prefs
@@ -272,12 +277,29 @@ public class WidgetFragment extends Fragment implements
                     }
 
                 } else {
-                    // if is the firs chart data,  save to prefs
+                    // if is the first chart data,  save to prefs
                     prefsHistoricCopy.put(String.valueOf(widget.getID()), widget.getMachineParamHistoricData());
                 }
             }
         }
         PersistenceManager.getInstance().saveChartHistoricData(prefsHistoricCopy);
+    }
+
+    private void removeOver1500Points(Widget widget) {
+        int widgetParamHistoDataSize = widget.getMachineParamHistoricData().size();
+        ArrayList<Widget.HistoricData> toRemove = new ArrayList<>();
+
+        if (widgetParamHistoDataSize > CHART_POINTS_LIST_LIMIT_SIZE) {
+            for (int i = CHART_POINTS_LIST_LIMIT_SIZE + 1; i < widgetParamHistoDataSize; i++) {
+
+                toRemove.add(widget.getMachineParamHistoricData().get(i));
+            }
+        }
+
+        for (Widget.HistoricData historicDataToRemove: toRemove){
+
+            widget.getMachineParamHistoricData().remove(historicDataToRemove);
+        }
     }
 
     private void cleanOver24HoursData(HashMap<String, ArrayList<Widget.HistoricData>> prefsHistoricCopy, String widgetId) {
@@ -286,7 +308,8 @@ public class WidgetFragment extends Fragment implements
 
         for (int i = 0; i < prefsHistoricCopy.get(widgetId).size(); i++) {
             if (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(i).getTime(), "dd/MM/yyyy HH:mm:ss") <
-                    (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(prefsHistoricCopy.get(widgetId).size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TWENTY_FOUR_HOURS)) {
+                    (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(prefsHistoricCopy.get(widgetId).size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TWENTY_FOUR_HOURS)
+                    || i > CHART_POINTS_LIST_LIMIT_SIZE) {
                 toClean.add(prefsHistoricCopy.get(widgetId).get(i));
             }
         }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 
 import com.operators.errorobject.ErrorObjectInterface;
@@ -93,7 +94,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
             @Override
             public void onSetOperatorSuccess(String operatorId) {
                 SendBroadcast.refreshPolling(getContext());
-                ZLogger.i(LOG_TAG, "onSetOperatorSuccess()");
+                OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
                 Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
                 tracker.send(new HitBuilders.EventBuilder()
@@ -105,7 +106,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
-                ZLogger.w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+                OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
                 Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
                 tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Operetor Sign in")

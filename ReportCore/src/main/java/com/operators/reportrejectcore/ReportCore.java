@@ -1,5 +1,6 @@
 package com.operators.reportrejectcore;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
@@ -41,7 +42,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -50,7 +51,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
@@ -67,7 +68,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onApproveFirstItemSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onApproveFirstItemSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -76,7 +77,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onApproveFirstItemSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onApproveFirstItemSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
@@ -93,7 +94,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -102,7 +103,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
@@ -120,7 +121,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -129,7 +130,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
@@ -147,7 +148,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -156,7 +157,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());
@@ -173,7 +174,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportSuccess(o);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
 
@@ -182,7 +183,7 @@ public class ReportCore {
                             if (mReportCallbackListener != null) {
                                 mReportCallbackListener.sendReportFailure(reason);
                             } else {
-                                ZLogger.w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
+                                OppAppLogger.getInstance().w(LOG_TAG, "onSendReportSuccess() mReportCallbackListener is null ");
                             }
                         }
                     }, mReportPersistenceManagerInterface.getTotalRetries(), mReportPersistenceManagerInterface.getRequestTimeout());

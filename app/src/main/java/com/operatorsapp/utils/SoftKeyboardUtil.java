@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.oppapplog.OppAppLogger;
 import com.zemingo.logrecorder.ZLogger;
 
 public class SoftKeyboardUtil {
@@ -21,7 +22,7 @@ public class SoftKeyboardUtil {
                 }
             }
         } catch (Exception e) {
-            ZLogger.e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
+            OppAppLogger.getInstance().e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
         }
     }
 
@@ -34,7 +35,7 @@ public class SoftKeyboardUtil {
                     inputManager.hideSoftInputFromWindow(fragment.getView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             } catch (Exception e) {
-                ZLogger.e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
+                OppAppLogger.getInstance().e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
             }
         }
     }
@@ -47,7 +48,7 @@ public class SoftKeyboardUtil {
                 inputManager.hideSoftInputFromWindow(fragment.getView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         } catch (Exception e) {
-            ZLogger.e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
+            OppAppLogger.getInstance().e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
         }
     }
 
@@ -60,7 +61,7 @@ public class SoftKeyboardUtil {
                     inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             } catch (Exception e) {
-                ZLogger.e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
+                OppAppLogger.getInstance().e(LOG_TAG, "error hiding keyboard, " + e.getMessage());
             }
         }
     }

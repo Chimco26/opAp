@@ -2,6 +2,7 @@ package com.operators.reportfieldsformachinenetworkbridge;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
@@ -54,7 +55,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                         }
                         else
                         {
-                            ZLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
+                            OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine onResponse Success");
                             callback.onGetReportFieldsForMachineSuccess(response.body().getReportFieldsForMachine());
                         }
                     }
@@ -62,7 +63,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                     {
                         if(response.body() != null)
                         {
-                            ZLogger.i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
+                            OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine onResponse failure");
                             ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                             callback.onGetReportFieldsForMachineFailed(errorObject);
                         }
@@ -70,7 +71,7 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 }
                 else
                 {
-                    ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
             }
 
@@ -81,20 +82,20 @@ public class ReportFieldsForMachineNetworkBridge implements ReportFieldsForMachi
                 {
                     if(mRetryCount++ < totalRetries)
                     {
-                        ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     }
                     else
                     {
                         mRetryCount = 0;
-                        ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Response Error");
                         callback.onGetReportFieldsForMachineFailed(errorObject);
                     }
                 }
                 else
                 {
-                    ZLogger.i(LOG_TAG, "getReportFieldsForMachine callback is null");
+                    OppAppLogger.getInstance().i(LOG_TAG, "getReportFieldsForMachine callback is null");
                 }
 
             }

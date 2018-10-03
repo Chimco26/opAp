@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
@@ -20,7 +21,6 @@ import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
 
 import org.acra.ACRA;
 
@@ -68,6 +68,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREFS_VERSION = "PREFS_VERSION";
     private static final float DEFAULT_VERSION = 1.6f;
     private static final String PREF_CHECKED_ALARM_IDS = "PREF_CHECKED_ALARM_IDS";
+    private static final String PREF_STORAGE_PERMISSION_GRANTED = "PREF_STORAGE_PERMISSION_GRANTED";
 
 
     private static PersistenceManager msInstance;
@@ -83,7 +84,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public static PersistenceManager getInstance() {
         if (msInstance == null) {
-            ZLogger.e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
+            OppAppLogger.getInstance().e(LOG_TAG, "getInstance(), fail, PersistenceManager is not init");
         }
         return msInstance;
     }
@@ -243,7 +244,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }
 
 
-        ZLogger.d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
+        OppAppLogger.getInstance().d(LOG_TAG, "saveShiftLogs(), jsonEvents: " + mGson.toJson(events));
     }
 
     private ArrayList<Event> getEventsFirstHalf(ArrayList<Event> events) {
@@ -417,5 +418,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setDisplayToolbarTutorial(boolean isNew) {
         SecurePreferences.getInstance().setBoolean(PREF_TOOLBAR_TUTORIAL, isNew);
+    }
+
+    public void setStorageGranted(boolean granted) {
+        SecurePreferences.getInstance().setBoolean(PREF_STORAGE_PERMISSION_GRANTED, granted);
+    }
+
+    public boolean isStorageGranted() {
+        return SecurePreferences.getInstance().getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
     }
 }

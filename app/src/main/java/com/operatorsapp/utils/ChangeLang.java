@@ -45,20 +45,22 @@ public class ChangeLang {
 
             @Override
             protected Void doInBackground(Void... params) {
-                String app_locale = PersistenceManager.getInstance().getCurrentLang();
-                Locale locale = new Locale(app_locale);
-                Locale.setDefault(locale);
+                if (PersistenceManager.getInstance() != null) {
+                    String app_locale = PersistenceManager.getInstance().getCurrentLang();
+                    Locale locale = new Locale(app_locale);
+                    Locale.setDefault(locale);
 
-                //Configuration to query the current layout direction.
-                Configuration config = new Configuration();
-                config.locale = locale;
-                context.getResources().updateConfiguration(config,
-                        context.getResources().getDisplayMetrics());
-                Bidi bidi = new Bidi(app_locale,
-                        Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
-                bidi.isLeftToRight();
-                YourGlobalClass.updateLanguage(context, app_locale);
+                    //Configuration to query the current layout direction.
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    context.getResources().updateConfiguration(config,
+                            context.getResources().getDisplayMetrics());
+                    Bidi bidi = new Bidi(app_locale,
+                            Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
+                    bidi.isLeftToRight();
+                    YourGlobalClass.updateLanguage(context, app_locale);
 
+                }
                 return null;
             }
 

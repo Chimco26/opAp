@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -47,7 +48,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -96,9 +96,12 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         if (context instanceof ShowDashboardCroutonListener) {
             mDashboardCroutonListener = (ShowDashboardCroutonListener) getActivity();
-            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
-
         }
+
+        if (context instanceof OnCroutonRequestListener) {
+            mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
+        }
+
     }
 
     @Override
@@ -144,8 +147,13 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
-            mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
+
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                    && mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition) != null) {
+                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+                mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getCavitiesActual();
+            }
+
         }
 
 
@@ -358,7 +366,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         reportNetworkBridge.inject(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        ZLogger.i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " JobId: " + mJobId);
 
         mReportCore.sendCycleUnitsReport(mUnitsCounter, mJobId);
 
@@ -377,7 +385,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
-            ZLogger.i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
 
 //            if (getFragmentManager() != null) {
@@ -399,7 +407,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
-            ZLogger.i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
 
             dismissProgressDialog();

@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -226,7 +227,7 @@ public class SecurePreferences {
             try {
                 return decrypt(securedEncodedValue);
             } catch (SecurePreferencesException e) {
-                ZLogger.e(LOG_TAG, "getString(), failed on key " + key);
+                OppAppLogger.getInstance().e(LOG_TAG, "getString(), failed on key " + key);
                 throw e;
             }
         }
@@ -281,7 +282,7 @@ return null;
         byte[] securedValue = Base64.decode(securedEncodedValue, Base64.NO_WRAP);
         byte[] value = convert(reader, securedValue);
         if (value == null) {
-            ZLogger.e(LOG_TAG, "decrypt(), value is null");
+            OppAppLogger.getInstance().e(LOG_TAG, "decrypt(), value is null");
             return null;
         }
         try {

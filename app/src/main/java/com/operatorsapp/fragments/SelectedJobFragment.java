@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
@@ -168,13 +169,13 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
 
     @Override
     public void onStartJobSuccess() {
-        ZLogger.i(LOG_TAG, "onStartJobSuccess()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onStartJobSuccess()");
         dismissProgressDialog();
     }
 
     @Override
     public void onStartJobFailure() {
-        ZLogger.i(LOG_TAG, "onStartJobFailure()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onStartJobFailure()");
         dismissProgressDialog();
     }
 

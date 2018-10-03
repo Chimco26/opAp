@@ -14,14 +14,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.operators.getmachinesnetworkbridge.GetMachinesNetworkBridge;
 import com.operators.logincore.LoginCore;
 import com.operators.loginnetworkbridge.LoginNetworkBridge;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.zemingo.logrecorder.LogRecorder;
-import com.zemingo.logrecorder.ZLogger;
 
-import io.fabric.sdk.android.Fabric;
 import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
@@ -29,6 +25,7 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.litepal.LitePal;
 
+import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.operatorsapp.utils.SendReportUtil.IS_APP_CRASH;
@@ -66,18 +63,17 @@ public class OperatorApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Fabric.with(this, new Crashlytics());
 
         LitePal.initialize(this);
 
         ACRA.init(this);
 
-
         msApplicationContext = getApplicationContext();
 //        LeakCanary.install(this);
 
         sAnalytics = GoogleAnalytics.getInstance(this);
-        LogRecorder.initInstance(msApplicationContext);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/DroidSans.ttf").setFontAttrId(R.attr.fontPath).build());
 
@@ -99,9 +95,6 @@ public class OperatorApplication extends MultiDexApplication {
 
         initImageLoading();
 
-        if (BuildConfig.DEBUG) {
-            ZLogger.DEBUG = true;
-        }
     }
 
 

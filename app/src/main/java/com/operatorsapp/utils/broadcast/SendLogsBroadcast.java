@@ -10,6 +10,9 @@ public class SendLogsBroadcast extends BroadcastReceiver {
 
     private SendLogsListener mListener;
 
+    public SendLogsBroadcast() {
+
+    }
 
     public SendLogsBroadcast(SendLogsListener listener) {
 

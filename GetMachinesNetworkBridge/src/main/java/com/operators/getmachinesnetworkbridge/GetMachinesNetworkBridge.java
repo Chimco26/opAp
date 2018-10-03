@@ -1,6 +1,7 @@
 package com.operators.getmachinesnetworkbridge;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
@@ -40,17 +41,17 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
                     }
                     if (response.body().getErrorResponse() == null) {
                         if (machines != null && machines.size() > 0) {
-                            ZLogger.d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
+                            OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + machines.size() + " machines");
 
                             getMachinesCallback.onGetMachinesSucceeded(machines);
 
                         } else {
-                            ZLogger.d(LOG_TAG, "onRequestFailed(), list null or empty");
+                            OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), list null or empty");
                             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "list null or empty");
                             getMachinesCallback.onGetMachinesFailed(errorObject);
                         }
                     } else {
-                        ZLogger.d(LOG_TAG, "onRequest(), getMachines failed");
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getMachines failed");
                         ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
                         getMachinesCallback.onGetMachinesFailed(errorObject);
                     }
@@ -60,10 +61,10 @@ public class GetMachinesNetworkBridge implements GetMachinesNetworkBridgeInterfa
             @Override
             public void onFailure(Call<MachinesResponse> call, Throwable t) {
                 if (retryCount++ < totalRetries) {
-                    ZLogger.v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().v(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 } else {
-                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     getMachinesCallback.onGetMachinesFailed(errorObject);
                 }

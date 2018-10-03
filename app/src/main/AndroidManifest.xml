@@ -59,6 +59,14 @@
             android:name=".utils.broadcast.SendLogsBroadcast"
             android:enabled="true"
             android:exported="true" />
+        <receiver
+            android:name=".utils.broadcast.BroadcastAlarmManager"
+            android:enabled="true"
+            android:exported="true" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="14901f99212291ad01bd6ae5fb3af77ed3114173" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

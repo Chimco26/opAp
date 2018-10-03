@@ -1,5 +1,6 @@
 package com.operators.shiftlognetworkbridge;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
@@ -50,7 +51,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 {
                     ArrayList<Event> events = response.body().getEvents();
 
-                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
+                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
 
 
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
@@ -58,7 +59,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 else
                 {
 
-                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
+                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - getShiftLog failed Error");
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getShiftLog failed Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
                 }
@@ -69,14 +70,14 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             {
                 if(retryCount++ < totalRetries)
                 {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
 
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     retryCount = 0;
-                    ZLogger.d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog, onFailure " + t.getMessage());
 
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     shiftLogCoreCallback.onShiftLogFailed(errorObject);
@@ -103,13 +104,13 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
                 }
                 else if(response.body() != null)
                 {
-                    ZLogger.e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
+                    OppAppLogger.getInstance().e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
                 else
                 {
-                    ZLogger.d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
+                    OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "GetShiftForMachine failed Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }
@@ -120,13 +121,13 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
             {
                 if(retryCount++ < totalRetries)
                 {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     retryCount = 0;
-                    ZLogger.d(LOG_TAG, "GetShiftForMachine, onFailure " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "GetShiftForMachine, onFailure " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 }

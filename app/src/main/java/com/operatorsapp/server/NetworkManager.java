@@ -2,6 +2,7 @@ package com.operatorsapp.server;
 
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
@@ -53,7 +54,6 @@ import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServ
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.utils.SendReportUtil;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -89,7 +89,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         PostUpdtaeActionsNetworkManager,
         PostActivateJobNetworkManager,
         PostUpdateNotesForJobNetworkManager,
-        PostSplitEventNetworkManager{
+        PostSplitEventNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -106,7 +106,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
     public static NetworkManager getInstance() {
         if (msInstance == null) {
-            ZLogger.e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
+            OppAppLogger.getInstance().e(LOG_TAG, "getInstance(), fail, NetworkManager is not init");
         }
         return msInstance;
     }
@@ -274,7 +274,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .addInterceptor(loggingInterceptor)
                                 .build();
                     }
-                }else if (timeUnit != null){
+                } else if (timeUnit != null) {
 
                     int millis = timeUnitToMillis(timeUnit, timeout);
 
@@ -286,7 +286,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .build();
                     }
                 }
-
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
 
 
@@ -305,9 +304,9 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             mRetrofit = new Retrofit.Builder().build();
 
         } catch (RuntimeException e) {
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
-                Log.e(LOG_TAG,e.getMessage());
+                Log.e(LOG_TAG, e.getMessage());
 
             SendReportUtil.sendAcraExeption(e, "getRetrofit " + siteUrl);
 
@@ -353,6 +352,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
         return  millis;
     }
+
 
     @Override
     public EmeraldGetMachinesStatusServiceRequest getMachineStatusRetroFitServiceRequests(String siteUrl) {
@@ -711,7 +711,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             okHttpClient.connectionPool().evictAll();
 
         } catch (Exception e) {
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
                 Log.e(LOG_TAG, e.getMessage());
         }

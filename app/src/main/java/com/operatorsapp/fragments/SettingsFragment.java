@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
@@ -288,7 +290,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @Override
     public void onReportUpdatedSuccess() {
-        ZLogger.i(LOG_TAG, "onReportUpdatedSuccess()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onReportUpdatedSuccess()");
         mRefreshStatusTextView.setVisibility(View.VISIBLE);
         dismissProgressDialog();
 
@@ -296,7 +298,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
     @Override
     public void onReportUpdateFailure() {
-        ZLogger.i(LOG_TAG, "onReportUpdateFailure()");
+        OppAppLogger.getInstance().i(LOG_TAG, "onReportUpdateFailure()");
         dismissProgressDialog();
     }
 
@@ -309,4 +311,5 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     {
         return R.id.settings_crouton_root;
     }
+
 }

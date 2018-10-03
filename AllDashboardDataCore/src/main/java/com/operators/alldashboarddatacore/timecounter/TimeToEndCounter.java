@@ -4,6 +4,7 @@ package com.operators.alldashboarddatacore.timecounter;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
 import com.zemingo.logrecorder.ZLogger;
 
@@ -33,7 +34,7 @@ public class TimeToEndCounter
 
             public void onFinish() {
                 mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
-                ZLogger.i(LOG_TAG, "onFinish()");
+                OppAppLogger.getInstance().i(LOG_TAG, "onFinish()");
             }
 
         }.start();
@@ -54,7 +55,7 @@ public class TimeToEndCounter
             @Override
             public void onFinish() {
                 mOnTimeToEndChangedListener.onTimeToEndChanged(FINISHED);
-                ZLogger.i(LOG_TAG, "onFinish()");
+                OppAppLogger.getInstance().i(LOG_TAG, "onFinish()");
             }
 
         }.start();

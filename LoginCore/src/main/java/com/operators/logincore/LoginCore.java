@@ -3,6 +3,7 @@ package com.operators.logincore;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
@@ -41,20 +42,20 @@ public class LoginCore {
             mLoginNetworkBridgeInterface.login(siteUrl, username,EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(final String sessionId) {
-                ZLogger.d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
 
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
-                        ZLogger.d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
+                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
                         saveSessionData(sessionId, siteUrl, username, password);
                         loginUICallback.onLoginSucceeded(machines);
                     }
 
                     @Override
                     public void onGetMachinesFailed(ErrorObjectInterface reason) {
-                        ZLogger.d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
+                        OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesFailed" + reason.getDetailedDescription());
                         loginUICallback.onLoginFailed(reason);
                     }
                 }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
@@ -62,7 +63,7 @@ public class LoginCore {
 
             @Override
             public void onLoginFailed(ErrorObjectInterface reason) {
-                ZLogger.d(LOG_TAG, "login, onLoginFailed");
+                OppAppLogger.getInstance().d(LOG_TAG, "login, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());
@@ -75,7 +76,7 @@ public class LoginCore {
             @Override
             public void onLoginSucceeded(String sessionId) {
 
-                ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
+                OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
 
                 saveSessionData(sessionId, siteUrl, username, password);
 
@@ -84,7 +85,7 @@ public class LoginCore {
 
             @Override
             public void onLoginFailed(ErrorObjectInterface reason) {
-                ZLogger.d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
+                OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginFailed");
                 loginUICallback.onLoginFailed(reason);
             }
         }, mLoginPersistenceManagerInterface.getTotalRetries(), mLoginPersistenceManagerInterface.getRequestTimeout());

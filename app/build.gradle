@@ -95,6 +95,7 @@ dependencies {
     implementation project(':ActiveJobsListForMachineCore')
     implementation project(':ActiveJobsListForMachineInfra')
     implementation project(':ActiveJobsListForMachineNetworkBridge')
+    implementation project(':oppapplog')
     //noinspection GradleDependency
     implementation 'ch.acra:acra:4.8.2'
     implementation 'com.android.support:multidex:1.0.3'

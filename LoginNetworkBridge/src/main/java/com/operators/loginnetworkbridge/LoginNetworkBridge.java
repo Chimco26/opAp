@@ -1,6 +1,7 @@
 package com.operators.loginnetworkbridge;
 
 
+import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
@@ -51,12 +52,12 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface
                     SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
                     if(sessionResult.getErrorResponse() == null)
                     {
-                        ZLogger.d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
                         loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId());
                     }
                     else
                     {
-                        ZLogger.d(LOG_TAG, "onRequest(), getSessionId failed");
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getSessionId failed");
                         ErrorObject errorObject = errorObjectWithErrorCode(sessionResult.getErrorResponse());
                         loginCoreCallback.onLoginFailed(errorObject);
                     }
@@ -71,13 +72,13 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface
             {
                 if(mRetryCount++ < totalRetries)
                 {
-                    ZLogger.d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
+                    OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + mRetryCount + " out of " + totalRetries + ")");
                     call.clone().enqueue(this);
                 }
                 else
                 {
                     mRetryCount = 0;
-                    ZLogger.d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                    OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     loginCoreCallback.onLoginFailed(errorObject);
                 }
