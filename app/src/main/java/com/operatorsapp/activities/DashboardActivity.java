@@ -532,6 +532,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
+                        pollingBackup(true);
                     }
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
