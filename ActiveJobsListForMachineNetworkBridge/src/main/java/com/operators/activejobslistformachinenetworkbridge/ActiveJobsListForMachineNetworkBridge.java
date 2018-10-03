@@ -11,6 +11,7 @@ import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.activejobslistformachinenetworkbridge.server.requests.GetActiveJobsListForMachineRequest;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
+import com.operators.errorobject.ErrorObjectInterface;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
@@ -58,13 +59,19 @@ public class ActiveJobsListForMachineNetworkBridge implements ActiveJobsListForM
                         callback.onGetActiveJobsListForMachineFailed(errorObject);
                     }
                 } else {
+
+                    ErrorObjectInterface errorObject;
+
                     if (response.body() != null) {
-                        ErrorObject errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
-                        callback.onGetActiveJobsListForMachineFailed(errorObject);
+                        errorObject = errorObjectWithErrorCode(response.body().getErrorResponse());
+                    } else if (response.raw() != null && response.raw().code() == 401) {
+                        errorObject = new ErrorObject(ErrorObject.ErrorCode.SessionInvalid, response.raw().message() + "");
                     } else {
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
-                        callback.onGetActiveJobsListForMachineFailed(errorObject);
+                        errorObject = new ErrorObject(ErrorObject.ErrorCode.No_data, "Response is null Error");
                     }
+
+                    callback.onGetActiveJobsListForMachineFailed(errorObject);
+
                 }
             }
 
