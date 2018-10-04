@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -131,6 +132,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
     private ViewGroup.LayoutParams mShiftLogParams;
+    private RelativeLayout.LayoutParams mSwipeParams;
     private boolean mIsNewShiftLogs;
     private MachineStatus mCurrentMachineStatus;
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
@@ -263,6 +265,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 SendBroadcast.refreshPolling(getActivity());
             }
         });
+        mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
+        mSwipeParams.width = mShiftLogParams.width;
+        mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+        mShiftLogSwipeRefresh.requestLayout();
 
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
@@ -307,6 +313,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
                                 mShiftLogLayout.getLayoutParams().width = currentX;
                                 mShiftLogLayout.requestLayout();
+                                mSwipeParams.width = mShiftLogParams.width;
+                                mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+                                mShiftLogSwipeRefresh.requestLayout();
                                 mDownX = (int) event.getRawX();
                                 mShiftLogAdapter.changeState(true);
                             }
@@ -524,6 +533,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
+        mSwipeParams.width = mShiftLogParams.width;
+        mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+        mShiftLogSwipeRefresh.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
         mListener.onResize(newWidth, mStatusLayout.getLayoutParams().height);
 
