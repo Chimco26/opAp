@@ -76,13 +76,12 @@ import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
-
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
@@ -1127,6 +1126,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
+        clearOver24HShift();
+
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
@@ -1232,6 +1233,29 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter.notifyDataSetChanged();
     }
 
+    private void clearOver24HShift() {
+
+        DataSupport.deleteAll(Event.class, "meventtimeinmillis < ?", String.valueOf(System.currentTimeMillis() - 24*60*60*1000));
+
+//        ArrayList<Event> toDelete = new ArrayList<>();
+//
+//        for (Event event: mDatabaseHelper.getAlEvents()){
+//
+//            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+//                < System.currentTimeMillis() - 24*60*60*1000){
+//
+//                toDelete.add(event);
+//
+//            }
+//        }
+//
+//        for (Event event: toDelete){
+//
+//            DataSupport.delete(Event.class, event.getEventID());
+//        }
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -1245,12 +1269,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            closeWoopList(mShiftLogParams, mWidgetsParams);
 //        }
 
-        DataSupport.deleteAll(Event.class);
-
-        mEventsQueue.clear();
-        mNoData = true;
-        mNoNotificationsText.setVisibility(View.VISIBLE);
-        mLoadingDataText.setVisibility(View.GONE);
+//        DataSupport.deleteAll(Event.class);
+//
+//        mEventsQueue.clear();
+//        mNoData = true;
+//        mNoNotificationsText.setVisibility(View.VISIBLE);
+//        mLoadingDataText.setVisibility(View.GONE);
     }
 
     @Override
