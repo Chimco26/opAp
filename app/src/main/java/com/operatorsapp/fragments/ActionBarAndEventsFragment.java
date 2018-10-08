@@ -92,6 +92,8 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
+
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
@@ -1181,7 +1183,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setCheckedAlarms(null);
 
 
-                    event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
                 }
             }
 
@@ -1235,24 +1237,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void clearOver24HShift() {
 
-        DataSupport.deleteAll(Event.class, "meventtimeinmillis < ?", String.valueOf(System.currentTimeMillis() - 24*60*60*1000));
+        ArrayList<Event> toDelete = new ArrayList<>();
 
-//        ArrayList<Event> toDelete = new ArrayList<>();
-//
-//        for (Event event: mDatabaseHelper.getAlEvents()){
-//
-//            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
-//                < System.currentTimeMillis() - 24*60*60*1000){
-//
-//                toDelete.add(event);
-//
-//            }
-//        }
-//
-//        for (Event event: toDelete){
-//
-//            DataSupport.delete(Event.class, event.getEventID());
-//        }
+        for (Event event: mDatabaseHelper.getAlEvents()){
+
+            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+                < System.currentTimeMillis() - DAY_IN_MILLIS){
+
+                toDelete.add(event);
+
+            }
+        }
+
+        for (Event event: toDelete){
+
+            mDatabaseHelper.deleteEvent(event.getEventID());
+        }
 
     }
 

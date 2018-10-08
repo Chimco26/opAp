@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -35,7 +35,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_EVENT = "Event";
 
     // column names
-    public static final String KEY_ID = "id";
     public static final String KEY_EVENT_ID = "meventid";
     public static final String KEY_PRIORITY = "mpriority";
     public static final String KEY_TIME = "meventtime";
@@ -68,7 +67,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
             KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
-            KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
             KEY_TITLE + " TEXT," +
@@ -146,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE "
-                + KEY_ID + " = " + eventId;
+                + KEY_EVENT_ID + " = " + eventId;
 
         Log.e(LOG, selectQuery);
 
@@ -290,7 +288,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         // updating row
-        return db.update(TABLE_EVENT, values, KEY_ID + " = ?",
+        return db.update(TABLE_EVENT, values, KEY_EVENT_ID + " = ?",
                 new String[]{String.valueOf(event.getEventID())});
     }
 
@@ -301,7 +299,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(TABLE_EVENT, KEY_ID + " = ?",
+        db.delete(TABLE_EVENT, KEY_EVENT_ID + " = ?",
                 new String[]{String.valueOf(event_id)});
     }
 
@@ -327,7 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
 
-        values.put(KEY_ID, event.getEventID());
+        values.put(KEY_EVENT_ID, event.getEventID());
         values.put(KEY_PRIORITY, event.getPriority());
         values.put(KEY_TIME, event.getTime());
         values.put(KEY_TIME_MILLIS, getLongFromDateString(event.getTime(), "dd/MM/yyyy HH:mm:ss"));
@@ -375,7 +373,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (c != null) {
 
-            event.setEventID(c.getInt(c.getColumnIndex(KEY_ID)));
+            event.setEventID(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
             event.setEventTime(c.getString(c.getColumnIndex(KEY_TIME)));
             event.setEventTimeInMillis(c.getLong(c.getColumnIndex(KEY_TIME_MILLIS)));
