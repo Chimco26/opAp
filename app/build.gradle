@@ -3,14 +3,14 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 19
-        versionName "1.8.1"
+        versionCode 21
+        versionName "1.9.0"
         multiDexEnabled true
     }
     buildTypes {
