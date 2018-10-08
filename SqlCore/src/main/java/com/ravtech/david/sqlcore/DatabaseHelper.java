@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // column names
     public static final String KEY_EVENT_ID = "meventid";
+    private static final String KEY_ID = "id";
     public static final String KEY_PRIORITY = "mpriority";
     public static final String KEY_TIME = "meventtime";
     public static final String KEY_TITLE = "meventtitle";
@@ -67,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
             KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
+            KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
             KEY_TITLE + " TEXT," +
@@ -92,7 +94,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_CREATED_AT + " DATETIME," +
             KEY_TIME_MILLIS + " BIGINT" +
             ")";
-
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -326,6 +327,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(KEY_EVENT_ID, event.getEventID());
+        values.put(KEY_ID, event.getEventID());
         values.put(KEY_PRIORITY, event.getPriority());
         values.put(KEY_TIME, event.getTime());
         values.put(KEY_TIME_MILLIS, getLongFromDateString(event.getTime(), "dd/MM/yyyy HH:mm:ss"));
