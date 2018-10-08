@@ -1262,20 +1262,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     }
-
-    @Override
-    public void onShiftForMachineEnded() {
+//
+//    @Override
+//    public void onShiftForMachineEnded() {
 //       TODO if (mShiftLogParams != null && mWidgetsParams != null) {
 //            closeWoopList(mShiftLogParams, mWidgetsParams);
 //        }
-
+//
 //        DataSupport.deleteAll(Event.class);
 //
 //        mEventsQueue.clear();
 //        mNoData = true;
 //        mNoNotificationsText.setVisibility(View.VISIBLE);
 //        mLoadingDataText.setVisibility(View.GONE);
-    }
+//    }
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {

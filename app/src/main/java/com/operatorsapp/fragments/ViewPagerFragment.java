@@ -181,11 +181,6 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     }
 
     @Override
-    public void onShiftForMachineEnded() {
-
-    }
-
-    @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
 
     }

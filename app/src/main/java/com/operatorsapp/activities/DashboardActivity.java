@@ -678,12 +678,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
 
-        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
-
-            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                dashboardUICallbackListener.onShiftForMachineEnded();
-            }
-        }
+//        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+//
+//            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+//                dashboardUICallbackListener.onShiftForMachineEnded();
+//            }
+//        }
         shiftForMachineTimer();
     }
 

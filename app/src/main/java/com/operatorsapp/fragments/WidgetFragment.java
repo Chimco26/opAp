@@ -218,11 +218,6 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onShiftForMachineEnded() {
-
-    }
-
-    @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
 
     }
