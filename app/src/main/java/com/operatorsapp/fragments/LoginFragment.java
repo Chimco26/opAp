@@ -271,6 +271,7 @@ public class LoginFragment extends Fragment {
         if (mNavigationCallback != null) {
 
             mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+            //TODO Lenox open dashboard
 
             mNavigationCallback.isTryToLogin(false);
         }
@@ -302,7 +303,6 @@ public class LoginFragment extends Fragment {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
             mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
-
             mNavigationCallback.isTryToLogin(false);
         }
     }

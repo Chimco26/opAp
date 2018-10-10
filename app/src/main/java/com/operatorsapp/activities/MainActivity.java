@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToDashboardActivity(int machineId) {
+        //TODO Lenox need arraylist machin
         Intent intent = new Intent(this, DashboardActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("machineId", machineId);
