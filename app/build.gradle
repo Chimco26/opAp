@@ -4,7 +4,6 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion 27
     buildToolsVersion '28.0.2'
-
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
@@ -28,12 +27,25 @@ android {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
     }
-
     lintOptions {
         disable 'MissingTranslation'
     }
 
+    // Specifies one flavor dimension.
+    flavorDimensions "version"
 
+    productFlavors {
+        Lenox {
+            minSdkVersion 19
+            applicationId 'com.operatorsapp.lenox'
+            targetSdkVersion 27
+            versionCode 1
+            versionName '1'
+            applicationIdSuffix "lenox"
+        }
+        emerald {
+        }
+    }
 }
 
 
@@ -102,7 +114,7 @@ dependencies {
     androidTestImplementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support:multidex-instrumentation:1.0.3'
     implementation 'org.litepal.android:core:1.6.1'
-//    implementation 'com.nostra13.universalimageloader:universal-default_image-loader:1.9.5' failed
+    //    implementation 'com.nostra13.universalimageloader:universal-default_image-loader:1.9.5' failed
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation project(path: ':SqlCore')
     implementation project(path: ':publicutils')
@@ -112,5 +124,4 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true;
     }
-
 }
