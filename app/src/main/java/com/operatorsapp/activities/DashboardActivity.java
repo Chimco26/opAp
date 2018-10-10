@@ -1354,6 +1354,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportStopReasonFragment = reportStopReasonFragment;
 
+        if (mReportStopReasonFragment != null) {
+
+            mReportStopReasonFragment.setSelectedEvents(mSelectedEvents);
+        }
+
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
@@ -1390,6 +1395,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mSelectStopReasonFragment != null) {
 
             mSelectStopReasonFragment.setSelectedEvents(mSelectedEvents);
+        }
+        if (mReportStopReasonFragment != null) {
+
+            mReportStopReasonFragment.setSelectedEvents(mSelectedEvents);
         }
         if (mActionBarAndEventsFragment != null) {
 

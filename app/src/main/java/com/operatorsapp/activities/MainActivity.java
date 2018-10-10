@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     private void checkFlavor() {
-        if(BuildConfig.FLAVOR.equals("emerald")) {
+        if(BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
             Log.d(TAG, "onCreate: emerald");
 
-        }else if (BuildConfig.FLAVOR.equals("Lenox")){
+        }else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
 
             Log.d(TAG, "onCreate: Lenox");
         }

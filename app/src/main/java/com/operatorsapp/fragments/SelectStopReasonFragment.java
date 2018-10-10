@@ -289,13 +289,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
 
-//            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
-//            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
-//
-//            if (o != null){
-//
-//                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
-//            }
             try {
 
                 mReportCore.unregisterListener();

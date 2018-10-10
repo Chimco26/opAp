@@ -302,8 +302,7 @@ public class LoginFragment extends Fragment {
     private void loginSuccess() {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachine
-                    Id());
+            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
             mNavigationCallback.isTryToLogin(false);
         }
     }
