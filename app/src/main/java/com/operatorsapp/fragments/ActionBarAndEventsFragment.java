@@ -23,7 +23,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -47,6 +46,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.infra.Machine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -61,6 +61,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
+import com.operatorsapp.adapters.LenoxMachineAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -233,6 +234,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
+    private void initLenoxMachineRv(View view){
+
+        RecyclerView lenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        lenoxMachineRv.setLayoutManager(linearLayoutManager);
+        lenoxMachineRv.setAdapter(new LenoxMachineAdapter(new ArrayList<Machine>()));
+
+    }
+
     public ViewGroup.LayoutParams initView(@NonNull View view) {
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
@@ -286,6 +296,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+
+        initLenoxMachineRv(view);
 
         mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
         mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
