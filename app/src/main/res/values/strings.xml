@@ -234,6 +234,7 @@
     <string name="fill_units_or_weight">* Please report Units or Weight</string>
     <string name="emerald_flavor_name">emerald</string>
     <string name="lenox_flavor_name">Lenox</string>
+    <string name="machine">Machine</string>
 
 
 </resources>

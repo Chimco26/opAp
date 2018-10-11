@@ -23,6 +23,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -53,6 +54,7 @@ import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -82,6 +84,7 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
+
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
@@ -164,6 +167,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
     private int mSelectedPosition;
+    private View mLenoxMachineLy;
+    private int mLenoxMachineLyWidth;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -197,11 +202,38 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
+        final ViewGroup.LayoutParams statusBarParams = initView(view);
 
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+
+            mLenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_ly);
+
+            mLenoxMachineLy.setVisibility(View.VISIBLE);
+
+            mLenoxMachineLy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    mLenoxMachineLyWidth = mLenoxMachineLy.getWidth();
+
+                    mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+
+                    if (mLenoxMachineLyWidth != 0) {
+                        mLenoxMachineLy.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
+
+        }else {
+            mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+        }
+    }
+
+    public ViewGroup.LayoutParams initView(@NonNull View view) {
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
         // get screen parameters
@@ -230,8 +262,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams = mStatusLayout.getLayoutParams();
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
-
-        mListener.onResize(mCloseWidth, statusBarParams.height);
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
@@ -272,20 +302,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
         mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
-        //mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
-        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
-
         final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
 
         view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
-
-//        mSwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                SendBroadcast.refreshPolling(getContext());
-//                //mSwipeToRefresh.setRefreshing(true);
-//            }
-//        });
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
@@ -351,6 +370,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), end ");
 
         initJobsSpinner();
+
+        return statusBarParams;
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams) {
@@ -526,7 +547,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
-        mListener.onResize(newWidth, mStatusLayout.getLayoutParams().height);
+        mListener.onResize(newWidth + mLenoxMachineLyWidth, mStatusLayout.getLayoutParams().height);
 
         mShiftLogAdapter.changeState(!isOpen);
         mListener.onWidgetChangeState(!isOpen);
@@ -1239,17 +1260,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         ArrayList<Event> toDelete = new ArrayList<>();
 
-        for (Event event: mDatabaseHelper.getAlEvents()){
+        for (Event event : mDatabaseHelper.getAlEvents()) {
 
             if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
-                < System.currentTimeMillis() - DAY_IN_MILLIS){
+                    < System.currentTimeMillis() - DAY_IN_MILLIS) {
 
                 toDelete.add(event);
 
             }
         }
 
-        for (Event event: toDelete){
+        for (Event event : toDelete) {
 
             mDatabaseHelper.deleteEvent(event.getEventID());
         }
@@ -1617,18 +1638,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mVisiblefragment = visibleFragment;
 
-        if (mToolBarView != null){
-            
-        if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
-                mVisiblefragment instanceof RecipeFragment ||
-                mVisiblefragment instanceof WidgetFragment){
+        if (mToolBarView != null) {
 
-            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
+            if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
+                    mVisiblefragment instanceof RecipeFragment ||
+                    mVisiblefragment instanceof WidgetFragment) {
 
-        }else {
+                mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
 
-            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.GONE);
-        }
+            } else {
+
+                mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.GONE);
+            }
         }
     }
 

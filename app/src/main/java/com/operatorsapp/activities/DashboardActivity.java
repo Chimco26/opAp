@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.operatorsapp.BuildConfig;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -65,6 +64,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResp
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -179,7 +179,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,13 +250,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initDashboardFragment() {
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))){
+        if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
             openWidgetFragment();
 
             initViewPagerFragment();
 
-        }else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+        } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
             initLenoxDashboardFragment();
         }

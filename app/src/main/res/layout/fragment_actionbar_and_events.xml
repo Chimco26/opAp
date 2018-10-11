@@ -221,10 +221,32 @@
                     android:layout_below="@id/status_layout">
 
                     <LinearLayout
+                        android:id="@+id/FAAE_lenox_machines_ly"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:gravity="center_horizontal"
+                        android:background="@color/grey_transparent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:text="@string/machine"
+                            android:gravity="center"/>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/FAAE_lenox_machines_rv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/fragment_dashboard_shiftlog"
                         android:layout_width="124dp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="start"
+                        android:layout_toEndOf="@id/FAAE_lenox_machines_ly"
                         android:background="@drawable/side_menu"
                         android:orientation="vertical">
 

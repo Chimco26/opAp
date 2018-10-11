@@ -70,6 +70,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private SubReasons mSelectedSubreason;
     private ArrayList<Integer> mSelectedEvents;
     private int mSelectedPosition;
+    private int mFlavorSpanDif;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
@@ -132,21 +133,26 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
 
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+
+            mFlavorSpanDif = -1;
+        }
+
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
             ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
         } else {
 
-            mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+            mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS + mFlavorSpanDif);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
             int spacing = 0;//40
 
             Configuration config = getResources().getConfiguration();
             if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
             } else {
-                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
             }
             initStopReasons();
 
@@ -159,9 +165,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public void setSpanCount(boolean isOpen) {
         if (mGridLayoutManager != null) {
             if (isOpen) {
-                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
+                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1 + mFlavorSpanDif);
             } else {
-                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+                mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS + mFlavorSpanDif);
             }
             mIsOpen = isOpen;
         }
