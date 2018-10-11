@@ -114,6 +114,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
@@ -200,7 +201,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
 
-
         ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
 
         shiftLogNetworkBridge.inject(NetworkManager.getInstance());
@@ -259,6 +259,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
             initLenoxDashboardFragment();
+
+            if (mActionBarAndEventsFragment != null) {
+                mActionBarAndEventsFragment.setMachines(Objects.requireNonNull(getIntent().getExtras()).<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST));
+            }
         }
 
     }
@@ -878,7 +882,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void goToDashboardActivity(int machine) {
+    public void goToDashboardActivity(int machine, ArrayList<Machine> machines) {
 
     }
 

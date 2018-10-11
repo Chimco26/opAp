@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -168,8 +169,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
     private int mSelectedPosition;
-    private View mLenoxMachineLy;
+    private RecyclerView mLenoxMachineRv;
     private int mLenoxMachineLyWidth;
+    private View mLenoxMachineLy;
+    private ArrayList<Machine> mMachines;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -236,10 +239,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initLenoxMachineRv(View view){
 
-        RecyclerView lenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
+        mLenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        lenoxMachineRv.setLayoutManager(linearLayoutManager);
-        lenoxMachineRv.setAdapter(new LenoxMachineAdapter(new ArrayList<Machine>()));
+        mLenoxMachineRv.setLayoutManager(linearLayoutManager);
+        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(mMachines));
 
     }
 
@@ -1667,6 +1670,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setFromAnotherActivity(boolean fromAnotherActivity) {
         this.mFromAnotherActivity = fromAnotherActivity;
+    }
+
+    public void setMachines(final ArrayList<Machine> machines) {
+
+       mMachines = machines;
     }
 
     public interface ActionBarAndEventsFragmentListener {

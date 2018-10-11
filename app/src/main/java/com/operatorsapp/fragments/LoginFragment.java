@@ -32,6 +32,7 @@ import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -40,7 +41,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -270,7 +270,14 @@ public class LoginFragment extends Fragment {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
-            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+
+                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+
+            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+
+                loginSuccess(machines);
+            }
             //TODO Lenox open dashboard
 
             mNavigationCallback.isTryToLogin(false);
@@ -299,10 +306,10 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void loginSuccess() {
+    private void loginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
+            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
             mNavigationCallback.isTryToLogin(false);
         }
     }
@@ -330,7 +337,7 @@ public class LoginFragment extends Fragment {
 
                 } else {
 
-                    loginSuccess();
+                    loginSuccess(machines);
 
                 }
 
@@ -345,7 +352,7 @@ public class LoginFragment extends Fragment {
 
                 } else {
 
-                    loginSuccess();
+                    loginSuccess(machines);
 
                 }
 

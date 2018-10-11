@@ -23,6 +23,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.operators.infra.Machine;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -32,6 +33,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
+    public static final String MACHINE_LIST = "MACHINE_LIST";
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
     private Fragment mCurrentFragment;
@@ -107,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
-    public void goToDashboardActivity(int machineId) {
+    public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
         //TODO Lenox need arraylist machin
         Intent intent = new Intent(this, DashboardActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("machineId", machineId);
-
+        bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
