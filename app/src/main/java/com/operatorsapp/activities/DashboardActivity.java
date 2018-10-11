@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.operatorsapp.BuildConfig;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -70,6 +71,7 @@ import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
 import com.operatorsapp.fragments.ReportInventoryFragment;
@@ -217,9 +219,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mContainer3 = findViewById(R.id.fragments_container_reason);
 
-        openWidgetFragment();
-
-        initViewPagerFragment();
+        initDashboardFragment();
 
         try {
 
@@ -247,6 +247,29 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
+    }
+
+    private void initDashboardFragment() {
+
+        if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))){
+
+            openWidgetFragment();
+
+            initViewPagerFragment();
+
+        }else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+
+            initLenoxDashboardFragment();
+        }
+
+    }
+
+    private void initLenoxDashboardFragment() {
+
+        try {
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), LenoxDashboardFragment.newInstance()).commit();
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     private void initViewPagerFragment() {
@@ -1639,34 +1662,38 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void addFragmentsToViewPager(RecipeResponse response) {
 
-        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 
-            showRecipeFragment(response);
+                showRecipeFragment(response);
 
-            mViewPagerFragment.addFragment(mWidgetFragment);
+                mViewPagerFragment.addFragment(mWidgetFragment);
 
-        } else {
+            } else {
 
-            mViewPagerFragment.addFragment(mWidgetFragment);
+                mViewPagerFragment.addFragment(mWidgetFragment);
 
-            showRecipeFragment(response);
+                showRecipeFragment(response);
 
+            }
         }
     }
 
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        if (mRecipeFragment == null) {
+        if (mViewPagerFragment != null) {
 
-            mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
+            if (mRecipeFragment == null) {
 
-            mViewPagerFragment.addFragment(mRecipeFragment);
+                mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
-        } else {
+                mViewPagerFragment.addFragment(mRecipeFragment);
 
-            mRecipeFragment.updateRecipeResponse(recipeResponse);
+            } else {
+
+                mRecipeFragment.updateRecipeResponse(recipeResponse);
+            }
         }
-
     }
 
     @Override
