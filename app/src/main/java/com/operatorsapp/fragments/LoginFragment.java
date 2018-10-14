@@ -276,6 +276,8 @@ public class LoginFragment extends Fragment {
 
             } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
+                PersistenceManager.getInstance().setSelectedMachine(true);
+
                 loginSuccess(machines);
             }
             //TODO Lenox open dashboard

@@ -114,7 +114,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
@@ -172,6 +171,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private MachineStatus mCurrentMachineStatus;
     private int mSpinnerProductPosition;
     private Handler pollingBackupHandler = new Handler();
+    private ArrayList<Machine> mMachines;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -187,32 +187,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
+        mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
 
-        GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
-
-        getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-
-        GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
-
-        getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
-
-        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
-
-        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
-
-        mAllDashboardDataCore = new AllDashboardDataCore(this, getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
+        initDataListeners();
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
-
-        ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
-        reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
-
-        mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
         mContainer2 = findViewById(R.id.fragments_container_widget);
 
@@ -228,6 +213,28 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } catch (IllegalStateException ignored) {
         }
         OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
+    }
+
+    private void initDataListeners() {
+
+        GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
+
+        getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
+
+        GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
+
+        getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
+
+        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+
+        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
+
+        mAllDashboardDataCore = new AllDashboardDataCore(this, getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
+
+        ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
+        reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
+
+        mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
     }
 
     private void pollingBackup(boolean isActivate) {
@@ -258,10 +265,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
+            setLenoxMachine(PersistenceManager.getInstance().getMachineId());
+
             initLenoxDashboardFragment();
 
             if (mActionBarAndEventsFragment != null) {
-                mActionBarAndEventsFragment.setMachines(Objects.requireNonNull(getIntent().getExtras()).<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST));
+                mActionBarAndEventsFragment.setMachines(mMachines);
             }
         }
 
@@ -1509,6 +1518,27 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
 
+    }
+
+    @Override
+    public void onLenoxMachineClicked(Machine machine) {
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - 24*60*60*1000, "yyyy-MM-dd HH:mm:ss.SSS"));
+
+        DataSupport.deleteAll(Event.class);
+
+        onClearAllSelectedEvents();
+        
+        setLenoxMachine(machine.getId());
+    }
+
+    public void setLenoxMachine(int machineId) {
+
+        ProgressDialogManager.show(this);
+
+        PersistenceManager.getInstance().setMachineId(machineId);
+
+        dashboardDataStartPolling();
     }
 
     @Override

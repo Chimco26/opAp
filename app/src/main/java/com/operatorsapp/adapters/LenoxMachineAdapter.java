@@ -15,10 +15,13 @@ import java.util.ArrayList;
 public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapter.ViewHolder> {
 
     private final ArrayList<Machine> mMachines;
+    private final LenoxMachineAdapterListener mListener;
 
-    public LenoxMachineAdapter(ArrayList<Machine> machines){
+    public LenoxMachineAdapter(ArrayList<Machine> machines, LenoxMachineAdapterListener listener){
 
         mMachines = machines;
+
+        mListener = listener;
     }
 
     @NonNull
@@ -29,13 +32,24 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LenoxMachineAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LenoxMachineAdapter.ViewHolder holder, final int position) {
 
         holder.mTv.setText(mMachines.get(position).getMachineEName());
+
+        holder.mTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mListener.onLenoxMachineClicked(mMachines.get(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
+        if (mMachines != null){
+            return mMachines.size();
+        }
         return 0;
     }
 
@@ -46,5 +60,10 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
             super(inflate);
             mTv = inflate.findViewById(R.id.ILM_tv);
         }
+    }
+
+    public interface LenoxMachineAdapterListener{
+
+        void onLenoxMachineClicked(Machine machine);
     }
 }

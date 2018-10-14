@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -102,7 +101,7 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
-        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener {
+        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -232,17 +231,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-        }else {
+        } else {
             mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
         }
     }
 
-    private void initLenoxMachineRv(View view){
+    private void initLenoxMachineRv(View view) {
 
         mLenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mLenoxMachineRv.setLayoutManager(linearLayoutManager);
-        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(mMachines));
+        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(mMachines, this));
 
     }
 
@@ -1674,8 +1673,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void setMachines(final ArrayList<Machine> machines) {
 
-       mMachines = machines;
+        mMachines = machines;
     }
+
+    @Override
+    public void onLenoxMachineClicked(Machine machine) {
+
+        mListener.onLenoxMachineClicked(machine);
+    }
+
 
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
@@ -1697,6 +1703,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 
         void onProductionStatusChanged(int id);
+
+        void onLenoxMachineClicked(Machine machine);
+
     }
 
 }

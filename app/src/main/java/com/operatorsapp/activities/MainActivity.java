@@ -30,6 +30,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
@@ -111,7 +112,13 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
-        //TODO Lenox need arraylist machin
+
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name)) &&
+                PersistenceManager.getInstance().getMachineId() == -1) {
+
+            PersistenceManager.getInstance().setMachineId(machines.get(0).getId());
+        }
+
         Intent intent = new Intent(this, DashboardActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("machineId", machineId);
