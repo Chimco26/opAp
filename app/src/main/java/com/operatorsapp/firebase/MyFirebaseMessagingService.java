@@ -125,6 +125,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
             int notificationType = Integer.parseInt(data.get("NotificationType"));
             int responseType = Integer.parseInt(data.get("ResponseType"));
+            int id = Integer.parseInt(data.get("ID"));
 
             Notification notification = new Notification(remoteMessage.getNotification().getBody(),
                     data.get("SourceUserName"),
@@ -132,21 +133,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     responseType,
                     "",
                     data.get("TargetUserName"),
-                    Integer.parseInt(data.get("ID")));
+                    id);
 
             ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
             notificationList.add(notification);
             PersistenceManager.getInstance().setNotificationHistory(notificationList);
-            notifyFragment(notificationType, responseType);
+            notifyFragment(notificationType, responseType, id);
         }catch (Exception e){
 
         }
     }
 
-    public void notifyFragment(int type, int responseType){
+    public void notifyFragment(int type, int responseType, int id){
         Intent intent = new Intent(Consts.NOTIFICATION_BROADCAST_NAME);
         intent.putExtra(Consts.NOTIFICATION_TYPE, type);
+        intent.putExtra(Consts.NOTIFICATION_ID, id);
 
         switch (type){
             case Consts.NOTIFICATION_TYPE_REAL_TIME:

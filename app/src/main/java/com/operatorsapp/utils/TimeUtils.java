@@ -154,6 +154,14 @@ public class TimeUtils {
             return date;
         } catch (java.text.ParseException e) {
 
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            try {
+                Date date2 = dateFormat.parse(time);
+                return date2;
+            } catch (java.text.ParseException e1) {
+
+            }
+
         }
         return null;
     }

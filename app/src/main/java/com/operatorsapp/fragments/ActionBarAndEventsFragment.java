@@ -401,7 +401,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mNotificationsReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
                 int type = intent.getIntExtra(Consts.NOTIFICATION_TYPE, 0);
+
                 if (type == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     int status = intent.getIntExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, 0);
                     mHandlerTechnicianCall.removeCallbacksAndMessages(null);
@@ -435,73 +437,82 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB){
 
                     setNotificationNeedResponse();
-                    openNotificationPopUp();
+                    openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
                 }
             }
         };
     }
 
-    private void openNotificationPopUp() {
+    private void openNotificationPopUp(int notificationId) {
 
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
         if (notificationList != null && notificationList.size() > 0) {
-            final Notification notification = notificationList.get(notificationList.size() - 1);
 
+            Notification notification = null;
 
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.setContentView(R.layout.notification_recycler_item);
-            dialog.setCanceledOnTouchOutside(true);
-
-            Window window = dialog.getWindow();
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-
-            ImageView btnClose = dialog.findViewById(R.id.notification_item_iv);
-            Button btnApprove = dialog.findViewById(R.id.notification_item_approve_btn);
-            Button btnDecline = dialog.findViewById(R.id.notification_item_decline_btn);
-            Button btnClarify = dialog.findViewById(R.id.notification_item_clarify_btn);
-            TextView tvSender = dialog.findViewById(R.id.notification_item_tv_sender);
-            TextView tvBody = dialog.findViewById(R.id.notification_item_tv_body);
-
-            btnClose.setImageDrawable(getResources().getDrawable(R.drawable.close));
-            tvBody.setText(notification.getmBody());
-            tvSender.setText(notification.getmSender());
-
-            View.OnClickListener thisDialogListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (v.getId()) {
-                        case R.id.notification_item_iv:
-                            dialog.dismiss();
-                            break;
-
-                        case R.id.notification_item_approve_btn:
-                            sendNotificationResponse(notificationList.size()-1, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
-                            dialog.dismiss();
-                            break;
-
-                        case R.id.notification_item_decline_btn:
-                            sendNotificationResponse(notificationList.size()-1, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
-                            dialog.dismiss();
-                            break;
-
-                        case R.id.notification_item_clarify_btn:
-                            sendNotificationResponse(notificationList.size()-1, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
-                            dialog.dismiss();
-                            break;
-                    }
+            for (int i = 0; i < notificationList.size(); i++) {
+                if (notificationList.get(i).getmNotificationID() == notificationId){
+                    notification = notificationList.get(i);
+                    break;
                 }
-            };
+            }
 
-            btnApprove.setOnClickListener(thisDialogListener);
-            btnDecline.setOnClickListener(thisDialogListener);
-            btnClarify.setOnClickListener(thisDialogListener);
-            btnClose.setOnClickListener(thisDialogListener);
+            if (notification != null) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.notification_recycler_item);
+                dialog.setCanceledOnTouchOutside(true);
 
-            dialog.show();
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams wlp = window.getAttributes();
+
+                wlp.gravity = Gravity.BOTTOM;
+                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                window.setAttributes(wlp);
+
+                ImageView btnClose = dialog.findViewById(R.id.notification_item_iv);
+                Button btnApprove = dialog.findViewById(R.id.notification_item_approve_btn);
+                Button btnDecline = dialog.findViewById(R.id.notification_item_decline_btn);
+                Button btnClarify = dialog.findViewById(R.id.notification_item_clarify_btn);
+                TextView tvSender = dialog.findViewById(R.id.notification_item_tv_sender);
+                TextView tvBody = dialog.findViewById(R.id.notification_item_tv_body);
+
+                btnClose.setImageDrawable(getResources().getDrawable(R.drawable.close));
+                tvBody.setText(notification.getmBody());
+                tvSender.setText(notification.getmSender());
+
+                View.OnClickListener thisDialogListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (v.getId()) {
+                            case R.id.notification_item_iv:
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_approve_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_decline_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_clarify_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+
+                btnApprove.setOnClickListener(thisDialogListener);
+                btnDecline.setOnClickListener(thisDialogListener);
+                btnClarify.setOnClickListener(thisDialogListener);
+                btnClose.setOnClickListener(thisDialogListener);
+
+                dialog.show();
+            }
         }
     }
 
