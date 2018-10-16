@@ -50,9 +50,17 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportCycleUnitsNetwor
 import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.interfaces.OpAppServiceRequests;
+import com.operatorsapp.server.requests.NotificationHistoryRequest;
+import com.operatorsapp.server.requests.PostNotificationTokenRequest;
+import com.operatorsapp.server.requests.PostTechnicianCallRequest;
+import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
 import java.util.HashMap;
@@ -62,6 +70,8 @@ import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -829,5 +839,39 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             SendReportUtil.sendAcraExeption(e, "approveEmeraldPostUpdateNotesForJob");
         }
         return mRetrofit.create(EmeraldPostUpdateNotesForJob.class);
+    }
+
+    public void postNotificationToken(PostNotificationTokenRequest request, final Callback<ErrorResponseNewVersion> callback) {
+
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ErrorResponseNewVersion> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationTokenRequest(request);
+        call.enqueue(callback);
+
+    }
+
+    public void getNotificationHistory(final Callback<NotificationHistoryResponse> callback) {
+
+        PersistenceManager pm = PersistenceManager.getInstance();
+        NotificationHistoryRequest request = new NotificationHistoryRequest(pm.getSessionId(), pm.getMachineId());
+        mRetrofit = getRetrofit(pm.getSiteUrl(), pm.getRequestTimeout(), TimeUnit.SECONDS);
+
+        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).getNotificationHistoryRequest(request);
+        call.enqueue(callback);
+    }
+
+    public void postTechnicianCall(PostTechnicianCallRequest request, final Callback<ErrorResponseNewVersion> callback) {
+
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ErrorResponseNewVersion> call = mRetrofit.create(OpAppServiceRequests.class).postTechnicianCallRequest(request);
+        call.enqueue(callback);
+
+    }
+
+    public void postResponseToNotification(RespondToNotificationRequest request, final Callback<ErrorResponseNewVersion> callback) {
+
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ErrorResponseNewVersion> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationResponse(request);
+        call.enqueue(callback);
+
     }
 }

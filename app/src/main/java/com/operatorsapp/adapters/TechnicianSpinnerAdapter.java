@@ -37,9 +37,9 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
             mView = row;
             mRowName = row.findViewById(R.id.spinner_item_name);
             mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            if(mSpinnerItems != null && mSpinnerItems.get(0) != null)
+            if(mSpinnerItems != null && mSpinnerItems.get(position) != null)
             {
-                String technicianName = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(0).getEName() : mSpinnerItems.get(0).getLName();
+                String technicianName = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
                 mRowName.setText(technicianName);
             }
             else

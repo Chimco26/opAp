@@ -41,12 +41,17 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -263,6 +268,7 @@ public class LoginFragment extends Fragment {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
                 getVersion(machines, true);
+                getNotifications();
             }
 
             @Override
@@ -293,7 +299,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-
+                getNotifications();
                 getVersion(machines, false);
             }
 
@@ -314,6 +320,30 @@ public class LoginFragment extends Fragment {
 
             mNavigationCallback.isTryToLogin(false);
         }
+    }
+
+    private void getNotifications(){
+
+        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+            @Override
+            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+
+                if (response != null && response.body() != null && response.body().getmError() == null) {
+                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                }else {
+                    PersistenceManager.getInstance().setNotificationHistory(null);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+
+                PersistenceManager.getInstance().setNotificationHistory(null);
+
+            }
+        });
+
     }
 
     private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin) {

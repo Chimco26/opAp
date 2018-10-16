@@ -146,6 +146,19 @@ public class TimeUtils {
     }
 
     @SuppressLint("SimpleDateFormat")
+    public static Date getDateForNotification(String time) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = dateFormat.parse(time);
+            return date;
+        } catch (java.text.ParseException e) {
+
+        }
+        return null;
+    }
+
+    @SuppressLint("SimpleDateFormat")
     public static String getDateForChart(String time) {
         if (time != null && !time.equals("")) {
             String out = null;

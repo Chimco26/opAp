@@ -101,6 +101,8 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.interfaces.OpAppServiceRequests;
+import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ShowCrouton;
@@ -108,6 +110,8 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.ravtech.david.sqlcore.Event;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 import org.litepal.crud.DataSupport;
 
@@ -237,6 +241,38 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } catch (IllegalStateException ignored) {
         }
         OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
+
+        checkUpdateNotificationToken();
+    }
+
+    private void checkUpdateNotificationToken() {
+
+        final PersistenceManager pm = PersistenceManager.getInstance();
+        if (pm.isNeedUpdateToken()) {
+
+            final boolean retry[] = {true};
+
+            PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken());
+            NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+                @Override
+                public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+                    Log.d(LOG_TAG, "token sent");
+                    pm.setNeedUpdateToken(false);
+                }
+
+                @Override
+                public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                    pm.setNeedUpdateToken(true);
+                    Log.d(LOG_TAG, "token failed");
+                    if (retry[0]){
+                        retry[0] = false;
+                        call.clone();
+                    }
+                }
+            });
+
+        }
+
     }
 
     private void pollingBackup(boolean isActivate) {

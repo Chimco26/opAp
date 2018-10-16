@@ -35,7 +35,6 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

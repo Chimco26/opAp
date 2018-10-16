@@ -234,6 +234,16 @@
     <string name="fill_units_or_weight">* Please report Units or Weight</string>
     <string name="activate_job_dialog_message">You Are About to Activate a New Job, \n Are You Sure You Want to Proceed?</string>
     <string name="activate_job_dialog_title">Activate New Job</string>
+    <string name="technician_list">Technician List</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="call_technician_title">Technician Call</string>
+    <string name="respond_notification_title">Respond to Notification</string>
+    <string name="call_technician_text">Need you to fix something</string>
+    <string name="called_technician">called technician</string>
+    <string name="message_received">message received</string>
+    <string name="message_declined">message declined</string>
+    <string name="no_notification_to_show">No Notifications to Show From Past 24 hours</string>
 
 
 </resources>

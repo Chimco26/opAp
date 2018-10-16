@@ -30,6 +30,7 @@
     <color name="oval_background">#e5e5e5</color>
     <color name="default_gray">#878787</color>
     <color name="default_gray_status">#868686</color>
+    <color name="dark_indigo">#11115a</color>
 
     <color name="status_bar">#00033a</color>
     <color name="white">#ffffff</color>

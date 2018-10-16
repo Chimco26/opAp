@@ -17,6 +17,9 @@ import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManag
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
+import com.operatorsapp.server.requests.NotificationHistoryRequest;
+import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -26,7 +29,11 @@ import org.acra.ACRA;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+
+import retrofit2.Response;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -69,6 +76,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final float DEFAULT_VERSION = 1.6f;
     private static final String PREF_CHECKED_ALARM_IDS = "PREF_CHECKED_ALARM_IDS";
     private static final String PREF_STORAGE_PERMISSION_GRANTED = "PREF_STORAGE_PERMISSION_GRANTED";
+    private static final String PREF_NOTIFICATION_TOKEN = "pref.PREF_NOTIFICATION_TOKEN";
+    private static final String PREF_UPDATE_NOTIFICATION_TOKEN = "pref.PREF_UPDATE_NOTIFICATION_TOKEN";
+    private static final String PREF_NOTIFICATION_HISTORY = "pref.PREF_NOTIFICATION_HISTORY";
+    private static final String PREF_TECHNICIAN_CALL_TIME = "pref.PREF_TECHNICIAN_CALL_TIME";
 
 
     private static PersistenceManager msInstance;
@@ -426,5 +437,63 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public boolean isStorageGranted() {
         return SecurePreferences.getInstance().getBoolean(PREF_STORAGE_PERMISSION_GRANTED, false);
+    }
+
+    public void setNotificationToken(String token) {
+        SecurePreferences.getInstance().setString(PREF_NOTIFICATION_TOKEN, token);
+    }
+
+    public String getNotificationToken() {
+        return SecurePreferences.getInstance().getString(PREF_NOTIFICATION_TOKEN);
+    }
+
+    public boolean isNeedUpdateToken() {
+        return SecurePreferences.getInstance().getBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, true);
+    }
+
+    public void setNeedUpdateToken(boolean isUpdateToken) {
+        SecurePreferences.getInstance().setBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, isUpdateToken);
+
+    }
+
+    public void setNotificationHistory(ArrayList<Notification> notificationList) {
+        SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
+    }
+
+    public ArrayList<Notification> getNotificationHistory() {
+        String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
+        Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+        ArrayList<Notification> notificationsList = mGson.fromJson(str, listType);
+        ArrayList<Notification> filteredList = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date date = new Date();
+        for (int i = 0; i < notificationsList.size(); i++) {
+            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
+            if (date != null && date.after(cal.getTime())){
+                filteredList.add(notificationsList.get(i));
+            }
+        }
+
+        if (notificationsList.size() > filteredList.size()){
+            setNotificationHistory(filteredList);
+        }
+
+        return filteredList;
+
+    }
+
+    public void setTechnicianCallTime(long technicianCallTime) {
+        SecurePreferences.getInstance().setString(PREF_TECHNICIAN_CALL_TIME, String.valueOf(technicianCallTime));
+    }
+
+    public long getTechnicianCallTime() {
+        String time = SecurePreferences.getInstance().getString(PREF_TECHNICIAN_CALL_TIME, "0");
+        if (time != null && time.length() > 0 ){
+            return Long.parseLong(time);
+        }else {
+            return 0;
+        }
+
     }
 }
