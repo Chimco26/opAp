@@ -390,18 +390,22 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
 
-    public void setCheckedAlarms(ArrayList<Integer> checkedAlarmList) {
+    public void setCheckedAlarms(HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap) {
 
-        SecurePreferences.getInstance().setString(PREF_CHECKED_ALARM_IDS, mGson.toJson(checkedAlarmList));
+        SecurePreferences.getInstance().setString(PREF_CHECKED_ALARM_IDS, mGson.toJson(checkedAlarmHashMap));
     }
 
-    public ArrayList<Integer> getCheckedAlarms() {
+    public HashMap<Integer, ArrayList<Integer>> getCheckedAlarms() {
 
-        String ids = SecurePreferences.getInstance().getString(PREF_CHECKED_ALARM_IDS, mGson.toJson(new ArrayList<>()));
-        Type listType = new TypeToken<ArrayList<Integer>>() {
+        String ids = SecurePreferences.getInstance().getString(PREF_CHECKED_ALARM_IDS, "");
+        Type listType = new TypeToken<HashMap<Integer, ArrayList<Integer>>>() {
         }.getType();
 
-        return mGson.fromJson(ids, listType);
+        if (ids != null && ids.length() > 0 && !ids.equals("null")) {
+            return mGson.fromJson(ids, listType);
+        }else {
+            return new HashMap<>();
+        }
     }
 
     public void setMinEventDuration(int minEventDuration) {

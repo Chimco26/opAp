@@ -90,6 +90,7 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1112,6 +1113,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
+    public void onLastItemUpdated() {
+
+        mListener.onLastShiftItemUpdated();
+    }
+
+    @Override
     public void onSelectMode(int type, int eventID) {
 
         startSelectMode(eventID);
@@ -1174,7 +1181,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (events != null && events.size() > 0) {
 
-            ArrayList<Integer> checkedAlarms = PersistenceManager.getInstance().getCheckedAlarms();
+            HashMap<Integer, ArrayList<Integer>> checkedAlarmsHashMap = PersistenceManager.getInstance().getCheckedAlarms();
+
+            ArrayList<Integer> checkedAlarms = checkedAlarmsHashMap.get(PersistenceManager.getInstance().getMachineId());
 
             mEventsQueue.clear();
 
@@ -1191,7 +1200,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-
             for (Event event : events) {
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
@@ -1201,24 +1209,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mIsNewShiftLogs) {
                         mEventsQueue.add(event);
                     }
+                    if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+                        addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
+                    }
                 } else {
 
-                    if (checkedAlarms != null) {
-
-                        for (Integer integer : checkedAlarms) {
-
-                            if (integer == event.getEventID()) {
-
-                                event.setTreated(true);
-                            }
-
-                        }
-                    }
-
-                    PersistenceManager.getInstance().setCheckedAlarms(null);
-
-
-                    event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+                    addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
                 }
             }
 
@@ -1268,6 +1264,30 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogAdapter != null)
             mShiftLogAdapter.notifyDataSetChanged();
+    }
+
+    public void addCheckedAlarms(HashMap<Integer, ArrayList<Integer>> checkedAlarmsHashMap, ArrayList<Integer> checkedAlarms, Event event) {
+        if (checkedAlarms != null) {
+
+            for (Integer integer : checkedAlarms) {
+
+                if (integer == event.getEventID()) {
+
+                    event.setTreated(true);
+
+                    mEventsQueue.remove(event);
+
+                }
+
+            }
+        }
+
+        checkedAlarmsHashMap.remove(PersistenceManager.getInstance().getMachineId());
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
+
+
+        event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
     }
 
     private void clearOver24HShift() {
@@ -1583,7 +1603,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
 
-                    event.updateAll("meventid = ?", String.valueOf(eventId));
+                    event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId));
                 }
 
 
@@ -1706,6 +1726,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onLenoxMachineClicked(Machine machine);
 
+        void onLastShiftItemUpdated();
     }
 
 }

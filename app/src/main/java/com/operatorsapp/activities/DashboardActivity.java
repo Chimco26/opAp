@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -106,18 +108,22 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -172,6 +178,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mSpinnerProductPosition;
     private Handler pollingBackupHandler = new Handler();
     private ArrayList<Machine> mMachines;
+    private AlertDialog mLoadingDialog;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -1523,23 +1530,104 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onLenoxMachineClicked(Machine machine) {
 
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - 24*60*60*1000, "yyyy-MM-dd HH:mm:ss.SSS"));
+        saveAlarmsCheckedLocaly();
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
         DataSupport.deleteAll(Event.class);
 
         onClearAllSelectedEvents();
-        
+
         setLenoxMachine(machine.getId());
+    }
+
+    private void saveAlarmsCheckedLocaly() {
+        //because alarms status not saved in sever side,
+        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
+        //and update the alarms if checked
+
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+
+        HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
+        Cursor tempCursor = databaseHelper.getCursorOrderByTime();
+
+        ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
+
+        if (alarmList == null) {
+            alarmList = new ArrayList<>();
+        }
+
+        alarmList.clear();
+
+        for (Event event: databaseHelper.getListFromCursor(tempCursor)) {
+
+            if (event.isTreated()) {
+
+                event.setTreated(false);
+
+                event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+
+                event.save();
+            }
+
+        }
+
+        for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
+
+            if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) > 0) {
+
+                alarmList.add(tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
+            }
+
+        }
+
+        tempCursor.close();
+
+        checkedAlarmHashMap.remove(persistenceManager.getMachineId());
+
+        checkedAlarmHashMap.put(persistenceManager.getMachineId(), alarmList);
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmHashMap);
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+
+    }
+
+    @Override
+    public void onLastShiftItemUpdated() {
+
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
     }
 
     public void setLenoxMachine(int machineId) {
 
-        ProgressDialogManager.show(this);
+        showLoadingDialog();
 
         PersistenceManager.getInstance().setMachineId(machineId);
 
         dashboardDataStartPolling();
     }
+
+    private void showLoadingDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(getString(R.string.loading_data));
+
+        builder.setCancelable(false);
+
+        mLoadingDialog = builder.create();
+
+        if (!mLoadingDialog.isShowing()) {
+            mLoadingDialog.show();
+        }
+    }
+
 
     @Override
     public void onSplitEventPressed(int eventID) {

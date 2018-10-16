@@ -37,9 +37,11 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.NetworkAvailable;
 import com.ravtech.david.sqlcore.DatabaseHelper;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
 {
@@ -254,27 +256,40 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
         //and update the alarms if checked
 
-        ArrayList<Integer> checkedAlarmList = new ArrayList<>();
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - (24 * 60 * 60 * 100), "yyyy-MM-dd HH:mm:ss.SSS"));
+        HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
 
-        Cursor mTempCursor = databaseHelper.getCursorOrderByTime();
+        Cursor tempCursor = databaseHelper.getCursorOrderByTime();
 
-        while (mTempCursor.isLast()) {
+        ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
 
-            if (mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) == 1) {
-
-                checkedAlarmList.add(mTempCursor.getInt(mTempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
-            }
-
-            mTempCursor.moveToNext();
+        if (alarmList == null){
+            alarmList = new ArrayList<>();
         }
 
-        mTempCursor.close();
+        alarmList.clear();
 
-        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmList);
+        for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
+
+            if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) == 1) {
+
+                alarmList.add(tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
+            }
+
+        }
+
+        tempCursor.close();
+
+        checkedAlarmHashMap.remove(persistenceManager.getMachineId());
+
+        checkedAlarmHashMap.put(persistenceManager.getMachineId(), alarmList);
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmHashMap);
     }
 
 

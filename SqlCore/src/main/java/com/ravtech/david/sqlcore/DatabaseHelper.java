@@ -19,9 +19,6 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final long LOG_DURATION_MILLIS = 1000 * 60 * 60 * 24;
-
-
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
