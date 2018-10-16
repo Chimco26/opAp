@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -57,6 +59,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
 import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
+import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -69,6 +72,8 @@ import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 import com.operatorsapp.utils.DownloadHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.File;
@@ -96,6 +101,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     public static final String EXTRA_ACTIVATE_JOB_RESPONSE = "EXTRA_ACTIVATE_JOB_RESPONSE";
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
+    private static final int NUMBER_OF_COLUMNS = 2;
     private TextView mTitleTv;
     private TextView mTitleLine1Tv1;
     private TextView mTitleLine1Tv2;
@@ -141,6 +147,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<Action> mUpdatedActions;
     private TextView mProductNoteTv;
     private TextView mProductPdfNoImageTv;
+    private RecyclerView mPropsRv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,7 +375,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         initImagesViews();
 
-        initViewsTitleLine();
+        initTopPropsRv();
 
         initViewsMaterialItem();
 
@@ -569,47 +576,20 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void initViewsTitleLine() {
+    private void initTopPropsRv() {
 
-        ArrayList<Property> properties = (ArrayList<Property>) mCurrentPendingJob.getProperties();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
+        mPropsRv.setLayoutManager(gridLayoutManager);
+        int spacing = 0;//40
 
-        SimpleDateFormat actualFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
-
-        if (properties.size() > 0) {
-            mTitleLine1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName(), 1));
-            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                mTitleLine1Tv2.setText(getResizedString(updateDateForRtl(properties.get(0), actualFormat, dateFormat), 2));
-            } else {
-                mTitleLine1Tv2.setText(getResizedString(properties.get(0).getValue(), 2));
-            }
-        }
-        if (properties.size() > 1) {
-            mTitleLine1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName(), 1));
-            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                mTitleLine1Tv4.setText(getResizedString(updateDateForRtl(properties.get(1), actualFormat, dateFormat), 2));
-            } else {
-                mTitleLine1Tv4.setText(getResizedString(properties.get(1).getValue(), 2));
-            }
+        Configuration config = getResources().getConfiguration();
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            mPropsRv.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
+        } else {
+            mPropsRv.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
         }
 
-        if (properties.size() > 2) {
-            mTit2Line1Tv1.setText(getResizedString(mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName(), 1));
-            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                mTit2Line1Tv2.setText(getResizedString(updateDateForRtl(properties.get(2), actualFormat, dateFormat), 2));
-            } else {
-                mTit2Line1Tv2.setText(getResizedString(properties.get(2).getValue(), 2));
-            }
-        }
-        if (properties.size() > 3) {
-            mTit2Line1Tv3.setText(getResizedString(mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName(), 1));
-            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                mTit2Line1Tv4.setText(getResizedString(updateDateForRtl(properties.get(3), actualFormat, dateFormat), 2));
-            } else {
-                mTit2Line1Tv4.setText(getResizedString(properties.get(3).getValue(), 2));
-            }
-        }
+        mPropsRv.setAdapter(new PendingJobPropsAdapter(this, mCurrentPendingJob.getProperties(), mHashMapHeaders));
 
     }
 
@@ -664,9 +644,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mProductNoteTv = findViewById(R.id.AJA_notes_tv);
 
-        initVarsSearch();
+        mPropsRv = findViewById(R.id.AJA_top_prop_rv);
 
-        initVarsTitleLine();
+        initVarsSearch();
 
         initVarsMaterialItem();
 
@@ -709,19 +689,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mMaterialItemTitleTv = mMaterialItem.findViewById(R.id.JAMI_title);
 
         mMaterialItemRv = mMaterialItem.findViewById(R.id.JAMI_rv);
-    }
-
-    private void initVarsTitleLine() {
-        mTitleLine1Tv1 = findViewById(R.id.AJA_title_line1_tv1);
-        mTitleLine1Tv2 = findViewById(R.id.AJA_title_line1_tv2);
-        mTitleLine1Tv3 = findViewById(R.id.AJA_title_line1_tv3);
-        mTitleLine1Tv4 = findViewById(R.id.AJA_title_line1_tv4);
-
-        mTit2Line1Tv1 = findViewById(R.id.AJA_title_line2_tv1);
-        mTit2Line1Tv2 = findViewById(R.id.AJA_title_line2_tv2);
-        mTit2Line1Tv3 = findViewById(R.id.AJA_title_line2_tv3);
-        mTit2Line1Tv4 = findViewById(R.id.AJA_title_line2_tv4);
-
     }
 
     private void initVarsSearch() {
@@ -1080,14 +1047,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onPandingJobSelected(PandingJob pandingJob) {
-
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-//
-//        SimpleDateFormat actualFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
-//
-//        for (Property property : mCurrentPendingJob.getProperties()) {
-//            updateDateForRtl(property, actualFormat, dateFormat);
-//        }
 
         for (PandingJob pandingJob1 : mPendingJobsResponse.getPandingJobs()) {
 

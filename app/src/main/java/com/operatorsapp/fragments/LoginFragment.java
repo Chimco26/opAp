@@ -40,7 +40,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -302,8 +301,7 @@ public class LoginFragment extends Fragment {
     private void loginSuccess() {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachine
-                    Id());
+            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
             mNavigationCallback.isTryToLogin(false);
         }
     }
