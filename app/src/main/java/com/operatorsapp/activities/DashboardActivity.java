@@ -1562,19 +1562,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         alarmList.clear();
 
-        for (Event event: databaseHelper.getListFromCursor(tempCursor)) {
-
-            if (event.isTreated()) {
-
-                event.setTreated(false);
-
-                event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
-
-                event.save();
-            }
-
-        }
-
         for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
 
             if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) > 0) {
