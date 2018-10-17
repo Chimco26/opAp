@@ -148,9 +148,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
     private TextView mSelectedNumberTv;
-    private View mConfigView;
-    private View mConfigLayout;
-    private TextView mConfigTextView;
     private View mSelectedNumberLy;
     private Event mLastEvent;
     private Fragment mVisiblefragment;
@@ -244,10 +241,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
 
-        mConfigLayout = view.findViewById(R.id.pConfig_layout);
-        mConfigView = view.findViewById(R.id.pConfig_view);
-        mConfigTextView = view.findViewById(R.id.text_view_config);
-        mConfigTextView.setSelected(true);
         mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
@@ -1381,18 +1374,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             machineName = getString(R.string.dashes);
         }
 
-        if (machinesData.getConfigName() != null) {
-
-            mConfigView.setVisibility(View.VISIBLE);
-            mConfigLayout.setVisibility(View.VISIBLE);
-
-            mConfigTextView.setText(machinesData.getConfigName());
-        } else {
-            mConfigView.setVisibility(View.GONE);
-            mConfigLayout.setVisibility(View.GONE);
-
-        }
-
         mMachineIdStatusBarTextView.setText(machineName);
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
@@ -1409,9 +1390,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMachineIdStatusBarTextView.setText("");
         mMachineStatusStatusBarTextView.setText("");
         mTimerTextView.setText("");
-        mConfigTextView.setText("");
-        mConfigView.setVisibility(View.GONE);
-        mConfigLayout.setVisibility(View.GONE);
 
         if (getActivity() != null) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_data));
