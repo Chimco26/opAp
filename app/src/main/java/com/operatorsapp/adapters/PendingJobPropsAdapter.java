@@ -12,12 +12,13 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Heade
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static com.operatorsapp.utils.StringUtil.getResizedString;
+import static com.operatorsapp.utils.TimeUtils.updateDateForRtl;
 
 public class PendingJobPropsAdapter extends RecyclerView.Adapter<PendingJobPropsAdapter.ViewHolder> {
 
@@ -46,29 +47,20 @@ public class PendingJobPropsAdapter extends RecyclerView.Adapter<PendingJobProps
         SimpleDateFormat actualFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
 
-        viewHolder.mTitleTv.setText(mHashMapHeaders.get(mProps.get(position).getKey()).getDisplayName());
+        viewHolder.mTitleTv.setText(getResizedString(mHashMapHeaders.get(mProps.get(position).getKey()).getDisplayName(), 20));
         if (mContext.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             viewHolder.mValueTv.setText(updateDateForRtl(mProps.get(position), actualFormat, dateFormat));
         } else {
             viewHolder.mValueTv.setText(mProps.get(position).getValue());
         }
-    }
-
-    private String updateDateForRtl(Property property, SimpleDateFormat actualFormat, SimpleDateFormat newFormat) {
-
-        if (property.getKey().contains("Time") && property.getValue() != null && property.getValue().length() > 0) {
-
-            try {
-                Date date = actualFormat.parse(property.getValue());
-                return newFormat.format(date);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if (mProps.get(position).getValue() != null) {
+            if (mProps.get(position).getValue().length() > 18) {
+                viewHolder.mValueTv.setSelected(true);
+            } else {
+                viewHolder.mValueTv.setSelected(false);
             }
         }
-        return property.getValue();
     }
-
 
     @Override
     public int getItemCount() {

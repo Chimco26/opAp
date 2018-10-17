@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,15 +103,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
     private static final int NUMBER_OF_COLUMNS = 2;
+    private static final int PROPOS_RV_HEIGHT = 87;
     private TextView mTitleTv;
-    private TextView mTitleLine1Tv1;
-    private TextView mTitleLine1Tv2;
-    private TextView mTitleLine1Tv3;
-    private TextView mTitleLine1Tv4;
-    private TextView mTit2Line1Tv1;
-    private TextView mTit2Line1Tv2;
-    private TextView mTit2Line1Tv3;
-    private TextView mTit2Line1Tv4;
     private PDFView mProductPdfView;
     private ImageView mProductImage;
     private View mProductPdfNoImageLy;
@@ -148,6 +142,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private TextView mProductNoteTv;
     private TextView mProductPdfNoImageTv;
     private RecyclerView mPropsRv;
+    private View mPropsRvOpenButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -591,30 +586,20 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mPropsRv.setAdapter(new PendingJobPropsAdapter(this, mCurrentPendingJob.getProperties(), mHashMapHeaders));
 
-    }
-
-    private String getResizedString(String s, int type) {
-
-        if (s == null || s.length() <= 20) {
-            return s;
-
-        } else {
-
-            switch (type) {
-
-                case 1:
-
-                    return s.substring(0, 30) + "...";
-
-                case 2:
-
-                    return s.substring(0, 20) + "...";
-
-                default:
-                    return s;
+        mPropsRvOpenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewGroup.LayoutParams params = mPropsRv.getLayoutParams();
+                if (params.height == (int) (PROPOS_RV_HEIGHT * getResources().getDisplayMetrics().density)) {
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    mPropsRv.setLayoutParams(params);
+                } else {
+                    params.height = (int) (PROPOS_RV_HEIGHT * getResources().getDisplayMetrics().density);
+                    mPropsRv.setLayoutParams(params);
+                }
             }
+        });
 
-        }
     }
 
     private void headerListToHashMap(List<Header> headers) {
@@ -645,6 +630,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mProductNoteTv = findViewById(R.id.AJA_notes_tv);
 
         mPropsRv = findViewById(R.id.AJA_top_prop_rv);
+
+        mPropsRvOpenButton = findViewById(R.id.AJA_props_top_rv_button);
 
         initVarsSearch();
 
