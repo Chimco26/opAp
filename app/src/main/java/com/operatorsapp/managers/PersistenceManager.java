@@ -469,7 +469,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         cal.add(Calendar.DAY_OF_YEAR, -1);
         Date date = new Date();
         for (int i = 0; i < notificationsList.size(); i++) {
-            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
+            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime(), TimeUtils.SQL_T_FORMAT);
             if (date != null && date.after(cal.getTime())){
                 filteredList.add(notificationsList.get(i));
             }

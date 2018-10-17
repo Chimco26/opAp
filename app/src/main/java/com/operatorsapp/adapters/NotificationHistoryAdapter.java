@@ -1,11 +1,13 @@
 package com.operatorsapp.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
@@ -25,13 +27,41 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
 
     private final OnNotificationResponseSelected mListener;
+    private final Context mContext;
     private ArrayList<Notification> mNotificationsList;
-    private boolean isFirstNotificationOfToday = true;
-    private boolean isFirstNotificationOfYesterday = true;
+    private int mFirstTodayPosition;
+    private int mFirstYesterdayPosition;
 
-    public NotificationHistoryAdapter(ArrayList<Notification> notificationHistory, OnNotificationResponseSelected listener) {
+    public NotificationHistoryAdapter(Context context, ArrayList<Notification> notificationHistory, OnNotificationResponseSelected listener) {
+        this.mContext = context;
         mNotificationsList = notificationHistory;
         mListener = listener;
+        mFirstTodayPosition = mNotificationsList.size();
+        mFirstYesterdayPosition = mNotificationsList.size();
+        getTitlesPosition();
+    }
+
+    private void getTitlesPosition() {
+
+        Date date;
+        Notification notification;
+        Calendar c = Calendar.getInstance();
+
+        for (int i = 0; i < mNotificationsList.size(); i++) {
+
+            notification = mNotificationsList.get(i);
+            date = TimeUtils.getDateForNotification(notification.getmSentTime(), TimeUtils.SQL_NO_T_FORMAT);
+            c.setTime(date);
+
+            if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && i < mFirstTodayPosition){
+                mFirstTodayPosition = i;
+            }
+
+            if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)+1 && i < mFirstYesterdayPosition){
+                mFirstYesterdayPosition = i;
+            }
+
+        }
     }
 
     @NonNull
@@ -47,7 +77,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     public void onBindViewHolder(@NonNull NotificationHistoryAdapter.ViewHolder holder, final int position) {
 
         Notification notification = mNotificationsList.get(position);
-        Date date = TimeUtils.getDateForNotification(notification.getmSentTime());
+        Date date = TimeUtils.getDateForNotification(notification.getmSentTime(), TimeUtils.SQL_NO_T_FORMAT);
         String time = "";
 
         if (date != null) {
@@ -55,18 +85,15 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             c.setTime(date);
             time = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
 
-            if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && isFirstNotificationOfToday){
+            if (position == mFirstTodayPosition){
                 holder.mDayTitleTv.setText(R.string.today);
                 holder.mDayTitleTv.setVisibility(View.VISIBLE);
-                isFirstNotificationOfToday = false;
-            }else if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)+1 && isFirstNotificationOfYesterday){
+            }else if (position == mFirstYesterdayPosition){
                 holder.mDayTitleTv.setText(R.string.yesterday);
                 holder.mDayTitleTv.setVisibility(View.VISIBLE);
-                isFirstNotificationOfYesterday = false;
             }else {
                 holder.mDayTitleTv.setVisibility(View.GONE);
             }
-
         }
 
         if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
@@ -105,6 +132,22 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         });
 
+        switch (notification.getmResponseType()){
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                holder.mIconIv.setImageDrawable(null);
+                break;
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                holder.mIconIv.setImageDrawable(null);
+                break;
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+                holder.mIconIv.setImageDrawable(null);
+                break;
+
+            default: holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));
+        }
     }
 
     @Override
@@ -121,6 +164,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         private TextView mBodyTv;
         private TextView mSenderTv;
         private TextView mTimeTv;
+        private ImageView mIconIv;
 
         public ViewHolder(View view) {
             super(view);
@@ -132,6 +176,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             mBodyTv = view.findViewById(R.id.notification_item_tv_body);
             mSenderTv = view.findViewById(R.id.notification_item_tv_sender);
             mTimeTv = view.findViewById(R.id.notification_item_tv_time);
+            mIconIv = view.findViewById(R.id.notification_item_iv);
         }
     }
 

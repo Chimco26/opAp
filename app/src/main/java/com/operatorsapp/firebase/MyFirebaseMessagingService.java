@@ -1,22 +1,18 @@
 package com.operatorsapp.firebase;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.server.callback.PostNotificationTokenCallback;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.Notification;
-import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
+import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -126,10 +122,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             int notificationType = Integer.parseInt(data.get("NotificationType"));
             int responseType = Integer.parseInt(data.get("ResponseType"));
             int id = Integer.parseInt(data.get("ID"));
+            String time = TimeUtils.getStringNoTFormatForNotification(data.get("ResponseDate"));
 
             Notification notification = new Notification(remoteMessage.getNotification().getBody(),
                     data.get("SourceUserName"),
-                    data.get("ResponseDate"),
+                    time,
                     responseType,
                     "",
                     data.get("TargetUserName"),

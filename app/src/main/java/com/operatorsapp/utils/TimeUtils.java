@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
+    public static final String SQL_T_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
@@ -146,9 +148,29 @@ public class TimeUtils {
     }
 
     @SuppressLint("SimpleDateFormat")
-    public static Date getDateForNotification(String time) {
+    public static String getStringNoTFormatForNotification(String time) {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (time.contains("T")) {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat(SQL_T_FORMAT);
+            try {
+                Date date = dateFormat.parse(time);
+                dateFormat = new SimpleDateFormat(SQL_NO_T_FORMAT);
+
+                return dateFormat.format(date);
+            } catch (java.text.ParseException e) {
+
+            }
+        }
+        return "";
+
+
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static Date getDateForNotification(String time, String format) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         try {
             Date date = dateFormat.parse(time);
             return date;
@@ -164,6 +186,23 @@ public class TimeUtils {
 
         }
         return null;
+
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        try {
+//            Date date = dateFormat.parse(time);
+//            return date;
+//        } catch (java.text.ParseException e) {
+//
+//            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//            try {
+//                Date date2 = dateFormat.parse(time);
+//                return date2;
+//            } catch (java.text.ParseException e1) {
+//
+//            }
+//
+//        }
+//        return null;
     }
 
     @SuppressLint("SimpleDateFormat")

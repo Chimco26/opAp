@@ -1106,7 +1106,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
         if (notificationList.size() > 0) {
-            final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
+            final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
                 @Override
                 public void onNotificationResponse(int position, int responseType) {
 
