@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class TimeUtils {
     public static final String SQL_T_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
@@ -150,42 +151,99 @@ public class TimeUtils {
     @SuppressLint("SimpleDateFormat")
     public static String getStringNoTFormatForNotification(String time) {
 
-        if (time.contains("T")) {
+        if (time != null && time != "") {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
+            SimpleDateFormat dateFormatSql = new SimpleDateFormat(SQL_NO_T_FORMAT);
+            SimpleDateFormat dateFormatSqlT = new SimpleDateFormat(SQL_T_FORMAT);
+            Date date;
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat(SQL_T_FORMAT);
             try {
-                Date date = dateFormat.parse(time);
-                dateFormat = new SimpleDateFormat(SQL_NO_T_FORMAT);
+                date = dateFormat.parse(time);
+                return time;
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
+            try {
+                date = dateFormatSql.parse(time);
                 return dateFormat.format(date);
             } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
 
+            try {
+                date = dateFormatSqlT.parse(time);
+                return dateFormat.format(date);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
             }
         }
+
+
+//
+//
+//
+//        if (time.contains("T")) {
+//            dateFormat = new SimpleDateFormat(SQL_T_FORMAT);
+//            try {
+//                Date date = dateFormat.parse(time);
+//                dateFormat = new SimpleDateFormat(SQL_NO_T_FORMAT);
+//
+//                return dateFormat.format(date);
+//            } catch (java.text.ParseException e) {
+//
+//            }
+//
+//        }
         return "";
 
 
     }
 
     @SuppressLint("SimpleDateFormat")
-    public static Date getDateForNotification(String time, String format) {
+    public static Date getDateForNotification(String time) {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
+        SimpleDateFormat dateFormatSql = new SimpleDateFormat(SQL_NO_T_FORMAT);
+        SimpleDateFormat dateFormatSqlT = new SimpleDateFormat(SQL_T_FORMAT);
+
         try {
-            Date date = dateFormat.parse(time);
-            return date;
+            return dateFormat.parse(time);
         } catch (java.text.ParseException e) {
-
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            try {
-                Date date2 = dateFormat.parse(time);
-                return date2;
-            } catch (java.text.ParseException e1) {
-
-            }
-
+            e.printStackTrace();
         }
+
+        try {
+            return dateFormatSql.parse(time);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            return dateFormatSqlT.parse(time);
+
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
         return null;
+
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(SQL_NO_T_FORMAT);
+//        try {
+//            Date date = dateFormat.parse(time);
+//            return date;
+//        } catch (java.text.ParseException e) {
+//
+//            dateFormat = new SimpleDateFormat(SQL_T_FORMAT);
+//            try {
+//                Date date2 = dateFormat.parse(time);
+//                return date2;
+//            } catch (java.text.ParseException e1) {
+//
+//            }
+//
+//        }
+//        return null;
 
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        try {

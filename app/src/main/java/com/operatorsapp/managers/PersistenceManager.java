@@ -30,6 +30,8 @@ import org.acra.ACRA;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -457,6 +459,22 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public void setNotificationHistory(ArrayList<Notification> notificationList) {
+
+        Collections.sort(notificationList, new Comparator<Notification>() {
+            @Override
+            public int compare(Notification o1, Notification o2) {
+
+                if (o1.getmNotificationID() > o2.getmNotificationID()){
+                    return -1;
+                }else if (o1.getmNotificationID() < o2.getmNotificationID()){
+                    return 1;
+                }else {
+                    return 0;
+                }
+            }
+        });
+
+
         SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
     }
 
@@ -469,7 +487,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         cal.add(Calendar.DAY_OF_YEAR, -1);
         Date date = new Date();
         for (int i = 0; i < notificationsList.size(); i++) {
-            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime(), TimeUtils.SQL_T_FORMAT);
+            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
             if (date != null && date.after(cal.getTime())){
                 filteredList.add(notificationsList.get(i));
             }

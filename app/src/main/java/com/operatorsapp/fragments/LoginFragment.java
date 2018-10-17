@@ -41,9 +41,11 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.utils.TimeUtils;
 import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
@@ -329,6 +331,12 @@ public class LoginFragment extends Fragment {
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
                 if (response != null && response.body() != null && response.body().getmError() == null) {
+
+                    for (Notification not : response.body().getmNotificationsList()) {
+                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                    }
+
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                 }else {
                     PersistenceManager.getInstance().setNotificationHistory(null);

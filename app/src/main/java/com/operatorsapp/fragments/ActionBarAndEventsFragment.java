@@ -27,6 +27,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -468,6 +469,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 wlp.gravity = Gravity.BOTTOM;
                 wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                 window.setAttributes(wlp);
+                Point point = new Point(1,1);
+                ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+                dialog.getWindow().setLayout((point.x * 2)/3 , WindowManager.LayoutParams.WRAP_CONTENT);
 
                 ImageView btnClose = dialog.findViewById(R.id.notification_item_iv);
                 Button btnApprove = dialog.findViewById(R.id.notification_item_approve_btn);
@@ -1099,8 +1103,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.RIGHT;
+        wlp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        wlp.x = -130;
+//        wlp.y = 240;
         window.setAttributes(wlp);
 
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
@@ -1119,12 +1125,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             RecyclerView rvDialog = new RecyclerView(getActivity());
             rvDialog.setLayoutManager(new LinearLayoutManager(getActivity()));
             rvDialog.setAdapter(notificationHistoryAdapter);
-
             dialog.setContentView(rvDialog);
 
             Point point = new Point(1,1);
             ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
-            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,(point.y * 5)/6);
+            dialog.getWindow().setLayout((int) (point.x / 3.5),point.y - 50);
+
+
         }else {
             TextView tv = new TextView(getActivity());
             tv.setPadding(20,50,20,50);

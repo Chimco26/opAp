@@ -50,7 +50,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         for (int i = 0; i < mNotificationsList.size(); i++) {
 
             notification = mNotificationsList.get(i);
-            date = TimeUtils.getDateForNotification(notification.getmSentTime(), TimeUtils.SQL_NO_T_FORMAT);
+            date = TimeUtils.getDateForNotification(notification.getmSentTime());
             c.setTime(date);
 
             if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && i < mFirstTodayPosition){
@@ -77,7 +77,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     public void onBindViewHolder(@NonNull NotificationHistoryAdapter.ViewHolder holder, final int position) {
 
         Notification notification = mNotificationsList.get(position);
-        Date date = TimeUtils.getDateForNotification(notification.getmSentTime(), TimeUtils.SQL_NO_T_FORMAT);
+        Date date = TimeUtils.getDateForNotification(notification.getmSentTime());
         String time = "";
 
         if (date != null) {
