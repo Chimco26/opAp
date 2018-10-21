@@ -1,74 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/C0L_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/C0L_title_tv"
-            style="@style/BreeSerifRegular"
+        <LinearLayout
+            android:id="@+id/C0L_layout"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="@string/channel_0"
-            android:textColor="@color/blue1"
-            android:textSize="25sp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/C0L_title_tv"
+                style="@style/BreeSerifRegular"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="@string/channel_0"
+                android:textColor="@color/blue1"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+                <include
+                    android:id="@+id/C0L_item"
+                    layout="@layout/item_product_0" />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/C0L_img"
+                    android:layout_width="450dp"
+                    android:layout_height="380dp"
+                    android:background="@drawable/combined_shape"
+                    android:padding="10dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/C0L_note_ly"
+                android:layout_width="869dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="33dp"
+                android:background="@drawable/combined_shape"
+                android:orientation="vertical"
+                android:paddingEnd="24dp"
+                android:paddingStart="24dp"
+                android:paddingTop="24dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_gravity="start"
+                    android:id="@+id/C0L_actions_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:textColor="@color/black"
+                    android:text="@string/notes"
+                    android:textSize="25sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/C0L_notes_tv"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/C0L_open_edit_text_btn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/note" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-
-            <include
-                android:id="@+id/C0L_item"
-                layout="@layout/item_product_0" />
-
-            <View
-                android:layout_width="60dp"
-                android:layout_height="match_parent" />
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/C0L_img"
-                android:layout_width="450dp"
-                android:layout_height="380dp"
-                android:background="@drawable/combined_shape"
-                android:padding="10dp" />
+                android:id="@+id/C0L_no_data_img"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_cloud"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/C0L_no_data_tv"
+                style="@style/FontStyle_T7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_data"
+                android:textColor="@color/divider_gray"
+                android:textSize="50sp"
+                android:visibility="gone" />
 
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/C0L_no_data_img"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/ic_cloud"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/C0L_no_data_tv"
-            style="@style/FontStyle_T7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/no_data"
-            android:textColor="@color/divider_gray"
-            android:textSize="50sp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

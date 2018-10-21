@@ -96,14 +96,36 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         }
 
-        if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
-            holder.mClarifyBtn.setVisibility(View.VISIBLE);
-            holder.mApproveBtn.setVisibility(View.VISIBLE);
-            holder.mDeclineBtn.setVisibility(View.VISIBLE);
-        }else {
-            holder.mClarifyBtn.setVisibility(View.GONE);
-            holder.mApproveBtn.setVisibility(View.GONE);
-            holder.mDeclineBtn.setVisibility(View.GONE);
+        switch (notification.getmResponseType()){
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+                holder.mClarifyBtn.setVisibility(View.GONE);
+                holder.mApproveBtn.setVisibility(View.GONE);
+                holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
+                break;
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                holder.mClarifyBtn.setVisibility(View.GONE);
+                holder.mApproveBtn.setVisibility(View.GONE);
+                holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
+                break;
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                holder.mClarifyBtn.setVisibility(View.GONE);
+                holder.mApproveBtn.setVisibility(View.GONE);
+                holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
+                break;
+
+            default:
+                holder.mClarifyBtn.setVisibility(View.VISIBLE);
+                holder.mApproveBtn.setVisibility(View.VISIBLE);
+                holder.mDeclineBtn.setVisibility(View.VISIBLE);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));
+                break;
+
         }
 
         holder.mBodyTv.setText(notification.getmBody());
@@ -135,15 +157,15 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         switch (notification.getmResponseType()){
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                holder.mIconIv.setImageDrawable(null);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                holder.mIconIv.setImageDrawable(null);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
-                holder.mIconIv.setImageDrawable(null);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
                 break;
 
             default: holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));

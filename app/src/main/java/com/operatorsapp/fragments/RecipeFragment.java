@@ -1,15 +1,20 @@
 package com.operatorsapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +22,9 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
@@ -25,6 +33,10 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.No0ChanneAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
+import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.ViewTagsHelper;
 
 import java.util.ArrayList;
@@ -61,6 +73,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mlayoutChannel1_99NoDataLayout;
     private View mlayoutChannel1_99MainLy;
     private View mLayoutChannel100RvLy;
+    private View mLayoutChannel0NoteLayout;
+    private TextView mLayoutChannel0NotesTv;
+    private ImageView mLayoutChannel0EditTextIv;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -188,6 +203,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0ItemSplitLy = mLayoutChannel0Item.findViewById(R.id.IP_split_ly);
 
+        mLayoutChannel0NoteLayout = mLayoutChannel0.findViewById(R.id.C0L_note_ly);
+
+        mLayoutChannel0EditTextIv = mLayoutChannel0.findViewById(R.id.C0L_open_edit_text_btn);
+
+        mLayoutChannel0NotesTv = mLayoutChannel0.findViewById(R.id.C0L_notes_tv);
+
     }
 
     private void initView() {
@@ -300,6 +321,18 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 mLayoutChannel0ItemSplitLy.removeAllViews();
             }
 
+
+            if (mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
+                mLayoutChannel0NotesTv.setText(mRecipeResponse.getNote());
+            }
+            mLayoutChannel0EditTextIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openNotesDialog();
+                }
+            });
+
+
         } else {
 
             mLayoutChannel0MainLayout.setVisibility(View.GONE);
@@ -313,6 +346,75 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         }
 
     }
+
+    private void openNotesDialog() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+        builder.setView(dialogView);
+
+        TextView noteTitleTv = dialogView.findViewById(R.id.DN_note_title);
+        final EditText noteEt = dialogView.findViewById(R.id.DN_note);
+        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+
+        if (mLayoutChannel0NotesTv.getText().length() > 0) {
+
+            noteTitleTv.setText(getString(R.string.edit_note));
+            noteEt.setText(mLayoutChannel0NotesTv.getText());
+        } else {
+            noteTitleTv.setText(getString(R.string.add_note));
+            noteEt.setHint(getString(R.string.enter_note_here));
+        }
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                updateNotes(alert, noteEt.getText().toString());
+
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                alert.dismiss();
+            }
+        });
+
+    }
+
+    private void updateNotes(final AlertDialog alert, final String note) {
+
+        ProgressDialogManager.show(getActivity());
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+        PersistenceManager pm = PersistenceManager.getInstance();
+        PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), pm.getJobId(), note);
+        simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
+            @Override
+            public void onUpdateNotesSuccess(ErrorResponseNewVersion responseNewVersion) {
+                mLayoutChannel0NotesTv.setText(note);
+                ProgressDialogManager.dismiss();
+                alert.dismiss();
+            }
+
+            @Override
+            public void onUpdateNotesFailed(ErrorObjectInterface reason) {
+                ProgressDialogManager.dismiss();
+            }
+        }, NetworkManager.getInstance(), updateNotesRequest, pm.getTotalRetries(), pm.getRequestTimeout());
+
+
+    }
+
 
     private void initListener(View view) {
 
