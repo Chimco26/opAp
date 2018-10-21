@@ -80,7 +80,12 @@
                     android:layout_height="25dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/blue1"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:scrollHorizontally="true"/>
 
                 <TextView
                     android:id="@+id/PI_tv2_value"
@@ -89,7 +94,12 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:scrollHorizontally="true"/>
 
                 <TextView
                     android:id="@+id/PI_tv3_value"
@@ -98,7 +108,12 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:scrollHorizontally="true"/>
 
                 <TextView
                     android:id="@+id/PI_tv4_value"
@@ -107,7 +122,12 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:focusable="true"
+                    android:scrollHorizontally="true"
+                    />
             </LinearLayout>
 
         </LinearLayout>

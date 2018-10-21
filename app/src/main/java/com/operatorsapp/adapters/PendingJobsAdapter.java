@@ -63,32 +63,16 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
         }
 
         if (properties.size() > 0) {
-            viewHolder.mTv1.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(0).getKey()).getDisplayName()));
-            viewHolder.mTv1Value.setText(properties.get(0).getValue());
-            viewHolder.mTv1.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(0).getKey()).getColor().replace("\t", "")));
+            initPropertyView(properties, viewHolder.mTv1, 0, viewHolder.mTv1Value);
         }
-
         if (properties.size() > 1) {
-
-            viewHolder.mTv2.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(1).getKey()).getDisplayName()));
-            viewHolder.mTv2Value.setText(properties.get(1).getValue());
-            viewHolder.mTv2.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(1).getKey()).getColor().replace("\t", "")));
-
+            initPropertyView(properties, viewHolder.mTv2, 1, viewHolder.mTv2Value);
         }
         if (properties.size() > 2) {
-
-            viewHolder.mTv3.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(2).getKey()).getDisplayName()));
-            viewHolder.mTv3Value.setText(properties.get(2).getValue());
-            viewHolder.mTv3.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(2).getKey()).getColor().replace("\t", "")));
-
+            initPropertyView(properties, viewHolder.mTv3, 2, viewHolder.mTv3Value);
         }
-
         if (properties.size() > 3) {
-
-            viewHolder.mTv4.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(3).getKey()).getDisplayName()));
-            viewHolder.mTv4Value.setText(properties.get(3).getValue());
-            viewHolder.mTv4.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(3).getKey()).getColor().replace("\t", "")));
-
+            initPropertyView(properties, viewHolder.mTv4, 3, viewHolder.mTv4Value);
         }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +93,19 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
             }
         });
 
+    }
+
+    public void initPropertyView(ArrayList<Property> properties, TextView mTv4, int i, TextView mTv4Value) {
+        mTv4.setText(String.format("%s: ", mHashMapHeaders.get(properties.get(i).getKey()).getDisplayName()));
+        mTv4.setTextColor(Color.parseColor(mHashMapHeaders.get(properties.get(i).getKey()).getColor().replace("\t", "")));
+        mTv4Value.setText(properties.get(i).getValue());
+        if (properties.get(i).getValue() != null) {
+            if (properties.get(i).getValue().length() > 15) {
+                mTv4Value.setSelected(true);
+            } else {
+                mTv4Value.setSelected(false);
+            }
+        }
     }
 
 
