@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static org.acra.ACRA.LOG_TAG;
 
 /**
@@ -45,7 +46,6 @@ import static org.acra.ACRA.LOG_TAG;
 public class WidgetFragment extends Fragment implements
         DashboardUICallbackListener {
 
-    private static final long TWENTY_FOUR_HOURS = 60000L * 60 * 24;
     private static final int CHART_POINTS_LIST_LIMIT_SIZE = 1500;
     private boolean mIsOpen;
     //    private int mOpenWidth;
@@ -303,7 +303,7 @@ public class WidgetFragment extends Fragment implements
 
         for (int i = 0; i < prefsHistoricCopy.get(widgetId).size(); i++) {
             if (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(i).getTime(), "dd/MM/yyyy HH:mm:ss") <
-                    (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(prefsHistoricCopy.get(widgetId).size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TWENTY_FOUR_HOURS)
+                    (TimeUtils.getLongFromDateString(prefsHistoricCopy.get(widgetId).get(prefsHistoricCopy.get(widgetId).size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - DAY_IN_MILLIS)
                     || i > CHART_POINTS_LIST_LIMIT_SIZE) {
                 toClean.add(prefsHistoricCopy.get(widgetId).get(i));
             }
