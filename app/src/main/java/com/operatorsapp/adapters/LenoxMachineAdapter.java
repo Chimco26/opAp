@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.operators.infra.Machine;
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.ArrayList;
 
@@ -16,12 +18,18 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
 
     private final ArrayList<Machine> mMachines;
     private final LenoxMachineAdapterListener mListener;
+    private final Context mContext;
+    private int mSelectedMachineId;
 
-    public LenoxMachineAdapter(ArrayList<Machine> machines, LenoxMachineAdapterListener listener){
+    public LenoxMachineAdapter(Context context, ArrayList<Machine> machines, LenoxMachineAdapterListener listener){
+
+        mContext = context;
 
         mMachines = machines;
 
         mListener = listener;
+
+        mSelectedMachineId = PersistenceManager.getInstance().getMachineId();
     }
 
     @NonNull
@@ -32,7 +40,9 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LenoxMachineAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final LenoxMachineAdapter.ViewHolder holder, int position) {
+
+        updateBackground(holder, position);
 
         holder.mTv.setText(mMachines.get(position).getMachineEName());
 
@@ -40,9 +50,21 @@ public class LenoxMachineAdapter extends RecyclerView.Adapter<LenoxMachineAdapte
             @Override
             public void onClick(View v) {
 
-                mListener.onLenoxMachineClicked(mMachines.get(position));
+                mSelectedMachineId = mMachines.get(holder.getAdapterPosition()).getId();
+                mListener.onLenoxMachineClicked(mMachines.get(holder.getAdapterPosition()));
+                notifyDataSetChanged();
             }
         });
+    }
+
+    private void updateBackground(@NonNull ViewHolder holder, int position) {
+        if (mMachines.get(position).getId() == mSelectedMachineId){
+            holder.mTv.setBackgroundColor(mContext.getResources().getColor(R.color.machine_blue));
+            holder.mTv.setTextColor((mContext.getResources().getColor(R.color.white)));
+        }else {
+            holder.mTv.setBackground(mContext.getResources().getDrawable(R.drawable.blue_stroke));
+            holder.mTv.setTextColor((mContext.getResources().getColor(R.color.machine_blue)));
+        }
     }
 
     @Override

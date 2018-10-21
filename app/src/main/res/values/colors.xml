@@ -59,4 +59,5 @@
     <color name="grey1">#4d4d4d</color>
     <color name="grey_lite">#bababa</color>
     <color name="grey_transparent">#0b000000</color>
+    <color name="machine_blue">#2459af</color>
 </resources>

@@ -5,9 +5,11 @@
 
     <ImageView
         android:id="@+id/FLD_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/blue1"
+        android:layout_width="673dp"
+        android:layout_height="331dp"
+        android:src="@drawable/lenox_360_logo"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
         />
 
 </LinearLayout>

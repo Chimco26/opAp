@@ -99,7 +99,6 @@ import java.util.TimerTask;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
-
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener {
@@ -242,7 +241,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mLenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mLenoxMachineRv.setLayoutManager(linearLayoutManager);
-        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(mMachines, this));
+        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
 
     }
 
@@ -696,7 +695,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
+            ((TextView)mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteUrl());
 
+            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+                ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
+            }
 //            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
 //            title.setText(spannableString);
 //            title.setVisibility(View.VISIBLE);
