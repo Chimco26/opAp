@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.StopReasons;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
 import com.operatorsapp.utils.ReasonImage;
+import com.operatorsapp.utils.ReasonImageLenox;
 
 import java.util.List;
 
@@ -57,7 +59,11 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
 
         holder.mStopTitle.setText(nameByLang);
 
-        holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+            holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+        } else {
+            holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+        }
     }
 
     @Override
