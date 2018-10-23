@@ -12,60 +12,71 @@ import java.util.List;
  * Awesome Pojo Generator
  * */
 public class RecipeResponse implements Parcelable {
-  @SerializedName("ProductData")
-  @Expose
-  private ProductData ProductData;
-  @SerializedName("LeaderRecordID")
-  @Expose
-  private Integer LeaderRecordID;
-  @SerializedName("error")
-  @Expose
-  private ErrorResponse error;
-  @SerializedName("FunctionSucceed")
-  @Expose
-  private Boolean FunctionSucceed;
-  @SerializedName("RecipeData")
-  @Expose
-  private List<RecipeData> RecipeData;
-  public RecipeResponse(){
-  }
-  public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,ErrorResponse error,Boolean FunctionSucceed,List<RecipeData> RecipeData){
-   this.ProductData=ProductData;
-   this.LeaderRecordID=LeaderRecordID;
-   this.error=error;
-   this.FunctionSucceed=FunctionSucceed;
-   this.RecipeData=RecipeData;
-  }
-  public void setProductData(ProductData ProductData){
-   this.ProductData=ProductData;
-  }
-  public ProductData getProductData(){
-   return ProductData;
-  }
-  public void setLeaderRecordID(Integer LeaderRecordID){
-   this.LeaderRecordID=LeaderRecordID;
-  }
-  public Integer getLeaderRecordID(){
-   return LeaderRecordID;
-  }
-  public void setError(ErrorResponse error){
-   this.error=error;
-  }
-  public Object getError(){
-   return error;
-  }
-  public void setFunctionSucceed(Boolean FunctionSucceed){
-   this.FunctionSucceed=FunctionSucceed;
-  }
-  public Boolean getFunctionSucceed(){
-   return FunctionSucceed;
-  }
-  public void setRecipeData(List<RecipeData> RecipeData){
-   this.RecipeData=RecipeData;
-  }
-  public List<RecipeData> getRecipeData(){
-   return RecipeData;
-  }
+    @SerializedName("ProductData")
+    @Expose
+    private ProductData ProductData;
+    @SerializedName("LeaderRecordID")
+    @Expose
+    private Integer LeaderRecordID;
+    @SerializedName("error")
+    @Expose
+    private ErrorResponse error;
+    @SerializedName("FunctionSucceed")
+    @Expose
+    private Boolean FunctionSucceed;
+    @SerializedName("RecipeData")
+    @Expose
+    private List<RecipeData> RecipeData;
+    @SerializedName("JobNotes")
+    @Expose
+    private String note = "";
+
+    public RecipeResponse(){
+    }
+    public RecipeResponse(ProductData ProductData,Integer LeaderRecordID,ErrorResponse error,Boolean FunctionSucceed,List<RecipeData> RecipeData, String note){
+     this.ProductData=ProductData;
+     this.LeaderRecordID=LeaderRecordID;
+     this.error=error;
+     this.FunctionSucceed=FunctionSucceed;
+     this.RecipeData=RecipeData;
+     this.note=note;
+    }
+    public void setProductData(ProductData ProductData){
+     this.ProductData=ProductData;
+    }
+    public ProductData getProductData(){
+     return ProductData;
+    }
+    public void setLeaderRecordID(Integer LeaderRecordID){
+     this.LeaderRecordID=LeaderRecordID;
+    }
+    public Integer getLeaderRecordID(){
+     return LeaderRecordID;
+    }
+    public void setError(ErrorResponse error){
+     this.error=error;
+    }
+    public Object getError(){
+     return error;
+    }
+    public void setFunctionSucceed(Boolean FunctionSucceed){
+     this.FunctionSucceed=FunctionSucceed;
+    }
+    public Boolean getFunctionSucceed(){
+     return FunctionSucceed;
+    }
+    public void setRecipeData(List<RecipeData> RecipeData){
+     this.RecipeData=RecipeData;
+    }
+    public List<RecipeData> getRecipeData(){
+     return RecipeData;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     @Override
     public int describeContents() {
@@ -79,6 +90,7 @@ public class RecipeResponse implements Parcelable {
         dest.writeParcelable(this.error, flags);
         dest.writeValue(this.FunctionSucceed);
         dest.writeList(this.RecipeData);
+        dest.writeValue(this.note);
     }
 
     protected RecipeResponse(Parcel in) {
@@ -86,6 +98,7 @@ public class RecipeResponse implements Parcelable {
         this.LeaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.error = in.readParcelable(Object.class.getClassLoader());
         this.FunctionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.note = (String) in.readValue(String.class.getClassLoader());
         this.RecipeData = new ArrayList<com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData>();
         in.readList(this.RecipeData, com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData.class.getClassLoader());
     }

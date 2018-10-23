@@ -29,19 +29,19 @@
                     android:id="@+id/AJA_back_btn"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
-                    android:paddingStart="20dp"
                     android:paddingBottom="15dp"
                     android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
                     android:paddingTop="15dp"
-                    android:src="@drawable/button_x_selector"/>
+                    android:src="@drawable/button_x_selector" />
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/AJA_back_btn"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:layout_marginStart="25dp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:src="@drawable/arrow_back" />-->
+                <!--android:id="@+id/AJA_back_btn"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_marginStart="25dp"-->
+                <!--android:gravity="center"-->
+                <!--android:src="@drawable/arrow_back" />-->
 
                 <TextView
                     android:id="@+id/AJA_title"
@@ -354,12 +354,12 @@
                                     android:visibility="visible">
 
                                     <TextView
-                                        android:layout_gravity="start"
                                         android:id="@+id/AJA_actions_tv"
                                         android:layout_width="wrap_content"
                                         android:layout_height="42dp"
-                                        android:textColor="@color/black"
+                                        android:layout_gravity="start"
                                         android:text="@string/notes"
+                                        android:textColor="@color/black"
                                         android:textSize="25sp" />
 
                                     <View
@@ -383,8 +383,8 @@
                                             android:id="@+id/AJA_open_edit_text_btn"
                                             android:layout_width="25dp"
                                             android:layout_height="25dp"
-                                            android:layout_margin="10dp"
                                             android:layout_gravity="center_vertical"
+                                            android:layout_margin="10dp"
                                             android:src="@drawable/note" />
 
                                     </LinearLayout>
@@ -411,7 +411,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true" >
+
+
+            </FrameLayout>
 
         </RelativeLayout>
     </LinearLayout>

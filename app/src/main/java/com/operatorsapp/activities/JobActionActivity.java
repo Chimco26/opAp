@@ -2,6 +2,7 @@ package com.operatorsapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -34,6 +35,8 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
@@ -62,6 +65,7 @@ import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -148,6 +152,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_action);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(this.getLocalClassName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         mCroutonCreator = new CroutonCreator();
 
@@ -898,15 +908,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
-                postUpdateActions(mUpdatedActions);
+                validateDialog();
 
-                if (mCurrentJobDetails != null) {
-                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                    postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-                            String.valueOf(persistenceManager.getMachineId()),
-                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-                            persistenceManager.getOperatorId()));
-                }
                 break;
 
             case R.id.AJA_item_material:
@@ -941,6 +944,33 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                 openNotesDialog();
                 break;
         }
+    }
+
+    private void validateDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true)
+                .setMessage(R.string.activate_job_dialog_message)
+                .setTitle(R.string.activate_job_dialog_title)
+                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        postUpdateActions(mUpdatedActions);
+
+                        if (mCurrentJobDetails != null) {
+                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                    String.valueOf(persistenceManager.getMachineId()),
+                                    String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+                                    persistenceManager.getOperatorId()));
+                        }
+
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 
     private void openNotesDialog() {

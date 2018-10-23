@@ -26,10 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
@@ -59,11 +62,10 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
 
-    public static Fragment newInstance() {
+    public static SettingsFragment newInstance() {
 
         return new SettingsFragment();
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -74,6 +76,12 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Nullable
@@ -262,7 +270,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
 
         PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
-        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        DatabaseHelper databaseHelper =DatabaseHelper.getInstance(getActivity());
 
         Cursor tempCursor = databaseHelper.getCursorOrderByTime();
 

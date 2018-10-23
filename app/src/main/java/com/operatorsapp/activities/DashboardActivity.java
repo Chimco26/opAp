@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -71,6 +73,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
@@ -102,6 +105,8 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.interfaces.OpAppServiceRequests;
+import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ShowCrouton;
@@ -110,6 +115,8 @@ import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 import org.litepal.crud.DataSupport;
 
@@ -176,6 +183,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private MachineStatus mCurrentMachineStatus;
     private int mSpinnerProductPosition;
+    private Tracker mTracker;
     private Handler pollingBackupHandler = new Handler();
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
@@ -193,6 +201,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), start ");
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
 
@@ -242,6 +254,55 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
+
+//        mContainer2 = findViewById(R.id.fragments_container_widget);
+//
+//        mContainer3 = findViewById(R.id.fragments_container_reason);
+//
+//        openWidgetFragment();
+//
+//        initViewPagerFragment();
+//
+//        try {
+//
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+//
+//            getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+//        } catch (IllegalStateException ignored) {
+//        }
+//        OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
+
+        checkUpdateNotificationToken();
+    }
+
+    private void checkUpdateNotificationToken() {
+
+        final PersistenceManager pm = PersistenceManager.getInstance();
+        if (pm.isNeedUpdateToken()) {
+
+            final boolean retry[] = {true};
+
+            PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken());
+            NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+                @Override
+                public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+                    Log.d(LOG_TAG, "token sent");
+                    pm.setNeedUpdateToken(false);
+                }
+
+                @Override
+                public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                    pm.setNeedUpdateToken(true);
+                    Log.d(LOG_TAG, "token failed");
+                    if (retry[0]){
+                        retry[0] = false;
+                        call.clone();
+                    }
+                }
+            });
+
+        }
+
     }
 
     private void pollingBackup(boolean isActivate) {
@@ -430,6 +491,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onResume();
 
         }
+
+        mTracker.setScreenName(this.getLocalClassName());
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
@@ -1501,7 +1565,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onProductionStatusChanged(int id) {
+    public void onProductionStatusChanged(int id, final String newStatus) {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
@@ -1510,9 +1574,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 // TODO: 31/07/2018 display crouton
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
+
+                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Production Status")
+                            .setAction("Production Status Changed Successfully")
+                            .setLabel("New Status: " + newStatus)
+                            .build());
                 } else {
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+
+                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Production Status")
+                            .setAction("Production Status Changed Failed")
+                            .setLabel("Error: " + response.getmError().getErrorDesc())
+                            .build());
                 }
             }
 
@@ -1521,6 +1599,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ProgressDialogManager.dismiss();
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+                Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Production Status")
+                        .setAction("Production Status Changed Failed")
+                        .setLabel("Error: " + reason.getDetailedDescription())
+                        .build());
 
             }
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
@@ -1550,7 +1634,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
 
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
 
         Cursor tempCursor = databaseHelper.getCursorOrderByTime();
 

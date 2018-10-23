@@ -221,6 +221,17 @@
     <string name="sign_out">התנתקות</string>
     <string name="add_note">הוספת הערה</string>
     <string name="fill_units_or_weight">* נא להזין יחידות או משקל</string>
+    <string name="loading_file">טוען קובץ...</string>
+    <string name="loading_error">טעינה</string>
+    <string name="tutorial_swipe">החלק ימינה את לוח המכוונים כדי לראות את המתכון של פקודת העבודה הנוכחית</string>
+    <string name="tutorial_job_actions">פעולת פקע- פקע חדשה</string>
+    <string name="tutorial_job_actions_desc">הכן את עצמך להפעלת פקודת העבודה הבאה בזמן</string>
+    <string name="tutorial_event_log_desc">דווח אירוע או מספר אירועי עצירה יחד, כאשר הן משתייכים לאותה סיבת עצירה.</string>
+    <string name="tutorial_event_log_title">יומן אירועים</string>
+    <string name="tutorial_split_event_title">פיצול אירוע</string>
+    <string name="tutorial_split_event_Desc">השתמש באיקון \'מספריים\' לפיצול אירוע. בדרך זו ניתן לדווח סיבה שונה עבור כל חלק.</string>
+    <string name="activate_job_dialog_message">נבחרה פק"ע חדשה, האם להמשיך בהפעלה?</string>
+    <string name="activate_job_dialog_title">הפעלת פק"ע חדשה</string>
 
 
 </resources>

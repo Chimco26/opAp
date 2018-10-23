@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.infra.Machine;
@@ -37,6 +39,7 @@ import java.util.Comparator;
 
 public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener
 {
+    public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
@@ -91,6 +94,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             {}.getType();
             mMachinesList = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 

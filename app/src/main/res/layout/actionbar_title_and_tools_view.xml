@@ -50,24 +50,67 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/toolbar_tutorial_iv"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="31dp"
-                android:layout_toStartOf="@+id/settings_button"
-                android:src="@drawable/info" />
+             <!--</LinearLayout>-->
 
-            <ImageView
-                android:id="@+id/settings_button"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="31dp"
-                android:src="@drawable/settings_new_small" />
+             <ImageView
+                 android:id="@+id/toolbar_technician_button"
+                 android:layout_toStartOf="@+id/toolbar_tutorial_iv"
+                 android:layout_width="23dp"
+                 android:layout_height="23dp"
+                 android:layout_marginEnd="31dp"
+                 android:layout_centerVertical="true"
+                 android:src="@drawable/technician"/>
 
+
+             <ImageView
+                 android:id="@+id/toolbar_technician_indicator"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_toStartOf="@+id/toolbar_tutorial_iv"
+                 android:visibility="visible"
+                 android:layout_marginTop="15dp"
+                 android:layout_marginEnd="15dp"/>
+
+             <TextView
+                 android:id="@+id/toolbar_technician_tv"
+                 android:layout_toStartOf="@+id/toolbar_technician_button"
+                 android:layout_marginEnd="31dp"
+                 android:layout_centerVertical="true"
+                 android:textColor="@color/white"
+                 android:textSize="14sp"
+                 android:textStyle="bold"
+                 android:textAlignment="gravity"
+                 android:gravity="center"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content" />
+
+
+             <ImageView
+                 android:id="@+id/toolbar_tutorial_iv"
+                 android:layout_toStartOf="@+id/settings_button"
+                 android:layout_width="23dp"
+                 android:layout_height="23dp"
+                 android:layout_marginEnd="31dp"
+                 android:layout_centerVertical="true"
+                 android:src="@drawable/info"/>
+
+             <ImageView
+                 android:id="@+id/settings_button"
+                 android:layout_width="23dp"
+                 android:layout_height="23dp"
+                 android:layout_toStartOf="@+id/toolbar_notification_button"
+                 android:layout_centerVertical="true"
+                 android:layout_marginEnd="31dp"
+                 android:src="@drawable/settings_new_small" />
+
+             <ImageView
+                 android:id="@+id/toolbar_notification_button"
+                 android:layout_width="23dp"
+                 android:layout_height="23dp"
+                 android:layout_alignParentEnd="true"
+                 android:layout_centerVertical="true"
+                 android:layout_marginEnd="31dp"
+                 android:src="@drawable/notifications" />
 
             <!--<LinearLayout-->
             <!--android:id="@+id/lil_user_spinner"-->
@@ -78,6 +121,31 @@
             <!--android:layout_centerVertical="true"-->
             <!--android:layout_alignParentEnd="true"-->
             <!--android:padding="0.5dp">-->
+
+             <TextView
+                 android:id="@+id/toolbar_notification_indicator"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentEnd="true"
+                 android:textSize="12sp"
+                 android:text="1"
+                 android:textStyle="bold"
+                 android:textColor="@color/blue1"
+                 android:textAlignment="gravity"
+                 android:gravity="top"
+                 android:layout_alignTop="@+id/toolbar_notification_button"
+                 android:layout_marginEnd="31dp"/>
+
+
+             <!--<LinearLayout-->
+                 <!--android:id="@+id/lil_user_spinner"-->
+                 <!--android:layout_width="wrap_content"-->
+                 <!--android:layout_height="wrap_content"-->
+                 <!--android:layout_marginEnd="25dp"-->
+                 <!--android:background="@color/T12_color"-->
+                 <!--android:layout_centerVertical="true"-->
+                 <!--android:layout_alignParentEnd="true"-->
+                 <!--android:padding="0.5dp">-->
 
 
             <!--<LinearLayout-->

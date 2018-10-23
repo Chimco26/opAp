@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 
@@ -22,6 +24,7 @@ import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -51,6 +54,13 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_selected_operator, container, false);
         Bundle bundle = this.getArguments();
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         Gson gson = new Gson();
         if (bundle != null) {
             mSelectedOperator = gson.fromJson(bundle.getString(SELECTED_OPERATOR), Operator.class);
@@ -86,11 +96,23 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
                 SendBroadcast.refreshPolling(getContext());
                 OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
+                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Operetor Sign in")
+                                .setAction("Signed in Successfully")
+                                .setLabel("Operator name: " + mSelectedOperator.getOperatorName() + ", ID: " + mSelectedOperator.getOperatorId())
+                                .build());
             }
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
                 OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Operetor Sign in")
+                        .setAction("Signed in Failed")
+                        .setLabel("Failed Reason: " + reason.getError().toString())
+                        .build());
 
             }
         });

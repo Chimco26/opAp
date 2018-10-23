@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,6 +33,7 @@ import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.StopSubReasonAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -109,6 +112,12 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
 
         }
+
+        // Analytics
+        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -280,6 +289,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
+            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
 
             if (response.isFunctionSucceed()){
                 // TODO: 17/07/2018 add crouton for success
@@ -287,8 +297,19 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stop Reason Report")
+                        .setAction("Reported Successfully")
+                        .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
+                        .build());
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stop Reason Report")
+                        .setAction("Report Failed")
+                        .setLabel("Screen: SelectStopReasonFragment, Error: " + response.getmError().getErrorDesc())
+                        .build());
             }
 
             try {
@@ -314,6 +335,13 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Stop Reason Report")
+                    .setAction("Report Failed")
+                    .setLabel("Screen: SelectStopReasonFragment, Error: " + reason.getDetailedDescription())
+                    .build());
+
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override

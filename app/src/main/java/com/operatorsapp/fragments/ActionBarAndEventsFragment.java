@@ -2,13 +2,17 @@ package com.operatorsapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,21 +27,29 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
@@ -55,6 +67,8 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.BuildConfig;
+import com.operators.reportfieldsformachineinfra.Technician;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -62,8 +76,10 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LenoxMachineAdapter;
+import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
+import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -72,9 +88,15 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostTechnicianCallRequest;
+import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
@@ -91,6 +113,8 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -98,6 +122,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
@@ -109,6 +137,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int TYPE_ALERT = 20;
     private static final int STOPPED = 2;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
+    private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 20;
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -136,6 +165,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mMachineStatusStatusBarTextView;
     private ImageView mStatusIndicatorImageView;
     private ViewGroup.LayoutParams mShiftLogParams;
+    private RelativeLayout.LayoutParams mSwipeParams;
     private boolean mIsNewShiftLogs;
     private MachineStatus mCurrentMachineStatus;
     private JobsSpinnerAdapter mJobsSpinnerAdapter;
@@ -169,6 +199,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mLenoxMachineLyWidth;
     private View mLenoxMachineLy;
     private ArrayList<Machine> mMachines;
+    private TextView mNotificationIndicatorIv;
+    private ImageView mTechnicianIndicatorIv;
+    private TextView mTechnicianIndicatorTv;
+    private BroadcastReceiver mNotificationsReceiver = null;
+    private Handler mHandlerTechnicianCall = new Handler();
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -188,6 +223,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (getActivity() != null) {
                 LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReasonBroadcast, filter);
             }
+        }
+
+        if (mNotificationsReceiver == null){
+            setNotificationsReceiver();
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mNotificationsReceiver),new IntentFilter(Consts.NOTIFICATION_BROADCAST_NAME));
         }
 
     }
@@ -301,6 +341,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 SendBroadcast.refreshPolling(getActivity());
             }
         });
+        mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
+        mSwipeParams.width = mShiftLogParams.width;
+        mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+        mShiftLogSwipeRefresh.requestLayout();
 
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
@@ -334,6 +378,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
                                 mShiftLogLayout.getLayoutParams().width = currentX;
                                 mShiftLogLayout.requestLayout();
+                                mSwipeParams.width = mShiftLogParams.width;
+                                mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+                                mShiftLogSwipeRefresh.requestLayout();
                                 mDownX = (int) event.getRawX();
                                 mShiftLogAdapter.changeState(true);
                             }
@@ -379,6 +426,128 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         initJobsSpinner();
 
         return statusBarParams;
+    }
+
+    private void setNotificationsReceiver() {
+        mNotificationsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                int type = intent.getIntExtra(Consts.NOTIFICATION_TYPE, 0);
+
+                if (type == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    int status = intent.getIntExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, 0);
+                    mHandlerTechnicianCall.removeCallbacksAndMessages(null);
+                    switch (status){
+                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_CALLED:
+
+                            break;
+
+                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_RECEIVED:
+                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.recieved));
+                            mTechnicianIndicatorTv.setText(R.string.message_received);
+                            break;
+
+                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_DECLINED:
+                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.decline));
+                            mTechnicianIndicatorTv.setText(R.string.message_declined);
+                            break;
+                    }
+
+                    mHandlerTechnicianCall.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+                            mTechnicianIndicatorIv.setBackground(null);
+                            mTechnicianIndicatorTv.setText("");
+                        }
+                    }, 1000 * 60 * 5);
+
+                }else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB){
+
+                    setNotificationNeedResponse();
+                    openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
+                }
+            }
+        };
+    }
+
+    private void openNotificationPopUp(int notificationId) {
+
+        final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
+        if (notificationList != null && notificationList.size() > 0) {
+
+            Notification notification = null;
+
+            for (int i = 0; i < notificationList.size(); i++) {
+                if (notificationList.get(i).getmNotificationID() == notificationId){
+                    notification = notificationList.get(i);
+                    break;
+                }
+            }
+
+            if (notification != null) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.notification_recycler_item);
+                dialog.setCanceledOnTouchOutside(true);
+
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams wlp = window.getAttributes();
+
+                wlp.gravity = Gravity.BOTTOM;
+                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                window.setAttributes(wlp);
+                Point point = new Point(1,1);
+                ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+                dialog.getWindow().setLayout((point.x * 2)/3 , WindowManager.LayoutParams.WRAP_CONTENT);
+
+                ImageView btnClose = dialog.findViewById(R.id.notification_item_iv);
+                Button btnApprove = dialog.findViewById(R.id.notification_item_approve_btn);
+                Button btnDecline = dialog.findViewById(R.id.notification_item_decline_btn);
+                Button btnClarify = dialog.findViewById(R.id.notification_item_clarify_btn);
+                TextView tvSender = dialog.findViewById(R.id.notification_item_tv_sender);
+                TextView tvBody = dialog.findViewById(R.id.notification_item_tv_body);
+
+                btnClose.setImageDrawable(getResources().getDrawable(R.drawable.close));
+                tvBody.setText(notification.getmBody());
+                tvSender.setText(notification.getmSender());
+
+                View.OnClickListener thisDialogListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (v.getId()) {
+                            case R.id.notification_item_iv:
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_approve_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_decline_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                                dialog.dismiss();
+                                break;
+
+                            case R.id.notification_item_clarify_btn:
+                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+
+                btnApprove.setOnClickListener(thisDialogListener);
+                btnDecline.setOnClickListener(thisDialogListener);
+                btnClarify.setOnClickListener(thisDialogListener);
+                btnClose.setOnClickListener(thisDialogListener);
+
+                dialog.show();
+            }
+        }
     }
 
     private void onButtonClick(final ViewGroup.LayoutParams leftLayoutParams) {
@@ -501,7 +670,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        mDatabaseHelper = new DatabaseHelper(getContext());
+        mDatabaseHelper = DatabaseHelper.getInstance(getContext());
 
         Cursor mTempCursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 
@@ -553,6 +722,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
+        mSwipeParams.width = mShiftLogParams.width;
+        mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+        mShiftLogSwipeRefresh.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
         mListener.onResize(newWidth + mLenoxMachineLyWidth, mStatusLayout.getLayoutParams().height);
 
@@ -695,17 +867,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 //            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
 //            title.setText(spannableString);
-//            title.setVisibility(View.VISIBLE);
+//            title.setVisibility(View.VIStoolbar_notification_button
 
+            ImageView notificationIv = mToolBarView.findViewById(R.id.toolbar_notification_button);
+            ImageView technicianIv = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
+            mTechnicianIndicatorIv = mToolBarView.findViewById(R.id.toolbar_technician_indicator);
+            mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
+            mNotificationIndicatorIv = mToolBarView.findViewById(R.id.toolbar_notification_indicator);
+
+            setNotificationNeedResponse();
+            setTechnicianCallStatus();
+
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startToolbarTutorial();
-//                    if (PersistenceManager.getInstance().isDisplayToolbarTutorial()){
-//                    }
                 }
             });
+
+            notificationIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openNotificationsList();
+                    //openNotificationPopUp();
+                }
+            });
+
+            technicianIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openTechniciansList();
+                }
+            });
+
 
             final Spinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
@@ -838,6 +1033,199 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    private void setTechnicianCallStatus() {
+
+        long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
+        long now = new Date().getTime();
+        if (technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)){
+            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
+            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+            mTechnicianIndicatorTv.setText(R.string.called_technician);
+
+            mHandlerTechnicianCall.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (PersistenceManager.getInstance().getTechnicianCallTime() > 0){
+                        PersistenceManager.getInstance().setTechnicianCallTime(0);
+                        mTechnicianIndicatorIv.setBackground(null);
+                        mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+                        mTechnicianIndicatorTv.setText("");
+                        ShowCrouton.showSimpleCrouton(((DashboardActivity)getActivity()), "Call for Technician was canceled", CroutonCreator.CroutonType.ALERT_DIALOG);
+                    }
+                }
+            }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
+        }else {
+            mTechnicianIndicatorIv.setBackground(null);
+            mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+            mTechnicianIndicatorTv.setText("");
+        }
+
+    }
+
+    private void setNotificationNeedResponse() {
+        int counter = 0;
+        for (Notification item : PersistenceManager.getInstance().getNotificationHistory()) {
+            if (item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+                counter ++;
+            }
+        }
+
+        if (counter > 0){
+            mNotificationIndicatorIv.setVisibility(View.VISIBLE);
+            mNotificationIndicatorIv.setText(counter + "");
+        }else {
+            mNotificationIndicatorIv.setVisibility(View.INVISIBLE);
+            mNotificationIndicatorIv.setText("");
+        }
+    }
+
+    private void openTechniciansList() {
+        final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog_list);
+        dialog.setCanceledOnTouchOutside(true);
+
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.RIGHT;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        final ListView technicianLv = dialog.findViewById(R.id.dialog_list_scrollview);
+        TextView technicianTv = dialog.findViewById(R.id.dialog_list_tv);
+        technicianTv.setText(R.string.technician_list);
+
+        final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, techniciansList);
+        technicianLv.setAdapter(technicianSpinnerAdapter);
+
+        technicianLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                PersistenceManager pm = PersistenceManager.getInstance();
+                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), getString(R.string.call_technician_title), techniciansList.get(position).getID(), getString(R.string.call_technician_text), pm.getUserName(), techniciansList.get(position).getEName());
+                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
+                    @Override
+                    public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                        PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
+                        setTechnicianCallStatus();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                        ShowCrouton.showSimpleCrouton(((DashboardActivity)getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
+                    }
+                });
+
+                Toast.makeText(getActivity(), techniciansList.get(position).getEName(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private void openNotificationsList() {
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setCanceledOnTouchOutside(true);
+
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        wlp.x = -130;
+//        wlp.y = 240;
+        window.setAttributes(wlp);
+
+        final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
+
+        if (notificationList.size() > 0) {
+            final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
+                @Override
+                public void onNotificationResponse(int position, int responseType) {
+
+                    sendNotificationResponse(position, responseType);
+                    dialog.dismiss();
+
+                }
+            });
+
+            RecyclerView rvDialog = new RecyclerView(getActivity());
+            rvDialog.setLayoutManager(new LinearLayoutManager(getActivity()));
+            rvDialog.setAdapter(notificationHistoryAdapter);
+            dialog.setContentView(rvDialog);
+
+            Point point = new Point(1,1);
+            ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+            dialog.getWindow().setLayout((int) (point.x / 3.5),point.y - 50);
+
+
+        }else {
+            TextView tv = new TextView(getActivity());
+            tv.setPadding(20,50,20,50);
+            tv.setText(getString(R.string.no_notification_to_show));
+            tv.setTextSize(16);
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            dialog.setContentView(tv);
+
+            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+
+        dialog.show();
+    }
+
+    private void sendNotificationResponse(final int position, final int responseType) {
+
+        final PersistenceManager pm = PersistenceManager.getInstance();
+        final Notification notification = pm.getNotificationHistory().get(position);
+        RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
+                getResources().getString(R.string.respond_notification_title),
+                notification.getmBody(),
+                pm.getMachineId() + "",
+                notification.getmNotificationID() + "",
+                responseType,
+                Consts.NOTIFICATION_TYPE_FROM_WEB,
+                Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
+                pm.getOperatorId(),
+                pm.getOperatorName(),
+                notification.getmSender());
+
+        ProgressDialogManager.show(getActivity());
+        NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                Toast.makeText(getContext(), "onResponse", Toast.LENGTH_SHORT).show();
+
+                ArrayList<Notification> nList = pm.getNotificationHistory();
+                Notification notif = nList.get(position);
+                notif.setmResponseType(responseType);
+                nList.remove(position);
+                nList.add(position, notif);
+                pm.setNotificationHistory(nList);
+                setNotificationNeedResponse();
+                if (ProgressDialogManager.isShowing()){
+                    ProgressDialogManager.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
+                if (ProgressDialogManager.isShowing()){
+                    ProgressDialogManager.dismiss();
+                }
+            }
+        });
+
+    }
+
     public void setupProductionStatusSpinner() {
 
         if (getActivity() == null) {
@@ -879,7 +1267,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     ProgressDialogManager.show(getActivity());
                     String newTitle = OperatorApplication.isEnglishLang() ? finalStatusList.get(position).getEName() : finalStatusList.get(position).getLName();
                     ((OperatorSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
-                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId());
+                    mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName());
                 }
 
             }
@@ -1464,6 +1852,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         super.onDestroy();
 
         removeBroadcasts();
+        if (mHandlerTechnicianCall != null) {
+            mHandlerTechnicianCall.removeCallbacksAndMessages(null);
+        }
     }
 
 
@@ -1473,6 +1864,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             try {
 
                 LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReasonBroadcast);
+                LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mNotificationsReceiver);
 
             } catch (Exception e) {
 
@@ -1703,7 +2095,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 
-        void onProductionStatusChanged(int id);
+        void onProductionStatusChanged(int id, String newStatus);
 
         void onLenoxMachineClicked(Machine machine);
 
