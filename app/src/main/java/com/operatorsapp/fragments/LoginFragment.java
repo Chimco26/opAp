@@ -43,7 +43,6 @@ import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,11 +258,13 @@ public class LoginFragment extends Fragment {
 
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
-            public void onLoginSucceeded(ArrayList<Machine> machines) {
+            public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
                 getVersion(machines, true);
                 getNotifications();
+                PersistenceManager.getInstance().setSiteName(siteName);
+
             }
 
             @Override
@@ -302,10 +303,11 @@ public class LoginFragment extends Fragment {
         ProgressDialogManager.show(getActivity());
         LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
-            public void onLoginSucceeded(ArrayList<Machine> machines) {
+            public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
                 getNotifications();
                 getVersion(machines, false);
+                PersistenceManager.getInstance().setSiteName(siteName);
             }
 
             @Override

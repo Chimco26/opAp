@@ -17,9 +17,7 @@ import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManag
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
-import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.responses.Notification;
-import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -34,8 +32,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-
-import retrofit2.Response;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -82,6 +78,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_UPDATE_NOTIFICATION_TOKEN = "pref.PREF_UPDATE_NOTIFICATION_TOKEN";
     private static final String PREF_NOTIFICATION_HISTORY = "pref.PREF_NOTIFICATION_HISTORY";
     private static final String PREF_TECHNICIAN_CALL_TIME = "pref.PREF_TECHNICIAN_CALL_TIME";
+    private static final String PREF_SITE_NAME = "pref.PREF_SITE_NAME";
 
 
     private static PersistenceManager msInstance;
@@ -489,16 +486,18 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         ArrayList<Notification> filteredList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, -1);
-        Date date = new Date();
-        for (int i = 0; i < notificationsList.size(); i++) {
-            date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
-            if (date != null && date.after(cal.getTime())){
-                filteredList.add(notificationsList.get(i));
+        Date date;
+        if (notificationsList != null) {
+            for (int i = 0; i < notificationsList.size(); i++) {
+                date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
+                if (date != null && date.after(cal.getTime())) {
+                    filteredList.add(notificationsList.get(i));
+                }
             }
-        }
 
-        if (notificationsList.size() > filteredList.size()){
-            setNotificationHistory(filteredList);
+            if (notificationsList.size() > filteredList.size()) {
+                setNotificationHistory(filteredList);
+            }
         }
 
         return filteredList;
@@ -517,5 +516,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
             return 0;
         }
 
+    }
+
+    public void setSiteName(String siteName) {
+        SecurePreferences.getInstance().setString(PREF_SITE_NAME, siteName);
+    }
+
+    public String getSiteName() {
+        return SecurePreferences.getInstance().getString(PREF_SITE_NAME, "");
     }
 }

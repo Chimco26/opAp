@@ -1,7 +1,6 @@
 package com.operators.logincore;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -12,7 +11,6 @@ import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
@@ -41,7 +39,7 @@ public class LoginCore {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
             mLoginNetworkBridgeInterface.login(siteUrl, username,EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
-            public void onLoginSucceeded(final String sessionId) {
+            public void onLoginSucceeded(final String sessionId, final String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
 
 
@@ -50,7 +48,7 @@ public class LoginCore {
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
                         OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
                         saveSessionData(sessionId, siteUrl, username, password);
-                        loginUICallback.onLoginSucceeded(machines);
+                        loginUICallback.onLoginSucceeded(machines, siteName);
                     }
 
                     @Override
@@ -74,13 +72,13 @@ public class LoginCore {
 
         mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(), new LoginCoreCallback() {
             @Override
-            public void onLoginSucceeded(String sessionId) {
+            public void onLoginSucceeded(String sessionId, String siteName) {
 
                 OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
 
                 saveSessionData(sessionId, siteUrl, username, password);
 
-                loginUICallback.onLoginSucceeded(null);
+                loginUICallback.onLoginSucceeded(null, siteName);
             }
 
             @Override

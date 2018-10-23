@@ -9,11 +9,18 @@ public class SessionId {
     @SerializedName("UserID")
     private int mUserID;
 
+    @SerializedName("SiteName")
+    private String mSiteName;
+
     public String getSessionId() {
         return mSessionId;
     }
 
     public int getUserID() {
         return mUserID;
+    }
+
+    public String getmSiteName() {
+        return mSiteName;
     }
 }
