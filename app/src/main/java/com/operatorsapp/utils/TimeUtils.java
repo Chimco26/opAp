@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ParseException;
 import android.util.Log;
 
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 
@@ -43,6 +44,21 @@ public class TimeUtils {
             }
         }
 
+    }
+
+    public static String updateDateForRtl(Property property, SimpleDateFormat actualFormat, SimpleDateFormat newFormat) {
+
+        if (property.getKey().contains("Time") && property.getValue() != null && property.getValue().length() > 0) {
+
+            try {
+                Date date = actualFormat.parse(property.getValue());
+                return newFormat.format(date);
+
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return property.getValue();
     }
 
     public static String getDate(long milliSeconds, String dateFormat) {

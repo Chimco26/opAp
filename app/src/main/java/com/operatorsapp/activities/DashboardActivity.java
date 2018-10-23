@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -66,6 +68,7 @@ import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResp
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -73,6 +76,7 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
 import com.operatorsapp.fragments.ReportInventoryFragment;
@@ -109,6 +113,7 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
+import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,12 +122,15 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -177,6 +185,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mSpinnerProductPosition;
     private Tracker mTracker;
     private Handler pollingBackupHandler = new Handler();
+    private ArrayList<Machine> mMachines;
+    private AlertDialog mLoadingDialog;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -184,7 +194,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             pollingBackup(true);
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,41 +206,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OperatorApplication application = (OperatorApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
+        mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
 
-        GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
-
-        getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
-
-        GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
-
-        getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
-
-
-        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
-
-        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
-
-        mAllDashboardDataCore = new AllDashboardDataCore(this, getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
+        initDataListeners();
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
-
-        ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
-        reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
-
-        mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
 
         mContainer2 = findViewById(R.id.fragments_container_widget);
 
         mContainer3 = findViewById(R.id.fragments_container_reason);
 
-        openWidgetFragment();
-
-        initViewPagerFragment();
+        initDashboardFragment();
 
         try {
 
@@ -241,6 +232,45 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } catch (IllegalStateException ignored) {
         }
         OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
+    }
+
+    private void initDataListeners() {
+
+        GetMachineStatusNetworkBridge getMachineStatusNetworkBridge = new GetMachineStatusNetworkBridge();
+
+        getMachineStatusNetworkBridge.inject(NetworkManager.getInstance());
+
+        GetMachineDataNetworkBridge getMachineDataNetworkBridge = new GetMachineDataNetworkBridge();
+
+        getMachineDataNetworkBridge.inject(NetworkManager.getInstance());
+
+        ShiftLogNetworkBridge shiftLogNetworkBridge = new ShiftLogNetworkBridge();
+
+        shiftLogNetworkBridge.inject(NetworkManager.getInstance());
+
+        mAllDashboardDataCore = new AllDashboardDataCore(this, getMachineStatusNetworkBridge, PersistenceManager.getInstance(), getMachineDataNetworkBridge, PersistenceManager.getInstance(), PersistenceManager.getInstance(), shiftLogNetworkBridge);
+
+        ReportFieldsForMachineNetworkBridge reportFieldsForMachineNetworkBridge = new ReportFieldsForMachineNetworkBridge();
+        reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
+
+        mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
+
+//        mContainer2 = findViewById(R.id.fragments_container_widget);
+//
+//        mContainer3 = findViewById(R.id.fragments_container_reason);
+//
+//        openWidgetFragment();
+//
+//        initViewPagerFragment();
+//
+//        try {
+//
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
+//
+//            getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+//        } catch (IllegalStateException ignored) {
+//        }
+//        OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
 
         checkUpdateNotificationToken();
     }
@@ -277,11 +307,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void pollingBackup(boolean isActivate) {
 
-        if (isActivate){
+        if (isActivate) {
             pollingBackupHandler.removeCallbacksAndMessages(null);
             pollingBackupHandler.postDelayed(pollingBackupRunnable, POOLING_BACKUP_DELAY);
             Log.d(LOG_TAG, "pollingBackupHandler reset");
-        }else{
+        } else {
             pollingBackupHandler.removeCallbacksAndMessages(null);
             Log.d(LOG_TAG, "pollingBackupHandler removed");
         }
@@ -291,6 +321,35 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mWidgetFragment = WidgetFragment.newInstance();
 
+    }
+
+    private void initDashboardFragment() {
+
+        if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+
+            openWidgetFragment();
+
+            initViewPagerFragment();
+
+        } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+
+            setLenoxMachine(PersistenceManager.getInstance().getMachineId());
+
+            initLenoxDashboardFragment();
+
+            if (mActionBarAndEventsFragment != null) {
+                mActionBarAndEventsFragment.setMachines(mMachines);
+            }
+        }
+
+    }
+
+    private void initLenoxDashboardFragment() {
+
+        try {
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), LenoxDashboardFragment.newInstance()).commit();
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     private void initViewPagerFragment() {
@@ -580,7 +639,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         getAllRecipes(machineStatus.getAllMachinesData().get(0).getCurrentJobID(), true);
 
                         pollingBackup(true);
-
                     }
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
@@ -726,12 +784,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onTimeToEndChanged(long millisUntilFinished) {
 
-        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
-
-            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                dashboardUICallbackListener.onShiftForMachineEnded();
-            }
-        }
+//        if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+//
+//            for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+//                dashboardUICallbackListener.onShiftForMachineEnded();
+//            }
+//        }
         shiftForMachineTimer();
     }
 
@@ -904,7 +962,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void goToDashboardActivity(int machine) {
+    public void goToDashboardActivity(int machine, ArrayList<Machine> machines) {
 
     }
 
@@ -1402,6 +1460,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mReportStopReasonFragment = reportStopReasonFragment;
 
+        if (mReportStopReasonFragment != null) {
+
+            mReportStopReasonFragment.setSelectedEvents(mSelectedEvents);
+        }
+
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), reportStopReasonFragment).commit();
@@ -1438,6 +1501,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mSelectStopReasonFragment != null) {
 
             mSelectStopReasonFragment.setSelectedEvents(mSelectedEvents);
+        }
+        if (mReportStopReasonFragment != null) {
+
+            mReportStopReasonFragment.setSelectedEvents(mSelectedEvents);
         }
         if (mActionBarAndEventsFragment != null) {
 
@@ -1543,6 +1610,95 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }, NetworkManager.getInstance(), new SetProductionModeForMachineRequest(persistenceManager.getSessionId(), persistenceManager.getMachineId(), id), persistenceManager.getTotalRetries());
 
     }
+
+    @Override
+    public void onLenoxMachineClicked(Machine machine) {
+
+        saveAlarmsCheckedLocaly();
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+
+        DataSupport.deleteAll(Event.class);
+
+        onClearAllSelectedEvents();
+
+        setLenoxMachine(machine.getId());
+    }
+
+    private void saveAlarmsCheckedLocaly() {
+        //because alarms status not saved in sever side,
+        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
+        //and update the alarms if checked
+
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+
+        HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
+
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+
+        Cursor tempCursor = databaseHelper.getCursorOrderByTime();
+
+        ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
+
+        if (alarmList == null) {
+            alarmList = new ArrayList<>();
+        }
+
+        alarmList.clear();
+
+        for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
+
+            if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) > 0) {
+
+                alarmList.add(tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
+            }
+
+        }
+
+        tempCursor.close();
+
+        checkedAlarmHashMap.remove(persistenceManager.getMachineId());
+
+        checkedAlarmHashMap.put(persistenceManager.getMachineId(), alarmList);
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmHashMap);
+
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+
+    }
+
+    @Override
+    public void onLastShiftItemUpdated() {
+
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
+    }
+
+    public void setLenoxMachine(int machineId) {
+
+        showLoadingDialog();
+
+        PersistenceManager.getInstance().setMachineId(machineId);
+
+        dashboardDataStartPolling();
+    }
+
+    private void showLoadingDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(getString(R.string.loading_data));
+
+        builder.setCancelable(false);
+
+        mLoadingDialog = builder.create();
+
+        if (!mLoadingDialog.isShowing()) {
+            mLoadingDialog.show();
+        }
+    }
+
 
     @Override
     public void onSplitEventPressed(int eventID) {
@@ -1698,34 +1854,38 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void addFragmentsToViewPager(RecipeResponse response) {
 
-        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 
-            showRecipeFragment(response);
+                showRecipeFragment(response);
 
-            mViewPagerFragment.addFragment(mWidgetFragment);
+                mViewPagerFragment.addFragment(mWidgetFragment);
 
-        } else {
+            } else {
 
-            mViewPagerFragment.addFragment(mWidgetFragment);
+                mViewPagerFragment.addFragment(mWidgetFragment);
 
-            showRecipeFragment(response);
+                showRecipeFragment(response);
 
+            }
         }
     }
 
     private void showRecipeFragment(RecipeResponse recipeResponse) {
 
-        if (mRecipeFragment == null) {
+        if (mViewPagerFragment != null) {
 
-            mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
+            if (mRecipeFragment == null) {
 
-            mViewPagerFragment.addFragment(mRecipeFragment);
+                mRecipeFragment = RecipeFragment.newInstance(recipeResponse);
 
-        } else {
+                mViewPagerFragment.addFragment(mRecipeFragment);
 
-            mRecipeFragment.updateRecipeResponse(recipeResponse);
+            } else {
+
+                mRecipeFragment.updateRecipeResponse(recipeResponse);
+            }
         }
-
     }
 
     @Override

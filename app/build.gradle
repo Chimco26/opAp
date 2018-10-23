@@ -3,14 +3,13 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
-
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 19
-        versionName "1.8.1"
+        versionCode 21
+        versionName "1.9.0"
         multiDexEnabled true
     }
     buildTypes {
@@ -28,12 +27,25 @@ android {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
     }
-
     lintOptions {
         disable 'MissingTranslation'
     }
 
+    // Specifies one flavor dimension.
+    flavorDimensions "version"
 
+    productFlavors {
+        Lenox {
+            minSdkVersion 19
+            applicationId 'com.operatorsapp.lenox'
+            targetSdkVersion 27
+            versionCode 1
+            versionName '1'
+            applicationIdSuffix "lenox"
+        }
+        emerald {
+        }
+    }
 }
 
 
@@ -44,9 +56,9 @@ dependencies {
     implementation('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         exclude group: 'com.google.android', module: 'support-v4'
     }
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-messaging:17.3.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     testImplementation 'junit:junit:4.12'
     implementation project(':LoginCore')
     implementation project(':LoginNetworkBridge')
@@ -90,7 +102,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.android.support:design:27.1.1'
-    implementation 'com.google.android.gms:play-services-plus:15.0.1'
+    implementation 'com.google.android.gms:play-services-plus:16.0.0'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation project(':ErrorObjectInterface')
@@ -104,18 +116,17 @@ dependencies {
     androidTestImplementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support:multidex-instrumentation:1.0.3'
     implementation 'org.litepal.android:core:1.6.1'
-//    implementation 'com.nostra13.universalimageloader:universal-default_image-loader:1.9.5' failed
+    //    implementation 'com.nostra13.universalimageloader:universal-default_image-loader:1.9.5' failed
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation project(path: ':SqlCore')
     implementation project(path: ':publicutils')
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.github.barteksc:android-pdf-viewer:3.0.0-beta.5'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.3'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     compile('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true;
     }
-
 }
 
 apply plugin: 'com.google.gms.google-services'

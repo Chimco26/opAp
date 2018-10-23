@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -24,15 +25,19 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
+import com.operators.infra.Machine;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -41,8 +46,9 @@ import static android.app.AlarmManager.INTERVAL_DAY;
 
 public class MainActivity extends AppCompatActivity implements GoToScreenListener, OnCroutonRequestListener {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
+    public static final String MACHINE_LIST = "MACHINE_LIST";
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
     private Fragment mCurrentFragment;
@@ -71,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         goToFragment(LoginFragment.newInstance(), true, false);
 
         updateAndroidSecurityProvider(this);
+
+        checkFlavor();
+    }
+
+    private void checkFlavor() {
+        if(BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+
+            Log.d(TAG, "onCreate: emerald");
+
+        }else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+
+            Log.d(TAG, "onCreate: Lenox");
+        }
     }
 
     @Override
@@ -91,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToFragment(Fragment fragment, boolean centralContainer, boolean addToBackStack) {
-        OppAppLogger.getInstance().d(LOG_TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
+        OppAppLogger.getInstance().d(TAG, "goToFragment(), " + fragment.getClass().getSimpleName());
         mCurrentFragment = fragment;
         if (addToBackStack) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mCurrentFragment).addToBackStack("").commit();
@@ -101,14 +120,22 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
     @Override
-    public void goToDashboardActivity(int machineId) {
+    public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
+
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name)) &&
+                PersistenceManager.getInstance().getMachineId() == -1) {
+
+            PersistenceManager.getInstance().setMachineId(machines.get(0).getId());
+        }
+
         Intent intent = new Intent(this, DashboardActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("machineId", machineId);
-
+        bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
+
     }
 
 

@@ -3,7 +3,7 @@
 
     <dbname value="events" />
 
-    <version value="2" />
+    <version value="6" />
 
     <list>
         <mapping class="com.ravtech.david.sqlcore.Event" />

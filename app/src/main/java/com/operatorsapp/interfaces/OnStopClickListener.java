@@ -1,7 +1,5 @@
 package com.operatorsapp.interfaces;
 
-import com.ravtech.david.sqlcore.Event;
-
 public interface OnStopClickListener {
     void onStopClicked(int eventId,String startTime, String endTime, long duration);
 
@@ -10,4 +8,6 @@ public interface OnStopClickListener {
     void onStopEventSelected(Integer event, boolean b);
 
     void onSplitEventPressed(int eventID);
+
+    void onLastItemUpdated();
 }

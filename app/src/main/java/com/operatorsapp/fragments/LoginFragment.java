@@ -6,16 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +30,7 @@ import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
@@ -225,15 +222,11 @@ public class LoginFragment extends Fragment {
                 actionBar.setDisplayShowTitleEnabled(false);
                 actionBar.setDisplayShowCustomEnabled(true);
                 actionBar.setDisplayUseLogoEnabled(true);
-                SpannableString s = new SpannableString(getString(R.string.screen_title));
-                s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, s.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), s.length() - 3, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                LayoutInflater inflator = LayoutInflater.from(getActivity());
-                /* rootView null*/
-                @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view, null);
-                ((TextView) view.findViewById(R.id.title)).setText(s);
-                actionBar.setCustomView(view);
-                actionBar.setIcon(R.drawable.logo);
+                if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+                    actionBar.setIcon(R.drawable.lenox_logo_new_medium);
+                }else {
+                    actionBar.setIcon(R.drawable.logo_new_medium);
+                }
             }
         }
     }
@@ -287,7 +280,17 @@ public class LoginFragment extends Fragment {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
-            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+
+                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+
+            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+
+                PersistenceManager.getInstance().setSelectedMachine(true);
+
+                loginSuccess(machines);
+            }
+            //TODO Lenox open dashboard
 
             mNavigationCallback.isTryToLogin(false);
         }
@@ -315,11 +318,10 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void loginSuccess() {
+    private void loginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId());
-
+            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
             mNavigationCallback.isTryToLogin(false);
         }
     }
@@ -377,7 +379,7 @@ public class LoginFragment extends Fragment {
 
                 } else {
 
-                    loginSuccess();
+                    loginSuccess(machines);
 
                 }
 
@@ -392,7 +394,7 @@ public class LoginFragment extends Fragment {
 
                 } else {
 
-                    loginSuccess();
+                    loginSuccess(machines);
 
                 }
 

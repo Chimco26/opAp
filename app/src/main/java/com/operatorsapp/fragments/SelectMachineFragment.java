@@ -134,7 +134,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 if(canGoNext)
                 {
                     PersistenceManager.getInstance().setMachineId(mMachineId);
-                    mNavigationCallback.goToDashboardActivity(mMachineId);
+                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
                 }
                 return true;
             }
@@ -158,7 +158,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 {
                     PersistenceManager.getInstance().setMachineId(mMachineId);
                     PersistenceManager.getInstance().setSelectedMachine(true);
-                    mNavigationCallback.goToDashboardActivity(mMachineId);
+                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
                 }
             }
         });

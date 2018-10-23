@@ -1,14 +1,13 @@
 package com.ravtech.david.sqlcore;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.util.TimeUtils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,9 +19,6 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final long LOG_DURATION_MILLIS = 1000 * 60 * 60 * 24;
-
-
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
@@ -30,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 6;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -39,8 +35,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_EVENT = "Event";
 
     // column names
-    public static final String KEY_ID = "id";
     public static final String KEY_EVENT_ID = "meventid";
+    private static final String KEY_ID = "id";
     public static final String KEY_PRIORITY = "mpriority";
     public static final String KEY_TIME = "meventtime";
     public static final String KEY_TITLE = "meventtitle";
@@ -64,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_IS_DISMISS = "misdismiss";
     private static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_CHECKED = "mchecked";
+    public static final String KEY_TIME_MILLIS = "meventtimeinmillis";
 
 
     // Table Create Statements
@@ -94,7 +91,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_TREATED + " BOOLEAN," +
             KEY_CHECKED + " BOOLEAN," +
             KEY_IS_DISMISS + " BOOLEAN," +
-            KEY_CREATED_AT + " DATETIME" +
+            KEY_CREATED_AT + " DATETIME," +
+            KEY_TIME_MILLIS + " BIGINT" +
             ")";
 
 
@@ -155,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE "
-                + KEY_ID + " = " + eventId;
+                + KEY_EVENT_ID + " = " + eventId;
 
         Log.e(LOG, selectQuery);
 
@@ -299,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         // updating row
-        return db.update(TABLE_EVENT, values, KEY_ID + " = ?",
+        return db.update(TABLE_EVENT, values, KEY_EVENT_ID + " = ?",
                 new String[]{String.valueOf(event.getEventID())});
     }
 
@@ -310,7 +308,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(TABLE_EVENT, KEY_ID + " = ?",
+        db.delete(TABLE_EVENT, KEY_EVENT_ID + " = ?",
                 new String[]{String.valueOf(event_id)});
     }
 
@@ -336,9 +334,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
 
+        values.put(KEY_EVENT_ID, event.getEventID());
         values.put(KEY_ID, event.getEventID());
         values.put(KEY_PRIORITY, event.getPriority());
         values.put(KEY_TIME, event.getTime());
+        values.put(KEY_TIME_MILLIS, getLongFromDateString(event.getTime(), "dd/MM/yyyy HH:mm:ss"));
         values.put(KEY_TITLE, event.getTitle());
         values.put(KEY_E_TITLE, event.getEventETitle());
         values.put(KEY_L_TITLE, event.getEventLTitle());
@@ -362,6 +362,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private static long getLongFromDateString(String date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        long timeInMilliseconds = 0;
+        try {
+            Date mDate = sdf.parse(date);
+            timeInMilliseconds = mDate.getTime();
+        } catch (java.text.ParseException e) {
+            if(e.getMessage()!=null){}
+
+//                Log.e(LOG_TAG,e.getMessage());
+        }
+        return timeInMilliseconds;
+    }
 
     private Event convertRawToEvent(Cursor c) {
 
@@ -369,9 +383,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (c != null) {
 
-            event.setEventID(c.getInt(c.getColumnIndex(KEY_ID)));
+            event.setEventID(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
             event.setEventTime(c.getString(c.getColumnIndex(KEY_TIME)));
+            event.setEventTimeInMillis(c.getLong(c.getColumnIndex(KEY_TIME_MILLIS)));
             event.setEventTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
             event.setmEventETitle(c.getString(c.getColumnIndex(KEY_E_TITLE)));
             event.setmEventLTitle(c.getString(c.getColumnIndex(KEY_L_TITLE)));

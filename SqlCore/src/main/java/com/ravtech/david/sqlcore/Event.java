@@ -59,6 +59,8 @@ public class Event extends DataSupport implements Parcelable {
 
     private boolean mChecked;
 
+    private long mEventTimeInMillis;
+
     public Event() {
     }
 
@@ -373,5 +375,13 @@ public class Event extends DataSupport implements Parcelable {
 
     public boolean isChecked() {
         return mChecked;
+    }
+
+    public void setEventTimeInMillis(long eventTimeInMillis) {
+        mEventTimeInMillis = eventTimeInMillis;
+    }
+
+    public long getEventTimeInMillis() {
+        return mEventTimeInMillis;
     }
 }

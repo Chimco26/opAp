@@ -152,6 +152,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final Cursor cursor) {
 
+        mOnStopClickListener.onLastItemUpdated();
+
         final ShiftLogViewHolder holder = (ShiftLogViewHolder) viewHolder;
 
         final Event event = new Event(
@@ -332,7 +334,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                         holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                         holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);
 //                        mOnStopClickListener.onStopClicked(event.getEventID(), event.getTime(), event.getEventEndTime(), event.getDuration());
-                        event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                        event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
                     } else {
 
                         holder.mStopEventCheckBox.setChecked(!event.isChecked());

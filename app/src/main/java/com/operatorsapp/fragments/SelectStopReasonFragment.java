@@ -27,6 +27,7 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -83,6 +84,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private GridLayoutManager mGridLayoutManager;
     private boolean mIsOpen;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
+    private int mFlavorSpanDif;
 
 
     public static SelectStopReasonFragment newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
@@ -158,24 +160,24 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+
+            mFlavorSpanDif = -1;
+        }
+
         mRecyclerView = view.findViewById(R.id.selected_stop_recycler_view);
-        mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
+        mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS + mFlavorSpanDif);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         int spacing;
-//        String strManufacturer = android.os.Build.MANUFACTURER;
-//
-//        if (strManufacturer.equals(SAMSUNG)) {
-//            spacing = 80;
-//        } else {
-//            spacing = 40;
-//        }
+
         spacing = 0;
         Configuration config = getResources().getConfiguration();
         if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS, spacing, true, 0));
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecorationRTL(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
         } else {
 
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS, spacing, true, 0));
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
         }
 
         initSubReasons();
@@ -192,9 +194,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     public void setSpanCount(boolean isOpen) {
         if (isOpen) {
-            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1);
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS - 1 + mFlavorSpanDif);
         } else {
-            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS);
+            mGridLayoutManager.setSpanCount(NUMBER_OF_COLUMNS + mFlavorSpanDif);
 
         }
         mIsOpen = isOpen;
@@ -310,13 +312,6 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                         .build());
             }
 
-//            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
-//            Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
-//
-//            if (o != null){
-//
-//                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
-//            }
             try {
 
                 mReportCore.unregisterListener();

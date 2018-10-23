@@ -58,6 +58,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
+import com.operators.infra.Machine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -65,6 +66,7 @@ import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
+import com.operatorsapp.BuildConfig;
 import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
@@ -73,6 +75,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
+import com.operatorsapp.adapters.LenoxMachineAdapter;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
@@ -98,6 +101,7 @@ import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
@@ -108,6 +112,7 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -116,6 +121,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -123,7 +129,7 @@ import retrofit2.Response;
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
-        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener {
+        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener, View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -176,9 +182,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
     private TextView mSelectedNumberTv;
-    private View mConfigView;
-    private View mConfigLayout;
-    private TextView mConfigTextView;
     private View mSelectedNumberLy;
     private Event mLastEvent;
     private Fragment mVisiblefragment;
@@ -192,6 +195,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
     private int mSelectedPosition;
+    private RecyclerView mLenoxMachineRv;
+    private int mLenoxMachineLyWidth;
+    private View mLenoxMachineLy;
+    private ArrayList<Machine> mMachines;
     private TextView mNotificationIndicatorIv;
     private ImageView mTechnicianIndicatorIv;
     private TextView mTechnicianIndicatorTv;
@@ -235,11 +242,47 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
+        final ViewGroup.LayoutParams statusBarParams = initView(view);
 
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+
+            mLenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_ly);
+
+            mLenoxMachineLy.setVisibility(View.VISIBLE);
+
+            mLenoxMachineLy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    mLenoxMachineLyWidth = mLenoxMachineLy.getWidth();
+
+                    mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+
+                    if (mLenoxMachineLyWidth != 0) {
+                        mLenoxMachineLy.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
+
+        } else {
+            mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+        }
+    }
+
+    private void initLenoxMachineRv(View view) {
+
+        mLenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mLenoxMachineRv.setLayoutManager(linearLayoutManager);
+        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
+
+    }
+
+    public ViewGroup.LayoutParams initView(@NonNull View view) {
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
         // get screen parameters
@@ -269,8 +312,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
-        mListener.onResize(mCloseWidth, statusBarParams.height);
-
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
@@ -282,10 +323,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
 
-        mConfigLayout = view.findViewById(R.id.pConfig_layout);
-        mConfigView = view.findViewById(R.id.pConfig_view);
-        mConfigTextView = view.findViewById(R.id.text_view_config);
-        mConfigTextView.setSelected(true);
         mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
@@ -294,6 +331,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+
+        initLenoxMachineRv(view);
 
         mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
         mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -314,20 +353,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
         mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
-        //mMinDurationText.setText(String.valueOf(PersistenceManager.getInstance().getMinEventDuration()) + " " + getString(R.string.minutes));
-        // mMinDurationLil.setLayoutParams(new RelativeLayout.LayoutParams(mCloseWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
-
         final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
 
         view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
-
-//        mSwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                SendBroadcast.refreshPolling(getContext());
-//                //mSwipeToRefresh.setRefreshing(true);
-//            }
-//        });
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
@@ -396,6 +424,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), end ");
 
         initJobsSpinner();
+
+        return statusBarParams;
     }
 
     private void setNotificationsReceiver() {
@@ -696,7 +726,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
         mShiftLogSwipeRefresh.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
-        mListener.onResize(newWidth, mStatusLayout.getLayoutParams().height);
+        mListener.onResize(newWidth + mLenoxMachineLyWidth, mStatusLayout.getLayoutParams().height);
 
         mShiftLogAdapter.changeState(!isOpen);
         mListener.onWidgetChangeState(!isOpen);
@@ -830,7 +860,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
+            ((TextView)mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteUrl());
 
+            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+                ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
+            }
 //            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
 //            title.setText(spannableString);
 //            title.setVisibility(View.VIStoolbar_notification_button
@@ -1463,6 +1497,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
+    public void onLastItemUpdated() {
+
+        mListener.onLastShiftItemUpdated();
+    }
+
+    @Override
     public void onSelectMode(int type, int eventID) {
 
         startSelectMode(eventID);
@@ -1514,6 +1554,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
+        clearOver24HShift();
+
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
@@ -1523,7 +1565,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (events != null && events.size() > 0) {
 
-            ArrayList<Integer> checkedAlarms = PersistenceManager.getInstance().getCheckedAlarms();
+            HashMap<Integer, ArrayList<Integer>> checkedAlarmsHashMap = PersistenceManager.getInstance().getCheckedAlarms();
+
+            ArrayList<Integer> checkedAlarms = checkedAlarmsHashMap.get(PersistenceManager.getInstance().getMachineId());
 
             mEventsQueue.clear();
 
@@ -1540,7 +1584,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
 
-
             for (Event event : events) {
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
@@ -1550,24 +1593,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mIsNewShiftLogs) {
                         mEventsQueue.add(event);
                     }
+                    if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+                        addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
+                    }
                 } else {
 
-                    if (checkedAlarms != null) {
-
-                        for (Integer integer : checkedAlarms) {
-
-                            if (integer == event.getEventID()) {
-
-                                event.setTreated(true);
-                            }
-
-                        }
-                    }
-
-                    PersistenceManager.getInstance().setCheckedAlarms(null);
-
-
-                    event.updateAll("meventid = ?", String.valueOf(event.getEventID()));
+                    addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
                 }
             }
 
@@ -1619,26 +1650,71 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter.notifyDataSetChanged();
     }
 
+    public void addCheckedAlarms(HashMap<Integer, ArrayList<Integer>> checkedAlarmsHashMap, ArrayList<Integer> checkedAlarms, Event event) {
+        if (checkedAlarms != null) {
+
+            for (Integer integer : checkedAlarms) {
+
+                if (integer == event.getEventID()) {
+
+                    event.setTreated(true);
+
+                    mEventsQueue.remove(event);
+
+                }
+
+            }
+        }
+
+        checkedAlarmsHashMap.remove(PersistenceManager.getInstance().getMachineId());
+
+        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
+
+
+        event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+    }
+
+    private void clearOver24HShift() {
+
+        ArrayList<Event> toDelete = new ArrayList<>();
+
+        for (Event event : mDatabaseHelper.getAlEvents()) {
+
+            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+                    < System.currentTimeMillis() - DAY_IN_MILLIS) {
+
+                toDelete.add(event);
+
+            }
+        }
+
+        for (Event event : toDelete) {
+
+            mDatabaseHelper.deleteEvent(event.getEventID());
+        }
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
 
 
     }
-
-    @Override
-    public void onShiftForMachineEnded() {
+//
+//    @Override
+//    public void onShiftForMachineEnded() {
 //       TODO if (mShiftLogParams != null && mWidgetsParams != null) {
 //            closeWoopList(mShiftLogParams, mWidgetsParams);
 //        }
-
-        DataSupport.deleteAll(Event.class);
-
-        mEventsQueue.clear();
-        mNoData = true;
-        mNoNotificationsText.setVisibility(View.VISIBLE);
-        mLoadingDataText.setVisibility(View.GONE);
-    }
+//
+//        DataSupport.deleteAll(Event.class);
+//
+//        mEventsQueue.clear();
+//        mNoData = true;
+//        mNoNotificationsText.setVisibility(View.VISIBLE);
+//        mLoadingDataText.setVisibility(View.GONE);
+//    }
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
@@ -1744,18 +1820,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             machineName = getString(R.string.dashes);
         }
 
-        if (machinesData.getConfigName() != null) {
-
-            mConfigView.setVisibility(View.VISIBLE);
-            mConfigLayout.setVisibility(View.VISIBLE);
-
-            mConfigTextView.setText(machinesData.getConfigName());
-        } else {
-            mConfigView.setVisibility(View.GONE);
-            mConfigLayout.setVisibility(View.GONE);
-
-        }
-
         mMachineIdStatusBarTextView.setText(machineName);
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
@@ -1772,9 +1836,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMachineIdStatusBarTextView.setText("");
         mMachineStatusStatusBarTextView.setText("");
         mTimerTextView.setText("");
-        mConfigTextView.setText("");
-        mConfigView.setVisibility(View.GONE);
-        mConfigLayout.setVisibility(View.GONE);
 
         if (getActivity() != null) {
             mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_no_data));
@@ -1915,7 +1976,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
 
-                    event.updateAll("meventid = ?", String.valueOf(eventId));
+                    event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId));
                 }
 
 
@@ -1984,24 +2045,36 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mVisiblefragment = visibleFragment;
 
-        if (mToolBarView != null){
-            
-        if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
-                mVisiblefragment instanceof RecipeFragment ||
-                mVisiblefragment instanceof WidgetFragment){
+        if (mToolBarView != null) {
 
-            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
+            if (mVisiblefragment instanceof ActionBarAndEventsFragment ||
+                    mVisiblefragment instanceof RecipeFragment ||
+                    mVisiblefragment instanceof WidgetFragment) {
 
-        }else {
+                mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.VISIBLE);
 
-            mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.GONE);
-        }
+            } else {
+
+                mToolBarView.findViewById(R.id.toolbar_job_spinner).setVisibility(View.GONE);
+            }
         }
     }
 
     public void setFromAnotherActivity(boolean fromAnotherActivity) {
         this.mFromAnotherActivity = fromAnotherActivity;
     }
+
+    public void setMachines(final ArrayList<Machine> machines) {
+
+        mMachines = machines;
+    }
+
+    @Override
+    public void onLenoxMachineClicked(Machine machine) {
+
+        mListener.onLenoxMachineClicked(machine);
+    }
+
 
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
@@ -2023,6 +2096,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 
         void onProductionStatusChanged(int id, String newStatus);
+
+        void onLenoxMachineClicked(Machine machine);
+
+        void onLastShiftItemUpdated();
     }
 
 }
