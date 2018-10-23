@@ -3,7 +3,7 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.operatorsapp"
         minSdkVersion 17
@@ -36,12 +36,11 @@ android {
 
     productFlavors {
         Lenox {
-            minSdkVersion 19
-            applicationId 'com.operatorsapp.lenox'
+            minSdkVersion 17
             targetSdkVersion 27
             versionCode 1
             versionName '1'
-            applicationIdSuffix "lenox"
+            applicationIdSuffix ".lenox"
         }
         emerald {
         }
