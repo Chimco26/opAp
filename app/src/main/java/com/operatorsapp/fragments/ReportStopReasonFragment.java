@@ -142,10 +142,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+//        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+//
+//            mFlavorSpanDif = -1;
+//        }
+        //TODO Lenox uncomment
 
-            mFlavorSpanDif = -1;
-        }
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");

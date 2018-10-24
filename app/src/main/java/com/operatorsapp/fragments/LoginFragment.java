@@ -281,17 +281,17 @@ public class LoginFragment extends Fragment {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
-            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+//            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
                 mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
 
-            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-
-                PersistenceManager.getInstance().setSelectedMachine(true);
-
-                loginSuccess(machines);
-            }
-            //TODO Lenox open dashboard
+//            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+//
+//                PersistenceManager.getInstance().setSelectedMachine(true);
+//
+//                loginSuccess(machines);
+//            }
+            //TODO Lenox uncomment
 
             mNavigationCallback.isTryToLogin(false);
         }

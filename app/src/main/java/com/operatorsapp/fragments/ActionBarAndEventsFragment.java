@@ -248,38 +248,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         final ViewGroup.LayoutParams statusBarParams = initView(view);
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-
-            mLenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_ly);
-
-            mLenoxMachineLy.setVisibility(View.VISIBLE);
-
-            mLenoxMachineLy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-
-                    mLenoxMachineLyWidth = mLenoxMachineLy.getWidth();
-
-                    mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
-                    mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
-                    mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
-                    mShiftLogSwipeRefresh.requestLayout();
-
-                    mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
-
-                    if (mLenoxMachineLyWidth != 0) {
-                        mLenoxMachineLy.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                }
-            });
-
-        } else {
+//        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+//
+//            mLenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_ly);
+//
+//            mLenoxMachineLy.setVisibility(View.VISIBLE);
+//
+//            mLenoxMachineLy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                @Override
+//                public void onGlobalLayout() {
+//
+//                    mLenoxMachineLyWidth = mLenoxMachineLy.getWidth();
+//
+//                    mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
+//                    mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
+//                    mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+//                    mShiftLogSwipeRefresh.requestLayout();
+//
+//                    mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+//
+//                    if (mLenoxMachineLyWidth != 0) {
+//                        mLenoxMachineLy.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                    }
+//                }
+//            });
+//
+//        } else {
             mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
             mSwipeParams.width = mShiftLogParams.width;
             mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
             mShiftLogSwipeRefresh.requestLayout();
             mListener.onResize(mCloseWidth, statusBarParams.height);
-        }
+        //TODO Lenox uncomment
+
+            //        }
     }
 
     private void initLenoxMachineRv(View view) {
@@ -866,13 +868,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             ((TextView)mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteName());
 
-            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
-                ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
-            }
-//            final TextView title = mToolBarView.findViewById(R.id.toolbar_title);
-//            title.setText(spannableString);
-//            title.setVisibility(View.VIStoolbar_notification_button
-
             ImageView notificationIv = mToolBarView.findViewById(R.id.toolbar_notification_button);
             ImageView technicianIv = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
@@ -1028,6 +1023,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
+
+            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+                notificationIv.setVisibility(View.INVISIBLE);
+                technicianIv.setVisibility(View.INVISIBLE);
+                tutorialIv.setVisibility(View.INVISIBLE);
+                jobsSpinner.setVisibility(View.GONE);
+                mToolBarView.findViewById(R.id.toolbar_production_status).setVisibility(View.GONE);
+                mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
+                mToolBarView.findViewById(R.id.toolbar_notification_indicator).setVisibility(View.GONE);
+                mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
+                View userIcon = mToolBarView.findViewById(R.id.settings_button);
+                RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) userIcon.getLayoutParams();
+                param.setMarginEnd((int) (-23 * getActivity().getResources().getDisplayMetrics().density));
+                userIcon.setLayoutParams(param);
+                ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
+            }
+
         }
 
         if (PersistenceManager.getInstance().isDisplayToolbarTutorial()) {

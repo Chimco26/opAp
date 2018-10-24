@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -27,7 +27,6 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
-import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -47,7 +46,6 @@ import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.GridSpacingItemDecorationRTL;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 
@@ -161,10 +159,11 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         super.onViewCreated(view, savedInstanceState);
 
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
-
-            mFlavorSpanDif = -1;
-        }
+//        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+//
+//            mFlavorSpanDif = -1;
+//        }
+        //TODO Lenox uncomment
 
         mRecyclerView = view.findViewById(R.id.selected_stop_recycler_view);
         mGridLayoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS + mFlavorSpanDif);

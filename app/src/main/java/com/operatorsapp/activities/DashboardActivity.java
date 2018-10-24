@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -332,7 +336,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
-            setLenoxMachine(PersistenceManager.getInstance().getMachineId());
+            changeActionBarColor(R.color.lenox_action_bar_color);
+
+//            setLenoxMachine(PersistenceManager.getInstance().getMachineId());
+            //TODO Lenox uncomment
 
             initLenoxDashboardFragment();
 
@@ -340,6 +347,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 mActionBarAndEventsFragment.setMachines(mMachines);
             }
         }
+
+    }
+
+    public void changeActionBarColor(int resourseColor) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, resourseColor));
+        }
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(resourseColor)));
 
     }
 
