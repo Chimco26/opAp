@@ -260,6 +260,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mLenoxMachineLyWidth = mLenoxMachineLy.getWidth();
 
+                    mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
+                    mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
+                    mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+                    mShiftLogSwipeRefresh.requestLayout();
+
                     mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
 
                     if (mLenoxMachineLyWidth != 0) {
@@ -269,7 +274,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             });
 
         } else {
-            mListener.onResize(mCloseWidth + mLenoxMachineLyWidth, statusBarParams.height);
+            mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
+            mSwipeParams.width = mShiftLogParams.width;
+            mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
+            mShiftLogSwipeRefresh.requestLayout();
+            mListener.onResize(mCloseWidth, statusBarParams.height);
         }
     }
 
@@ -341,11 +350,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 SendBroadcast.refreshPolling(getActivity());
             }
         });
-        mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
-        mSwipeParams.width = mShiftLogParams.width;
-        mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
-        mShiftLogSwipeRefresh.requestLayout();
-
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
@@ -378,7 +382,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (currentX >= mCloseWidth && currentX <= mOpenWidth) {
                                 mShiftLogLayout.getLayoutParams().width = currentX;
                                 mShiftLogLayout.requestLayout();
-                                mSwipeParams.width = mShiftLogParams.width;
+                                mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
                                 mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
                                 mShiftLogSwipeRefresh.requestLayout();
                                 mDownX = (int) event.getRawX();
@@ -722,7 +726,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
-        mSwipeParams.width = mShiftLogParams.width;
+        mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
         mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
         mShiftLogSwipeRefresh.requestLayout();
 //        mListener.onWidgetUpdatemargine(newWidth);
@@ -901,7 +905,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-
             final Spinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
 
@@ -1072,7 +1075,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (counter > 0){
             mNotificationIndicatorIv.setVisibility(View.VISIBLE);
-            mNotificationIndicatorIv.setText(counter + "");
+            mNotificationIndicatorIv.setText(String.format("%d", counter));
         }else {
             mNotificationIndicatorIv.setVisibility(View.INVISIBLE);
             mNotificationIndicatorIv.setText("");
@@ -1080,6 +1083,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openTechniciansList() {
+        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)){
+            return;
+        }
         final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
 
         final Dialog dialog = new Dialog(getActivity());
@@ -1087,9 +1093,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         dialog.setCanceledOnTouchOutside(true);
 
         Window window = dialog.getWindow();
+        assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.RIGHT;
+        wlp.gravity = Gravity.END;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
@@ -1108,14 +1115,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), getString(R.string.call_technician_title), techniciansList.get(position).getID(), getString(R.string.call_technician_text), pm.getUserName(), techniciansList.get(position).getEName());
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
-                    public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                    public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                         PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                         setTechnicianCallStatus();
 
                     }
 
                     @Override
-                    public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                    public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                         ShowCrouton.showSimpleCrouton(((DashboardActivity)getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
                 });
@@ -1135,9 +1142,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         dialog.setCanceledOnTouchOutside(true);
 
         Window window = dialog.getWindow();
+        assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+        wlp.gravity = Gravity.END | Gravity.BOTTOM;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //        wlp.x = -130;
 //        wlp.y = 240;
@@ -1200,7 +1208,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ProgressDialogManager.show(getActivity());
         NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                 Toast.makeText(getContext(), "onResponse", Toast.LENGTH_SHORT).show();
 
                 ArrayList<Notification> nList = pm.getNotificationHistory();
@@ -1216,7 +1224,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
                 if (ProgressDialogManager.isShowing()){
                     ProgressDialogManager.dismiss();
@@ -1594,13 +1602,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mEventsQueue.add(event);
                     }
                     if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-                        addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
+                        addCheckedAlarms(checkedAlarms, event);
                     }
                 } else {
 
-                    addCheckedAlarms(checkedAlarmsHashMap, checkedAlarms, event);
+                    addCheckedAlarms(checkedAlarms, event);
                 }
             }
+
+            checkedAlarmsHashMap.remove(PersistenceManager.getInstance().getMachineId());
+
+            PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
             mNoNotificationsText.setVisibility(View.GONE);
 
@@ -1650,7 +1662,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter.notifyDataSetChanged();
     }
 
-    public void addCheckedAlarms(HashMap<Integer, ArrayList<Integer>> checkedAlarmsHashMap, ArrayList<Integer> checkedAlarms, Event event) {
+    public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
         if (checkedAlarms != null) {
 
             for (Integer integer : checkedAlarms) {
@@ -1665,11 +1677,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         }
-
-        checkedAlarmsHashMap.remove(PersistenceManager.getInstance().getMachineId());
-
-        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
-
 
         event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
     }
@@ -1870,7 +1877,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (e.getMessage() != null)
                     Log.e(LOG_TAG, e.getMessage());
-
             }
         }
     }
