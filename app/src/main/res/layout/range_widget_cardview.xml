@@ -58,7 +58,7 @@
             android:maxLines="1"
             android:text="17"
             android:textColor="@color/C16"
-            android:textSize="40dp"/>
+            android:textSize="40sp"/>
     </LinearLayout>
 
     <View

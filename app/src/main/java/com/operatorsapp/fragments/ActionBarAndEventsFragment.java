@@ -195,7 +195,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private JoshProductNameSpinnerAdapter mJoshProductNameSpinnerAdapter;
     private List<ActiveJob> mActiveJobs;
     private int mSelectedPosition;
-    private RecyclerView mLenoxMachineRv;
     private int mLenoxMachineLyWidth;
     private View mLenoxMachineLy;
     private ArrayList<Machine> mMachines;
@@ -286,10 +285,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initLenoxMachineRv(View view) {
 
-        mLenoxMachineRv = view.findViewById(R.id.FAAE_lenox_machines_rv);
+        RecyclerView lenoxMachineLy = view.findViewById(R.id.FAAE_lenox_machines_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mLenoxMachineRv.setLayoutManager(linearLayoutManager);
-        mLenoxMachineRv.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
+        lenoxMachineLy.setLayoutManager(linearLayoutManager);
+        lenoxMachineLy.setAdapter(new LenoxMachineAdapter(getContext(), mMachines, this));
 
     }
 
@@ -866,8 +865,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
-            ((TextView)mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteName());
-
             ImageView notificationIv = mToolBarView.findViewById(R.id.toolbar_notification_button);
             ImageView technicianIv = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
@@ -1024,21 +1021,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
 
-            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
-                notificationIv.setVisibility(View.INVISIBLE);
-                technicianIv.setVisibility(View.INVISIBLE);
-                tutorialIv.setVisibility(View.INVISIBLE);
-                jobsSpinner.setVisibility(View.GONE);
-                mToolBarView.findViewById(R.id.toolbar_production_status).setVisibility(View.GONE);
-                mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
-                mToolBarView.findViewById(R.id.toolbar_notification_indicator).setVisibility(View.GONE);
-                mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
-                View userIcon = mToolBarView.findViewById(R.id.settings_button);
-                RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) userIcon.getLayoutParams();
-                param.setMarginEnd((int) (-23 * getActivity().getResources().getDisplayMetrics().density));
-                userIcon.setLayoutParams(param);
-                ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
-            }
+            initLenoxView(notificationIv, technicianIv, tutorialIv, jobsSpinner);
 
         }
 
@@ -1046,6 +1029,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             startToolbarTutorial();
         }
 
+    }
+
+    public void initLenoxView(ImageView notificationIv, ImageView technicianIv, ImageView tutorialIv, Spinner jobsSpinner) {
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            notificationIv.setVisibility(View.INVISIBLE);
+            technicianIv.setVisibility(View.INVISIBLE);
+            tutorialIv.setVisibility(View.INVISIBLE);
+            jobsSpinner.setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.toolbar_production_status).setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.toolbar_notification_indicator).setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
+            View userIcon = mToolBarView.findViewById(R.id.settings_button);
+            RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) userIcon.getLayoutParams();
+            param.setMarginEnd((int) (-23 * getActivity().getResources().getDisplayMetrics().density));
+            userIcon.setLayoutParams(param);
+            ((ImageView)mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
+            mToolBarView.findViewById(R.id.ATATV_company_name_separator).setVisibility(View.VISIBLE);
+            ((TextView)mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteName());
+        }
     }
 
     private void setTechnicianCallStatus() {
