@@ -461,19 +461,21 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setNotificationHistory(ArrayList<Notification> notificationList) {
 
-        Collections.sort(notificationList, new Comparator<Notification>() {
-            @Override
-            public int compare(Notification o1, Notification o2) {
+        if (notificationList != null && notificationList.size() > 0) {
+            Collections.sort(notificationList, new Comparator<Notification>() {
+                @Override
+                public int compare(Notification o1, Notification o2) {
 
-                if (o1.getmNotificationID() > o2.getmNotificationID()){
-                    return -1;
-                }else if (o1.getmNotificationID() < o2.getmNotificationID()){
-                    return 1;
-                }else {
-                    return 0;
+                    if (o1.getmNotificationID() > o2.getmNotificationID()) {
+                        return -1;
+                    } else if (o1.getmNotificationID() < o2.getmNotificationID()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 }
-            }
-        });
+            });
+        }
 
 
         SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
