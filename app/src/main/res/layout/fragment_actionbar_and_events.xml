@@ -214,6 +214,11 @@
                             android:background="@drawable/side_menu"
                             android:orientation="vertical">
 
+                                <Spinner
+                                    android:id="@+id/FAAE_shift_spinner"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"/>
+
                                 <LinearLayout
                                     android:id="@+id/fragment_dashboard_min_duration_lil"
                                     android:orientation="horizontal"
