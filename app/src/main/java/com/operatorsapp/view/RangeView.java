@@ -43,7 +43,7 @@ public class RangeView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCurrentLine != null) {
+        if (mCurrentLine != null && !mCurrentLine.isRecycled()) {
             canvas.drawBitmap(mCurrentLine, mX, 0, null);
         }
     }
@@ -71,9 +71,11 @@ public class RangeView extends View {
     }
 
     public void hideView() {
-        mCurrentLine.recycle();
-        mCurrentLine = null;
-        forceRedraw();
+        if (mCurrentLine != null && !mCurrentLine.isRecycled()) {
+            mCurrentLine.recycle();
+            mCurrentLine = null;
+            forceRedraw();
+        }
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
