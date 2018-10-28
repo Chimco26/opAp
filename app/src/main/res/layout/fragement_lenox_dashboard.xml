@@ -9,7 +9,7 @@
         android:layout_height="331dp"
         android:src="@drawable/lenox_360_logo"
         android:layout_gravity="center"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="170dp"
         />
 
 </LinearLayout>
