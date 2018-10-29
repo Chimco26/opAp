@@ -31,7 +31,7 @@ public class ProjectionView extends View {
         init(context);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         mProjectionQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_projection_quantity_oval));
         mCurrentQuantity = drawableToBitmap(context.getDrawable(R.drawable.data_current_quantity_oval));
         //  mPaint = new Paint();

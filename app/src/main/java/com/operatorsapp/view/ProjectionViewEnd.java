@@ -32,7 +32,7 @@ public class ProjectionViewEnd extends View {
         init(context);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         mRightViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_blue));
         mRightViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_right_quantity_oval_gray));
        // mPaint = new Paint();

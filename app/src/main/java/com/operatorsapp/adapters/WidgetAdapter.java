@@ -375,7 +375,9 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mDivider.requestLayout();
                     }
                 });
-
+                projectionViewHolder.mRangeView.init(mContext);
+                projectionViewHolder.mProjectionView.init(mContext);
+                projectionViewHolder.mProjectionViewEnd.init(mContext);
                 setSizes(projectionViewHolder.mParentLayout);
                 projectionViewHolder.mRangeView.setCurrentLine(false);
                 float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
@@ -384,7 +386,7 @@ public class WidgetAdapter extends Adapter {
                     projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
                     projectionViewHolder.mProjectionViewStart.setCurrentView(true);
-                    projectionViewHolder.mCurrentValueInChart.setText("");
+//                    projectionViewHolder.mCurrentValueInChart.setText("");
                     projectionViewHolder.mRangeView.hideView();
                 } else if (widget.getProjection() >= widget.getTarget()) {
                     projectionViewHolder.mBluePlus.setVisibility(View.GONE);
