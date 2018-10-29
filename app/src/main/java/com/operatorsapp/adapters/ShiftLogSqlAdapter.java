@@ -266,7 +266,6 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
                 if (event.getPriority() == 1) {
 
-
                     holder.mStoppedIcon.setImageResource(R.drawable.ic_hand_red);
                     holder.mStoppedTitle.setTextColor(Color.RED);
                     holder.mStoppedTime.setTextColor(Color.RED);

@@ -41,7 +41,7 @@ public class ProjectionViewEnd extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCurrentView != null) {
+        if (mCurrentView != null && !mCurrentView.isRecycled()) {
             canvas.drawBitmap(mCurrentView, 0, 0, null);
         }
     }
@@ -55,9 +55,11 @@ public class ProjectionViewEnd extends View {
     }
 
     public void hideView() {
-        mCurrentView.recycle();
-        mCurrentView = null;
-        forceRedraw();
+        if (mCurrentView != null && !mCurrentView.isRecycled()) {
+            mCurrentView.recycle();
+            mCurrentView = null;
+            forceRedraw();
+        }
     }
 
     public void forceRedraw() {
