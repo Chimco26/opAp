@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TREATED = "mtreated";
     private static final String KEY_SUB_TITLE_L_NAME = "meventsubtitlelname";
     private static final String KEY_ALARM_DISMISSED = "malarmdismissed";
-    private static final String KEY_REASON_ID = "meventreasonid";
+    public static final String KEY_REASON_ID = "meventreasonid";
     private static final String KEY_TIME_OF_ADDED = "mtimeofadded";
     public static final String KEY_IS_DISMISS = "misdismiss";
     private static final String KEY_CREATED_AT = "created_at";
@@ -274,10 +274,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getStopTypeZeroShiftOrderByTimeFilterByDuration(int minEventDuration) {
-        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE (" + KEY_GROUP_ID + " = 6 AND " +
-                KEY_DURATION + " >= " + minEventDuration + " AND NOT " + KEY_TREATED +
-                ") OR (" + KEY_GROUP_ID + " = 6 AND NOT " + KEY_TREATED + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+    public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
+                KEY_DURATION + " >= " + minEventDuration +
+                ") OR (" + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();

@@ -173,7 +173,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_H_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_L_VALUE)),
-                cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_STANDARD_VALUE))
+                cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_STANDARD_VALUE)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_REASON_ID))
         );
 
 
@@ -325,7 +326,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     if (!mIsSelectionMode) {
 
                         event.setChecked(true);
-                        mOnStopClickListener.onSelectMode(type, event.getEventID());
+                        mOnStopClickListener.onSelectMode(event);
 //                        mOnStopClickListener.onStopEventSelected(event.getEventID(), true);
 
                         v.setTag(true);
