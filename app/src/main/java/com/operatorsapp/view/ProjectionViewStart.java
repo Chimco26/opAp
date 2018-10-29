@@ -16,6 +16,8 @@ import com.operatorsapp.R;
 public class ProjectionViewStart extends View {
 
     private Bitmap mLeftView;
+    private Bitmap mLeftViewBlue;
+    private Bitmap mLeftViewGray;
     //private Paint mPaint;
 
     public ProjectionViewStart(Context context) {
@@ -31,7 +33,8 @@ public class ProjectionViewStart extends View {
     }
 
     private void init(Context context) {
-        mLeftView = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
+        mLeftViewBlue = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval));
+        mLeftViewGray = drawableToBitmap(context.getDrawable(R.drawable.data_left_quantity_oval_gray));
         //   mPaint = new Paint();
     }
 
@@ -40,6 +43,14 @@ public class ProjectionViewStart extends View {
         super.onDraw(canvas);
         if (mLeftView != null && !mLeftView.isRecycled()) {
             canvas.drawBitmap(mLeftView, 0, 0, null);
+        }
+    }
+
+    public void setCurrentView(boolean blue) {
+        if (blue) {
+            mLeftView = mLeftViewBlue;
+        } else {
+            mLeftView = mLeftViewGray;
         }
     }
 
