@@ -135,9 +135,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
-    //    public static final int TYPE_STOP = 6;
     public static final int TYPE_ALERT = 20;
-    private static final int STOPPED = 2;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
     private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 20;
     private static final String ALARM_TYPE = "Alarms";
@@ -210,7 +208,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private BroadcastReceiver mNotificationsReceiver = null;
     private Handler mHandlerTechnicianCall = new Handler();
     private Spinner mShiftSpinner;
-    private ShiftTypeSpinnerAdapter mShiftAdapter;
     private String mSelectedCursorType;
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -449,8 +446,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initShiftSpinner() {
         mSelectedCursorType = ALL_EVENTS_TYPE;
         if (getActivity() != null) {
-            final ArrayList<String> items =  new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.shiftlog_spinner_items)));
-            mShiftAdapter = new ShiftTypeSpinnerAdapter(getActivity(), R.layout.item_product_spinner, items, getLayoutInflater());
+            final ArrayList<String> items = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.shiftlog_spinner_items)));
+            items.add(ALL_EVENTS_TYPE);
+            items.add(ALARM_TYPE);
+            items.add(STOP_TYPE);
+            items.add(UNTREATED_STOP_TYPE);
+            ShiftTypeSpinnerAdapter mShiftAdapter = new ShiftTypeSpinnerAdapter(getActivity(), R.layout.item_product_spinner, items, getLayoutInflater());
             mShiftAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
             mShiftSpinner.setAdapter(mShiftAdapter);
 

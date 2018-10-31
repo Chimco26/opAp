@@ -383,23 +383,34 @@ public class WidgetAdapter extends Adapter {
                 if (currentFloat >= widget.getTarget()) {
                     projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
+                    projectionViewHolder.mProjectionViewStart.setCurrentView(true);
                     projectionViewHolder.mCurrentValueInChart.setText("");
                     projectionViewHolder.mRangeView.hideView();
                 } else if (widget.getProjection() >= widget.getTarget()) {
                     projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
-                    projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
+                    projectionViewHolder.mProjectionViewStart.setCurrentView(true);
+                    if (!isNearestTexts(currentFloat, widget.getProjection())) {
+                        projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
+                    }else {
+                        projectionViewHolder.mGrayValueInEndChart.setText("");
+                    }
                 } else {
                     projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
+                    projectionViewHolder.mProjectionViewStart.setCurrentView(true);
                     projectionViewHolder.mProjectionViewEnd.hideView();
-                    projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
+                    if (!isNearestTexts(currentFloat, widget.getProjection())) {
+                        projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
+                    }else {
+                        projectionViewHolder.mGrayValueInChart.setText("");
+                    }
                 }
                 if (currentFloat <= widget.getLowLimit()) {
                     projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                     projectionViewHolder.mRangeView.hideView();
                     projectionViewHolder.mProjectionView.hideViews();
-                    projectionViewHolder.mProjectionViewStart.hideView();
+                    projectionViewHolder.mProjectionViewStart.setCurrentView(false);
                     projectionViewHolder.mGrayValueInEndChart.setText("");
                     projectionViewHolder.mGrayValueInChart.setText("");
                     projectionViewHolder.mCurrentValueInChart.setText("");
@@ -434,6 +445,10 @@ public class WidgetAdapter extends Adapter {
         //        });
 
 
+    }
+
+    private boolean isNearestTexts(float currentFloat, Float projection) {
+        return ((currentFloat/projection) < 1.2 || (projection/currentFloat) > 0.8);
     }
 
     private void setSizes(final RelativeLayout parent) {
