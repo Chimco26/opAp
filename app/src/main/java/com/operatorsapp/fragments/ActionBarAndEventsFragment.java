@@ -41,6 +41,8 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,7 +80,6 @@ import com.operatorsapp.adapters.LenoxMachineAdapter;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
-import com.operatorsapp.adapters.ShiftTypeSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
@@ -138,10 +139,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int TYPE_ALERT = 20;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
     private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 20;
-    private static final String ALARM_TYPE = "Alarms";
-    private static final String STOP_TYPE = "All Stops";
-    private static final String UNTREATED_STOP_TYPE = "Untreated Stops";
-    private static final String ALL_EVENTS_TYPE = "All Events";
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -207,8 +204,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mTechnicianIndicatorTv;
     private BroadcastReceiver mNotificationsReceiver = null;
     private Handler mHandlerTechnicianCall = new Handler();
-    private Spinner mShiftSpinner;
-    private String mSelectedCursorType;
+    private boolean isShowAlarms;
+    private Event mFirstSeletedEvent;
+    private CheckBox mShowAlarmCheckBox;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -328,6 +326,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mShowAlarmCheckBox = view.findViewById(R.id.FAAE_alarm_chekbox);
+        mShowAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isShowAlarms = isChecked;
+                setShiftLogAdapter(getCursorByType());
+            }
+        });
+
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
@@ -436,61 +443,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         initJobsSpinner();
 
-        mShiftSpinner = view.findViewById(R.id.FAAE_shift_spinner);
-
-        initShiftSpinner();
-
         return statusBarParams;
     }
 
-    private void initShiftSpinner() {
-        mSelectedCursorType = ALL_EVENTS_TYPE;
-        if (getActivity() != null) {
-            final ArrayList<String> items = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.shiftlog_spinner_items)));
-            items.add(ALL_EVENTS_TYPE);
-            items.add(ALARM_TYPE);
-            items.add(STOP_TYPE);
-            items.add(UNTREATED_STOP_TYPE);
-            ShiftTypeSpinnerAdapter mShiftAdapter = new ShiftTypeSpinnerAdapter(getActivity(), R.layout.item_product_spinner, items, getLayoutInflater());
-            mShiftAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
-            mShiftSpinner.setAdapter(mShiftAdapter);
-
-            mShiftSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    Cursor cursor = getCursorByType(items.get(position));
-                    setShiftLogAdapter(cursor);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        }
-    }
-
     @Nullable
-    public Cursor getCursorByType(String type) {
-        Cursor cursor = null;
-        switch (type) {
-            case ALL_EVENTS_TYPE:
-                mSelectedCursorType = ALL_EVENTS_TYPE;
-                cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-                break;
-            case ALARM_TYPE:
-                mSelectedCursorType = ALARM_TYPE;
-                cursor = mDatabaseHelper.getAlarmTypeShiftOrderByTime();
-                break;
-            case STOP_TYPE:
-                mSelectedCursorType = STOP_TYPE;
-                cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-                break;
-            case UNTREATED_STOP_TYPE:
-                mSelectedCursorType = UNTREATED_STOP_TYPE;
-                cursor = mDatabaseHelper.getStopTypeZeroShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-                break;
+    public Cursor getCursorByType() {
+        Cursor cursor;
+        if (isShowAlarms) {
+            cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        } else {
+            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
         }
         return cursor;
     }
@@ -748,7 +710,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mDatabaseHelper = DatabaseHelper.getInstance(getContext());
 
-        Cursor tempCursor = getCursorByType(mSelectedCursorType);
+        Cursor tempCursor = getCursorByType();
 
         if (tempCursor.moveToFirst()) {
 
@@ -792,7 +754,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth, boolean isOpen) {
+    private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth,
+                                boolean isOpen) {
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
         mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;
@@ -1099,7 +1062,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    public void initLenoxView(ImageView notificationIv, ImageView technicianIv, ImageView tutorialIv, Spinner jobsSpinner) {
+    public void initLenoxView(ImageView notificationIv, ImageView technicianIv, ImageView
+            tutorialIv, Spinner jobsSpinner) {
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             notificationIv.setVisibility(View.INVISIBLE);
             technicianIv.setVisibility(View.INVISIBLE);
@@ -1523,7 +1487,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mLastEvent.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(mLastEvent.getEventID()));
 
-            Cursor cursor = getCursorByType(mSelectedCursorType);
+            Cursor cursor = getCursorByType();
             setShiftLogAdapter(cursor);
 
             mShiftLogRecycler.setAdapter(mShiftLogAdapter);
@@ -1569,9 +1533,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onReportClick(int eventId, String start, String end, long duration) {
-        //TODO    openStopReportScreen(eventId, start, end, duration);
-        startSelectMode(eventId);
+    public void onReportClick(Event event) {
+        //TODO    openStopReportScreen(eventId, start, end, duration);mEvent.getEventID(), mEvent.getTime(), mEvent.getEventEndTime(), mEvent.getDuration()
+        startSelectMode(event);
     }
 
     @Override
@@ -1599,27 +1563,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onSelectMode(int type, int eventID) {
+    public void onSelectMode(Event event) {
 
-        startSelectMode(eventID);
+        startSelectMode(event);
     }
 
-    private void startSelectMode(int eventID) {
-
-        mShiftSpinner.setVisibility(View.GONE);
+    private void startSelectMode(Event event) {
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
 
         mIsSelectionMode = true;
+        mFirstSeletedEvent = event;
 
         Cursor cursor;
-        if (mSelectedCursorType.equals(UNTREATED_STOP_TYPE)) {
-            cursor = getCursorByType(mSelectedCursorType);
-        } else {
-            cursor = getCursorByType(STOP_TYPE);
-        }
+        cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
         setShiftLogAdapter(cursor);
-        onStopEventSelected(eventID, true);
+        onStopEventSelected(event.getEventID(), true);
+
+        mShowAlarmCheckBox.setVisibility(View.GONE);
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
@@ -1719,15 +1680,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             Cursor cursor;
             if (mIsSelectionMode) {
 
-                if (mSelectedCursorType.equals(UNTREATED_STOP_TYPE)) {
-                    cursor = getCursorByType(mSelectedCursorType);
-                } else {
-                    cursor = getCursorByType(STOP_TYPE);
-                }
+                cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
 
             } else {
 
-                cursor = getCursorByType(mSelectedCursorType);
+                cursor = getCursorByType();
             }
             setShiftLogAdapter(cursor);
 
@@ -1737,7 +1694,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
 
                     if (!mIsSelectionMode) {
-                        startSelectMode(event.getEventID());
+                        startSelectMode(event);
                     }
                     mEventsQueue.pop();
 
@@ -1836,7 +1793,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine
+                                                                     activeJobsListForMachine) {
 
         if (activeJobsListForMachine != null) {
             initProductView(activeJobsListForMachine);
@@ -2057,7 +2015,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //    }
 
     @Override
-    public void onSelectStopReason(int eventId, int reasonId, String en, String il, String eSubTitle, String lSubtitle) {
+    public void onSelectStopReason(int eventId, int reasonId, String en, String il, String
+            eSubTitle, String lSubtitle) {
 
         List<Event> events = DataSupport.where(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId)).find(Event.class);
 
@@ -2102,12 +2061,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsSelectionMode = false;
 
         Cursor cursor;
-        cursor = getCursorByType(mSelectedCursorType);
+        cursor = getCursorByType();
         setShiftLogAdapter(cursor);
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
-        mShiftSpinner.setVisibility(View.VISIBLE);
+        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {

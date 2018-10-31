@@ -33,7 +33,7 @@ public class RangeView extends View {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void init(Context context) {
+    public void init(Context context) {
         mDataLineBlue = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
         mDataLineRed = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_red));
         mCurrentLine = mDataLineBlue;

@@ -129,7 +129,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
                     if (mListener != null) {
                         //// TODO: 20-Nov-16  check
                         dismiss();
-                        mListener.onReportClick(mEvent.getEventID(), mEvent.getTime(), mEvent.getEventEndTime(), mEvent.getDuration());
+                        mListener.onReportClick(mEvent);
                     }
                 }
             });
@@ -246,6 +246,6 @@ public class DialogFragment extends android.support.v4.app.DialogFragment {
 
         void onDismissAllClick(DialogInterface dialog, int eventGroupId, int requestCode);
 
-        void onReportClick(int eventId, String start, String end, long duration);
+        void onReportClick(Event event);
     }
 }

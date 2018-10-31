@@ -72,7 +72,7 @@ public class Event extends DataSupport implements Parcelable {
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
                  String endTime, int groupId, int id, int priority, String groupEname, String groupLname, int duration,
-                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue) {
+                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId) {
 
         mEventTitle = title;
         mEventETitle = eTitle;
@@ -91,7 +91,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmHValue = alarmHValue;
         mAlarmLValue = alarmLValue;
         mAlarmStandardValue = alarmStandardValue;
-
+        mEventReasonID = reasonId;
 
     }
 
