@@ -162,6 +162,15 @@
         <item>Report Production</item>
     </array>
 
+    <array name="shiftlog_spinner_items">
+
+        <item>All Events</item>
+        <item>Alarms</item>
+        <item>All Stops</item>
+        <item>Uncategorized Stops</item>
+
+    </array>
+
     <string name="approve_first_item">End Setup</string>
 
     <plurals name="days">

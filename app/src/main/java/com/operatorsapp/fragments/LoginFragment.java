@@ -262,7 +262,7 @@ public class LoginFragment extends Fragment {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
                 getVersion(machines, true);
-                getNotifications();
+                //getNotifications();
                 PersistenceManager.getInstance().setSiteName(siteName);
 
             }
@@ -305,7 +305,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-                getNotifications();
+               // getNotifications();
                 getVersion(machines, false);
                 PersistenceManager.getInstance().setSiteName(siteName);
             }
@@ -328,35 +328,35 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void getNotifications(){
-
-        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
-            @Override
-            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
-
-                if (response != null && response.body() != null && response.body().getmError() == null) {
-
-                    for (Notification not : response.body().getmNotificationsList()) {
-                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
-                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
-                    }
-
-                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
-                }else {
-                    PersistenceManager.getInstance().setNotificationHistory(null);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
-
-                PersistenceManager.getInstance().setNotificationHistory(null);
-
-            }
-        });
-
-    }
+//    private void getNotifications(){
+//
+//        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+//            @Override
+//            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+//
+//                if (response != null && response.body() != null && response.body().getmError() == null) {
+//
+//                    for (Notification not : response.body().getmNotificationsList()) {
+//                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+//                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+//                    }
+//
+//                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+//                }else {
+//                    PersistenceManager.getInstance().setNotificationHistory(null);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+//
+//                PersistenceManager.getInstance().setNotificationHistory(null);
+//
+//            }
+//        });
+//
+//    }
 
     private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin) {
 

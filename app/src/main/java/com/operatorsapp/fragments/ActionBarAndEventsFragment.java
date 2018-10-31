@@ -112,6 +112,7 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -139,7 +140,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final int STOPPED = 2;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
     private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 20;
-    private static final String ALARM_TYPE = "Alarm";
+    private static final String ALARM_TYPE = "Alarms";
     private static final String STOP_TYPE = "All Stops";
     private static final String UNTREATED_STOP_TYPE = "Untreated Stops";
     private static final String ALL_EVENTS_TYPE = "All Events";
@@ -448,11 +449,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initShiftSpinner() {
         mSelectedCursorType = ALL_EVENTS_TYPE;
         if (getActivity() != null) {
-            final ArrayList<String> items = new ArrayList<>();
-            items.add(ALL_EVENTS_TYPE);
-            items.add(ALARM_TYPE);
-            items.add(STOP_TYPE);
-            items.add(UNTREATED_STOP_TYPE);
+            final ArrayList<String> items =  new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.shiftlog_spinner_items)));
             mShiftAdapter = new ShiftTypeSpinnerAdapter(getActivity(), R.layout.item_product_spinner, items, getLayoutInflater());
             mShiftAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
             mShiftSpinner.setAdapter(mShiftAdapter);
@@ -508,17 +505,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     int status = intent.getIntExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, 0);
                     mHandlerTechnicianCall.removeCallbacksAndMessages(null);
                     switch (status) {
-                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_CALLED:
+//                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_CALLED:
+//                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+//                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
+//                            mTechnicianIndicatorTv.setText(R.string.called_technician);
+//
+//                            break;
 
-                            break;
-
-                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_RECEIVED:
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.recieved));
                             mTechnicianIndicatorTv.setText(R.string.message_received);
                             break;
 
-                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_DECLINED:
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.decline));
                             mTechnicianIndicatorTv.setText(R.string.message_declined);
@@ -537,8 +537,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 
                     setNotificationNeedResponse();
-                    openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
                 }
+                openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
             }
         };
     }
@@ -565,7 +565,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 Window window = dialog.getWindow();
                 WindowManager.LayoutParams wlp = window.getAttributes();
 
-                wlp.gravity = Gravity.BOTTOM;
+                wlp.gravity = Gravity.TOP;
+                wlp.y = mToolBarView.getHeight();
                 wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                 window.setAttributes(wlp);
                 Point point = new Point(1, 1);
@@ -579,6 +580,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 TextView tvSender = dialog.findViewById(R.id.notification_item_tv_sender);
                 TextView tvBody = dialog.findViewById(R.id.notification_item_tv_body);
 
+                if (notification.getmResponseType() != 0){
+                    btnApprove.setVisibility(View.GONE);
+                    btnClarify.setVisibility(View.GONE);
+                    btnDecline.setVisibility(View.GONE);
+                }
                 btnClose.setImageDrawable(getResources().getDrawable(R.drawable.close));
                 tvBody.setText(notification.getmBody());
                 tvSender.setText(notification.getmSender());
@@ -1173,6 +1179,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         WindowManager.LayoutParams wlp = window.getAttributes();
 
         wlp.gravity = Gravity.END;
+        if (!OperatorApplication.isEnglishLang()) {
+            wlp.x = Gravity.END;
+        }
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
@@ -1222,6 +1231,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         WindowManager.LayoutParams wlp = window.getAttributes();
 
         wlp.gravity = Gravity.END | Gravity.BOTTOM;
+        if (!OperatorApplication.isEnglishLang()) {
+            wlp.x = Gravity.END;
+        }
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //        wlp.x = -130;
 //        wlp.y = 240;

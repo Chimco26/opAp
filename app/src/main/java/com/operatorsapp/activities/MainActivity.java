@@ -33,12 +33,20 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
@@ -120,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void goToDashboardActivity(int machineId, ArrayList<Machine> machines) {
+        //now we have machineID and can get notifications history
+        getNotifications();
 
 //        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name)) &&
 //                PersistenceManager.getInstance().getMachineId() == -1) {
@@ -134,10 +144,42 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);
-        finish();
+
 
     }
 
+    private void getNotifications(){
+
+        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+            @Override
+            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+
+                if (response != null && response.body() != null && response.body().getmError() == null) {
+
+                    for (Notification not : response.body().getmNotificationsList()) {
+                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                    }
+
+                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    finish();
+                }else {
+                    PersistenceManager.getInstance().setNotificationHistory(null);
+                    finish();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+
+                PersistenceManager.getInstance().setNotificationHistory(null);
+                finish();
+
+            }
+        });
+
+    }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
         try {

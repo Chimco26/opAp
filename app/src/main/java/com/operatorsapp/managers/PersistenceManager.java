@@ -451,6 +451,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public boolean isNeedUpdateToken() {
+        String str = getNotificationToken();
         return SecurePreferences.getInstance().getBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, true);
     }
 

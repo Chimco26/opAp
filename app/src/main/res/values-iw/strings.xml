@@ -154,6 +154,16 @@
         <item>דיווח ייצור</item>
     </array>
 
+
+    <array name="shiftlog_spinner_items">
+
+        <item>כל האירועים</item>
+        <item>התראות</item>
+        <item>עצירות</item>
+        <item>עצירות לא מסווגות</item>
+
+    </array>
+
     <string name="approve_first_item">אישור פריט ראשון</string>
 
     <plurals name="days">
@@ -232,6 +242,7 @@
     <string name="tutorial_split_event_Desc">השתמש באיקון \'מספריים\' לפיצול אירוע. בדרך זו ניתן לדווח סיבה שונה עבור כל חלק.</string>
     <string name="activate_job_dialog_message">נבחרה פק"ע חדשה, האם להמשיך בהפעלה?</string>
     <string name="activate_job_dialog_title">הפעלת פק"ע חדשה</string>
+    <string name="technician_list">רשימת טכנאים</string>
 
 
 </resources>

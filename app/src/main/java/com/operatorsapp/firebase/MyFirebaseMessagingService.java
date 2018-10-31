@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
@@ -34,7 +35,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         Log.d(LOG_TAG, "Refreshed token: " + token);
 
-        sendRegistrationToServer(token);
+        if (token != null && token != "") {
+            sendRegistrationToServer(token);
+        }else {
+            FirebaseInstanceId.getInstance().getInstanceId();
+        }
     }
 
     private void sendRegistrationToServer(String token) {
