@@ -113,7 +113,6 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -1302,7 +1301,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         List<PackageTypes> statusList = new ArrayList<>();
         if (reportForMachine != null && reportForMachine.getProductionStatus() != null) {
 
-            statusList = ((DashboardActivity) getActivity()).getReportForMachine().getProductionStatus();
+            statusList = reportForMachine.getProductionStatus();
             items = new String[statusList.size()];
             for (int i = 0; i < statusList.size(); i++) {
                 items[i] = OperatorApplication.isEnglishLang() ? statusList.get(i).getEName() : statusList.get(i).getLName();

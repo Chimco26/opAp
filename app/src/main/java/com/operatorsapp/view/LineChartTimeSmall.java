@@ -271,21 +271,21 @@ public class LineChartTimeSmall extends FrameLayout {
         });
     }
 
-//    private void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
-//    {
-//
-//        /* // zero line, removed due to performance cost
-//        YAxis leftAxis = mChart.getAxisLeft();
-//        LimitLine limitLine1 = new LimitLine(0f, "");
-//        limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
-//        limitLine1.setLineWidth(1f);
-//        leftAxis.addLimitLine(limitLine1);
-//        */
-//
-//
-//        //addStandardLine(standardValue); // standard line, removed due to performance cost
-//        //addLimitLines(lowLimit, highLimit);
-//    }
+    public void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
+    {
+
+        //zero line, removed due to performance cost
+        YAxis leftAxis = mChart.getAxisLeft();
+        LimitLine limitLine1 = new LimitLine(0f, "");
+        limitLine1.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
+        limitLine1.setLineWidth(1f);
+        leftAxis.addLimitLine(limitLine1);
+
+
+
+        addStandardLine(standardValue); // standard line, removed due to performance cost
+        addLimitLines(lowLimit, highLimit);
+    }
 
     @SuppressWarnings("unused")
     private void addStandardLine(Float standardValue)
