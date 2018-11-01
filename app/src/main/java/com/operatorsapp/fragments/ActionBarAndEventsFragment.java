@@ -41,7 +41,6 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -205,7 +205,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Handler mHandlerTechnicianCall = new Handler();
     private boolean isShowAlarms;
     private Event mFirstSeletedEvent;
-    private CheckBox mShowAlarmCheckBox;
+    private Switch mShowAlarmCheckBox;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -755,6 +755,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void toggleWoopList(ViewGroup.LayoutParams mLeftLayoutParams, int newWidth,
                                 boolean isOpen) {
+        if (mShiftLogAdapter == null){return;}
         mLeftLayoutParams.width = newWidth;
         mShiftLogLayout.requestLayout();
         mSwipeParams.width = mShiftLogParams.width + mLenoxMachineLyWidth;

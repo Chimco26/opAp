@@ -216,13 +216,17 @@
                             android:background="@drawable/side_menu"
                             android:orientation="vertical">
 
-                            <CheckBox
+                            <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="40dp"
+                                android:gravity="start|center_vertical"
+                                android:thumb="@drawable/drawable_switch"
+                                android:track="@drawable/drawable_bg"
                                 android:text="@string/alarms"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
+                                android:textSize="24sp"
+                                android:switchPadding="30dp"
+                                android:textStyle="bold"/>
 
                             <LinearLayout
                                 android:id="@+id/fragment_dashboard_min_duration_lil"
