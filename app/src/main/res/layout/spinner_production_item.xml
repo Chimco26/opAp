@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="50dp"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:gravity="bottom">
+
+    <ImageView
+        android:id="@+id/SPI_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/production_blue"
+        android:padding="7dp"/>
+</LinearLayout>

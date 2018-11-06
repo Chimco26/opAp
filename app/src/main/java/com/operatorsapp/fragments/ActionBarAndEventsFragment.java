@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -79,6 +80,7 @@ import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LenoxMachineAdapter;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
+import com.operatorsapp.adapters.ProductionSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -883,15 +885,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 return;
             }
 
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            SpannableString spannableString = new SpannableString(getActivity().getString(R.string.screen_title));
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, spannableString.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            LayoutInflater inflator = LayoutInflater.from(getActivity());
+            LayoutInflater inflator = initActionBar(actionBar);
 
             // TODO: 08/07/2018 update to new toolbar
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
@@ -944,8 +938,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mApproveItemID = mJobActionsSpinnerItems.size();
                 mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID, getString(R.string.approve_first_item)));
 
-                mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
+                mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems );
                 mJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                jobsSpinner.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             }
 
             jobsSpinner.setAdapter(mJobsSpinnerAdapter);
@@ -960,6 +955,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         OppAppLogger.getInstance().w(LOG_TAG, "missing machine status data in job spinner");
                         return;
                     }
+                    mJobsSpinnerAdapter.updateTitle(mJobActionsSpinnerItems.get(position).getName());
                     if (mJobActionsSpinnerItems.get(position).isEnabled()) {
                         // TODO: 5/10/2018 NATAN
                         switch (position) {
@@ -1062,6 +1058,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    public LayoutInflater initActionBar(ActionBar actionBar) {
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        SpannableString spannableString = new SpannableString(getActivity().getString(R.string.screen_title));
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.white)), 0, spannableString.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.T12_color)), spannableString.length() - 3, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return LayoutInflater.from(getActivity());
+    }
+
     public void initLenoxView(ImageView notificationIv, ImageView technicianIv, ImageView
             tutorialIv, Spinner jobsSpinner) {
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
@@ -1069,7 +1077,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianIv.setVisibility(View.INVISIBLE);
             tutorialIv.setVisibility(View.INVISIBLE);
             jobsSpinner.setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.toolbar_production_status).setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_notification_indicator).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
@@ -1295,7 +1303,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         int selected = 0;
 
-        final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_status);
+        final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
+        final TextView textview = mToolBarView.findViewById(R.id.toolbar_production_text);
         ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
         String[] items;
         String newTitle = "";
@@ -1315,9 +1324,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             items = new String[]{""};
         }
 
-        final ArrayAdapter<String> productionStatusSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, items, newTitle);
+        textview.setText(items[0]);
+        final ArrayAdapter<String> productionStatusSpinnerAdapter = new ProductionSpinnerAdapter(getActivity(), R.layout.spinner_production_item, items, newTitle);
         productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
-        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+//        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
 
         final List<PackageTypes> finalStatusList = statusList;
         productionStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1327,8 +1337,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() != finalStatusList.get(position).getId()) {
                     ProgressDialogManager.show(getActivity());
                     String newTitle = OperatorApplication.isEnglishLang() ? finalStatusList.get(position).getEName() : finalStatusList.get(position).getLName();
-                    ((OperatorSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
+                    ((ProductionSpinnerAdapter) productionStatusSpinner.getAdapter()).updateTitle(newTitle);
                     mListener.onProductionStatusChanged(finalStatusList.get(position).getId(), finalStatusList.get(position).getEName());
+                    textview.setText(newTitle);
                 }
 
             }

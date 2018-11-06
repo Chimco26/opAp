@@ -290,9 +290,13 @@ public class WidgetAdapter extends Adapter {
                 timeViewHolder.mTitle.setText(nameByLang2);
                 timeViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
                 timeViewHolder.mValue.setText(widget.getCurrentValue());
-                if (Float.valueOf(widget.getCurrentValue()) < widget.getLowLimit() || Float.valueOf(widget.getCurrentValue()) > widget.getHighLimit()) {
-                    timeViewHolder.mValue.setTextColor(mContext.getResources().getColor(R.color.red_line));
-                }else {
+                try {
+                    if (Float.valueOf(widget.getCurrentValue()) < widget.getLowLimit() || Float.valueOf(widget.getCurrentValue()) > widget.getHighLimit()) {
+                        timeViewHolder.mValue.setTextColor(mContext.getResources().getColor(R.color.red_line));
+                    }else {
+                        timeViewHolder.mValue.setTextColor(mContext.getResources().getColor(R.color.C16));
+                    }
+                }catch (NumberFormatException e){
                     timeViewHolder.mValue.setTextColor(mContext.getResources().getColor(R.color.C16));
                 }
                     final ArrayList<Entry> tenHoursValues = new ArrayList<>();
