@@ -12,14 +12,14 @@ import android.widget.TextView;
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 
-public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
+public class LanguagesSpinnerAdapterActionBar extends ArrayAdapter<String> {
     private Activity mContext;
     private String[] mSpinnerItems;
     private TextView mRowName;
-//    private View mView;
+    //    private View mView;
     private boolean mIsFirst = true;
 
-    public LanguagesSpinnerAdapter(Activity context, int resource, String[] spinnerItems) {
+    public LanguagesSpinnerAdapterActionBar(Activity context, int resource, String[] spinnerItems) {
         super(context, resource, spinnerItems);
         this.mContext = context;
         this.mSpinnerItems = spinnerItems;
@@ -32,6 +32,7 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
+//            mView = row;
             mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
             if (mIsFirst) {
@@ -53,7 +54,6 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
-//            mView = row;
         }
 
         String item = mSpinnerItems[position];
@@ -67,15 +67,13 @@ public class LanguagesSpinnerAdapter extends ArrayAdapter<String> {
     }
 
     public void setTitle(int position) {
-//        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         mRowName.setText(mSpinnerItems[position]);
         mRowName.setTextSize(20);
     }
 
     public void setTitle(String language) {
-//        mRowName = (TextView) mView.findViewById(R.id.spinner_language_item_name);
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         mRowName.setText(language);
         mRowName.setTextSize(20);
     }

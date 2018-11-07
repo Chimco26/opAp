@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -112,18 +111,17 @@ import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
+import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -1658,7 +1656,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onLenoxMachineClicked(Machine machine) {
 
-        saveAlarmsCheckedLocaly();
+        SaveAlarmsHelper.saveAlarmsCheckedLocaly(this);
 
         PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
@@ -1669,54 +1667,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setLenoxMachine(machine.getId());
     }
 
-    private void saveAlarmsCheckedLocaly() {
-        //because alarms status not saved in sever side,
-        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
-        //and update the alarms if checked
-
-        PersistenceManager persistenceManager = PersistenceManager.getInstance();
-
-        HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
-
-        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
-
-        Cursor tempCursor = databaseHelper.getCursorOrderByTime();
-
-        ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
-
-        if (alarmList == null) {
-            alarmList = new ArrayList<>();
-        }
-
-        alarmList.clear();
-
-        for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
-
-            if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) > 0) {
-
-                alarmList.add(tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
-            }
-
-        }
-
-        tempCursor.close();
-
-        checkedAlarmHashMap.remove(persistenceManager.getMachineId());
-
-        checkedAlarmHashMap.put(persistenceManager.getMachineId(), alarmList);
-
-        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmHashMap);
-
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
-
-    }
-
     @Override
     public void onLastShiftItemUpdated() {
 
         if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }
+    }
+
+    @Override
+    public void showBlackFilter(boolean show) {
+        setBlackFilter(show);
     }
 
     public void setLenoxMachine(int machineId) {
