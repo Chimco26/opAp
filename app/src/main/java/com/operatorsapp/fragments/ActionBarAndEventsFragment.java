@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -97,6 +98,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
@@ -2211,7 +2213,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     SaveAlarmsHelper.saveAlarmsCheckedLocaly(getActivity());
                     PersistenceManager.getInstance().setCurrentLang(getResources().getStringArray(R.array.language_codes_array)[position]);
                     PersistenceManager.getInstance().setCurrentLanguageName(getResources().getStringArray(R.array.languages_spinner_array)[position]);
-                    mListener.onRefreshApplicationRequest();
+                    sendTokenWithSessionIdToServer();
 
             }
 
@@ -2221,6 +2223,35 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
     }
+
+    private void sendTokenWithSessionIdToServer() {
+        final PersistenceManager pm = PersistenceManager.getInstance();
+        final String id = Settings.Secure.getString(getActivity().getContentResolver(),Settings.Secure.ANDROID_ID);
+        PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                if (response != null && response.body() != null && response.isSuccessful()) {
+                    Log.d(LOG_TAG, "token sent");
+                    pm.tryToUpdateToken("success + android id: " + id);
+                    mListener.onRefreshApplicationRequest();
+
+                }else {
+                    pm.tryToUpdateToken("failed + android id: " + id);
+                    Log.d(LOG_TAG, "token failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                pm.tryToUpdateToken("failed + android id: " + id);
+                pm.setNeedUpdateToken(true);
+                Log.d(LOG_TAG, "token failed");
+            }
+        });
+
+    }
+
 
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);

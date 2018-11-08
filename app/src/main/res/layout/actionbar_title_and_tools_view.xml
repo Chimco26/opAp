@@ -52,18 +52,14 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/toolbar_technician_tv"
+            <com.operatorsapp.view.EmeraldSpinner
+                android:id="@+id/ATATV_language_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
-                android:gravity="center"
-                android:textAlignment="gravity"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
+                android:layout_toStartOf="@+id/toolbar_tutorial_iv"
+                android:layout_height="wrap_content">
+            </com.operatorsapp.view.EmeraldSpinner>
 
             <ImageView
                 android:id="@+id/toolbar_tutorial_iv"
@@ -193,24 +189,41 @@
                     android:background="@color/dark_indigo" />
 
                 <RelativeLayout
-                    android:layout_width="50dp"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/toolbar_technician_tv"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/toolbar_technician_button"
+                        android:layout_toEndOf="@+id/toolbar_technician_tv"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
                         android:src="@drawable/technician" />
+
 
 
                     <ImageView
                         android:id="@+id/toolbar_technician_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
+                        android:layout_toEndOf="@+id/toolbar_technician_button"
+                        android:layout_alignTop="@+id/toolbar_technician_button"
                         android:visibility="visible" />
+
 
                 </RelativeLayout>
 
