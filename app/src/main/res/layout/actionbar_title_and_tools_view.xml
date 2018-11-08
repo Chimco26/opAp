@@ -105,7 +105,8 @@
                  android:layout_marginEnd="31dp"
                  android:src="@drawable/settings_new_small" />
 
-             <ImageView
+
+            <ImageView
                  android:id="@+id/toolbar_notification_button"
                  android:layout_width="23dp"
                  android:layout_height="23dp"
@@ -113,6 +114,31 @@
                  android:layout_centerVertical="true"
                  android:layout_marginEnd="31dp"
                  android:src="@drawable/notifications" />
+
+            <FrameLayout
+                android:id="@+id/toolbar_notification_counter_circle"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/toolbar_notification_button"
+                android:layout_marginEnd="28dp"
+                android:background="@drawable/blue_circle"
+                android:layout_marginTop="2dp"
+                tools:visibility="invisible">
+
+                <TextView
+                    android:id="@+id/toolbar_notification_counter_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content" />
+
+
+            </FrameLayout>
 
             <!--<LinearLayout-->
             <!--android:id="@+id/lil_user_spinner"-->
@@ -123,21 +149,6 @@
             <!--android:layout_centerVertical="true"-->
             <!--android:layout_alignParentEnd="true"-->
             <!--android:padding="0.5dp">-->
-
-             <TextView
-                 android:id="@+id/toolbar_notification_indicator"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_alignParentEnd="true"
-                 android:textSize="12sp"
-                 android:text="1"
-                 android:textStyle="bold"
-                 android:textColor="@color/blue1"
-                 android:textAlignment="gravity"
-                 android:gravity="top"
-                 android:layout_alignTop="@+id/toolbar_notification_button"
-                 android:layout_marginEnd="31dp"/>
-
 
              <!--<LinearLayout-->
                  <!--android:id="@+id/lil_user_spinner"-->

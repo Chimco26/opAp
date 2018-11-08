@@ -28,13 +28,19 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
     private final OnNotificationResponseSelected mListener;
     private final Context mContext;
-    private ArrayList<Notification> mNotificationsList;
+    private ArrayList<Notification> mNotificationsList = new ArrayList<>();
     private int mFirstTodayPosition;
     private int mFirstYesterdayPosition;
 
     public NotificationHistoryAdapter(Context context, ArrayList<Notification> notificationHistory, OnNotificationResponseSelected listener) {
         this.mContext = context;
-        mNotificationsList = notificationHistory;
+
+        for (Notification item : notificationHistory) {
+            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                mNotificationsList.add(item);
+            }
+        }
+
         mListener = listener;
         mFirstTodayPosition = mNotificationsList.size();
         mFirstYesterdayPosition = mNotificationsList.size();
@@ -83,7 +89,21 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         if (date != null) {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
-            time = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+            String minutes;
+            String hours;
+
+            if (c.get(Calendar.MINUTE) < 10 ){
+                minutes = "0" + c.get(Calendar.MINUTE);
+            }else {
+                minutes = c.get(Calendar.MINUTE) + "";
+            }
+            if (c.get(Calendar.HOUR_OF_DAY) < 10 ){
+                hours = "0" + c.get(Calendar.HOUR_OF_DAY);
+            }else {
+                hours = c.get(Calendar.HOUR_OF_DAY) + "";
+            }
+
+            time = hours + ":" + minutes;
 
             if (position == mFirstTodayPosition){
                 holder.mDayTitleTv.setText(R.string.today);
@@ -123,7 +143,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.VISIBLE);
                 holder.mApproveBtn.setVisibility(View.VISIBLE);
                 holder.mDeclineBtn.setVisibility(View.VISIBLE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
                 break;
 
         }
@@ -136,40 +156,40 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         holder.mApproveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onNotificationResponse(position, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
             }
         });
 
         holder.mDeclineBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onNotificationResponse(position, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
             }
         });
 
         holder.mClarifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onNotificationResponse(position, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
             }
         });
 
-        switch (notification.getmResponseType()){
-
-            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
-                break;
-
-            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
-                break;
-
-            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
-                break;
-
-            default: holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));
-        }
+//        switch (notification.getmResponseType()){
+//
+//            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
+//                break;
+//
+//            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
+//                break;
+//
+//            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
+//                break;
+//
+//            default: holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.general_notificaion));
+//        }
     }
 
     @Override
@@ -203,6 +223,6 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     }
 
     public interface OnNotificationResponseSelected{
-        void onNotificationResponse(int position, int responseType);
+        void onNotificationResponse(int notificationId, int responseType);
     }
 }

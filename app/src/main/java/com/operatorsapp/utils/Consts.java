@@ -29,6 +29,7 @@ public class Consts {
     public static final int NOTIFICATION_TECHNICIAN_STATUS_DECLINED = 3;
     public static final String NOTIFICATION_BROADCAST_NAME = "NOTIFICATION_BROADCAST_NAME";
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+    public static final String NOTIFICATION_TECHNICIAN_NAME = "NOTIFICATION_TECHNICIAN_NAME";
 
     public enum NotificationType
     {

@@ -243,6 +243,21 @@
     <string name="activate_job_dialog_message">נבחרה פק"ע חדשה, האם להמשיך בהפעלה?</string>
     <string name="activate_job_dialog_title">הפעלת פק"ע חדשה</string>
     <string name="technician_list">רשימת טכנאים</string>
+    <string name="today">היום</string>
+    <string name="yesterday">אתמול</string>
+    <string name="call_technician_title">קריאה לטכנאי</string>
+    <string name="respond_notification_title">השב להודעה</string>
+    <string name="call_technician_text">צריך לתקן משהו</string>
+    <string name="called_technician">טכנאי הוזמן</string>
+    <string name="message_received">קריאה התקבלה</string>
+    <string name="message_declined">קריאה נדחתה</string>
+    <string name="no_notification_to_show">אין הודעות ב-24 שעות האחרונות</string>
+    <string name="alarms">התראות</string>
+    <string name="under_maintenance">תחת תחזוקה</string>
+    <string name="at_work">בטיפול</string>
+    <string name="work_comlpeted">טיפול הסתיים</string>
+    <string name="technician_time_out">שים לב, עברו 20 דקות מרגע שליחת הקריאה לטכנאי XXX  ולא התקבל מענה, באפשרותך לפתוח קריאה נוספת או לפנות לאחראי המשמרת.</string>
+    <string name="message_from">הודעה מ</string>
 
 
 </resources>

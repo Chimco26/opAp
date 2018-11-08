@@ -27,7 +27,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/message_icon"/>
+                android:src="@drawable/message_dark"/>
 
             <TextView
                 android:id="@+id/notification_item_tv_sender"
@@ -64,30 +64,30 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/notification_item_iv"
                 android:layout_below="@+id/notification_item_tv_body">
 
                 <Button
                     android:id="@+id/notification_item_approve_btn"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/v"/>
+                    android:background="@drawable/baseline_check_circle"/>
 
                 <Button
                     android:id="@+id/notification_item_decline_btn"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
-                    android:background="@drawable/x"/>
+                    android:background="@drawable/close_circle_outline"/>
 
                 <Button
                     android:id="@+id/notification_item_clarify_btn"
-                    android:layout_width="20dp"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/question_mark"/>
+                    android:background="@drawable/question_circle_outline"/>
 
             </LinearLayout>
 

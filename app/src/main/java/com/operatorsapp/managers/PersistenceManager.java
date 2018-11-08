@@ -33,6 +33,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+import retrofit2.http.PUT;
+
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
         JobsPersistenceManagerInterface, OperatorPersistenceManagerInterface, ReportFieldsForMachinePersistenceManagerInterface, ReportPersistenceManagerInterface, MachineDataPersistenceManagerInterface, ActiveJobsListForMachinePersistenceManagerInterface {
@@ -79,6 +81,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_NOTIFICATION_HISTORY = "pref.PREF_NOTIFICATION_HISTORY";
     private static final String PREF_TECHNICIAN_CALL_TIME = "pref.PREF_TECHNICIAN_CALL_TIME";
     private static final String PREF_SITE_NAME = "pref.PREF_SITE_NAME";
+    private static final String PREF_MACHINE_NAME = "pref.PREF_MACHINE_NAME";
 
 
     private static PersistenceManager msInstance;
@@ -460,8 +463,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     }
 
-    public void setNotificationHistory(ArrayList<Notification> notificationList) {
+    public void setNotificationHistory(final ArrayList<Notification> notificationList) {
 
+        final ArrayList<Notification> copyList = new ArrayList<>();
         if (notificationList != null && notificationList.size() > 0) {
             Collections.sort(notificationList, new Comparator<Notification>() {
                 @Override
@@ -472,12 +476,23 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
                     } else if (o1.getmNotificationID() < o2.getmNotificationID()) {
                         return 1;
                     } else {
+                        copyList.add(o2);
                         return 0;
                     }
                 }
             });
         }
 
+        if (copyList.size() > 0) {
+            for (Notification not : copyList) {
+                for (Notification not2 : notificationList) {
+                    if (not.getmNotificationID() == not2.getmNotificationID()) {
+                        notificationList.remove(not2);
+                        break;
+                    }
+                }
+            }
+        }
 
         SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
     }
@@ -527,5 +542,21 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public String getSiteName() {
         return SecurePreferences.getInstance().getString(PREF_SITE_NAME, "");
+    }
+
+    public void tryToUpdateToken(String status) {
+        SecurePreferences.getInstance().setString("tryToUpdateToken", status + "  time: " + new Date().getTime());
+    }
+
+    public String getTimeOfUpdateToken() {
+        return SecurePreferences.getInstance().getString("tryToUpdateToken", "?");
+    }
+
+    public void setMachineName(String mMachineName) {
+        SecurePreferences.getInstance().setString(PREF_MACHINE_NAME, mMachineName);
+    }
+
+    public String getMachineName(){
+        return SecurePreferences.getInstance().getString(PREF_MACHINE_NAME, "");
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
@@ -38,11 +41,17 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.NetworkAvailable;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
@@ -237,7 +246,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                     saveAlarmsCheckedLocaly();
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
-                    mSettingsInterface.onRefreshApplicationRequest();
+                    sendTokenWithSessionIdToServer();
                 }
                 break;
             }
@@ -256,6 +265,34 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
         }
+    }
+
+    private void sendTokenWithSessionIdToServer() {
+        final PersistenceManager pm = PersistenceManager.getInstance();
+        final String id = Settings.Secure.getString(getActivity().getContentResolver(),Settings.Secure.ANDROID_ID);
+        PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                if (response != null && response.body() != null && response.isSuccessful()) {
+                    Log.d(LOG_TAG, "token sent");
+                    pm.tryToUpdateToken("success + android id: " + id);
+                    mSettingsInterface.onRefreshApplicationRequest();
+
+                }else {
+                    pm.tryToUpdateToken("failed + android id: " + id);
+                    Log.d(LOG_TAG, "token failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                pm.tryToUpdateToken("failed + android id: " + id);
+                pm.setNeedUpdateToken(true);
+                Log.d(LOG_TAG, "token failed");
+            }
+        });
+
     }
 
 

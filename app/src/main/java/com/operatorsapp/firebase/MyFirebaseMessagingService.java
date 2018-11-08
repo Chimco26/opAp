@@ -1,10 +1,15 @@
 package com.operatorsapp.firebase;
 
 import android.content.Intent;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
@@ -38,7 +43,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         if (token != null && token != "") {
             sendRegistrationToServer(token);
         }else {
-            FirebaseInstanceId.getInstance().getInstanceId();
+            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w(LOG_TAG, "getInstanceId failed", task.getException());
+                        return;
+                    }
+
+                    sendRegistrationToServer(task.getResult().getToken());
+                }
+            });
         }
     }
 
@@ -53,14 +68,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         final boolean retry[] = {true};
 
         if (machineId > 0 && siteUrl.length() > 0) {
-            PostNotificationTokenRequest request = new PostNotificationTokenRequest(sessionID, machineId, token);
+            final String id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+            PostNotificationTokenRequest request = new PostNotificationTokenRequest(sessionID, machineId, token, id);
             NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
                 @Override
                 public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
                     if (response != null && response.body() != null && response.isSuccessful()) {
                         Log.d(LOG_TAG, "token sent");
                         pm.setNeedUpdateToken(false);
+                        pm.tryToUpdateToken("success + android id: " + id);
                     }else {
+                        pm.tryToUpdateToken("failed + android id: " + id);
                         pm.setNeedUpdateToken(true);
                         Log.d(LOG_TAG, "token failed");
                         if (retry[0]){
@@ -72,6 +90,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
                 @Override
                 public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                    pm.tryToUpdateToken("failed + android id: " + id);
                     pm.setNeedUpdateToken(true);
                     Log.d(LOG_TAG, "token failed");
                     if (retry[0]){
@@ -128,26 +147,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             int responseType = Integer.parseInt(data.get("ResponseType"));
             int id = Integer.parseInt(data.get("ID"));
             String time = TimeUtils.getStringNoTFormatForNotification(data.get("ResponseDate"));
+            String targetName = data.get("TargetUserName");
+            String sourceName = data.get("SourceUserName");
 
-            Notification notification = new Notification(remoteMessage.getNotification().getBody(),
-                    data.get("SourceUserName"),
+            Notification notification = new Notification(data.get("text"),
+                    data.get("title"),
+                    sourceName,
                     time,
                     responseType,
                     "",
-                    data.get("TargetUserName"),
-                    id);
+                    targetName,
+                    id,
+                    notificationType);
 
             ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
             notificationList.add(notification);
             PersistenceManager.getInstance().setNotificationHistory(notificationList);
-            notifyFragment(notificationType, responseType, id);
+            notifyFragment(notificationType, responseType, id, sourceName);
         }catch (Exception e){
 
         }
     }
 
-    public void notifyFragment(int type, int responseType, int id){
+    public void notifyFragment(int type, int responseType, int id, String sourceName){
         Intent intent = new Intent(Consts.NOTIFICATION_BROADCAST_NAME);
         intent.putExtra(Consts.NOTIFICATION_TYPE, type);
         intent.putExtra(Consts.NOTIFICATION_ID, id);
@@ -160,6 +183,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             case Consts.NOTIFICATION_TYPE_TECHNICIAN:
 
                 intent.putExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, responseType);
+                intent.putExtra(Consts.NOTIFICATION_TECHNICIAN_NAME, sourceName);
                 break;
 
         }

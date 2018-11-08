@@ -252,11 +252,20 @@
     <string name="call_technician_title">Technician Call</string>
     <string name="respond_notification_title">Respond to Notification</string>
     <string name="call_technician_text">Need you to fix something</string>
-    <string name="called_technician">called technician</string>
-    <string name="message_received">message received</string>
-    <string name="message_declined">message declined</string>
+    <string name="called_technician">Called technician</string>
+    <string name="message_received">Message received</string>
+    <string name="message_declined">Message declined</string>
     <string name="no_notification_to_show">No Notifications to Show From Past 24 hours</string>
     <string name="alarms">Alarms</string>
+    <string name="under_maintenance">under maintenance</string>
+    <string name="at_work">At work</string>
+    <string name="work_comlpeted">Work completed</string>
+    <string name="technician_time_out">Attention: It’s been 20 minutes since you called for a technician with no response.  Reopen a call or contract your supervisor.</string>
+    <string name="message_from">Message from: </string>
+    <string name="operator">Operator</string>
+    <string name="sent_service_call">sent a service call from machine</string>
+    <string name="service_call_made">Service call has been sent to you from machine</string>
+    <string name="call_for_technician_unresponsive">Your call for technician was unresponsive and therefore cancelled</string>
 
 
 </resources>

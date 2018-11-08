@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -138,7 +139,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final int ANIM_DURATION_MILLIS = 200;
     public static final int TYPE_ALERT = 20;
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
-    private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 20;
+    private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 5;
+    private static final long ONE_HOUR = 1000 * 60 * 60;
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -199,7 +201,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private int mLenoxMachineLyWidth;
     private View mLenoxMachineLy;
     private ArrayList<Machine> mMachines;
-    private TextView mNotificationIndicatorIv;
     private ImageView mTechnicianIndicatorIv;
     private TextView mTechnicianIndicatorTv;
     private BroadcastReceiver mNotificationsReceiver = null;
@@ -207,6 +208,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean isShowAlarms;
     private Event mFirstSeletedEvent;
     private CheckBox mShowAlarmCheckBox;
+    private FrameLayout mNotificationIndicatorCircleFl;
+    private TextView mNotificationIndicatorNumTv;
+    private Dialog mPopUpDialog;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -463,10 +467,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onReceive(Context context, Intent intent) {
 
                 int type = intent.getIntExtra(Consts.NOTIFICATION_TYPE, 0);
+                String technicianName = intent.getStringExtra(Consts.NOTIFICATION_TECHNICIAN_NAME);
 
                 if (type == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                     int status = intent.getIntExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, 0);
                     mHandlerTechnicianCall.removeCallbacksAndMessages(null);
+                    long delay = 0;
                     switch (status) {
 //                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_CALLED:
 //                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
@@ -478,24 +484,47 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.recieved));
-                            mTechnicianIndicatorTv.setText(R.string.message_received);
+                            mTechnicianIndicatorTv.setText(getString(R.string.message_received) + "\n" + technicianName);
+                            delay = ONE_HOUR;
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.decline));
-                            mTechnicianIndicatorTv.setText(R.string.message_declined);
+                            mTechnicianIndicatorTv.setText(getString(R.string.message_declined) + "\n" + technicianName);
+                            PersistenceManager.getInstance().setTechnicianCallTime(0);
+                            delay = 1000 * 60 * 2;
                             break;
+
+
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.work));
+                            mTechnicianIndicatorTv.setText(getString(R.string.at_work) + "\n" + technicianName);
+                            delay = ONE_HOUR;
+                            break;
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.done));
+                            mTechnicianIndicatorTv.setText(getString(R.string.work_comlpeted) + "\n" + technicianName);
+                            PersistenceManager.getInstance().setTechnicianCallTime(0);
+                            delay = 1000 * 60 * 2;
+
+
+
                     }
 
                     mHandlerTechnicianCall.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            PersistenceManager.getInstance().setTechnicianCallTime(0);
                             mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
                             mTechnicianIndicatorIv.setBackground(null);
                             mTechnicianIndicatorTv.setText("");
                         }
-                    }, 1000 * 60 * 5);
+                    }, delay);
 
                 } else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 
@@ -506,7 +535,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         };
     }
 
-    private void openNotificationPopUp(int notificationId) {
+    private void openNotificationPopUp(final int notificationId) {
 
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
         if (notificationList != null && notificationList.size() > 0) {
@@ -521,58 +550,66 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             if (notification != null) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.setContentView(R.layout.notification_recycler_item);
-                dialog.setCanceledOnTouchOutside(true);
+                if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+                    mPopUpDialog.dismiss();
+                }
+                mPopUpDialog = new Dialog(getActivity());
+                mPopUpDialog.setContentView(R.layout.notification_popup);
+                mPopUpDialog.setCanceledOnTouchOutside(true);
 
-                Window window = dialog.getWindow();
+                Window window = mPopUpDialog.getWindow();
                 WindowManager.LayoutParams wlp = window.getAttributes();
 
                 wlp.gravity = Gravity.TOP;
-                wlp.y = mToolBarView.getHeight();
-                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wlp);
+                wlp.y = 0;
                 Point point = new Point(1, 1);
                 ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
-                dialog.getWindow().setLayout((point.x * 2) / 3, WindowManager.LayoutParams.WRAP_CONTENT);
+                window.setLayout((point.x * 1) / 2, WindowManager.LayoutParams.WRAP_CONTENT);
+                window.setAttributes(wlp);
+                mPopUpDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-                ImageView btnClose = dialog.findViewById(R.id.notification_item_iv);
-                Button btnApprove = dialog.findViewById(R.id.notification_item_approve_btn);
-                Button btnDecline = dialog.findViewById(R.id.notification_item_decline_btn);
-                Button btnClarify = dialog.findViewById(R.id.notification_item_clarify_btn);
-                TextView tvSender = dialog.findViewById(R.id.notification_item_tv_sender);
-                TextView tvBody = dialog.findViewById(R.id.notification_item_tv_body);
+                ImageView btnClose = mPopUpDialog.findViewById(R.id.notification_popup_iv);
+                ImageView icon = mPopUpDialog.findViewById(R.id.notification_popup_icon_iv);
+                Button btnApprove = mPopUpDialog.findViewById(R.id.notification_popup_approve_btn);
+                Button btnDecline = mPopUpDialog.findViewById(R.id.notification_popup_decline_btn);
+                Button btnClarify = mPopUpDialog.findViewById(R.id.notification_popup_clarify_btn);
+                TextView tvSender = mPopUpDialog.findViewById(R.id.notification_popup_tv_sender);
+                TextView tvBody = mPopUpDialog.findViewById(R.id.notification_popup_tv_body);
 
                 if (notification.getmResponseType() != 0){
                     btnApprove.setVisibility(View.GONE);
                     btnClarify.setVisibility(View.GONE);
                     btnDecline.setVisibility(View.GONE);
                 }
-                btnClose.setImageDrawable(getResources().getDrawable(R.drawable.close));
+
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
+                }
+
                 tvBody.setText(notification.getmBody());
-                tvSender.setText(notification.getmSender());
+                tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (v.getId()) {
-                            case R.id.notification_item_iv:
-                                dialog.dismiss();
+                            case R.id.notification_popup_iv:
+                                mPopUpDialog.dismiss();
                                 break;
 
-                            case R.id.notification_item_approve_btn:
-                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
-                                dialog.dismiss();
+                            case R.id.notification_popup_approve_btn:
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                                mPopUpDialog.dismiss();
                                 break;
 
-                            case R.id.notification_item_decline_btn:
-                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
-                                dialog.dismiss();
+                            case R.id.notification_popup_decline_btn:
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                                mPopUpDialog.dismiss();
                                 break;
 
-                            case R.id.notification_item_clarify_btn:
-                                sendNotificationResponse(notificationList.size() - 1, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
-                                dialog.dismiss();
+                            case R.id.notification_popup_clarify_btn:
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                                mPopUpDialog.dismiss();
                                 break;
                         }
                     }
@@ -583,7 +620,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 btnClarify.setOnClickListener(thisDialogListener);
                 btnClose.setOnClickListener(thisDialogListener);
 
-                dialog.show();
+                mPopUpDialog.show();
             }
         }
     }
@@ -901,7 +938,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIndicatorIv = mToolBarView.findViewById(R.id.toolbar_technician_indicator);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
-            mNotificationIndicatorIv = mToolBarView.findViewById(R.id.toolbar_notification_indicator);
+            mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
+            mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
 
             setNotificationNeedResponse();
             setTechnicianCallStatus();
@@ -924,7 +962,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openTechniciansList();
+                    long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
+                    long now = new Date().getTime();
+                    if (!(technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE))) {
+                        openTechniciansList();
+                    }
                 }
             });
 
@@ -1071,7 +1113,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             jobsSpinner.setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_production_status).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.toolbar_notification_indicator).setVisibility(View.GONE);
+            mToolBarView.findViewById(R.id.toolbar_notification_counter_circle).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
             View userIcon = mToolBarView.findViewById(R.id.settings_button);
             RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) userIcon.getLayoutParams();
@@ -1092,6 +1134,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
             mTechnicianIndicatorTv.setText(R.string.called_technician);
 
+
             mHandlerTechnicianCall.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -1100,7 +1143,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mTechnicianIndicatorIv.setBackground(null);
                         mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
                         mTechnicianIndicatorTv.setText("");
-                        ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician was canceled", CroutonCreator.CroutonType.ALERT_DIALOG);
+
+                        final AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getActivity());
+                        builder.setCancelable(true);
+                        builder.setTitle(getString(R.string.call_technician_title))
+                                .setMessage(getString(R.string.call_for_technician_unresponsive))
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(R.drawable.technician_dark)
+                                .show();
                     }
                 }
             }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
@@ -1121,11 +1176,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         if (counter > 0) {
-            mNotificationIndicatorIv.setVisibility(View.VISIBLE);
-            mNotificationIndicatorIv.setText(String.format("%d", counter));
+            mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
+            mNotificationIndicatorNumTv.setText(counter + "");
         } else {
-            mNotificationIndicatorIv.setVisibility(View.INVISIBLE);
-            mNotificationIndicatorIv.setText("");
+            mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
+            mNotificationIndicatorNumTv.setText(counter + "");
         }
     }
 
@@ -1162,7 +1217,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 PersistenceManager pm = PersistenceManager.getInstance();
-                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), getString(R.string.call_technician_title), techniciansList.get(position).getID(), getString(R.string.call_technician_text), pm.getUserName(), techniciansList.get(position).getEName());
+
+                String body;
+                String title = getString(R.string.operator) + " ";
+                if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
+                    title +=  pm.getOperatorName();
+                    body = getString(R.string.operator) + " " + pm.getOperatorName() + " " + getString(R.string.sent_service_call) + " " + pm.getMachineName();
+                }else {
+                    body = getString(R.string.service_call_made) + " " + pm.getMachineName();
+                    title += pm.getUserName();
+                }
+
+                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, techniciansList.get(position).getID(), body, pm.getUserName(), techniciansList.get(position).getEName());
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
                     public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
@@ -1188,6 +1254,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void openNotificationsList() {
 
+        String st = PersistenceManager.getInstance().getNotificationToken();
+        st = PersistenceManager.getInstance().getTimeOfUpdateToken();
+
         final Dialog dialog = new Dialog(getActivity());
         dialog.setCanceledOnTouchOutside(true);
 
@@ -1209,9 +1278,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notificationList.size() > 0) {
             final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
                 @Override
-                public void onNotificationResponse(int position, int responseType) {
+                public void onNotificationResponse(int notificationId, int responseType) {
 
-                    sendNotificationResponse(position, responseType);
+                    sendNotificationResponse(notificationId, responseType);
                     dialog.dismiss();
 
                 }
@@ -1242,49 +1311,56 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         dialog.show();
     }
 
-    private void sendNotificationResponse(final int position, final int responseType) {
+    private void sendNotificationResponse(final int notificationId, final int responseType) {
 
         final PersistenceManager pm = PersistenceManager.getInstance();
-        final Notification notification = pm.getNotificationHistory().get(position);
-        RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
-                getResources().getString(R.string.respond_notification_title),
-                notification.getmBody(),
-                pm.getMachineId() + "",
-                notification.getmNotificationID() + "",
-                responseType,
-                Consts.NOTIFICATION_TYPE_FROM_WEB,
-                Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
-                pm.getOperatorId(),
-                pm.getOperatorName(),
-                notification.getmSender());
-
-        ProgressDialogManager.show(getActivity());
-        NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
-            @Override
-            public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
-                Toast.makeText(getContext(), "onResponse", Toast.LENGTH_SHORT).show();
-
-                ArrayList<Notification> nList = pm.getNotificationHistory();
-                Notification notif = nList.get(position);
-                notif.setmResponseType(responseType);
-                nList.remove(position);
-                nList.add(position, notif);
-                pm.setNotificationHistory(nList);
-                setNotificationNeedResponse();
-                if (ProgressDialogManager.isShowing()) {
-                    ProgressDialogManager.dismiss();
-                }
+        final Notification[] notification = new Notification[1];
+        for (Notification item : pm.getNotificationHistory()) {
+            if (item.getmNotificationID() == notificationId) {
+                notification[0] = item;
+                break;
             }
+        }
 
-            @Override
-            public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
-                if (ProgressDialogManager.isShowing()) {
-                    ProgressDialogManager.dismiss();
+        if (notification[0] != null) {
+
+            RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
+                    getResources().getString(R.string.respond_notification_title),
+                    notification[0].getmBody(),
+                    pm.getMachineId() + "",
+                    notification[0].getmNotificationID() + "",
+                    responseType,
+                    Consts.NOTIFICATION_TYPE_FROM_WEB,
+                    Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
+                    pm.getOperatorId(),
+                    pm.getOperatorName(),
+                    notification[0].getmSender());
+
+            ProgressDialogManager.show(getActivity());
+            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
+                @Override
+                public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                    Toast.makeText(getContext(), "onResponse", Toast.LENGTH_SHORT).show();
+
+                    ArrayList<Notification> nList = pm.getNotificationHistory();
+                    notification[0].setmResponseType(responseType);
+                    nList.add(notification[0]);
+                    pm.setNotificationHistory(nList);
+                    setNotificationNeedResponse();
+                    if (ProgressDialogManager.isShowing()) {
+                        ProgressDialogManager.dismiss();
+                    }
                 }
-            }
-        });
 
+                @Override
+                public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                    Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
+                    if (ProgressDialogManager.isShowing()) {
+                        ProgressDialogManager.dismiss();
+                    }
+                }
+            });
+        }
     }
 
     public void setupProductionStatusSpinner() {

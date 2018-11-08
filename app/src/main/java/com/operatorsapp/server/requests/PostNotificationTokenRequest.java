@@ -19,13 +19,17 @@ public class PostNotificationTokenRequest {
     @SerializedName("Token")
     private String token;
 
+    @SerializedName("DeviceID")
+    private String deviceId;
+
     @SerializedName("ApplicationCode")
     private int mAppCode;
 
-    public PostNotificationTokenRequest(String sessionID, int machineId, String token) {
+    public PostNotificationTokenRequest(String sessionID, int machineId, String token, String deviceId) {
         this.mAppCode = APPLICATION_CODE_FOR_NOTIFICATIONS;
         this.sessionID = sessionID;
         this.machineId = machineId;
         this.token = token;
+        this.deviceId = deviceId;
     }
 }

@@ -49,6 +49,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private int mMachineId;
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private boolean canGoNext = false;
+    private String mMachineName;
 
     public static SelectMachineFragment newInstance(ArrayList machinesList)
     {
@@ -133,7 +134,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             {
                 if(canGoNext)
                 {
+
                     PersistenceManager.getInstance().setMachineId(mMachineId);
+                    PersistenceManager.getInstance().setMachineName(mMachineName);
+                    PersistenceManager.getInstance().setSelectedMachine(true);
+                    PersistenceManager.getInstance().setNeedUpdateToken(true);
                     mNavigationCallback.goToDashboardActivity(mMachineId, null);
                 }
                 return true;
@@ -157,7 +162,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 if(mGoButton.isEnabled())
                 {
                     PersistenceManager.getInstance().setMachineId(mMachineId);
+                    PersistenceManager.getInstance().setMachineName(mMachineName);
                     PersistenceManager.getInstance().setSelectedMachine(true);
+                    PersistenceManager.getInstance().setNeedUpdateToken(true);
                     mNavigationCallback.goToDashboardActivity(mMachineId, null);
                 }
             }
@@ -208,8 +215,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         if (mAutoCompleteAdapter != null && mAutoCompleteAdapter.getItem(position) != null) {
             mMachineId = mAutoCompleteAdapter.getItem(position).getId();
             String nameByLang = OperatorApplication.isEnglishLang() ? mAutoCompleteAdapter.getItem(position).getMachineEName() : mAutoCompleteAdapter.getItem(position).getMachineLName();
-            String machineName = nameByLang == null ? "" : nameByLang;
-            mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(machineName));
+            mMachineName = nameByLang == null ? "" : nameByLang;
+            mSearchField.setText(new StringBuilder(mMachineId).append(" - ").append(mMachineName));
             mSearchField.setSelection(mSearchField.length());
 
             canGoNext = true;

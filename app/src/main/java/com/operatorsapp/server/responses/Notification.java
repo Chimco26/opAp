@@ -26,17 +26,33 @@ public class Notification {
     @SerializedName("ResponseDate")
     private String mResponseDate;
 
+    @SerializedName("Title")
+    private String mTitle;
+
+    @SerializedName("NotificationType")
+    private int mNotificationType;
+
     @SerializedName("ID")
     private int mNotificationID;
 
-    public Notification(String mBody, String mSender, String mSentTime, int mResponseType, String mResponseDate, String mTargetName, int mNotificationID) {
+    public Notification(String mBody, String mTitle,  String mSender, String mSentTime, int mResponseType, String mResponseDate, String mTargetName, int mNotificationID, int mNotificationType) {
         this.mBody = mBody;
+        this.mTitle = mTitle;
         this.mSender = mSender;
         this.mSentTime = mSentTime;
         this.mResponseType = mResponseType;
         this.mResponseDate = mResponseDate;
         this.mTargetName = mTargetName;
         this.mNotificationID = mNotificationID;
+        this.mNotificationType= mNotificationType;
+    }
+
+    public int getmNotificationType() {
+        return mNotificationType;
+    }
+
+    public void setmNotificationType(int mNotificationType) {
+        this.mNotificationType = mNotificationType;
     }
 
     public String getmBody() {
