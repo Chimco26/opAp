@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -28,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.example.oppapplog.OppAppLogger;
@@ -44,16 +43,10 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.NetworkAvailable;
-import com.ravtech.david.sqlcore.DatabaseHelper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import com.operatorsapp.utils.SaveAlarmsHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
 {
@@ -243,7 +236,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                         getActivity().onBackPressed();
                     }
                 } else {
-                    saveAlarmsCheckedLocaly();
+                    SaveAlarmsHelper.saveAlarmsCheckedLocaly(getActivity());
                     PersistenceManager.getInstance().setCurrentLang(mSelectedLanguageCode);
                     PersistenceManager.getInstance().setCurrentLanguageName(mSelectedLanguageName);
                     sendTokenWithSessionIdToServer();
@@ -293,48 +286,6 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
         });
 
-    }
-
-
-    private void saveAlarmsCheckedLocaly() {
-        //because alarms status not saved in sever side,
-        // the goal is to clear the database on change language and load it completely on reopen (to get events true language)
-        //and update the alarms if checked
-
-        PersistenceManager persistenceManager = PersistenceManager.getInstance();
-
-        HashMap<Integer, ArrayList<Integer>> checkedAlarmHashMap = persistenceManager.getCheckedAlarms();
-
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
-
-        DatabaseHelper databaseHelper =DatabaseHelper.getInstance(getActivity());
-
-        Cursor tempCursor = databaseHelper.getCursorOrderByTime();
-
-        ArrayList<Integer> alarmList = checkedAlarmHashMap.get(persistenceManager.getMachineId());
-
-        if (alarmList == null){
-            alarmList = new ArrayList<>();
-        }
-
-        alarmList.clear();
-
-        for (tempCursor.moveToFirst(); !tempCursor.isAfterLast(); tempCursor.moveToNext()) {
-
-            if (tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_TREATED)) == 1) {
-
-                alarmList.add(tempCursor.getInt(tempCursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)));
-            }
-
-        }
-
-        tempCursor.close();
-
-        checkedAlarmHashMap.remove(persistenceManager.getMachineId());
-
-        checkedAlarmHashMap.put(persistenceManager.getMachineId(), alarmList);
-
-        PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmHashMap);
     }
 
 

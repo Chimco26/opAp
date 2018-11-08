@@ -41,7 +41,7 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<String> {
             if (mCurrentProduction == null || mCurrentProduction.equals("")) {
                 spinnerImage.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
             } else {
-                setIcon(mCurrentProduction, false, spinnerImage);
+                setIcon(mCurrentProduction, true, spinnerImage);
             }
         }
         return row;
@@ -62,11 +62,11 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<String> {
             if (mCurrentProduction.equals(item)) {
                 name.setTextColor(mContext.getResources().getColor(R.color.blue1));
                 setIcon(item, true, (ImageView) row.findViewById(R.id.SPID_image));
-                ((ImageView) row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
+                (row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
             } else {
                 name.setTextColor(mContext.getResources().getColor(R.color.white));
                 setIcon(item, false, (ImageView) row.findViewById(R.id.SPID_image));
-                ((ImageView) row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
+                (row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
             }
         }
         return row;

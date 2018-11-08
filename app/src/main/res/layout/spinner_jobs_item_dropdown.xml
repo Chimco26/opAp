@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/SJID_texte"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical"
         android:textSize="20sp"

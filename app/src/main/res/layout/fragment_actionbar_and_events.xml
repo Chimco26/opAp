@@ -12,6 +12,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
         <LinearLayout
             android:id="@+id/status_layout"
             android:layout_width="match_parent"
@@ -165,7 +168,13 @@
 
 
         </LinearLayout>
-
+            <View
+                android:id="@+id/FAAE_status_black_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_filter"
+                android:visibility="gone"/>
+    </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

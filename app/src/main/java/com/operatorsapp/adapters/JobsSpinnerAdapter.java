@@ -38,7 +38,10 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            row = inflater.inflate(R.layout.spinner_jobs_item, parent, false);
+            row = inflater.inflate(R.layout.spinner_job_item, parent, false);
+            TextView rowName = row.findViewById(R.id.spinner_job_item_name);
+            rowName.setTextSize(20);
+
         }
         return row;
     }
@@ -94,9 +97,9 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
                 break;
             case ADD_REJECTS:
                 if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.rejects));
-                } else {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.rejects_blue));
+                } else {
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.rejects));
                 }
                 break;
             case ACTIVATE_JOB:
@@ -111,6 +114,6 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
 
     public void updateTitle(String newTitle) {
         mCurrentProduction = newTitle;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 }
