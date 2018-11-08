@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:popupBackground="@android:color/transparent">
 
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="30dp"
         android:textSize="18sp"

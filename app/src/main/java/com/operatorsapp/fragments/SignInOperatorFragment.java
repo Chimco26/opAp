@@ -35,7 +35,6 @@ import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
-import com.zemingo.logrecorder.ZLogger;
 
 public class SignInOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
@@ -75,7 +74,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_operator_sign_in, container, false);
         view = rootView;
-        setActionBar();
+//        setActionBar();
         return rootView;
     }
 
@@ -189,7 +188,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            setActionBar();
+//            setActionBar();
         }
     }
 

@@ -482,12 +482,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.recieved));
                             mTechnicianIndicatorTv.setText(R.string.message_received);
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+                            mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.decline));
                             mTechnicianIndicatorTv.setText(R.string.message_declined);
                             break;
@@ -496,7 +498,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mHandlerTechnicianCall.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+                            mTechnicianIndicatorIv.setVisibility(View.GONE);
+                            mTechnicianIndicatorTv.setVisibility(View.GONE);
                             mTechnicianIndicatorIv.setBackground(null);
                             mTechnicianIndicatorTv.setText("");
                         }
@@ -851,7 +854,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobs);
             mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
             mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
-//            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
 
             mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -897,7 +900,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mToolBarView = inflator.inflate(R.layout.actionbar_title_and_tools_view, null);
 
             ImageView notificationIv = mToolBarView.findViewById(R.id.toolbar_notification_button);
-            ImageView technicianIv = mToolBarView.findViewById(R.id.toolbar_technician_button);
+            View technicianIv = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIndicatorIv = mToolBarView.findViewById(R.id.toolbar_technician_indicator);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
@@ -945,13 +948,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mJobActionsSpinnerItems.add(new JobActionsSpinnerItem(mApproveItemID, getString(R.string.approve_first_item)));
 
                 mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
-//                mJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                jobsSpinner.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             }
 
             jobsSpinner.setAdapter(mJobsSpinnerAdapter);
 
-            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
 
             jobsSpinner.setSpinnerEventsListener(this);
 
@@ -963,22 +964,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         OppAppLogger.getInstance().w(LOG_TAG, "missing machine status data in job spinner");
                         return;
                     }
-                    mJobsSpinnerAdapter.updateTitle(mJobActionsSpinnerItems.get(position).getName());
+                    mJobsSpinnerAdapter.updateSelectedId(mJobActionsSpinnerItems.get(position).getUniqueID());
                     if (mJobActionsSpinnerItems.get(position).isEnabled()) {
                         switch (position) {
                             case 0: {
-                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                OppAppLogger.getInstance().d(LOG_TAG, "New Job");
+                                if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
+                                    mListener.onJobActionItemClick();
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(new JobsFragment(), true, true);
                                 }
                                 break;
                             }
                             case 1: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 }
                                 break;
                             }
@@ -992,18 +994,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 3: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportInventoryFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 }
                                 break;
                             }
                             case 4: {
-                                OppAppLogger.getInstance().d(LOG_TAG, "New Job");
-                                if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
-                                    mListener.onJobActionItemClick();
+                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(new JobsFragment(), true, true);
+                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
                                 }
                                 break;
                             }
@@ -1070,7 +1071,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return LayoutInflater.from(getActivity());
     }
 
-    public void initLenoxView(ImageView notificationIv, ImageView technicianIv, ImageView
+    public void initLenoxView(ImageView notificationIv, View technicianIv, ImageView
             tutorialIv, EmeraldSpinner jobsSpinner) {
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             notificationIv.setVisibility(View.INVISIBLE);
@@ -1098,6 +1099,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
+            mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
             mTechnicianIndicatorTv.setText(R.string.called_technician);
 
             mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1106,7 +1108,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (PersistenceManager.getInstance().getTechnicianCallTime() > 0) {
                         PersistenceManager.getInstance().setTechnicianCallTime(0);
                         mTechnicianIndicatorIv.setBackground(null);
-                        mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+                        mTechnicianIndicatorIv.setVisibility(View.GONE);
+                        mTechnicianIndicatorTv.setVisibility(View.GONE);
                         mTechnicianIndicatorTv.setText("");
                         ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician was canceled", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
@@ -1114,7 +1117,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
         } else {
             mTechnicianIndicatorIv.setBackground(null);
-            mTechnicianIndicatorIv.setVisibility(View.INVISIBLE);
+            mTechnicianIndicatorIv.setVisibility(View.GONE);
+            mTechnicianIndicatorTv.setVisibility(View.GONE);
             mTechnicianIndicatorTv.setText("");
         }
 
@@ -1151,11 +1155,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.END;
-        if (!OperatorApplication.isEnglishLang()) {
-            wlp.x = Gravity.END;
-        }
-        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        int[] location = new int[2];
+        mTechnicianIndicatorIv.getLocationOnScreen(location);
+        wlp.x = location[0];
+        wlp.y = location[1];
+        wlp.height = 500;
+        wlp.gravity = Gravity.START | Gravity.TOP;
         window.setAttributes(wlp);
 
         final ListView technicianLv = dialog.findViewById(R.id.dialog_list_scrollview);
@@ -1306,28 +1311,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
         final TextView textview = mToolBarView.findViewById(R.id.toolbar_production_text);
         ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
-        String[] items;
-        String newTitle = "";
         List<PackageTypes> statusList = new ArrayList<>();
         if (reportForMachine != null && reportForMachine.getProductionStatus() != null) {
-
             statusList = reportForMachine.getProductionStatus();
-            items = new String[statusList.size()];
             for (int i = 0; i < statusList.size(); i++) {
-                items[i] = OperatorApplication.isEnglishLang() ? statusList.get(i).getEName() : statusList.get(i).getLName();
                 if (statusList.get(i).getId() == mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID()) {
                     selected = i;
                 }
             }
-            newTitle = OperatorApplication.isEnglishLang() ? statusList.get(selected).getEName() : statusList.get(selected).getLName();
-        } else {
-            items = new String[]{""};
         }
 
-        textview.setText(newTitle);
-        final ArrayAdapter<String> productionStatusSpinnerAdapter = new ProductionSpinnerAdapter(getActivity(), R.layout.spinner_production_item, items, newTitle);
+        textview.setText(OperatorApplication.isEnglishLang() ? statusList.get(selected).getEName() : statusList.get(selected).getLName());
+        final ArrayAdapter<PackageTypes> productionStatusSpinnerAdapter = new ProductionSpinnerAdapter(getActivity(), R.layout.spinner_production_item, statusList, selected);
         productionStatusSpinner.setAdapter(productionStatusSpinnerAdapter);
-        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+        productionStatusSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         final List<PackageTypes> finalStatusList = statusList;
         productionStatusSpinner.setSpinnerEventsListener(this);
@@ -1384,7 +1381,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             final ArrayAdapter<String> operatorSpinnerAdapter = new OperatorSpinnerAdapter(getActivity(), R.layout.spinner_operator_item, mOperatorsSpinnerArray.toArray(new String[mOperatorsSpinnerArray.size()]), PersistenceManager.getInstance().getOperatorName());
             operatorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             operatorsSpinner.setAdapter(operatorSpinnerAdapter);
-            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+            operatorsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+            operatorsSpinner.setSpinnerEventsListener(this);
             operatorsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -2124,9 +2122,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
         final boolean[] isFirst = {true};
 
-//        if (getActivity() != null) {
-//            mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-//        }
+        if (getActivity() != null) {
+            mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+        }
 
         mLanguagesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

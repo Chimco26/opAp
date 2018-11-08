@@ -15,21 +15,16 @@ import com.operatorsapp.model.JobActionsSpinnerItem;
 import java.util.List;
 
 public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
-    private static final String END_SETUP = "End Setup";
-    private static final String REPORT_PRODUCTION = "Report Production";
-    private static final String CHANGE_UNIT_CYCLE = "Change Units in Cycle\n";
-    private static final String ADD_REJECTS = "Add Rejects";
-    private static final String ACTIVATE_JOB = "Activate Job";
 
     private Activity mContext;
     private List<JobActionsSpinnerItem> mSpinnerItems;
-    private String mCurrentProduction;
+    private int mCurrentProductionId;
 
     public JobsSpinnerAdapter(Activity context, int resource, List<JobActionsSpinnerItem> operators) {
         super(context, resource, operators);
         mSpinnerItems = operators;
         mContext = context;
-        mCurrentProduction = mSpinnerItems.get(0).getName();
+        mCurrentProductionId = mSpinnerItems.get(0).getUniqueID();
     }
 
     @NonNull
@@ -53,67 +48,70 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_jobs_item_dropdown, parent, false);
         }
-        String item = mSpinnerItems.get(position).getName();
-        if (item != null) {
-            TextView name = row.findViewById(R.id.SJID_texte);
-            name.setText(item);
-            setIcon(item, false, (ImageView) row.findViewById(R.id.SJID_image));
-            if (mCurrentProduction.equals(item)) {
-                name.setTextColor(mContext.getResources().getColor(R.color.blue1));
-                setIcon(item, true, (ImageView) row.findViewById(R.id.SJID_image));
-                ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
-            } else {
-                name.setTextColor(mContext.getResources().getColor(R.color.white));
-                setIcon(item, false, (ImageView) row.findViewById(R.id.SJID_image));
-                ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
-            }
+        TextView name = row.findViewById(R.id.SJID_texte);
+        name.setText(mSpinnerItems.get(position).getName());
+        setIcon(mSpinnerItems.get(position).getUniqueID(), false, (ImageView) row.findViewById(R.id.SJID_image));
+        if (mCurrentProductionId == mSpinnerItems.get(position).getUniqueID()) {
+            name.setTextColor(mContext.getResources().getColor(R.color.blue1));
+            setIcon(mSpinnerItems.get(position).getUniqueID(), true, (ImageView) row.findViewById(R.id.SJID_image));
+            row.findViewById(R.id.SJID_image).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
+        } else {
+            name.setTextColor(mContext.getResources().getColor(R.color.white));
+            setIcon(mSpinnerItems.get(position).getUniqueID(), false, (ImageView) row.findViewById(R.id.SJID_image));
+            row.findViewById(R.id.SJID_image).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
         }
+
         return row;
     }
 
-    private void setIcon(String item, boolean selected, ImageView imageView) {
+    private void setIcon(int id, boolean selected, ImageView imageView) {
 
-        switch (item) {
-            case END_SETUP:
+        switch (id) {
+            case 4:
                 if (selected) {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup_copy));
                 } else {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup));
                 }
                 break;
-            case REPORT_PRODUCTION:
+            case 3:
                 if (selected) {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
                 } else {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
                 }
                 break;
-            case CHANGE_UNIT_CYCLE:
+            case 2:
                 if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.units_blue));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units_white));
                 } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.units));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units));
                 }
                 break;
-            case ADD_REJECTS:
+            case 1:
                 if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.rejects_blue));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add_white));
                 } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.rejects));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add));
                 }
                 break;
-            case ACTIVATE_JOB:
+            case 0:
                 if (selected) {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown_blue));
                 } else {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown));
                 }
                 break;
+            default:
+                if (selected) {
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
+                } else {
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
+                }
         }
     }
 
-    public void updateTitle(String newTitle) {
-        mCurrentProduction = newTitle;
-//        notifyDataSetChanged();
+    public void updateSelectedId(int id) {
+        mCurrentProductionId = id;
     }
 }

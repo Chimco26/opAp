@@ -1,7 +1,6 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
@@ -59,7 +58,7 @@ public class OperatorSpinnerAdapter extends ArrayAdapter<String> {
         if (item != null) {
             TextView name = row.findViewById(R.id.spinner_operator_item_name);
             TextViewCompat.setTextAppearance(name, R.style.FontStyle_T10);
-            name.setTextColor(Color.BLACK);
+            name.setTextColor(mContext.getResources().getColor(R.color.white));
             name.setText(item);
             name.setTextSize(18);
         }

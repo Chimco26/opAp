@@ -172,7 +172,7 @@
                 android:id="@+id/FAAE_status_black_filter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/black_filter"
+                android:background="@color/white_filter"
                 android:visibility="gone"/>
     </RelativeLayout>
         <RelativeLayout
@@ -392,6 +392,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black_filter"
+                android:clickable="true"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/FAAE_white_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white_filter"
                 android:clickable="true"
                 android:visibility="gone"/>
         </RelativeLayout>
