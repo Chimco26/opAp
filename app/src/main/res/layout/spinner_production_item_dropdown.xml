@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="62dp"
+    android:orientation="horizontal"
+    android:gravity="bottom"
+    android:popupBackground="@android:color/transparent">
+
+    <ImageView
+        android:id="@+id/SPID_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_white"
+        android:src="@drawable/production"
+        android:padding="7dp"/>
+
+    <TextView
+        android:id="@+id/SPID_texte"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="14dp"/>
+</LinearLayout>

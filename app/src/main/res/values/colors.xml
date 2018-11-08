@@ -63,4 +63,5 @@
     <color name="grey_transparent">#0b000000</color>
     <color name="machine_blue">#2459af</color>
     <color name="lenox_action_bar_color">#143b7a</color>
+    <color name="black_filter">#af000000</color>
 </resources>

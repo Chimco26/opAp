@@ -132,6 +132,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
@@ -196,6 +198,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Handler pollingBackupHandler = new Handler();
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
+    private Timer mReportModeTimer;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -263,23 +266,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         reportFieldsForMachineNetworkBridge.inject(NetworkManager.getInstance());
 
         mReportFieldsForMachineCore = new ReportFieldsForMachineCore(reportFieldsForMachineNetworkBridge, PersistenceManager.getInstance());
-
-//        mContainer2 = findViewById(R.id.fragments_container_widget);
-//
-//        mContainer3 = findViewById(R.id.fragments_container_reason);
-//
-//        openWidgetFragment();
-//
-//        initViewPagerFragment();
-//
-//        try {
-//
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, mActionBarAndEventsFragment).commit();
-//
-//            getSupportFragmentManager().addOnBackStackChangedListener(getListener());
-//        } catch (IllegalStateException ignored) {
-//        }
-//        OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
 
         checkUpdateNotificationToken();
     }
@@ -701,6 +687,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ProgressDialogManager.dismiss();
                     OppAppLogger.getInstance().w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
+                if (machineStatus != null) {
+                    setBlackFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                }
             }
 
             @Override
@@ -735,6 +724,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
+    }
+
+    private void setBlackFilter(boolean show) {
+        if (show) {
+            findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
+        }else {
+            findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
+            onClearAllSelectedEvents();
+        }
     }
 
 
@@ -1442,6 +1440,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         ProgressDialogManager.dismiss();
+
     }
 
     @Override
@@ -1509,6 +1508,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment) {
 
+        startReportModeTimer();
+
         mReportStopReasonFragment = reportStopReasonFragment;
 
         if (mReportStopReasonFragment != null) {
@@ -1522,6 +1523,30 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } catch (IllegalStateException ignored) {
         }
 
+    }
+
+    private void startReportModeTimer() {
+
+        final int[] timeCounter = new int[1];
+        if (mReportModeTimer != null){
+            mReportModeTimer.cancel();
+        }
+        mReportModeTimer = new Timer();
+        mReportModeTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (timeCounter[0] == 60) {
+                            onClearAllSelectedEvents();
+                            mReportModeTimer.cancel();
+                            return;
+                        }
+
+                        timeCounter[0]++;
+                    }
+                });
+            }
+        }, 0, 1000);
     }
 
     @Override
@@ -1570,6 +1595,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 onBackPressed();
             }
+        }else {
+            startReportModeTimer();
         }
     }
 
@@ -1626,7 +1653,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
 
-                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Production Status")
                             .setAction("Production Status Changed Successfully")
@@ -1636,7 +1663,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ProgressDialogManager.dismiss();
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
-                    Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                    Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Production Status")
                             .setAction("Production Status Changed Failed")
@@ -1650,7 +1677,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 ProgressDialogManager.dismiss();
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-                Tracker tracker = ((OperatorApplication)getApplication()).getDefaultTracker();
+                Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
                 tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Production Status")
                         .setAction("Production Status Changed Failed")
