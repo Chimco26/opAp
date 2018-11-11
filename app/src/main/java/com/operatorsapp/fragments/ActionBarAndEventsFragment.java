@@ -1208,10 +1208,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.END;
+        wlp.gravity = Gravity.START;
         if (!OperatorApplication.isEnglishLang()) {
-            wlp.x = Gravity.END;
+            wlp.x = Gravity.START;
         }
+        wlp.y = (int) mTollBarsHeight;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 

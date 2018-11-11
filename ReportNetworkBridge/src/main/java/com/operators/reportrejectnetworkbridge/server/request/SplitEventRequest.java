@@ -14,7 +14,7 @@ public class SplitEventRequest {
     @Expose
     private String sessionID;
 
-    @SerializedName("eventId")
+    @SerializedName("EventID")
     @Expose
     private String eventId;
 

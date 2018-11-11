@@ -13,6 +13,6 @@ import retrofit2.http.POST;
 
 public interface EmeraldPostSplitEvent {
 
-    @POST("/LeaderMESApi/PostSplitEvent")
+    @POST("/LeaderMESApi/SplitActiveEvent")
     Call<String> postSplitEvent(@Body SplitEventRequest splitEventRequest);
 }

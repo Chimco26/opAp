@@ -44,6 +44,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedEvents;
     private ArrayList<Event> mUpdatedAlarms;
+    private int mFirstStopEventPosition;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
@@ -58,6 +59,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mIsSelectionMode = selectMode;
         mSelectedEvents = selectedEvents;
         mUpdatedAlarms = new ArrayList<>();
+        mFirstStopEventPosition = getItemCount();
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
@@ -68,6 +70,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     public class ShiftLogViewHolder extends RecyclerView.ViewHolder {
 
         private final CheckBox mStopEventCheckBox;
+        private ImageView mSplitEvent;
         private TextView mParameterSubReasonTv;
         //    private LinearLayout mStoppedParentLayout;
         private LinearLayout mStoppedTitleLayout;
@@ -118,7 +121,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             mStoppedDivider = itemView.findViewById(R.id.event_stopped_shift_log_divider);
             mStoppedBottomDivider = itemView.findViewById(R.id.event_stopped_shift_log_bottom_divider);
             mStoppedSubtitle = itemView.findViewById(R.id.event_stopped_shift_log_item_subtitle);
-            //mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
+            mSplitEvent = itemView.findViewById(R.id.event_stopped_shift_log_item_split_event);
             //         mParameterParentLayout = itemView.findViewById(R.id.event_parameter_parent_layout);
             mParameterTitleLayout = itemView.findViewById(R.id.event_parameter_title_layout);
             mParameterTitle = itemView.findViewById(R.id.event_parameter_shift_log_item_title);
@@ -184,28 +187,28 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
         if (type == STOPPED) {
 
-//            if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()){
-//
-//                mFirstStopEventPosition = viewHolder.getAdapterPosition();
-//                holder.mSplitEvent.setVisibility(View.VISIBLE);
-//                holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        // TODO: 05/07/2018 split event
-//                        mOnStopClickListener.onSplitEventPressed(event.getEventID());
-//                    }
-//                });
-//
-//            }else {
-//                holder.mSplitEvent.setVisibility(View.GONE);
-//                holder.mSplitEvent.setOnClickListener(null);
-//            }
+            if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()){
+
+                mFirstStopEventPosition = viewHolder.getAdapterPosition();
+                holder.mSplitEvent.setVisibility(View.VISIBLE);
+                holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: 05/07/2018 split event
+                        mOnStopClickListener.onSplitEventPressed(event.getEventID());
+                    }
+                });
+
+            }else {
+                holder.mSplitEvent.setVisibility(View.GONE);
+                holder.mSplitEvent.setOnClickListener(null);
+            }
 
 
 
             if (mIsSelectionMode) {
 
-               // holder.mSplitEvent.setVisibility(View.GONE);
+                holder.mSplitEvent.setVisibility(View.GONE);
                 holder.mStopEventCheckBox.setVisibility(View.VISIBLE);
                 holder.mStopEventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
