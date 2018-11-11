@@ -52,7 +52,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
@@ -207,6 +206,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ArrayList<Machine> mMachines;
     private ImageView mTechnicianIndicatorIv;
     private TextView mTechnicianIndicatorTv;
+    private RelativeLayout mTechnicianIndicatorRl;
     private BroadcastReceiver mNotificationsReceiver = null;
     private Handler mHandlerTechnicianCall = new Handler();
     private boolean isShowAlarms;
@@ -940,11 +940,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIndicatorIv = mToolBarView.findViewById(R.id.toolbar_technician_indicator);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
+            mTechnicianIndicatorRl = mToolBarView.findViewById(R.id.toolbar_technician_rl);
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
 
             setNotificationNeedResponse();
-            setTechnicianCallStatus();
+            setTechnicianCallStatus("");
 
             tutorialIv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -961,7 +962,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            technicianIv.setOnClickListener(new View.OnClickListener() {
+            mTechnicianIndicatorRl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
@@ -1135,14 +1136,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void setTechnicianCallStatus() {
+    private void setTechnicianCallStatus(String techName) {
 
         long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
         long now = new Date().getTime();
         if (technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
-            mTechnicianIndicatorTv.setText(R.string.called_technician);
+            mTechnicianIndicatorTv.setText(R.string.called_technician + "\n" + techName);
 
 
             mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1229,6 +1230,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 PersistenceManager pm = PersistenceManager.getInstance();
 
+                ProgressDialogManager.show(getActivity());
+
                 String body;
                 String title = getString(R.string.operator) + " ";
                 if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
@@ -1239,22 +1242,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     title += pm.getUserName();
                 }
 
+                final String techName = OperatorApplication.isEnglishLang() ? techniciansList.get(position).getEName() : techniciansList.get(position).getLName();
+
                 PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, techniciansList.get(position).getID(), body, pm.getUserName(), techniciansList.get(position).getEName());
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
                     public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                         PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
-                        setTechnicianCallStatus();
+                        setTechnicianCallStatus(techName);
+
+                        ProgressDialogManager.dismiss();
 
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                        ProgressDialogManager.dismiss();
                         ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
                 });
 
-                Toast.makeText(getActivity(), techniciansList.get(position).getEName(), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -1264,9 +1271,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openNotificationsList() {
-
-        String st = PersistenceManager.getInstance().getNotificationToken();
-        st = PersistenceManager.getInstance().getTimeOfUpdateToken();
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.setCanceledOnTouchOutside(true);
@@ -1351,7 +1355,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
                 @Override
                 public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
-                    Toast.makeText(getContext(), "onResponse", Toast.LENGTH_SHORT).show();
 
                     ArrayList<Notification> nList = pm.getNotificationHistory();
                     notification[0].setmResponseType(responseType);
@@ -1365,7 +1368,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
-                    Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
