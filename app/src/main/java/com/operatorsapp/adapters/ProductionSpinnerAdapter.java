@@ -59,11 +59,11 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
             if (mSpinnerItems.get(mCurrentProductionId).getId() == mSpinnerItems.get(position).getId()) {
                 name.setTextColor(mContext.getResources().getColor(R.color.blue1));
                 setIcon(mSpinnerItems.get(position).getId(), true, (ImageView) row.findViewById(R.id.SPID_image));
-                (row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
+                ((ImageView)(row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
             } else {
                 name.setTextColor(mContext.getResources().getColor(R.color.white));
                 setIcon(mSpinnerItems.get(position).getId(), false, (ImageView) row.findViewById(R.id.SPID_image));
-                (row.findViewById(R.id.SPID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
+                (((ImageView)row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
             }
         }
         return row;
@@ -77,34 +77,6 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
                 } else {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
-                }
-                break;
-            case 2:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_production));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_production));
-                }
-                break;
-            case 3:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.preventive_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.preventive));
-                }
-                break;
-            case 4:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown));
-                }
-                break;
-            case 5:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.breakdown_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.breakdown));
                 }
                 break;
             default:

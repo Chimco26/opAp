@@ -26,6 +26,7 @@
     <string name="could_not_reach_server_error">תקלה - לא ניתן ליצור קשר עם השרת</string>
     <string name="unrecognized_operator">מפעיל לא ידוע</string>
     <string name="alarm">"התראה"</string>
+    <string name="alarms">התראות</string>
     <string name="loading_data">טוען נתונים...</string>
 
     <!--Select machine screen -->

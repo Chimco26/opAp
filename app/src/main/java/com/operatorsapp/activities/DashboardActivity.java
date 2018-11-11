@@ -643,7 +643,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
-                        dashboardUICallbackListener.onDeviceStatusChanged(machineStatus); // disable the button at least until next polling cycle
+                        dashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
 
                     }
                     ProgressDialogManager.dismiss();
@@ -653,7 +653,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                    setFilterWarningText(machineStatus.getAllMachinesData().get(0).ismProductionModeWarning());
                 }
+
             }
 
             @Override
@@ -700,10 +702,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setWhiteFilter(boolean show) {
-        if (show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
+        }
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.setWhiteFilter(show);
+        }
+    }
+
+    private void setFilterWarningText(boolean show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
         }
     }
 

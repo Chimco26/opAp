@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
-
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
@@ -29,7 +28,6 @@ import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 public class SelectedOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {
@@ -74,7 +72,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
         TextView selectedOperatorName = view.findViewById(R.id.operator_name_text_view);
         selectedOperatorName.setText(mSelectedOperator.getOperatorName());
 
-        setActionBar();
+//        setActionBar();
         return view;
     }
 

@@ -257,6 +257,7 @@
     <string name="message_declined">message declined</string>
     <string name="no_notification_to_show">No Notifications to Show From Past 24 hours</string>
     <string name="alarms">Alarms</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Attention! Cycles detected in a non-production status</string>
 
 
 </resources>

@@ -50,65 +50,36 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         }
         TextView name = row.findViewById(R.id.SJID_texte);
         name.setText(mSpinnerItems.get(position).getName());
-        setIcon(mSpinnerItems.get(position).getUniqueID(), false, (ImageView) row.findViewById(R.id.SJID_image));
-        if (mCurrentProductionId == mSpinnerItems.get(position).getUniqueID()) {
-            name.setTextColor(mContext.getResources().getColor(R.color.blue1));
-            setIcon(mSpinnerItems.get(position).getUniqueID(), true, (ImageView) row.findViewById(R.id.SJID_image));
-            row.findViewById(R.id.SJID_image).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
-        } else {
-            name.setTextColor(mContext.getResources().getColor(R.color.white));
-            setIcon(mSpinnerItems.get(position).getUniqueID(), false, (ImageView) row.findViewById(R.id.SJID_image));
-            row.findViewById(R.id.SJID_image).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
-        }
+        name.setTextColor(mContext.getResources().getColor(R.color.white));
+        setIcon(mSpinnerItems.get(position).getUniqueID(), (ImageView) row.findViewById(R.id.SJID_image));
+        ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
 
         return row;
     }
 
-    private void setIcon(int id, boolean selected, ImageView imageView) {
+    private void setIcon(int id, ImageView imageView) {
 
         switch (id) {
             case 4:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup_copy));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup));
                 break;
             case 3:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
                 break;
             case 2:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units_white));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units));
                 break;
             case 1:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add_white));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add));
                 break;
             case 0:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown));
                 break;
             default:
-                if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
-                } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
-                }
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
+
         }
+
     }
 
     public void updateSelectedId(int id) {

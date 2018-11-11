@@ -176,6 +176,7 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/toolbar_machine_separator"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
@@ -201,31 +202,26 @@
 
                     <ImageView
                         android:id="@+id/toolbar_technician"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="35dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/technician" />
 
-                    <ImageView
-                        android:id="@+id/toolbar_technician_indicator"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignTop="@+id/toolbar_technician"
-                        android:layout_toEndOf="@+id/toolbar_technician"
-                        android:visibility="visible" />
-
-                    <ImageView
+                    <TextView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_alignBottom="@+id/toolbar_technician"
                         android:layout_toEndOf="@+id/toolbar_technician"
                         android:visibility="visible"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/arrow_drop_down_white" />
+                        android:text="▼"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        />
 
                 </RelativeLayout>
 
                 <View
+                    android:id="@+id/toolbar_production_spinner_separator"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="@color/dark_indigo" />
@@ -237,6 +233,7 @@
                     tools:ignore="MissingPrefix"
                     android:layout_marginStart="15dp"
                     android:layout_gravity="center_vertical"
+                    android:background="@drawable/spinner_bckgrnd"
                     android:popupBackground="@android:color/transparent"
                     android:dropDownVerticalOffset="51dp" />
 
@@ -247,6 +244,7 @@
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
                     android:textSize="16sp"
+                    android:layout_marginStart="15dp"
                     android:gravity="center_vertical"/>
 
             </LinearLayout>
@@ -260,6 +258,7 @@
                 android:layout_alignParentEnd="true">
 
                 <View
+                    android:id="@+id/toolbar_job_spinner_separator"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="@color/dark_indigo" />
@@ -271,10 +270,12 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="25dp"
                     android:dropDownVerticalOffset="51dp"
+                    android:background="@drawable/spinner_bckgrnd"
                     app:theme="@style/ProximaNovaSemiBold"
                     android:popupBackground="@android:color/transparent"/>
 
                 <View
+                    android:id="@+id/toolbar_after_job_spinner_separator"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="@color/dark_indigo" />
@@ -308,6 +309,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:background="@drawable/spinner_bckgrnd"
                         android:drawSelectorOnTop="true"
                         android:dropDownVerticalOffset="51dp"
                         android:popupBackground="@android:color/transparent"
