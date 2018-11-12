@@ -267,6 +267,7 @@
     <string name="sent_service_call">sent a service call from machine</string>
     <string name="service_call_made">Service call has been sent to you from machine</string>
     <string name="call_for_technician_unresponsive">Your call for technician was unresponsive and therefore cancelled</string>
+    <string name="powered_by_leadermes">Powered by LeaderMES</string>
 
 
 </resources>

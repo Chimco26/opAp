@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.BuildConfig;
 import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operators.reportfieldsformachineinfra.SubReasons;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
@@ -44,7 +44,8 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     public StopSubReasonAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
 
         View view;
-        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+        if (com.operatorsapp.BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.sub_stop_reason_grid_item_lenox, parent, false);
         } else {
@@ -60,12 +61,13 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
+        holder.mStopTitle.setTextColor(Color.WHITE);
 
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
 
             holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mSubReasons.getId())));
 
-        }else {
+        } else {
             if (mSelectedPosition == position) {
                 holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
                 holder.mImageTitle.setTextColor(Color.WHITE);

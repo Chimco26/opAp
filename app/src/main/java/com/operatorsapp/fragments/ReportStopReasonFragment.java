@@ -133,6 +133,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
 
         setActionBar();
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
+        }
 //        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;
     }
