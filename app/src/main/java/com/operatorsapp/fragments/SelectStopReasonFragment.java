@@ -186,7 +186,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     private void initSubReasons() {
         if (mReportFieldsForMachine != null) {
-            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getSubReasons());
+            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition));
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }

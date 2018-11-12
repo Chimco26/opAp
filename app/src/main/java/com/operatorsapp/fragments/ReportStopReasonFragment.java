@@ -220,14 +220,13 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mSelectedSubreason = mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().get(0);
                 sendReport();
 
-                return;
+            }else {
+
+                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
+                        mReportFieldsForMachine.getStopReasons().get(position).getId(),
+                        mReportFieldsForMachine.getStopReasons().get(position).getEName(),
+                        mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
             }
-
-            mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
-                    mReportFieldsForMachine.getStopReasons().get(position).getId(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
-
         } catch (IllegalStateException e) {
 
             SendReportUtil.sendAcraExeption(e, "onStopReasonSelected");

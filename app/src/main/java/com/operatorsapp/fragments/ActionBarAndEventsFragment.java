@@ -1485,6 +1485,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 @Override
                 public void onClick(View v) {
                     mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true, true);
+                    mListener.showWhiteFilter(false);
                 }
             });
         } else {
@@ -1504,6 +1505,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position == 0) {
                         mOnGoToScreenListener.goToFragment(new SignInOperatorFragment(), true, true);
+                        mListener.showWhiteFilter(false);
                     } else if (position == 1) {
                         mOperatorCore.setOperatorForMachine("");
                     }
@@ -2044,11 +2046,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.working));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.working));//bahir koulam kmo lenox
 
         } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.parameter_deviation));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.stopped));
 
         } else if (status == MachineStatus.MachineServerStatus.COMMUNICATION_FAILURE.getId()) {
 
@@ -2072,7 +2074,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         } else if (status == MachineStatus.MachineServerStatus.PARAMETER_DEVIATION.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.deviation));
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.parameter_deviation));
 
         } else if (status == MachineStatus.MachineServerStatus.STOP_IDLE.getId()) {
 
@@ -2332,6 +2334,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onRefreshApplicationRequest();
 
         void showBlackFilter(boolean show);
+
+        void showWhiteFilter(boolean show);
     }
 
 }

@@ -73,7 +73,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.add));
                 break;
             case 0:
-                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.shutdown));
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.activate));
                 break;
             default:
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
