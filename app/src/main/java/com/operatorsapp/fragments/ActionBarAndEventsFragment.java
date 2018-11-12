@@ -19,6 +19,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -80,6 +82,7 @@ import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapterActionBar;
 import com.operatorsapp.adapters.LenoxMachineAdapter;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
+import com.operatorsapp.adapters.NotificationsPagerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ProductionSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
@@ -1143,7 +1146,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
             mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
-            mTechnicianIndicatorTv.setText(R.string.called_technician + "\n" + techName);
+            mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techName);
 
 
             mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1201,11 +1204,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
 
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.dialog_list);
-        dialog.setCanceledOnTouchOutside(true);
+        if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+            mPopUpDialog.dismiss();
+        }
+        
+        mPopUpDialog = new Dialog(getActivity());
+        mPopUpDialog.setContentView(R.layout.dialog_list);
+        mPopUpDialog.setCanceledOnTouchOutside(true);
 
-        Window window = dialog.getWindow();
+        Window window = mPopUpDialog.getWindow();
         assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
@@ -1217,8 +1224,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        final ListView technicianLv = dialog.findViewById(R.id.dialog_list_scrollview);
-        TextView technicianTv = dialog.findViewById(R.id.dialog_list_tv);
+        final ListView technicianLv = mPopUpDialog.findViewById(R.id.dialog_list_scrollview);
+        TextView technicianTv = mPopUpDialog.findViewById(R.id.dialog_list_tv);
         technicianTv.setText(R.string.technician_list);
 
         final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, techniciansList);
@@ -1262,20 +1269,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                 });
 
-                dialog.dismiss();
+                mPopUpDialog.dismiss();
             }
         });
 
-        dialog.show();
+        mPopUpDialog.show();
 
     }
 
     private void openNotificationsList() {
 
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.setCanceledOnTouchOutside(true);
+        if (mPopUpDialog != null && mPopUpDialog.isShowing()){
+            mPopUpDialog.dismiss();
+        }
 
-        Window window = dialog.getWindow();
+        mPopUpDialog = new Dialog(getActivity());
+        mPopUpDialog.setCanceledOnTouchOutside(true);
+
+        Window window = mPopUpDialog.getWindow();
         assert window != null;
         WindowManager.LayoutParams wlp = window.getAttributes();
 
@@ -1284,31 +1295,30 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             wlp.x = Gravity.END;
         }
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//        wlp.x = -130;
-//        wlp.y = 240;
         window.setAttributes(wlp);
 
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
         if (notificationList.size() > 0) {
-            final NotificationHistoryAdapter notificationHistoryAdapter = new NotificationHistoryAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
+
+            mPopUpDialog.setContentView(R.layout.frament_view_pager);
+
+            ViewPager vpDialog = mPopUpDialog.findViewById(R.id.FVP_view_pager);
+            PagerTabStrip vpTabs = mPopUpDialog.findViewById(R.id.FVP_view_pager_header);
+            vpTabs.setVisibility(View.VISIBLE);
+
+
+            vpDialog.setAdapter(new NotificationsPagerAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
                 @Override
                 public void onNotificationResponse(int notificationId, int responseType) {
-
                     sendNotificationResponse(notificationId, responseType);
-                    dialog.dismiss();
-
+                    mPopUpDialog.dismiss();
                 }
-            });
-
-            RecyclerView rvDialog = new RecyclerView(getActivity());
-            rvDialog.setLayoutManager(new LinearLayoutManager(getActivity()));
-            rvDialog.setAdapter(notificationHistoryAdapter);
-            dialog.setContentView(rvDialog);
+            }));
 
             Point point = new Point(1, 1);
             ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
-            dialog.getWindow().setLayout((int) (point.x / 3.5), point.y - 50);
+            mPopUpDialog.getWindow().setLayout((int) (point.x / 3), point.y - 50);
 
 
         } else {
@@ -1318,12 +1328,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             tv.setTextSize(16);
             tv.setGravity(Gravity.CENTER);
             tv.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-            dialog.setContentView(tv);
+            mPopUpDialog.setContentView(tv);
 
-            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            mPopUpDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
 
-        dialog.show();
+        mPopUpDialog.show();
     }
 
     private void sendNotificationResponse(final int notificationId, final int responseType) {
@@ -2202,6 +2212,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        }
         mLanguagesSpinner = view.findViewById(R.id.ATATV_language_spinner);
         LanguagesSpinnerAdapterActionBar spinnerArrayAdapter = new LanguagesSpinnerAdapterActionBar(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
+        mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
         final boolean[] isFirst = {true};
 

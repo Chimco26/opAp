@@ -24,7 +24,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="23dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/linearLayout">
 
                 <ImageView
                     android:id="@+id/ATATV_flavor_logo"
@@ -57,7 +58,12 @@
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
+                android:theme="@style/ProximaNovaSemiBold"
                 android:layout_toStartOf="@+id/toolbar_tutorial_iv"
+
+                android:drawSelectorOnTop="true"
+                tools:ignore="MissingPrefix"
+
                 android:layout_height="wrap_content">
             </com.operatorsapp.view.EmeraldSpinner>
 
@@ -196,31 +202,30 @@
 
                     <ImageView
                         android:id="@+id/toolbar_technician_button"
-                        android:layout_alignParentStart="true"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="15dp"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
                         android:src="@drawable/technician" />
-
 
 
                     <ImageView
                         android:id="@+id/toolbar_technician_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@+id/toolbar_technician_button"
                         android:layout_alignTop="@+id/toolbar_technician_button"
+                        android:layout_toRightOf="@+id/toolbar_technician_button"
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/toolbar_technician_tv"
-                        android:layout_toEndOf="@+id/toolbar_technician_indicator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
                         android:layout_marginStart="15dp"
+                        android:layout_toRightOf="@+id/toolbar_technician_indicator"
                         android:gravity="center"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"

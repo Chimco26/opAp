@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
@@ -35,11 +36,13 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     public NotificationHistoryAdapter(Context context, ArrayList<Notification> notificationHistory, OnNotificationResponseSelected listener) {
         this.mContext = context;
 
-        for (Notification item : notificationHistory) {
-            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN){
-                mNotificationsList.add(item);
-            }
-        }
+//        for (Notification item : notificationHistory) {
+//            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN){
+//                mNotificationsList.add(item);
+//            }
+//        }
+
+        mNotificationsList = notificationHistory;
 
         mListener = listener;
         mFirstTodayPosition = mNotificationsList.size();
@@ -153,43 +156,34 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         holder.mTimeTv.setText(time);
         holder.mBodyTv.setText(notification.getmBody());
 
-        holder.mApproveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
-            }
-        });
+        if (mNotificationsList.get(position).getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+            holder.mBtnsLil.setVisibility(View.GONE);
+        }else {
 
-        holder.mDeclineBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
-            }
-        });
+            holder.mBtnsLil.setVisibility(View.VISIBLE);
 
-        holder.mClarifyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
-            }
-        });
+            holder.mApproveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                }
+            });
 
-//        switch (notification.getmResponseType()){
-//
-//            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
-//                break;
-//
-//            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
-//                break;
-//
-//            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
-//                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
-//                break;
-//
-//            default: holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.general_notificaion));
-//        }
+            holder.mDeclineBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                }
+            });
+
+            holder.mClarifyBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onNotificationResponse(mNotificationsList.get(position).getmNotificationID(), Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                }
+            });
+        }
+
     }
 
     @Override
@@ -199,6 +193,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private LinearLayout mBtnsLil;
         private Button mApproveBtn;
         private Button mClarifyBtn;
         private Button mDeclineBtn;
@@ -219,6 +214,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             mSenderTv = view.findViewById(R.id.notification_item_tv_sender);
             mTimeTv = view.findViewById(R.id.notification_item_tv_time);
             mIconIv = view.findViewById(R.id.notification_item_iv);
+            mBtnsLil = view.findViewById(R.id.notification_item_btns_lil);
         }
     }
 

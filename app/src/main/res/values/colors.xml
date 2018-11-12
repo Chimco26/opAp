@@ -34,6 +34,7 @@
 
     <color name="status_bar">#00033a</color>
     <color name="white">#ffffff</color>
+    <color name="white_five">#f3f3f3</color>
     <color name="white_with_transparency">#E6404040</color>
     <color name="T4_color">#b5b5b5</color>
     <color name="T5_color">#66ffffff</color>
