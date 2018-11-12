@@ -15,7 +15,7 @@
     <application
         android:name=".application.OperatorApplication"
         android:allowBackup="true"
-        android:icon="@drawable/mdpiic_launcher_a_p_p"
+        android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"

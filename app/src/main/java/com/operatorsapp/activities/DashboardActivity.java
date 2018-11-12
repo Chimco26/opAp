@@ -677,7 +677,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
-                        dashboardUICallbackListener.onDeviceStatusChanged(machineStatus); // disable the button at least until next polling cycle
+                        dashboardUICallbackListener.onDeviceStatusChanged(machineStatus);
 
                     }
                     ProgressDialogManager.dismiss();
@@ -686,8 +686,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     OppAppLogger.getInstance().w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 if (machineStatus != null) {
-                    setBlackFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                    setWhiteFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                    setFilterWarningText(machineStatus.getAllMachinesData().get(0).ismProductionModeWarning());
                 }
+
             }
 
             @Override
@@ -727,9 +729,28 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setBlackFilter(boolean show) {
         if (show) {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
-        }else {
+        } else {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
             onClearAllSelectedEvents();
+        }
+    }
+
+    private void setWhiteFilter(boolean show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
+        }
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.setWhiteFilter(show);
+        }
+    }
+
+    private void setFilterWarningText(boolean show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
         }
     }
 
@@ -1526,7 +1547,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void startReportModeTimer() {
 
         final int[] timeCounter = new int[1];
-        if (mReportModeTimer != null){
+        if (mReportModeTimer != null) {
             mReportModeTimer.cancel();
         }
         mReportModeTimer = new Timer();
@@ -1593,7 +1614,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 onBackPressed();
             }
-        }else {
+        } else {
             startReportModeTimer();
         }
     }

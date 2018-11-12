@@ -109,9 +109,10 @@
                     style="@style/Roboto_Regular_Status_Data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="300dp"
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -168,6 +169,13 @@
 
 
         </LinearLayout>
+            <View
+                android:id="@+id/FAAE_status_white_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white_filter"
+                android:visibility="gone"/>
+
             <View
                 android:id="@+id/FAAE_status_black_filter"
                 android:layout_width="match_parent"
@@ -385,6 +393,26 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/left_panel_btn" />
 
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/FAAE_white_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white_filter"
+                android:clickable="true"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/FAAE_white_filter_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="24sp"
+                    android:textColor="@color/red_line"
+                    android:text="@string/attention_cycles_detected_in_a_non_production_status"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <ImageView

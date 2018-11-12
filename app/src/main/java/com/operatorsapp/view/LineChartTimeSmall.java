@@ -287,7 +287,6 @@ public class LineChartTimeSmall extends FrameLayout {
         addLimitLines(lowLimit, highLimit);
     }
 
-    @SuppressWarnings("unused")
     private void addStandardLine(Float standardValue)
     {
         YAxis leftAxis = mChart.getAxisLeft();
@@ -300,7 +299,6 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.addLimitLine(limitLine2);
     }
 
-    @SuppressWarnings("unused")
     private void addLimitLines(Float lowLimit, Float highLimit)
     {
         YAxis leftAxis = mChart.getAxisLeft();

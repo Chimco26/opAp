@@ -76,9 +76,21 @@ public class AllMachinesData {
     private String OperatorId;
     @SerializedName("ProductionModeID")
     private int mProductionModeID;
+    @SerializedName("CustomerIsActivateJobs")
+    private boolean mCustomerIsActivateJobs;
+    @SerializedName("ProductionModeWarning")
+    private boolean mProductionModeWarning;
 
     // TODO: 29/07/2018 worker sign in name + number
 
+
+    public boolean ismCustomerIsActivateJobs() {
+        return mCustomerIsActivateJobs;
+    }
+
+    public boolean ismProductionModeWarning() {
+        return mProductionModeWarning;
+    }
 
     public String getOperatorName() {
         return operatorName;
@@ -124,6 +136,7 @@ public class AllMachinesData {
     public int getCurrentValue() {
         return currentValue;
     }
+
 
 
     public String getDepartmentEname() {

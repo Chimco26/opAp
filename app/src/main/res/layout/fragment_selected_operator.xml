@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/operator_screen"
     android:layout_width="match_parent"
-                android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/bg_factory">
 
     </LinearLayout>
@@ -97,17 +97,17 @@
             </LinearLayout>
 
 
-           <!-- <Button
-                android:id="@+id/button_selected_operator_sign_in"
-                android:layout_width="85dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginStart="90dp"
-                android:background="@drawable/buttons_selector"
-                android:text="@string/common_signin_button_text"
-                android:textAllCaps="true"
-                android:textColor="@drawable/button_text_color_selector"
-                android:textSize="18sp" />-->
+            <!-- <Button
+                 android:id="@+id/button_selected_operator_sign_in"
+                 android:layout_width="85dp"
+                 android:layout_height="30dp"
+                 android:layout_marginEnd="2dp"
+                 android:layout_marginStart="90dp"
+                 android:background="@drawable/buttons_selector"
+                 android:text="@string/common_signin_button_text"
+                 android:textAllCaps="true"
+                 android:textColor="@drawable/button_text_color_selector"
+                 android:textSize="18sp" />-->
             <Button
                 android:id="@+id/button_selected_operator_sign_in"
                 android:layout_width="138dp"
