@@ -27,6 +27,7 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
@@ -151,6 +152,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         final View view = inflater.inflate(R.layout.fragment_select_stop_reason_new, container, false);
 
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
@@ -186,7 +191,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     private void initSubReasons() {
         if (mReportFieldsForMachine != null) {
-            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getSubReasons());
+            mStopReasonsAdapter = new StopSubReasonAdapter(this, getContext(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition));
             mRecyclerView.setAdapter(mStopReasonsAdapter);
         }
     }

@@ -133,6 +133,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
 
         setActionBar();
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
+        }
 //        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;
     }
@@ -220,14 +223,13 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mSelectedSubreason = mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().get(0);
                 sendReport();
 
-                return;
+            }else {
+
+                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
+                        mReportFieldsForMachine.getStopReasons().get(position).getId(),
+                        mReportFieldsForMachine.getStopReasons().get(position).getEName(),
+                        mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
             }
-
-            mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
-                    mReportFieldsForMachine.getStopReasons().get(position).getId(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getEName(),
-                    mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
-
         } catch (IllegalStateException e) {
 
             SendReportUtil.sendAcraExeption(e, "onStopReasonSelected");

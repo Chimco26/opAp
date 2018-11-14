@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.operatorsapp.BuildConfig;
+import com.operatorsapp.utils.ReasonImageLenox;
 import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
@@ -280,7 +282,11 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     holder.mStoppedTime.setTypeface(null, Typeface.BOLD);
                 }
             } else {
-                holder.mStoppedIcon.setImageResource(ReasonImage.getImageForStopReasonShiftLog(event.getEventGroupID()));
+                if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+                    holder.mStoppedIcon.setImageResource(ReasonImageLenox.getImageForStopReasonShiftLog(event.getEventGroupID()));
+                } else {
+                    holder.mStoppedIcon.setImageResource(ReasonImage.getImageForStopReasonShiftLog(event.getEventGroupID()));
+                }
                 holder.mStoppedTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black));
                 holder.mStoppedTime.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
                 holder.mStoppedTime.setTypeface(null, Typeface.NORMAL);

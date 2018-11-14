@@ -13,23 +13,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.operators.reportfieldsformachineinfra.StopReasons;
 import com.operators.reportfieldsformachineinfra.SubReasons;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
+import com.operatorsapp.utils.ReasonImageLenox;
 
 import java.util.List;
 
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
     private static final String LOG_TAG = StopSubReasonAdapter.class.getSimpleName();
+    private final StopReasons mSubReasons;
     private List<SubReasons> mSubReasonsList;
     private Context mContext;
     private int mSelectedPosition = -1;
     private OnSelectedSubReasonListener mOnSelectedSubReasonListener;
 
-    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, List<SubReasons> subReasonsList) {
-        mSubReasonsList = subReasonsList;
+    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasons subReasonsList) {
+        mSubReasonsList = subReasonsList.getSubReasons();
+        mSubReasons = subReasonsList;
         mContext = context;
         mOnSelectedSubReasonListener = onSelectedSubReasonListener;
     }
@@ -37,9 +42,16 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     @NonNull
     @Override
     public StopSubReasonAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.sub_stop_reason_grid_item, parent, false);
 
+        View view;
+        if (com.operatorsapp.BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.sub_stop_reason_grid_item_lenox, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.sub_stop_reason_grid_item, parent, false);
+        }
         return new ViewHolder(view);
     }
 
@@ -47,19 +59,26 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        if (mSelectedPosition == position) {
-            holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
-            holder.mImageTitle.setTextColor(Color.WHITE);
-        } else {
-            holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.stop_sub_selector));
-            holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
-        }
-
         String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
-        if (nameByLang != null) {
-            char firstLetter = nameByLang.charAt(0);
-            holder.mImageTitle.setText(String.valueOf(firstLetter));
+        holder.mStopTitle.setTextColor(Color.WHITE);
+
+        if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+
+            holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mSubReasons.getId())));
+
+        } else {
+            if (mSelectedPosition == position) {
+                holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
+                holder.mImageTitle.setTextColor(Color.WHITE);
+            } else {
+                holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.stop_sub_selector));
+                holder.mImageTitle.setTextColor(ContextCompat.getColorStateList(mContext, R.color.button_stop_text_selector));
+            }
+            if (nameByLang != null) {
+                char firstLetter = nameByLang.charAt(0);
+                holder.mImageTitle.setText(String.valueOf(firstLetter));
+            }
         }
         try {
             holder.itemView.setOnClickListener(new View.OnClickListener() {

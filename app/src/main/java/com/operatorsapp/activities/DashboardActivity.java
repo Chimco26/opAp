@@ -20,7 +20,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
@@ -1733,6 +1732,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void showBlackFilter(boolean show) {
         setBlackFilter(show);
+    }
+
+    @Override
+    public void showWhiteFilter(boolean show) {
+        setWhiteFilter(show);
     }
 
     public void setLenoxMachine(int machineId) {
