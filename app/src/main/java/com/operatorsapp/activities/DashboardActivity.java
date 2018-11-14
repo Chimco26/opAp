@@ -1768,12 +1768,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         simpleRequests.postSplitEvent(persistenceManager.getSiteUrl(), new PostSplitEventCallback() {
             @Override
             public void onPostSplitEventSuccess(Object response) {
-                Toast.makeText(DashboardActivity.this, "onPostSplitEventSuccess", Toast.LENGTH_SHORT).show();
+
+                dashboardDataStartPolling();
             }
 
             @Override
             public void onPostSplitEventFailed(ErrorObjectInterface reason) {
-                Toast.makeText(DashboardActivity.this, "onPostSplitEventFailed", Toast.LENGTH_SHORT).show();
 
             }
         }, NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
