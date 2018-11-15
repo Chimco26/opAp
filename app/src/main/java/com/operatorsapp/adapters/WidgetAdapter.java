@@ -511,14 +511,16 @@ public class WidgetAdapter extends Adapter {
                     convertCurrentValue = currentValue / scaleValue;
                     convertProjectionValue = projectionValue / scaleValue;
                 }
-                if (convertCurrentValue > 1000) {
-                    convertCurrentValue = 1000;
+                float currentWidth = mProjectionCapsuleWidth * convertCurrentValue;
+                float projectionWidth = projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue;
+                if (currentWidth > 1000) {
+                    currentWidth = 1000;
                 }
-                if (convertProjectionValue > 1000) {
-                    convertProjectionValue = 1000;
+                if (projectionWidth > 1000) {
+                    projectionWidth = 1000;
                 }
                 projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue/* half of the line*/);
-                projectionViewHolder.mProjectionView.updateWidth((mProjectionCapsuleWidth * convertCurrentValue), (projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue));
+                projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
                 projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
             }
