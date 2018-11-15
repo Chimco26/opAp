@@ -243,50 +243,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getCursorOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE " + KEY_GROUP_ID + " = 20" +
-                " OR (" + KEY_GROUP_ID + " !=20 AND " + KEY_DURATION + " >= " + minEventDuration + ")" +
-                " OR (" + KEY_GROUP_ID + " !=20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.rawQuery(countQuery, null);
-
-        return c;
+        return db.rawQuery(countQuery, null);
 
     }
 
-//    private String getMinimumDurationLimit() {
-//        return String.valueOf(MIN_EVENT_DURATION_MILLIS / (60 * 1000));
-//    }
-
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
-        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
-                KEY_DURATION + " >= " + minEventDuration +
-                ") OR (" + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.rawQuery(countQuery, null);
-
-        return c;
+        return db.rawQuery(countQuery, null);
 
     }
 
     public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
-        String countQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
                 KEY_DURATION + " >= " + minEventDuration +
                 ") OR (" + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.rawQuery(countQuery, null);
-
-        return c;
+        return db.rawQuery(countQuery, null);
 
     }
+
+    //    private String getMinimumDurationLimit() {
+//        return String.valueOf(MIN_EVENT_DURATION_MILLIS / (60 * 1000));
+//    }
 
     public Cursor getAlarmTypeShiftOrderByTime() {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT + " WHERE " + KEY_GROUP_ID + " = 20" +

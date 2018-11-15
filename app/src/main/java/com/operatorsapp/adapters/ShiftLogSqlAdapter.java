@@ -192,7 +192,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()){
 
                 mFirstStopEventPosition = viewHolder.getAdapterPosition();
-                holder.mSplitEvent.setVisibility(View.VISIBLE);
+                if (!BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
+                    holder.mSplitEvent.setVisibility(View.VISIBLE);
+                }
                 holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

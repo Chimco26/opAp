@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 
 public class LenoxDashboardFragment extends Fragment {
@@ -39,7 +40,7 @@ public class LenoxDashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         initVars(view);
-        initView();
+        initView(view);
     }
 
     private void initVars(View view) {
@@ -47,7 +48,9 @@ public class LenoxDashboardFragment extends Fragment {
         mImageView = view.findViewById(R.id.FLD_image_view);
     }
 
-    private void initView() {
-
+    private void initView(View view) {
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
+        }
     }
 }

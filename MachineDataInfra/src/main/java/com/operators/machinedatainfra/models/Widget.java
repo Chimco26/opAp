@@ -3,7 +3,6 @@ package com.operators.machinedatainfra.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Widget {
     @SerializedName("CurrentValue")
@@ -38,11 +37,11 @@ public class Widget {
 
     public class HistoricData {
         @SerializedName("CurrentValue")
-        private float mCurrentValue;
+        private Float mCurrentValue;
         @SerializedName("Time")
         private String mTime;
 
-        public float getValue() {
+        public Float getValue() {
             return mCurrentValue;
         }
 

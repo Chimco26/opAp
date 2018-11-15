@@ -339,13 +339,15 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
-            tracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Stop Reason Report")
-                    .setAction("Report Failed")
-                    .setLabel("Screen: SelectStopReasonFragment, Error: " + reason.getDetailedDescription())
-                    .build());
 
+            if (getActivity() != null && getActivity().getApplication() != null) {
+                Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stop Reason Report")
+                        .setAction("Report Failed")
+                        .setLabel("Screen: SelectStopReasonFragment, Error: " + reason.getDetailedDescription())
+                        .build());
+            }
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
                 ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override

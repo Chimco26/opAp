@@ -1102,7 +1102,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         }
 
-        if (PersistenceManager.getInstance().isDisplayToolbarTutorial()) {
+        if ((!BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) && PersistenceManager.getInstance().isDisplayToolbarTutorial()) {
             startToolbarTutorial();
         }
 
@@ -1731,7 +1731,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events) {
 
-        clearOver24HShift();
+        int deletedEvents = clearOver24HShift();
 
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
@@ -1818,6 +1818,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mNoData = true;
                 mNoNotificationsText.setVisibility(View.VISIBLE);
             }
+            if (deletedEvents > 0){
+
+                Cursor cursor;
+                if (mIsSelectionMode) {
+
+                    cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+
+                } else {
+
+                    cursor = getCursorByType();
+                }
+                setShiftLogAdapter(cursor);
+            }
         }
 
         mIsNewShiftLogs = true;
@@ -1846,7 +1859,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
     }
 
-    private void clearOver24HShift() {
+    private int clearOver24HShift() {
 
         ArrayList<Event> toDelete = new ArrayList<>();
 
@@ -1865,6 +1878,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mDatabaseHelper.deleteEvent(event.getEventID());
         }
 
+        return toDelete.size();
     }
 
     @Override

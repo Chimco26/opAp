@@ -38,14 +38,14 @@ public class ChartFragment extends BackStackAwareFragment {
 
     private static final String LOG_TAG = ChartFragment.class.getSimpleName();
 
-    private ArrayList<Entry> mValues;
+    private ArrayList<ArrayList<Entry>> mValues;
     private float mMinVal;
     private float mStandardVal;
     private float mMaxVal;
     private String[] mXValues;
     private String mFieldName;
 
-    public static ChartFragment newInstance(ArrayList<Entry> values, float min, float standard, float max, String[] xValues,String fieldName) {
+    public static ChartFragment newInstance(ArrayList<ArrayList<Entry>> values, float min, float standard, float max, String[] xValues, String fieldName) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
         Bundle args = new Bundle();
@@ -67,7 +67,7 @@ public class ChartFragment extends BackStackAwareFragment {
 
         if (getArguments() != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Entry>>() {
+            Type listType = new TypeToken<ArrayList<ArrayList<Entry>>>() {
             }.getType();
             mValues = gson.fromJson(getArguments().getString(VALUES), listType);
             mMinVal = getArguments().getFloat(MIN);
@@ -78,10 +78,12 @@ public class ChartFragment extends BackStackAwareFragment {
         }
 
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        if (getActivity() != null && getActivity().getApplication() != null) {
+            OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+            Tracker mTracker = application.getDefaultTracker();
+            mTracker.setScreenName(LOG_TAG);
+            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
     }
 
     @Override

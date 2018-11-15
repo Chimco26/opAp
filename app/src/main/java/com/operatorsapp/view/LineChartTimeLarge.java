@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.operatorsapp.R;
 
@@ -192,31 +193,35 @@ public class LineChartTimeLarge extends FrameLayout {
     }
 
 
-    public void setData(final ArrayList<Entry> values, String[] xValues, final float lowLimit, final float highLimit) {
+    public void setData(final ArrayList<ArrayList<Entry>> values, String[] xValues, final float lowLimit, final float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setValueTextColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(10f);
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        for (ArrayList<Entry> entries : values) {
+            LineDataSet set1 = new LineDataSet(entries, "DataSet 1");
+            set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+            set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setValueTextColor(ColorTemplate.getHoloBlue());
+            set1.setLineWidth(10f);
 //        set1.setDrawCircles(false);
-        set1.setDrawValues(false);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
+            set1.setDrawValues(false);
+            set1.setFillAlpha(65);
+            set1.setFillColor(ColorTemplate.getHoloBlue());
+            set1.setHighLightColor(Color.rgb(244, 117, 117));
 //        set1.setDrawCircleHole(false);
 
 
-        set1.setCircleRadius(10);
-        set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setDrawCircleHole(true);
-        set1.setDrawCircles(true);
+            set1.setCircleRadius(10);
+            set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setDrawCircleHole(true);
+            set1.setDrawCircles(true);
 
+            dataSets.add(set1);
+        }
 
         // create a data object with the datasets
-        LineData data = new LineData(set1);
+        LineData data = new LineData(dataSets);
         data.setValueTextColor(Color.WHITE);
         data.setValueTextSize(9f);
 
@@ -224,22 +229,24 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart.setData(data);
         mChart.animateX(300);
 
+        final Entry[] lastValue = new Entry[1];
+
         mChart.post(new Runnable() {
             @Override
             public void run() {
 
                 float max = highLimit;
                 float min = lowLimit;
-                for (Entry entry : values)
-                {
-                    float entryY = entry.getY();
-                    if(entryY > max)
-                    {
-                        max = entryY;
-                    }
-                    if(entryY < min)
-                    {
-                        min = entryY;
+                for (ArrayList<Entry> entries : values) {
+                    for (Entry entry : entries) {
+                        float entryY = entry.getY();
+                        if (entryY > max) {
+                            max = entryY;
+                        }
+                        if (entryY < min) {
+                            min = entryY;
+                        }
+                        lastValue[0] = entry;
                     }
                 }
 
@@ -252,10 +259,10 @@ public class LineChartTimeLarge extends FrameLayout {
                 leftAxis.resetAxisMinValue();
                 leftAxis.setAxisMinValue(min);
                 leftAxis.setAxisMaxValue(max);
-                leftAxis.calculate(min,max);
+                leftAxis.calculate(min, max);
 
                 mChart.zoomOut(); // needed for refresh
-                mChart.moveViewToX(values.get(values.size() - 1).getX());
+                mChart.moveViewToX(lastValue[0].getX());
                 mChart.invalidate();
             }
         });

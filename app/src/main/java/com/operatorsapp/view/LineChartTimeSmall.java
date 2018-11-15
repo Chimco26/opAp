@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.operatorsapp.R;
@@ -101,7 +102,7 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
         xAxis.setCenterAxisLabels(true);
-        xAxis.setLabelCount(5,true); // force only 4 labels as size is constant
+        xAxis.setLabelCount(5, true); // force only 4 labels as size is constant
 
         xAxis.setValueFormatter(new AxisValueFormatter() {
             @Override
@@ -172,37 +173,43 @@ public class LineChartTimeSmall extends FrameLayout {
         rightAxis.setEnabled(false);
     }
 
-    public void setData(final ArrayList<Entry> values, String[] xValues, final Float lowLimit, final Float highLimit) {
+    public void setData(final ArrayList<ArrayList<Entry>> values, String[] xValues, final Float lowLimit, final Float highLimit) {
         mXValues = xValues;
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setValueTextColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(3f);
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        for (ArrayList<Entry> entries : values) {
+            LineDataSet set1 = new LineDataSet(entries, "DataSet 1");
+            set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+            set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setValueTextColor(ColorTemplate.getHoloBlue());
+            set1.setLineWidth(3f);
 //        set1.setDrawCircles(false);
-        set1.setDrawValues(false);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
+            set1.setDrawValues(true);
+            set1.setFillAlpha(65);
+            set1.setFillColor(ColorTemplate.getHoloBlue());
+            set1.setHighLightColor(Color.rgb(244, 117, 117));
 //        set1.setDrawCircleHole(false);
-        set1.setCircleRadius(3);
-        set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
-        set1.setDrawCircleHole(true);
-        set1.setDrawCircles(true);
+            set1.setCircleRadius(3);
+            set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setDrawCircleHole(true);
+            set1.setDrawCircles(true);
 
-        set1.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                //rather than diaplaying value show label
-                return entry.getData().toString();
-            }
-        });
-
+            set1.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    //rather than diaplaying value show label
+                    if (entry == null || entry.getData() == null) {
+                        return "";
+                    }
+                    return entry.getData().toString();
+                }
+            });
+            dataSets.add(set1);
+        }
         // create a data object with the datasets
-        LineData data = new LineData(set1);
+        LineData data = new LineData(dataSets);
         data.setValueTextColor(Color.WHITE);
         data.setValueTextSize(9f);
 
@@ -216,23 +223,24 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
 
 //        setLimitLines(lowLimit,highLimit,standardValue);
-
+        final Entry[] lastValue = new Entry[1];
 
         mChart.post(new Runnable() {
             @Override
             public void run() {
                 float max = highLimit;
                 float min = lowLimit;
-                for (Entry entry : values)
-                {
-                    float entryY = entry.getY();
-                    if(entryY > max)
-                    {
-                        max = entryY;
-                    }
-                    if(entryY < min)
-                    {
-                        min = entryY;
+                for (ArrayList<Entry> entries : values) {
+                    for (Entry entry : entries) {
+
+                        float entryY = entry.getY();
+                        if (entryY > max) {
+                            max = entryY;
+                        }
+                        if (entryY < min) {
+                            min = entryY;
+                        }
+                        lastValue[0] = entry;
                     }
                 }
 
@@ -246,19 +254,17 @@ public class LineChartTimeSmall extends FrameLayout {
                 leftAxis.setAxisMinValue(min);
                 leftAxis.setAxisMaxValue(max);
                 mChart.zoomOut(); // needed due to chart lib not refreshing.
-                mChart.moveViewToX(values.get(values.size() - 1).getX());
+                mChart.moveViewToX(lastValue[0].getX());
 
                 float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
-                                .getPaintAxisLabels());
+                        .getPaintAxisLabels());
 
                 mChart.resetViewPortOffsets();
                 mChart.setViewPortOffsets(offsetLeft, 8f, 0f, 25f);
                 mChart.invalidate();
-                mChart.post(new Runnable()
-                {
+                mChart.post(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         float offsetLeft = mChart.getAxisLeft().getRequiredWidthSpace(mChart.getRendererLeftYAxis()
                                 .getPaintAxisLabels());
 
@@ -271,8 +277,7 @@ public class LineChartTimeSmall extends FrameLayout {
         });
     }
 
-    public void setLimitLines(Float lowLimit, Float highLimit, Float standardValue)
-    {
+    public void setLimitLines(Float lowLimit, Float highLimit, Float standardValue) {
 
         //zero line, removed due to performance cost
         YAxis leftAxis = mChart.getAxisLeft();
@@ -282,13 +287,11 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.addLimitLine(limitLine1);
 
 
-
         addStandardLine(standardValue); // standard line, removed due to performance cost
         addLimitLines(lowLimit, highLimit);
     }
 
-    private void addStandardLine(Float standardValue)
-    {
+    private void addStandardLine(Float standardValue) {
         YAxis leftAxis = mChart.getAxisLeft();
         LimitLine limitLine2 = new LimitLine(standardValue, "");
         limitLine2.setLineColor(ContextCompat.getColor(mContext, R.color.C16));
@@ -299,8 +302,7 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.addLimitLine(limitLine2);
     }
 
-    private void addLimitLines(Float lowLimit, Float highLimit)
-    {
+    private void addLimitLines(Float lowLimit, Float highLimit) {
         YAxis leftAxis = mChart.getAxisLeft();
         LimitLine limitLine3 = new LimitLine(lowLimit, "");
         limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
