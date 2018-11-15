@@ -525,7 +525,7 @@ public class WidgetAdapter extends Adapter {
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
             }
             if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
-                projectionViewHolder.mEndDivider.setVisibility(View.GONE);
+                projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
             } else {
                 projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
             }
@@ -534,8 +534,8 @@ public class WidgetAdapter extends Adapter {
         private void setRangeData (Widget widget, RangeViewHolder rangeViewHolder){
             float currentValue = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
             if (widget.isOutOfRange() && currentValue > widget.getHighLimit()) {
-                rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
-                rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
+                rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
+                rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
                 rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
                 rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
                 if (mClosedState) {
@@ -544,8 +544,8 @@ public class WidgetAdapter extends Adapter {
 
                 rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
             } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
-                rangeViewHolder.mRangeViewBlue.setVisibility(View.GONE);
-                rangeViewHolder.mCurrentValue.setVisibility(View.GONE);
+                rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
+                rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
                 rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
                 rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
                 if (mClosedState) {
@@ -554,8 +554,8 @@ public class WidgetAdapter extends Adapter {
 
                 rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
             } else {
-                rangeViewHolder.mRangeViewRed.setVisibility(View.GONE);
-                rangeViewHolder.mRedMark.setVisibility(View.GONE);
+                rangeViewHolder.mRangeViewRed.setVisibility(View.INVISIBLE);
+                rangeViewHolder.mRedMark.setVisibility(View.INVISIBLE);
                 rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
                 rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
                 if (widget.getHighLimit() > widget.getLowLimit()) {
