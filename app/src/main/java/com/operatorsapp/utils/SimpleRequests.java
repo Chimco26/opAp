@@ -398,11 +398,11 @@ public class SimpleRequests {
 
         final int[] retryCount = {0};
 
-        Call<String> call = postSplitEventNetworkManager.emeraldPostSplitEvent(siteUrl, requestTimeout, TimeUnit.SECONDS).postSplitEvent(splitEventRequest);
+        Call<ErrorResponseNewVersion> call = postSplitEventNetworkManager.emeraldPostSplitEvent(siteUrl, requestTimeout, TimeUnit.SECONDS).postSplitEvent(splitEventRequest);
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<ErrorResponseNewVersion>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
@@ -420,7 +420,7 @@ public class SimpleRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

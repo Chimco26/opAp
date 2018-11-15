@@ -195,42 +195,58 @@
                     android:layout_marginStart="15dp"
                     android:background="@color/dark_indigo" />
 
-                <TextView
-                    android:id="@+id/toolbar_technician_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:gravity="center"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:textStyle="bold"
-                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:id="@+id/toolbar_technician_button"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/toolbar_technician_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:textStyle="bold"
+                        android:layout_toRightOf="@+id/toolbar_technician_indicator_iv"
+                        android:layout_centerVertical="true"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/toolbar_technician_iv"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/technician" />
 
 
                     <ImageView
-                        android:id="@+id/toolbar_technician"
-                        android:layout_width="40dp"
-                        android:layout_height="35dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/technician" />
+                        android:id="@+id/toolbar_technician_indicator_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/toolbar_technician_iv"
+                        android:layout_alignTop="@+id/toolbar_technician_iv"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_centerVertical="true"/>
 
-                    <TextView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignBottom="@+id/toolbar_technician"
-                        android:layout_toEndOf="@+id/toolbar_technician"
-                        android:visibility="visible"
-                        android:text="▼"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        />
+
+                    <!--<TextView-->
+                        <!--android:layout_width="15dp"-->
+                        <!--android:layout_height="15dp"-->
+                        <!--android:layout_alignBottom="@+id/toolbar_technician"-->
+                        <!--android:layout_toEndOf="@+id/toolbar_technician"-->
+                        <!--android:visibility="visible"-->
+                        <!--android:text="▼"-->
+                        <!--android:textColor="@color/white"-->
+                        <!--android:textSize="12sp"-->
+                        <!--/>-->
 
                 </RelativeLayout>
 
@@ -242,8 +258,8 @@
 
                 <com.operatorsapp.view.EmeraldSpinner
                     android:id="@+id/toolbar_production_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     tools:ignore="MissingPrefix"
                     android:layout_marginStart="15dp"
                     android:layout_gravity="center_vertical"
@@ -296,8 +312,8 @@
 
                 <ImageView
                     android:id="@+id/iv_user_icon"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="5dp"
                     android:src="@drawable/user_new_small" />
