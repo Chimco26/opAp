@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "623327515173",
-    "firebase_url": "https://opapp-3197d.firebaseio.com",
-    "project_id": "opapp-3197d",
-    "storage_bucket": "opapp-3197d.appspot.com"
+    "project_number": "674311762554",
+    "firebase_url": "https://lenox-opp-app.firebaseio.com",
+    "project_id": "lenox-opp-app",
+    "storage_bucket": "lenox-opp-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623327515173:android:011f8f9cdc89ada1",
+        "mobilesdk_app_id": "1:674311762554:android:450b2023a313c1aa",
         "android_client_info": {
           "package_name": "com.operatorsapp.lenox"
         }
       },
       "oauth_client": [
         {
-          "client_id": "623327515173-nrrsq3lf88uj1ead5d57c6b6id7v167k.apps.googleusercontent.com",
+          "client_id": "674311762554-p29cqr25kkbk8d781hfa8sp55qetca6t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDRwZ5uuXFxFjeLQwAvZOxuXofRL3Pbmu8"
+          "current_key": "AIzaSyBVbIh__-tJJZEBl00lUR658nTq-FYEHZ0"
         }
       ],
       "services": {
