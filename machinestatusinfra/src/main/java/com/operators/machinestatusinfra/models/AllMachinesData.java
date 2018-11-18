@@ -80,9 +80,15 @@ public class AllMachinesData {
     private boolean mCustomerIsActivateJobs;
     @SerializedName("ProductionModeWarning")
     private boolean mProductionModeWarning;
+    @SerializedName("CurrentStatusTimeMin")
+    private int mCurrentStatusTimeMin;
 
     // TODO: 29/07/2018 worker sign in name + number
 
+
+    public int getCurrentStatusTimeMin() {
+        return mCurrentStatusTimeMin;
+    }
 
     public boolean ismCustomerIsActivateJobs() {
         return mCustomerIsActivateJobs;

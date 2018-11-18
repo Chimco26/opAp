@@ -483,7 +483,7 @@ public class WidgetAdapter extends Adapter {
     }
 
         private boolean isNearestTexts ( float currentFloat, Float projection){
-            return ((currentFloat / projection) < 1.2 || (projection / currentFloat) > 0.8);
+            return ((currentFloat / projection) < 1.2 && (currentFloat / projection) > 0.8);
         }
 
         private void setSizes ( final RelativeLayout parent){
@@ -562,7 +562,11 @@ public class WidgetAdapter extends Adapter {
                     float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
                     float currentFloatValue = currentValue - widget.getLowLimit();
                     final float convertCurrentValue = currentFloatValue / scaleValue;
-                    rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
+                    if (convertCurrentValue > 0.5){
+                        rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue - 7)/* half of the line*/);
+                    }else {
+                        rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
+                    }
                     rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
                 }
             }

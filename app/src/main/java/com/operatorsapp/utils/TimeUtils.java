@@ -22,6 +22,8 @@ public class TimeUtils {
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
+    private static final int ONE_DAY_IN_MINUTS = ONE_DAY_IN_SECONDS / 60;
+    private static final int ONE_HOUR_IN_MINUTS = ONE_HOUR_IN_SECONDS / 60;
     private static final String LOG_TAG = TimeUtils.class.getSimpleName();
 
     @SuppressWarnings("unused")
@@ -94,7 +96,7 @@ public class TimeUtils {
                     h = "Hour";
                 } else {
                     // Ohad change 6/6/17
-                    h = context.getResources().getQuantityString(R.plurals.hours,1);
+                    h = context.getResources().getQuantityString(R.plurals.hours, 1);
                     //h = "שעה";
                 }
             } else {
@@ -290,9 +292,9 @@ public class TimeUtils {
                 out = dateFormat2.format(date);
             } catch (ParseException ignored) {
             } catch (java.text.ParseException e) {
-                if(e.getMessage()!=null)
+                if (e.getMessage() != null)
 
-                Log.e(LOG_TAG,e.getMessage());
+                    Log.e(LOG_TAG, e.getMessage());
             }
 
             return out;
@@ -309,10 +311,35 @@ public class TimeUtils {
             Date mDate = sdf.parse(date);
             timeInMilliseconds = mDate.getTime();
         } catch (java.text.ParseException e) {
-            if(e.getMessage()!=null)
+            if (e.getMessage() != null)
 
-            Log.e(LOG_TAG,e.getMessage());
+                Log.e(LOG_TAG, e.getMessage());
         }
         return timeInMilliseconds;
+    }
+
+    public static String getTimeFromMinute(int minute) {
+
+        String result = "";
+
+        int days = minute / ONE_DAY_IN_MINUTS;
+
+        if (days > 0) {
+            result += days + "d" + " ";
+            minute -= days * ONE_DAY_IN_MINUTS;
+        }
+
+        int hours = minute / ONE_HOUR_IN_MINUTS;
+
+        if (hours > 0) {
+            result += hours + "hr" + " ";
+            minute -= hours * ONE_HOUR_IN_MINUTS;
+        }
+
+        if (minute > 0) {
+            result += minute + "min";
+        }
+
+        return result;
     }
 }

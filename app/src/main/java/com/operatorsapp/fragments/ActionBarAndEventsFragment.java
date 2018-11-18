@@ -223,6 +223,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private EmeraldSpinner mLanguagesSpinner;
     private View mStatusWhiteFilter;
     private RelativeLayout technicianRl;
+    private TextView mStatusTimeMinTv;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -954,6 +955,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
+            mStatusTimeMinTv = mToolBarView.findViewById(R.id.ATATV_status_time_min);
 
             setNotificationNeedResponse();
             setTechnicianCallStatus("");
@@ -1997,6 +1999,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusAggregation(machineStatus);
         mMachineStatusLayout.setVisibility(View.VISIBLE);
 
+        mStatusTimeMinTv.setText(TimeUtils.getTimeFromMinute(machineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin()));
 
     }
 
@@ -2058,7 +2061,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
 
-            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.working));//bahir koulam kmo lenox
+            mStatusIndicatorImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.working));
 
         } else if (status == MachineStatus.MachineServerStatus.STOPPED.getId()) {
 

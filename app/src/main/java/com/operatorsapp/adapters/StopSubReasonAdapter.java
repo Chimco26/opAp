@@ -61,14 +61,15 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         String nameByLang = OperatorApplication.isEnglishLang() ? mSubReasonsList.get(position).getEName() : mSubReasonsList.get(position).getLName();
         holder.mStopTitle.setText(nameByLang);
-        holder.mStopTitle.setTextColor(Color.WHITE);
 
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
 
+            holder.mStopTitle.setTextColor(Color.WHITE);
             holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mStopReason.getId())));
             holder.itemView.setBackground(mContext.getDrawable(ReasonImageLenox.getSubReasonBackgroundColor(mStopReason.getId())));
 
         } else {
+            holder.mStopTitle.setTextColor(mContext.getResources().getColor(R.color.color_jobs_row));
             if (mSelectedPosition == position) {
                 holder.mReasonImage.setBackground(mContext.getDrawable(R.drawable.btn_pressed));
                 holder.mImageTitle.setTextColor(Color.WHITE);
