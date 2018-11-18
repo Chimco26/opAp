@@ -120,10 +120,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         }
 
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        if( getActivity() != null && getActivity().getApplication() != null) {
+            OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+            Tracker mTracker = application.getDefaultTracker();
+            mTracker.setScreenName(LOG_TAG);
+            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
 //        getActiveJobs();
     }
 
@@ -133,9 +135,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         final View view = inflater.inflate(R.layout.fragment_report_stop_reason_new, container, false);
 
         setActionBar();
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
-            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
-        }
+
 //        mActiveJobsProgressBar = (ProgressBar) view.findViewById(R.id.active_jobs_progressBar);
         return view;
     }
@@ -145,12 +145,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
 
-//        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
-//
-//            mFlavorSpanDif = -1;
-//        }
-        //TODO Lenox uncomment
-
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+            view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
+            mFlavorSpanDif = -2;
+            mRecyclerView.setPadding(200,0,0,0);
+        }
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
             OppAppLogger.getInstance().i(LOG_TAG, "No Reasons in list");

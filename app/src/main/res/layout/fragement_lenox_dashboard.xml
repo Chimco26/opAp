@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="170dp"
+        >
     <ImageView
         android:id="@+id/FLD_image_view"
         android:layout_width="673dp"
         android:layout_height="331dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/lenox_360_logo"
         android:layout_gravity="center"
-        android:layout_marginStart="170dp"
         />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/powered_by_leadermess_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/grey_lite"
+        android:text="@string/powered_by_leadermes"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:visibility="visible"
+        />
+
+    </RelativeLayout>
+
+</RelativeLayout>

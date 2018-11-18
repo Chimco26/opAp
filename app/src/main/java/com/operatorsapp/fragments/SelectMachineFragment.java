@@ -97,11 +97,12 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
 
         // Analytics
-        OperatorApplication application = (OperatorApplication) getActivity().getApplication();
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
+        if (getActivity() != null && getActivity().getApplication() != null) {
+            OperatorApplication application = (OperatorApplication) getActivity().getApplication();
+            Tracker mTracker = application.getDefaultTracker();
+            mTracker.setScreenName(LOG_TAG);
+            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
     }
 
 

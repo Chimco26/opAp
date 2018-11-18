@@ -119,5 +119,42 @@ public class ReasonImageLenox {
         }
         return imageId;
 
+    }public static int getSubReasonBackgroundColor(int subReasons) {
+
+        int imageId;
+
+        switch (subReasons) {
+            case 2: {
+                imageId = R.drawable.circle_yellow;
+                break;
+            }
+            case 4: {
+                imageId = R.drawable.circle_purple;
+                break;
+            }
+            case 6: {
+                imageId = R.drawable.circle_purple_other;
+                break;
+            }
+            case 7: {
+                imageId = R.drawable.circle_green;
+                break;
+            }
+            case 9: {
+                imageId = R.drawable.circle_blue_blade;
+                break;
+            }
+            case 12: {
+                imageId = R.drawable.circle_blue_light;
+
+                break;
+            }
+            default:{
+                imageId = R.drawable.circle_purple_other;
+
+            }
+        }
+        return imageId;
+
     }
 }

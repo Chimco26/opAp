@@ -26,15 +26,15 @@ import java.util.List;
 public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdapter.ViewHolder> {
 
     private static final String LOG_TAG = StopSubReasonAdapter.class.getSimpleName();
-    private final StopReasons mSubReasons;
+    private final StopReasons mStopReason;
     private List<SubReasons> mSubReasonsList;
     private Context mContext;
     private int mSelectedPosition = -1;
     private OnSelectedSubReasonListener mOnSelectedSubReasonListener;
 
-    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasons subReasonsList) {
-        mSubReasonsList = subReasonsList.getSubReasons();
-        mSubReasons = subReasonsList;
+    public StopSubReasonAdapter(OnSelectedSubReasonListener onSelectedSubReasonListener, Context context, StopReasons stopReason) {
+        mSubReasonsList = stopReason.getSubReasons();
+        mStopReason = stopReason;
         mContext = context;
         mOnSelectedSubReasonListener = onSelectedSubReasonListener;
     }
@@ -65,7 +65,8 @@ public class StopSubReasonAdapter extends RecyclerView.Adapter<StopSubReasonAdap
 
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
 
-            holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mSubReasons.getId())));
+            holder.mReasonImage.setImageDrawable(mContext.getDrawable(ReasonImageLenox.getSubReasonIc(mStopReason.getId())));
+            holder.itemView.setBackground(mContext.getDrawable(ReasonImageLenox.getSubReasonBackgroundColor(mStopReason.getId())));
 
         } else {
             if (mSelectedPosition == position) {

@@ -21,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
@@ -38,18 +38,13 @@ import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.server.responses.Notification;
-import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
-import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -147,6 +142,12 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setActionBar();
+    }
+
     private void ravtechTest(View rootView) {
 
         rootView.findViewById(R.id.ravtech_test).setOnClickListener(new View.OnClickListener() {
@@ -216,6 +217,12 @@ public class LoginFragment extends Fragment {
         if (getActivity() != null) {
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
+                LayoutInflater inflator = LayoutInflater.from(getActivity());
+                @SuppressLint("InflateParams") View view = inflator.inflate(R.layout.actionbar_title_view1, null);
+                ImageView backButton = view.findViewById(R.id.action_bar_back_btn);
+                backButton.setVisibility(View.GONE);
+                ((TextView) view.findViewById(R.id.title)).setText("");
+                actionBar.setCustomView(view);
                 actionBar.setHomeButtonEnabled(false);
                 actionBar.setDisplayHomeAsUpEnabled(false);
                 actionBar.setDisplayShowTitleEnabled(false);
@@ -246,6 +253,8 @@ public class LoginFragment extends Fragment {
 
     private void tryToLogin() {
         mNavigationCallback.isTryToLogin(true);
+        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+
         ProgressDialogManager.show(getActivity());
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString().toLowerCase();
