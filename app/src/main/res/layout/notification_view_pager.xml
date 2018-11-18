@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/NVP_view_pager_ly_tabs"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/NVP_view_pager_tv_left_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/general"
+                android:textColor="@color/C16"
+                android:textSize="24sp" />
+
+            <View
+                android:id="@+id/NVP_view_pager_left_tab_underline"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/tabNotificationColor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/NVP_view_pager_tv_right_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/service_calls"
+                android:textColor="@color/C16"
+                android:textSize="24sp" />
+
+            <View
+                android:id="@+id/NVP_view_pager_right_tab_underline"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:background="@color/tabNotificationColor" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/NVP_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!--<android.support.v4.view.PagerTabStrip-->
+            <!--android:id="@+id/FVP_view_pager_header"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="top"-->
+            <!--style="@style/FontStyle_tabStrip"-->
+            <!--android:paddingBottom="6dp"-->
+            <!--android:paddingTop="6dp" />-->
+
+    </android.support.v4.view.ViewPager>
+
+
+</LinearLayout>

@@ -59,6 +59,8 @@ import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -104,6 +106,7 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
@@ -122,6 +125,8 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -147,6 +152,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
     private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 5;
     private static final long ONE_HOUR = 1000 * 60 * 60;
+    private static final long HALF_HOUR = 1000 * 60 * 30;
     private static final int PRODUCTION_ID = 1;
 
     private View mToolBarView;
@@ -486,6 +492,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 String technicianName = intent.getStringExtra(Consts.NOTIFICATION_TECHNICIAN_NAME);
 
                 if (type == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
+
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)mTechnicianIndicatorTv.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_TOP, RelativeLayout.TRUE);
+                    layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+                    mTechnicianIndicatorTv.setLayoutParams(layoutParams);
+
                     int status = intent.getIntExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, 0);
                     mHandlerTechnicianCall.removeCallbacksAndMessages(null);
                     long delay = 0;
@@ -501,7 +513,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.recieved));
-                            mTechnicianIndicatorTv.setText(R.string.message_received);
+                            mTechnicianIndicatorTv.setText(getString(R.string.message_received) + "\n" + technicianName);
                             delay = ONE_HOUR;
                             break;
 
@@ -509,7 +521,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
                             mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.decline2));
-                            mTechnicianIndicatorTv.setText(R.string.message_declined);
+                            mTechnicianIndicatorTv.setText(getString(R.string.message_declined) + "\n" + technicianName);
                             PersistenceManager.getInstance().setTechnicianCallTime(0);
                             delay = 1000 * 60 * 2;
                             break;
@@ -518,14 +530,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
-                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.work));
+                            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.work));
                             mTechnicianIndicatorTv.setText(getString(R.string.at_work) + "\n" + technicianName);
-                            delay = ONE_HOUR;
+                            delay = HALF_HOUR;
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
-                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.done));
+                            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.done));
                             mTechnicianIndicatorTv.setText(getString(R.string.work_comlpeted) + "\n" + technicianName);
                             PersistenceManager.getInstance().setTechnicianCallTime(0);
                             delay = 1000 * 60 * 2;
@@ -537,9 +549,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mHandlerTechnicianCall.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.technician));
-                            mTechnicianIndicatorTv.setVisibility(View.GONE);
-                            mTechnicianIndicatorIv.setImageDrawable(null);
+                            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.arrow_drop_down_white));
+                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)mTechnicianIndicatorTv.getLayoutParams();
+                            layoutParams.addRule(RelativeLayout.ALIGN_TOP, 0);
+                            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                            mTechnicianIndicatorTv.setLayoutParams(layoutParams);
                             mTechnicianIndicatorTv.setText("");
                         }
                     }, delay);
@@ -1159,7 +1173,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         long technicianCallTime = PersistenceManager.getInstance().getTechnicianCallTime();
         long now = new Date().getTime();
         if (technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
-            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.recieved));
+            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)mTechnicianIndicatorTv.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_TOP, RelativeLayout.TRUE);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+            mTechnicianIndicatorTv.setLayoutParams(layoutParams);
             mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
             mTechnicianIndicatorTv.setVisibility(View.VISIBLE);
             mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techName);
@@ -1170,8 +1188,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 public void run() {
                     if (PersistenceManager.getInstance().getTechnicianCallTime() > 0) {
                         PersistenceManager.getInstance().setTechnicianCallTime(0);
-                        mTechnicianIndicatorIv.setImageDrawable(null);
-                        //mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.technician));
+                        //mTechnicianIndicatorIv.setImageDrawable(null);
+                        mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.arrow_drop_down_white));
                         mTechnicianIndicatorTv.setVisibility(View.GONE);
                         mTechnicianIndicatorTv.setText("");
 
@@ -1182,6 +1200,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 .setMessage(getString(R.string.call_for_technician_unresponsive))
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.arrow_drop_down_white));
+                                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)mTechnicianIndicatorTv.getLayoutParams();
+                                        layoutParams.addRule(RelativeLayout.ALIGN_TOP, 0);
+                                        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                                        mTechnicianIndicatorTv.setLayoutParams(layoutParams);
                                         dialog.dismiss();
                                     }
                                 })
@@ -1191,8 +1214,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
         } else {
-            mTechnicianIndicatorIv.setImageDrawable(null);
-            //mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.technician));
+            //mTechnicianIndicatorIv.setImageDrawable(null);
+            mTechnicianIndicatorIv.setImageDrawable(getResources().getDrawable(R.drawable.arrow_drop_down_white));
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)mTechnicianIndicatorTv.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_TOP, 0);
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            mTechnicianIndicatorTv.setLayoutParams(layoutParams);
             mTechnicianIndicatorTv.setVisibility(View.GONE);
             mTechnicianIndicatorTv.setText("");
         }
@@ -1220,7 +1247,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)) {
             return;
         }
+
         final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
+
+        Collections.sort(techniciansList, new Comparator<Technician>() {
+            @Override
+            public int compare(Technician o1, Technician o2) {
+                if (OperatorApplication.isEnglishLang()){
+                    return o1.getEName().compareTo(o2.getEName());
+                }else {
+                    return o1.getLName().compareTo(o2.getLName());
+                }
+            }
+        });
 
         if (mPopUpDialog != null && mPopUpDialog.isShowing()){
             mPopUpDialog.dismiss();
@@ -1273,16 +1312,43 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
                     public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
-                        PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
-                        setTechnicianCallStatus(techName);
+                        if (response.body() != null && response.body().getmError() == null) {
+                            PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
+                            setTechnicianCallStatus(techName);
+                            getNotificationsFromServer();
+                            ProgressDialogManager.dismiss();
 
-                        ProgressDialogManager.dismiss();
 
+                            Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                            tracker.send(new HitBuilders.EventBuilder()
+                                    .setCategory("Technician Call")
+                                    .setAction("Technician was called Successfully")
+                                    .setLabel("technician name: " + techName)
+                                    .build());
+                        }else {
+                            String msg = "failed";
+                            if (response.body() != null && response.body().getmError() != null){
+                                msg = response.body().getmError().getmErrorMessage();
+                            }
+                            onFailure(call, new Throwable(msg));
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
                         ProgressDialogManager.dismiss();
+
+                        String m = "";
+                        if (t != null && t.getMessage() != null){
+                            m = t.getMessage();
+                        }
+                        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                        tracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Technician Call")
+                                .setAction("Call for Technician failed")
+                                .setLabel("reason: " + m)
+                                .build());
+
                         ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
                 });
@@ -1319,11 +1385,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (notificationList.size() > 0) {
 
-            mPopUpDialog.setContentView(R.layout.frament_view_pager);
+            mPopUpDialog.setContentView(R.layout.notification_view_pager);
 
-            ViewPager vpDialog = mPopUpDialog.findViewById(R.id.FVP_view_pager);
-            PagerTabStrip vpTabs = mPopUpDialog.findViewById(R.id.FVP_view_pager_header);
-            vpTabs.setVisibility(View.VISIBLE);
+            final ViewPager vpDialog = mPopUpDialog.findViewById(R.id.NVP_view_pager);
+            final TextView rightTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_right_tab);
+            final TextView leftTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_left_tab);
+            final View rightTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_right_tab_underline);
+            final View leftTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_left_tab_underline);
 
 
             vpDialog.setAdapter(new NotificationsPagerAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
@@ -1333,6 +1401,50 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mPopUpDialog.dismiss();
                 }
             }));
+
+            vpDialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    switch (position){
+                        case 0:
+                            leftTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
+                            leftTabUnderline.setVisibility(View.VISIBLE);
+                            rightTab.setTextColor(getResources().getColor(R.color.dark_indigo));
+                            rightTabUnderline.setVisibility(View.INVISIBLE);
+                            break;
+                        case 1:
+                            rightTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
+                            rightTabUnderline.setVisibility(View.VISIBLE);
+                            leftTab.setTextColor(getResources().getColor(R.color.dark_indigo));
+                            leftTabUnderline.setVisibility(View.INVISIBLE);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+            leftTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    vpDialog.setCurrentItem(1);
+                }
+            });
+
+            rightTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    vpDialog.setCurrentItem(0);
+                }
+            });
 
             Point point = new Point(1, 1);
             ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
@@ -1352,6 +1464,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         mPopUpDialog.show();
+
+
+        Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Notifications dialog")
+                .setAction("Notifications dialog was opened")
+                .setLabel("Notifications dialog was opened")
+                .build());
     }
 
     private void sendNotificationResponse(final int notificationId, final int responseType) {
@@ -1413,6 +1533,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         int selected = 0;
 
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
+        final LinearLayout productionStatusSpinnerLil = mToolBarView.findViewById(R.id.toolbar_production_spinner_lil);
+        productionStatusSpinnerLil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                productionStatusSpinner.performClick();
+            }
+        });
+
         productionStatusSpinner.setVisibility(View.VISIBLE);
         final TextView textview = mToolBarView.findViewById(R.id.toolbar_production_text);
         ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
@@ -2302,6 +2430,36 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             mStatusWhiteFilter.setVisibility(View.GONE);
         }
+    }
+
+    private void getNotificationsFromServer(){
+
+        NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
+            @Override
+            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+
+                if (response != null && response.body() != null && response.body().getmError() == null) {
+
+                    for (Notification not : response.body().getmNotificationsList()) {
+                        not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
+                        not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                    }
+
+                    PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                }else {
+                    PersistenceManager.getInstance().setNotificationHistory(null);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+
+                PersistenceManager.getInstance().setNotificationHistory(null);
+
+            }
+        });
+
     }
 
     public interface ActionBarAndEventsFragmentListener {

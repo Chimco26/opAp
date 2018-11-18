@@ -120,33 +120,57 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         }
 
         switch (notification.getmResponseType()){
-
             case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
+
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
+                }else {
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
+                }
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
+
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
+                }else {
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
+                }
+                break;
+
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_blue));
+                break;
+
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.service_done));
                 break;
 
             default:
                 holder.mClarifyBtn.setVisibility(View.VISIBLE);
                 holder.mApproveBtn.setVisibility(View.VISIBLE);
                 holder.mDeclineBtn.setVisibility(View.VISIBLE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
+
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technician_dark));
+                }else {
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
+                }
+
                 break;
 
         }
@@ -154,11 +178,12 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         holder.mBodyTv.setText(notification.getmBody());
         holder.mSenderTv.setText(notification.getmSender());
         holder.mTimeTv.setText(time);
-        holder.mBodyTv.setText(notification.getmBody());
 
         if (mNotificationsList.get(position).getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
             holder.mBtnsLil.setVisibility(View.GONE);
-            holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.general_notificaion));
+            if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+                holder.mBodyTv.setText(mContext.getResources().getString(R.string.default_unanswered_technocian_call));
+            }
         }else {
 
             holder.mBtnsLil.setVisibility(View.VISIBLE);

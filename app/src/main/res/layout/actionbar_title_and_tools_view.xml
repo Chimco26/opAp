@@ -198,7 +198,7 @@
 
                 <RelativeLayout
                     android:id="@+id/toolbar_technician_button"
-                    android:layout_width="150dp"
+                    android:layout_width="210dp"
                     android:layout_height="match_parent">
 
                     <TextView
@@ -228,12 +228,13 @@
 
                     <ImageView
                         android:id="@+id/toolbar_technician_indicator_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_toRightOf="@+id/toolbar_technician_iv"
-                        android:layout_alignTop="@+id/toolbar_technician_iv"
+                        android:layout_centerInParent="true"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="2dp"
+                        android:src="@drawable/arrow_drop_down_white"
                         android:layout_centerVertical="true"/>
 
 
@@ -256,26 +257,33 @@
                     android:layout_height="match_parent"
                     android:background="@color/dark_indigo" />
 
-                <com.operatorsapp.view.EmeraldSpinner
-                    android:id="@+id/toolbar_production_spinner"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    tools:ignore="MissingPrefix"
-                    android:layout_marginStart="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/spinner_bckgrnd"
-                    android:popupBackground="@android:color/transparent"
-                    android:dropDownVerticalOffset="51dp" />
+                <LinearLayout
+                    android:id="@+id/toolbar_production_spinner_lil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/toolbar_production_text"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="16sp"
-                    android:layout_marginStart="15dp"
-                    android:gravity="center_vertical"/>
+                    <com.operatorsapp.view.EmeraldSpinner
+                        android:id="@+id/toolbar_production_spinner"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        tools:ignore="MissingPrefix"
+                        android:layout_marginStart="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/spinner_bckgrnd"
+                        android:popupBackground="@android:color/transparent"
+                        android:dropDownVerticalOffset="51dp" />
+
+                    <TextView
+                        android:id="@+id/toolbar_production_text"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:layout_marginStart="15dp"
+                        android:gravity="center_vertical"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
