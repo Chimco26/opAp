@@ -418,7 +418,7 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                         projectionViewHolder.mProjectionViewStart.setCurrentView(true);
-                        if (!isNearestTexts(currentFloat, widget.getProjection())) {
+                        if (!isNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
                         } else {
                             projectionViewHolder.mGrayValueInEndChart.setText("");
@@ -428,7 +428,7 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                         projectionViewHolder.mProjectionViewStart.setCurrentView(true);
                         projectionViewHolder.mProjectionViewEnd.hideView();
-                        if (!isNearestTexts(currentFloat, widget.getProjection())) {
+                        if (!isNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
                         } else {
                             projectionViewHolder.mGrayValueInChart.setText("");
@@ -477,166 +477,167 @@ public class WidgetAdapter extends Adapter {
             //        });
 
 
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
 
-        private boolean isNearestTexts ( float currentFloat, Float projection){
-            return ((currentFloat / projection) < 1.2 && (currentFloat / projection) > 0.8);
+    private boolean isNearestTexts(Widget widget) {
+        float size = widget.getStandardValue() - widget.getLowLimit();
+        return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size  < 0.15);
         }
 
-        private void setSizes ( final RelativeLayout parent){
-            ViewGroup.LayoutParams layoutParams;
-            layoutParams = parent.getLayoutParams();
-            layoutParams.height = (int) (mHeight * 0.45);
-            layoutParams.width = (int) (mWidth * 0.325);
-            parent.requestLayout();
+    private void setSizes(final RelativeLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
 
-        }
+    }
 
-        private void setProjectionData (ProjectionViewHolder projectionViewHolder, Widget widget,
-        float finalCurrentFloat){
-            String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-            projectionViewHolder.mTitle.setText(nameByLang4);
-            projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
-            projectionViewHolder.mValue.setText(valueInK(finalCurrentFloat));
-            if (widget.getTarget() >= widget.getLowLimit()) {
-                float scaleValue = (widget.getTarget() - widget.getLowLimit());
-                float currentValue = finalCurrentFloat - widget.getLowLimit();
-                float projectionValue = (widget.getProjection() - widget.getLowLimit());
-                float convertCurrentValue = 1;
-                float convertProjectionValue = 1;
-                if (scaleValue != 0) {
-                    convertCurrentValue = currentValue / scaleValue;
-                    convertProjectionValue = projectionValue / scaleValue;
-                }
-                float currentWidth = mProjectionCapsuleWidth * convertCurrentValue;
-                float projectionWidth = projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue;
-                if (currentWidth > 1000) {
-                    currentWidth = 1000;
-                }
-                if (projectionWidth > 1000) {
-                    projectionWidth = 1000;
-                }
-                projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue/* half of the line*/);
-                projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
-                projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
-                projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
+    private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget,
+                                   float finalCurrentFloat) {
+        String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        projectionViewHolder.mTitle.setText(nameByLang4);
+        projectionViewHolder.mSubtitle.setText(new StringBuilder(mContext.getString(R.string.total_required)).append(valueInK(widget.getTarget())));
+        projectionViewHolder.mValue.setText(valueInK(finalCurrentFloat));
+        if (widget.getTarget() >= widget.getLowLimit()) {
+            float scaleValue = (widget.getTarget() - widget.getLowLimit());
+            float currentValue = finalCurrentFloat - widget.getLowLimit();
+            float projectionValue = (widget.getProjection() - widget.getLowLimit());
+            float convertCurrentValue = 1;
+            float convertProjectionValue = 1;
+            if (scaleValue != 0) {
+                convertCurrentValue = currentValue / scaleValue;
+                convertProjectionValue = projectionValue / scaleValue;
             }
-            if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
-                projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
-            } else {
-                projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
+            float currentWidth = mProjectionCapsuleWidth * convertCurrentValue;
+            float projectionWidth = projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue;
+            if (currentWidth > 1000) {
+                currentWidth = 1000;
             }
-        }
-
-        private void setRangeData (Widget widget, RangeViewHolder rangeViewHolder){
-            float currentValue = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
-            if (widget.isOutOfRange() && currentValue > widget.getHighLimit()) {
-                rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
-                rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-                if (mClosedState) {
-                    rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.89)/*max location*/);
-                }  //todo
-
-                rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
-            } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
-                rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
-                rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
-                if (mClosedState) {
-                    rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.001)/*min location*/);
-                }  //todo
-
-                rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
-            } else {
-                rangeViewHolder.mRangeViewRed.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mRedMark.setVisibility(View.INVISIBLE);
-                rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
-                rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
-                if (widget.getHighLimit() > widget.getLowLimit()) {
-                    float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
-                    float currentFloatValue = currentValue - widget.getLowLimit();
-                    final float convertCurrentValue = currentFloatValue / scaleValue;
-                    if (convertCurrentValue > 0.5){
-                        rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue - 7)/* half of the line*/);
-                    }else {
-                        rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
-                    }
-                    rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
-                }
+            if (projectionWidth > 1000) {
+                projectionWidth = 1000;
             }
+            projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue/* half of the line*/);
+            projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
+            projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
+            projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
         }
+        if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
+            projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
+        } else {
+            projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
+        }
+    }
 
-        @SuppressLint("DefaultLocale")
-        private String valueInK ( float value){
-            String valueString = String.valueOf(value);
-            if (value >= 1000) {
-                float valueFloat = value / 1000;
-                if (value % 100 == 0) {
-                    valueString = String.format("%.1f", valueFloat);
+    private void setRangeData(Widget widget, RangeViewHolder rangeViewHolder) {
+        float currentValue = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
+        if (widget.isOutOfRange() && currentValue > widget.getHighLimit()) {
+            rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
+            rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
+            if (mClosedState) {
+                rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.89)/*max location*/);
+            }  //todo
+
+            rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
+        } else if (widget.isOutOfRange() && currentValue < widget.getLowLimit()) {
+            rangeViewHolder.mRangeViewBlue.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mCurrentValue.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mRangeViewRed.setVisibility(View.VISIBLE);
+            rangeViewHolder.mRedMark.setVisibility(View.VISIBLE);
+            if (mClosedState) {
+                rangeViewHolder.mRangeViewRed.updateX((float) (mRangeCapsuleWidth * 0.001)/*min location*/);
+            }  //todo
+
+            rangeViewHolder.mRedMark.setX(rangeViewHolder.mRangeViewRed.getX());
+        } else {
+            rangeViewHolder.mRangeViewRed.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mRedMark.setVisibility(View.INVISIBLE);
+            rangeViewHolder.mRangeViewBlue.setVisibility(View.VISIBLE);
+            rangeViewHolder.mCurrentValue.setVisibility(View.VISIBLE);
+            if (widget.getHighLimit() > widget.getLowLimit()) {
+                float scaleValue = (widget.getHighLimit() - widget.getLowLimit());
+                float currentFloatValue = currentValue - widget.getLowLimit();
+                final float convertCurrentValue = currentFloatValue / scaleValue;
+                if (convertCurrentValue > 0.5) {
+                    rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue - 7)/* half of the line*/);
                 } else {
-                    valueString = String.format("%.2f", valueFloat);
+                    rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
                 }
-                if (value % 1000 == 0) {
-                    valueString = String.valueOf(value / 1000);
-                }
-                return valueString + "k";
+                rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
+            }
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private String valueInK(float value) {
+        String valueString = String.valueOf(value);
+        if (value >= 1000) {
+            float valueFloat = value / 1000;
+            if (value % 100 == 0) {
+                valueString = String.format("%.1f", valueFloat);
             } else {
-                return valueString;
+                valueString = String.format("%.2f", valueFloat);
             }
-        }
-
-        @Override
-        public int getItemCount () {
-            if (mWidgets != null) {
-                return mWidgets.size();
-            } else return 0;
-        }
-
-        @Override
-        public int getItemViewType ( int position){
-            int type;
-            switch (mWidgets.get(position).getFieldType()) {
-                case 0:
-                    type = NUMERIC;
-                    break;
-                case 1:
-                    type = RANGE;
-                    break;
-                case 2:
-                    type = PROJECTION;
-                    break;
-                case 3:
-                    type = TIME;
-                    break;
-                default:
-                    type = NUMERIC;
-                    break;
+            if (value % 1000 == 0) {
+                valueString = String.valueOf(value / 1000);
             }
-            return type;
+            return valueString + "k";
+        } else {
+            return valueString;
         }
+    }
 
-        enum StringParse {
-            INT, FLOAT
+    @Override
+    public int getItemCount() {
+        if (mWidgets != null) {
+            return mWidgets.size();
+        } else return 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type;
+        switch (mWidgets.get(position).getFieldType()) {
+            case 0:
+                type = NUMERIC;
+                break;
+            case 1:
+                type = RANGE;
+                break;
+            case 2:
+                type = PROJECTION;
+                break;
+            case 3:
+                type = TIME;
+                break;
+            default:
+                type = NUMERIC;
+                break;
         }
+        return type;
+    }
 
-        private float tryParse (String value, StringParse stringParse){
-            try {
-                if (stringParse == StringParse.INT) {
-                    return Integer.parseInt(value);
-                }
-                if (stringParse == StringParse.FLOAT) {
-                    return Float.parseFloat(value);
-                }
-            } catch (NumberFormatException nfe) {
-                // Log exception.
-                return 0;
+    enum StringParse {
+        INT, FLOAT
+    }
+
+    private float tryParse(String value, StringParse stringParse) {
+        try {
+            if (stringParse == StringParse.INT) {
+                return Integer.parseInt(value);
             }
+            if (stringParse == StringParse.FLOAT) {
+                return Float.parseFloat(value);
+            }
+        } catch (NumberFormatException nfe) {
+            // Log exception.
             return 0;
         }
+        return 0;
     }
+}

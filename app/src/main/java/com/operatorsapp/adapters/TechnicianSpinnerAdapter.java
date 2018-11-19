@@ -34,20 +34,22 @@ public class TechnicianSpinnerAdapter extends ArrayAdapter<Technician> {
         if (row == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.base_spinner_item, parent, false);
-            mView = row;
-            mRowName = row.findViewById(R.id.spinner_item_name);
-            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-            if(mSpinnerItems != null && mSpinnerItems.get(position) != null)
-            {
-                String technicianName = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
-                mRowName.setText(technicianName);
-            }
-            else
-            {
-                mRowName.setText(mContext.getString(R.string.dashes));
-            }
-            mRowName.setTextSize(22);
         }
+
+        mView = row;
+        mRowName = row.findViewById(R.id.spinner_item_name);
+        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
+        if(mSpinnerItems != null && mSpinnerItems.get(position) != null)
+        {
+            String technicianName = OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName();
+            mRowName.setText(technicianName);
+        }
+        else
+        {
+            mRowName.setText(mContext.getString(R.string.dashes));
+        }
+        mRowName.setTextSize(22);
+
         return row;
     }
 

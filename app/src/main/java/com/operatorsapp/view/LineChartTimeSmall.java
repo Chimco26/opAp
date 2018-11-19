@@ -224,6 +224,7 @@ public class LineChartTimeSmall extends FrameLayout {
 
 //        setLimitLines(lowLimit,highLimit,standardValue);
         final Entry[] lastValue = new Entry[1];
+        lastValue[0] = new Entry(0,0);
 
         mChart.post(new Runnable() {
             @Override
