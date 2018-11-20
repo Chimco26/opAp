@@ -1437,20 +1437,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             leftTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    vpDialog.setCurrentItem(1);
+                    vpDialog.setCurrentItem(0);
                 }
             });
 
             rightTab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    vpDialog.setCurrentItem(0);
+                    vpDialog.setCurrentItem(1);
                 }
             });
 
             Point point = new Point(1, 1);
             ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
             mPopUpDialog.getWindow().setLayout((int) (point.x / 3), point.y - 50);
+
+            vpDialog.setCurrentItem(0);
 
 
         } else {
@@ -1782,6 +1784,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSplitEventPressed(int eventID) {
         // TODO: 05/07/2018 call server split event
+
+
         mListener.onSplitEventPressed(eventID);
 
     }

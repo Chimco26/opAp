@@ -1,11 +1,13 @@
 package com.operatorsapp.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -198,8 +200,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 holder.mSplitEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 05/07/2018 split event
-                        mOnStopClickListener.onSplitEventPressed(event.getEventID());
+                        validateDialog(event.getEventID());
+
                     }
                 });
 
@@ -479,6 +481,28 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             });
         }
     }
+
+    private void validateDialog(final int eventID) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setCancelable(true)
+                .setMessage(R.string.activate_job_dialog_message)
+                .setTitle(R.string.activate_job_dialog_title)
+                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        mOnStopClickListener.onSplitEventPressed(eventID);
+
+
+
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+    }
+
 
     @Override
     public int getItemViewType(int groupID) {

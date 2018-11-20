@@ -1780,11 +1780,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostSplitEventSuccess(Object response) {
 
+                ShowCrouton.jobsLoadingSuccessCrouton(DashboardActivity.this, getString(R.string.split_event_success));
                 dashboardDataStartPolling();
             }
 
             @Override
             public void onPostSplitEventFailed(ErrorObjectInterface reason) {
+                ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, getString(R.string.split_event_failed));
 
             }
         }, NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
