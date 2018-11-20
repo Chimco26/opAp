@@ -271,6 +271,8 @@
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
     <string name="general">General</string>
     <string name="service_calls">Service Calls</string>
+    <string name="split_event_success">The Event was Split Successfully</string>
+    <string name="split_event_failed">Split Event Failed</string>
 
 
 </resources>

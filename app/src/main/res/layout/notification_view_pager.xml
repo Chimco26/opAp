@@ -51,7 +51,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:text="@string/service_calls"
-                android:textColor="@color/C16"
+                android:textColor="@color/dark_indigo"
                 android:textSize="24sp" />
 
             <View
