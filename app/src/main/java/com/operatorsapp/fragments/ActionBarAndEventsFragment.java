@@ -229,6 +229,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mStatusWhiteFilter;
     private RelativeLayout technicianRl;
     private TextView mStatusTimeMinTv;
+    private boolean mAutoSelectMode;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -916,7 +917,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mJoshProductNameSpinnerAdapter = new JoshProductNameSpinnerAdapter(getActivity(), R.layout.item_product_spinner, mActiveJobs);
             mJoshProductNameSpinnerAdapter.setDropDownViewResource(R.layout.item_product_spinner_list);
             mProductSpinner.setAdapter(mJoshProductNameSpinnerAdapter);
-            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+            mProductSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.status_bar), PorterDuff.Mode.SRC_ATOP);
 
             mProductSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -1887,8 +1888,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
             }
-
+            boolean mustBeClosed = false;
             for (Event event : events) {
+
+                if (mAutoSelectMode && event.getEventEndTime() != null && event.getEventEndTime().length() > 0 &&
+                        mFirstSeletedEvent != null && mSelectedEvents != null
+                        && mSelectedEvents.size() == 1){
+
+                    mustBeClosed = true;
+                }
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
@@ -1930,16 +1938,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     if (!mIsSelectionMode) {
                         startSelectMode(event);
-                    }
+                        mAutoSelectMode = true;
+                    }else if(mustBeClosed){mListener.onClearAllSelectedEvents();}
                     mEventsQueue.pop();
 
                 } else if (event.getEventGroupID() == TYPE_ALERT) {
                     openDialog(event);
                     mLastEvent = event;
                     mEventsQueue.pop();
+                    if(mustBeClosed){mListener.onClearAllSelectedEvents();}
                 }
 
-            }
+            }else if(mustBeClosed){mListener.onClearAllSelectedEvents();}
         } else {
             if (DataSupport.count(Event.class) == 0) {
                 mNoData = true;
@@ -2288,6 +2298,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void disableSelectMode() {
 
         mIsSelectionMode = false;
+
+        mFirstSeletedEvent = null;
+
+        mSelectedEvents = null;
+
+        mAutoSelectMode = false;
 
         Cursor cursor;
         cursor = getCursorByType();

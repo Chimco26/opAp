@@ -52,7 +52,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -64,6 +63,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    private static final int REFRESH_DELAY_MILLIS = 3000;
     private TextView mCancelButton;
     private Button mNextButton;
     private OnCroutonRequestListener mOnCroutonRequestListener;
@@ -410,6 +410,8 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
+           SendBroadcast.refreshPolling(getContext());
+
         }
     };
 

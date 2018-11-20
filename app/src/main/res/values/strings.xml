@@ -78,7 +78,7 @@
     <string name="cause">Cause</string>
     <string name="next">Next</string>
     <string name="units">Units</string>
-    <string name="weight">Weight</string>
+    <string name="weight">Weight (i.e.KG)</string>
     <string name="material_weight_alarm">Material Weight Alarm</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">No reports are available</string>

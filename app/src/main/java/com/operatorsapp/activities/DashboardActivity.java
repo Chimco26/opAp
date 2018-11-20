@@ -302,7 +302,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                     }
                 });
-            }else {
+            } else {
                 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -1434,6 +1434,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 dashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
 
             }
+
         }
     }
 
@@ -1619,6 +1620,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onClearAllSelectedEvents() {
+
+        mSelectedEvents = null;
+
+        if (mActionBarAndEventsFragment != null) {
+
+            mActionBarAndEventsFragment.disableSelectMode();
+        }
 
         if (mReportStopReasonFragment != null) {
 
