@@ -15,8 +15,10 @@ import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerIn
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
+import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
+import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
@@ -82,6 +84,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_TECHNICIAN_CALL_TIME = "pref.PREF_TECHNICIAN_CALL_TIME";
     private static final String PREF_SITE_NAME = "pref.PREF_SITE_NAME";
     private static final String PREF_MACHINE_NAME = "pref.PREF_MACHINE_NAME";
+    private static final String CALLED_TECHNICIAN_NAME = "pref.PREF_CALLED_TECHNICIAN_NAME";
+    private static final String CALLED_TECHNICIAN = "pref.PREF_CALLED_TECHNICIAN";
 
 
     private static PersistenceManager msInstance;
@@ -558,5 +562,26 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public String getMachineName(){
         return SecurePreferences.getInstance().getString(PREF_MACHINE_NAME, "");
+    }
+
+    public void setCalledTechnicianName(String techName) {
+        SecurePreferences.getInstance().setString(CALLED_TECHNICIAN_NAME, techName);
+    }
+
+    public String getCalledTechnicianName(){
+        return SecurePreferences.getInstance().getString(CALLED_TECHNICIAN_NAME, "");
+    }
+
+    public void setCalledTechnician(TechCallInfo techCallInfo) {
+        SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfo));
+    }
+
+    public TechCallInfo getCalledTechnician(){
+        String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN, "");
+        TechCallInfo t = mGson.fromJson(str, TechCallInfo.class);
+        if (t == null){
+            t = new TechCallInfo(-1, "", "", 0);
+        }
+        return t;
     }
 }
