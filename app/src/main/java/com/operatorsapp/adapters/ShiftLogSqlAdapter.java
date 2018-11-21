@@ -531,6 +531,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             @Override
             public void onClick(View v) {
                 mOnStopClickListener.onSplitEventPressed(eventID);
+                alertDialog.dismiss();
             }
         });
 
