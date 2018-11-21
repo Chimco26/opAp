@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -24,9 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -54,7 +53,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 public class ReportRejectsFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
 
@@ -393,13 +391,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    SendBroadcast.refreshPolling(getContext());
-                }
-            }, REFRESH_DELAY_MILLIS);
+            SendBroadcast.refreshPolling(getContext());
 
         }
 
@@ -432,6 +424,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
                 }
                 //ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
+            SendBroadcast.refreshPolling(getContext());
         }
     };
 

@@ -24,9 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -54,7 +54,6 @@ import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 import static com.operatorsapp.application.OperatorApplication.isEnglishLang;
 
@@ -64,6 +63,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    private static final int REFRESH_DELAY_MILLIS = 3000;
     private int mCurrentProductId;
     private ImageView mPlusButton;
     private ImageView mMinusButton;
@@ -349,7 +349,6 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
 
                 getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
-
 //
 //            SendBroadcast.refreshPolling(getContext());
 //            dismissProgressDialog();
@@ -372,7 +371,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             dismissProgressDialog();
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
-
+            SendBroadcast.refreshPolling(getContext());
         }
     };
 

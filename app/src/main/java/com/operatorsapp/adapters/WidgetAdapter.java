@@ -444,18 +444,18 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mCurrentValueInChart.setText("");
                     }
                     final float finalCurrentFloat = currentFloat;
-                    if (mProjectionCapsuleWidth == 0) {
-                        projectionViewHolder.mCapsule.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
-                                setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
-                            }
-                        });
-                    } else {
-                        mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
-                        setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
-                    }
+//                    if (mProjectionCapsuleWidth == 0) {
+                    projectionViewHolder.mCapsule.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
+                            setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
+                        }
+                    });
+//                    } else {
+//                        mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
+//                        setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
+//                    }
                     projectionViewHolder.mMin.setText(valueInK(widget.getLowLimit()));
                     //                projectionViewHolder.mStandard.setText(valueInK((int) widget.getStandardValue()));
                     projectionViewHolder.mMax.setText(valueInK(widget.getTarget()));
@@ -484,8 +484,8 @@ public class WidgetAdapter extends Adapter {
 
     private boolean isNearestTexts(Widget widget) {
         float size = widget.getStandardValue() - widget.getLowLimit();
-        return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size  < 0.15);
-        }
+        return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
+    }
 
     private void setSizes(final RelativeLayout parent) {
         ViewGroup.LayoutParams layoutParams;
@@ -588,7 +588,7 @@ public class WidgetAdapter extends Adapter {
             }
             return valueString + "k";
         } else {
-            return valueString;
+            return String.valueOf((int)value);
         }
     }
 

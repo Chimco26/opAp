@@ -212,7 +212,7 @@
 
                         <ImageView
                             android:id="@+id/AJA_props_top_rv_button"
-                            android:layout_width="30dp"
+                            android:layout_width="60dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:src="@drawable/left_panel_btn"

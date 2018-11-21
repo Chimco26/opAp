@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -59,6 +60,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    private static final int REFRESH_DELAY_MILLIS = 3000;
     private int mCurrentProductId;
 
     private ImageView mPlusButton;
@@ -402,6 +404,13 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SendBroadcast.refreshPolling(getContext());
+                }
+            }, REFRESH_DELAY_MILLIS);
 
         }
 
@@ -411,7 +420,9 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
             mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
 
             dismissProgressDialog();
+            SendBroadcast.refreshPolling(getContext());
         }
+
     };
 
     private ErrorResponseNewVersion objectToNewError(Object o) {
