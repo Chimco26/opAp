@@ -487,25 +487,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
 
     private void validateDialog(final int eventID) {
 
-//        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//        builder.setCancelable(true)
-//                .setMessage(R.string.activate_job_dialog_message)
-//                .setTitle(R.string.activate_job_dialog_title)
-//                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//
-//                        mOnStopClickListener.onSplitEventPressed(eventID);
-//
-//
-//
-//                    }
-//                });
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-//
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
-
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
         builder.setView(dialogView);
