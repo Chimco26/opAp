@@ -1,5 +1,6 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -12,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -485,20 +488,41 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private void validateDialog(final int eventID) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setCancelable(true)
-                .setMessage(R.string.activate_job_dialog_message)
-                .setTitle(R.string.activate_job_dialog_title)
-                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+        builder.setView(dialogView);
 
-                        mOnStopClickListener.onSplitEventPressed(eventID);
+        TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
+        TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
+        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+        dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
 
 
+        submitBtn.setText(R.string.split);
+        bodyTv.setText(R.string.split_event_validation_text);
+        bodyTv.setTextSize(16);
+        titleTv.setText(R.string.split_event_validation_title);
+        titleTv.setTextSize(28);
 
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
+        builder.setCancelable(true);
+        final AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnStopClickListener.onSplitEventPressed(eventID);
+                alertDialog.dismiss();
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
 
 
     }

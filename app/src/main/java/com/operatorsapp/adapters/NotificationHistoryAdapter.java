@@ -124,6 +124,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:

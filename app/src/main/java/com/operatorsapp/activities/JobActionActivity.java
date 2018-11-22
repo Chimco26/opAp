@@ -949,28 +949,68 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private void validateDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true)
-                .setMessage(R.string.activate_job_dialog_message)
-                .setTitle(R.string.activate_job_dialog_title)
-                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                        postUpdateActions(mUpdatedActions);
 
-                        if (mCurrentJobDetails != null) {
-                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-                                    String.valueOf(persistenceManager.getMachineId()),
-                                    String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-                                    persistenceManager.getOperatorId()));
-                        }
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+        builder.setView(dialogView);
 
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
+        TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
+        TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
+        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+        dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
+
+
+        submitBtn.setText(R.string.activate);
+        bodyTv.setText(R.string.activate_job_dialog_message );
+        bodyTv.setTextSize(16);
+        titleTv.setText(R.string.activate_job_dialog_title);
+        titleTv.setTextSize(28);
+
+        builder.setCancelable(true);
+        final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+//        builder.setCancelable(true)
+//                .setMessage(R.string.activate_job_dialog_message)
+//                .setTitle(R.string.activate_job_dialog_title)
+//                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//
+//                        postUpdateActions(mUpdatedActions);
+//
+//                        if (mCurrentJobDetails != null) {
+//                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+//                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+//                                    String.valueOf(persistenceManager.getMachineId()),
+//                                    String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+//                                    persistenceManager.getOperatorId()));
+//                        }
+//
+//                    }
+//                });
 
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postUpdateActions(mUpdatedActions);
+                if (mCurrentJobDetails != null) {
+                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                    postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                            String.valueOf(persistenceManager.getMachineId()),
+                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
+                            persistenceManager.getOperatorId()));
+                }
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
     private void openNotesDialog() {
