@@ -35,6 +35,7 @@ public class ChartFragment extends BackStackAwareFragment {
     private static final String MAX = "max";
     private static final String X_VALUES = "xValues";
     private static final String FIELD_NAME = "fieldName";
+    private static final String MIDNIGHT = "MIDNIGHT";
 
     private static final String LOG_TAG = ChartFragment.class.getSimpleName();
 
@@ -44,8 +45,9 @@ public class ChartFragment extends BackStackAwareFragment {
     private float mMaxVal;
     private String[] mXValues;
     private String mFieldName;
+    private float mMidnightLimit;
 
-    public static ChartFragment newInstance(ArrayList<ArrayList<Entry>> values, float min, float standard, float max, String[] xValues, String fieldName) {
+    public static ChartFragment newInstance(ArrayList<ArrayList<Entry>> values, float min, float standard, float max, String[] xValues, String fieldName, float midnightLimit) {
         Gson gson = new Gson();
         String valuesString = gson.toJson(values);
         Bundle args = new Bundle();
@@ -53,6 +55,7 @@ public class ChartFragment extends BackStackAwareFragment {
         args.putFloat(MIN, min);
         args.putFloat(STANDARD, standard);
         args.putFloat(MAX, max);
+        args.putFloat(MIDNIGHT, midnightLimit);
         args.putStringArray(X_VALUES, xValues);
         args.putString(FIELD_NAME, fieldName);
 
@@ -75,6 +78,7 @@ public class ChartFragment extends BackStackAwareFragment {
             mMaxVal = getArguments().getFloat(MAX);
             mXValues = getArguments().getStringArray(X_VALUES);
             mFieldName = getArguments().getString(FIELD_NAME);
+            mMidnightLimit = getArguments().getFloat(MIDNIGHT);
         }
 
         // Analytics
@@ -116,7 +120,7 @@ public class ChartFragment extends BackStackAwareFragment {
             mMax.setText(maxText);
 
             mChart.setData(mValues, mXValues,mMinVal, mMaxVal);
-            mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal);
+            mChart.setAxis(context, mMinVal, mStandardVal, mMaxVal, mMidnightLimit);
         }
 
 //        setActionBar();

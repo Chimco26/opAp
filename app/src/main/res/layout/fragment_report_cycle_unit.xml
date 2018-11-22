@@ -12,43 +12,16 @@
         android:background="@drawable/rectangle_11_copy_2"
         android:gravity="center_vertical">
 
-
         <TextView
-            android:id="@+id/textView"
-            style="@style/Roboto_Regular_Status_Title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="20dp"
-            android:gravity="center_vertical"
-            android:text="@string/product"
-            android:textColor="@color/status_bar"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/report_cycle_u_product_name_text_view"
+            android:id="@+id/id_title"
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignTop="@+id/textView"
-            android:layout_toEndOf="@+id/textView"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="@string/product_name"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/id_title"
-            style="@style/Roboto_Regular_Status_Title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/report_cycle_u_product_name_text_view"
+            android:maxLength="50"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/report_cycle_u_product_name_text_view"
             android:gravity="center_vertical"
             android:text="@string/id"
+            android:textColor="@color/status_bar"
             android:textSize="16sp"/>
 
         <TextView
@@ -56,6 +29,7 @@
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:maxEms="50"
             android:layout_alignTop="@+id/id_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/id_title"
@@ -68,13 +42,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/job_title"
             android:layout_marginEnd="39dp">
 
             <Spinner
                 android:id="@+id/report_job_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="23dp"
-                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical"
                 android:dropDownVerticalOffset="55dp"
                 android:visibility="gone" />
@@ -97,7 +71,8 @@
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/report_job_spinner_frame"
             android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/report_job_spinner_frame"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/report_cycle_id_text_view"
             android:gravity="center_vertical"
             android:text="@string/josh"
             android:textColor="@color/status_bar"

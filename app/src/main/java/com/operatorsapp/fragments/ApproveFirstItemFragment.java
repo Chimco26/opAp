@@ -166,10 +166,8 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             mNextButton.setEnabled(true);
         }
 
-        TextView productNameTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
-        productNameTextView.setText(new StringBuilder(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName()).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
@@ -350,21 +348,11 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
 
             if (response.isFunctionSucceed()){
-                // TODO: 17/07/2018 add crouton for success
-                // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
 
-
-//            if (((SendApproveFirstItemResponse) o).getErrorResponse() != null){
-//
-//                mDashboardCroutonListener.onShowCrouton(((SendApproveFirstItemResponse) o).getErrorResponse().getErrorDesc());
-//            }else{
-//                // TODO: 15/07/2018 add another constructor for success
-//                mDashboardCroutonListener.onShowCrouton(getString(R.string.end_setup_success));
-//            }
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             if(mCallbackListener != null)

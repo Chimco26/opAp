@@ -94,7 +94,7 @@ public class AllMachinesData {
         return mCustomerIsActivateJobs;
     }
 
-    public boolean ismProductionModeWarning() {
+    public boolean isProductionModeWarning() {
         return mProductionModeWarning;
     }
 

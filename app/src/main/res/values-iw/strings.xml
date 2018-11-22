@@ -76,7 +76,7 @@
     <string name="cause">גורם פסילה</string>
     <string name="next">דווח</string>
     <string name="units">יחידות</string>
-    <string name="weight">(i.e.KG) משקל</string>
+    <string name="weight">(KG) משקל</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">אין דיווח</string>
     <string name="report_stop_event_reason">דווח סיבת אירוע עצירה</string>

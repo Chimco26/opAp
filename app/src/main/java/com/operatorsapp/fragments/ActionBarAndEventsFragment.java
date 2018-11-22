@@ -230,6 +230,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private RelativeLayout technicianRl;
     private TextView mStatusTimeMinTv;
     private boolean mAutoSelectMode;
+    private View mMainView;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -272,6 +273,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
+        mMainView = view;
         final ViewGroup.LayoutParams statusBarParams = initView(view);
 
 //        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
@@ -1150,6 +1152,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianIv.setVisibility(View.INVISIBLE);
             tutorialIv.setVisibility(View.INVISIBLE);
             jobsSpinner.setVisibility(View.GONE);
+            mMainView.findViewById(R.id.FAAE_product_ly).setVisibility(View.GONE);
+            mMainView.findViewById(R.id.FAAE_product_ly_separator1).setVisibility(View.GONE);
+            mMainView.findViewById(R.id.FAAE_josh_id_ly).setVisibility(View.GONE);
+            mMainView.findViewById(R.id.FAAE_josh_id_ly_separator2).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_technician_button).setVisibility(View.GONE);
@@ -1842,11 +1848,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (!BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
-            onApproveFirstItemEnabledChanged(machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem());
-
             setupProductionStatusSpinner();
 
             setupOperatorSpinner();
+
+            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(1).getUniqueID());
+            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
+            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
+            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                    && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
+                    , mJobActionsSpinnerItems.get(4).getUniqueID());
         }
 
     }
@@ -2031,9 +2042,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
+        disableActionInSpinner(enabled, mApproveItemID);
+    }
+
+    public void disableActionInSpinner(boolean enabled, int itemId) {
         if (mJobsSpinnerAdapter != null) {
             for (JobActionsSpinnerItem item : mJobActionsSpinnerItems) {
-                if (item.getUniqueID() == mApproveItemID) {
+                if (item.getUniqueID() == itemId) {
                     item.setEnabled(enabled);
                 }
             }
@@ -2467,7 +2482,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     public void setWhiteFilter(boolean show) {
-        if (show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             mStatusWhiteFilter.setVisibility(View.VISIBLE);
         } else {
             mStatusWhiteFilter.setVisibility(View.GONE);

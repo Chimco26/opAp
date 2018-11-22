@@ -92,7 +92,7 @@ public class LineChartTimeLarge extends FrameLayout {
         addView(view);
     }
 
-    public void setAxis(Context context, float min, float standard, float max) {
+    public void setAxis(Context context, float min, float standard, float max, float midnightLimit) {
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
         l.setEnabled(false);
@@ -190,6 +190,19 @@ public class LineChartTimeLarge extends FrameLayout {
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
+
+        addVerticalLimitLimitLine(midnightLimit);
+    }
+
+    private void addVerticalLimitLimitLine(float midnightLimit) {
+        XAxis bottomAxis = mChart.getXAxis();
+        LimitLine limitLine3 = new LimitLine(midnightLimit, mContext.getResources().getString(R.string.midnight));
+        limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine3.setTextSize(16);
+        limitLine3.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
+        limitLine3.setLineWidth(1f);
+        limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        bottomAxis.addLimitLine(limitLine3);
     }
 
 

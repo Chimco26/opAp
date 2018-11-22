@@ -50,9 +50,14 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
         }
         TextView name = row.findViewById(R.id.SJID_texte);
         name.setText(mSpinnerItems.get(position).getName());
-        name.setTextColor(mContext.getResources().getColor(R.color.white));
         setIcon(mSpinnerItems.get(position).getUniqueID(), (ImageView) row.findViewById(R.id.SJID_image));
         ((ImageView) row.findViewById(R.id.SJID_image)).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
+
+        if (mSpinnerItems.get(position).isEnabled()){
+            name.setTextColor(mContext.getResources().getColor(R.color.white));
+        }else {
+            name.setTextColor(mContext.getResources().getColor(R.color.dialog_text_gray));
+        }
 
         return row;
     }

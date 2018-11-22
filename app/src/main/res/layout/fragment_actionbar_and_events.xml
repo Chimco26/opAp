@@ -15,174 +15,181 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp">
-        <LinearLayout
-            android:id="@+id/status_layout"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/rectangle_11_copy_2"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="24dp"
-            android:paddingEnd="30dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/status_layout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/rectangle_11_copy_2"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingEnd="20dp">
+                android:paddingStart="24dp"
+                android:paddingEnd="30dp">
 
-                <ImageView
-                    android:id="@+id/FAAE_multiple_product_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/config" />
-
-                <TextView
-                    style="@style/Roboto_Regular_Status_Title"
+                <LinearLayout
+                    android:id="@+id/FAAE_product_ly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="@string/product"
-                    android:textColor="@color/status_bar"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:paddingEnd="20dp">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical">
+                    <ImageView
+                        android:id="@+id/FAAE_multiple_product_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/config" />
 
                     <TextView
-                        android:id="@+id/text_view_product_name_and_id"
+                        style="@style/Roboto_Regular_Status_Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/product"
+                        android:textColor="@color/status_bar"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/text_view_product_name_and_id"
+                            style="@style/Roboto_Regular_Status_Data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:visibility="visible" />
+
+                        <Spinner
+                            android:id="@+id/FAAE_product_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:dropDownVerticalOffset="43dp"
+                            android:spinnerMode="dropdown"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/FAAE_product_ly_separator1"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/C20" />
+
+                <LinearLayout
+                    android:id="@+id/FAAE_josh_id_ly"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Roboto_Regular_Status_Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/job"
+                        android:textColor="@color/status_bar"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_job_id"
                         style="@style/Roboto_Regular_Status_Data"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"
-                        android:singleLine="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:ellipsize="end"
+                        android:maxWidth="300dp"
+                        android:maxLines="1"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:visibility="visible" />
+                        android:textSize="20sp" />
+                </LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/FAAE_product_spinner"
+                <View
+                    android:id="@+id/FAAE_josh_id_ly_separator2"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/C20" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Roboto_Regular_Status_Title"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:dropDownVerticalOffset="43dp"
-                        android:spinnerMode="dropdown"
-                        android:visibility="gone" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/shift"
+                        android:textColor="@color/status_bar"
+                        android:textSize="20sp" />
 
-                </RelativeLayout>
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_view_shift_id"
+                        style="@style/Roboto_Regular_Status_Data"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+                </LinearLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/C20" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="horizontal">
 
                 <TextView
-                    style="@style/Roboto_Regular_Status_Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:text="@string/job"
-                    android:textColor="@color/status_bar"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/text_view_job_id"
+                    android:id="@+id/text_view_timer"
                     style="@style/Roboto_Regular_Status_Data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="300dp"
-                    android:layout_marginStart="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
+                    android:layout_marginStart="30dp"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
-            </LinearLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/C20" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.75"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/Roboto_Regular_Status_Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:text="@string/shift"
-                    android:textColor="@color/status_bar"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/text_view_shift_id"
-                    style="@style/Roboto_Regular_Status_Data"
+                <ImageView
+                    android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:background="@drawable/ic_clock_blue" />
+
+
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/text_view_timer"
-                style="@style/Roboto_Regular_Status_Data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_clock_blue" />
-
-
-        </LinearLayout>
             <View
                 android:id="@+id/FAAE_status_white_filter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white_filter"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/FAAE_status_black_filter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black_filter"
-                android:visibility="gone"/>
-    </RelativeLayout>
+                android:visibility="gone" />
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -238,12 +245,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="40dp"
                                 android:gravity="start|center_vertical"
-                                android:thumb="@drawable/drawable_switch"
-                                android:track="@drawable/drawable_bg"
+                                android:switchPadding="30dp"
                                 android:text="@string/alarms"
                                 android:textSize="24sp"
-                                android:switchPadding="30dp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold"
+                                android:thumb="@drawable/drawable_switch"
+                                android:track="@drawable/drawable_bg" />
 
                             <LinearLayout
                                 android:id="@+id/fragment_dashboard_min_duration_lil"
@@ -406,13 +413,16 @@
 
                 <TextView
                     android:id="@+id/FAAE_white_filter_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textSize="24sp"
-                    android:textColor="@color/red_line"
+                    android:gravity="center"
                     android:text="@string/attention_cycles_detected_in_a_non_production_status"
-                    android:visibility="gone"/>
+                    android:textColor="@color/red_line"
+                    android:textSize="21sp"
+                    android:padding="15dp"
+                    android:visibility="gone"
+                    android:background="@drawable/background_item_gallery"/>
             </RelativeLayout>
 
             <ImageView
@@ -421,7 +431,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/black_filter"
                 android:clickable="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
     </LinearLayout>

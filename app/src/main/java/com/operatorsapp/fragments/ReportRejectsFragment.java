@@ -155,7 +155,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mUnitsEditText = view.findViewById(R.id.units_edit_text);
         mWeightEditText = view.findViewById(R.id.weight_edit_text);
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
-        TextView productNameTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
 //        getActiveJobs();
@@ -218,7 +217,6 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             }
         }
 
-        productNameTextView.setText(new StringBuilder(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName()).append(","));
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsEditText.setFocusableInTouchMode(true);

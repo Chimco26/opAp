@@ -159,10 +159,8 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         }
 
 
-        TextView mProductTitleTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView mProductIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
-        mProductTitleTextView.setText(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName());
         mProductIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsCounterTextView = view.findViewById(R.id.units_text_view);

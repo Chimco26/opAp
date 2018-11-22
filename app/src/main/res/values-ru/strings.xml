@@ -71,7 +71,7 @@
     <string name="cause">Причина</string>
     <string name="next">Далее</string>
     <string name="units">Единицы</string>
-    <string name="weight">Вес (i.e.KG)</string>
+    <string name="weight">Вес (KG)</string>
     <string name="material_weight_alarm">Сигнализация массы материала</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">Нет доступных отчетов</string>

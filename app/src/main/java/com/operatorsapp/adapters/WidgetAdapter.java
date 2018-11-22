@@ -27,12 +27,14 @@ import com.operatorsapp.view.ProjectionViewStart;
 import com.operatorsapp.view.RangeView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class WidgetAdapter extends Adapter {
     private static final long FOUR_HOURS = 60000L * 60 * 4;
@@ -300,29 +302,45 @@ public class WidgetAdapter extends Adapter {
                     } catch (NumberFormatException e) {
                         timeViewHolder.mValue.setTextColor(mContext.getResources().getColor(R.color.C16));
                     }
+                    int xValuesIncreaseIndex = 0;
                     ArrayList<Entry> tenHoursValues = new ArrayList<>();
                     ArrayList<Entry> fourHoursValues = new ArrayList<>();
                     ArrayList<ArrayList<Entry>> fourHoursList = new ArrayList<>();
                     final ArrayList<ArrayList<Entry>> tenHoursList = new ArrayList<>();
+                    float midnightLimit = 0;
                     if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
-                        final String[] xValues = new String[widget.getMachineParamHistoricData().size()];
+                        final String[] xValues = new String[widget.getMachineParamHistoricData().size() + 1];
                         for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
-                            xValues[i] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());/*new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime()));*/
+                            try {
+                                Date date = TimeUtils.getTodayMidnightDate();
+                                if (i > 0 && xValues.length > 0 &&
+                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i - 1).getTime()).before(date) &&
+                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()).after(date)){
+                                    xValues[i] = mContext.getResources().getString(R.string.midnight);
+                                    xValuesIncreaseIndex = 1;
+                                    midnightLimit = i;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            xValues[i + xValuesIncreaseIndex] = TimeUtils.getDateForChart(widget.getMachineParamHistoricData().get(i).getTime());
                             Entry entry;
                             try {
-                                entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue()/*, new SimpleDateFormat("HH:mm").format(new Date(widget.getMachineParamHistoricData().get(i).getTime())*/);
+                                entry = new Entry(i, widget.getMachineParamHistoricData().get(i).getValue());
                             } catch (Exception e) {
                                 entry = null;
                             }
                             if (entry == null) {
                                 if (fourHoursValues.size() > 0) {
                                     fourHoursList.add(fourHoursValues);
+                                }
+                                if (tenHoursValues.size() > 0) {
                                     tenHoursList.add(tenHoursValues);
                                 }
                                 tenHoursValues = new ArrayList<>();
                                 fourHoursValues = new ArrayList<>();
                             } else {
-                                if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - TEN_HOURS)) {
+                                if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - DAY_IN_MILLIS)) {
                                     tenHoursValues.add(entry);
                                 }
                                 if (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(i).getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - FOUR_HOURS)) {
@@ -330,14 +348,19 @@ public class WidgetAdapter extends Adapter {
                                 }
                             }
                         }
+                        if (fourHoursValues.size() > 0) {
+                            fourHoursList.add(fourHoursValues);
+                            tenHoursList.add(tenHoursValues);
+                        }
                         timeViewHolder.mChart.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
-                        timeViewHolder.mChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue());
+                        timeViewHolder.mChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
+                        final float midnightFinal = midnightLimit;
                         timeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (tenHoursList.size() > 0) {
                                     String nameByLang = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-                                    mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursList, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang), true, false);
+                                    mGoToScreenListener.goToFragment(ChartFragment.newInstance(tenHoursList, widget.getLowLimit(), widget.getStandardValue(), widget.getHighLimit(), xValues, nameByLang, midnightFinal), true, false);
                                 }
                             }
                         });
@@ -484,7 +507,11 @@ public class WidgetAdapter extends Adapter {
 
     private boolean isNearestTexts(Widget widget) {
         float size = widget.getStandardValue() - widget.getLowLimit();
-        return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
+        try {
+            return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
+        }catch (NumberFormatException e){
+            return false;
+        }
     }
 
     private void setSizes(final RelativeLayout parent) {

@@ -77,7 +77,7 @@
     <string name="cause">سبب</string>
     <string name="next">التالي</string>
     <string name="units">وحدات</string>
-    <string name="weight">(i.e.KG) وزن</string>
+    <string name="weight">(KG) وزن</string>
     <string name="material_weight_alarm">انذار وزن المواد</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">ا تتوفر تقارير</string>

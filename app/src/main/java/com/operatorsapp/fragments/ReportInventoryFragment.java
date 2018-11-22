@@ -162,10 +162,8 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             mMinusButton.setEnabled(true);
             mPlusButton.setEnabled(true);
         }
-        TextView productTitleTextView = view.findViewById(R.id.report_cycle_u_product_name_text_view);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
 
-        productTitleTextView.setText(mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshName());
         productIdTextView.setText(String.valueOf(mCurrentProductId));
 
         mUnitsCounterTextView = view.findViewById(R.id.units_text_view);

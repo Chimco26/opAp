@@ -76,7 +76,7 @@
     <string name="cause">Causa</string>
     <string name="next">Proximo</string>
     <string name="units">Unidades</string>
-    <string name="weight">Peso (i.e.KG)</string>
+    <string name="weight">Peso (KG)</string>
     <string name="material_weight_alarm">Alarma del peso del material</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">No hay informes disponibles</string>

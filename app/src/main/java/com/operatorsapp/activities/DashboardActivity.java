@@ -685,7 +685,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                    setFilterWarningText(machineStatus.getAllMachinesData().get(0).ismProductionModeWarning());
+                    setFilterWarningText(machineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                 }
 
             }

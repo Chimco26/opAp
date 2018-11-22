@@ -71,7 +71,7 @@
     <string name="cause">Причина</string>
     <string name="next">Далі</string>
     <string name="units">Одиниці</string>
-    <string name="weight">Вага (i.e.KG)</string>
+    <string name="weight">Вага (KG)</string>
     <string name="material_weight_alarm">Сигналізація ваги матеріалу</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">Немає доступних звітів</string>
