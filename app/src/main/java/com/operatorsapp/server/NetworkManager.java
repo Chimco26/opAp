@@ -26,6 +26,7 @@ import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetRe
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetAllRecipe;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetIntervalAndTimeOut;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetJobDetails;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetPendingJobList;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetVersion;
@@ -39,6 +40,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInven
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetVersionNetworkManager;
@@ -99,7 +101,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         PostUpdtaeActionsNetworkManager,
         PostActivateJobNetworkManager,
         PostUpdateNotesForJobNetworkManager,
-        PostSplitEventNetworkManager {
+        PostSplitEventNetworkManager,
+        GetIntervalAndTimeOutNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -755,6 +758,20 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         }
         return mRetrofit.create(EmeraldGetVersion.class);
     }
+
+    @Override
+    public EmeraldGetIntervalAndTimeOut emeraldGetIntervalAndTimeOut(String siteUrl, int timeout, TimeUnit timeUnit) {
+
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldGetIntervalAndTimeOut.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldGetIntervalAndTimeOutRequests");
+        }
+        return mRetrofit.create(EmeraldGetIntervalAndTimeOut.class);    }
 
     @Override
     public EmeraldGetPendingJobList emeraldGetPendingJobList(String siteUrl, int timeout, TimeUnit timeUnit) {

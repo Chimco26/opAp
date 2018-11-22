@@ -67,10 +67,12 @@ import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachin
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachinenetworkbridge.ReportFieldsForMachineNetworkBridge;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
+import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.ShiftForMachineResponse;
@@ -159,6 +161,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
     private static final String REPORT_PRODUCTION_TAG = "ReportProduction";
     private static final int POOLING_BACKUP_DELAY = 1000 * 60 * 5;
+    private static final String INTERVAL_KEY = "OpAppPollingInterval";
+    private static final String TIME_OUT_KEY = "OpAppRequestTimeout";
+    private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
 
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
@@ -221,6 +226,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setSupportActionBar(toolbar);
 
         mCroutonCreator = new CroutonCreator();
+
+        getIntervalAndTimeout();
 
         initDataListeners();
 
@@ -1925,6 +1932,51 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    private void getIntervalAndTimeout() {
+
+        if (PersistenceManager.getInstance().getVersion() < MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API) {
+            return;
+        }
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        simpleRequests.getIntervalAndTimeout(persistanceManager.getSiteUrl(),
+                persistanceManager.getSessionId(), new GetVersionCallback() {
+                    @Override
+                    public void onGetVersionSuccess(Object response) {
+
+                        setIntervalAndTimeOut((IntervalAndTimeOutResponse) response);
+                    }
+
+                    @Override
+                    public void onGetVersionFailed(ErrorObjectInterface reason) {
+
+                    }
+
+                }, NetworkManager.getInstance(), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
+    }
+
+    public void setIntervalAndTimeOut(IntervalAndTimeOutResponse response) {
+        if (Integer.parseInt(response.getPollingIntervalData().get(0).getValue()) > 0) {
+            if (response.getPollingIntervalData().get(0).getKey().equals(INTERVAL_KEY)) {
+                PersistenceManager.getInstance().setPolingFrequency(Integer.parseInt(response.getPollingIntervalData().get(0).getValue()));
+            }
+            if (response.getPollingIntervalData().get(0).getKey().equals(TIME_OUT_KEY)) {
+                PersistenceManager.getInstance().setRequestTimeOut(Integer.parseInt(response.getPollingIntervalData().get(0).getValue()));
+            }
+        }
+        if (Integer.parseInt(response.getPollingIntervalData().get(1).getValue()) > 0) {
+            if (response.getPollingIntervalData().get(1).getKey().equals(INTERVAL_KEY)) {
+                PersistenceManager.getInstance().setPolingFrequency(Integer.parseInt(response.getPollingIntervalData().get(1).getValue()));
+            }
+            if (response.getPollingIntervalData().get(1).getKey().equals(TIME_OUT_KEY)) {
+                PersistenceManager.getInstance().setRequestTimeOut(Integer.parseInt(response.getPollingIntervalData().get(1).getValue()));
+            }
+        }
+    }
+
     private void addFragmentsToViewPager(RecipeResponse response) {
 
         if (mViewPagerFragment != null) {
@@ -2087,4 +2139,5 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
     }
+
 }
