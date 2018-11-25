@@ -2479,7 +2479,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mLanguagesSpinner = view.findViewById(R.id.ATATV_language_spinner);
         LanguagesSpinnerAdapterActionBar spinnerArrayAdapter = new LanguagesSpinnerAdapterActionBar(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
-        final boolean[] isFirst = {true};
 
         if (getActivity() != null) {
             mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);

@@ -315,7 +315,7 @@ public class WidgetAdapter extends Adapter {
                                 Date date = TimeUtils.getTodayMidnightDate();
                                 if (i > 0 && xValues.length > 0 &&
                                         TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i - 1).getTime()).before(date) &&
-                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()).after(date)){
+                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()).after(date)) {
                                     xValues[i] = mContext.getResources().getString(R.string.midnight);
                                     xValuesIncreaseIndex = 1;
                                     midnightLimit = i;
@@ -395,18 +395,18 @@ public class WidgetAdapter extends Adapter {
 
                     rangeViewHolder.mRangeViewRed.setCurrentLine(true);
                     rangeViewHolder.mRangeViewBlue.setCurrentLine(false);
-                    if (mRangeCapsuleWidth == 0) {
-                        rangeViewHolder.mCapsule.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
-                                setRangeData(widget, rangeViewHolder);
-                            }
-                        });
-                    } else {
-                        mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
-                        setRangeData(widget, rangeViewHolder);
-                    }
+//                    if (mRangeCapsuleWidth == 0) {
+                    rangeViewHolder.mCapsule.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
+                            setRangeData(widget, rangeViewHolder);
+                        }
+                    });
+//                    } else {
+//                        mRangeCapsuleWidth = rangeViewHolder.mCapsule.getWidth();
+//                        setRangeData(widget, rangeViewHolder);
+//                    }
                     rangeViewHolder.mMin.setText(String.valueOf(widget.getLowLimit()));
                     rangeViewHolder.mStandard.setText(String.valueOf(widget.getStandardValue()));
                     rangeViewHolder.mMax.setText(String.valueOf(widget.getHighLimit()));
@@ -457,7 +457,7 @@ public class WidgetAdapter extends Adapter {
                             projectionViewHolder.mGrayValueInChart.setText("");
                         }
                     }
-                    if (currentFloat <= widget.getLowLimit()) {
+                    if (currentFloat <= widget.getLowLimit() && currentFloat != widget.getTarget()) {
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                         projectionViewHolder.mRangeView.hideView();
                         projectionViewHolder.mProjectionView.hideViews();
@@ -509,7 +509,7 @@ public class WidgetAdapter extends Adapter {
         float size = widget.getStandardValue() - widget.getLowLimit();
         try {
             return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -615,7 +615,7 @@ public class WidgetAdapter extends Adapter {
             }
             return valueString + "k";
         } else {
-            return String.valueOf((int)value);
+            return String.valueOf((int) value);
         }
     }
 
