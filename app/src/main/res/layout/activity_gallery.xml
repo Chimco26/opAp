@@ -66,6 +66,12 @@
             android:layout_centerInParent="true"
             android:visibility="gone" />
 
+        <com.halilibo.bettervideoplayer.BetterVideoPlayer
+            android:id="@+id/AG_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
+
         <LinearLayout
             android:id="@+id/AG_scale_ly"
             android:layout_width="wrap_content"

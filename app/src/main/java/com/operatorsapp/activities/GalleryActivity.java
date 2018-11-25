@@ -27,6 +27,8 @@ import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.halilibo.bettervideoplayer.BetterVideoCallback;
+import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GalleryAdapter;
@@ -46,7 +48,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         DownloadHelper.DownloadFileListener,
         OnPageChangeListener,
         OnLoadCompleteListener,
-        OnErrorListener {
+        OnErrorListener, BetterVideoCallback {
 
     private static final String TAG = GalleryActivity.class.getSimpleName();
 
@@ -54,6 +56,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     public static final String EXTRA_RECIPE_FILES_TITLE = "EXTRA_RECIPE_FILES_TITLE";
     public static final String EXTRA_RECIPE_PDF_FILES = "EXTRA_RECIPE_PDF_FILES";
     public static final int EXTRA_GALLERY_CODE = 123;
+    private static final String TEST_URL = "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
 
     private RecyclerView mRv;
     private ArrayList<String> mFileUrls;
@@ -71,6 +74,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mLoadingTv;
     private boolean isLoad;
     private DownloadHelper mDownloadHelper;
+    private BetterVideoPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +114,8 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         mPdfViewer = findViewById(R.id.AG_pdf);
 
+        mPlayer = findViewById(R.id.AG_player);
+
         mScaleTv = findViewById(R.id.AG_scale_tv);
 
         mLoadingLy = findViewById(R.id.AG_loading_ly);
@@ -134,6 +140,16 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         Constants.Pinch.MINIMUM_ZOOM = 0.25f;
 
+        mPlayer.setCallback(this);
+
+        mPlayer.enableControls();
+
+        mPlayer.enableSwipeGestures();
+
+        mPlayer.setSource(Uri.parse(TEST_URL));
+
+        //todo update Visibility of AG_scale_ly when is player or not
+        //todo call reset when close player or open new video
 
         mTitleTv.setText(mTitle);
 
@@ -647,4 +663,49 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         mLoadingTv.setText(getResources().getString(R.string.loading_error));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPlayer.pause();
+    }
+
+    @Override
+    public void onStarted(BetterVideoPlayer player) {
+
+    }
+
+    @Override
+    public void onPaused(BetterVideoPlayer player) {
+
+    }
+
+    @Override
+    public void onPreparing(BetterVideoPlayer player) {
+
+    }
+
+    @Override
+    public void onPrepared(BetterVideoPlayer player) {
+
+    }
+
+    @Override
+    public void onBuffering(int percent) {
+
+    }
+
+    @Override
+    public void onError(BetterVideoPlayer player, Exception e) {
+
+    }
+
+    @Override
+    public void onCompletion(BetterVideoPlayer player) {
+
+    }
+
+    @Override
+    public void onToggleControls(BetterVideoPlayer player, boolean isShowing) {
+
+    }
 }

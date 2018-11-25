@@ -313,7 +313,9 @@ public class WidgetAdapter extends Adapter {
                         for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
                             try {
                                 Date date = TimeUtils.getTodayMidnightDate();
-                                if (i > 0 && xValues.length > 0 &&
+                                if (i > 0 && xValues.length > 0 && date != null &&
+                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i - 1).getTime()) != null &&
+                                        TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()) != null &&
                                         TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i - 1).getTime()).before(date) &&
                                         TimeUtils.getDateForNotification(widget.getMachineParamHistoricData().get(i).getTime()).after(date)) {
                                     xValues[i] = mContext.getResources().getString(R.string.midnight);
@@ -441,7 +443,7 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                         projectionViewHolder.mProjectionViewStart.setCurrentView(true);
-                        if (!isNearestTexts(widget)) {
+                        if (isNotNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
                         } else {
                             projectionViewHolder.mGrayValueInEndChart.setText("");
@@ -451,7 +453,7 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
                         projectionViewHolder.mProjectionViewStart.setCurrentView(true);
                         projectionViewHolder.mProjectionViewEnd.hideView();
-                        if (!isNearestTexts(widget)) {
+                        if (isNotNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
                         } else {
                             projectionViewHolder.mGrayValueInChart.setText("");
@@ -505,7 +507,7 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
-    private boolean isNearestTexts(Widget widget) {
+    private boolean isNotNearestTexts(Widget widget) {
         float size = widget.getStandardValue() - widget.getLowLimit();
         try {
             return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
@@ -602,7 +604,7 @@ public class WidgetAdapter extends Adapter {
 
     @SuppressLint("DefaultLocale")
     private String valueInK(float value) {
-        String valueString = String.valueOf(value);
+        String valueString;
         if (value >= 1000) {
             float valueFloat = value / 1000;
             if (value % 100 == 0) {
