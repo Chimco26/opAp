@@ -34,16 +34,6 @@ android {
     // Specifies one flavor dimension.
     flavorDimensions "version"
 
-    signingConfigs {
-        release {
-            // You need to specify either an absolute path or include the
-            // keystore file in the same directory as the build.gradle file.
-            storeFile file("OpreratorAppKeyStoreLenox.jks")
-            storePassword "lenox360leadermes"
-            keyAlias "LenoxOperator"
-            keyPassword "lenox360leadermes"
-        }
-    }
     productFlavors {
         Lenox {
             minSdkVersion 17
@@ -51,7 +41,6 @@ android {
             versionCode 1
             versionName '1'
             applicationIdSuffix ".lenox"
-            signingConfig signingConfigs.release
         }
         emerald {
         }

@@ -2521,8 +2521,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     pm.tryToUpdateToken("success + android id: " + id);
-                    mListener.onRefreshApplicationRequest();
-
+                    if (mListener != null) {
+                        mListener.onRefreshApplicationRequest();
+                    }
                 }else {
                     pm.tryToUpdateToken("failed + android id: " + id);
                     Log.d(LOG_TAG, "token failed");

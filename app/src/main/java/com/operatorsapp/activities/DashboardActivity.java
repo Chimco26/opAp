@@ -1284,12 +1284,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         DataSupport.deleteAll(Event.class);
 
         String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
 
         PersistenceManager.getInstance().clear();
 
         PersistenceManager.getInstance().items.clear();
 
         PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
 
         OppAppLogger.getInstance().i(LOG_TAG, "PersistenceManager cleared");
         //Cores clear

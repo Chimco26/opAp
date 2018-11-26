@@ -510,7 +510,7 @@ public class WidgetAdapter extends Adapter {
     private boolean isNotNearestTexts(Widget widget) {
         float size = widget.getStandardValue() - widget.getLowLimit();
         try {
-            return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size < 0.15);
+            return ((widget.getProjection() - Float.valueOf(widget.getCurrentValue())) / size > 0.15);
         } catch (NumberFormatException e) {
             return false;
         }
