@@ -549,10 +549,16 @@ public class WidgetAdapter extends Adapter {
             if (projectionWidth > 1000) {
                 projectionWidth = 1000;
             }
-            projectionViewHolder.mRangeView.updateX(mProjectionCapsuleWidth * convertCurrentValue/* half of the line*/);
+            if (convertCurrentValue > 0.9) {
+                projectionViewHolder.mRangeView.updateX(currentWidth - 8/* half of the line*/);
+                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 8/* half of the line*/);
+                projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 8/* half of the line*/);
+            } else {
+                projectionViewHolder.mRangeView.updateX(currentWidth/* half of the line*/);
+                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 2/* half of the line*/);
+                projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
+            }
             projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
-            projectionViewHolder.mCurrentValueInChart.setX(mProjectionCapsuleWidth * convertCurrentValue - 2/* half of the line*/);
-            projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
         }
         if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
             projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
