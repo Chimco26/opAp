@@ -62,6 +62,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private static final int REFRESH_DELAY_MILLIS = 3000;
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
+    private static final String REJECT_MESURING = "REJECT_MESURING";
     private TextView mCancelButton;
     private Button mNextButton;
     private OnCroutonRequestListener mOnCroutonRequestListener;
@@ -79,13 +80,15 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
     private Double mWeightData = null;
     private ReportCore mReportCore;
     private int mSelectedPosition;
+    private String mRejectMesuaring;
 
-    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
+    public static ReportRejectsFragment newInstance(int currentProductId, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition, String rejectMesuring) {
         ReportRejectsFragment reportRejectsFragment = new ReportRejectsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(CURRENT_PRODUCT_ID, currentProductId);
         bundle.putParcelable(CURRENT_JOB_LIST_FOR_MACHINE, activeJobsListForMachine);
         bundle.putInt(CURRENT_SELECTED_POSITION, selectedPosition);
+        bundle.putString(REJECT_MESURING, rejectMesuring);
         reportRejectsFragment.setArguments(bundle);
         return reportRejectsFragment;
     }
@@ -113,6 +116,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
+            mRejectMesuaring = getArguments().getString(REJECT_MESURING);
 
             if (mActiveJobsListForMachine != null) {
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
@@ -156,6 +160,7 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         mWeightEditText = view.findViewById(R.id.weight_edit_text);
         mJobsSpinner = view.findViewById(R.id.report_job_spinner);
         TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
+        setWeightTitleView(view);
 
 //        getActiveJobs();
 
@@ -269,6 +274,14 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         initJobsSpinner();
         disableSpinnerProgressBar();
 
+    }
+
+    private void setWeightTitleView(View view) {
+        if (mRejectMesuaring.equals("gr")){
+            ((TextView)view.findViewById(R.id.FRR_weight_tv)).setText(String.format("%s (%s)", getResources().getString(R.string.weight), getResources().getString(R.string.gr)));
+        }else {
+            ((TextView)view.findViewById(R.id.FRR_weight_tv)).setText(String.format("%s (%s)", getResources().getString(R.string.weight), getResources().getString(R.string.kg)));
+        }
     }
 
     private void refreshSendButtonState() {

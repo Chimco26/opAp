@@ -1046,9 +1046,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                             case 1: {
                                 if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.getAllMachinesData().get(0).getRejectMesuaring()), true, true);
                                 } else {
-                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+                                    mOnGoToScreenListener.goToFragment(ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition, mCurrentMachineStatus.getAllMachinesData().get(0).getRejectMesuaring()), true, true);
                                 }
                                 break;
                             }
@@ -2476,12 +2476,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                currentLanguage = getResources().getStringArray(R.array.language_codes_array)[i];
 //            }
 //        }
+        final String[] languagesNames = getResources().getStringArray(R.array.languages_spinner_array);
         mLanguagesSpinner = view.findViewById(R.id.ATATV_language_spinner);
-        LanguagesSpinnerAdapterActionBar spinnerArrayAdapter = new LanguagesSpinnerAdapterActionBar(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
+        LanguagesSpinnerAdapterActionBar spinnerArrayAdapter = new LanguagesSpinnerAdapterActionBar(getActivity(), R.layout.spinner_language_item, languagesNames);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
 
         if (getActivity() != null) {
             mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        for (int i = 0; i < languagesNames.length; i++) {
+
+            if (languagesNames[i].equals(PersistenceManager.getInstance().getCurrentLanguageName())) {
+                mLanguagesSpinner.setSelection(i);
+            }
         }
 
         mLanguagesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -2490,7 +2498,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 SaveAlarmsHelper.saveAlarmsCheckedLocaly(getActivity());
                 PersistenceManager.getInstance().setCurrentLang(getResources().getStringArray(R.array.language_codes_array)[position]);
-                PersistenceManager.getInstance().setCurrentLanguageName(getResources().getStringArray(R.array.languages_spinner_array)[position]);
+                PersistenceManager.getInstance().setCurrentLanguageName(languagesNames[position]);
                 mListener.onRefreshApplicationRequest();
                 sendTokenWithSessionIdToServer();
 

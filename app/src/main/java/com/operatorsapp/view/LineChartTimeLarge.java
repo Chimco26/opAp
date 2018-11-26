@@ -161,14 +161,14 @@ public class LineChartTimeLarge extends FrameLayout {
 
         LimitLine limitLine1 = new LimitLine(0f, "");
         limitLine1.setLineColor(ContextCompat.getColor(context, R.color.C16));
-        limitLine1.setLineWidth(1f);
+        limitLine1.setLineWidth(0.5f);
         leftAxis.addLimitLine(limitLine1);
 
         LimitLine limitLine2 = new LimitLine(standard, "        Standard");
         limitLine2.setLineColor(ContextCompat.getColor(context, R.color.C16));
         limitLine2.setTextSize(16);
         limitLine2.setTextColor(ContextCompat.getColor(context, R.color.red_line));
-        limitLine2.setLineWidth(1f);
+        limitLine2.setLineWidth(0.5f);
         limitLine2.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine2);
 
@@ -176,7 +176,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine3.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine3.setTextSize(16);
         limitLine3.setTextColor(ContextCompat.getColor(context, R.color.red_line));
-        limitLine3.setLineWidth(1f);
+        limitLine3.setLineWidth(0.5f);
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine3);
 
@@ -184,7 +184,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine4.setLineColor(ContextCompat.getColor(context, R.color.red_line));
         limitLine4.setTextSize(16);
         limitLine4.setTextColor(ContextCompat.getColor(context, R.color.red_line));
-        limitLine4.setLineWidth(1f);
+        limitLine4.setLineWidth(0.5f);
         limitLine4.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         leftAxis.addLimitLine(limitLine4);
 
@@ -200,7 +200,7 @@ public class LineChartTimeLarge extends FrameLayout {
         limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
         limitLine3.setTextSize(16);
         limitLine3.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
-        limitLine3.setLineWidth(1f);
+        limitLine3.setLineWidth(0.5f);
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         bottomAxis.addLimitLine(limitLine3);
     }

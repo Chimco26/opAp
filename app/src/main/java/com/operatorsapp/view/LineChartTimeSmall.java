@@ -299,7 +299,7 @@ public class LineChartTimeSmall extends FrameLayout {
         limitLine3.setLineColor(ContextCompat.getColor(mContext, R.color.red_line));
         limitLine3.setTextSize(16);
         limitLine3.setTextColor(ContextCompat.getColor(mContext, R.color.red_line));
-        limitLine3.setLineWidth(1f);
+        limitLine3.setLineWidth(0.5f);
         limitLine3.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
         bottomAxis.addLimitLine(limitLine3);
     }

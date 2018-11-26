@@ -76,7 +76,7 @@
     <string name="cause">Oorzaak</string>
     <string name="next">Volgende</string>
     <string name="units">Stuks</string>
-    <string name="weight">Gewicht (KG)</string>
+    <string name="weight">Gewicht</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">Geen rapporten beschikbaar</string>
     <string name="report_stop_event_reason">Rapporteer een reden voor de stop van de machine</string>

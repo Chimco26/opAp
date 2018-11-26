@@ -82,9 +82,15 @@ public class AllMachinesData {
     private boolean mProductionModeWarning;
     @SerializedName("CurrentStatusTimeMin")
     private int mCurrentStatusTimeMin;
+    @SerializedName("RejectMesuaring")
+    private String mRejectMesuaring;
 
     // TODO: 29/07/2018 worker sign in name + number
 
+
+    public String getRejectMesuaring() {
+        return mRejectMesuaring;
+    }
 
     public int getCurrentStatusTimeMin() {
         return mCurrentStatusTimeMin;
@@ -106,11 +112,11 @@ public class AllMachinesData {
         return OperatorId;
     }
 
-    public boolean isAddRejectsOnSetupEnd(){
+    public boolean isAddRejectsOnSetupEnd() {
         return addRejectsOnSetupEnd;
     }
 
-    public boolean isDisplayRejectFactor(){
+    public boolean isDisplayRejectFactor() {
         return displayRejectFactor;
     }
 
@@ -122,8 +128,7 @@ public class AllMachinesData {
         return currentJobID;
     }
 
-    public String getCurrentJobName()
-    {
+    public String getCurrentJobName() {
         return currentJobName;
     }
 
@@ -142,7 +147,6 @@ public class AllMachinesData {
     public int getCurrentValue() {
         return currentValue;
     }
-
 
 
     public String getDepartmentEname() {
@@ -197,8 +201,7 @@ public class AllMachinesData {
         return machineName;
     }
 
-    public String getMachineStatusLName()
-    {
+    public String getMachineStatusLName() {
         return machineStatusLName;
     }
 
@@ -206,8 +209,7 @@ public class AllMachinesData {
         return machineStatusEname;
     }
 
-    public String getMachineStatusName()
-    {
+    public String getMachineStatusName() {
         return machineStatusName;
     }
 
@@ -223,18 +225,15 @@ public class AllMachinesData {
         return shiftEndingIn;
     }
 
-    public boolean canReportApproveFirstItem()
-    {
+    public boolean canReportApproveFirstItem() {
         return !setupEnd; // when not setup end, we can send this report.
     }
 
-    public String getMachineEName()
-    {
+    public String getMachineEName() {
         return machineEName;
     }
 
-    public String getShiftIDString()
-    {
+    public String getShiftIDString() {
         return shiftIDString;
     }
 

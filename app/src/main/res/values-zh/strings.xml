@@ -71,7 +71,7 @@
     <string name="cause">原因</string>
     <string name="next">下一个</string>
     <string name="units">单位</string>
-    <string name="weight">重量 (KG)</string>
+    <string name="weight">重量</string>
     <string name="material_weight_alarm">警报 - 材料重量</string>
     <string name="dashes">- -</string>
     <string name="no_reasons">未报告原因</string>

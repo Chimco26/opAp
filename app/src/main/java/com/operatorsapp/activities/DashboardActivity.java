@@ -2115,7 +2115,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 case REPORT_REJECT_TAG:
                     reportFragment = ReportRejectsFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(),
-                            mActiveJobsListForMachine, mSpinnerProductPosition);
+                            mActiveJobsListForMachine, mSpinnerProductPosition, mCurrentMachineStatus.getAllMachinesData().get(0).getRejectMesuaring());
 
                     break;
 
