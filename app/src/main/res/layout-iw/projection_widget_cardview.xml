@@ -61,7 +61,7 @@
                 android:text="1.7k"
                 android:textColor="@color/blue1"
                 android:textSize="40sp"
-                autofit:minTextSize="18sp"/>
+                autofit:minTextSize="40sp"/>
 
             <!--  <TextView
                   style="@style/FontStyle_T11"
@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/projection_widget_projectionView"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="16dp"
             android:gravity="start">
 
             <ImageView
