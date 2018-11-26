@@ -29,7 +29,6 @@ import android.widget.TextView;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.oppapplog.OppAppLogger;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -44,6 +43,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.NetworkAvailable;
 import com.operatorsapp.utils.SaveAlarmsHelper;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,6 +105,8 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         final LanguagesSpinnerAdapter spinnerArrayAdapter = new LanguagesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
+        ((TextView)view.findViewById(R.id.FS_version)).setText(String.valueOf(PersistenceManager.getInstance().getVersion()));
+        ((TextView)view.findViewById(R.id.FS_username)).setText(String.valueOf(PersistenceManager.getInstance().getUserName()));
 
         if (getActivity() != null) {
             mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);

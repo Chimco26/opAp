@@ -186,6 +186,52 @@
                             android:textSize="22sp"/>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="35dp">
+
+
+                    <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/version"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"/>
+
+                        <TextView
+                            android:id="@+id/FS_version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/grey1"
+                            android:layout_marginStart="30dp"
+                            android:textSize="22sp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="35dp">
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/username"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"/>
+
+                        <TextView
+                            android:id="@+id/FS_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:textColor="@color/grey1"
+                            android:textSize="22sp"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout

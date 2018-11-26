@@ -278,6 +278,8 @@
     <string name="split_event_validation_title">Split Event</string>
     <string name="split">Split</string>
     <string name="gr">gr</string>
+    <string name="version">Version</string>
+    <string name="username">Username</string>
 
 
 </resources>
