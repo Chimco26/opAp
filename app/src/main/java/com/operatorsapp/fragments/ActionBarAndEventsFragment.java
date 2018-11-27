@@ -233,6 +233,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mStatusTimeMinTv;
     private boolean mAutoSelectMode;
     private View mMainView;
+    private boolean mEndSetupDisable;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -1907,9 +1908,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(1).getUniqueID());
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                    && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
-                    , mJobActionsSpinnerItems.get(4).getUniqueID());
+
+            if (!mEndSetupDisable) {
+                disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                                && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
+                        , mJobActionsSpinnerItems.get(4).getUniqueID());
+            }else {
+                mEndSetupDisable = false;
+            }
         }
 
     }
@@ -2095,6 +2101,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
         disableActionInSpinner(enabled, mApproveItemID);
+        mEndSetupDisable = true;
+
     }
 
     public void disableActionInSpinner(boolean enabled, int itemId) {

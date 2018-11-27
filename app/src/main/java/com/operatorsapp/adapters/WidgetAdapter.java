@@ -551,7 +551,7 @@ public class WidgetAdapter extends Adapter {
             }
             if (convertCurrentValue > 0.9) {
                 projectionViewHolder.mRangeView.updateX(currentWidth - 8/* half of the line*/);
-                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 8/* half of the line*/);
+                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 20/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 8/* half of the line*/);
             } else {
                 projectionViewHolder.mRangeView.updateX(currentWidth/* half of the line*/);
@@ -600,10 +600,11 @@ public class WidgetAdapter extends Adapter {
                 final float convertCurrentValue = currentFloatValue / scaleValue;
                 if (convertCurrentValue > 0.5) {
                     rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue - 7)/* half of the line*/);
+                    rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX() - 7);
                 } else {
                     rangeViewHolder.mRangeViewBlue.updateX((rangeViewHolder.mRangeViewBlue.getWidth() * convertCurrentValue)/* half of the line*/);
+                    rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
                 }
-                rangeViewHolder.mCurrentValue.setX(rangeViewHolder.mRangeViewBlue.getX());
             }
         }
     }
