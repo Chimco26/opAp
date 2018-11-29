@@ -169,4 +169,5 @@
         <item quantity="many">ч</item>
     </plurals>
     <string name="common_signin_button_text">Вход</string>
+    <string name="activate">Активировать</string>
 </resources>

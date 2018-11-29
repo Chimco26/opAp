@@ -173,4 +173,5 @@
         <item quantity="other">heures</item>
     </plurals>
     <string name="common_signin_button_text">être connecté</string>
+    <string name="activate">Activer</string>
 </resources>

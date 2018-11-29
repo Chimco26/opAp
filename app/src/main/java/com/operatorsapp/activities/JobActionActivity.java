@@ -318,7 +318,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void postActivateJob(ActivateJobRequest activateJobRequest) {
+    private void postActivateJob(final AlertDialog alertDialog, ActivateJobRequest activateJobRequest) {
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -332,6 +332,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
+                if (alertDialog.isShowing()){
+                    alertDialog.dismiss();
+                }
 
                 if (response == null) {
 
@@ -353,6 +356,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
+                ProgressDialogManager.dismiss();
+                if (alertDialog.isShowing()){
+                    alertDialog.dismiss();
+                }
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
@@ -997,7 +1004,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                 postUpdateActions(mUpdatedActions);
                 if (mCurrentJobDetails != null) {
                     PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                    postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                    postActivateJob(alertDialog, new ActivateJobRequest(persistenceManager.getSessionId(),
                             String.valueOf(persistenceManager.getMachineId()),
                             String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
                             persistenceManager.getOperatorId()));

@@ -172,5 +172,24 @@
         <item quantity="other">Horas</item>
     </plurals>
     <string name="common_signin_button_text">Conectarse</string>
+    <string name="actionnable_jobs">Lista de trabajos pendientes</string>
+    <string name="actions">acciones</string>
+    <string name="activate">Activar</string>
+    <string name="add">Agregar</string>
+    <string name="add_note">Agregar nota/ comentario</string>
+    <string name="alarms">Alarmas</string>
+    <string name="amount">Cantidad</string>
+    <string name="at_work">En tratamiento</string>
+    <string name="catalog">Catálogo</string>
+    <string name="cavities_actual">Cavidades Activos</string>
+    <string name="cavities_standard">Cavidades estándar</string>
+    <string name="events_selected">Eventos seleccionados</string>
+    <string name="general">General</string>
+    <string name="kg">kg</string>
+    <string name="machine">Maquina</string>
+    <string name="materials">Materiales</string>
+    <string name="mold">Molde</string>
+    <string name="notes">Nota/ Comentario</string>
+    <string name="pConfig">Configuración</string>
 
 </resources>

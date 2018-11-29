@@ -58,7 +58,6 @@
     <string name="error_shift_log">错误 -未能执行机移位对数函数</string>
     <string name="operator_sign_in">操作员注册</string>
     <string name="operator_sign_in_action_bar">操作员注册</string>
-    <string name="cancel">取消</string>
     <string name="retry">重试</string>
     <string name="end">结束</string>
     <string name="start">开始</string>
@@ -68,7 +67,6 @@
     <string name="enter_with_your_id">输入您的 ID</string>
     <string name="report_rejects">报告不良</string>
     <string name="reject_reason">不良原因</string>
-    <string name="cause">原因</string>
     <string name="next">下一个</string>
     <string name="units">单位</string>
     <string name="weight">重量</string>
@@ -164,7 +162,13 @@
         <item quantity="one">小时</item>
         <item quantity="other">小时</item>
     </plurals>
-    <string name="common_signin_button_text">SIGN IN</string>
+    <string name="activate_job_dialog_title">激活</string>
+    <string name="add">添加机器</string>
+    <string name="add_note">高级设置</string>
+    <string name="app_name">批准</string>
+    <string name="called_technician">取消</string>
+    <string name="catalog">原因</string>
+    <string name="emerald_flavor_name">结束</string>
 
 
 </resources>

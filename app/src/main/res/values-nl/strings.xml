@@ -178,5 +178,6 @@
     <string name="welcome">Welcome</string>
     <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
     <string name="common_signin_button_text">Aanmelden</string>
+    <string name="activate">Activeer</string>
 
 </resources>
