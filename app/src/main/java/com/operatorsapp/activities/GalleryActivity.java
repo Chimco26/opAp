@@ -140,13 +140,13 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         Constants.Pinch.MINIMUM_ZOOM = 0.25f;
 
-        mPlayer.setCallback(this);
-
-        mPlayer.enableControls();
-
-        mPlayer.enableSwipeGestures();
-
-        mPlayer.setSource(Uri.parse(TEST_URL));
+//        mPlayer.setCallback(this);
+//
+//        mPlayer.enableControls();
+//
+//        mPlayer.enableSwipeGestures();
+//
+//        mPlayer.setSource(Uri.parse(TEST_URL));
 
         //todo update Visibility of AG_scale_ly when is player or not
         //todo call reset when close player or open new video

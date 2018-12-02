@@ -153,7 +153,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         RecipeFragment.OnRecipeFragmentListener,
         AdvancedSettingsFragment.AdvancedSettingsListener,
         ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener,
-        DashboardCentralContainerListener {
+        DashboardCentralContainerListener,
+        OnReportFieldsUpdatedCallbackListener{
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -584,6 +585,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void getActiveJobs() {
+        mOnReportFieldsUpdatedCallbackListener = this;
         ActiveJobsListForMachineNetworkBridge activeJobsListForMachineNetworkBridge = new ActiveJobsListForMachineNetworkBridge();
         activeJobsListForMachineNetworkBridge.inject(NetworkManager.getInstance());
         ActiveJobsListForMachineCore mActiveJobsListForMachineCore = new ActiveJobsListForMachineCore(PersistenceManager.getInstance(), activeJobsListForMachineNetworkBridge);
@@ -599,6 +601,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (activeJobsListForMachine != null) {
 
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
+
+                mReportFieldsForMachineCore.stopPolling();
+                mReportFieldsForMachineCore.startPolling();
 
                 if (activeJobsListForMachine.getActiveJobs().size() <= 1) {
 
@@ -1348,7 +1353,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
 //        mReportFieldsForMachineCore.stopPolling();
 //        mReportFieldsForMachineCore.startPolling();
-//        getActiveJobs();
+        getActiveJobs();
 
         onRefreshPolling();
         OppAppLogger.getInstance().i(LOG_TAG, "onRefreshReportFieldsRequest() command received from settings screen");
@@ -2142,4 +2147,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     }
 
+    @Override
+    public void onReportUpdatedSuccess() {
+
+    }
+
+    @Override
+    public void onReportUpdateFailure() {
+
+    }
 }
