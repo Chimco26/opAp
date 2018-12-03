@@ -260,7 +260,7 @@
     <string name="message_from">הודעה מ</string>
     <string name="app_name">מפעיל</string>
     <string name="attention_cycles_detected_in_a_non_production_status">\"אזהרה!   המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי.  בבקשה אל תשכח להפעיל פק\"\"ע בזמן.\"</string>
-    <string name="call_for_technician_unresponsive">" המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי."</string>
+    <string name="call_for_technician_unresponsive">קריאתך לטכנאי לא נענתה במשך 5 דקות ולכן בוטלה.</string>
     <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
     <string name="gr">גרם</string>
     <string name="kg">קג</string>
