@@ -40,7 +40,7 @@ public class DownloadHelper {
     public void downloadFileFromUrl(String url) {
 
         mDownloadFileFromURL = new DownloadFileFromURL();
-        mDownloadFileFromURL.execute(url);
+        mDownloadFileFromURL.execute(url.replace(" ", "%20"));
 
     }
 
