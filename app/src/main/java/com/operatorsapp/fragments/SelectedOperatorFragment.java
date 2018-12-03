@@ -1,17 +1,14 @@
 package com.operatorsapp.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
@@ -24,12 +21,14 @@ import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 
-public class SelectedOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
+public class SelectedOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider
 {
     public static final String LOG_TAG = SelectedOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
@@ -37,6 +36,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     private Operator mSelectedOperator;
     private OperatorCore mOperatorCore;
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
+    private OnCroutonRequestListener mOnCroutonRequestListener;
 
     @Override
     public void onAttach(Context context) {
@@ -45,6 +45,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
         if (mOperatorCoreToDashboardActivityCallback != null) {
             mOperatorCore = mOperatorCoreToDashboardActivityCallback.onSignInOperatorFragmentAttached();
         }
+        mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
     }
 
     @Nullable
@@ -86,7 +87,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
 
             @Override
             public void onOperatorDataReceiveFailure(ErrorObjectInterface reason) {
-
+                updateFailed(reason);
             }
 
             @Override
@@ -104,17 +105,23 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
 
             @Override
             public void onSetOperatorFailed(ErrorObjectInterface reason) {
-                OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
-                Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Operetor Sign in")
-                        .setAction("Signed in Failed")
-                        .setLabel("Failed Reason: " + reason.getError().toString())
-                        .build());
+                updateFailed(reason);
 
             }
         });
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    public void updateFailed(ErrorObjectInterface reason) {
+        ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "Set operator failed. Reason : " + reason.getError().toString());
+        OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
+        Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Operetor Sign in")
+                .setAction("Signed in Failed")
+                .setLabel("Failed Reason: " + reason.getError().toString())
+                .build());
+        getActivity().onBackPressed();
     }
 
     @Override
@@ -130,33 +137,33 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
         mSignInButton.setOnClickListener(null);
     }
 
-    protected void setActionBar() {
-        if (getActivity() != null) {
-
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setHomeButtonEnabled(false);
-                actionBar.setDisplayHomeAsUpEnabled(false);
-                actionBar.setDisplayShowTitleEnabled(false);
-                actionBar.setDisplayShowCustomEnabled(true);
-                actionBar.setDisplayUseLogoEnabled(true);
-                LayoutInflater inflater = LayoutInflater.from(getActivity());
-                // rootView null
-                @SuppressLint("InflateParams")
-                View view = inflater.inflate(R.layout.operator_fragment_action_bar, null);
-
-                ImageView buttonClose = view.findViewById(R.id.arrow_back);
-                buttonClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        getActivity().onBackPressed();
-                    }
-                });
-                actionBar.setCustomView(view);
-            }
-        }
-    }
+//    protected void setActionBar() {
+//        if (getActivity() != null) {
+//
+//            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+//            if (actionBar != null) {
+//                actionBar.setHomeButtonEnabled(false);
+//                actionBar.setDisplayHomeAsUpEnabled(false);
+//                actionBar.setDisplayShowTitleEnabled(false);
+//                actionBar.setDisplayShowCustomEnabled(true);
+//                actionBar.setDisplayUseLogoEnabled(true);
+//                LayoutInflater inflater = LayoutInflater.from(getActivity());
+//                // rootView null
+//                @SuppressLint("InflateParams")
+//                View view = inflater.inflate(R.layout.operator_fragment_action_bar, null);
+//
+//                ImageView buttonClose = view.findViewById(R.id.arrow_back);
+//                buttonClose.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        getActivity().onBackPressed();
+//                    }
+//                });
+//                actionBar.setCustomView(view);
+//            }
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -182,7 +189,7 @@ public class SelectedOperatorFragment extends BackStackAwareFragment implements 
     @Override
     public int getCroutonRoot()
     {
-        return R.id.operator_screen;
+        return R.id.parent_layouts;
     }
 
     private void dismissProgressDialog()

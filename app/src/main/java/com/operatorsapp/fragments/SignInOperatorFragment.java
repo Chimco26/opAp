@@ -1,14 +1,12 @@
 package com.operatorsapp.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
@@ -36,7 +33,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
-public class SignInOperatorFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
+public class SignInOperatorFragment extends Fragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
@@ -199,39 +196,39 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
     }
 
 
-    protected void setActionBar() {
-
-        if (getActivity() != null) {
-
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setHomeButtonEnabled(false);
-                actionBar.setDisplayHomeAsUpEnabled(false);
-                actionBar.setDisplayShowTitleEnabled(false);
-                actionBar.setDisplayShowCustomEnabled(true);
-                actionBar.setDisplayUseLogoEnabled(true);
-                LayoutInflater inflater = LayoutInflater.from(getActivity());
-                // rootView null
-                @SuppressLint("InflateParams")
-                View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
-
-                LinearLayout buttonClose = view.findViewById(R.id.close_image);
-                buttonClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    if (fragmentManager != null) {
-//                        fragmentManager.popBackStack();
+//    protected void setActionBar() {
+//
+//        if (getActivity() != null) {
+//
+//            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+//            if (actionBar != null) {
+//                actionBar.setHomeButtonEnabled(false);
+//                actionBar.setDisplayHomeAsUpEnabled(false);
+//                actionBar.setDisplayShowTitleEnabled(false);
+//                actionBar.setDisplayShowCustomEnabled(true);
+//                actionBar.setDisplayUseLogoEnabled(true);
+//                LayoutInflater inflater = LayoutInflater.from(getActivity());
+//                // rootView null
+//                @SuppressLint("InflateParams")
+//                View view = inflater.inflate(R.layout.sign_in_operator_action_bar, null);
+//
+//                LinearLayout buttonClose = view.findViewById(R.id.close_image);
+//                buttonClose.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                    FragmentManager fragmentManager = getFragmentManager();
+////                    if (fragmentManager != null) {
+////                        fragmentManager.popBackStack();
+////                    }
+//
+//                        getActivity().onBackPressed();
 //                    }
-
-                        getActivity().onBackPressed();
-                    }
-                });
-                actionBar.setCustomView(view);
-            }
-
-        }
-    }
+//                });
+//                actionBar.setCustomView(view);
+//            }
+//
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -267,7 +264,7 @@ public class SignInOperatorFragment extends BackStackAwareFragment implements Vi
 
     @Override
     public int getCroutonRoot() {
-        return R.id.operator_screen;
+        return R.id.parent_layouts;
     }
 
     private void dismissProgressDialog() {
