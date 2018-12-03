@@ -18,7 +18,7 @@
     <string name="login_fields_user_name_hint">User Name</string>
     <string name="login_fields_password_hint">Password</string>
     <string name="login_dialog_dismiss">DISMISS</string>
-    <string name="login_dialog_dismiss_all">DISMISS FOR SHIFT</string>
+    <string name="login_dialog_dismiss_all">DISMISS FOR THIS SHIFT</string>
     <string name="network_error">Network Error</string>
     <string name="credentials_error">Username/Password mismatch</string>
     <string name="url_error">Site URL not correct</string>

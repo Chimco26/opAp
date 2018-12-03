@@ -174,6 +174,44 @@
     <string name="welcome">اهلاً وسهلاً</string>
     <string name="log_in_to_nyour_factory">ادخل الى \nمصنعك</string>
     <string name="common_signin_button_text">تسجيل الدخول</string>
+    <string name="action_details">تفاصيل الاجراء</string>
+    <string name="actionnable_jobs">اعمال قابلة للتنفيذ</string>
+    <string name="actions">اجرائات</string>
+    <string name="activate">تشغيل</string>
+    <string name="activate_job_dialog_message">أنت على وشك تفعيل عمل جديد ، هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="activate_job_dialog_title">تشغيل عمل جديد</string>
+    <string name="add">اضف</string>
+    <string name="add_note">اضافه ملاحظه</string>
+    <string name="alarms">اشعارات</string>
+    <string name="amount">كميه</string>
+    <string name="app_name">مشغل</string>
+    <string name="at_work">في العلاج</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">\"انتباه!     تم اكتشاف الدورات في حالة عدم الإنتاج.     من فضلك لا تنسى لتفعيل العمل في الوقت المناسب!\"</string>
+    <string name="call_for_technician_unresponsive">كان ندائك للفني غير مستجيب وبالتالي تم إلغاؤه</string>
+    <string name="call_technician_text">بحاجة لإصلاح شيء ما</string>
+    <string name="call_technician_title">نداء للتقني</string>
+    <string name="called_technician">تقني مدعو</string>
+    <string name="catalog">رقم المنتج</string>
+    <string name="cavities_actual">الوحدات الفعاله في الدوره</string>
+    <string name="cavities_standard">الوحدات المعيار في الدوره</string>
+    <string name="channel_1_99">قناه1-99</string>
+    <string name="channel_0">قناه 0</string>
+    <string name="channel_100">قناه 100</string>
+    <string name="close">اغلق</string>
+    <string name="default_unanswered_technocian_call">في انتظارالتقني للرد</string>
+    <string name="edit_note">تصحيح التعليق</string>
+    <string name="end_setup_success">تم تنفيذ شهادة الإعداد بنجاح</string>
+    <string name="enter_note_here">saادخل/ي الملاحظه هنا</string>
+    <string name="events_selected">الاحداث التي اختيرت</string>
+    <string name="fill_units_or_weight">يجب ادخال الوحدات او الوزن</string>
+    <string name="general">عام</string>
+    <string name="get_jobs_details_failed_error">فشل في الحصول على تفاصيل المهمه</string>
+    <string name="get_panding_jobs_failed_error">فشل في الحصول على تفاصيل المهام القادمه</string>
+    <string name="kg">كجم</string>
+    <string name="loading_error">مشكله في التحميل</string>
+    <string name="loading_file">يتم تحميل الملف</string>
+    <string name="machine">ماكنه</string>
+    <string name="materials">مواد</string>
 
 
 </resources>

@@ -120,7 +120,7 @@
     <string name="approving_technician">טכנאי מאשר</string>
     <string name="approve">אישור</string>
     <string name="setup_end">אישור פריט\nראשון</string>
-    <string name="first_item_approval">אישור פריט ראשון</string>
+    <string name="first_item_approval">סיום סט-אפ</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -180,16 +180,16 @@
         <item quantity="two">שעות</item>
     </plurals>
     <string name="switch_user">שנה משתמש</string>
-    <string name="error_shift_log">נכשל בביצוע פניית שרתGetMachineShiftLog</string>
+    <string name="error_shift_log">נכשל בביצוע פניית שרת ל- GetMachineShiftLog</string>
     <string name="send_logs">שלח נתוני שגיאות</string>
-    <string name="total_required">סה"כ נדרש&#160;</string>
+    <string name="total_required">סה\"כ נדרש</string>
     <string name="no_data_chart">נדרש לספק נתונים\nלהצגת הגרף</string>
     <string name="package_type">סוג אריזה</string>
     <string name="welcome">ברוך הבא</string>
     <string name="log_in_to_nyour_factory">התחבר\nלמפעל</string>
     <string name="common_signin_button_text">כניסה</string>
    
-    <string name="popup_timeout_range_error">זמן הצגת ההתראה חייב להיות בטווח 3-30 שניות</string>
+    <string name="popup_timeout_range_error">זמן הצגת ההתראה חייב להיות בטווח 5-30 שניות</string>
     <string name="popup_timeout">זמן הצגת התראות</string>
     <string name="pConfig">תצורה</string>
 
@@ -217,8 +217,8 @@
     <string name="close">סגור</string>
     <string name="add">הוסף</string>
     <string name="start_job_success">הפעולה בוצעה בהצלחה</string>
-    <string name="get_panding_jobs_failed_error">פק״עות ממתינות  שגיאה נכשלה</string>
-    <string name="get_jobs_details_failed_error">פרטי העבודה נכשלה שגיאה</string>
+    <string name="get_panding_jobs_failed_error">כשל ביבוא רשימת פקודות עבודה ממתינות</string>
+    <string name="get_jobs_details_failed_error">כשל ביבוא פרטי פקודת העבודה</string>
     <string name="no_available_pdf">אין Pdf זמין</string>
     <string name="min_duration_shiftlog">זמן אירוע מינמלי</string>
     <string name="minutes">דקות</string>
@@ -232,7 +232,7 @@
     <string name="add_note">הוספת הערה</string>
     <string name="fill_units_or_weight">* נא להזין יחידות או משקל</string>
     <string name="loading_file">טוען קובץ...</string>
-    <string name="loading_error">טעינה</string>
+    <string name="loading_error">תקלת טעינה</string>
     <string name="tutorial_swipe">החלק ימינה את לוח המכוונים כדי לראות את המתכון של פקודת העבודה הנוכחית</string>
     <string name="tutorial_job_actions">פעולת פקע- פקע חדשה</string>
     <string name="tutorial_job_actions_desc">הכן את עצמך להפעלת פקודת העבודה הבאה בזמן</string>
@@ -258,6 +258,22 @@
     <string name="work_comlpeted">טיפול הסתיים</string>
     <string name="technician_time_out">שים לב, עברו 20 דקות מרגע שליחת הקריאה לטכנאי XXX  ולא התקבל מענה, באפשרותך לפתוח קריאה נוספת או לפנות לאחראי המשמרת.</string>
     <string name="message_from">הודעה מ</string>
+    <string name="app_name">מפעיל</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">\"אזהרה!   המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי.  בבקשה אל תשכח להפעיל פק\"\"ע בזמן.\"</string>
+    <string name="call_for_technician_unresponsive">" המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי."</string>
+    <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
+    <string name="gr">גרם</string>
+    <string name="kg">קג</string>
+    <string name="machine">מכונה</string>
+    <string name="operator">מפעיל</string>
+    <string name="search_job_id_or_product_name">חפש מק\"ט פק\"ע או שם מוצר</string>
+    <string name="sent_service_call">נשלחה קריאת שירות ממכונה</string>
+    <string name="service_call_made">קריאת שירות נשלחה אליך ממכונה</string>
+    <string name="service_calls">קריאת שירות</string>
+    <string name="split_event_failed">פיצול האירוע נכשל</string>
+    <string name="split_event_success">פיצול האירוע בוצע בהצלחה</string>
+    <string name="split">פיצול אירוע</string>
+    <string name="general">כללי</string>
 
 
 </resources>
