@@ -69,7 +69,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.end_setup));
                 break;
             case 3:
-                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_dark_blue));
                 break;
             case 2:
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.cycle_units));
@@ -81,7 +81,7 @@ public class JobsSpinnerAdapter extends ArrayAdapter<JobActionsSpinnerItem> {
                 imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.activate));
                 break;
             default:
-                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
+                imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_dark_blue));
 
         }
 

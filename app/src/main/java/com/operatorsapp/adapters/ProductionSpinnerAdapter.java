@@ -76,14 +76,14 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
                 if (selected) {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_blue));
                 } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.production_dark_blue));
                 }
                 break;
             default:
                 if (selected) {
                     imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_production));
                 } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_production));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.no_production_dark_blue));
                 }
         }
     }

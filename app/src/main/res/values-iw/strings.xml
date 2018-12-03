@@ -272,8 +272,11 @@
     <string name="service_calls">קריאת שירות</string>
     <string name="split_event_failed">פיצול האירוע נכשל</string>
     <string name="split_event_success">פיצול האירוע בוצע בהצלחה</string>
-    <string name="split">פיצול אירוע</string>
+    <string name="split">לפצל</string>
     <string name="general">כללי</string>
+    <string name="split_event_validation_text">אתה עומד לפצל את האירוע, האם להמשיך בפעולה?</string>
+    <string name="split_event">פיצול אירוע</string>
+    <string name="split_event_validation_title">פיצול אירוע</string>
 
 
 </resources>
