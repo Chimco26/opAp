@@ -172,7 +172,11 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         OppAppLogger.getInstance().w(LOG_TAG, "sendReportReject(), onResponse() callback is null");
                     }
                 } else {
-                    onFailure(call, new Exception(response.body().getErrorDesc()));
+                    String error = "";
+                    if (response != null && response.body() != null){
+                        error = response.body().getErrorDesc();
+                    }
+                    onFailure(call, new Exception(error));
                 }
             }
 

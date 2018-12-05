@@ -108,7 +108,7 @@ public class LineChartTimeSmall extends FrameLayout {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if ((int) value % mXValues.length >= 0) {
-                    if (!mXValues[(int) value % mXValues.length].equals(mXVal)) {
+                    if (mXVal != null && mXValues != null && !mXValues[(int) value % mXValues.length].equals(mXVal)) {
                         mXVal = mXValues[(int) value % mXValues.length];
                         return mXVal;
                     } else {

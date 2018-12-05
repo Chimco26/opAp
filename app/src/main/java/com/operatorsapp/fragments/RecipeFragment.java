@@ -276,7 +276,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            mLayoutChannel0ItemTitleTv.setText(getString(R.string.production_parameters));
+            mLayoutChannel0ItemTitleTv.setText(getActivity().getString(R.string.production_parameters));
 
             if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 
@@ -362,11 +362,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         if (mLayoutChannel0NotesTv.getText().length() > 0) {
 
-            noteTitleTv.setText(getString(R.string.edit_note));
+            noteTitleTv.setText(getActivity().getString(R.string.edit_note));
             noteEt.setText(mLayoutChannel0NotesTv.getText());
         } else {
-            noteTitleTv.setText(getString(R.string.add_note));
-            noteEt.setHint(getString(R.string.enter_note_here));
+            noteTitleTv.setText(getActivity().getString(R.string.add_note));
+            noteEt.setHint(getActivity().getString(R.string.enter_note_here));
         }
 
         final AlertDialog alert = builder.create();

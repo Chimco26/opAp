@@ -98,7 +98,8 @@ public class RecipeResponse implements Parcelable {
         this.LeaderRecordID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.error = in.readParcelable(Object.class.getClassLoader());
         this.FunctionSucceed = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.note = (String) in.readValue(String.class.getClassLoader());
+        //this.note = (String) in.readValue(String.class.getClassLoader());
+        this.note =  in.readString();
         this.RecipeData = new ArrayList<com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData>();
         in.readList(this.RecipeData, com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData.class.getClassLoader());
     }
