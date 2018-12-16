@@ -24,6 +24,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
@@ -57,7 +58,11 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
         // Analytics
         OperatorApplication application = (OperatorApplication) getActivity().getApplication();
         Tracker mTracker = application.getDefaultTracker();
+        PersistenceManager pm = PersistenceManager.getInstance();
         mTracker.setScreenName(LOG_TAG);
+        mTracker.setClientId("machine id: " + pm.getMachineId());
+        mTracker.setAppVersion(pm.getVersion() + "");
+        mTracker.setHostname(pm.getSiteName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         Gson gson = new Gson();

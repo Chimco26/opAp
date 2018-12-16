@@ -168,7 +168,6 @@
     <string name="app_name">LeaderMES操作員</string>
     <string name="called_technician">已呼叫的技術人員</string>
     <string name="catalog">目錄</string>
-    <string name="emerald_flavor_name">翠綠色</string>
     <string name="action_details">操作詳情</string>
     <string name="actionnable_jobs">可操作的作業</string>
     <string name="actions">操作</string>
@@ -249,6 +248,12 @@
     <string name="work_comlpeted">工作完成了</string>
     <string name="yesterday">昨天</string>
     <string name="you_can_add_a_note">您可以添加備註</string>
+    <string name="split_event_validation_text">您即將拆分事件，您確定要繼續進行嗎？</string>
+    <string name="split_event_validation_title">拆分事件</string>
+    <string name="midnight">午夜</string>
+    <string name="split">拆分</string>
+    <string name="version">"版本 "</string>
+    <string name="username">"使用者名稱 "</string>
 
 
 </resources>

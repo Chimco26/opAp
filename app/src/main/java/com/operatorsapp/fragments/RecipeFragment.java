@@ -97,7 +97,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         // Analytics
         OperatorApplication application = (OperatorApplication) getActivity().getApplication();
         Tracker mTracker = application.getDefaultTracker();
+        PersistenceManager pm = PersistenceManager.getInstance();
         mTracker.setScreenName(LOG_TAG);
+        mTracker.setClientId("machine id: " + pm.getMachineId());
+        mTracker.setAppVersion(pm.getVersion() + "");
+        mTracker.setHostname(pm.getSiteName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
@@ -276,7 +280,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            mLayoutChannel0ItemTitleTv.setText(getActivity().getString(R.string.production_parameters));
+            mLayoutChannel0ItemTitleTv.setText(getResources().getString(R.string.production_parameters));
 
             if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 

@@ -69,26 +69,38 @@
 
             <ImageView
                 android:id="@+id/toolbar_tutorial_iv"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:layout_toStartOf="@+id/settings_button"
                 android:src="@drawable/info" />
 
             <ImageView
                 android:id="@+id/settings_button"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:layout_toStartOf="@+id/toolbar_notification_button"
                 android:src="@drawable/settings_new_small" />
 
             <ImageView
                 android:id="@+id/toolbar_notification_button"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"

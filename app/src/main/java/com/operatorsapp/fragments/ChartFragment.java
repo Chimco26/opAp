@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.LineChartTimeLarge;
 
 import java.lang.reflect.Type;
@@ -85,7 +86,11 @@ public class ChartFragment extends BackStackAwareFragment {
         if (getActivity() != null && getActivity().getApplication() != null) {
             OperatorApplication application = (OperatorApplication) getActivity().getApplication();
             Tracker mTracker = application.getDefaultTracker();
+            PersistenceManager pm = PersistenceManager.getInstance();
             mTracker.setScreenName(LOG_TAG);
+            mTracker.setClientId("machine id: " + pm.getMachineId());
+            mTracker.setAppVersion(pm.getVersion() + "");
+            mTracker.setHostname(pm.getSiteName());
             mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         }
     }

@@ -153,7 +153,7 @@
         <item>Производственный отчет</item>
     </array>
     <string name="approve_first_item">Окончание настройки</string>
-    <string name="welcome">Welcome</string>
+    <string name="welcome">Добро пожаловать</string>
     <string name="log_in_to_nyour_factory">Вход на Ваш завод</string>
     <plurals name="days">
         <item quantity="one">%d д.</item>

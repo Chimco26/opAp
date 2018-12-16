@@ -11,14 +11,14 @@
     <string name="link_machine">Maschine verbinden</string>
     <string name="screen_title">LeaderMES</string>
     <string name="login_fields_error">Alle Felder muessen ausgefuellt werden</string>
-    <string name="login">Log In</string>
+    <string name="login">Einloggen</string>
     <string name="login_screen_save">Speichern</string>
     <string name="login_fields_factory_name_hint">Name des Betriebs</string>
     <string name="login_fields_factory_url_hint">URL des Betriebs</string>
     <string name="login_fields_user_name_hint">Benutzername</string>
     <string name="login_fields_password_hint">Passwort</string>
-    <string name="login_dialog_dismiss">DISMISS</string>
-    <string name="login_dialog_dismiss_all">DISMISS FOR SHIFT</string>
+    <string name="login_dialog_dismiss">verwerfen</string>
+    <string name="login_dialog_dismiss_all">Für Schicht überspringen/ verwerfen</string>
     <string name="network_error">Netzwerkfehler</string>
     <string name="credentials_error">Fehler in den Anmeldedaten</string>
     <string name="url_error">Website URL fehlerhaft</string>
@@ -31,23 +31,23 @@
     <string name="select_machine_screen_title">Maschine verbinden</string>
 
     <string name="done">Erledigt</string>
-    <string name="add_another">Add Machine</string>
+    <string name="add_another">Maschine hinzufügen</string>
     <string name="ok">OK</string>
 
-    <string name="go">Go</string>
+    <string name="go">Los</string>
     <string name="machine_id_name">Maschinenname/ID</string>
     <string name="enter_machine_id_name">Maschinennamen eingeben/ Name</string>
     <string name="no_notifications">Keine Mitteilungen</string>
     <string name="no_data">Keine Daten</string>
-    <string name="error_rest">Exception in Rest service</string>
-    <string name="jobs_actions">Job actions</string>
-    <string name="job_id">Job ID</string>
+    <string name="error_rest">Ausnahmen im Rest-Service</string>
+    <string name="jobs_actions">Auftrags-Aktionen</string>
+    <string name="job_id">Auftrags-Nr.</string>
     <string name="product_name">Produktname</string>
     <string name="erp">ERP</string>
     <string name="planned_start">Geplanter Beginn</string>
     <string name="number_of_units">Anzahl der Einheiten</string>
     <string name="new_job">Neue Aktivitaeten</string>
-    <string name="new_job_details">New job details</string>
+    <string name="new_job_details">Details - Neuer Auftrag</string>
     <string name="product_id">Produkt-ID</string>
     <string name="erp_id">ERP-ID</string>
     <string name="quantity">Menge</string>
@@ -60,7 +60,7 @@
     <string name="shift">Schicht</string>
     <string name="operator_id">Werker-ID</string>
     <string name="operator_name">Name des Werkers</string>
-    <string name="error_shift_log">Fail to perform GetMachineShiftLog function</string>
+    <string name="error_shift_log">Funktion "GetMachineShiftLog" konnte nicht ausgeführt werden.</string>
 
     <string name="operator_sign_in">Werker\nSign in</string>
     <string name="operator_sign_in_action_bar">Werker-Anmeldung Sign In</string>
@@ -72,7 +72,7 @@
     <string name="report">Bericht</string>
     <string name="stop_event">Ereignis stoppen</string>
     <string name="enter_with_your_id">Bitte Ihre ID eingeben</string>
-    <string name="report_rejects">Report Rejects</string>
+    <string name="report_rejects">Report: Ausschussteile</string>
     <string name="reject_reason">Reject Gruende</string>
     <string name="cause">Ursache</string>
     <string name="next">Weiter</string>
@@ -86,45 +86,45 @@
     <string name="report_reject_nreason">Report Reject\nReason</string>
     <string name="report_stop_start">"Beginn "</string>
     <string name="report_stop_resume">"Ende"</string>
-    <string name="report_cycle_nunits">Report Cycle\nUnits</string>
-    <string name="report_cycle_units">Report Cycle Units</string>
-    <string name="report_inventory_nitem_production">Report Inventory\nItem Production</string>
-    <string name="report_inventory_item_production">Report Inventory Item Production</string>
+    <string name="report_cycle_nunits">Report: Zykluszeiten \n</string>
+    <string name="report_cycle_units">Report: Zykluszeiten</string>
+    <string name="report_inventory_nitem_production">Report: Produktion \n</string>
+    <string name="report_inventory_item_production">Report: Produktion</string>
     <string name="package_type">Verpackungstyp</string>
     <string name="settings">Einstellungen</string>
-    <string name="operator_app_settings">Operator\nApp\nSettings</string>
+    <string name="operator_app_settings">Werker \n App  \n Einstellungen</string>
     <string name="language">Sprache</string>
     <string name="factory_sign_in">Betriebs sign in</string>
     <string name="change">Aendern</string>
     <string name="advanced_settings">Fortgeschrittene Einstellungen</string>
-    <string name="refresh_reporting_data">Refresh Reporting Data</string>
-    <string name="operator_napp_nadvanced_nsettings">Operator\nApp\nAdvanced\nSettings</string>
-    <string name="polling_frequency">Polling frequency</string>
-    <string name="request_timeout">Request timeout</string>
-    <string name="request_timeout_range_error">Request timeout must be in range 20-120 seconds</string>
-    <string name="polling_frequency_range_error">Polling frequency must be in range 20-60 seconds</string>
-    <string name="refreshed">refreshed</string>
+    <string name="refresh_reporting_data">Report aktualisieren</string>
+    <string name="operator_napp_nadvanced_nsettings">Werker \n App \n Fortschritt \n Einstellungen</string>
+    <string name="polling_frequency">Abfragefrequenz</string>
+    <string name="request_timeout">Anforderungs-Time-Out</string>
+    <string name="request_timeout_range_error">Anforderungs-Time-Out muss zwischen 20-120 Sekunden betragen.</string>
+    <string name="polling_frequency_range_error">Abfragefrequenz muss zwischen 20-60 Sekunden betragen.</string>
+    <string name="refreshed">neu geladen</string>
     <string name="one">1</string>
-    <string name="end_">Ende: </string>
+    <string name="end_">Ende:</string>
     <string name="start_">Start: </string>
     <string name="chart_min_">Min: </string>
     <string name="chart_standard_">Standard:&#160;</string>
     <string name="chart_max_">Max: </string>
     <string name="space">&#160;</string>
-    <string name="switch_user">Switch User</string>
+    <string name="switch_user">Benutzer wechseln</string>
     <string name="standard">Standard&#160;</string>
-    <string name="total_required">Total required&#160;</string>
+    <string name="total_required">Benötigte Gesamtstückzahl&#160;</string>
     <string name="shift_log_min">Min&#160;</string>
     <string name="shift_log_max">Max&#160;</string>
     <string name="shift_log_standard">Standard&#160;</string>
-    <string name="approving_technician">Approving technician</string>
-    <string name="approve">Approve</string>
-    <string name="setup_end">Setup\nend</string>
-    <string name="first_item_approval">Setup End</string>
-    <string name="send_logs">Send logs</string>
+    <string name="approving_technician">Freigabe durch Einrichter</string>
+    <string name="approve">Genehmigen</string>
+    <string name="setup_end">Setup \n beenden</string>
+    <string name="first_item_approval">Setup beenden</string>
+    <string name="send_logs">Daten senden</string>
     <string name="alarm">"Alarm"</string>
-    <string name="loading_data">Loading data..</string>
-    <string name="no_data_chart">You need to provide data\nfor the chart</string>
+    <string name="loading_data">Die Datei wird geladen.</string>
+    <string name="no_data_chart">Sie müssen Daten für die Tabelle auswählen.</string>
 
     <array name="languages_spinner_array">
         <item>English</item>
@@ -153,14 +153,14 @@
     </array>
     <array name="jobs_spinner_array">
         <item>Neuer Job</item>
-        <item>Add Rejects</item>
-        <item>Change Units In Cycle</item>
+        <item>Ausschussteile hinzufügen</item>
+        <item>Kavität ändern</item>
         <item>Produktions-Report</item>
     </array>
 
     <string name="approve_first_item">Setup Ende</string>
-    <string name="welcome">Welcome</string>
-    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
+    <string name="welcome">Willkommen</string>
+    <string name="log_in_to_nyour_factory">In Produktion anmelden</string>
 
     <plurals name="days">
         <item quantity="one">%d Tag</item>
@@ -172,7 +172,7 @@
         <item quantity="one">Stunde</item>
         <item quantity="other">Stunden</item>
     </plurals>
-    <string name="common_signin_button_text">SIGN IN</string>
+    <string name="common_signin_button_text">Einloggen</string>
     <string name="activate">Aktivieren</string>
     <string name="actions">Aktionen</string>
     <string name="actionnable_jobs">Auswählbare Aufträge</string>
@@ -199,7 +199,6 @@
     <string name="close">Schließen</string>
     <string name="default_unanswered_technocian_call">Wartet auf Antwort von Einrichter</string>
     <string name="edit_note">Notiz ändern</string>
-    <string name="emerald_flavor_name">emerald</string>
     <string name="end_setup_success">Rüstvorgang erfolgreich beendet</string>
     <string name="enter_note_here">Hier können Sie eine Notiz eingeben</string>
     <string name="events_selected">Ausgewählte Ereignisse:</string>
@@ -259,4 +258,5 @@
     <string name="tutorial_job_actions">Auftragsaktionen - Neuer Auftrag</string>
     <string name="tutorial_event_log_title">Ereignisdaten</string>
     <string name="tutorial_event_log_desc">Füge mehrere Reports zusammen, wenn diese den gleichen Stillstandsgrund haben.</string>
+    <string name="split_event_validation_title">Aufspalten Ereignis</string>
 </resources>

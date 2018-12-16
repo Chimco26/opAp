@@ -121,6 +121,7 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
+import org.litepal.util.Const;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -1191,7 +1192,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mHandlerTechnicianCall.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (PersistenceManager.getInstance().getTechnicianCallTime() > 0) {
+                    TechCallInfo techCallInfo2 = PersistenceManager.getInstance().getCalledTechnician();
+                    //if (PersistenceManager.getInstance().getTechnicianCallTime() > 0) {
+                    if (techCallInfo2.getmCallTime() > 0 && techCallInfo2.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
 
                         final AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getActivity());

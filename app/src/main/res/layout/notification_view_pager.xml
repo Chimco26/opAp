@@ -8,6 +8,7 @@
         android:id="@+id/NVP_view_pager_ly_tabs"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
+        android:layoutDirection="ltr"
         android:layout_height="55dp"
         android:background="@color/white"
         android:gravity="start|center_vertical"

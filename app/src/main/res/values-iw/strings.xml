@@ -275,8 +275,10 @@
     <string name="split">פיצול</string>
     <string name="general">כללי</string>
     <string name="split_event_validation_text">אתה עומד לפצל את האירוע, האם להמשיך בפעולה?</string>
-    <string name="split_event">פיצול אירוע</string>
     <string name="split_event_validation_title">פיצול אירוע</string>
+    <string name="version">גרסה</string>
+    <string name="username">שם משתמש</string>
+
 
 
 </resources>

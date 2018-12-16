@@ -158,8 +158,8 @@
     </array>
 
     <string name="approve_first_item">Final de Preparacion</string>
-    <string name="welcome">Welcome</string>
-    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="log_in_to_nyour_factory">Login en su fábrica</string>
 
     <plurals name="days">
         <item quantity="one">%d Dia</item>
@@ -204,7 +204,6 @@
     <string name="channel_100">Canal 100</string>
     <string name="close">Cerrar</string>
     <string name="default_unanswered_technocian_call">Editar nota</string>
-    <string name="emerald_flavor_name">esmeralda</string>
     <string name="edit_note">Editar nota</string>
     <string name="end_setup_success">Configuración finalizada correctamente</string>
     <string name="enter_note_here">Introduce tu nota aquí</string>
@@ -256,5 +255,12 @@
     <string name="work_comlpeted">bajo mantenimiento</string>
     <string name="yesterday">Ayer</string>
     <string name="you_can_add_a_note">Puedes añadir una nota</string>
+    <string name="split_event_validation_text">Está a punto de dividir un evento, ¿está seguro de que desea continuar?</string>
+    <string name="split_event_validation_title">Dividir evento</string>
+    <string name="midnight">medianoche</string>
+    <string name="split">Dividir</string>
+    <string name="version">Versión</string>
+    <string name="username">Nombre de usuario</string>
+
 
 </resources>

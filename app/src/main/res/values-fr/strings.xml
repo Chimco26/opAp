@@ -33,7 +33,7 @@
     <string name="add_another">Ajouter une machine</string>
     <string name="ok">OK</string>
 
-    <string name="go">GO</string>
+    <string name="go">DÉMARRER</string>
     <string name="machine_id_name">Nom / ID de la Machine</string>
     <string name="enter_machine_id_name">Entrez la Machine\nID / Nom</string>
     <string name="no_notifications">Aucune notification</string>
@@ -160,7 +160,7 @@
 
     <string name="approve_first_item">Fin de Préparation</string>
     <string name="welcome">Bienvenue</string>
-    <string name="log_in_to_nyour_factory">Log In To \nYour Factory</string>
+    <string name="log_in_to_nyour_factory">Connectez-vous à votre usine</string>
 
     <plurals name="days">
         <item quantity="one">%d Jour</item>
@@ -199,7 +199,6 @@
     <string name="close">Fermer</string>
     <string name="default_unanswered_technocian_call">En attente de la réponse du technicien</string>
     <string name="edit_note">Modifier la note</string>
-    <string name="emerald_flavor_name">émeraude</string>
     <string name="end_setup_success">Installation terminée avec succès</string>
     <string name="enter_note_here">Saisissez votre remarque ici</string>
     <string name="events_selected">Evénements sélectionnés :</string>
@@ -215,7 +214,7 @@
     <string name="message_from">Message de :</string>
     <string name="message_received">Message reçu</string>
     <string name="min_duration_shiftlog">"Durée minimale de l'événement "</string>
-    <string name="minutes">Minimum</string>
+    <string name="minutes">Minutes</string>
     <string name="mold">Moisissure</string>
     <string name="mold_catalog">Catalogue des moisissures</string>
     <string name="name">Nom</string>
@@ -256,4 +255,9 @@
     <string name="work_comlpeted">Tâches réalisées</string>
     <string name="yesterday">Hier</string>
     <string name="you_can_add_a_note">Vous pouvez ajouter une note</string>
+    <string name="midnight">minuit</string>
+    <string name="split_event_validation_text">"Vous êtes sur le point de scinder un événement. Êtes-vous sûr de vouloir continuer ? "</string>
+    <string name="split_event_validation_title">"Scinder l'événement "</string>
+    <string name="split">"Partager "</string>
+    <string name="username">"Nom utilisateur "</string>
 </resources>

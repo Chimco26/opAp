@@ -126,7 +126,11 @@ public class ReportRejectsFragment extends BackStackAwareFragment implements Vie
         // Analytics
         OperatorApplication application = (OperatorApplication) getActivity().getApplication();
         Tracker mTracker = application.getDefaultTracker();
+        PersistenceManager pm = PersistenceManager.getInstance();
         mTracker.setScreenName(LOG_TAG);
+        mTracker.setClientId("machine id: " + pm.getMachineId());
+        mTracker.setAppVersion(pm.getVersion() + "");
+        mTracker.setHostname(pm.getSiteName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 

@@ -21,6 +21,7 @@ import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
+import com.operatorsapp.managers.PersistenceManager;
 import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
@@ -97,6 +98,10 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
                     // Analytics
                     OperatorApplication application = (OperatorApplication) getActivity().getApplication();
                     Tracker mTracker = application.getDefaultTracker();
+                    PersistenceManager pm = PersistenceManager.getInstance();
+                    mTracker.setClientId("machine id: " + pm.getMachineId());
+                    mTracker.setAppVersion(pm.getVersion() + "");
+                    mTracker.setHostname(pm.getSiteName());
                     mTracker.setScreenName("ViewPager new page Selected: " + mFragmentList.get(position).getTag());
                     mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 

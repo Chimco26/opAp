@@ -23,6 +23,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.DashBoardActivityToSelectedJobFragmentCallback;
 import com.operatorsapp.interfaces.JobsFragmentToDashboardActivityCallback;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.CurrentJob;
 import com.zemingo.logrecorder.ZLogger;
@@ -53,7 +54,11 @@ public class SelectedJobFragment extends BackStackAwareFragment implements View.
         // Analytics
         OperatorApplication application = (OperatorApplication) getActivity().getApplication();
         Tracker mTracker = application.getDefaultTracker();
+        PersistenceManager pm = PersistenceManager.getInstance();
         mTracker.setScreenName(LOG_TAG);
+        mTracker.setClientId("machine id: " + pm.getMachineId());
+        mTracker.setAppVersion(pm.getVersion() + "");
+        mTracker.setHostname(pm.getSiteName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         Bundle bundle = this.getArguments();

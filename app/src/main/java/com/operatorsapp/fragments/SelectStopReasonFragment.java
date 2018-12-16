@@ -293,7 +293,12 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
-            Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+            Tracker tracker = null;
+            try {
+                tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+            }catch (NullPointerException e){
+
+            }
 
             if (response.isFunctionSucceed()){
                 // TODO: 17/07/2018 add crouton for success
@@ -302,18 +307,22 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Stop Reason Report")
-                        .setAction("Reported Successfully")
-                        .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
-                        .build());
+                if (tracker != null) {
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Stop Reason Report")
+                            .setAction("Reported Successfully")
+                            .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
+                            .build());
+                }
             }else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
-                tracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Stop Reason Report")
-                        .setAction("Report Failed")
-                        .setLabel("Screen: SelectStopReasonFragment, Error: " + response.getmError().getErrorDesc())
-                        .build());
+                if (tracker != null) {
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Stop Reason Report")
+                            .setAction("Report Failed")
+                            .setLabel("Screen: SelectStopReasonFragment, Error: " + response.getmError().getErrorDesc())
+                            .build());
+                }
             }
 
             try {

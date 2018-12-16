@@ -533,6 +533,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
 
         mTracker.setScreenName(this.getLocalClassName());
+        PersistenceManager pm = PersistenceManager.getInstance();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.setClientId("machine id: " + pm.getMachineId());
+        mTracker.setAppVersion(pm.getVersion() + "");
+        mTracker.setHostname(pm.getSiteName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
@@ -1966,9 +1971,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void setIntervalAndTimeOut(IntervalAndTimeOutResponse response) {
+        int poll = PersistenceManager.getInstance().getPollingFrequency();
+        int pollNew;
         if (Integer.parseInt(response.getPollingIntervalData().get(0).getValue()) > 0) {
             if (response.getPollingIntervalData().get(0).getKey().equals(INTERVAL_KEY)) {
-                PersistenceManager.getInstance().setPolingFrequency(Integer.parseInt(response.getPollingIntervalData().get(0).getValue()));
+                pollNew = Integer.parseInt(response.getPollingIntervalData().get(0).getValue());
+                PersistenceManager.getInstance().setPolingFrequency(pollNew);
+                if (poll != pollNew){
+                    onRefreshPollingRequest();
+                }
             }
             if (response.getPollingIntervalData().get(0).getKey().equals(TIME_OUT_KEY)) {
                 PersistenceManager.getInstance().setRequestTimeOut(Integer.parseInt(response.getPollingIntervalData().get(0).getValue()));
@@ -1976,7 +1987,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         if (Integer.parseInt(response.getPollingIntervalData().get(1).getValue()) > 0) {
             if (response.getPollingIntervalData().get(1).getKey().equals(INTERVAL_KEY)) {
-                PersistenceManager.getInstance().setPolingFrequency(Integer.parseInt(response.getPollingIntervalData().get(1).getValue()));
+                pollNew = Integer.parseInt(response.getPollingIntervalData().get(1).getValue());
+                PersistenceManager.getInstance().setPolingFrequency(pollNew);
+                if (poll != pollNew){
+                    onRefreshPollingRequest();
+                }
             }
             if (response.getPollingIntervalData().get(1).getKey().equals(TIME_OUT_KEY)) {
                 PersistenceManager.getInstance().setRequestTimeOut(Integer.parseInt(response.getPollingIntervalData().get(1).getValue()));
