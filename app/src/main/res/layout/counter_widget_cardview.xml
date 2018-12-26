@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/counter_parent_layout"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
+    android:layout_centerInParent="true"
+    android:background="@drawable/widget_background_selector"
+    android:orientation="vertical">
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/counter_widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:ellipsize="end"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:text="Manual production counter"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        autofit:minTextSize="12sp"/>
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/counter_widget_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/counter_widget_title"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="More info"
+        android:textSize="14sp"
+        autofit:minTextSize="8sp" />
+
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/divider_gray"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        
+        <NumberPicker
+            android:id="@+id/counter_widget_value_np"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="80dp"></NumberPicker>
+
+        <ImageView
+            android:id="@+id/counter_widget_add_iv"
+            android:layout_gravity="center_vertical"
+            android:layout_width="44dp"
+            android:layout_margin="15dp"
+            android:layout_height="44dp"
+            android:src="@drawable/add_blue"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

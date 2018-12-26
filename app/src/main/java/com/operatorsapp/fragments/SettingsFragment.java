@@ -30,6 +30,7 @@ import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapter;
@@ -109,7 +110,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         final LanguagesSpinnerAdapter spinnerArrayAdapter = new LanguagesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
-        ((TextView)view.findViewById(R.id.FS_version)).setText(String.valueOf(PersistenceManager.getInstance().getVersion()));
+        ((TextView)view.findViewById(R.id.FS_version)).setText(String.valueOf(BuildConfig.VERSION_NAME));
         ((TextView)view.findViewById(R.id.FS_username)).setText(String.valueOf(PersistenceManager.getInstance().getUserName()));
 
         if (getActivity() != null) {

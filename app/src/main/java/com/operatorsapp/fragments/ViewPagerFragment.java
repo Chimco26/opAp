@@ -1,14 +1,22 @@
 package com.operatorsapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -16,12 +24,18 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.managers.ProgressDialogManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
+import com.operatorsapp.utils.SimpleRequests;
 import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
@@ -34,6 +48,10 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
 //    private SwipeRefreshLayout mSwipeRefresh;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+//    private ImageView mNoteIv;
+//    private TextView mNoteTv;
+//    private LinearLayout mNoteLy;
+//    private String noteStr = "";
 
     public static ViewPagerFragment newInstance() {
         ViewPagerFragment viewPagerFragment = new ViewPagerFragment();

@@ -192,6 +192,7 @@
     <string name="channel_1_99">Channel 1–99</string>
     <string name="channel_100">Channel 100</string>
     <string name="events_selected">Events selected:</string>
+    <string name="events">events</string>
     <string name="loading_file">Loading File…</string>
     <string name="loading_error">Loading error</string>
     <string name="production_parameters">Production parameters</string>
@@ -223,6 +224,7 @@
     <string name="add_note">Add Note</string>
     <string name="min_duration_shiftlog">Min. Event Duration: </string>
     <string name="minutes">Min.</string>
+    <string name="minutes_long">minutes</string>
     <string name="tutorial_job_actions">Job Actions - New Job</string>
     <string name="tutorial_job_actions_desc">Begin prep for the next job ahead of time</string>
     <string name="tutorial_swipe">Swipe the dashboard sideways to view the recipe for the current job</string>
@@ -280,6 +282,10 @@
     <string name="gr">gr</string>
     <string name="version">Version</string>
     <string name="username">Username</string>
+    <string name="incremented_successfully">Incremented Successfully</string>
+    <string name="incremented_failure">Failed to Increment</string>
+    <string name="top_five_stop_events">Top 5 stop events</string>
+    <string name="top_five_reject_reasons">Top 5 Reject Reasons</string>
 
 
 </resources>

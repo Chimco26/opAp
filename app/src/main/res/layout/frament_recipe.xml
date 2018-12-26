@@ -4,8 +4,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingStart="18dp"
-    android:background="@color/white"
-    android:paddingTop="10dp">
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/FR_note_ly"
+        android:layout_width="869dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/combined_shape"
+        android:orientation="vertical"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp"
+        android:layout_marginBottom="14dp"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_gravity="start"
+            android:id="@+id/FVP_actions_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:textColor="@color/black"
+            android:text="@string/notes"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/divider_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/FR_notes_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/FR_open_edit_text_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/note" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"

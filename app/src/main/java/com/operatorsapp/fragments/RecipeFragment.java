@@ -73,9 +73,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mlayoutChannel1_99NoDataLayout;
     private View mlayoutChannel1_99MainLy;
     private View mLayoutChannel100RvLy;
-    private View mLayoutChannel0NoteLayout;
-    private TextView mLayoutChannel0NotesTv;
-    private ImageView mLayoutChannel0EditTextIv;
+    private ImageView mNoteIv;
+    private TextView mNoteTv;
+    private LinearLayout mNoteLy;
 
     public static RecipeFragment newInstance(RecipeResponse recipeResponse) {
         RecipeFragment recipeFragment = new RecipeFragment();
@@ -149,6 +149,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mchannel100BotomView = view.findViewById(R.id.FR_channel_100_btn_bottom);
 
+        mNoteIv = view.findViewById(R.id.FR_open_edit_text_btn);
+        mNoteTv = view.findViewById(R.id.FR_notes_tv);
+        mNoteLy = view.findViewById(R.id.FR_note_ly);
+
         initChannel0Vars(view);
 
         initChannel1_99Vars(view);
@@ -206,13 +210,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         mLayoutChannel0ItemSubTitleTv = mLayoutChannel0Item.findViewById(R.id.IP_sub_title);
 
         mLayoutChannel0ItemSplitLy = mLayoutChannel0Item.findViewById(R.id.IP_split_ly);
-
-        mLayoutChannel0NoteLayout = mLayoutChannel0.findViewById(R.id.C0L_note_ly);
-
-        mLayoutChannel0EditTextIv = mLayoutChannel0.findViewById(R.id.C0L_open_edit_text_btn);
-
-        mLayoutChannel0NotesTv = mLayoutChannel0.findViewById(R.id.C0L_notes_tv);
-
     }
 
     private void initView() {
@@ -222,6 +219,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         initChannel100View();
 
         initChanne1_1_99_View();
+
+        if (mRecipeResponse!= null && mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
+            mNoteTv.setText(mRecipeResponse.getNote());
+        }
 
     }
 
@@ -280,7 +281,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            mLayoutChannel0ItemTitleTv.setText(getResources().getString(R.string.production_parameters));
+            mLayoutChannel0ItemTitleTv.setText(getActivity().getResources().getString(R.string.production_parameters));
 
             if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 
@@ -325,18 +326,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 mLayoutChannel0ItemSplitLy.removeAllViews();
             }
 
-
-            if (mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
-                mLayoutChannel0NotesTv.setText(mRecipeResponse.getNote());
-            }
-            mLayoutChannel0EditTextIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openNotesDialog();
-                }
-            });
-
-
         } else {
 
             mLayoutChannel0MainLayout.setVisibility(View.GONE);
@@ -364,10 +353,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         Button submitBtn = dialogView.findViewById(R.id.DN_btn);
         ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
 
-        if (mLayoutChannel0NotesTv.getText().length() > 0) {
+        if (mNoteTv.getText().length() > 0) {
 
             noteTitleTv.setText(getActivity().getString(R.string.edit_note));
-            noteEt.setText(mLayoutChannel0NotesTv.getText());
+            noteEt.setText(mNoteTv.getText());
         } else {
             noteTitleTv.setText(getActivity().getString(R.string.add_note));
             noteEt.setHint(getActivity().getString(R.string.enter_note_here));
@@ -405,7 +394,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
             public void onUpdateNotesSuccess(ErrorResponseNewVersion responseNewVersion) {
-                mLayoutChannel0NotesTv.setText(note);
+                mNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();
             }
@@ -439,6 +428,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             }
         });
 
+        mNoteLy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNotesDialog();
+            }
+        });
     }
 
     private void initChanne1_1_99_View() {

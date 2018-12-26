@@ -86,6 +86,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_MACHINE_NAME = "pref.PREF_MACHINE_NAME";
     private static final String CALLED_TECHNICIAN_NAME = "pref.PREF_CALLED_TECHNICIAN_NAME";
     private static final String CALLED_TECHNICIAN = "pref.PREF_CALLED_TECHNICIAN";
+    private static final String PREF_SHIFT_START = "pref.PREF_SHIFT_START";
+    private static final String PREF_SHIFT_END = "pref.PREF_SHIFT_END";
 
 
     private static PersistenceManager msInstance;
@@ -372,6 +374,30 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     @Override
     public void setMachineDataStartingFrom(String startingFrom) {
         SecurePreferences.getInstance().setString(PREF_MACHINE_DATA_STARTING_FROM, startingFrom);
+    }
+
+    public void setShiftStart(String shiftStart) {
+        SecurePreferences.getInstance().setString(PREF_SHIFT_START, shiftStart);
+    }
+
+    public void setShiftEnd(String shiftEnd) {
+        if (shiftEnd != null && !shiftEnd.isEmpty() && shiftEnd.length() > 0) {
+            SecurePreferences.getInstance().setString(PREF_SHIFT_END, shiftEnd);
+        }
+    }
+
+
+    public String getShiftStart() {
+        return SecurePreferences.getInstance().getString(PREF_SHIFT_START);
+    }
+
+    public String getShiftEnd() {
+        String shiftEnd = SecurePreferences.getInstance().getString(PREF_SHIFT_END);
+        if (shiftEnd != null && !shiftEnd.isEmpty() && shiftEnd.length() > 0) {
+            return shiftEnd = TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
+        }else {
+            return TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
+        }
     }
 
     public boolean isNewShiftLogs() {

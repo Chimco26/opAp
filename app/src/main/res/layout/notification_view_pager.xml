@@ -68,22 +68,30 @@
 
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/NVP_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
         android:id="@+id/NVP_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <!--<android.support.v4.view.PagerTabStrip-->
-            <!--android:id="@+id/FVP_view_pager_header"-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="top"-->
-            <!--style="@style/FontStyle_tabStrip"-->
-            <!--android:paddingBottom="6dp"-->
-            <!--android:paddingTop="6dp" />-->
+            <!--<android.support.v4.view.PagerTabStrip-->
+                <!--android:id="@+id/FVP_view_pager_header"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="top"-->
+                <!--style="@style/FontStyle_tabStrip"-->
+                <!--android:paddingBottom="6dp"-->
+                <!--android:paddingTop="6dp" />-->
 
-    </android.support.v4.view.ViewPager>
+
+        </android.support.v4.view.ViewPager>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

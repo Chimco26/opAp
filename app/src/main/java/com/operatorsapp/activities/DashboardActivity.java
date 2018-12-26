@@ -114,12 +114,14 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SimpleRequests;
+import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.ravtech.david.sqlcore.Event;
@@ -777,6 +779,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 ProgressDialogManager.dismiss();
+                Widget widget = new Widget();
+                widget.createDemo();
+                widgetList.add(widget);
 
                 if (mSelectJobId != null) {
                     PersistenceManager.getInstance().setJobId(mSelectJobId);
@@ -826,7 +831,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
-
+                PersistenceManager.getInstance().setShiftStart(TimeUtils.getNoTFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()));
+                if (shiftForMachineResponse.getEndTime() != null && shiftForMachineResponse.getEndTime().length() > 0) {
+                    PersistenceManager.getInstance().setShiftEnd(TimeUtils.getNoTFromDateString(shiftForMachineResponse.getEndTime(), shiftForMachineResponse.getTimeFormat()));
+                }
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);
                 } else {
@@ -1698,6 +1706,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     dashboardDataStartPolling();
 
                     Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
+                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Production Status")
                             .setAction("Production Status Changed Successfully")
@@ -1708,6 +1717,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
                     Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
+                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Production Status")
                             .setAction("Production Status Changed Failed")
@@ -1722,6 +1732,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 // TODO: 31/07/2018 set error message
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
                 Tracker tracker = ((OperatorApplication) getApplication()).getDefaultTracker();
+                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                 tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Production Status")
                         .setAction("Production Status Changed Failed")
@@ -2119,6 +2130,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mOnJobFinishedListener = onJobFinishedListener;
 
         getActiveJobs();
+    }
+
+    @Override
+    public void onCounterPressedInCentralDashboardContainer(int count){
+        PostIncrementCounterRequest request = new PostIncrementCounterRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId());
+        NetworkManager.getInstance().postIncrementCounter(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+                onRefreshPollingRequest();
+                mCroutonCreator.showCrouton(DashboardActivity.this, getString(R.string.incremented_successfully), 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                mCroutonCreator.showCrouton(DashboardActivity.this, getString(R.string.incremented_failure), 0, getCroutonRoot(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
+            }
+        });
     }
 
     @Override

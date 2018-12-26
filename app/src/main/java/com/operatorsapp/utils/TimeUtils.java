@@ -14,12 +14,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
     public static final String SQL_T_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String SIMPLE_HMS_FORMAT = "HH:mm:ss";
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
@@ -319,6 +321,22 @@ public class TimeUtils {
         return timeInMilliseconds;
     }
 
+    @SuppressLint("SimpleDateFormat")
+    public static String getNoTFromDateString(String date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf2 = new SimpleDateFormat(SQL_NO_T_FORMAT);
+        String finalDate = "";
+        try {
+            Date mDate = sdf.parse(date);
+            finalDate = sdf2.format(mDate);
+        } catch (java.text.ParseException e) {
+            if (e.getMessage() != null)
+
+                Log.e(LOG_TAG, e.getMessage());
+        }
+        return finalDate;
+    }
+
     public static String getTimeFromMinute(int minute) {
 
         String result = "";
@@ -354,5 +372,41 @@ public class TimeUtils {
         date.set(Calendar.MILLISECOND, 0);
 
         return date.getTime();
+    }
+
+    public static String getDateFromFormat(Date date, String format) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+
+        String dateToString = simpleDateFormat.format(date);
+        return dateToString;
+    }
+
+    public static long getMillisFromHMS(String mDuration) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(SIMPLE_HMS_FORMAT);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT-0:00"));
+        long millis = 0;
+        try {
+            Date date = simpleDateFormat.parse(mDuration);
+            millis = date.getTime();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return millis;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String getHMSFromMillis(long millis){
+
+        String output = "";
+
+        if (millis >= 1000){
+            output = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+                    TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
+                    TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1));
+
+        }
+
+        return output;
     }
 }

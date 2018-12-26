@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class WidgetAdapter extends Adapter {
     private final int RANGE = 1;
     private final int PROJECTION = 2;
     private final int TIME = 3;
+    private final int COUNTER = 4;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -204,6 +206,28 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
+    private class CounterViewHolder extends ViewHolder {
+
+        private RelativeLayout mParentLayout;
+        private View mDivider;
+        private AutofitTextView mTitle;
+        private AutofitTextView mSubtitle;
+        private ImageView mAdd;
+        private NumberPicker mValue;
+
+        CounterViewHolder(View itemView) {
+            super(itemView);
+
+            mParentLayout = itemView.findViewById(R.id.counter_parent_layout);
+            mDivider = itemView.findViewById(R.id.divider);
+            mTitle = itemView.findViewById(R.id.counter_widget_title);
+            mValue = itemView.findViewById(R.id.counter_widget_value_np);
+            mSubtitle = itemView.findViewById(R.id.counter_widget_subtitle);
+            mAdd = itemView.findViewById(R.id.counter_widget_add_iv);
+
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -221,6 +245,9 @@ public class WidgetAdapter extends Adapter {
             case TIME: {
                 return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false));
             }
+            case COUNTER: {
+                return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false));
+            }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
     }
@@ -233,6 +260,43 @@ public class WidgetAdapter extends Adapter {
             int type = getItemViewType(position);
             final Widget widget = mWidgets.get(position);
             switch (type) {
+
+                case COUNTER:
+                    final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
+
+                    counterViewHolder.mDivider.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ViewGroup.MarginLayoutParams mItemViewParams4;
+                            mItemViewParams4 = (ViewGroup.MarginLayoutParams) counterViewHolder.mDivider.getLayoutParams();
+                            mItemViewParams4.setMargins(0, (int) (counterViewHolder.mParentLayout.getHeight() * 0.4), 0, 0);
+                            counterViewHolder.mDivider.requestLayout();
+                        }
+                    });
+
+
+                    setSizes(counterViewHolder.mParentLayout);
+                    String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+                    counterViewHolder.mTitle.setText(nameByLang4);
+                    counterViewHolder.mValue.setMinValue(0);
+                    final int[] value = {0};
+                    try {
+                        value[0] = Integer.parseInt(widget.getCurrentValue());
+                    }catch (NumberFormatException e){
+
+                    }
+                    counterViewHolder.mValue.setValue(value[0]);
+                    counterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
+                    counterViewHolder.mAdd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDashboardCentralContainerListener.onCounterPressedInCentralDashboardContainer(value[0]);
+                        }
+                    });
+
+                    // TODO: 16/12/2018 complete logic
+
+                    break;
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
 
@@ -650,6 +714,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 3:
                 type = TIME;
+                break;
+            case 4:
+                type = COUNTER;
                 break;
             default:
                 type = NUMERIC;

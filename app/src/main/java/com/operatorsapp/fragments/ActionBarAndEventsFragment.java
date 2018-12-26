@@ -1287,7 +1287,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void setNotificationNeedResponse() {
         int counter = 0;
         for (Notification item : PersistenceManager.getInstance().getNotificationHistory()) {
-            if (item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
+            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
                 counter++;
             }
         }
@@ -1383,6 +1383,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
                             Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                            tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                             tracker.send(new HitBuilders.EventBuilder()
                                     .setCategory("Technician Call")
                                     .setAction("Technician was called Successfully")
@@ -1407,6 +1408,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             m = t.getMessage();
                         }
                         Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                         tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Technician Call")
                                 .setAction("Call for Technician failed")
@@ -1456,8 +1458,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             final TextView leftTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_left_tab);
             final View rightTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_right_tab_underline);
             final View leftTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_left_tab_underline);
+            final SwipeRefreshLayout swipeRefresh = mPopUpDialog.findViewById(R.id.NVP_swipe);
 
 
+            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    getNotificationsFromServer();
+                }
+            });
             vpDialog.setAdapter(new NotificationsPagerAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
                 @Override
                 public void onNotificationResponse(int notificationId, int responseType) {
@@ -1492,7 +1501,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
+                    if (swipeRefresh != null) {
+                        swipeRefresh.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+                    }
                 }
             });
 
@@ -1533,6 +1544,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Notifications dialog")
                 .setAction("Notifications dialog was opened")
@@ -2574,6 +2586,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    openNotificationsList();
+
                 }else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }

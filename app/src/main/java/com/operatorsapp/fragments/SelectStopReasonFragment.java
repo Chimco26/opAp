@@ -115,6 +115,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         // Analytics
         OperatorApplication application = (OperatorApplication) getActivity().getApplication();
         Tracker mTracker = application.getDefaultTracker();
+        mTracker.setHostname(PersistenceManager.getInstance().getSiteName());
         mTracker.setScreenName(LOG_TAG);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
@@ -308,6 +309,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
 
                 if (tracker != null) {
+                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Stop Reason Report")
                             .setAction("Reported Successfully")
@@ -351,6 +353,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             if (getActivity() != null && getActivity().getApplication() != null) {
                 Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                 tracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Stop Reason Report")
                         .setAction("Report Failed")

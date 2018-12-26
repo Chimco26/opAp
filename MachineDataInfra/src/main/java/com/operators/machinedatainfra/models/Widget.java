@@ -140,4 +140,12 @@ public class Widget {
         }
         return mTarget;
     }
+
+    public void createDemo(){
+        mCurrentValue = "99";
+        mFieldEName = "counter";
+        mFieldName = "counter";
+        mID = 99;
+        mFieldType = 4;
+    }
 }

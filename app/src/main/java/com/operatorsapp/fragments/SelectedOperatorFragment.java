@@ -101,6 +101,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
                 OppAppLogger.getInstance().i(LOG_TAG, "onSetOperatorSuccess()");
                 mOperatorCoreToDashboardActivityCallback.onSetOperatorForMachineSuccess(mSelectedOperator.getOperatorId(), mSelectedOperator.getOperatorName());
                 Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
                 tracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Operetor Sign in")
                                 .setAction("Signed in Successfully")
@@ -121,6 +122,7 @@ public class SelectedOperatorFragment extends Fragment implements View.OnClickLi
         ShowCrouton.operatorLoadingErrorCrouton(mOnCroutonRequestListener, "Set operator failed. Reason : " + reason.getError().toString());
         OppAppLogger.getInstance().w(LOG_TAG, "Set operator failed. Reason : " + reason.getError().toString());
         Tracker tracker = ((OperatorApplication)getActivity().getApplication()).getDefaultTracker();
+        tracker.setHostname(PersistenceManager.getInstance().getSiteName());
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Operetor Sign in")
                 .setAction("Signed in Failed")
