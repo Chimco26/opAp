@@ -396,14 +396,14 @@ public class TimeUtils {
     }
 
     @SuppressLint("DefaultLocale")
-    public static String getHMSFromMillis(long millis){
-
+    public static String getHMSFromMillis(double millis){
+        long ms = (long) millis;
         String output = "";
 
         if (millis >= 1000){
-            output = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
-                    TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
-                    TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1));
+            output = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(ms),
+                    TimeUnit.MILLISECONDS.toMinutes(ms) % TimeUnit.HOURS.toMinutes(1),
+                    TimeUnit.MILLISECONDS.toSeconds(ms) % TimeUnit.MINUTES.toSeconds(1));
 
         }
 

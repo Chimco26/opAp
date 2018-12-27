@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:background="@color/reports_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/report_vertical_iv"
+            android:padding="20dp"
+            android:gravity="center_vertical"
+            android:layout_margin="12dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+        <TextView
+            android:id="@+id/report_vertical_tv"
+            android:padding="20dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            style="@style/ProximaNovaSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/divider_gray"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"/>
+
+</LinearLayout>

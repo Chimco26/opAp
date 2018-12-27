@@ -60,9 +60,9 @@ public class StopReasonsAdapter extends RecyclerView.Adapter<StopReasonsAdapter.
         holder.mStopTitle.setText(nameByLang);
 
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
-            holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
         } else {
-            holder.mReasonImage.setBackground(mContext.getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
+            holder.mReasonImage.setBackground(mContext.getResources().getDrawable(ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId())));
         }
     }
 

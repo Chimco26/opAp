@@ -27,7 +27,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final int mListType;
 
     private int mParentWidth;
-    private long mTotalSum;
+    private double mTotalSum;
     private ArrayList<TopFiveItem> mTopList;
     private final Context mContext;
 
@@ -57,7 +57,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        long amount = Long.parseLong(mTopList.get(position).getmAmount());
+        double amount = Double.parseDouble(mTopList.get(position).getmAmount());
         int width;
         if (amount < 1 || mTotalSum == 0){
             width = 1;
@@ -78,7 +78,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_STOP:
 
                 final StopEventViewHolder stopEventViewHolder = (StopEventViewHolder) holder;
-                stopEventViewHolder.topTv.setText(TimeUtils.getHMSFromMillis(Long.parseLong(mTopList.get(position).getmAmount())));
+                stopEventViewHolder.topTv.setText(TimeUtils.getHMSFromMillis(Double.parseDouble(mTopList.get(position).getmAmount())));
                 stopEventViewHolder.topText.setText(mTopList.get(position).getmText());
                 stopEventViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
                 try{
@@ -139,7 +139,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mTopList = mTopList;
         mTotalSum = 0;
         for (TopFiveItem item : mTopList) {
-            mTotalSum += Long.parseLong(item.getmAmount());
+            mTotalSum += Double.parseDouble(item.getmAmount());
         }
         notifyDataSetChanged();
     }

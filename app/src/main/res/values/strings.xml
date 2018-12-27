@@ -288,4 +288,11 @@
     <string name="top_five_reject_reasons">Top 5 Reject Reasons</string>
 
 
+    <string-array name="color_array">
+        <item>#954b7d</item>
+        <item>#ff6b6b</item>
+        <item>#5aca96</item>
+        <item>#599abe</item>
+    </string-array >
+
 </resources>

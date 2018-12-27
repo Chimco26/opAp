@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -32,6 +37,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.adapters.NewStopReasonsAdapter;
 import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -74,6 +80,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private ArrayList<Integer> mSelectedEvents;
     private int mSelectedPosition;
     private int mFlavorSpanDif;
+    private Switch mSwitch;
 
     public static ReportStopReasonFragment newInstance(boolean isOpen, ActiveJobsListForMachine activeJobsListForMachine, int selectedPosition) {
         ReportStopReasonFragment reportStopReasonFragment = new ReportStopReasonFragment();
@@ -148,6 +155,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
+        mSwitch = view.findViewById(R.id.stop_switch);
 
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
             view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
@@ -173,6 +181,18 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             }
             initStopReasons();
 
+            // TODO: 27/12/2018 change icon
+            mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        initNewStopReasons();
+                    }else {
+                        initStopReasons();
+                    }
+                }
+            });
+
             setSpanCount(mIsOpen);
 
         }
@@ -193,8 +213,15 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private void initStopReasons() {
 
         StopReasonsAdapter mStopReasonsAdapter = new StopReasonsAdapter(getContext(), mReportFieldsForMachine.getStopReasons(), this);
-
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mStopReasonsAdapter);
+    }
+
+    private void initNewStopReasons(){
+
+        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(),this );
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.setAdapter(newStopReasonsAdapter);
     }
 
     @Override
@@ -236,6 +263,25 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         } catch (IllegalStateException e) {
 
             SendReportUtil.sendAcraExeption(e, "onStopReasonSelected");
+        }
+
+    }
+
+    @Override
+    public void onSubReasonSelected(SubReasons subReason) {
+        if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
+
+            OppAppLogger.getInstance().i(LOG_TAG, "Selected sub reason id: " + subReason.getId());
+
+            mSelectedSubreason = subReason;
+
+            sendReport();
+
+//            SendBroadcast.refreshPolling(getContext());
+
+        } else {
+
+            Toast.makeText(getActivity(), "you need to choice at least one Event", Toast.LENGTH_SHORT).show();
         }
 
     }

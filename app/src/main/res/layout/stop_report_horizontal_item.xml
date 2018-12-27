@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="15dp"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:background="@drawable/combined_shape">
+
+    <LinearLayout
+        android:id="@+id/report_horizontal_lil"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:background="@color/purple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/report_horizontal_iv"
+            android:layout_gravity="center_vertical"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="12dp"/>
+
+        <TextView
+            android:id="@+id/report_horizontal_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="@color/white"
+            style="@style/ProximaNovaSemiBold"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/report_vertical_rv"
+        android:layout_below="@+id/report_horizontal_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
