@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,7 +39,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
-import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
 import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
@@ -64,7 +63,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private static final String CURRENT_JOB_LIST_FOR_MACHINE = "CURRENT_JOB_LIST_FOR_MACHINE";
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private static final int REFRESH_DELAY_MILLIS = 3000;
-    private TextView mCancelButton;
+    private RelativeLayout mCancelButton;
     private Button mNextButton;
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private int mSelectedReasonId;
@@ -72,8 +71,6 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     private int mCurrentProductId;
     private Integer mJobId = 0;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
-    private Spinner mJobsSpinner;
-    private ProgressBar mActiveJobsProgressBar;
     private ReportCore mReportCore;
     private int mSelectedTechnicianId;
     private ApproveFirstItemFragmentCallbackListener mCallbackListener;
@@ -102,8 +99,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         }
         mOnCroutonRequestListener = (OnCroutonRequestListener) getActivity();
 
-        if(context instanceof ApproveFirstItemFragmentCallbackListener)
-        {
+        if (context instanceof ApproveFirstItemFragmentCallbackListener) {
             mCallbackListener = (ApproveFirstItemFragmentCallbackListener) context;
         }
         if (context instanceof ShowDashboardCroutonListener) {
@@ -112,8 +108,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     }
 
     @Override
-    public void onDetach()
-    {
+    public void onDetach() {
         super.onDetach();
         mCallbackListener = null;
         mOnCroutonRequestListener = null;
@@ -151,12 +146,11 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!PersistenceManager.getInstance().getAddRejectsOnSetupEnd()){
+        if (!PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
             view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
         }
-        mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
 //        getActiveJobs();
         mCancelButton = view.findViewById(R.id.button_cancel);
         mNextButton = view.findViewById(R.id.button_approve);
@@ -169,13 +163,6 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
 //            mNextButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.buttons_selector));
             mNextButton.setEnabled(true);
         }
-
-        TextView productIdTextView = view.findViewById(R.id.report_cycle_id_text_view);
-
-        productIdTextView.setText(String.valueOf(mCurrentProductId));
-
-        mJobsSpinner = view.findViewById(R.id.report_job_spinner);
-
 
         if (mReportFieldsForMachine != null) {
 
@@ -201,10 +188,10 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
-            }else {
+            } else {
                 for (RejectReasons rejectReason : mReportFieldsForMachine.getRejectReasons()) {
                     String nameByLang = OperatorApplication.isEnglishLang() ? rejectReason.getEName() : rejectReason.getLName();
-                    if (nameByLang.equals(getString(R.string.reject_reason_setup))){
+                    if (nameByLang.equals(getString(R.string.reject_reason_setup))) {
                         mSelectedReasonId = rejectReason.getId();
                         break;
                     }
@@ -221,8 +208,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (mReportFieldsForMachine.getRejectCauses().size() > 0)
-                    {
+                    if (mReportFieldsForMachine.getRejectCauses().size() > 0) {
                         mSelectedTechnicianId = mReportFieldsForMachine.getTechnicians().get(position).getID();
                     }
 
@@ -236,27 +222,23 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             });
         }
         mCancelButton = view.findViewById(R.id.button_cancel);
-
-        initJobsSpinner();
-
-        disableSpinnerProgressBar();
     }
 
     private void sortRejectReasons() {
         List<RejectReasons> list = mReportFieldsForMachine.getRejectReasons();
         Collections.sort(list, new Comparator<RejectReasons>() {
             public int compare(RejectReasons o1, RejectReasons o2) {
-                if (OperatorApplication.isEnglishLang()){
+                if (OperatorApplication.isEnglishLang()) {
                     return o1.getEName().compareTo(o2.getEName());
-                }else {
+                } else {
                     return o1.getLName().compareTo(o2.getLName());
                 }
             }
         });
         for (RejectReasons rr : list) {
-            if (rr.getEName().equals("Setup")){
+            if (rr.getEName().equals("Setup")) {
                 list.remove(rr);
-                list.add(0,rr);
+                list.add(0, rr);
                 break;
             }
         }
@@ -277,7 +259,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         super.onResume();
         mCancelButton.setOnClickListener(this);
         mNextButton.setOnClickListener(this);
-
+        mCallbackListener.onApproveFirstItemShowFilter(true);
     }
 
     protected void setActionBar() {
@@ -317,8 +299,7 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         switch (v.getId()) {
             case R.id.button_cancel: {
                 FragmentManager fragmentManager = getFragmentManager();
-                if(fragmentManager != null)
-                {
+                if (fragmentManager != null) {
                     fragmentManager.popBackStack();
                 }
                 break;
@@ -330,8 +311,13 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
         }
     }
 
-    private void sendReport()
-    {
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCallbackListener.onApproveFirstItemShowFilter(false);
+    }
+
+    private void sendReport() {
         ProgressDialogManager.show(getActivity());
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
         reportNetworkBridge.injectApproveFirstItem(NetworkManager.getInstance());
@@ -342,140 +328,90 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
 
     }
 
-    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener()
-    {
+    ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
-        public void sendReportSuccess(Object o)
-        {//TODO crouton error
+        public void sendReportSuccess(Object o) {//TODO crouton error
             ErrorResponseNewVersion response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
 
-            if (response.isFunctionSucceed()){
+            if (response.isFunctionSucceed()) {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
-            }else {
+            } else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }
 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
-            if(mCallbackListener != null)
-            {
+            if (mCallbackListener != null) {
                 mCallbackListener.onApproveFirstItemComplete();
             }
             FragmentManager fragmentManager = getFragmentManager();
-            if(fragmentManager != null)
-            {
+            if (fragmentManager != null) {
                 fragmentManager.popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
 
         }
 
         @Override
-        public void sendReportFailure(ErrorObjectInterface reason)
-        {
+        public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
-            if(reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null)
-            {
-                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback()
-                {
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch && getActivity() != null) {
+                ((DashboardActivity) getActivity()).silentLoginFromDashBoard(mOnCroutonRequestListener, new SilentLoginCallback() {
                     @Override
-                    public void onSilentLoginSucceeded()
-                    {
+                    public void onSilentLoginSucceeded() {
                         sendReport();
                     }
 
                     @Override
-                    public void onSilentLoginFailed(ErrorObjectInterface reason)
-                    {
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
                         ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
                         dismissProgressDialog();
                     }
                 });
-            }
-            else
-            {
+            } else {
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
-           SendBroadcast.refreshPolling(getContext());
+            SendBroadcast.refreshPolling(getContext());
 
         }
     };
 
     private ErrorResponseNewVersion objectToNewError(Object o) {
         ErrorResponseNewVersion responseNewVersion;
-        if (o instanceof ErrorResponseNewVersion){
-            responseNewVersion = (ErrorResponseNewVersion)o;
-        }else {
+        if (o instanceof ErrorResponseNewVersion) {
+            responseNewVersion = (ErrorResponseNewVersion) o;
+        } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
             responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            if (responseNewVersion.getmError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }
         return responseNewVersion;
     }
 
-    private void dismissProgressDialog()
-    {
-        if(getActivity() != null)
-        {
-            getActivity().runOnUiThread(new Runnable()
-            {
+    private void dismissProgressDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     ProgressDialogManager.dismiss();
                 }
             });
         }
     }
 
-    private void disableSpinnerProgressBar() {
-        mActiveJobsProgressBar.setVisibility(View.GONE);
-    }
-
-    private void initJobsSpinner() {
-        if(getActivity() != null)
-        {
-            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null)
-            {
-                mJobsSpinner.setVisibility(View.VISIBLE);
-                final ActiveJobsSpinnerAdapter activeJobsSpinnerAdapter = new ActiveJobsSpinnerAdapter(getActivity(), R.layout.active_jobs_spinner_item, mActiveJobsListForMachine.getActiveJobs());
-                activeJobsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mJobsSpinner.setAdapter(activeJobsSpinnerAdapter);
-                mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-                mJobsSpinner.setSelection(mSelectedPosition);
-                mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
-
-                    }
-                });
-            }
-        }
-    }
-
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.parent_layouts;
     }
 

@@ -121,7 +121,6 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
-import org.litepal.util.Const;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -150,7 +149,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     public static final int TYPE_ALERT = 20;
-    private static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;//TODO check this
+    public static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
     private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 5;
     private static final long TECHNICIAN_CALL_CLEAN_ALL = 1000 * 60 * 20;
     private static final long ONE_HOUR = 1000 * 60 * 60;

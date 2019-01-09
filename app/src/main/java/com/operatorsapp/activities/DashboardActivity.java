@@ -1,5 +1,6 @@
 package com.operatorsapp.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +23,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -85,6 +88,8 @@ import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
+import com.operatorsapp.fragments.ApproveFirstItemFragment;
+import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
@@ -142,6 +147,7 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -156,7 +162,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         AdvancedSettingsFragment.AdvancedSettingsListener,
         ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener,
         DashboardCentralContainerListener,
-        OnReportFieldsUpdatedCallbackListener{
+        OnReportFieldsUpdatedCallbackListener {
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
@@ -203,6 +209,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
     private Timer mReportModeTimer;
+    private AlertDialog mAlaramAlertDialog;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -250,6 +257,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         } catch (IllegalStateException ignored) {
         }
         OppAppLogger.getInstance().d(LOG_TAG, "onCreate(), end ");
+
     }
 
     private void initDataListeners() {
@@ -765,12 +773,42 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void setFilterWarningText(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
+//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
+            showNoProductionAlarm();
         } else {
-            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
+            if (mAlaramAlertDialog != null){
+                mAlaramAlertDialog.dismiss();
+            }
+//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
         }
     }
 
+    private void showNoProductionAlarm() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.no_production_alarm_dialog, null);
+        builder.setView(dialogView);
+        Button submitBtn = dialogView.findViewById(R.id.NPAD_btn);
+        builder.setCancelable(false);
+        mAlaramAlertDialog = builder.create();
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivateJobScreen();
+            }
+        });
+        mAlaramAlertDialog.show();
+    }
+
+    public void openActivateJobScreen() {
+        OppAppLogger.getInstance().d(LOG_TAG, "New Job");
+        if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
+            onJobActionItemClick();
+        } else {
+            goToFragment(new JobsFragment(), true, true);
+        }
+    }
 
     @NonNull
     private MachineDataUICallback getMachineDataUICallback() {
@@ -1039,7 +1077,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
             if (isCentralContainer) {
 
-                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+                if (fragment instanceof ApproveFirstItemFragment) {
+
+                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+                }
 
             } else {
 
@@ -1466,6 +1507,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
+    public void onApproveFirstItemShowFilter(boolean b) {
+        setBlackFilter(b);
+    }
+
+    @Override
     public void onRefreshPolling() {
 
         Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
@@ -1768,7 +1814,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void showBlackFilter(boolean show) {
-        setBlackFilter(show);
+        if (!(getVisibleFragment() instanceof ApproveFirstItemFragment)) {
+            setBlackFilter(show);
+        }
     }
 
     @Override
@@ -1988,7 +2036,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (response.getPollingIntervalData().get(0).getKey().equals(INTERVAL_KEY)) {
                 pollNew = Integer.parseInt(response.getPollingIntervalData().get(0).getValue());
                 PersistenceManager.getInstance().setPolingFrequency(pollNew);
-                if (poll != pollNew){
+                if (poll != pollNew) {
                     onRefreshPollingRequest();
                 }
             }
@@ -2000,7 +2048,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (response.getPollingIntervalData().get(1).getKey().equals(INTERVAL_KEY)) {
                 pollNew = Integer.parseInt(response.getPollingIntervalData().get(1).getValue());
                 PersistenceManager.getInstance().setPolingFrequency(pollNew);
-                if (poll != pollNew){
+                if (poll != pollNew) {
                     onRefreshPollingRequest();
                 }
             }
@@ -2133,7 +2181,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onCounterPressedInCentralDashboardContainer(int count){
+    public void onCounterPressedInCentralDashboardContainer(int count) {
         PostIncrementCounterRequest request = new PostIncrementCounterRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId());
         NetworkManager.getInstance().postIncrementCounter(request, new Callback<ErrorResponseNewVersion>() {
             @Override

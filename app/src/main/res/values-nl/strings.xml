@@ -120,7 +120,7 @@
     <string name="shift_log_standard">Standaard</string>
     <string name="approving_technician">Controleur</string>
     <string name="approve">Goedkeuren</string>
-    <string name="setup_end">Einde\nOmbouw</string>
+    <string name="setup_end">Einde Ombouw</string>
     <string name="first_item_approval">Einde Ombouw</string>
 
     <array name="languages_spinner_array">

@@ -8,6 +8,12 @@ public class Widget {
     @SerializedName("CurrentValue")
     private String mCurrentValue;
 
+    @SerializedName("CurrentColor")
+    private String mCurrentColor;
+
+    @SerializedName("ProjectionColor")
+    private String mProjectionColor;
+
     @SerializedName("FieldEName")
     private String mFieldEName;
 
@@ -62,6 +68,22 @@ public class Widget {
     @SerializedName("TargetScreen")
     private String mTargetScreen;
 
+
+    public String getCurrentColor() {
+        return mCurrentColor;
+    }
+
+    public void setCurrentColor(String mCurrentColor) {
+        this.mCurrentColor = mCurrentColor;
+    }
+
+    public String getProjectionColor() {
+        return mProjectionColor;
+    }
+
+    public void setmProjectionColor(String mProjectionColor) {
+        this.mProjectionColor = mProjectionColor;
+    }
 
     public String getTargetScreen() {
         return mTargetScreen;

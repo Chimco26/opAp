@@ -147,14 +147,20 @@
             android:layout_alignStart="@id/projection_widget_oval"
             android:layout_marginTop="18dp"/>
 
-        <com.operatorsapp.view.RangeView
-            android:id="@+id/projection_widget_range_view"
+        <RelativeLayout
+            android:id="@+id/projection_widget_range_view_rv"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginEnd="35dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="18dp"/>
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="35dp">
 
+            <View
+                android:id="@+id/projection_widget_range_view"
+                android:layout_width="8dp"
+                android:layout_height="48dp" />
+
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/projection_widget_blue_plus"
             android:layout_width="match_parent"

@@ -118,7 +118,7 @@
     <string name="shift_log_standard">Standart&#160;</string>
     <string name="approving_technician">Approbation du Technicien</string>
     <string name="approve">Accepter</string>
-    <string name="setup_end">Fin\nPréparation</string>
+    <string name="setup_end">Fin Préparation</string>
     <string name="first_item_approval">Fin Préparation</string>
     <string name="send_logs">Envoie du registre</string>
     <string name="alarm">"Alarmes"</string>

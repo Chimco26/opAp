@@ -2,6 +2,9 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -144,6 +147,7 @@ public class WidgetAdapter extends Adapter {
 
     private class ProjectionViewHolder extends ViewHolder {
 
+        private final View mRangeViewRv;
         private RelativeLayout mParentLayout;
         private View mDivider;
         private AutofitTextView mTitle;
@@ -152,7 +156,7 @@ public class WidgetAdapter extends Adapter {
         private View mCapsule;
         private View mEndDivider;
         private ProjectionView mProjectionView;
-        private RangeView mRangeView;
+        private View mRangeView;
         private ProjectionViewStart mProjectionViewStart;
         private ProjectionViewEnd mProjectionViewEnd;
         private TextView mCurrentValueInChart;
@@ -174,6 +178,7 @@ public class WidgetAdapter extends Adapter {
             mEndDivider = itemView.findViewById(R.id.projection_widget_end_divider);
             mProjectionView = itemView.findViewById(R.id.projection_widget_projectionView);
             mRangeView = itemView.findViewById(R.id.projection_widget_range_view);
+            mRangeViewRv = itemView.findViewById(R.id.projection_widget_range_view_rv);
             mProjectionViewStart = itemView.findViewById(R.id.projection_widget_projectionView_start);
             mProjectionViewEnd = itemView.findViewById(R.id.projection_widget_projectionView_end);
             mCurrentValueInChart = itemView.findViewById(R.id.projection_widget_current_value_in_chart);
@@ -490,11 +495,12 @@ public class WidgetAdapter extends Adapter {
                             projectionViewHolder.mDivider.requestLayout();
                         }
                     });
-                    projectionViewHolder.mRangeView.init(mContext);
+                    projectionViewHolder.mRangeView.setBackground(createRangeShape(widget.getCurrentColor()));
                     projectionViewHolder.mProjectionView.init(mContext);
                     projectionViewHolder.mProjectionViewEnd.init(mContext);
                     setSizes(projectionViewHolder.mParentLayout);
-                    projectionViewHolder.mRangeView.setCurrentLine(false);
+//                    projectionViewHolder.mRangeView.setCurrentLine(false);
+//                    projectionViewHolder.mRangeView.setLineColor(mContext, "#000000");
                     float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
                     projectionViewHolder.mCurrentValueInChart.setText(valueInK(currentFloat));
                     if (currentFloat >= widget.getTarget()) {
@@ -502,7 +508,7 @@ public class WidgetAdapter extends Adapter {
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
                         projectionViewHolder.mProjectionViewStart.setCurrentView(true);
 //                    projectionViewHolder.mCurrentValueInChart.setText("");
-                        projectionViewHolder.mRangeView.hideView();
+                        projectionViewHolder.mRangeView.setVisibility(View.GONE);
                     } else if (widget.getProjection() >= widget.getTarget()) {
                         projectionViewHolder.mBluePlus.setVisibility(View.GONE);
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
@@ -525,7 +531,7 @@ public class WidgetAdapter extends Adapter {
                     }
                     if (currentFloat <= widget.getLowLimit() && currentFloat != widget.getTarget()) {
                         projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
-                        projectionViewHolder.mRangeView.hideView();
+                        projectionViewHolder.mRangeView.setVisibility(View.GONE);
                         projectionViewHolder.mProjectionView.hideViews();
                         projectionViewHolder.mProjectionViewStart.setCurrentView(false);
                         projectionViewHolder.mGrayValueInEndChart.setText("");
@@ -537,7 +543,7 @@ public class WidgetAdapter extends Adapter {
                     projectionViewHolder.mCapsule.post(new Runnable() {
                         @Override
                         public void run() {
-                            mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
+                            mProjectionCapsuleWidth = projectionViewHolder.mRangeViewRv.getWidth();
                             setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                         }
                     });
@@ -614,21 +620,32 @@ public class WidgetAdapter extends Adapter {
                 projectionWidth = 1000;
             }
             if (convertCurrentValue > 0.9) {
-                projectionViewHolder.mRangeView.updateX(currentWidth - 8/* half of the line*/);
+                projectionViewHolder.mRangeView.setX(currentWidth - 8/* half of the line*/);
                 projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 20/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 8/* half of the line*/);
             } else {
-                projectionViewHolder.mRangeView.updateX(currentWidth/* half of the line*/);
+                projectionViewHolder.mRangeView.setX(currentWidth/* half of the line*/);
                 projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 2/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
             }
             projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
         }
+        //todo chnge rangeview color
+        projectionViewHolder.mEndDivider.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
         if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
             projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
         } else {
             projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
         }
+    }
+
+    private Drawable createRangeShape(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setCornerRadii(new float[]{0,0,0,0,60,60,60,60});
+        ((GradientDrawable) drawable).setSize(8, 48);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
     }
 
     private void setRangeData(Widget widget, RangeViewHolder rangeViewHolder) {

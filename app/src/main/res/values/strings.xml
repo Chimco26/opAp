@@ -122,7 +122,7 @@
     <string name="shift_log_standard">Standard&#160;</string>
     <string name="approving_technician">Approving Technician</string>
     <string name="approve">Approve</string>
-    <string name="setup_end">Setup\nEnd</string>
+    <string name="setup_end">Setup End</string>
     <string name="first_item_approval">Setup End</string>
     <string name="send_logs">Send Logs</string>
     <string name="alarm">"Alarm"</string>
@@ -286,6 +286,8 @@
     <string name="incremented_failure">Failed to Increment</string>
     <string name="top_five_stop_events">Top 5 stop events</string>
     <string name="top_five_reject_reasons">Top 5 Reject Reasons</string>
+    <string name="attention">Attention!</string>
+    <string name="activate_job">Activate Job</string>
 
 
     <string-array name="color_array">
