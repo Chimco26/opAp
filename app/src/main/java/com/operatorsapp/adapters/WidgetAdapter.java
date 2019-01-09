@@ -213,7 +213,11 @@ public class WidgetAdapter extends Adapter {
         private AutofitTextView mTitle;
         private AutofitTextView mSubtitle;
         private ImageView mAdd;
-        private NumberPicker mValue;
+        private TextView mValue1;
+        private TextView mValue10;
+        private TextView mValue100;
+        private TextView mValue1000;
+        private TextView mValue10000;
 
         CounterViewHolder(View itemView) {
             super(itemView);
@@ -221,7 +225,11 @@ public class WidgetAdapter extends Adapter {
             mParentLayout = itemView.findViewById(R.id.counter_parent_layout);
             mDivider = itemView.findViewById(R.id.divider);
             mTitle = itemView.findViewById(R.id.counter_widget_title);
-            mValue = itemView.findViewById(R.id.counter_widget_value_np);
+            mValue1 = itemView.findViewById(R.id.counter_widget_value_tv1);
+            mValue10 = itemView.findViewById(R.id.counter_widget_value_tv10);
+            mValue100 = itemView.findViewById(R.id.counter_widget_value_tv100);
+            mValue1000 = itemView.findViewById(R.id.counter_widget_value_tv1000);
+            mValue10000 = itemView.findViewById(R.id.counter_widget_value_tv10000);
             mSubtitle = itemView.findViewById(R.id.counter_widget_subtitle);
             mAdd = itemView.findViewById(R.id.counter_widget_add_iv);
 
@@ -278,15 +286,31 @@ public class WidgetAdapter extends Adapter {
                     setSizes(counterViewHolder.mParentLayout);
                     String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
                     counterViewHolder.mTitle.setText(nameByLang4);
-                    counterViewHolder.mValue.setMinValue(0);
+
+
+
+
                     final int[] value = {0};
                     try {
                         value[0] = Integer.parseInt(widget.getCurrentValue());
                     }catch (NumberFormatException e){
-
                     }
-                    counterViewHolder.mValue.setValue(value[0]);
-                    counterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
+
+
+
+                    counterViewHolder.mValue1.setText(value[0] % 10 + "");
+                    counterViewHolder.mValue10.setText((value[0] / 10) % 10 + "");
+                    counterViewHolder.mValue100.setText((value[0] / 100) % 10 + "");
+                    counterViewHolder.mValue1000.setText((value[0] / 1000) % 10 + "");
+                    counterViewHolder.mValue10000.setText((value[0] / 10000) % 10 + "");
+
+                    if (value[0] > 99999){
+                        counterViewHolder.mSubtitle.setVisibility(View.VISIBLE);
+                        counterViewHolder.mSubtitle.setText(mContext.getResources().getString(R.string.total_amount) + " " + value[0]);
+                    }else {
+                        counterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
+                    }
+
                     counterViewHolder.mAdd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

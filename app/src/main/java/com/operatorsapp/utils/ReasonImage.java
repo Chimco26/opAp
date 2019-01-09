@@ -1,5 +1,8 @@
 package com.operatorsapp.utils;
 
+import android.graphics.Color;
+import android.support.v4.graphics.ColorUtils;
+
 import com.operatorsapp.R;
 
 /**
@@ -7,6 +10,67 @@ import com.operatorsapp.R;
  */
 
 public class ReasonImage {
+
+    public static int getColorForStopReason(int stopReasonId){
+        int color;
+
+        switch (stopReasonId) {
+            case 1: {
+                color = Color.parseColor("#5ACA96");
+                break;
+            }
+            case 2: {
+                color = Color.parseColor("#FF6B6B");
+                break;
+            }
+            case 3: {
+                color = Color.parseColor("#736FAA");
+                break;
+            }
+            case 4: {
+                color = Color.parseColor("#954B7D");
+                break;
+            }
+            case 5: {
+                color = Color.parseColor("#599ABE");
+                break;
+            }
+            case 6: {
+                color = Color.parseColor("#FF6B6B");
+                break;
+            }
+            case 7: {
+                color = Color.parseColor("#FFC23A");
+                break;
+            }
+            case 8: {
+                color = Color.parseColor("#78B4FF");
+                // labor
+                break;
+            }
+            case 9: {
+                color = Color.parseColor("#78B4FF");
+                // mold
+                break;
+            }
+            case 10: {
+                color = Color.parseColor("#954B7D");
+
+                break;
+            }
+            case 12: {
+                // expected stops
+                color = Color.parseColor("#599ABE");
+
+                break;
+            }
+            default:{
+                color = Color.parseColor("#78B4FF");
+
+            }
+        }
+        return color;
+    }
 
     public static int getImageForStopReason(int stopReasonId) {
 

@@ -119,6 +119,10 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         }
 
+        holder.mBodyTv.setText(notification.getmBody());
+        holder.mSenderTv.setText(notification.getmSender());
+        holder.mTimeTv.setText(time);
+
         switch (notification.getmResponseType()){
             case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
                 holder.mClarifyBtn.setVisibility(View.GONE);
@@ -161,6 +165,12 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.service_done));
                 break;
 
+            case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_blue));
+                holder.mBodyTv.setText(mContext.getString(R.string.service_call_was_canceled));
+                holder.mSenderTv.setText(notification.getmTargetName());
+                break;
+
             default:
                 holder.mClarifyBtn.setVisibility(View.VISIBLE);
                 holder.mApproveBtn.setVisibility(View.VISIBLE);
@@ -176,9 +186,6 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
         }
 
-        holder.mBodyTv.setText(notification.getmBody());
-        holder.mSenderTv.setText(notification.getmSender());
-        holder.mTimeTv.setText(time);
 
         if (mNotificationsList.get(position).getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
             holder.mBtnsLil.setVisibility(View.GONE);

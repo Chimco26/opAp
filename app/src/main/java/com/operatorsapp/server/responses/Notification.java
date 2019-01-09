@@ -55,6 +55,14 @@ public class Notification {
         this.mNotificationType = mNotificationType;
     }
 
+    public String getmTitle() {
+        return mTitle;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
     public String getmBody() {
         return mBody;
     }

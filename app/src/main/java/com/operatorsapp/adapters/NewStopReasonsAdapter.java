@@ -60,12 +60,13 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         } else {
             imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
+        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(mStopItemsList.get(position).getSubReasons(), imgId));
         int color = new Random().nextInt(4);
         Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
-        holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
+       // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
     }
 
     @Override
