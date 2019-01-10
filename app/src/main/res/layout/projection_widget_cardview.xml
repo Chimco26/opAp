@@ -137,14 +137,24 @@
             android:layout_marginEnd="14dp"
             android:background="@drawable/capsule_oval" />
 
-        <com.operatorsapp.view.ProjectionViewStart
+        <View
             android:id="@+id/projection_widget_projectionView_start"
-            android:layout_width="match_parent"
+            android:layout_width="30dp"
             android:layout_height="43dp"
             android:layout_marginStart="14dp"
-            android:layout_marginTop="18dp" />
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="38dp" />
 
-        <com.operatorsapp.view.ProjectionView
+
+        <View
+            android:id="@+id/projection_widget_projectionViewProjection"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="38dp" />
+
+        <View
             android:id="@+id/projection_widget_projectionView"
             android:layout_width="match_parent"
             android:layout_height="43dp"
@@ -152,7 +162,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="38dp" />
 
-        <com.operatorsapp.view.ProjectionViewEnd
+        <View
             android:id="@+id/projection_widget_projectionView_end"
             android:layout_width="30dp"
             android:layout_height="43dp"
@@ -165,7 +175,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="35dp">
+            android:layout_marginEnd="38dp">
 
             <View
                 android:id="@+id/projection_widget_range_view"
@@ -195,7 +205,7 @@
             android:layout_height="53dp"
             android:layout_alignEnd="@id/projection_widget_oval"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="23dp"
+            android:layout_marginEnd="28dp"
             android:background="@color/divider_gray" />
 
         <!--<View-->

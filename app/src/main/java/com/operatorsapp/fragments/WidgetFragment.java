@@ -268,7 +268,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (response != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0){
+                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0){
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                 }
             }
