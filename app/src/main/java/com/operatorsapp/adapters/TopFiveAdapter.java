@@ -57,12 +57,12 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        double amount = Double.parseDouble(mTopList.get(position).getmAmount());
+        double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
         int width;
         if (amount < 1 || mTotalSum == 0){
-            width = 1;
+            width = 50;
         }else {
-            width = (int) (mParentWidth / (mTotalSum / amount));
+            width = (int) ((mParentWidth -50) * (Math.abs(amount) / mTotalSum)) + 50;
         }
 
         switch (mListType){
@@ -139,7 +139,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mTopList = mTopList;
         mTotalSum = 0;
         for (TopFiveItem item : mTopList) {
-            mTotalSum += Double.parseDouble(item.getmAmount());
+            mTotalSum += Math.abs(Double.parseDouble(item.getmAmount()));
         }
         notifyDataSetChanged();
     }

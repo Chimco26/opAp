@@ -22,6 +22,7 @@ public class TimeUtils {
     public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     public static final String SIMPLE_HMS_FORMAT = "HH:mm:ss";
+    public static final String COMMON_DATE_FORMAT = "HH:mm dd/MM/yyyy";
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
@@ -231,20 +232,17 @@ public class TimeUtils {
         try {
             return dateFormat.parse(time);
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
         }
 
         try {
             return dateFormatSql.parse(time);
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
         }
 
         try {
             return dateFormatSqlT.parse(time);
 
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
         }
 
         return null;

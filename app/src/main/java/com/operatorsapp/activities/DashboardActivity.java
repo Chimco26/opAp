@@ -817,10 +817,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onDataReceivedSuccessfully(ArrayList<Widget> widgetList) {
                 ProgressDialogManager.dismiss();
-                Widget widget = new Widget();
-                widget.createDemo();
-                widgetList.add(widget);
-
                 if (mSelectJobId != null) {
                     PersistenceManager.getInstance().setJobId(mSelectJobId);
                 }

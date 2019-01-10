@@ -14,6 +14,9 @@ public class Widget {
     @SerializedName("ProjectionColor")
     private String mProjectionColor;
 
+    @SerializedName("TargetColor")
+    private String mTargetColor;
+
     @SerializedName("FieldEName")
     private String mFieldEName;
 
@@ -40,6 +43,16 @@ public class Widget {
 
     @SerializedName("MachineParamHistoricData")
     private ArrayList<HistoricData> mMachineParamHistoricData;
+
+    private int mEditStep;
+
+    public int getEditStep() {
+        return mEditStep;
+    }
+
+    public void setEditStep(int mEditStep) {
+        this.mEditStep = mEditStep;
+    }
 
     public class HistoricData {
         @SerializedName("CurrentValue")
@@ -81,8 +94,16 @@ public class Widget {
         return mProjectionColor;
     }
 
-    public void setmProjectionColor(String mProjectionColor) {
+    public void setProjectionColor(String mProjectionColor) {
         this.mProjectionColor = mProjectionColor;
+    }
+
+    public String getTargetColor() {
+        return mTargetColor;
+    }
+
+    public void setmTargetColor(String mTargetColor) {
+        this.mTargetColor = mTargetColor;
     }
 
     public String getTargetScreen() {

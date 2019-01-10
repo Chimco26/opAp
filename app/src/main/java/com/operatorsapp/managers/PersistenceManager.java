@@ -15,11 +15,11 @@ import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerIn
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
-import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -34,8 +34,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-
-import retrofit2.http.PUT;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -88,6 +86,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String CALLED_TECHNICIAN = "pref.PREF_CALLED_TECHNICIAN";
     private static final String PREF_SHIFT_START = "pref.PREF_SHIFT_START";
     private static final String PREF_SHIFT_END = "pref.PREF_SHIFT_END";
+    private static final String PREF_RECENT_TECH_CALL = "pref.RECENT_TECH_CALL";
 
 
     private static PersistenceManager msInstance;
@@ -537,9 +536,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         Date date;
         if (notificationsList != null) {
             for (int i = 0; i < notificationsList.size(); i++) {
-                date = TimeUtils.getDateForNotification(notificationsList.get(i).getmSentTime());
+                Notification not = notificationsList.get(i);
+                date = TimeUtils.getDateForNotification(not.getmSentTime());
                 if (date != null && date.after(cal.getTime())) {
-                    filteredList.add(notificationsList.get(i));
+                    filteredList.add(not);
+                }else if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN &&
+                        (not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE || not.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE)){
+                    filteredList.add(not);
                 }
             }
 
@@ -599,15 +602,59 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public void setCalledTechnician(TechCallInfo techCallInfo) {
-        SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfo));
+        ArrayList<TechCallInfo> list = getCalledTechnician();
+        list.add(techCallInfo);
+        SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(list));
     }
 
-    public TechCallInfo getCalledTechnician(){
-        String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN, "");
-        TechCallInfo t = mGson.fromJson(str, TechCallInfo.class);
-        if (t == null){
-            t = new TechCallInfo(-1, "", "", 0);
+    public void setCalledTechnicianList(ArrayList<TechCallInfo> techCallInfoList) {
+        if (techCallInfoList == null){
+            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(new ArrayList<>()));
+        }else {
+            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfoList));
         }
-        return t;
+    }
+
+    public ArrayList<TechCallInfo> getCalledTechnician(){
+
+        String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN,  mGson.toJson(new ArrayList<>()));
+        Type listType = new TypeToken<ArrayList<TechCallInfo>>() {
+        }.getType();
+
+        ArrayList<TechCallInfo> techCallInfoList = new ArrayList<>();
+        if (str.length() > 0){
+            techCallInfoList = mGson.fromJson(str, listType);
+        }
+
+//        TechCallInfo t = mGson.fromJson(str, TechCallInfo.class);
+//        if (t == null){
+//            t = new TechCallInfo(-1, "", "", 0);
+//        }
+        if (techCallInfoList == null){
+            techCallInfoList = new ArrayList<TechCallInfo>();
+        }else if(techCallInfoList != null && techCallInfoList.size() > 0) {
+                Collections.sort(techCallInfoList, new Comparator<TechCallInfo>() {
+                    @Override
+                    public int compare(TechCallInfo o1, TechCallInfo o2) {
+
+                        if (o1.getmCallTime() > o2.getmCallTime()) {
+                            return -1;
+                        } else if (o1.getmCallTime() < o2.getmCallTime()) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+                });
+        }
+        return techCallInfoList;
+    }
+
+    public void setRecentTechCallId(int notificationId) {
+        SecurePreferences.getInstance().setInt(PREF_RECENT_TECH_CALL, notificationId);
+    }
+
+    public int getRecentTechCallId() {
+        return SecurePreferences.getInstance().getInt(PREF_RECENT_TECH_CALL);
     }
 }

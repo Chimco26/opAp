@@ -182,7 +182,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 break;
             case Consts.NOTIFICATION_TYPE_TECHNICIAN:
 
-                intent.putExtra(Consts.NOTIFICATION_TECHNICIAN_STATUS, responseType);
+                intent.putExtra(Consts.NOTIFICATION_RESPONSE_TYPE, responseType);
                 intent.putExtra(Consts.NOTIFICATION_TECHNICIAN_NAME, sourceName);
                 break;
 

@@ -147,9 +147,6 @@ public class WidgetFragment extends Fragment implements
     }
 
     private void initTopFive(View view) {
-//        LinearLayout include1_stat1= includeTopFive_1.findViewById(R.id.title_stat1_top_five);
-//        LinearLayout include1_stat2= includeTopFive_1.findViewById(R.id.title_stat2_top_five);
-//        LinearLayout include1_stat3= includeTopFive_1.findViewById(R.id.title_stat3_top_five);
 
         View includeTopFive_1 = view.findViewById(R.id.fragment_dashboard_top_five_1);
         View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
@@ -165,6 +162,7 @@ public class WidgetFragment extends Fragment implements
         include1_row1_stat2_num = includeTopFive_1.findViewById(R.id.row1_title_stat2_top_five_number_tv);
         include1_row1_stat3_num = includeTopFive_1.findViewById(R.id.row1_title_stat3_top_five_number_tv);
 
+        row2_title = includeTopFive_1.findViewById(R.id.title_row2_top_five_tv);
         include1_row2_stat1_num = includeTopFive_1.findViewById(R.id.row2_title_stat1_top_five_number_tv);
         include1_row2_stat2_num = includeTopFive_1.findViewById(R.id.row2_title_stat2_top_five_number_tv);
         include1_row2_stat3_num = includeTopFive_1.findViewById(R.id.row2_title_stat3_top_five_number_tv);
@@ -323,9 +321,9 @@ public class WidgetFragment extends Fragment implements
             CriticalEvent crit2 = critList.get(1);
             row2_lil.setVisibility(View.VISIBLE);
             row2_title.setText(crit2.getmName());
-            include2_stat1_num.setText(crit2.getmDuration());
-            include2_stat2_num.setText(crit2.getmPercentageDuration() + "%");
-            include2_stat3_num.setText(crit2.getmEventsCount());
+            include1_row2_stat1_num.setText(crit2.getmDuration());
+            include1_row2_stat2_num.setText(crit2.getmPercentageDuration() + "%");
+            include1_row2_stat3_num.setText(crit2.getmEventsCount());
         }else {
             row2_lil.setVisibility(View.GONE);
         }

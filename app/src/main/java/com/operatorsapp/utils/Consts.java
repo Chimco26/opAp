@@ -6,12 +6,14 @@ package com.operatorsapp.utils;
 
 public class Consts {
 
+    public static final String NOTIFICATION_RESPONSE_TYPE = "NOTIFICATION_RESPONSE_TYPE";
     public static final int NOTIFICATION_RESPONSE_TYPE_UNSET = 0;
     public static final int NOTIFICATION_RESPONSE_TYPE_APPROVE = 1;
     public static final int NOTIFICATION_RESPONSE_TYPE_DECLINE = 2;
     public static final int NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS = 3;
     public static final int NOTIFICATION_RESPONSE_TYPE_START_SERVICE = 4;
     public static final int NOTIFICATION_RESPONSE_TYPE_END_SERVICE = 5;
+    public static final int NOTIFICATION_RESPONSE_TYPE_CANCELLED = 6;
 
     public static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";
     public static final int NOTIFICATION_TYPE_FROM_WEB = 1;
