@@ -45,7 +45,13 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
     public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, TechDialogListener listener) {
         super(context);
-        mTechList = techList;
+        mTechList = new ArrayList<>();
+        for (TechCallInfo call : techList) {
+            if (call.isOpenCall()){
+                mTechList.add(call);
+            }
+        }
+
         mListener = listener;
     }
 

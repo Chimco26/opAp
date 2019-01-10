@@ -34,10 +34,12 @@ import com.operatorsapp.fragments.LoginFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
 
@@ -160,12 +162,30 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
                 if (response != null && response.body() != null && response.body().getmError() == null) {
 
+                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+
+                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()){
+                            for (TechCallInfo techCall : techList) {
+                                if (not.getmNotificationID() == techCall.getmNotificationId()){
+                                    break;
+                                }
+                            }
+                            techList.add(new TechCallInfo(not.getmResponseType(),not.getmTargetName(), not.getmTitle(), TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId()));
+                        }
                     }
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    PersistenceManager.getInstance().setCalledTechnicianList(techList);
+                    if (techList.size() > 0){
+                        PersistenceManager.getInstance().setRecentTechCallId(techList.get(0).getmNotificationId());
+                    }else {
+                        PersistenceManager.getInstance().setRecentTechCallId(0);
+                    }
+
                     finish();
                 }else {
                     PersistenceManager.getInstance().setNotificationHistory(null);

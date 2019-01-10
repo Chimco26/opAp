@@ -60,9 +60,9 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
         int width;
         if (amount < 1 || mTotalSum == 0){
-            width = 50;
+            width = 150;
         }else {
-            width = (int) ((mParentWidth -50) * (Math.abs(amount) / mTotalSum)) + 50;
+            width = (int) ((mParentWidth ) * (Math.abs(amount) / mTotalSum)) + 100;
         }
 
         switch (mListType){

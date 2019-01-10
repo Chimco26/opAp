@@ -125,6 +125,7 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
@@ -1345,6 +1346,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     private void clearData() {
+
+        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+
+            }
+        });
 
         DataSupport.deleteAll(Event.class);
 
