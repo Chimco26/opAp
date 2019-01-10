@@ -747,7 +747,7 @@ public class WidgetAdapter extends Adapter {
             if (value % 100 == 0) {
                 valueString = String.format("%.1f", valueFloat);
             } else {
-                valueString = String.format("%.2f", valueFloat);
+                valueString = String.format("%.1f", valueFloat);
             }
             if (value % 1000 == 0) {
                 valueString = String.valueOf(value / 1000);
