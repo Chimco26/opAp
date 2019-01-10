@@ -177,7 +177,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mDeclineBtn.setVisibility(View.VISIBLE);
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technician_dark));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
                 }else {
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
                 }

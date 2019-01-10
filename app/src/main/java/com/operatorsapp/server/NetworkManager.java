@@ -60,6 +60,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
@@ -913,6 +914,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getTopRejects(GetTopRejectsAndEventsRequest request, final Callback<TopRejectResponse> callback){
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<TopRejectResponse> call = mRetrofit.create(OpAppServiceRequests.class).getRejects(request);
+        call.enqueue(callback);
+    }
+
+    public void postDeleteToken(PostDeleteTokenRequest request, final Callback<ErrorResponseNewVersion> callback){
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ErrorResponseNewVersion> call = mRetrofit.create(OpAppServiceRequests.class).postDeleteToken(request);
         call.enqueue(callback);
     }
 }

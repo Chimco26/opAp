@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -235,6 +237,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mMainView;
     private boolean mEndSetupDisable;
     private ImageView mTechnicianIconIv;
+    private Chronometer mTechnicianTimerCh;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -801,6 +804,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onPause() {
         super.onPause();
+        mTechnicianTimerCh.stop();
     }
 
 
@@ -1003,6 +1007,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIconIv = mToolBarView.findViewById(R.id.toolbar_technician_iv);
+            mTechnicianTimerCh = mToolBarView.findViewById(R.id.toolbar_technician_chronometer);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
@@ -1164,10 +1169,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void checkTechCalls() {
         ArrayList<TechCallInfo> tech = PersistenceManager.getInstance().getCalledTechnician();
         if (tech != null && tech.size() > 0){
-            openDeleteTechCallDialog(tech);
-        }else {
-            openTechniciansList();
+            for (TechCallInfo call : tech) {
+                if (call.isOpenCall()){
+                    openDeleteTechCallDialog(tech);
+                    return;
+                }
+            }
+
         }
+
+        openTechniciansList();
     }
 
     private void openDeleteTechCallDialog(ArrayList<TechCallInfo> tech) {
@@ -1295,12 +1306,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    }
 //                }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
 //            }
+            long callDuration =  new Date().getTime() - techCallInfo.getmCallTime();
+            int days = 0;
+            days = (int) (callDuration / (24 * 60 * 60 * 1000));
+            if (days > 0){
+                callDuration -= (int) (callDuration / (24 * 60 * 60 * 1000));
+                mTechnicianTimerCh.setFormat("Days:" + days + " %s");
+            }
 
-            mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
+
+            mTechnicianTimerCh.setBase(SystemClock.elapsedRealtime() - (callDuration));
+            mTechnicianTimerCh.start();
+           // mTechnicianTimerCh.setFormat("Call: %s");
+            mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
 
             long delay = -1;
             switch (techCallInfo.getmResponseType()) {
                 case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
+                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
                     //calculate 5 minutes from call and display a message
                     if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET && technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
                         mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1360,6 +1383,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }else {
             mTechnicianIconIv.setImageResource(R.drawable.technicaian);
             mTechnicianIndicatorTv.setText("");
+            mTechnicianTimerCh.stop();
+            mTechnicianTimerCh.setText("");
             PersistenceManager.getInstance().setRecentTechCallId(0);
         }
 

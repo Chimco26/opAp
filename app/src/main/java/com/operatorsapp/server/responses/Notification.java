@@ -1,6 +1,7 @@
 package com.operatorsapp.server.responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.operatorsapp.utils.Consts;
 
 /**
  * Created by alex on 14/10/2018.
@@ -35,6 +36,12 @@ public class Notification {
     @SerializedName("ID")
     private int mNotificationID;
 
+    @SerializedName("SourceUserID")
+    private int mSourceUserID;
+
+    @SerializedName("TargetUserID")
+    private int mTargetUserId;
+
     public Notification(String mBody, String mTitle,  String mSender, String mSentTime, int mResponseType, String mResponseDate, String mTargetName, int mNotificationID, int mNotificationType) {
         this.mBody = mBody;
         this.mTitle = mTitle;
@@ -53,6 +60,22 @@ public class Notification {
 
     public void setmNotificationType(int mNotificationType) {
         this.mNotificationType = mNotificationType;
+    }
+
+    public int getmSourceUserID() {
+        return mSourceUserID;
+    }
+
+    public void setmSourceUserID(int mSourceUserID) {
+        this.mSourceUserID = mSourceUserID;
+    }
+
+    public int getmTargetUserId() {
+        return mTargetUserId;
+    }
+
+    public void setmTargetUserId(int mTargetUserId) {
+        this.mTargetUserId = mTargetUserId;
     }
 
     public String getmTitle() {
@@ -117,5 +140,26 @@ public class Notification {
 
     public void setmNotificationID(int mNotificationID) {
         this.mNotificationID = mNotificationID;
+    }
+
+    public boolean isOpenCall(){
+        switch (mResponseType){
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
+                return false;
+            default:return false;
+        }
     }
 }

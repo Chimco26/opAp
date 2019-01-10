@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class ActiveJob implements Parcelable {
 
     @SerializedName("CavitiesActual")
-    private Integer cavitiesActual;
+    private Double cavitiesActual;
     @SerializedName("CavitiesStandard")
     private Integer cavitiesStandard;
     @SerializedName("Department")
@@ -41,7 +41,7 @@ public class ActiveJob implements Parcelable {
         this.jobName = jobName;
     }
 
-    public void setCavitiesActual(Integer cavitiesActual) {
+    public void setCavitiesActual(Double cavitiesActual) {
         this.cavitiesActual = cavitiesActual;
     }
 
@@ -94,7 +94,7 @@ public class ActiveJob implements Parcelable {
         return cavitiesStandard;
     }
 
-    public Integer getCavitiesActual()
+    public Double getCavitiesActual()
     {
         return cavitiesActual;
     }
@@ -151,7 +151,7 @@ public class ActiveJob implements Parcelable {
     }
 
     protected ActiveJob(Parcel in) {
-        this.cavitiesActual = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.cavitiesActual = (Double) in.readValue(Double.class.getClassLoader());
         this.cavitiesStandard = (Integer) in.readValue(Integer.class.getClassLoader());
         this.department = (Integer) in.readValue(Integer.class.getClassLoader());
         this.jobID = (Integer) in.readValue(Integer.class.getClassLoader());

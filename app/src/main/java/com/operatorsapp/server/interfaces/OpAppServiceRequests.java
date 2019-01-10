@@ -3,6 +3,7 @@ package com.operatorsapp.server.interfaces;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
@@ -43,4 +44,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetRejects")
     Call<TopRejectResponse> getRejects(@Body GetTopRejectsAndEventsRequest request);
+
+    @POST("/LeaderMESApi/DeleteToken")
+    Call<ErrorResponseNewVersion> postDeleteToken(@Body PostDeleteTokenRequest request);
 }

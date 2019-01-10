@@ -15,10 +15,10 @@ public class Mold implements Parcelable {
     private String catalog;
     @SerializedName("CavitiesActual")
     @Expose
-    private Integer cavitiesActual;
+    private Double cavitiesActual;
     @SerializedName("CavitiesStandard")
     @Expose
-    private Integer cavitiesStandard;
+    private Double cavitiesStandard;
     @SerializedName("Files")
     @Expose
     private List<String> files = null;
@@ -34,19 +34,19 @@ public class Mold implements Parcelable {
         this.catalog = catalog;
     }
 
-    public Integer getCavitiesActual() {
+    public Double getCavitiesActual() {
         return cavitiesActual;
     }
 
-    public void setCavitiesActual(Integer cavitiesActual) {
+    public void setCavitiesActual(Double cavitiesActual) {
         this.cavitiesActual = cavitiesActual;
     }
 
-    public Integer getCavitiesStandard() {
+    public Double getCavitiesStandard() {
         return cavitiesStandard;
     }
 
-    public void setCavitiesStandard(Integer cavitiesStandard) {
+    public void setCavitiesStandard(Double cavitiesStandard) {
         this.cavitiesStandard = cavitiesStandard;
     }
 
@@ -86,8 +86,8 @@ public class Mold implements Parcelable {
 
     protected Mold(Parcel in) {
         this.catalog = in.readString();
-        this.cavitiesActual = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.cavitiesStandard = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.cavitiesActual = (Double) in.readValue(Integer.class.getClassLoader());
+        this.cavitiesStandard = (Double) in.readValue(Integer.class.getClassLoader());
         this.files = in.createStringArrayList();
         this.name = in.readString();
     }

@@ -1,5 +1,7 @@
 package com.operatorsapp.model;
 
+import com.operatorsapp.utils.Consts;
+
 /**
  * Created by alex on 20/11/2018.
  */
@@ -75,6 +77,27 @@ public class TechCallInfo {
 
     public void setmCallTime(long mCallTime) {
         this.mCallTime = mCallTime;
+    }
+
+    public boolean isOpenCall(){
+        switch (mResponseType){
+
+            case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                return true;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                return false;
+            case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
+                return false;
+            default:return false;
+        }
     }
 
 
