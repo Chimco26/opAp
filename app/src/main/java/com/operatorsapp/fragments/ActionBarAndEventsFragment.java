@@ -1195,6 +1195,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onCleanTech(TechCallInfo techCallInfo) {
 //                cleanTech(0, techCallInfo);
+                getNotificationsFromServer(false);
                 setTechnicianCallStatus();
             }
         });
@@ -1310,7 +1311,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             days = (int) (callDuration / (24 * 60 * 60 * 1000));
             if (days > 0){
                 callDuration -= (int) (days * (24 * 60 * 60 * 1000));
-                mTechnicianTimerCh.setFormat("Days:" + days + " %s");
+                mTechnicianTimerCh.setFormat("Days: " + days + ", %s");
+            }else {
+                mTechnicianTimerCh.setFormat("%s");
             }
 
 

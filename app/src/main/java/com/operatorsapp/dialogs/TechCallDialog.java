@@ -88,12 +88,17 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
                 if (notificationToRemove != null) {
 
+                    int responseType = Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED;
+                    if (notificationToRemove.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE) {
+                        responseType = Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE;
+                    }
+
                     RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                             notificationToRemove.getmTitle(),
                             notificationToRemove.getmBody(),
                             pm.getMachineId() + "",
                             notificationToRemove.getmNotificationID() + "",
-                            Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED,
+                            responseType,
                             notificationToRemove.getmNotificationType(),
                             Consts.NOTIFICATION_RESPONSE_TARGET_TECHNICIAN,
                             techCallInfo.getmTechnicianId()+"",
