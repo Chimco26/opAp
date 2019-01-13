@@ -64,6 +64,7 @@ public class WidgetAdapter extends Adapter {
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mSelectedReasonId;
     private int mSelectedCauseId;
+    private boolean isEditNumeric;
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
                          boolean closedState, int height, int width,
@@ -363,14 +364,14 @@ public class WidgetAdapter extends Adapter {
 
                     break;
                 case NUMERIC:
+                    if (isEditNumeric && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                        return;
+                    }
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-
-                    if (widget.getEditStep() == 0) {
+                    if (widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                        setupNumericRejectItem(widget, numericViewHolder);
+                    } else {
                         initNumericDiplayLy(widget, numericViewHolder);
-                    } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
-                        initEditNumericStep1(widget, numericViewHolder);
-                    } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
-                        initEditNumericStep2(widget, numericViewHolder);
                     }
                     break;
                 case TIME:
@@ -613,6 +614,19 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
+    public void setupNumericRejectItem(Widget widget, NumericViewHolder numericViewHolder) {
+        if (widget.getEditStep() == 0) {
+            isEditNumeric = false;
+            initNumericDiplayLy(widget, numericViewHolder);
+        } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+            isEditNumeric = true;
+            initEditNumericStep1(widget, numericViewHolder);
+        } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+            isEditNumeric = true;
+            initEditNumericStep2(widget, numericViewHolder);
+        }
+    }
+
     private void initEditNumericStep2(final Widget widget, final NumericViewHolder numericViewHolder) {
         numericViewHolder.mDisplayLy.setVisibility(View.GONE);
         numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
@@ -627,7 +641,8 @@ public class WidgetAdapter extends Adapter {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(1);
-                notifyDataSetChanged();
+                setupNumericRejectItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
         numericViewHolder.mStep2ReportBtn.setOnClickListener(new View.OnClickListener() {
@@ -639,7 +654,8 @@ public class WidgetAdapter extends Adapter {
                         numericViewHolder.mUnitRadioBtn.isChecked(),
                         mSelectedCauseId,
                         mSelectedReasonId);
-                notifyDataSetChanged();
+                setupNumericRejectItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
 
             }
         });
@@ -693,8 +709,8 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
-    public void setReportFieldsForMachine(ReportFieldsForMachine reportFieldsForMachine){
-        mReportFieldsForMachine =  reportFieldsForMachine;
+    public void setReportFieldsForMachine(ReportFieldsForMachine reportFieldsForMachine) {
+        mReportFieldsForMachine = reportFieldsForMachine;
     }
 
     private void initEditNumericStep1(final Widget widget,
@@ -708,17 +724,16 @@ public class WidgetAdapter extends Adapter {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(0);
-                notifyDataSetChanged();
+                setupNumericRejectItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
         numericViewHolder.mStep1NextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(2);
-                numericViewHolder.mEditNumberEt.getText().toString();
-                numericViewHolder.mUnitRadioBtn.isChecked();
-                numericViewHolder.mWeightRadioBtn.isChecked();
-                notifyDataSetChanged();
+                setupNumericRejectItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
     }
@@ -755,9 +770,13 @@ public class WidgetAdapter extends Adapter {
                 @Override
                 public void onClick(View v) {
 
-                    widget.setEditStep(1);
-                    notifyDataSetChanged();
-//                    mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
+                    if (widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                        widget.setEditStep(1);
+                        setupNumericRejectItem(widget, numericViewHolder);
+                        mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
+                    } else {
+                        mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
+                    }
                 }
             });
 
@@ -803,7 +822,7 @@ public class WidgetAdapter extends Adapter {
                 convertProjectionValue = projectionValue / scaleValue;
             }
             float currentWidth = mProjectionCapsuleWidth * convertCurrentValue;
-            float projectionWidth = projectionViewHolder.mProjectionViewProjection.getWidth() * convertProjectionValue;
+            float projectionWidth = mProjectionCapsuleWidth * convertProjectionValue;
             if (currentWidth > 1000) {
                 currentWidth = 1000;
             }

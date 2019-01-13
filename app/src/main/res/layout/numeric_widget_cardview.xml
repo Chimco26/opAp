@@ -258,6 +258,7 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
+                android:gravity="center"
                 android:text="@string/cancel"
                 android:layout_centerVertical="true"
                 android:textStyle="bold"/>

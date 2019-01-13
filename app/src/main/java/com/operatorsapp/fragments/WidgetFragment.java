@@ -490,4 +490,8 @@ public class WidgetFragment extends Fragment implements
             mWidgetAdapter.setReportFieldsForMachine(reportFieldsForMachine);
         }
     }
+
+    public void scrollToPosition(int position) {
+        mWidgetRecycler.scrollToPosition(position);
+    }
 }

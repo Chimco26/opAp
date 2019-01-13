@@ -2223,6 +2223,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         sendReport(value, isUnit, selectedCauseId, selectedReasonId);
     }
 
+    @Override
+    public void onScrollToPosition(int position) {
+        mWidgetFragment.scrollToPosition(position);
+    }
+
     private void sendReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
         ProgressDialogManager.show(this);
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -2230,9 +2235,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         if (isUnit) {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectProductJobId);
         } else{
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -2251,10 +2256,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
-            if (getFragmentManager() != null) {
-
-                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
+//            if (getFragmentManager() != null) {
+//
+//                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//            }
 
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
