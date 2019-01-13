@@ -1,30 +1,36 @@
 package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
 import com.operators.machinedatainfra.models.Widget;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
-import com.operatorsapp.view.ProjectionView;
-import com.operatorsapp.view.ProjectionViewEnd;
-import com.operatorsapp.view.ProjectionViewStart;
 import com.operatorsapp.view.RangeView;
 
 import java.util.ArrayList;
@@ -40,8 +46,9 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 public class WidgetAdapter extends Adapter {
     private static final long FOUR_HOURS = 60000L * 60 * 4;
     private static final long TEN_HOURS = 60000L * 60 * 10;
+    private static final String REPORT_REJECT_KEY = "ReportRejects";
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
-    private Context mContext;
+    private Activity mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
     private final int RANGE = 1;
@@ -54,8 +61,14 @@ public class WidgetAdapter extends Adapter {
     private boolean mClosedState;
     private int mHeight;
     private int mWidth;
+    private ReportFieldsForMachine mReportFieldsForMachine;
+    private int mSelectedReasonId;
+    private int mSelectedCauseId;
 
-    public WidgetAdapter(Context context, List<Widget> widgets, GoToScreenListener goToScreenListener, boolean closedState, int height, int width, DashboardCentralContainerListener dashboardCentralContainerListener) {
+    public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
+                         boolean closedState, int height, int width,
+                         DashboardCentralContainerListener dashboardCentralContainerListener,
+                         ReportFieldsForMachine reportFieldsForMachine) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
@@ -63,6 +76,7 @@ public class WidgetAdapter extends Adapter {
         mHeight = height;
         mWidth = width;
         mDashboardCentralContainerListener = dashboardCentralContainerListener;
+        mReportFieldsForMachine = reportFieldsForMachine;
     }
 
     public void changeState(boolean closedState) {
@@ -84,7 +98,20 @@ public class WidgetAdapter extends Adapter {
 
     private class NumericViewHolder extends ViewHolder {
 
-        private final View mEditIc;
+        private final View mEditStep2Ly;
+        private final Spinner mSpinner1;
+        private final View mSpinner1BtnRv;
+        private final Spinner mSpinner2;
+        private final View mStep2CancelBtn;
+        private final View mStep2ReportBtn;
+        private View mEditIc;
+        private View mDisplayLy;
+        private View mEditStep1Ly;
+        private EditText mEditNumberEt;
+        private RadioButton mUnitRadioBtn;
+        private RadioButton mWeightRadioBtn;
+        private View mStep1CancelBtn;
+        private TextView mStep1NextBtn;
         private RelativeLayout mParentLayout;
         private View mDivider;
         private AutofitTextView mTitle;
@@ -102,6 +129,21 @@ public class WidgetAdapter extends Adapter {
             mValue = itemView.findViewById(R.id.numeric_widget_value);
             mChangeMaterial = itemView.findViewById(R.id.numeric_widget_change_material);
             mEditIc = itemView.findViewById(R.id.numeric_widget_edit_ic);
+            mDisplayLy = itemView.findViewById(R.id.NWC_display_ly);
+
+            mEditStep1Ly = itemView.findViewById(R.id.NWC_edit_step_1_ly);
+            mEditNumberEt = itemView.findViewById(R.id.NWC_edit_number_et);
+            mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
+            mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
+            mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
+            mStep1NextBtn = itemView.findViewById(R.id.NWC_edit_next_btn);
+
+            mEditStep2Ly = itemView.findViewById(R.id.NWC_edit_step_2_ly);
+            mSpinner1 = itemView.findViewById(R.id.NWC_reason_spinner);
+            mSpinner1BtnRv = itemView.findViewById(R.id.NWC_reason2_spinner_rl);
+            mSpinner2 = itemView.findViewById(R.id.NWC_reason2_spinner);
+            mStep2CancelBtn = itemView.findViewById(R.id.NWC_edit_step2_cancel_btn);
+            mStep2ReportBtn = itemView.findViewById(R.id.NWC_edit_step2_next_btn);
 
         }
     }
@@ -144,6 +186,7 @@ public class WidgetAdapter extends Adapter {
 
     private class ProjectionViewHolder extends ViewHolder {
 
+        private final View mRangeViewRv;
         private RelativeLayout mParentLayout;
         private View mDivider;
         private AutofitTextView mTitle;
@@ -151,10 +194,11 @@ public class WidgetAdapter extends Adapter {
         private TextView mValue;
         private View mCapsule;
         private View mEndDivider;
-        private ProjectionView mProjectionView;
-        private RangeView mRangeView;
-        private ProjectionViewStart mProjectionViewStart;
-        private ProjectionViewEnd mProjectionViewEnd;
+        private View mProjectionView;
+        private View mProjectionViewProjection;
+        private View mRangeView;
+        private View mProjectionViewStart;
+        private View mProjectionViewEnd;
         private TextView mCurrentValueInChart;
         private TextView mGrayValueInChart;
         private TextView mGrayValueInEndChart;
@@ -173,7 +217,9 @@ public class WidgetAdapter extends Adapter {
             mCapsule = itemView.findViewById(R.id.projection_widget_oval);
             mEndDivider = itemView.findViewById(R.id.projection_widget_end_divider);
             mProjectionView = itemView.findViewById(R.id.projection_widget_projectionView);
+            mProjectionViewProjection = itemView.findViewById(R.id.projection_widget_projectionViewProjection);
             mRangeView = itemView.findViewById(R.id.projection_widget_range_view);
+            mRangeViewRv = itemView.findViewById(R.id.projection_widget_range_view_rv);
             mProjectionViewStart = itemView.findViewById(R.id.projection_widget_projectionView_start);
             mProjectionViewEnd = itemView.findViewById(R.id.projection_widget_projectionView_end);
             mCurrentValueInChart = itemView.findViewById(R.id.projection_widget_current_value_in_chart);
@@ -287,16 +333,11 @@ public class WidgetAdapter extends Adapter {
                     String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
                     counterViewHolder.mTitle.setText(nameByLang4);
 
-
-
-
                     final int[] value = {0};
                     try {
                         value[0] = Integer.parseInt(widget.getCurrentValue());
-                    }catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                     }
-
-
 
                     counterViewHolder.mValue1.setText(value[0] % 10 + "");
                     counterViewHolder.mValue10.setText((value[0] / 10) % 10 + "");
@@ -304,10 +345,10 @@ public class WidgetAdapter extends Adapter {
                     counterViewHolder.mValue1000.setText((value[0] / 1000) % 10 + "");
                     counterViewHolder.mValue10000.setText((value[0] / 10000) % 10 + "");
 
-                    if (value[0] > 99999){
+                    if (value[0] > 99999) {
                         counterViewHolder.mSubtitle.setVisibility(View.VISIBLE);
                         counterViewHolder.mSubtitle.setText(mContext.getResources().getString(R.string.total_amount) + " " + value[0]);
-                    }else {
+                    } else {
                         counterViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
                     }
 
@@ -324,42 +365,13 @@ public class WidgetAdapter extends Adapter {
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
 
-                    numericViewHolder.mDivider.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ViewGroup.MarginLayoutParams mItemViewParams1;
-                            mItemViewParams1 = (ViewGroup.MarginLayoutParams) numericViewHolder.mDivider.getLayoutParams();
-                            mItemViewParams1.setMargins(0, (int) (numericViewHolder.mParentLayout.getHeight() * 0.4), 0, 0);
-                            numericViewHolder.mDivider.requestLayout();
-                        }
-                    });
-
-                    setSizes(numericViewHolder.mParentLayout);
-                    String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
-                    numericViewHolder.mTitle.setText(nameByLang1);
-                    numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
-                    numericViewHolder.mValue.setText(widget.getCurrentValue());
-                    numericViewHolder.mValue.setSelected(true);
-
-                    numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
-
-                    if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
-
-                        numericViewHolder.mEditIc.setVisibility(View.VISIBLE);
-
-                        numericViewHolder.mEditIc.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
-                            }
-                        });
-
-                    } else {
-
-                        numericViewHolder.mEditIc.setVisibility(View.GONE);
+                    if (widget.getEditStep() == 0) {
+                        initNumericDiplayLy(widget, numericViewHolder);
+                    } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                        initEditNumericStep1(widget, numericViewHolder);
+                    } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                        initEditNumericStep2(widget, numericViewHolder);
                     }
-
                     break;
                 case TIME:
 
@@ -514,23 +526,27 @@ public class WidgetAdapter extends Adapter {
                             projectionViewHolder.mDivider.requestLayout();
                         }
                     });
-                    projectionViewHolder.mRangeView.init(mContext);
-                    projectionViewHolder.mProjectionView.init(mContext);
-                    projectionViewHolder.mProjectionViewEnd.init(mContext);
+                    projectionViewHolder.mCapsule.setBackground(createCapsuleDrawable(widget.getTargetColor()));
+                    projectionViewHolder.mRangeView.setBackground(createRangeShape(widget.getCurrentColor()));
+                    projectionViewHolder.mProjectionView.setBackground(createProjectionShape(widget.getCurrentColor()));
+                    projectionViewHolder.mProjectionViewProjection.setBackground(createProjectionShape(widget.getProjectionColor()));
+                    projectionViewHolder.mProjectionViewEnd.setBackground(createEndProjectionShape(widget.getProjectionColor()));
+                    projectionViewHolder.mProjectionViewStart.setBackground(createStartProjectionShape(widget.getCurrentColor()));
                     setSizes(projectionViewHolder.mParentLayout);
-                    projectionViewHolder.mRangeView.setCurrentLine(false);
+//                    projectionViewHolder.mRangeView.setCurrentLine(false);
+//                    projectionViewHolder.mRangeView.setLineColor(mContext, "#000000");
                     float currentFloat = tryParse(widget.getCurrentValue(), StringParse.FLOAT);
                     projectionViewHolder.mCurrentValueInChart.setText(valueInK(currentFloat));
                     if (currentFloat >= widget.getTarget()) {
                         projectionViewHolder.mBluePlus.setVisibility(View.VISIBLE);
-                        projectionViewHolder.mProjectionViewEnd.setCurrentView(true);
-                        projectionViewHolder.mProjectionViewStart.setCurrentView(true);
+                        projectionViewHolder.mProjectionViewEnd.setBackground(createEndProjectionShape(widget.getCurrentColor()));
+                        projectionViewHolder.mProjectionViewStart.setBackground(createStartProjectionShape(widget.getCurrentColor()));
 //                    projectionViewHolder.mCurrentValueInChart.setText("");
-                        projectionViewHolder.mRangeView.hideView();
+                        projectionViewHolder.mRangeView.setVisibility(View.GONE);
                     } else if (widget.getProjection() >= widget.getTarget()) {
                         projectionViewHolder.mBluePlus.setVisibility(View.GONE);
-                        projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
-                        projectionViewHolder.mProjectionViewStart.setCurrentView(true);
+                        projectionViewHolder.mProjectionViewEnd.setBackground(createEndProjectionShape(widget.getProjectionColor()));
+                        projectionViewHolder.mProjectionViewStart.setBackground(createStartProjectionShape(widget.getCurrentColor()));
                         if (isNotNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInEndChart.setText(valueInK(widget.getProjection()));
                         } else {
@@ -538,9 +554,9 @@ public class WidgetAdapter extends Adapter {
                         }
                     } else {
                         projectionViewHolder.mBluePlus.setVisibility(View.GONE);
-                        projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
-                        projectionViewHolder.mProjectionViewStart.setCurrentView(true);
-                        projectionViewHolder.mProjectionViewEnd.hideView();
+                        projectionViewHolder.mProjectionViewEnd.setBackground(createEndProjectionShape(widget.getProjectionColor()));
+                        projectionViewHolder.mProjectionViewStart.setBackground(createStartProjectionShape(widget.getCurrentColor()));
+                        projectionViewHolder.mProjectionViewEnd.setVisibility(View.GONE);
                         if (isNotNearestTexts(widget)) {
                             projectionViewHolder.mGrayValueInChart.setText(valueInK(widget.getProjection()));
                         } else {
@@ -548,20 +564,22 @@ public class WidgetAdapter extends Adapter {
                         }
                     }
                     if (currentFloat <= widget.getLowLimit() && currentFloat != widget.getTarget()) {
-                        projectionViewHolder.mProjectionViewEnd.setCurrentView(false);
-                        projectionViewHolder.mRangeView.hideView();
-                        projectionViewHolder.mProjectionView.hideViews();
-                        projectionViewHolder.mProjectionViewStart.setCurrentView(false);
+                        projectionViewHolder.mProjectionViewEnd.setBackground(createEndProjectionShape(widget.getProjectionColor()));
+                        projectionViewHolder.mRangeView.setVisibility(View.GONE);
+                        projectionViewHolder.mProjectionView.setVisibility(View.GONE);
+                        projectionViewHolder.mProjectionViewProjection.setVisibility(View.VISIBLE);
+                        projectionViewHolder.mProjectionViewStart.setBackground(createStartProjectionShape(widget.getProjectionColor()));
                         projectionViewHolder.mGrayValueInEndChart.setText("");
                         projectionViewHolder.mGrayValueInChart.setText("");
                         projectionViewHolder.mCurrentValueInChart.setText("");
                     }
+
                     final float finalCurrentFloat = currentFloat;
 //                    if (mProjectionCapsuleWidth == 0) {
                     projectionViewHolder.mCapsule.post(new Runnable() {
                         @Override
                         public void run() {
-                            mProjectionCapsuleWidth = projectionViewHolder.mRangeView.getWidth();
+                            mProjectionCapsuleWidth = projectionViewHolder.mRangeViewRv.getWidth();
                             setProjectionData(projectionViewHolder, widget, finalCurrentFloat);
                         }
                     });
@@ -595,6 +613,160 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
+    private void initEditNumericStep2(final Widget widget, final NumericViewHolder numericViewHolder) {
+        numericViewHolder.mDisplayLy.setVisibility(View.GONE);
+        numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditStep2Ly.setVisibility(View.VISIBLE);
+
+        if (!PersistenceManager.getInstance().getDisplayRejectFactor()) {
+            numericViewHolder.mSpinner1BtnRv.setVisibility(View.GONE);
+        }
+        setNumericReportRejctStep2Spinners(widget, numericViewHolder);
+
+        numericViewHolder.mStep2CancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(1);
+                notifyDataSetChanged();
+            }
+        });
+        numericViewHolder.mStep2ReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(0);
+                mDashboardCentralContainerListener.onReportReject(
+                        numericViewHolder.mEditNumberEt.getText().toString(),
+                        numericViewHolder.mUnitRadioBtn.isChecked(),
+                        mSelectedCauseId,
+                        mSelectedReasonId);
+                notifyDataSetChanged();
+
+            }
+        });
+    }
+
+    private void setNumericReportRejctStep2Spinners(Widget widget, NumericViewHolder numericViewHolder) {
+        if (mReportFieldsForMachine != null) {
+
+            final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
+            reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            numericViewHolder.mSpinner1.setAdapter(reasonSpinnerArrayAdapter);
+            numericViewHolder.mSpinner1.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+            numericViewHolder.mSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
+                    reasonSpinnerArrayAdapter.setTitle(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+            if (PersistenceManager.getInstance().getDisplayRejectFactor()) {
+                final RejectCauseSpinnerAdapter causeSpinnerArrayAdapter = new RejectCauseSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectCauses());
+                causeSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                numericViewHolder.mSpinner2.setAdapter(causeSpinnerArrayAdapter);
+                numericViewHolder.mSpinner2.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+
+                numericViewHolder.mSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (mReportFieldsForMachine.getRejectCauses().size() > 0) {
+                            mSelectedCauseId = mReportFieldsForMachine.getRejectCauses().get(position).getId();
+                        }
+                        causeSpinnerArrayAdapter.setTitle(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            } else {
+                mSelectedCauseId = 0;
+            }
+        }
+    }
+
+    public void setReportFieldsForMachine(ReportFieldsForMachine reportFieldsForMachine){
+        mReportFieldsForMachine =  reportFieldsForMachine;
+    }
+
+    private void initEditNumericStep1(final Widget widget,
+                                      final NumericViewHolder numericViewHolder) {
+
+        numericViewHolder.mDisplayLy.setVisibility(View.GONE);
+        numericViewHolder.mEditStep1Ly.setVisibility(View.VISIBLE);
+        numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
+
+        numericViewHolder.mStep1CancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(0);
+                notifyDataSetChanged();
+            }
+        });
+        numericViewHolder.mStep1NextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(2);
+                numericViewHolder.mEditNumberEt.getText().toString();
+                numericViewHolder.mUnitRadioBtn.isChecked();
+                numericViewHolder.mWeightRadioBtn.isChecked();
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void initNumericDiplayLy(final Widget widget,
+                                    final NumericViewHolder numericViewHolder) {
+        numericViewHolder.mDisplayLy.setVisibility(View.VISIBLE);
+        numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
+        numericViewHolder.mDivider.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.MarginLayoutParams mItemViewParams1;
+                mItemViewParams1 = (ViewGroup.MarginLayoutParams) numericViewHolder.mDivider.getLayoutParams();
+                mItemViewParams1.setMargins(0, (int) (numericViewHolder.mParentLayout.getHeight() * 0.4), 0, 0);
+                numericViewHolder.mDivider.requestLayout();
+            }
+        });
+
+        setSizes(numericViewHolder.mParentLayout);
+        String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        numericViewHolder.mTitle.setText(nameByLang1);
+        numericViewHolder.mSubtitle.setVisibility(View.INVISIBLE);
+        numericViewHolder.mValue.setText(widget.getCurrentValue());
+        numericViewHolder.mValue.setSelected(true);
+
+        numericViewHolder.mChangeMaterial.setVisibility(View.INVISIBLE);
+
+        if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
+
+            numericViewHolder.mEditIc.setVisibility(View.VISIBLE);
+
+            numericViewHolder.mEditIc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    widget.setEditStep(1);
+                    notifyDataSetChanged();
+//                    mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
+                }
+            });
+
+        } else {
+
+            numericViewHolder.mEditIc.setVisibility(View.GONE);
+        }
+    }
+
     private boolean isNotNearestTexts(Widget widget) {
         float size = widget.getStandardValue() - widget.getLowLimit();
         try {
@@ -613,7 +785,8 @@ public class WidgetAdapter extends Adapter {
 
     }
 
-    private void setProjectionData(ProjectionViewHolder projectionViewHolder, Widget widget,
+    private void setProjectionData(final ProjectionViewHolder projectionViewHolder, Widget
+            widget,
                                    float finalCurrentFloat) {
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         projectionViewHolder.mTitle.setText(nameByLang4);
@@ -630,7 +803,7 @@ public class WidgetAdapter extends Adapter {
                 convertProjectionValue = projectionValue / scaleValue;
             }
             float currentWidth = mProjectionCapsuleWidth * convertCurrentValue;
-            float projectionWidth = projectionViewHolder.mProjectionView.getWidth() * convertProjectionValue;
+            float projectionWidth = projectionViewHolder.mProjectionViewProjection.getWidth() * convertProjectionValue;
             if (currentWidth > 1000) {
                 currentWidth = 1000;
             }
@@ -638,21 +811,87 @@ public class WidgetAdapter extends Adapter {
                 projectionWidth = 1000;
             }
             if (convertCurrentValue > 0.9) {
-                projectionViewHolder.mRangeView.updateX(currentWidth - 8/* half of the line*/);
-                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 20/* half of the line*/);
+                projectionViewHolder.mRangeView.setX(currentWidth /* half of the line*/);
+                projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 10/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 8/* half of the line*/);
             } else {
-                projectionViewHolder.mRangeView.updateX(currentWidth/* half of the line*/);
+                projectionViewHolder.mRangeView.setX(currentWidth/* half of the line*/);
                 projectionViewHolder.mCurrentValueInChart.setX(currentWidth - 2/* half of the line*/);
                 projectionViewHolder.mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
             }
-            projectionViewHolder.mProjectionView.updateWidth(currentWidth, projectionWidth);
+//            projectionViewHolder.mProjectionView.getLayoutParams().width = ((int) currentWidth);
+//            projectionViewHolder.mProjectionViewProjection.getLayoutParams().width = ((int) projectionWidth);
+            final float finalCurrentWidth = currentWidth;
+            projectionViewHolder.mProjectionView.post(new Runnable() {
+                @Override
+                public void run() {
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) projectionViewHolder.mProjectionView.getLayoutParams();
+                    mItemViewParams4.width = (int) finalCurrentWidth;
+                    projectionViewHolder.mProjectionView.requestLayout();
+                }
+            });
+            final float finalProjectionWidth = projectionWidth;
+            projectionViewHolder.mProjectionViewProjection.post(new Runnable() {
+                @Override
+                public void run() {
+                    ViewGroup.MarginLayoutParams mItemViewParams4;
+                    mItemViewParams4 = (ViewGroup.MarginLayoutParams) projectionViewHolder.mProjectionViewProjection.getLayoutParams();
+                    mItemViewParams4.width = (int) finalProjectionWidth;
+                    projectionViewHolder.mProjectionViewProjection.requestLayout();
+                }
+            });
         }
+        projectionViewHolder.mEndDivider.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
         if (projectionViewHolder.mEndDivider.getX() - projectionViewHolder.mRangeView.getX() < 150 && projectionViewHolder.mBluePlus.getVisibility() != View.VISIBLE && finalCurrentFloat != 0) {
             projectionViewHolder.mEndDivider.setVisibility(View.INVISIBLE);
         } else {
             projectionViewHolder.mEndDivider.setVisibility(View.VISIBLE);
         }
+    }
+
+    private Drawable createRangeShape(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setCornerRadii(new float[]{0, 0, 0, 0, 60, 60, 60, 60});
+        ((GradientDrawable) drawable).setSize(8, 48);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
+    }
+
+    private Drawable createStartProjectionShape(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setCornerRadii(new float[]{60, 60, 0, 0, 0, 0, 60, 60});
+        ((GradientDrawable) drawable).setSize(30, 43);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
+    }
+
+    private Drawable createEndProjectionShape(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setCornerRadii(new float[]{0, 0, 60, 60, 60, 60, 0, 0});
+        ((GradientDrawable) drawable).setSize(30, 43);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
+    }
+
+    private Drawable createProjectionShape(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setSize(30, 43);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
+    }
+
+    private Drawable createCapsuleDrawable(String color) {
+        Drawable drawable = new GradientDrawable();
+        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
+        ((GradientDrawable) drawable).setCornerRadii(new float[]{60, 60, 60, 60, 60, 60, 60, 60});
+        ((GradientDrawable) drawable).setSize(270, 60);
+        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
+        return drawable;
     }
 
     private void setRangeData(Widget widget, RangeViewHolder rangeViewHolder) {
@@ -705,7 +944,7 @@ public class WidgetAdapter extends Adapter {
             if (value % 100 == 0) {
                 valueString = String.format("%.1f", valueFloat);
             } else {
-                valueString = String.format("%.2f", valueFloat);
+                valueString = String.format("%.1f", valueFloat);
             }
             if (value % 1000 == 0) {
                 valueString = String.valueOf(value / 1000);

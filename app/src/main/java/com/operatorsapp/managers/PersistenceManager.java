@@ -15,7 +15,6 @@ import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerIn
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
-import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operatorsapp.model.TechCallInfo;
@@ -35,8 +34,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-
-import retrofit2.http.PUT;
 
 public class PersistenceManager implements LoginPersistenceManagerInterface,
         ShiftLogPersistenceManagerInterface, PersistenceManagerInterface, MachineStatusPersistenceManagerInterface,
@@ -612,7 +609,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setCalledTechnicianList(ArrayList<TechCallInfo> techCallInfoList) {
         if (techCallInfoList == null){
-            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, "");
+            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(new ArrayList<>()));
         }else {
             SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfoList));
         }
@@ -624,7 +621,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         Type listType = new TypeToken<ArrayList<TechCallInfo>>() {
         }.getType();
 
-        ArrayList<TechCallInfo> techCallInfoList = mGson.fromJson(str, listType);
+        ArrayList<TechCallInfo> techCallInfoList = new ArrayList<>();
+        if (str.length() > 0){
+            techCallInfoList = mGson.fromJson(str, listType);
+        }
 
 //        TechCallInfo t = mGson.fromJson(str, TechCallInfo.class);
 //        if (t == null){

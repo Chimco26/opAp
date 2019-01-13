@@ -113,7 +113,7 @@
     <string name="shift_log_standard">Стандарт</string>
     <string name="approving_technician">Затвердження техніка</string>
     <string name="approve">Затвердити</string>
-    <string name="setup_end">Закінчення\nналаштування</string>
+    <string name="setup_end">Закінчення налаштування</string>
     <string name="first_item_approval">Закінчення налаштування</string>
     <string name="send_logs">Відправити журнали</string>
     <string name="alarm">Попередження</string>

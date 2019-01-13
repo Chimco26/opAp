@@ -3,441 +3,114 @@
     android:id="@+id/report_reject_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:clickable="true">
+    android:clickable="true"
+    android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="483dp"
+        android:layout_height="402dp"
+        android:background="@color/white">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/rectangle_11_copy_2"
-            android:gravity="center_vertical">
+            android:id="@+id/button_cancel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="23dp">
 
-            <TextView
-                android:id="@+id/id_title"
-                style="@style/Roboto_Regular_Status_Data"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:maxLength="50"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:text="@string/id"
-                android:textColor="@color/status_bar"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/report_cycle_id_text_view"
-                style="@style/Roboto_Regular_Status_Data"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:maxEms="50"
-                android:layout_alignTop="@+id/id_title"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/id_title"
-                android:gravity="center_vertical"
-                android:text="@string/product_id"
-                android:textSize="16sp"/>
-
-            <FrameLayout
-                android:id="@+id/report_job_spinner_frame"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@id/job_title"
-                android:layout_marginEnd="39dp">
-
-                <Spinner
-                    android:id="@+id/report_job_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="23dp"
-                    android:layout_gravity="center_vertical"
-                    android:dropDownVerticalOffset="55dp"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/active_jobs_progressBar"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/C16"
-                    android:indeterminateTintMode="src_atop" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/job_title"
-                style="@style/Roboto_Regular_Status_Title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignTop="@+id/report_job_spinner_frame"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/report_cycle_id_text_view"
-                android:gravity="center_vertical"
-                android:text="@string/josh"
-                android:textColor="@color/status_bar"
-                android:textSize="16sp"/>
-
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/close" />
         </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/parent_layouts"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="55dp"
+            android:paddingTop="25dp"
+            android:paddingEnd="55dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:text="@string/setup_end"
+                android:textColor="@color/blue1"
+                android:textSize="35sp" />
 
             <LinearLayout
-
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/reject_reason_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/reject_reason"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
 
                 <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/reports_background"
-                    android:gravity="center_vertical">
+                    android:id="@+id/reject_reason_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/edit_text_background_selector">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="vertical">
-
-
-                        <ImageView
-                            android:id="@+id/imageView2"
-                            android:layout_width="84dp"
-                            android:layout_height="84dp"
-                            android:layout_marginStart="20dp"
-                            android:background="@drawable/group_x" />
-
-                        <View
-                            android:layout_width="69dp"
-                            android:layout_height="2dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
-                            android:background="@color/divider_gray" />
-
-                        <TextView
-                            style="@style/FontStyle_T120"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="18dp"
-                            android:text="@string/setup_end"
-                            android:textSize="30sp" />
-                    </LinearLayout>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center_vertical">
-
-                    <!--<LinearLayout
+                    <Spinner
+                        android:id="@+id/reject_reason_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_marginBottom="40dp"
-                            android:layout_marginStart="50dp"
-                            android:layout_weight="0.97"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                android:id="@+id/reject_reason_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="7dp"
-                                android:text="@string/reject_reason"
-                                android:textColor="@color/black"
-                                android:textSize="22sp" />
-
-                                <RelativeLayout
-                                    android:id="@+id/reject_reason_rl"
-                                    android:layout_width="282dp"
-                                    android:layout_height="52dp"
-                                    android:layout_marginBottom="30dp"
-                                    android:background="@drawable/edit_text_background_selector">
-
-                                    <Spinner
-                                        android:id="@+id/reject_reason_spinner"
-                                        android:layout_width="280dp"
-                                        android:layout_height="50dp"
-                                        android:dropDownVerticalOffset="45dp" />
-                                </RelativeLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="7dp"
-                                    android:text="@string/approving_technician"
-                                    android:textColor="@color/black"
-                                    android:textSize="22sp" />
-
-                                <RelativeLayout
-                                    android:layout_width="282dp"
-                                    android:layout_height="52dp"
-                                    android:background="@drawable/edit_text_background_selector">
-
-                                    <Spinner
-                                        android:id="@+id/technician_spinner"
-                                        android:layout_width="280dp"
-                                        android:layout_height="50dp"
-                                        android:dropDownVerticalOffset="45dp" />
-                                </RelativeLayout>
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="60dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/units"
-                                    android:textColor="@color/black"
-                                    android:textSize="22sp"/>
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/units_edit_text"
-                                    style="@style/FontStyle_T6"
-                                    android:layout_width="320dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/edit_text_background_selector"
-                                    android:hint=" "
-                                    android:inputType="numberDecimal|numberSigned"
-                                    android:textDirection="ltr"
-                                    android:singleLine="true"
-                                    android:textSize="22sp"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginEnd="44dp"
-                                android:layout_marginStart="83dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/weight"
-                                    android:textColor="@color/black"
-                                    android:textSize="22sp"/>
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/weight_edit_text"
-                                    style="@style/FontStyle_T6"
-                                    android:layout_width="320dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/edit_text_background_selector"
-                                    android:hint=" "
-                                    android:inputType="numberDecimal|numberSigned"
-                                    android:textDirection="ltr"
-                                    android:singleLine="true"
-                                    android:textSize="22sp"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="40dp"
-                                android:layout_marginEnd="37dp"
-                                android:gravity="end"
-                                android:orientation="horizontal"
-                                android:weightSum="1">
-
-                                <TextView
-                                    android:id="@+id/button_cancel"
-                                    style="@style/FontStyle_Button"
-                                    android:layout_width="136dp"
-                                    android:layout_height="34dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:gravity="center"
-                                    android:text="@string/cancel"
-                                    android:textAllCaps="true"
-                                    android:textColor="@drawable/button_cancel_text_selector"
-                                    android:textSize="22sp" />
-
-                                <Button
-                                    android:id="@+id/button_approve"
-                                    style="@style/FontStyle_Button"
-                                    android:layout_width="94dp"
-                                    android:layout_height="34dp"
-                                    android:layout_weight="0.13"
-                                    android:background="@drawable/buttons_selector"
-                                    android:text="@string/approve"
-                                    android:textColor="@drawable/button_text_color_selector"
-                                    android:textSize="22sp" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
--->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="50dp"
-                            android:layout_marginBottom="40dp"
-                            android:layout_weight="0.97"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/reject_reason_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="7dp"
-                                android:text="@string/reject_reason"
-                                android:textColor="@color/black"
-                                android:textSize="22sp" />
-
-                            <RelativeLayout
-                                android:id="@+id/reject_reason_rl"
-                                android:layout_width="282dp"
-                                android:layout_height="52dp"
-                                android:layout_marginBottom="30dp"
-                                android:background="@drawable/edit_text_background_selector">
-
-                                <Spinner
-                                    android:id="@+id/reject_reason_spinner"
-                                    android:layout_width="280dp"
-                                    android:layout_height="50dp"
-                                    android:dropDownVerticalOffset="45dp" />
-                            </RelativeLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="35dp"
-                                android:layout_marginBottom="7dp"
-                                android:text="@string/approving_technician"
-                                android:textColor="@color/black"
-                                android:textSize="22sp" />
-
-                            <RelativeLayout
-                                android:layout_width="282dp"
-                                android:layout_height="52dp"
-                                android:background="@drawable/edit_text_background_selector">
-
-                                <Spinner
-                                    android:id="@+id/technician_spinner"
-                                    android:layout_width="280dp"
-                                    android:layout_height="50dp"
-                                    android:dropDownVerticalOffset="45dp" />
-                            </RelativeLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="37dp"
-                                android:layout_marginBottom="40dp"
-                                android:gravity="end"
-                                android:orientation="horizontal"
-                                android:weightSum="1">
-
-                                <TextView
-                                    android:id="@+id/button_cancel"
-                                    style="@style/FontStyle_Button"
-                                    android:layout_width="136dp"
-                                    android:layout_height="34dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:gravity="center"
-                                    android:text="@string/cancel"
-                                    android:textAllCaps="true"
-                                    android:textColor="@drawable/button_cancel_text_selector"
-                                    android:textSize="22sp" />
-
-                                <Button
-                                    android:id="@+id/button_approve"
-                                    style="@style/FontStyle_Button"
-                                    android:layout_width="94dp"
-                                    android:layout_height="34dp"
-                                    android:layout_weight="0.13"
-                                    android:background="@drawable/buttons_selector"
-                                    android:text="@string/approve"
-                                    android:textColor="@drawable/button_text_color_selector"
-                                    android:textSize="22sp" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
+                        android:layout_height="50dp"
+                        android:dropDownVerticalOffset="45dp" />
                 </RelativeLayout>
-
-
             </LinearLayout>
 
-        </FrameLayout>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/approving_technician"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/edit_text_background_selector">
+
+                    <Spinner
+                        android:id="@+id/technician_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:dropDownVerticalOffset="45dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_approve"
+                style="@style/FontStyle_Button"
+                android:layout_width="183dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/buttons_selector"
+                android:text="@string/approve"
+                android:textColor="@drawable/button_text_color_selector"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

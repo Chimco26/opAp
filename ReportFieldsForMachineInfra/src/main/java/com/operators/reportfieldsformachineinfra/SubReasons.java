@@ -1,11 +1,14 @@
 package com.operators.reportfieldsformachineinfra;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Sergey on 02/08/2016.
  */
-public class SubReasons {
+public class SubReasons implements Parcelable {
 
     @SerializedName("ID")
     private int id;
@@ -33,4 +36,39 @@ public class SubReasons {
     {
         return subReasons;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.EName);
+        dest.writeString(this.LName);
+        dest.writeTypedArray(this.subReasons, flags);
+    }
+
+    public SubReasons() {
+    }
+
+    protected SubReasons(Parcel in) {
+        this.id = in.readInt();
+        this.EName = in.readString();
+        this.LName = in.readString();
+        this.subReasons = in.createTypedArray(SubReasons.CREATOR);
+    }
+
+    public static final Parcelable.Creator<SubReasons> CREATOR = new Parcelable.Creator<SubReasons>() {
+        @Override
+        public SubReasons createFromParcel(Parcel source) {
+            return new SubReasons(source);
+        }
+
+        @Override
+        public SubReasons[] newArray(int size) {
+            return new SubReasons[size];
+        }
+    };
 }

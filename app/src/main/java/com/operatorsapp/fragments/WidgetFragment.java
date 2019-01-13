@@ -21,6 +21,7 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.TopFiveAdapter;
@@ -91,9 +92,21 @@ public class WidgetFragment extends Fragment implements
     TextView include2_stat3_num;
     private LinearLayout row1_lil;
     private LinearLayout row2_lil;
+    private ReportFieldsForMachine mReportFieldForMachine;
 
-    public static WidgetFragment newInstance() {
-        return new WidgetFragment();
+    public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine) {
+        WidgetFragment widgetFragment = new WidgetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ReportFieldsForMachine.TAG, reportFieldsForMachine);
+        return widgetFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mReportFieldForMachine = getArguments().getParcelable(ReportFieldsForMachine.TAG);
+        }
     }
 
     @Override
@@ -135,7 +148,9 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.setLayoutManager(mGridLayoutManager);
             GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener, true, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
+            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
+                    true, mRecyclersHeight, mWidgetsLayoutWidth,
+                    mDashboardCentralContainerListener, mReportFieldForMachine);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -244,7 +259,9 @@ public class WidgetFragment extends Fragment implements
             if (mWidgetAdapter != null) {
                 mWidgetAdapter.setNewData(widgetList);
             } else {
-                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener, !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth, mDashboardCentralContainerListener);
+                mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
+                        !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
+                        mDashboardCentralContainerListener, mReportFieldForMachine);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
@@ -266,7 +283,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (response != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0){
+                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0){
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                 }
             }
@@ -281,7 +298,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopStopAndCriticalEvents(request, new Callback<StopAndCriticalEventsResponse>() {
             @Override
             public void onResponse(Call<StopAndCriticalEventsResponse> call, Response<StopAndCriticalEventsResponse> response) {
-                if (response != null && response.body().getmError() == null){
+                if (response != null && response.body() != null && response.body().getmError() == null){
 
                     if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
                         ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
@@ -465,5 +482,12 @@ public class WidgetFragment extends Fragment implements
     @Override
     public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine) {
 
+    }
+
+    public void setReportFieldForMachine(ReportFieldsForMachine reportFieldsForMachine) {
+        mReportFieldForMachine = reportFieldsForMachine;
+        if (mWidgetAdapter != null){
+            mWidgetAdapter.setReportFieldsForMachine(reportFieldsForMachine);
+        }
     }
 }
