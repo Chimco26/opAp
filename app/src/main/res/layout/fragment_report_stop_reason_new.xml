@@ -21,6 +21,8 @@
         android:id="@+id/stop_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:thumb="@null"
+        android:track="@null"
         android:background="@drawable/switch_grid_linear"/>
 
     <android.support.v7.widget.RecyclerView

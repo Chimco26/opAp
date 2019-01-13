@@ -176,7 +176,7 @@
     <string name="alarms">警報</string>
     <string name="amount">數量</string>
     <string name="at_work">在工作</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">注意！\n在非生產狀態下檢測到的週期。\n請不要忘記及時啟動一項作業！</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">在非生產狀態下檢測到的週期。\n請不要忘記及時啟動一項作業！</string>
     <string name="call_for_technician_unresponsive">您呼叫的技術人員沒有回應，因此被取消了</string>
     <string name="call_technician_text">需要您解決一些問題</string>
     <string name="call_technician_title">技術人員呼叫</string>

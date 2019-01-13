@@ -181,7 +181,7 @@
     <string name="amount">Количество</string>
     <string name="app_name">Оператор</string>
     <string name="at_work">В работе</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">Внимание! Обнаружены циклы в отсутствие производства. Пожалуйста, не забудьте активировать работу вовремя!</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Обнаружены циклы в отсутствие производства. Пожалуйста, не забудьте активировать работу вовремя!</string>
     <string name="call_for_technician_unresponsive">Вызов техника остался неотвеченным и поэтому отменен</string>
     <string name="call_technician_text">Требуется Ваша помощь</string>
     <string name="call_technician_title">Вызов техника</string>

@@ -42,11 +42,12 @@ import me.grantland.widget.AutofitTextView;
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.DashboardActivity.REPORT_REJECT_TAG;
+import static com.operatorsapp.activities.DashboardActivity.REPORT_UNIT_CYCLE_TAG;
 
 public class WidgetAdapter extends Adapter {
     private static final long FOUR_HOURS = 60000L * 60 * 4;
     private static final long TEN_HOURS = 60000L * 60 * 10;
-    private static final String REPORT_REJECT_KEY = "ReportRejects";
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
     private Activity mContext;
     private List<Widget> mWidgets;
@@ -64,7 +65,6 @@ public class WidgetAdapter extends Adapter {
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mSelectedReasonId;
     private int mSelectedCauseId;
-    private boolean isEditNumeric;
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
                          boolean closedState, int height, int width,
@@ -105,6 +105,10 @@ public class WidgetAdapter extends Adapter {
         private final Spinner mSpinner2;
         private final View mStep2CancelBtn;
         private final View mStep2ReportBtn;
+        private final View mEditCycleLy;
+        private final EditText mEditCycleEt;
+        private final View mEditCycleCancelBtn;
+        private final View mEditCycleReportBtn;
         private View mEditIc;
         private View mDisplayLy;
         private View mEditStep1Ly;
@@ -145,6 +149,11 @@ public class WidgetAdapter extends Adapter {
             mSpinner2 = itemView.findViewById(R.id.NWC_reason2_spinner);
             mStep2CancelBtn = itemView.findViewById(R.id.NWC_edit_step2_cancel_btn);
             mStep2ReportBtn = itemView.findViewById(R.id.NWC_edit_step2_next_btn);
+
+            mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
+            mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
+            mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
+            mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
 
         }
     }
@@ -364,12 +373,15 @@ public class WidgetAdapter extends Adapter {
 
                     break;
                 case NUMERIC:
-                    if (isEditNumeric && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                    if (isEditMode() && (widget.getTargetScreen().equals(REPORT_REJECT_TAG) ||
+                            widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG))) {
                         return;
                     }
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-                    if (widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                    if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
                         setupNumericRejectItem(widget, numericViewHolder);
+                    } else if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
+                        setupNumericCycleItem(widget, numericViewHolder);
                     } else {
                         initNumericDiplayLy(widget, numericViewHolder);
                     }
@@ -614,22 +626,64 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
+    private boolean isEditMode() {//todo is not saved in the object because come from server
+        for (Widget widgets: mWidgets){
+            if (widgets.getEditStep() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setupNumericCycleItem(Widget widget, NumericViewHolder numericViewHolder) {
+        if (widget.getEditStep() == 0) {
+            initNumericDiplayLy(widget, numericViewHolder);
+        } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)) {
+            initEditCycleLy(widget, numericViewHolder);
+        }
+    }
+
     public void setupNumericRejectItem(Widget widget, NumericViewHolder numericViewHolder) {
         if (widget.getEditStep() == 0) {
-            isEditNumeric = false;
             initNumericDiplayLy(widget, numericViewHolder);
-        } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
-            isEditNumeric = true;
+        } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep1(widget, numericViewHolder);
-        } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
-            isEditNumeric = true;
+        } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep2(widget, numericViewHolder);
         }
+    }
+
+    private void initEditCycleLy(final Widget widget, final NumericViewHolder numericViewHolder) {
+        numericViewHolder.mDisplayLy.setVisibility(View.GONE);
+        numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditCycleLy.setVisibility(View.VISIBLE);
+
+        numericViewHolder.mEditCycleCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(0);
+                setupNumericCycleItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
+            }
+        });
+        numericViewHolder.mEditCycleReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widget.setEditStep(0);
+                mDashboardCentralContainerListener.onReportCycleUnit(
+                        numericViewHolder.mEditCycleEt.getText().toString());
+                setupNumericCycleItem(widget, numericViewHolder);
+                mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
+
+            }
+        });
     }
 
     private void initEditNumericStep2(final Widget widget, final NumericViewHolder numericViewHolder) {
         numericViewHolder.mDisplayLy.setVisibility(View.GONE);
         numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditCycleLy.setVisibility(View.GONE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.VISIBLE);
 
         if (!PersistenceManager.getInstance().getDisplayRejectFactor()) {
@@ -719,6 +773,7 @@ public class WidgetAdapter extends Adapter {
         numericViewHolder.mDisplayLy.setVisibility(View.GONE);
         numericViewHolder.mEditStep1Ly.setVisibility(View.VISIBLE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditCycleLy.setVisibility(View.GONE);
 
         numericViewHolder.mStep1CancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -743,6 +798,7 @@ public class WidgetAdapter extends Adapter {
         numericViewHolder.mDisplayLy.setVisibility(View.VISIBLE);
         numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
+        numericViewHolder.mEditCycleLy.setVisibility(View.GONE);
         numericViewHolder.mDivider.post(new Runnable() {
             @Override
             public void run() {
@@ -770,11 +826,15 @@ public class WidgetAdapter extends Adapter {
                 @Override
                 public void onClick(View v) {
 
-                    if (widget.getTargetScreen().equals(REPORT_REJECT_KEY)) {
+                    if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
                         widget.setEditStep(1);
                         setupNumericRejectItem(widget, numericViewHolder);
                         mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
-                    } else {
+                    } else if (widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)){
+                        widget.setEditStep(1);
+                        setupNumericCycleItem(widget, numericViewHolder);
+                        mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
+                    }else {
                         mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
                     }
                 }

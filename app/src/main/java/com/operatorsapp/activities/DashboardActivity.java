@@ -173,9 +173,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
-    private static final String REPORT_REJECT_TAG = "ReportRejects";
-    private static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
-    private static final String REPORT_PRODUCTION_TAG = "ReportProduction";
+    public static final String REPORT_REJECT_TAG = "ReportRejects";
+    public static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
+    public static final String REPORT_PRODUCTION_TAG = "ReportProduction";
     private static final int POOLING_BACKUP_DELAY = 1000 * 60 * 5;
     private static final String INTERVAL_KEY = "OpAppPollingInterval";
     private static final String TIME_OUT_KEY = "OpAppRequestTimeout";
@@ -781,13 +781,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void setFilterWarningText(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
             showNoProductionAlarm();
         } else {
             if (mAlaramAlertDialog != null) {
                 mAlaramAlertDialog.dismiss();
             }
-//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
         }
     }
 
@@ -2226,6 +2224,30 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onScrollToPosition(int position) {
         mWidgetFragment.scrollToPosition(position);
+    }
+
+    @Override
+    public void onReportCycleUnit(String value) {
+        sendCycleUnitReport(Double.parseDouble(value));
+    }
+
+    private void sendCycleUnitReport(double value) {
+        ProgressDialogManager.show(this);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.inject(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
+
+        mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
+
+//        if (getFragmentManager() != null) {
+//
+//            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//        }
+
+//        SendBroadcast.refreshPolling(getContext());
     }
 
     private void sendReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
