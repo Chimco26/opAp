@@ -188,6 +188,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

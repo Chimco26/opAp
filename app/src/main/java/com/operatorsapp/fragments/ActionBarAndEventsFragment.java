@@ -1310,7 +1310,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             int days = 0;
             days = (int) (callDuration / (24 * 60 * 60 * 1000));
             if (days > 0){
-                callDuration -= (int) (callDuration / (24 * 60 * 60 * 1000));
+                callDuration -= (int) (days * (24 * 60 * 60 * 1000));
                 mTechnicianTimerCh.setFormat("Days:" + days + " %s");
             }
 
