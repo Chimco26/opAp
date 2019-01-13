@@ -185,11 +185,21 @@ public class WidgetFragment extends Fragment implements
 
 
         mTopStops_rv = includeTopFive_1.findViewById(R.id.top_five_recyclerView);
-        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
         mTopStops_rv.setAdapter(new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP));
 
         mTopRejects_rv = includeTopFive_2.findViewById(R.id.top_five_recyclerView);
-        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
         mTopRejects_rv.setAdapter(new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT));
 
         include1_title.setText(getString(R.string.top_five_stop_events));

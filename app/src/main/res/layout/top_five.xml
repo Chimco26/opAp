@@ -302,6 +302,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/top_five_recyclerView"
+        android:scrollbars="none"
         android:layout_margin="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
