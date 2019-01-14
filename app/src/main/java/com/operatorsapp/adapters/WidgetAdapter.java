@@ -2,6 +2,7 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.ChartFragment;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 import com.operatorsapp.view.RangeView;
@@ -87,14 +89,37 @@ public class WidgetAdapter extends Adapter {
 
     public void setNewData(List<Widget> widgets) {
         if (mWidgets != null) {
+            ArrayList<Widget> toUpdate = getWidgetIneditMode();
             mWidgets.clear();
             mWidgets.addAll(widgets);
+            updateNewWidgetWithEditMode(toUpdate);
         } else {
 
             mWidgets = widgets;
 
         }
         notifyDataSetChanged();
+    }
+
+    public void updateNewWidgetWithEditMode(ArrayList<Widget> toUpdate) {
+            for (Widget widget1: toUpdate) {
+                for (Widget widget: mWidgets){
+                    if (widget.getID() == widget1.getID()) {
+                    widget.setEditStep(widget1.getEditStep());
+                }
+            }
+        }
+    }
+
+    @NonNull
+    public ArrayList<Widget> getWidgetIneditMode() {
+        ArrayList<Widget> toUpdate = new ArrayList<>();
+        for (Widget widget: mWidgets){
+            if (widget.getEditStep() > 0){
+                toUpdate.add(widget);
+            }
+        }
+        return toUpdate;
     }
 
     private class NumericViewHolder extends ViewHolder {
@@ -373,10 +398,6 @@ public class WidgetAdapter extends Adapter {
 
                     break;
                 case NUMERIC:
-                    if (isEditMode() && (widget.getTargetScreen().equals(REPORT_REJECT_TAG) ||
-                            widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG))) {
-                        return;
-                    }
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
                     if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
                         setupNumericRejectItem(widget, numericViewHolder);
@@ -626,15 +647,6 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
-    private boolean isEditMode() {//todo is not saved in the object because come from server
-        for (Widget widgets: mWidgets){
-            if (widgets.getEditStep() > 0){
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void setupNumericCycleItem(Widget widget, NumericViewHolder numericViewHolder) {
         if (widget.getEditStep() == 0) {
             initNumericDiplayLy(widget, numericViewHolder);
@@ -658,12 +670,15 @@ public class WidgetAdapter extends Adapter {
         numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
         numericViewHolder.mEditCycleLy.setVisibility(View.VISIBLE);
+        numericViewHolder.mEditCycleEt.requestFocus();
+        KeyboardUtils.showKeyboard(mContext);
 
         numericViewHolder.mEditCycleCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(0);
                 setupNumericCycleItem(widget, numericViewHolder);
+                numericViewHolder.mEditCycleEt.clearFocus();
                 mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
@@ -674,6 +689,7 @@ public class WidgetAdapter extends Adapter {
                 mDashboardCentralContainerListener.onReportCycleUnit(
                         numericViewHolder.mEditCycleEt.getText().toString());
                 setupNumericCycleItem(widget, numericViewHolder);
+                numericViewHolder.mEditCycleEt.clearFocus();
                 mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
 
             }
@@ -774,12 +790,15 @@ public class WidgetAdapter extends Adapter {
         numericViewHolder.mEditStep1Ly.setVisibility(View.VISIBLE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
         numericViewHolder.mEditCycleLy.setVisibility(View.GONE);
+        numericViewHolder.mEditNumberEt.requestFocus();
+        KeyboardUtils.showKeyboard(mContext);
 
         numericViewHolder.mStep1CancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(0);
                 setupNumericRejectItem(widget, numericViewHolder);
+                numericViewHolder.mEditNumberEt.clearFocus();
                 mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
@@ -788,6 +807,7 @@ public class WidgetAdapter extends Adapter {
             public void onClick(View v) {
                 widget.setEditStep(2);
                 setupNumericRejectItem(widget, numericViewHolder);
+                numericViewHolder.mEditNumberEt.clearFocus();
                 mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
             }
         });
@@ -799,6 +819,8 @@ public class WidgetAdapter extends Adapter {
         numericViewHolder.mEditStep1Ly.setVisibility(View.GONE);
         numericViewHolder.mEditStep2Ly.setVisibility(View.GONE);
         numericViewHolder.mEditCycleLy.setVisibility(View.GONE);
+        numericViewHolder.mEditNumberEt.setText("");
+        numericViewHolder.mEditCycleEt.setText("");
         numericViewHolder.mDivider.post(new Runnable() {
             @Override
             public void run() {
@@ -830,11 +852,11 @@ public class WidgetAdapter extends Adapter {
                         widget.setEditStep(1);
                         setupNumericRejectItem(widget, numericViewHolder);
                         mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
-                    } else if (widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)){
+                    } else if (widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)) {
                         widget.setEditStep(1);
                         setupNumericCycleItem(widget, numericViewHolder);
                         mDashboardCentralContainerListener.onScrollToPosition(numericViewHolder.getAdapterPosition());
-                    }else {
+                    } else {
                         mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
                     }
                 }
@@ -939,6 +961,15 @@ public class WidgetAdapter extends Adapter {
     }
 
     private Drawable createStartProjectionShape(String color) {
+        Configuration config = mContext.getResources().getConfiguration();
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            return createEndProjectionShapeDrawable(color);
+        }
+        return createStartProjectionShapeDrawable(color);
+    }
+
+    @NonNull
+    private Drawable createStartProjectionShapeDrawable(String color) {
         Drawable drawable = new GradientDrawable();
         ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
         ((GradientDrawable) drawable).setCornerRadii(new float[]{60, 60, 0, 0, 0, 0, 60, 60});
@@ -948,6 +979,15 @@ public class WidgetAdapter extends Adapter {
     }
 
     private Drawable createEndProjectionShape(String color) {
+        Configuration config = mContext.getResources().getConfiguration();
+        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            return createStartProjectionShapeDrawable(color);
+        }
+        return createEndProjectionShapeDrawable(color);
+    }
+
+    @NonNull
+    private Drawable createEndProjectionShapeDrawable(String color) {
         Drawable drawable = new GradientDrawable();
         ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
         ((GradientDrawable) drawable).setCornerRadii(new float[]{0, 0, 60, 60, 60, 60, 0, 0});

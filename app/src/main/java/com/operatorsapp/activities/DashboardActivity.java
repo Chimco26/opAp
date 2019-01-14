@@ -1,6 +1,5 @@
 package com.operatorsapp.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,10 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -216,7 +213,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
     private Timer mReportModeTimer;
-    private AlertDialog mAlaramAlertDialog;
+    //    private AlertDialog mAlaramAlertDialog;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -781,30 +778,31 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void setFilterWarningText(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            showNoProductionAlarm();
+            findViewById(R.id.FAAE_cycle_alarm_view).setVisibility(View.VISIBLE);
         } else {
-            if (mAlaramAlertDialog != null) {
-                mAlaramAlertDialog.dismiss();
-            }
+            findViewById(R.id.FAAE_cycle_alarm_view).setVisibility(View.GONE);
         }
+        setBlackFilter(show);
     }
 
     private void showNoProductionAlarm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.no_production_alarm_dialog, null);
-        builder.setView(dialogView);
-        Button submitBtn = dialogView.findViewById(R.id.NPAD_btn);
-        builder.setCancelable(false);
-        mAlaramAlertDialog = builder.create();
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivateJobScreen();
-            }
-        });
-        mAlaramAlertDialog.show();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        LayoutInflater inflater = this.getLayoutInflater();
+//        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.no_production_alarm_dialog, null);
+//        builder.setView(dialogView);
+//        Button submitBtn = dialogView.findViewById(R.id.NPAD_btn);
+//        builder.setCancelable(false);
+//        mAlaramAlertDialog = builder.create();
+//        submitBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openActivateJobScreen();
+//            }
+//        });
+//        mAlaramAlertDialog.show();
     }
 
     public void openActivateJobScreen() {
@@ -1085,6 +1083,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (fragment instanceof ApproveFirstItemFragment) {
 
                     getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
                 }
 
             } else {
@@ -2258,7 +2258,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportCore.registerListener(mReportCallbackListener);
         if (isUnit) {
             mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectProductJobId);
-        } else{
+        } else {
             mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
         }
 //        SendBroadcast.refreshPolling(getContext());
@@ -2268,6 +2268,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         public void sendReportSuccess(Object errorResponse) {
+
             ErrorResponseNewVersion response = objectToNewError(errorResponse);
             ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");

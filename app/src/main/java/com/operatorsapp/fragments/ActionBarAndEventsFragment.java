@@ -478,7 +478,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         initProductsSpinner();
 
+        initCycleAlarmView(view);
+
         return statusBarParams;
+    }
+
+    private void initCycleAlarmView(View view) {
+        view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivateJobScreen();
+            }
+        });
     }
 
     @Nullable

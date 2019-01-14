@@ -504,4 +504,5 @@ public class WidgetFragment extends Fragment implements
     public void scrollToPosition(int position) {
         mWidgetRecycler.scrollToPosition(position);
     }
+
 }

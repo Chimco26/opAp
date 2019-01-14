@@ -416,13 +416,13 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/background_item_gallery"
                     android:gravity="center"
+                    android:padding="15dp"
                     android:text="@string/attention_cycles_detected_in_a_non_production_status"
                     android:textColor="@color/red_line"
                     android:textSize="21sp"
-                    android:padding="15dp"
-                    android:visibility="gone"
-                    android:background="@drawable/background_item_gallery"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <ImageView
@@ -432,6 +432,14 @@
                 android:background="@color/black_filter"
                 android:clickable="true"
                 android:visibility="gone" />
+
+            <include
+                android:id="@+id/FAAE_cycle_alarm_view"
+                layout="@layout/no_production_alarm_dialog"
+                android:layout_width="483dp"
+                android:layout_height="409dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
         </RelativeLayout>
 
     </LinearLayout>
