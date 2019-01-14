@@ -179,7 +179,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             } else {
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(NUMBER_OF_COLUMNS + mFlavorSpanDif, spacing, true, 0));
             }
-            initStopReasons();
+            initNewStopReasons();
 
             // TODO: 27/12/2018 change icon
             mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

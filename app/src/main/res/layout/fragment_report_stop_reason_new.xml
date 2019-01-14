@@ -18,6 +18,9 @@
         android:visibility="gone"/>
     
     <Switch
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:id="@+id/stop_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
