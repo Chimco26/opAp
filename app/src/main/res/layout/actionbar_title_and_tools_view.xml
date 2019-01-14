@@ -249,6 +249,8 @@
                         android:layout_marginEnd="10dp"
                         android:layout_toEndOf="@+id/toolbar_technician_iv"
                         android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="14sp"
