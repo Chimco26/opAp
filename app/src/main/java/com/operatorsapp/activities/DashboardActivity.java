@@ -1081,7 +1081,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (isCentralContainer) {
 
                 if (fragment instanceof ApproveFirstItemFragment) {
-
                     getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
                 } else {
                     getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();

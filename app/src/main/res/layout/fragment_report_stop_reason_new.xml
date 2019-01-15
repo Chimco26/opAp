@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:thumb="@null"
         android:track="@null"
+        android:checked="true"
         android:background="@drawable/switch_grid_linear"/>
 
     <android.support.v7.widget.RecyclerView
