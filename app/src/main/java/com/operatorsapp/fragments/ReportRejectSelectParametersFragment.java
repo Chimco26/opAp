@@ -347,7 +347,7 @@ public class ReportRejectSelectParametersFragment extends BackStackAwareFragment
 
             if (o != null){
 
-                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(((ErrorResponse) o).getErrorDesc(), false);
             }
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();

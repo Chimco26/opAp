@@ -115,13 +115,13 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
 
         final int[] retryCount = {0};
 
-        Call<SendMultipleStopRequest> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendMultipleStopReport(sendMultipleStopRequest);
+        Call<ErrorResponse> call = mReportStopNetworkManagerInterface.reportStopRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).sendMultipleStopReport(sendMultipleStopRequest);
 
-        call.enqueue(new Callback<SendMultipleStopRequest>() {
+        call.enqueue(new Callback<ErrorResponse>() {
             @Override
-            public void onResponse(@NonNull Call<SendMultipleStopRequest> call, @NonNull Response<SendMultipleStopRequest> response) {
+            public void onResponse(@NonNull Call<ErrorResponse> call, @NonNull Response<ErrorResponse> response) {
 
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && response.body().getErrorCode() == 0) {
                     if (callback != null) {
 
                         callback.onSendStopReportSuccess(response.body());
@@ -137,7 +137,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
             }
 
             @Override
-            public void onFailure(@NonNull Call<SendMultipleStopRequest> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ErrorResponse> call, @NonNull Throwable t) {
                 if (callback != null) {
                     if (retryCount[0]++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");

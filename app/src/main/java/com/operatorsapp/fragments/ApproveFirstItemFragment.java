@@ -336,9 +336,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
 
             if (response.isFunctionSucceed()) {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
             }
 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");

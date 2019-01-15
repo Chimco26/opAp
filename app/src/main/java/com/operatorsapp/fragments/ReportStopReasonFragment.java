@@ -355,11 +355,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             if (response.isFunctionSucceed()) {
                 // TODO: 17/07/2018 add crouton for success
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
             }
 
             try {

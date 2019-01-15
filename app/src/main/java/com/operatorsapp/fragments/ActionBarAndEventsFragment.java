@@ -92,6 +92,7 @@ import com.operatorsapp.adapters.ShiftLogSqlAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
+import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -1525,7 +1526,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         }else {
                             String msg = "failed";
                             if (response.body() != null && response.body().getmError() != null){
-                                msg = response.body().getmError().getmErrorMessage();
+                                msg = response.body().getmError().getErrorDesc();
                             }
                             onFailure(call, new Throwable(msg));
                         }
@@ -1548,7 +1549,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 .setLabel("reason: " + m)
                                 .build());
 
-                        ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
+                        final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
+                        dialog.setListener(new GenericDialog.OnGenericDialogListener() {
+                            @Override
+                            public void onActionYes() {
+                                dialog.cancel();
+                            }
+
+                            @Override
+                            public void onActionNo() {}
+
+                            @Override
+                            public void onActionAnother() {}
+                        });
+                        dialog.show();
+
+                        //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
                     }
                 });
 

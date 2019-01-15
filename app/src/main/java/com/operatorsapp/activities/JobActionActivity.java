@@ -66,6 +66,7 @@ import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
@@ -226,6 +227,24 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
                 } else {
                     ProgressDialogManager.dismiss();
+                    final GenericDialog dialog = new GenericDialog(JobActionActivity.this, getString(R.string.attention), getString(R.string.empty_job_list_msg), getString(R.string.ok), false);
+                    dialog.setListener(new GenericDialog.OnGenericDialogListener() {
+                        @Override
+                        public void onActionYes() {
+                            dialog.dismiss();
+                        }
+
+                        @Override
+                        public void onActionNo() {
+
+                        }
+
+                        @Override
+                        public void onActionAnother() {
+
+                        }
+                    });
+                    dialog.show();
                 }
 
             }

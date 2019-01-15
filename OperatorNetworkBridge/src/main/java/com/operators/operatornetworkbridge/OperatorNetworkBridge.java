@@ -113,8 +113,8 @@ public class OperatorNetworkBridge implements OperatorNetworkBridgeInterface {
                     setOperatorForMachineCallback.onSetOperatorForMachineSuccess();
                 }else {
                     ErrorObject errorObject;
-                    if (newResponse.getmError() != null && newResponse.getmError().getErrorDesc() != null && newResponse.getmError().getmErrorMessage() != null) {
-                        errorObject = errorObjectWithErrorCode(new ErrorResponse(newResponse.getmError().getErrorDesc(), newResponse.getmError().getmErrorMessage(),newResponse.getmError().getErrorCode()));
+                    if (newResponse.getmError() != null && newResponse.getmError().getErrorDesc() != null && newResponse.getmError().getErrorDesc() != null) {
+                        errorObject = errorObjectWithErrorCode(new ErrorResponse(newResponse.getmError().getErrorDesc(), newResponse.getmError().getErrorDesc(),newResponse.getmError().getErrorCode()));
                     }else {
                         errorObject = errorObjectWithErrorCode(new ErrorResponse("", "",500));
 
