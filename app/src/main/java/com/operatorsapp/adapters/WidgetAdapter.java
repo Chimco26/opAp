@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.data.Entry;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
@@ -58,6 +60,7 @@ public class WidgetAdapter extends Adapter {
     private final int PROJECTION = 2;
     private final int TIME = 3;
     private final int COUNTER = 4;
+    private final int IMAGE = 5;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -287,6 +290,18 @@ public class WidgetAdapter extends Adapter {
         }
     }
 
+    private class ImageViewHolder extends ViewHolder{
+
+        private ImageView mImageLayout;
+
+        public ImageViewHolder(View itemView) {
+            super(itemView);
+
+            mImageLayout = itemView.findViewById(R.id.image_widget_parent_layout);
+
+        }
+    }
+
     private class CounterViewHolder extends ViewHolder {
 
         private RelativeLayout mParentLayout;
@@ -337,6 +352,9 @@ public class WidgetAdapter extends Adapter {
             case COUNTER: {
                 return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false));
             }
+            case IMAGE: {
+                return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
+            }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false));
     }
@@ -350,6 +368,11 @@ public class WidgetAdapter extends Adapter {
             final Widget widget = mWidgets.get(position);
             switch (type) {
 
+                case IMAGE:
+                    final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                    ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
+
+                    break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
 
@@ -1099,6 +1122,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 4:
                 type = COUNTER;
+                break;
+            case 5:
+                type = IMAGE;
                 break;
             default:
                 type = NUMERIC;
