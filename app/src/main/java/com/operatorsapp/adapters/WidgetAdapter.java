@@ -420,7 +420,7 @@ public class WidgetAdapter extends Adapter {
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
                     if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
                         setupNumericRejectItem(widget, numericViewHolder);
-                    } else if (widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
+                    } else if (widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)) {
                         setupNumericCycleItem(widget, numericViewHolder);
                     } else {
                         initNumericDiplayLy(widget, numericViewHolder);
