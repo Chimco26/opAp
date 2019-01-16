@@ -240,6 +240,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mCycleWarningView;
     private boolean mSetupEndDialogShow;
     private boolean mCycleWarningViewShow;
+    private EmeraldSpinner mJobsSpinner;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -1057,8 +1058,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            final EmeraldSpinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
-
+            mJobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
             if (mJobsSpinnerAdapter == null) {
                 // we generate the data for the spinner, approve button can be disabled so created seperatly
@@ -1076,13 +1076,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
             }
 
-            jobsSpinner.setAdapter(mJobsSpinnerAdapter);
+            mJobsSpinner.setAdapter(mJobsSpinnerAdapter);
 
-            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
 
-            jobsSpinner.setSpinnerEventsListener(this);
+            mJobsSpinner.setSpinnerEventsListener(this);
 
-            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1171,7 +1171,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
 
-            initLenoxView(notificationIv, technicianRl, tutorialIv, jobsSpinner);
+            initLenoxView(notificationIv, technicianRl, tutorialIv, mJobsSpinner);
 
         }
 

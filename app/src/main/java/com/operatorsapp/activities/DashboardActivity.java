@@ -474,6 +474,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                         first = !first;
                     }
+                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                 }
             }
@@ -720,7 +721,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     OppAppLogger.getInstance().w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 if (machineStatus != null) {
-                    setWhiteFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
 //                    setFilterWarningText(true);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                 }
@@ -771,6 +772,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setWhiteFilter(boolean show) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment ||
+                fragment instanceof ReportStopReasonFragment ||
+                fragment instanceof SelectStopReasonFragment) {
+
+            setWhiteFilterViews(show);
+        } else {
+            setWhiteFilterViews(false);
+        }
+
+    }
+
+    private void setWhiteFilterViews(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
         } else {
