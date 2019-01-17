@@ -190,7 +190,7 @@
     <string name="amount">Bedrag</string>
     <string name="app_name">LeaderMES-bediener</string>
     <string name="at_work">Aan het werk</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">"\"Let op! Er zijn cyclussen gedetecteerd met een inactieve status. Vergeet niet om tijdig een taak te activeren! \" "</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">"\"Er zijn cyclussen gedetecteerd met een inactieve status. Vergeet niet om tijdig een taak te activeren! \" "</string>
     <string name="call_technician_text">Repareer iets voor mij</string>
     <string name="call_for_technician_unresponsive">"Er werd niet gereageerd op uw oproep voor een technicus en deze werd daarom geannuleerd "</string>
     <string name="call_technician_title">Bel technicus</string>

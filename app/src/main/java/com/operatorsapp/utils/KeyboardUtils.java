@@ -16,6 +16,11 @@ import android.view.inputmethod.InputMethodManager;
 
 public class KeyboardUtils {
 
+
+    public static void showKeyboard(Activity context) {
+        ((InputMethodManager) (context).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
     public static void closeKeyboard(Activity activity) {
 
         if (activity != null && activity.getCurrentFocus() != null) {
@@ -68,7 +73,6 @@ public class KeyboardUtils {
                     Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "lastVisibleDecorViewHeight: " + lastVisibleDecorViewHeight);
 
                     Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "visibleDecorViewHeight: " + visibleDecorViewHeight);
-
 
                     if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
 

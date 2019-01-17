@@ -1,6 +1,5 @@
 package com.operatorsapp.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,10 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -92,10 +89,9 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.SetupEndDialog;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
-import com.operatorsapp.fragments.ApproveFirstItemFragment;
-import com.operatorsapp.fragments.JobsFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
@@ -123,6 +119,7 @@ import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.PdfObject;
+import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -154,7 +151,6 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -173,9 +169,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private static final String LOG_TAG = DashboardActivity.class.getSimpleName();
 
-    private static final String REPORT_REJECT_TAG = "ReportRejects";
-    private static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
-    private static final String REPORT_PRODUCTION_TAG = "ReportProduction";
+    public static final String REPORT_REJECT_TAG = "ReportRejects";
+    public static final String REPORT_UNIT_CYCLE_TAG = "ReportUnitsInCycle";
+    public static final String REPORT_PRODUCTION_TAG = "ReportProduction";
     private static final int POOLING_BACKUP_DELAY = 1000 * 60 * 5;
     private static final String INTERVAL_KEY = "OpAppPollingInterval";
     private static final String TIME_OUT_KEY = "OpAppRequestTimeout";
@@ -216,7 +212,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
     private Timer mReportModeTimer;
-    private AlertDialog mAlaramAlertDialog;
+    //    private AlertDialog mAlaramAlertDialog;
     private Runnable pollingBackupRunnable = new Runnable() {
         @Override
         public void run() {
@@ -225,6 +221,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     };
     private ReportCore mReportCore;
+    private SetupEndDialog mSetupEndDialog;
+    private int mSelectedReasonId;
+    private int mSelectedTechnicianId;
+    private SendRejectObject mSendRejectObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -474,6 +474,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                         first = !first;
                     }
+                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                    setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                 }
             }
         };
@@ -719,8 +721,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     OppAppLogger.getInstance().w(LOG_TAG, " onStatusReceivedSuccessfully() - DashboardUICallbackListener is null");
                 }
                 if (machineStatus != null) {
-                    setWhiteFilter(machineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                    setFilterWarningText(machineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+//                    setFilterWarningText(true);
+                    setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                 }
 
             }
@@ -769,6 +772,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setWhiteFilter(boolean show) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment ||
+                fragment instanceof ReportStopReasonFragment ||
+                fragment instanceof SelectStopReasonFragment) {
+
+            setWhiteFilterViews(show);
+        } else {
+            setWhiteFilterViews(false);
+        }
+
+    }
+
+    private void setWhiteFilterViews(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
         } else {
@@ -780,41 +798,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setFilterWarningText(boolean show) {
-        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.VISIBLE);
-            showNoProductionAlarm();
-        } else {
-            if (mAlaramAlertDialog != null) {
-                mAlaramAlertDialog.dismiss();
+        Fragment fragment = getVisibleFragment();
+        if (mActionBarAndEventsFragment != null) {
+            if (fragment instanceof ActionBarAndEventsFragment ||
+                    fragment instanceof RecipeFragment ||
+                    fragment instanceof WidgetFragment ||
+                    fragment instanceof ReportStopReasonFragment ||
+                    fragment instanceof SelectStopReasonFragment) {
+                mActionBarAndEventsFragment.setCycleWarningViewShow(show);
+            } else {
+                mActionBarAndEventsFragment.setCycleWarningViewShow(false);
             }
-//            findViewById(R.id.FAAE_white_filter_text).setVisibility(View.GONE);
-        }
-    }
-
-    private void showNoProductionAlarm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.no_production_alarm_dialog, null);
-        builder.setView(dialogView);
-        Button submitBtn = dialogView.findViewById(R.id.NPAD_btn);
-        builder.setCancelable(false);
-        mAlaramAlertDialog = builder.create();
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivateJobScreen();
-            }
-        });
-        mAlaramAlertDialog.show();
-    }
-
-    public void openActivateJobScreen() {
-        OppAppLogger.getInstance().d(LOG_TAG, "New Job");
-        if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
-            onJobActionItemClick();
-        } else {
-            goToFragment(new JobsFragment(), true, true);
         }
     }
 
@@ -1032,6 +1026,28 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     };
 
+    private void showSetUpEndDialog() {
+        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine);
+        mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
+            @Override
+            public void sendReport(int selectedReasonId, int selectedTechnicianId) {
+                sendSetupEndReport(selectedReasonId, selectedTechnicianId);
+            }
+
+            @Override
+            public void onDismissSetupEndDialog() {
+                mSetupEndDialog = null;
+                if (mActionBarAndEventsFragment != null) {
+                    mActionBarAndEventsFragment.SetupEndDialogShow(false);
+                }
+            }
+        }).show();
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.SetupEndDialogShow(true);
+        }
+
+    }
+
     @Override
     public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
 
@@ -1084,10 +1100,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
             if (isCentralContainer) {
 
-                if (fragment instanceof ApproveFirstItemFragment) {
-
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-                }
+//                if (fragment instanceof ApproveFirstItemFragment) {
+//                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//                } else {
+                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//                }
 
             } else {
 
@@ -1834,14 +1851,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void showBlackFilter(boolean show) {
-        if (!(getVisibleFragment() instanceof ApproveFirstItemFragment)) {
-            setBlackFilter(show);
-        }
+//        if (mSetupEndDialog == null) {
+        setBlackFilter(show);
+//        }
     }
 
     @Override
     public void showWhiteFilter(boolean show) {
         setWhiteFilter(show);
+    }
+
+    @Override
+    public void onShowSetupEndDialog() {
+        showSetUpEndDialog();
     }
 
     public void setLenoxMachine(int machineId) {
@@ -2228,22 +2250,65 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
 
-        sendReport(value, isUnit, selectedCauseId, selectedReasonId);
+        sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
     }
 
-    private void sendReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+    @Override
+    public void onScrollToPosition(int position) {
+        mWidgetFragment.scrollToPosition(position);
+    }
+
+    @Override
+    public void onReportCycleUnit(String value) {
+        sendCycleUnitReport(Double.parseDouble(value));
+    }
+
+    private void sendCycleUnitReport(double value) {
+        ProgressDialogManager.show(this);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.inject(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackListener);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendRejectReport units value is: " + String.valueOf(value) + " JobId: " + mSelectProductJobId);
+
+        mReportCore.sendCycleUnitsReport(value, mSelectProductJobId);
+
+//        if (getFragmentManager() != null) {
+//
+//            getFragmentManager().popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//        }
+
+//        SendBroadcast.refreshPolling(getContext());
+    }
+
+    private void sendRejectReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+        mSendRejectObject = new SendRejectObject(value, isUnit, selectedCauseId, selectedReasonId);
         ProgressDialogManager.show(this);
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
         reportNetworkBridge.inject(NetworkManager.getInstance(), NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         if (isUnit) {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectJobId);
-        } else{
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectProductJobId);
+        } else {
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
+
+    private void sendSetupEndReport(int selectedReasonId, int selectedTechnicianId) {
+        mSelectedReasonId = selectedReasonId;
+        mSelectedTechnicianId = selectedTechnicianId;
+        ProgressDialogManager.show(this);
+        ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
+        reportNetworkBridge.injectApproveFirstItem(NetworkManager.getInstance());
+        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+        mReportCore.registerListener(mReportCallbackEndSetupListener);
+        mReportCore.sendApproveFirstItem(selectedReasonId, selectedTechnicianId, mSelectProductJobId);
+
+    }
+
 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
 
@@ -2259,10 +2324,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
-            if (getFragmentManager() != null) {
-
-                getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
 
             SendBroadcast.refreshPolling(DashboardActivity.this);
 
@@ -2276,7 +2337,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
                     @Override
                     public void onSilentLoginSucceeded() {
-//                        sendReport(value, isUnit, selectedCauseId, selectedReasonId);todo check if needed
+                        sendRejectReport(mSendRejectObject.getValue(), mSendRejectObject.isUnit(), mSendRejectObject.getSelectedCauseId(), mSendRejectObject.getSelectedReasonId());
                     }
 
                     @Override
@@ -2291,13 +2352,57 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
-                if (getFragmentManager() != null) {
 
-                    getFragmentManager().popBackStack(DASHBOARD_FRAGMENT, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                //ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
             SendBroadcast.refreshPolling(DashboardActivity.this);
+        }
+    };
+
+    ReportCallbackListener mReportCallbackEndSetupListener = new ReportCallbackListener() {
+        @Override
+        public void sendReportSuccess(Object o) {//TODO crouton error
+            ErrorResponseNewVersion response = objectToNewError(o);
+            SendBroadcast.refreshPolling(DashboardActivity.this);
+            ProgressDialogManager.dismiss();
+
+            if (response.isFunctionSucceed()) {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+            } else {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+
+            OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
+            mReportCore.unregisterListener();
+            onApproveFirstItemComplete();
+
+        }
+
+        @Override
+        public void sendReportFailure(ErrorObjectInterface reason) {
+            ProgressDialogManager.dismiss();
+            OppAppLogger.getInstance().w(LOG_TAG, "sendReportFailure()");
+            if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
+                silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
+                    @Override
+                    public void onSilentLoginSucceeded() {
+                        sendSetupEndReport(mSelectedReasonId, mSelectedTechnicianId);
+                    }
+
+                    @Override
+                    public void onSilentLoginFailed(ErrorObjectInterface reason) {
+                        OppAppLogger.getInstance().w(LOG_TAG, "Failed silent login");
+                        com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+                        ProgressDialogManager.dismiss();
+                    }
+                });
+            } else {
+
+                com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+            }
+            SendBroadcast.refreshPolling(DashboardActivity.this);
+
         }
     };
 

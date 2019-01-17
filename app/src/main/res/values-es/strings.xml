@@ -194,7 +194,7 @@
     <string name="action_details">Detalles de acción</string>
     <string name="activate_job_dialog_message">"Estás a punto de activar un nuevo trabajo, ¿estás seguro de que deseas continuar? "</string>
     <string name="activate_job_dialog_title">Activar nuevo trabajo</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">"\"¡Atención!  Ciclos detectados en el estatus de no producción.  ¡Por favor, no olvides activar un trabajo a tiempo!\" "</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">"\"Ciclos detectados en el estatus de no producción.  ¡Por favor, no olvides activar un trabajo a tiempo!\" "</string>
     <string name="call_for_technician_unresponsive">Tu llamada al técnico no obtuvo respuesta y, por lo tanto, se ha cancelado.</string>
     <string name="call_technician_text">Tienes que arreglar algo</string>
     <string name="call_technician_title">Llamada al técnico</string>

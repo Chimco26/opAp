@@ -83,7 +83,7 @@ public class Widget {
 
 
     public String getCurrentColor() {
-        return mCurrentColor;
+        return getColor(mCurrentColor);
     }
 
     public void setCurrentColor(String mCurrentColor) {
@@ -91,7 +91,7 @@ public class Widget {
     }
 
     public String getProjectionColor() {
-        return mProjectionColor;
+        return getColor(mProjectionColor);
     }
 
     public void setProjectionColor(String mProjectionColor) {
@@ -99,14 +99,25 @@ public class Widget {
     }
 
     public String getTargetColor() {
-        return mTargetColor;
+        return getColor(mTargetColor);
     }
 
-    public void setmTargetColor(String mTargetColor) {
+    private String getColor(String color){
+        if (color == null){
+            return "#bababa";
+        }else {
+            return color;
+        }
+    }
+
+    public void setTargetColor(String mTargetColor) {
         this.mTargetColor = mTargetColor;
     }
 
     public String getTargetScreen() {
+        if (mTargetScreen == null){
+            mTargetScreen = "";
+        }
         return mTargetScreen;
     }
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:autofit="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/widget_parent_layout"
-                android:layout_width="260dp"
-                android:layout_height="168dp"
-                android:background="@drawable/combined_shape">
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widget_parent_layout"
+    android:layout_width="260dp"
+    android:layout_height="168dp"
+    android:background="@drawable/combined_shape">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -147,20 +147,14 @@
             android:layout_alignStart="@id/projection_widget_oval"
             android:layout_marginTop="18dp"/>
 
-        <RelativeLayout
-            android:id="@+id/projection_widget_range_view_rv"
+        <com.operatorsapp.view.RangeView
+            android:id="@+id/projection_widget_range_view"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginEnd="35dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="35dp">
+            android:layout_marginTop="18dp"/>
 
-            <View
-                android:id="@+id/projection_widget_range_view"
-                android:layout_width="8dp"
-                android:layout_height="48dp" />
-
-        </RelativeLayout>
         <LinearLayout
             android:id="@+id/projection_widget_blue_plus"
             android:layout_width="match_parent"
@@ -201,12 +195,12 @@
             android:background="@color/divider_gray"/>
 
         <!--<View-->
-            <!--android:layout_width="2dp"-->
-            <!--android:layout_height="53dp"-->
-            <!--android:layout_alignEnd="@id/projection_widget_oval"-->
-            <!--android:layout_marginEnd="23dp"-->
-            <!--android:layout_marginTop="18dp"-->
-            <!--android:background="@color/divider_gray"/>-->
+        <!--android:layout_width="2dp"-->
+        <!--android:layout_height="53dp"-->
+        <!--android:layout_alignEnd="@id/projection_widget_oval"-->
+        <!--android:layout_marginEnd="23dp"-->
+        <!--android:layout_marginTop="18dp"-->
+        <!--android:background="@color/divider_gray"/>-->
 
         <LinearLayout
             android:layout_below="@id/projection_widget_current_value_in_chart_layout"

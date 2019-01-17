@@ -49,10 +49,10 @@
         android:id="@+id/NWC_display_ly"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_below="@id/divider"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <LinearLayout
@@ -101,9 +101,9 @@
         android:id="@+id/NWC_edit_step_1_ly"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/divider"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_below="@id/divider"
         android:visibility="gone">
 
         <LinearLayout
@@ -121,17 +121,17 @@
                     android:layout_height="wrap_content"
                     android:text="@string/rejects_quantity"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/NWC_edit_number_et"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:textSize="20sp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/box_grey_stroke"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:background="@drawable/box_strok_grey"
-                    android:layout_marginTop="3dp"/>
+                    android:inputType="numberSigned"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -140,32 +140,33 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp">
-                
+
                 <RadioButton
                     android:id="@+id/NWC_edit_unit_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:button="@drawable/radio_btn_selector_grey_blue"
+                    android:checked="true"
+                    android:paddingStart="3dp"
                     android:text="@string/units"
                     android:textColor="@color/black"
-                    android:button="@drawable/radio_btn_selector_grey_blue"
-                    android:textSize="24sp"
-                    android:checked="true"
-                    android:paddingStart="3dp"/>
+                    android:textSize="24sp" />
 
                 <RadioButton
                     android:id="@+id/NWC_edit_weight_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:button="@drawable/radio_btn_selector_grey_blue"
+                    android:paddingStart="3dp"
                     android:text="@string/weight"
                     android:textColor="@color/black"
-                    android:textSize="24sp"
-                    android:paddingStart="3dp"
-                    android:button="@drawable/radio_btn_selector_grey_blue"
-                    android:layout_marginTop="7dp"/>
+                    android:textSize="24sp" />
             </RadioGroup>
 
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -175,26 +176,25 @@
                 android:id="@+id/NWC_edit_cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:text="@string/cancel"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
-                android:text="@string/cancel"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/NWC_edit_next_btn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:background="@color/blue1"
-                android:textSize="18sp"
-                android:text="@string/next"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
+                android:background="@color/blue1"
                 android:gravity="center"
-                android:textStyle="bold"
-                />
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -204,10 +204,10 @@
         android:id="@+id/NWC_edit_step_2_ly"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/divider"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_below="@id/divider"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -217,36 +217,37 @@
             <RelativeLayout
                 android:id="@+id/NWC_reason_spinner_rl"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_marginEnd="5dp"
                 android:layout_height="52dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="0.5"
                 android:background="@drawable/edit_text_background_selector">
 
                 <Spinner
                     android:id="@+id/NWC_reason_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:dropDownVerticalOffset="55dp"/>
+                    android:dropDownVerticalOffset="55dp" />
 
             </RelativeLayout>
 
-             <RelativeLayout
+            <RelativeLayout
                 android:id="@+id/NWC_reason2_spinner_rl"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="52dp"
-                 android:layout_marginStart="5dp"
-                 android:background="@drawable/edit_text_background_selector">
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/edit_text_background_selector">
 
                 <Spinner
                     android:id="@+id/NWC_reason2_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:dropDownVerticalOffset="55dp"/>
+                    android:dropDownVerticalOffset="55dp" />
 
             </RelativeLayout>
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -256,28 +257,84 @@
                 android:id="@+id/NWC_edit_step2_cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/cancel"
                 android:textColor="@color/blue1"
                 android:textSize="18sp"
-                android:text="@string/cancel"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/NWC_edit_step2_next_btn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:background="@color/blue1"
-                android:textSize="18sp"
-                android:text="@string/report"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
+                android:background="@color/blue1"
                 android:gravity="center"
-                android:textStyle="bold"
-                />
+                android:text="@string/report"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/NWC_edit_quantity_ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/divider"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/NWC_edit_quantity_value_et"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@drawable/box_grey_stroke"
+            android:textColor="@color/blue1"
+            android:textSize="35sp"
+            android:gravity="center"
+            android:inputType="number"
+            android:textStyle="bold"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/NWC_edit_quantity_cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="@color/blue1"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/NWC_edit_quantity_next_btn"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:background="@color/blue1"
+                android:gravity="center"
+                android:text="@string/report"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
 </RelativeLayout>

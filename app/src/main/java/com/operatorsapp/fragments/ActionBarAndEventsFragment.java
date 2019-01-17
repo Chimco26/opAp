@@ -238,6 +238,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mEndSetupDisable;
     private ImageView mTechnicianIconIv;
     private Chronometer mTechnicianTimerCh;
+    private View mCycleWarningView;
+    private boolean mSetupEndDialogShow;
+    private boolean mCycleWarningViewShow;
+    private EmeraldSpinner mJobsSpinner;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -479,7 +483,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         initProductsSpinner();
 
+        initCycleAlarmView(view);
+
         return statusBarParams;
+    }
+
+    private void initCycleAlarmView(View view) {
+        mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
+        view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivateJobScreen();
+            }
+        });
     }
 
     @Nullable
@@ -1044,8 +1060,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            final EmeraldSpinner jobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
-
+            mJobsSpinner = mToolBarView.findViewById(R.id.toolbar_job_spinner);
 
             if (mJobsSpinnerAdapter == null) {
                 // we generate the data for the spinner, approve button can be disabled so created seperatly
@@ -1063,13 +1078,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mJobsSpinnerAdapter = new JobsSpinnerAdapter(getActivity(), R.layout.spinner_job_item, mJobActionsSpinnerItems);
             }
 
-            jobsSpinner.setAdapter(mJobsSpinnerAdapter);
+            mJobsSpinner.setAdapter(mJobsSpinnerAdapter);
 
-            jobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
+            mJobsSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.SRC_ATOP);
 
-            jobsSpinner.setSpinnerEventsListener(this);
+            mJobsSpinner.setSpinnerEventsListener(this);
 
-            jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            mJobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1109,11 +1124,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
                             }
                             case 4: {
-                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
-                                } else {
-                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
-                                }
+//                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+//                                } else {
+//                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+//                                }
+                                mListener.onShowSetupEndDialog();
                                 break;
                             }
                         }
@@ -1157,7 +1173,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 onDeviceStatusChanged(mCurrentMachineStatus);
             }
 
-            initLenoxView(notificationIv, technicianRl, tutorialIv, jobsSpinner);
+            initLenoxView(notificationIv, technicianRl, tutorialIv, mJobsSpinner);
 
         }
 
@@ -2636,12 +2652,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onSpinnerOpened(Spinner spinner) {
-        mStatusBlackFilter.setVisibility(View.VISIBLE);
-        mListener.showBlackFilter(true);
+        showBlackFilters();
+        setCycleWarningView(false);
+    }
+
+    public void showBlackFilters() {
+        if (!mSetupEndDialogShow) {
+            mStatusBlackFilter.setVisibility(View.VISIBLE);
+            mListener.showBlackFilter(true);
+        }
     }
 
     @Override
     public void onSpinnerClosed(Spinner spinner) {
+        hideBlackFilters();
+        setCycleWarningView(mCycleWarningViewShow);
+    }
+
+    public void hideBlackFilters() {
         mStatusBlackFilter.setVisibility(View.GONE);
         mListener.showBlackFilter(false);
     }
@@ -2686,6 +2714,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
+    }
+
+    private void setCycleWarningView(boolean show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            mCycleWarningView.setVisibility(View.VISIBLE);
+        } else {
+            mCycleWarningView.setVisibility(View.GONE);
+        }
+    }
+    public void setCycleWarningViewShow(boolean show){
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            mCycleWarningViewShow = true;
+        } else {
+            mCycleWarningViewShow = false;
+        }
+        setCycleWarningView(show);
     }
 
     private void sendTokenWithSessionIdToServer() {
@@ -2760,6 +2804,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    public void SetupEndDialogShow(boolean show) {
+        mSetupEndDialogShow = show;
+        hideBlackFilters();
+    }
+
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
 
@@ -2790,6 +2839,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void showBlackFilter(boolean show);
 
         void showWhiteFilter(boolean show);
+
+        void onShowSetupEndDialog();
     }
 
 }
