@@ -32,20 +32,21 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="15dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:src="@drawable/message_dark"/>
 
 
             <TextView
                 android:id="@+id/notification_item_subtext_tv"
                 style="@style/ProximaNovaSemiBold"
-                android:layout_width="45dp"
+                android:textColor="@color/black"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/notification_item_iv"
-                android:layout_marginRight="15dp"
-                android:textSize="8sp" />
+                android:layout_marginRight="5dp"
+                android:textSize="12sp" />
 
 
             <TextView
