@@ -36,16 +36,28 @@
                 android:layout_height="30dp"
                 android:src="@drawable/message_dark"/>
 
+
             <TextView
-                android:id="@+id/notification_item_tv_sender"
-                android:layout_toRightOf="@+id/notification_item_iv"
-                android:layout_toLeftOf="@+id/notification_item_tv_time"
-                android:layout_alignParentTop="true"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/dark_blue_two"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:id="@+id/notification_item_subtext_tv"
+                style="@style/ProximaNovaSemiBold"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/notification_item_iv"
+                android:layout_marginRight="15dp"
+                android:textSize="8sp" />
+
+
+            <TextView
+                    android:id="@+id/notification_item_tv_sender"
+                    android:layout_toRightOf="@+id/notification_item_iv"
+                    android:layout_toLeftOf="@+id/notification_item_tv_time"
+                    android:layout_alignParentTop="true"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_blue_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/notification_item_tv_time"

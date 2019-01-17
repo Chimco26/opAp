@@ -603,6 +603,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setCalledTechnician(TechCallInfo techCallInfo) {
         ArrayList<TechCallInfo> list = getCalledTechnician();
+        ArrayList<TechCallInfo> listCopy = new ArrayList<>();
+        listCopy.addAll(list);
+
+        for (TechCallInfo call : listCopy) {
+            if (call.getmTechnicianId() == techCallInfo.getmTechnicianId()){
+                list.remove(call);
+            }
+        }
+
         list.add(techCallInfo);
         SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(list));
     }

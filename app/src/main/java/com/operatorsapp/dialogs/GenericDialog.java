@@ -95,14 +95,12 @@ public class GenericDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.basic_dialog_action_no_btn:
                 if (mListener != null){
-
                     mListener.onActionNo();
                 }
                 break;
             case R.id.basic_dialog_action_yes_btn:
                 if (mListener != null){
-
-                    mListener.onActionNo();
+                    mListener.onActionYes();
                 }
                 break;
             case R.id.basic_dialog_action_another_btn:

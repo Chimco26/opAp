@@ -49,6 +49,7 @@
         android:background="@color/divider_gray"/>
 
     <LinearLayout
+        android:layoutDirection="ltr"
         android:layout_marginTop="20dp"
         android:layout_below="@id/divider"
         android:layout_width="match_parent"

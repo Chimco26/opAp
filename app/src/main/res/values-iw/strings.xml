@@ -278,6 +278,8 @@
     <string name="split_event_validation_title">פיצול אירוע</string>
     <string name="version">גרסה</string>
     <string name="username">שם משתמש</string>
+    <string name="attention">שים לב!</string>
+    <string name="empty_job_list_msg">רשימת פקעות ריקה</string>
 
 
 

@@ -2187,6 +2187,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCrouton(String errorResponse, boolean isError) {
 
+        if (errorResponse == null || errorResponse.length() == 0){
+            errorResponse = " ";
+        }
         if (isError){
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, errorResponse);
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);

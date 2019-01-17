@@ -268,6 +268,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     }
 
     @Override
+    public void onUpdateStopReasonSelected(int position) {
+        mSelectedPosition = position;
+    }
+
+    @Override
     public void onSubReasonSelected(SubReasons subReason) {
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {
 

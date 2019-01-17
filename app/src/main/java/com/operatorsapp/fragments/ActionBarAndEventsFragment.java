@@ -511,6 +511,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     for (TechCallInfo call : list) {
                         if (call.getmNotificationId() == notificationId){
                             call.setmResponseType(responseType);
+                            call.setmCallTime(new Date().getTime());
                             switch (responseType){
                                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                                     call.setmStatus(getString(R.string.message_received) + "\n" + call.getmName());
@@ -1185,6 +1186,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mPopUpDialog = new TechCallDialog(getActivity(), tech, new TechCallDialog.TechDialogListener() {
             @Override
             public void onNewCallPressed() {
+                mPopUpDialog.dismiss();
                 openTechniciansList();
             }
 
@@ -1381,7 +1383,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
                     break;
             }
-            mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
+            //mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
             cleanTech((int) delay, techCallInfo);
         }else {
             mTechnicianIconIv.setImageResource(R.drawable.technicaian);
@@ -1487,19 +1489,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 ProgressDialogManager.show(getActivity());
 
                 String body;
+                String operatorName = "";
                 String title = getString(R.string.operator) + " ";
                 if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
-                    title +=  pm.getOperatorName();
-                    body = getString(R.string.operator) + " " + pm.getOperatorName() + " " + getString(R.string.sent_service_call) + " " + pm.getMachineName();
+                    operatorName =  pm.getOperatorName();
                 }else {
-                    body = getString(R.string.service_call_made) + " " + pm.getMachineName();
-                    title += pm.getUserName();
+                    operatorName = pm.getUserName();
                 }
+                body = getString(R.string.service_call_made_new);
+                body = String.format(body, operatorName);
+                body += " " + pm.getMachineName();
+                title += operatorName;
 
                 final String techName = OperatorApplication.isEnglishLang() ? techniciansList.get(position).getEName() : techniciansList.get(position).getLName();
                 final int technicianId = techniciansList.get(position).getID();
 
-                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, pm.getUserName(), techniciansList.get(position).getEName());
+                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName());
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
                     public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
@@ -2727,7 +2732,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                if (response != null && response.body() != null && response.body().getmError() == null) {
+                     if (response != null && response.body() != null && response.body().getmError() == null) {
 
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));

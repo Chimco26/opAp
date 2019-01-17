@@ -169,12 +169,16 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
                         if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()){
+                            boolean isNew = true;
                             for (TechCallInfo techCall : techList) {
                                 if (not.getmNotificationID() == techCall.getmNotificationId()){
+                                    isNew = false;
                                     break;
                                 }
                             }
-                            techList.add(new TechCallInfo(not.getmResponseType(),not.getmTargetName(), not.getmTitle(), TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId()));
+                            if (isNew) {
+                                techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmTitle(), TimeUtils.getDateForNotification(not.getmSentTime()).getTime(), not.getmNotificationID(), not.getmTargetUserId()));
+                            }
                         }
                     }
 

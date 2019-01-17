@@ -27,8 +27,10 @@ import java.util.Date;
 public class NotificationHistoryAdapter extends RecyclerView.Adapter<NotificationHistoryAdapter.ViewHolder>{
 
 
+    private static final long MILLIS_IN_DAYS = 1000 * 60 * 60 * 24;
     private final OnNotificationResponseSelected mListener;
     private final Context mContext;
+    private Calendar mCalendar;
     private ArrayList<Notification> mNotificationsList = new ArrayList<>();
     private int mFirstTodayPosition;
     private int mFirstYesterdayPosition;
@@ -36,14 +38,9 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     public NotificationHistoryAdapter(Context context, ArrayList<Notification> notificationHistory, OnNotificationResponseSelected listener) {
         this.mContext = context;
 
-//        for (Notification item : notificationHistory) {
-//            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN){
-//                mNotificationsList.add(item);
-//            }
-//        }
-
         mNotificationsList = notificationHistory;
-
+        mCalendar = Calendar.getInstance();
+        mCalendar.add(Calendar.DAY_OF_MONTH, 1);
         mListener = listener;
         mFirstTodayPosition = mNotificationsList.size();
         mFirstYesterdayPosition = mNotificationsList.size();
@@ -87,6 +84,10 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
         Notification notification = mNotificationsList.get(position);
         Date date = TimeUtils.getDateForNotification(notification.getmSentTime());
+        if (position > 0){
+            mCalendar.setTime(TimeUtils.getDateForNotification(mNotificationsList.get(position -1).getmSentTime()));
+        }
+
         String time = "";
 
         if (date != null) {
@@ -111,16 +112,19 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             if (position == mFirstTodayPosition){
                 holder.mDayTitleTv.setText(R.string.today);
                 holder.mDayTitleTv.setVisibility(View.VISIBLE);
-            }else if (position == mFirstYesterdayPosition){
+            }else if (position == mFirstYesterdayPosition) {
                 holder.mDayTitleTv.setText(R.string.yesterday);
                 holder.mDayTitleTv.setVisibility(View.VISIBLE);
+            }else if (mCalendar.get(Calendar.DAY_OF_YEAR) != c.get(Calendar.DAY_OF_YEAR)){
+                holder.mDayTitleTv.setText(TimeUtils.getDateFromFormat(c.getTime(), TimeUtils.ONLY_DATE_FORMAT));
+                holder.mDayTitleTv.setVisibility(View.VISIBLE);
+                mCalendar = c;
             }else {
                 holder.mDayTitleTv.setVisibility(View.GONE);
             }
         }
 
         holder.mBodyTv.setText(notification.getmBody());
-        holder.mSenderTv.setText(notification.getmSender());
         holder.mTimeTv.setText(time);
 
         switch (notification.getmResponseType()){
@@ -129,12 +133,15 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
+                holder.mSubtextTv.setText(mContext.getResources().getString(R.string.more_details));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmSender()));
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
@@ -147,6 +154,8 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
+                holder.mSubtextTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
@@ -158,17 +167,21 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_blue));
+                holder.mSubtextTv.setText(mContext.getResources().getString(R.string.at_work));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.started_service2), notification.getmSender()));
                 break;
 
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                holder.mSubtextTv.setText(mContext.getResources().getString(R.string.service_completed));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.service_completed2), notification.getmSender()));
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.service_done));
                 break;
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                 holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_blue));
-                holder.mBodyTv.setText(mContext.getString(R.string.service_call_was_canceled));
-                holder.mSenderTv.setText(notification.getmTargetName());
+                holder.mSubtextTv.setText(mContext.getString(R.string.service_call_was_canceled));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_cancelled2), notification.getmSender()));
                 break;
 
             default:
@@ -178,7 +191,9 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
+                    holder.mSubtextTv.setText(mContext.getResources().getString(R.string.waiting_for_replay));
                 }else {
+                    holder.mSubtextTv.setText("");
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
                 }
 
@@ -188,12 +203,14 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
 
         if (mNotificationsList.get(position).getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+            holder.mSenderTv.setText(mContext.getString(R.string.technician) + " " + notification.getmTargetName());
             holder.mBtnsLil.setVisibility(View.GONE);
             if (notification.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
-                holder.mBodyTv.setText(mContext.getResources().getString(R.string.default_unanswered_technocian_call));
+                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.default_unanswered_technician_call), notification.getmSender()));
             }
         }else {
 
+            holder.mSenderTv.setText(notification.getmSender());
             holder.mBtnsLil.setVisibility(View.VISIBLE);
 
             holder.mApproveBtn.setOnClickListener(new View.OnClickListener() {
@@ -217,7 +234,6 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 }
             });
         }
-
     }
 
     @Override
@@ -227,6 +243,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView mSubtextTv;
         private LinearLayout mBtnsLil;
         private Button mApproveBtn;
         private Button mClarifyBtn;
@@ -249,6 +266,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             mTimeTv = view.findViewById(R.id.notification_item_tv_time);
             mIconIv = view.findViewById(R.id.notification_item_iv);
             mBtnsLil = view.findViewById(R.id.notification_item_btns_lil);
+            mSubtextTv = view.findViewById(R.id.notification_item_subtext_tv);
         }
     }
 
