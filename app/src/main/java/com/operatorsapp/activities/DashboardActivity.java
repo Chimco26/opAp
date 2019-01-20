@@ -326,23 +326,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
                 });
             } else {
-                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(LOG_TAG, "getInstanceId failed", task.getException());
-                            return;
+                try {
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w(LOG_TAG, "getInstanceId failed", task.getException());
+                                return;
+                            }
+
+                            // Get new Instance ID token
+
+                            PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
+                            checkUpdateNotificationToken();
+
                         }
-
-                        // Get new Instance ID token
-
-                        PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
-                        checkUpdateNotificationToken();
-
-                    }
-                });
+                    });
+                }catch (IllegalStateException e){}
             }
-
         }
 
     }
