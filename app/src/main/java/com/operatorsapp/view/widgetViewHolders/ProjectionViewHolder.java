@@ -53,7 +53,7 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
         mContext = context;
         mHeight = height;
         mWidth = width;
-        
+
         mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
         mDivider = itemView.findViewById(R.id.divider);
         mTitle = itemView.findViewById(R.id.projection_widget_title);
@@ -178,15 +178,17 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             if (projectionWidth > 1000) {
                 projectionWidth = 1000;
             }
-            if (convertCurrentValue > 0.9) {
-                mRangeView.setX(currentWidth /* half of the line*/);
-                mCurrentValueInChart.setX(currentWidth - 10/* half of the line*/);
-                mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 8/* half of the line*/);
-            } else {
-                mRangeView.setX(currentWidth/* half of the line*/);
-                mCurrentValueInChart.setX(currentWidth - 2/* half of the line*/);
-                mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
-            }
+            mRangeView.setX(currentWidth /* half of the line*/);
+            mCurrentValueInChart.setX(currentWidth + 5/* half of the line*/);
+            mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue + 5/* half of the line*/);
+//
+//            if (convertCurrentValue > 0.9) {
+//                mCurrentValueInChart.setX(currentWidth - 10/* half of the line*/);
+//                mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 10/* half of the line*/);
+//            } else {
+//                mCurrentValueInChart.setX(currentWidth - 2/* half of the line*/);
+//                mGrayValueInChart.setX(mProjectionCapsuleWidth * convertProjectionValue - 2/* half of the line*/);
+//            }
 //            mProjectionView.getLayoutParams().width = ((int) currentWidth);
 //            mProjectionViewProjection.getLayoutParams().width = ((int) projectionWidth);
             final float finalCurrentWidth = currentWidth;
@@ -217,7 +219,7 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
             mEndDivider.setVisibility(View.VISIBLE);
         }
     }
-    
+
     private void setSizes(final RelativeLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();

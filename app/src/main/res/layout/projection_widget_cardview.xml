@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="25dp"
-            android:gravity="end"
+            android:gravity="center_horizontal|end"
             android:textColor="@color/projection_gray"
             android:textSize="14sp" />
 
@@ -110,7 +110,6 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="1"
                 android:textColor="@color/blue1"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -150,17 +149,17 @@
             android:id="@+id/projection_widget_projectionViewProjection"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            android:layout_marginStart="35dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="38dp" />
+            android:layout_marginEnd="44dp" />
 
         <View
             android:id="@+id/projection_widget_projectionView"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            android:layout_marginStart="35dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="38dp" />
+            android:layout_marginEnd="44dp" />
 
         <View
             android:id="@+id/projection_widget_projectionView_end"
@@ -173,9 +172,9 @@
             android:id="@+id/projection_widget_range_view_rv"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="38dp">
+            android:layout_marginEnd="44dp">
 
             <View
                 android:id="@+id/projection_widget_range_view"
