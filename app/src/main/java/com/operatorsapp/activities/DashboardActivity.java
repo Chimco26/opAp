@@ -801,7 +801,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setFilterWarningText(boolean show) {
-        show = true;
         Fragment fragment = getVisibleFragment();
         if (mActionBarAndEventsFragment != null) {
             if (fragment instanceof ActionBarAndEventsFragment ||
