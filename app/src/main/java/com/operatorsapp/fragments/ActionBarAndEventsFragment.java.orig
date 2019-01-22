@@ -527,8 +527,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     for (TechCallInfo call : list) {
                         if (call.getmNotificationId() == notificationId) {
                             call.setmResponseType(responseType);
+<<<<<<< HEAD
+                            switch (responseType) {
+=======
                             call.setmCallTime(new Date().getTime());
                             switch (responseType){
+>>>>>>> 29580d1225feee62bb210c2e3fd786114faa534b
                                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                                     call.setmStatus(getString(R.string.message_received) + "\n" + call.getmName());
                                     break;
@@ -1124,7 +1128,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
                             }
                             case 4: {
+<<<<<<< HEAD
                                 openSetupEndFragment();
+=======
+//                                if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+//                                } else {
+//                                    mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+//                                }
+                                mListener.onShowSetupEndDialog();
+>>>>>>> 29580d1225feee62bb210c2e3fd786114faa534b
                                 break;
                             }
                         }
@@ -1512,9 +1525,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 String operatorName = "";
                 String title = getString(R.string.operator) + " ";
                 if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
-                    operatorName =  pm.getOperatorName();
+<<<<<<< HEAD
+                    title += pm.getOperatorName();
+                    body = getString(R.string.operator) + " " + pm.getOperatorName() + " " + getString(R.string.sent_service_call) + " " + pm.getMachineName();
                 } else {
+                    body = getString(R.string.service_call_made) + " " + pm.getMachineName();
+                    title += pm.getUserName();
+=======
+                    operatorName =  pm.getOperatorName();
+                }else {
                     operatorName = pm.getUserName();
+>>>>>>> 29580d1225feee62bb210c2e3fd786114faa534b
                 }
                 body = getString(R.string.service_call_made_new);
                 body = String.format(body, operatorName);
@@ -1550,8 +1571,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                     .build());
                         } else {
                             String msg = "failed";
+<<<<<<< HEAD
                             if (response.body() != null && response.body().getmError() != null) {
+                                msg = response.body().getmError().getmErrorMessage();
+=======
+                            if (response.body() != null && response.body().getmError() != null){
                                 msg = response.body().getmError().getErrorDesc();
+>>>>>>> 29580d1225feee62bb210c2e3fd786114faa534b
                             }
                             onFailure(call, new Throwable(msg));
                         }
@@ -1579,14 +1605,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void onActionYes() {
                                 dialog.cancel();
-                    }
+                            }
 
                             @Override
                             public void onActionNo() {}
 
                             @Override
                             public void onActionAnother() {}
-                });
+                        });
                         dialog.show();
 
                         //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
@@ -2676,9 +2702,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void showBlackFilters() {
         if (!mSetupEndDialogShow) {
-        mStatusBlackFilter.setVisibility(View.VISIBLE);
-        mListener.showBlackFilter(true);
-    }
+            mStatusBlackFilter.setVisibility(View.VISIBLE);
+            mListener.showBlackFilter(true);
+        }
     }
 
     @Override
@@ -2794,7 +2820,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                if (response != null && response.body() != null && response.body().getmError() == null) {
+                     if (response != null && response.body() != null && response.body().getmError() == null) {
 
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));

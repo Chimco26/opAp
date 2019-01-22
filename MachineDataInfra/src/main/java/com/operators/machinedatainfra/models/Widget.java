@@ -110,11 +110,14 @@ public class Widget {
         }
     }
 
-    public void setmTargetColor(String mTargetColor) {
+    public void setTargetColor(String mTargetColor) {
         this.mTargetColor = mTargetColor;
     }
 
     public String getTargetScreen() {
+        if (mTargetScreen == null){
+            mTargetScreen = "";
+        }
         return mTargetScreen;
     }
 

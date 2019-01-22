@@ -404,7 +404,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
                 //mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
             }else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
             }
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -419,7 +419,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportFailure(ErrorObjectInterface reason) {
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
-            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
+            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
 
             dismissProgressDialog();
             SendBroadcast.refreshPolling(getContext());

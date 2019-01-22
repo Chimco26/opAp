@@ -436,10 +436,10 @@
             <include
                 android:id="@+id/FAAE_cycle_alarm_view"
                 layout="@layout/no_production_alarm_dialog"
-                android:layout_width="483dp"
-                android:layout_height="409dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
     </LinearLayout>

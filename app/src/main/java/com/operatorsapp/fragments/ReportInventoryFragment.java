@@ -372,7 +372,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         public void sendReportFailure(ErrorObjectInterface reason) {
             dismissProgressDialog();
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportFailure() reason: " + reason.getDetailedDescription());
-            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription());
+            mDashboardCroutonListener.onShowCrouton("sendReportFailure() reason: " + reason.getDetailedDescription(), true);
             SendBroadcast.refreshPolling(getContext());
         }
     };

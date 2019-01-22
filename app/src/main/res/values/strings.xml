@@ -217,7 +217,7 @@
     <string name="add">Add</string>
     <string name="start_job_success">Job Started Successfully</string>
     <string name="end_setup_success">End Setup Successfully</string>
-    <string name="get_panding_jobs_failed_error">Get Panding Jobs Failed Error</string>
+    <string name="get_panding_jobs_failed_error">Get Pending Jobs Failed Error</string>
     <string name="get_jobs_details_failed_error">Get Job Details Failed Error</string>
     <string name="reject_reason_setup">Setup</string>
     <string name="no_available_pdf">No Available Pdf</string>
@@ -268,9 +268,11 @@
     <string name="operator">Operator</string>
     <string name="sent_service_call">sent a service call from machine</string>
     <string name="service_call_made">Service call has been sent to you from machine</string>
+    <string name="service_call_made_new">Service call has been sent by operator %1$s from machine</string>
     <string name="call_for_technician_unresponsive">Your call for technician was unresponsive for 5 Minutes</string>
     <string name="powered_by_leadermes">Powered by LeaderMES</string>
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
+    <string name="default_unanswered_technician_call">Operator %1$s opened a service call. Waiting for the technician to reply</string>
     <string name="general">General</string>
     <string name="service_calls">Service Calls</string>
     <string name="split_event_success">The Event was Split Successfully</string>
@@ -290,11 +292,25 @@
     <string name="activate_job">Activate Job</string>
     <string name="total_amount">Total Amount:</string>
     <string name="call_canceled">Call Canceled</string>
-    <string name="service_call_exists">Found Open Service Call</string>
-    <string name="service_call_exists_subtitle">Open Service Call was found, \n you can remove the open calls or open a new one</string>
+    <string name="service_call_exists">Open Service Calls</string>
+    <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
     <string name="open_new_call">New Service Call</string>
     <string name="service_call_was_canceled"><b>This Call was canceled</b></string>
     <string name="rejects_quantity">Rejects quantity</string>
+    <string name="empty_job_list_msg">The Pending Job list is empty</string>
+    <string name="call_approved">Call is approved</string>
+    <string name="call_approved2">A call made by operator %1$s was approved</string>
+    <string name="call_declined">Call was declined</string>
+    <string name="call_declined2">A call made by operator %1$s was declined</string>
+    <string name="started_service">Attending call</string>
+    <string name="started_service2">Attending call made by operator %1$s</string>
+    <string name="service_completed">Service completed</string>
+    <string name="service_completed2">Service call made by operator %1$s was completed</string>
+    <string name="call_cancelled">Call Cancelled</string>
+    <string name="call_cancelled2">Call made by operator %1$s was Cancelled</string>
+    <string name="waiting_for_replay">Waiting for replay</string>
+    <string name="more_details">Waiting for more details</string>
+    <string name="technician">Technician</string>
 
 
     <string-array name="color_array">

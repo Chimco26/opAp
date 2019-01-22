@@ -4,10 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -19,7 +17,7 @@ public class RangeView extends View {
     private Bitmap mDataLineBlue;
     private Bitmap mDataLineRed;
     private Bitmap mCurrentLine;
-  //  private Paint mPaint;
+    //  private Paint mPaint;
     private float mX;
 
     public RangeView(Context context) {
@@ -36,10 +34,10 @@ public class RangeView extends View {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void init(Context context) {
-        mDataLineBlue = drawableToBitmap(createRangeShape("#ffffff"));//drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
+        mDataLineBlue = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_blue));
         mDataLineRed = drawableToBitmap(context.getDrawable(R.drawable.data_line_oval_red));
         mCurrentLine = mDataLineBlue;
-     //   mPaint = new Paint();
+        //   mPaint = new Paint();
     }
 
     @Override
@@ -56,20 +54,6 @@ public class RangeView extends View {
         } else {
             mCurrentLine = mDataLineBlue;
         }
-    }
-
-    private Drawable createRangeShape(String color) {
-        Drawable drawable = new GradientDrawable();
-        ((GradientDrawable) drawable).setShape(GradientDrawable.RECTANGLE);
-        ((GradientDrawable) drawable).setCornerRadii(new float[]{0,0,0,0,60,60,60,60});
-        ((GradientDrawable) drawable).setSize(8, 48);
-        ((GradientDrawable) drawable).setColor(Color.parseColor(color));
-        return drawable;
-    }
-
-    public void setLineColor(Context context, String color){
-        GradientDrawable drawable = (GradientDrawable) context.getResources().getDrawable(R.drawable.data_line_oval_blue);
-        drawable.setColor(Color.parseColor(color));
     }
 
     public void forceRedraw() {

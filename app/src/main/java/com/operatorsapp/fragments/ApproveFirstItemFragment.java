@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -56,7 +57,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ApproveFirstItemFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider {
+public class ApproveFirstItemFragment extends DialogFragment implements View.OnClickListener, CroutonRootProvider {
 
     private static final String LOG_TAG = ApproveFirstItemFragment.class.getSimpleName();
     private static final String CURRENT_PRODUCT_ID = "current_product_id";
@@ -336,9 +337,9 @@ public class ApproveFirstItemFragment extends BackStackAwareFragment implements 
             dismissProgressDialog();
 
             if (response.isFunctionSucceed()) {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
             } else {
-                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc());
+                mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
             }
 
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");

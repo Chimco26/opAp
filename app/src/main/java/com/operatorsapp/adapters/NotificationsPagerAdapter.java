@@ -102,7 +102,7 @@ public class NotificationsPagerAdapter extends PagerAdapter {
             case ITEM_RIGHT:
 
                 for (Notification notification : mNotificationList) {
-                    if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
+                    if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED) {
                         tempList.add(notification);
                     }
 

@@ -63,7 +63,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
-        holder.mHorizontalRv.setAdapter(new VerticalAdapter(mStopItemsList.get(position).getSubReasons(), imgId));
+        holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
         int color = new Random().nextInt(4);
         Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
        // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
@@ -97,10 +97,12 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
     private class VerticalAdapter extends RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder> {
         private final List<SubReasons> mVerticalList;
         private final int mImgId;
+        private final int mGroupReasonPosition;
 
-        public VerticalAdapter(List<SubReasons> subReasons, int imgId) {
+        public VerticalAdapter(int groupReasonPosition, List<SubReasons> subReasons, int imgId) {
             mVerticalList = subReasons;
             mImgId = imgId;
+            mGroupReasonPosition = groupReasonPosition;
         }
 
         @NonNull
@@ -120,6 +122,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mOnStopReasonSelectedCallbackListener.onUpdateStopReasonSelected(mGroupReasonPosition);
                     mOnStopReasonSelectedCallbackListener.onSubReasonSelected(mVerticalList.get(position));
                 }
             });
