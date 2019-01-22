@@ -100,7 +100,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -528,7 +527,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         if (call.getmNotificationId() == notificationId) {
                             call.setmResponseType(responseType);
                             call.setmCallTime(new Date().getTime());
-                            switch (responseType){
+                            switch (responseType) {
                                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                                     call.setmStatus(getString(R.string.message_received) + "\n" + call.getmName());
                                     break;
@@ -1180,11 +1179,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void openSetupEndFragment() {
-        if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
-            mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
-        } else {
-            mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
-        }
+//        if (mCurrentMachineStatus == null || mCurrentMachineStatus.getAllMachinesData() == null) {
+//            mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(0, mActiveJobsListForMachine, mSelectedPosition), true, true);
+//        } else {
+//            mOnGoToScreenListener.goToFragment(ApproveFirstItemFragment.newInstance(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentProductID(), mActiveJobsListForMachine, mSelectedPosition), true, true);
+//        }
+        mListener.onShowSetupEndDialog();
     }
 
     private void checkTechCalls() {
@@ -1512,7 +1512,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 String operatorName = "";
                 String title = getString(R.string.operator) + " ";
                 if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
-                    operatorName =  pm.getOperatorName();
+                    operatorName = pm.getOperatorName();
                 } else {
                     operatorName = pm.getUserName();
                 }
@@ -1579,14 +1579,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void onActionYes() {
                                 dialog.cancel();
-                    }
+                            }
 
                             @Override
-                            public void onActionNo() {}
+                            public void onActionNo() {
+                            }
 
                             @Override
-                            public void onActionAnother() {}
-                });
+                            public void onActionAnother() {
+                            }
+                        });
                         dialog.show();
 
                         //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
@@ -2676,9 +2678,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void showBlackFilters() {
         if (!mSetupEndDialogShow) {
-        mStatusBlackFilter.setVisibility(View.VISIBLE);
-        mListener.showBlackFilter(true);
-    }
+            mStatusBlackFilter.setVisibility(View.VISIBLE);
+            mListener.showBlackFilter(true);
+        }
     }
 
     @Override
@@ -2741,7 +2743,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCycleWarningView.setVisibility(View.GONE);
         }
     }
-    public void setCycleWarningViewShow(boolean show){
+
+    public void setCycleWarningViewShow(boolean show) {
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             mCycleWarningViewShow = true;
         } else {

@@ -92,7 +92,6 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.SetupEndDialog;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
-import com.operatorsapp.fragments.ApproveFirstItemFragment;
 import com.operatorsapp.fragments.LenoxDashboardFragment;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
@@ -802,6 +801,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setFilterWarningText(boolean show) {
+        show = true;
         Fragment fragment = getVisibleFragment();
         if (mActionBarAndEventsFragment != null) {
             if (fragment instanceof ActionBarAndEventsFragment ||
@@ -1104,11 +1104,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
             if (isCentralContainer) {
 
-                if (fragment instanceof ApproveFirstItemFragment) {
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-                } else {
+//                if (fragment instanceof ApproveFirstItemFragment) {
+//                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+//                } else {
                     getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
-                }
+//                }
 
             } else {
 
