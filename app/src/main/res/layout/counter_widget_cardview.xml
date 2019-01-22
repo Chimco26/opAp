@@ -37,8 +37,6 @@
         android:textSize="14sp"
         autofit:minTextSize="8sp" />
 
-
-
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"

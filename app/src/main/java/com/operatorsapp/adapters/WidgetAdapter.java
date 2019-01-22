@@ -18,6 +18,7 @@ import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolder;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class WidgetAdapter extends Adapter {
     private final int TIME = 3;
     private final int COUNTER = 4;
     private final int IMAGE = 5;
-    private final int TIME_LEFT = 5; // current value is the time left in minutes
+    private final int TIME_LEFT = 6; // current value is the time left in minutes
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -140,6 +141,9 @@ public class WidgetAdapter extends Adapter {
             }
             case IMAGE: {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
+            }
+            case TIME_LEFT: {
+                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false));
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
