@@ -37,6 +37,7 @@ public class WidgetAdapter extends Adapter {
     private final int TIME = 3;
     private final int COUNTER = 4;
     private final int IMAGE = 5;
+    private final int TIME_LEFT = 5; // current value is the time left in minutes
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -85,6 +86,7 @@ public class WidgetAdapter extends Adapter {
                 for (Widget widget: mWidgets){
                     if (widget.getID() == widget1.getID()) {
                     widget.setEditStep(widget1.getEditStep());
+                    break;
                 }
             }
         }
@@ -156,38 +158,27 @@ public class WidgetAdapter extends Adapter {
                 case IMAGE:
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
-
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
-
                     counterViewHolder.setCounterItem(widget);
-
                     break;
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
                     numericViewHolder.setNumericItem(widget);
                     break;
                 case TIME:
-
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
-
                     timeViewHolder.setTimeItem(widget);
-
                     break;
-
                 case RANGE:
                     final RangeViewHolder rangeViewHolder = (RangeViewHolder) holder;
-
                     rangeViewHolder.setRangeItem(widget);
                     break;
-
                 case PROJECTION:
                     final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
-
                     projectionViewHolder.setProjectionItem(widget);
                     break;
-
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
