@@ -477,8 +477,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                         first = !first;
                     }
-                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                    setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                            && mCurrentMachineStatus.getAllMachinesData().size() > 0
+                            && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
+                        setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                        setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    }
                 }
             }
         };
