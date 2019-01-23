@@ -674,10 +674,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
+                    tvSender.setText(getString(R.string.message_from) + " " + notification.getmTargetName());
+                }else {
+                    tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                 }
 
                 tvBody.setText(notification.getmBody());
-                tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
                     @Override
@@ -1030,7 +1032,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
             mStatusTimeMinTv = mToolBarView.findViewById(R.id.ATATV_status_time_min);
 
-            setNotificationNeedResponse();
+            getNotificationsFromServer(false);
             setTechnicianCallStatus();
 
             tutorialIv.setOnClickListener(new View.OnClickListener() {
@@ -2776,7 +2778,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
 
-                     if (response != null && response.body() != null && response.body().getmError() == null) {
+                if (response != null && response.body() != null && response.body().getmError() == null) {
 
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
@@ -2791,6 +2793,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }
+
+                setNotificationNeedResponse();
 
             }
 

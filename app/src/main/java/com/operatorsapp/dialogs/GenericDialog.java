@@ -81,6 +81,7 @@ public class GenericDialog extends Dialog implements View.OnClickListener {
         if (mIsError){
             mTitleTv.setTextColor(Color.RED);
             mActionYesBtn.setBackgroundColor(Color.RED);
+            mHeaderIconIv.setBackground(mContext.getResources().getDrawable(R.drawable.attention_red));
         }
 
 
