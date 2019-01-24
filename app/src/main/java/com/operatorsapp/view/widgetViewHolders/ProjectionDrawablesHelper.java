@@ -6,9 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 
-public class ProjectionDrawablesHelper {
+class ProjectionDrawablesHelper {
 
-    public Drawable createRangeShape(String color) {
+    Drawable createRangeShape(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{0, 0, 0, 0, 60, 60, 60, 60});
@@ -18,7 +18,7 @@ public class ProjectionDrawablesHelper {
     }
 
     @NonNull
-    public Drawable createStartProjectionShapeDrawable(String color) {
+    private Drawable createStartProjectionShapeDrawable(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{60, 60, 0, 0, 0, 0, 60, 60});
@@ -28,7 +28,7 @@ public class ProjectionDrawablesHelper {
     }
 
     @NonNull
-    public Drawable createEndProjectionShapeDrawable(String color) {
+    private Drawable createEndProjectionShapeDrawable(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{0, 0, 60, 60, 60, 60, 0, 0});
@@ -37,7 +37,7 @@ public class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    public Drawable createProjectionShape(String color) {
+    Drawable createProjectionShape(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setSize(30, 43);
@@ -45,7 +45,7 @@ public class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    public Drawable createCapsuleDrawable(String color) {
+    Drawable createCapsuleDrawable(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{60, 60, 60, 60, 60, 60, 60, 60});
@@ -54,7 +54,7 @@ public class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    public Drawable createEndProjectionShape(String color, Context context) {
+    Drawable createEndProjectionShape(String color, Context context) {
 //        Configuration config = context.getResources().getConfiguration();
 //        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 //            return createStartProjectionShapeDrawable(color);
@@ -62,7 +62,7 @@ public class ProjectionDrawablesHelper {
         return createEndProjectionShapeDrawable(color);
     }
 
-    public Drawable createStartProjectionShape(String color, Context context) {
+    Drawable createStartProjectionShape(String color, Context context) {
 //        Configuration config = context.getResources().getConfiguration();
 //        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 //            return createEndProjectionShapeDrawable(color);
