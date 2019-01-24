@@ -140,10 +140,10 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
-                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmSender()));
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
+                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmSender()));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
                 }else {
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
@@ -154,10 +154,10 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mSubtextTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
-                holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                    holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_declined));
+                    holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
                 }else {
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));

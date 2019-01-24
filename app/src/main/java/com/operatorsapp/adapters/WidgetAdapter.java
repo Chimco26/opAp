@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
@@ -107,15 +108,24 @@ public class WidgetAdapter extends Adapter {
     private class ImageViewHolder extends ViewHolder{
 
         private ImageView mImageLayout;
+        private RelativeLayout mParentLayout;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
 
-            mImageLayout = itemView.findViewById(R.id.image_widget_parent_layout);
+            mImageLayout = itemView.findViewById(R.id.image_widget_layout);
+            mParentLayout = itemView.findViewById(R.id.image_widget_parent_layout);
 
         }
     }
+    private void setSizes(final RelativeLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
 
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -161,6 +171,7 @@ public class WidgetAdapter extends Adapter {
 
                 case IMAGE:
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                    setSizes(imageViewHolder.mParentLayout);
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
                     break;
                 case COUNTER:

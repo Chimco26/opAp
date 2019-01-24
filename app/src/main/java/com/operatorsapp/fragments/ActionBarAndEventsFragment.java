@@ -13,7 +13,6 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,7 +44,6 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -137,6 +135,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -236,11 +235,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mMainView;
     private boolean mEndSetupDisable;
     private ImageView mTechnicianIconIv;
-    private Chronometer mTechnicianTimerCh;
+    private TextView mTechnicianTimerTv;
     private View mCycleWarningView;
     private boolean mSetupEndDialogShow;
     private boolean mCycleWarningViewShow;
     private EmeraldSpinner mJobsSpinner;
+    private Handler mCallCounterHandler;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -551,70 +551,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     setTechnicianCallStatus();
 
-//                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
-//                    TechCallInfo techCallInfo = null;
-//                    for (TechCallInfo call : techList) {
-//                        if (call.getmNotificationId() == notificationId){
-//                            techCallInfo = call;
-//                            techCallInfo.setmResponseType(responseType);
-//                        }
-//                    }
-//                    if (techCallInfo != null) {
-//
-//                        long delay = 0;
-//                        switch (responseType) {
-////                        case Consts.NOTIFICATION_TECHNICIAN_STATUS_CALLED:
-////                            mTechnicianIndicatorIv.setVisibility(View.VISIBLE);
-////                            mTechnicianIndicatorIv.setBackground(getResources().getDrawable(R.drawable.called));
-////                            mTechnicianIndicatorTv.setText(R.string.called_technician);
-////
-////                            break;
-//                            case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-//                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_recieved));
-//                                techCallInfo.setmStatus(getString(R.string.message_received) + "\n" + techCallInfo.getmName());
-//                                mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
-//                                break;
-//
-//                            case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-//                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_declined));
-//                                techCallInfo.setmStatus(getString(R.string.message_declined) + "\n" + techCallInfo.getmName());
-//                                mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
-//                                delay = 1000 * 60 * 10;
-//                                break;
-//
-//                            case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-//                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.at_work));
-//                                techCallInfo.setmStatus(getString(R.string.at_work) + "\n" + techCallInfo.getmName());
-//                                mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
-//                                break;
-//
-//                            case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-//                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.work_completed));
-//                                techCallInfo.setmStatus(getString(R.string.work_comlpeted) + "\n" + techCallInfo.getmName());
-//                                mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
-//                                delay = 1000 * 60 * 10;
-//                                break;
-//
-////                            case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
-////                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.cancel));
-////                                techCallInfo.setmStatus(getString(R.string.call_canceled) + "\n" + techCallInfo.getmName());
-////                                mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
-////                                delay = 1000 * 60 * 2;
-////                                break;
-//
-//                        }
-//
-////                        PersistenceManager.getInstance().setCalledTechnician(techCallInfo);
-////                        mHandlerTechnicianCall.postDelayed(new Runnable() {
-////                            @Override
-////                            public void run() {
-////                                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
-////                                mTechnicianIndicatorTv.setText("");
-////                                PersistenceManager.getInstance().setCalledTechnician(new TechCallInfo(-1, "", "", 0));
-////                            }
-////                        }, delay);
-//                    }
-
                 } else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 
                     setNotificationNeedResponse();
@@ -673,10 +609,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
+                    tvSender.setText(getString(R.string.message_from) + " " + notification.getmTargetName());
+                }else {
+                    tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                 }
 
                 tvBody.setText(notification.getmBody());
-                tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
                     @Override
@@ -820,7 +758,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onPause() {
         super.onPause();
-        mTechnicianTimerCh.stop();
     }
 
 
@@ -1023,13 +960,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIconIv = mToolBarView.findViewById(R.id.toolbar_technician_iv);
-            mTechnicianTimerCh = mToolBarView.findViewById(R.id.toolbar_technician_chronometer);
+            mTechnicianTimerTv = mToolBarView.findViewById(R.id.toolbar_technician_chronometer);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
             mStatusTimeMinTv = mToolBarView.findViewById(R.id.ATATV_status_time_min);
 
-            setNotificationNeedResponse();
+            getNotificationsFromServer(false);
             setTechnicianCallStatus();
 
             tutorialIv.setOnClickListener(new View.OnClickListener() {
@@ -1292,62 +1229,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             long technicianCallTime = techCallInfo.getmCallTime();
             long now = new Date().getTime();
 
-//            if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET && technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
-//
-//                mHandlerTechnicianCall.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ArrayList<TechCallInfo> techList2 = PersistenceManager.getInstance().getCalledTechnician();
-//                        TechCallInfo techCallInfo2 = techList2.get(techList2.size()-1);
-//                        //if (PersistenceManager.getInstance().getTechnicianCallTime() > 0) {
-//                        if (techCallInfo2.getmCallTime() > 0 && techCallInfo2.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
-//
-//                            final AlertDialog.Builder builder;
-//                            builder = new AlertDialog.Builder(getActivity());
-//                            builder.setCancelable(true);
-//                            final AlertDialog alertDialog = builder.setTitle(getString(R.string.call_technician_title))
-//                                    .setMessage(getString(R.string.call_for_technician_unresponsive))
-//                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int which) {
-//                                            dialog.dismiss();
-//                                        }
-//                                    })
-//                                    .setIcon(R.drawable.technician_dark)
-//                                    .show();
-//
-////                            mHandlerTechnicianCall.postDelayed(new Runnable() {
-////                                @Override
-////                                public void run() {
-////                                    if (alertDialog != null && alertDialog.isShowing()) {
-////                                        alertDialog.dismiss();
-////                                    }
-////                                    PersistenceManager.getInstance().setCalledTechnician(new TechCallInfo(-1, "", "", 0));
-////                                    setTechnicianCallStatus();
-////                                }
-////                            }, TECHNICIAN_CALL_CLEAN_ALL);
-//                        }
-//                    }
-//                }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
-//            }
-            long callDuration = new Date().getTime() - techCallInfo.getmCallTime();
-            int days = 0;
-            days = (int) (callDuration / (24 * 60 * 60 * 1000));
-            if (days > 0) {
-                callDuration -= (int) (days * (24 * 60 * 60 * 1000));
-                mTechnicianTimerCh.setFormat("Days: " + days + ", %s");
-            } else {
-                mTechnicianTimerCh.setFormat("%s");
-            }
-
-
-            mTechnicianTimerCh.setBase(SystemClock.elapsedRealtime() - (callDuration));
-            mTechnicianTimerCh.start();
-            // mTechnicianTimerCh.setFormat("Call: %s");
-            mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
+            setTimeForTechTimer(techCallInfo);
 
             long delay = -1;
             switch (techCallInfo.getmResponseType()) {
                 case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
+                    mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
                     //calculate 5 minutes from call and display a message
                     if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET && technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
@@ -1376,62 +1263,108 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             }
                         }, TECHNICIAN_CALL_WAITING_RESPONSE - (now - technicianCallTime));
                     }
-//                    if (technicianCallTime > 0 && technicianCallTime > (now - (TECHNICIAN_CALL_WAITING_RESPONSE + TECHNICIAN_CALL_CLEAN_ALL))) {
-//                        mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
-//                        delay = (technicianCallTime - (now - (TECHNICIAN_CALL_WAITING_RESPONSE + TECHNICIAN_CALL_CLEAN_ALL)));
-//                    }
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                    mTechnicianIndicatorTv.setText(getString(R.string.call_approved) + "\n" + techCallInfo.getmName());
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_recieved));
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                     delay = 1000 * 60 * 10;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_declined));
+                    mTechnicianIndicatorTv.setText(getString(R.string.call_declined) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.at_work));
+                    mTechnicianIndicatorTv.setText(getString(R.string.started_service) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-                    delay = 1000 * 60 * 10;
+                    delay = 0;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.work_completed));
+                    mTechnicianIndicatorTv.setText(getString(R.string.service_completed) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                     delay = 0;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.cancel));
+                    mTechnicianIndicatorTv.setText(getString(R.string.call_cancelled) + "\n" + techCallInfo.getmName());
                     break;
                 default:
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
+                    mTechnicianIndicatorTv.setText("");
                     break;
             }
-            //mTechnicianIndicatorTv.setText(techCallInfo.getmStatus());
             cleanTech((int) delay, techCallInfo);
         } else {
             mTechnicianIconIv.setImageResource(R.drawable.technicaian);
             mTechnicianIndicatorTv.setText("");
-            mTechnicianTimerCh.stop();
-            mTechnicianTimerCh.setText("");
+            setTimeForTechTimer(null);
             PersistenceManager.getInstance().setRecentTechCallId(0);
         }
 
     }
 
-    private void cleanTech(int delay, final TechCallInfo techCallInfo) {
+    @SuppressLint("DefaultLocale")
+    private void setTimeForTechTimer(final TechCallInfo techCallInfo) {
+        if (mCallCounterHandler == null){
+            mCallCounterHandler = new Handler();
+        }
+        if (techCallInfo == null){
+            mCallCounterHandler.removeCallbacksAndMessages(null);
+            mTechnicianTimerTv.setText("");
+        }else {
+            mCallCounterHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    long callDuration = new Date().getTime() - techCallInfo.getmCallTime();
+                    int postDelay;
+                    String callTime;
+
+                    if (callDuration < ( 60 * 60 * 1000)){
+                        postDelay = 1000 * 60;
+                        callTime = String.format("%d Min.",TimeUnit.MILLISECONDS.toMinutes(callDuration));
+                    }else if (callDuration < 1000 * 60 * 60 * 24) {
+                        postDelay = 1000 * 60;
+                        callTime = String.format("%d Hrs., %d Min.",TimeUnit.MILLISECONDS.toHours(callDuration),
+                                TimeUnit.MILLISECONDS.toMinutes(callDuration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(callDuration)));
+                    }else {
+                            postDelay = 1000 * 60 * 60;
+                            callTime = String.format("%d Days, %d Hrs.", TimeUnit.MILLISECONDS.toDays(callDuration),
+                                    TimeUnit.MILLISECONDS.toHours(callDuration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(callDuration)));
+                    }
+
+                    mTechnicianTimerTv.setText(callTime);
+                    if (mCallCounterHandler == null){
+                        mCallCounterHandler = new Handler();
+                    }
+                    mCallCounterHandler.postDelayed(this, postDelay);
+                }
+            });
+        }
+    }
+
+    private void cleanTech(int delay, final TechCallInfo techCallInfo){
 
         if (delay >= 0) {
             mHandlerTechnicianCall.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
-                    mTechnicianIndicatorTv.setText("");
                     ArrayList<TechCallInfo> list = PersistenceManager.getInstance().getCalledTechnician();
                     if (list != null && list.size() > 0) {
-                        list.remove(techCallInfo);
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).getmNotificationId() == techCallInfo.getmNotificationId()){
+                                list.remove(i);
+                                break;
+                            }
+                        }
                         PersistenceManager.getInstance().setCalledTechnicianList(list);
                     }
                     if (list.size() > 0) {
                         PersistenceManager.getInstance().setRecentTechCallId(list.get(0).getmNotificationId());
                         setTechnicianCallStatus();
+                    }else {
+                        PersistenceManager.getInstance().setRecentTechCallId(-1);
+                        mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
+                        mTechnicianIndicatorTv.setText("");
                     }
                 }
             }, delay);
@@ -2448,6 +2381,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mHandlerTechnicianCall != null) {
             mHandlerTechnicianCall.removeCallbacksAndMessages(null);
         }
+        if (mCallCounterHandler != null){
+            mCallCounterHandler.removeCallbacksAndMessages(null);
+    }
     }
 
 
@@ -2812,6 +2748,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 } else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }
+
+                setNotificationNeedResponse();
 
             }
 

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:id="@+id/image_widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
-    android:background="@drawable/widget_background_selector"
-    android:orientation="vertical">
+    android:background="@drawable/widget_background_selector">
 
-</ImageView>
+    <ImageView
+        android:id="@+id/image_widget_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+    </ImageView>
+</RelativeLayout>
 
