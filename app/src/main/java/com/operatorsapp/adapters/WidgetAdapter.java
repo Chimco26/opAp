@@ -289,11 +289,13 @@ public class WidgetAdapter extends Adapter {
     private class ImageViewHolder extends ViewHolder {
 
         private ImageView mImageLayout;
+        private RelativeLayout mParentLayout;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
 
-            mImageLayout = itemView.findViewById(R.id.image_widget_parent_layout);
+            mImageLayout = itemView.findViewById(R.id.image_widget_layout);
+            mParentLayout = itemView.findViewById(R.id.image_widget_parent_layout);
 
         }
     }
@@ -366,8 +368,8 @@ public class WidgetAdapter extends Adapter {
 
                 case IMAGE:
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                    setSizes(imageViewHolder.mParentLayout);
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
-
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
