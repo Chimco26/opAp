@@ -80,4 +80,17 @@
         <attr name="aspectRatioWidth" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="PercentRoundBarForNatan">
+
+        <attr name="selectedBarColor" format="color"/>
+        <attr name="defaultBarColor" format="color"/>
+
+        <attr name="defaultFillColor" format="color"/>
+        <attr name="selectedFillColor" format="color"/>
+
+        <attr name="percentTextColor" format="color"/>
+        <attr name="percent" format="integer"/>
+        <attr name="thumbRadius" format="dimension"/>
+
+    </declare-styleable>
 </resources>

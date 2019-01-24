@@ -1,4 +1,4 @@
-package com.operatorsapp.view.widgetViewHolders;
+package com.operatorsapp.view.widgetViewHolders.helper;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,9 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 
-class ProjectionDrawablesHelper {
+public class ProjectionDrawablesHelper {
 
-    Drawable createRangeShape(String color) {
+    public Drawable createRangeShape(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{0, 0, 0, 0, 60, 60, 60, 60});
@@ -37,7 +37,7 @@ class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    Drawable createProjectionShape(String color) {
+    public Drawable createProjectionShape(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setSize(30, 43);
@@ -45,7 +45,7 @@ class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    Drawable createCapsuleDrawable(String color) {
+    public Drawable createCapsuleDrawable(String color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setCornerRadii(new float[]{60, 60, 60, 60, 60, 60, 60, 60});
@@ -54,7 +54,7 @@ class ProjectionDrawablesHelper {
         return drawable;
     }
 
-    Drawable createEndProjectionShape(String color, Context context) {
+    public Drawable createEndProjectionShape(String color, Context context) {
 //        Configuration config = context.getResources().getConfiguration();
 //        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 //            return createStartProjectionShapeDrawable(color);
@@ -62,7 +62,7 @@ class ProjectionDrawablesHelper {
         return createEndProjectionShapeDrawable(color);
     }
 
-    Drawable createStartProjectionShape(String color, Context context) {
+    public Drawable createStartProjectionShape(String color, Context context) {
 //        Configuration config = context.getResources().getConfiguration();
 //        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
 //            return createEndProjectionShapeDrawable(color);

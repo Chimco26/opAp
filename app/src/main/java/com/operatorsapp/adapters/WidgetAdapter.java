@@ -194,6 +194,9 @@ public class WidgetAdapter extends Adapter {
                     final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
                     projectionViewHolder.setProjectionItem(widget);
                     break;
+                case TIME_LEFT:
+                    final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
+                    timeLeftViewHolder.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());

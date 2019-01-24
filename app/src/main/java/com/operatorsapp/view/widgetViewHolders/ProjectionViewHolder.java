@@ -13,6 +13,7 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
+import com.operatorsapp.view.widgetViewHolders.helper.ProjectionDrawablesHelper;
 
 import me.grantland.widget.AutofitTextView;
 

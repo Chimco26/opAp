@@ -133,27 +133,40 @@
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/TLWC_countdown_rl"
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/TLWC_countdown_rl"-->
+            <!--android:layout_width="90dp"-->
+            <!--android:layout_height="90dp"-->
+            <!--android:background="@drawable/circle_grey">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/TLWC_countdown_tv"-->
+                <!--android:layout_width="80dp"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:textColor="@color/blue1"-->
+                <!--android:textSize="34sp"-->
+                <!--android:gravity="center"-->
+                <!--android:background="@drawable/circle_white"/>-->
+
+            <!--<com.operatorsapp.view.widgetViewHolders.CountDownView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
+
+        <!--</RelativeLayout>-->
+
+        <com.operatorsapp.view.widgetViewHolders.helper.PercentRoundBarForNatan
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:background="@drawable/circle_grey">
-
-            <TextView
-                android:id="@+id/TLWC_countdown_tv"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerInParent="true"
-                android:textColor="@color/blue1"
-                android:textSize="34sp"
-                android:gravity="center"
-                android:background="@drawable/circle_white"/>
-
-            <com.operatorsapp.view.widgetViewHolders.CountDownView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </RelativeLayout>
+            app:defaultFillColor="#0000ff"
+            app:defaultBarColor="#000000"
+            app:selectedFillColor="#aaaaaa"
+            app:selectedBarColor="#ff0000"
+            app:percentTextColor="#ffff00"
+            app:thumbRadius="35dp"
+            app:percent="21"/>
 
         <LinearLayout
             android:layout_width="120dp"
