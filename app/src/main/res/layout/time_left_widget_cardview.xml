@@ -131,49 +131,20 @@
         android:layout_marginEnd="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:layout_marginTop="-50dp">
 
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/TLWC_countdown_rl"-->
-            <!--android:layout_width="90dp"-->
-            <!--android:layout_height="90dp"-->
-            <!--android:background="@drawable/circle_grey">-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/TLWC_countdown_tv"-->
-                <!--android:layout_width="80dp"-->
-                <!--android:layout_height="80dp"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:textColor="@color/blue1"-->
-                <!--android:textSize="34sp"-->
-                <!--android:gravity="center"-->
-                <!--android:background="@drawable/circle_white"/>-->
-
-            <!--<com.operatorsapp.view.widgetViewHolders.CountDownView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" />-->
-
-        <!--</RelativeLayout>-->
-
-        <com.operatorsapp.view.widgetViewHolders.helper.PercentRoundBarForNatan
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            app:defaultFillColor="#0000ff"
-            app:defaultBarColor="#000000"
-            app:selectedFillColor="#aaaaaa"
-            app:selectedBarColor="#ff0000"
-            app:percentTextColor="#ffff00"
-            app:thumbRadius="35dp"
-            app:percent="21"/>
-
+        <com.operatorsapp.view.widgetViewHolders.CountDownView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="20dp"/>
         <LinearLayout
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/TLWC_countdown_text_tv"
