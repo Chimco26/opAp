@@ -203,7 +203,9 @@ public class CountDownView extends View {
 
     public boolean isReverse(int minute) {
         if (minute < endModeTimeInMinute){
-            isReverse = false;
+            if (isReverse) {
+                setReverse(false);
+            }
             return false;
         }else{
             if (!isReverse) {
