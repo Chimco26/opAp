@@ -132,8 +132,9 @@ public class WidgetAdapter extends Adapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case NUMERIC: {
-                return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                        mContext, mDashboardCentralContainerListener, mReportFieldsForMachine, mHeight, mWidth);
+//                return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
+//                        mContext, mDashboardCentralContainerListener, mReportFieldsForMachine, mHeight, mWidth);
+                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false));
             }
             case RANGE: {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
@@ -179,8 +180,10 @@ public class WidgetAdapter extends Adapter {
                     counterViewHolder.setCounterItem(widget);
                     break;
                 case NUMERIC:
-                    final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
-                    numericViewHolder.setNumericItem(widget);
+//                    final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
+//                    numericViewHolder.setNumericItem(widget);
+                    final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
+                    timeLeftViewHolder.setData(widget);
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
@@ -195,8 +198,8 @@ public class WidgetAdapter extends Adapter {
                     projectionViewHolder.setProjectionItem(widget);
                     break;
                 case TIME_LEFT:
-                    final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
-                    timeLeftViewHolder.setData(widget);
+                    final TimeLeftViewHolder timeLeftViewHolder1 = (TimeLeftViewHolder) holder;
+                    timeLeftViewHolder1.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
