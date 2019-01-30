@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.operatorsapp.R;
+import com.operatorsapp.utils.StringUtil;
 
 public class CountDownView extends View {
 
@@ -179,26 +180,26 @@ public class CountDownView extends View {
         private float y;
     }
 
-    public void update(int minute, String minuteEndText){
+    public void update(int minute, String minuteStartText){
         if (isReverse(minute)){
             percentAngle = minuteToPercent(minute - totalTimeInMinute);
         }else {
             percentAngle = minuteToPercent(minute);
         }
-        text = getMinuteText(minute, minuteEndText);
+        text = getMinuteText(minute, minuteStartText);
         invalidate();
     }
 
-    private String getMinuteText(int minute, String minuteEndText) {
+    private String getMinuteText(int minute, String minuteStartText) {
         if (minute < endModeTimeInMinute){
-            return minute + minuteEndText;
+            return minuteStartText + StringUtil.add0ToNumber(minute);
         }else {
-            return (totalTimeInMinute - minute) + minuteEndText;
+            return minuteStartText + StringUtil.add0ToNumber(totalTimeInMinute - minute);
         }
     }
 
     private float minuteToPercent(int minute){
-        return minute * 100 / (float)totalTimeInMinute;
+        return minute * 360 / (float)totalTimeInMinute;
     }
 
     public boolean isReverse(int minute) {

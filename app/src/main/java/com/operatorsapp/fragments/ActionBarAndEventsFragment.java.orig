@@ -2068,14 +2068,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onDeviceStatusChanged(MachineStatus machineStatus) {
+    public void onDeviceStatusChanged(MachineStatus mMachineStatus) {
         OppAppLogger.getInstance().i(LOG_TAG, "onDeviceStatusChanged()");
 
-        mCurrentMachineStatus = machineStatus;
+        mCurrentMachineStatus = mMachineStatus;
 
         initStatusLayout(mCurrentMachineStatus);
 
-        mMinDurationText.setText(String.format(Locale.getDefault(), "%d %s", machineStatus.getAllMachinesData().get(0).getMinEventDuration(), getString(R.string.minutes)));
+        mMinDurationText.setText(String.format(Locale.getDefault(), "%d %s", mMachineStatus.getAllMachinesData().get(0).getMinEventDuration(), getString(R.string.minutes)));
 
 
 //        if (mSwipeToRefresh.isRefreshing()){
@@ -2088,13 +2088,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             setupOperatorSpinner();
 
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(1).getUniqueID());
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
+            disableActionInSpinner(mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(1).getUniqueID());
+            disableActionInSpinner(mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
+            disableActionInSpinner(mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
 
             if (!mEndSetupDisable) {
-                disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                                && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
+                disableActionInSpinner(mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                                && mMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
                         , mJobActionsSpinnerItems.get(4).getUniqueID());
             } else {
                 mEndSetupDisable = false;
@@ -2382,13 +2382,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    private void initStatusLayout(MachineStatus machineStatus) {
+    private void initStatusLayout(MachineStatus mMachineStatus) {
 
-        if (machineStatus == null) {
+        if (mMachineStatus == null) {
 
             return;
         }
-        AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
+        AllMachinesData machinesData = mMachineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobName())));
@@ -2401,13 +2401,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMachineIdStatusBarTextView.setText(machineName);
         String statusNameByLang = OperatorApplication.isEnglishLang() ? machinesData.getMachineStatusEname() : machinesData.getMachineStatusLName();
         mMachineStatusStatusBarTextView.setText(statusNameByLang);
-        statusAggregation(machineStatus);
+        statusAggregation(mMachineStatus);
         mMachineStatusLayout.setVisibility(View.VISIBLE);
 
-        if (machineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin() > 0) {
+        if (mMachineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin() > 0) {
 
             mStatusTimeMinTv.setVisibility(View.VISIBLE);
-            mStatusTimeMinTv.setText(TimeUtils.getTimeFromMinute(machineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin()));
+            mStatusTimeMinTv.setText(TimeUtils.getTimeFromMinute(mMachineStatus.getAllMachinesData().get(0).getCurrentStatusTimeMin()));
         } else {
             mStatusTimeMinTv.setVisibility(View.GONE);
         }
@@ -2463,14 +2463,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-    private void statusAggregation(MachineStatus machineStatus) {
+    private void statusAggregation(MachineStatus mMachineStatus) {
 
         if (getActivity() == null) {
 
             return;
         }
 
-        int status = machineStatus.getAllMachinesData().get(0).getMachineStatusID();
+        int status = mMachineStatus.getAllMachinesData().get(0).getMachineStatusID();
 
 
         if (status == MachineStatus.MachineServerStatus.WORKING_OK.getId()) {
