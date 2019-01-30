@@ -31,6 +31,7 @@ import static android.support.v7.widget.RecyclerView.ViewHolder;
 public class WidgetAdapter extends Adapter {
     private static final long TEN_HOURS = 60000L * 60 * 10;
     private final DashboardCentralContainerListener mDashboardCentralContainerListener;
+    private final NumericViewHolder.OnKeyboardManagerListener mOnKeyboardManagerListener;
     private Activity mContext;
     private List<Widget> mWidgets;
     private final int NUMERIC = 0;
@@ -53,7 +54,8 @@ public class WidgetAdapter extends Adapter {
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
                          boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
-                         ReportFieldsForMachine reportFieldsForMachine) {
+                         ReportFieldsForMachine reportFieldsForMachine,
+                         NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
@@ -62,6 +64,7 @@ public class WidgetAdapter extends Adapter {
         mWidth = width;
         mDashboardCentralContainerListener = dashboardCentralContainerListener;
         mReportFieldsForMachine = reportFieldsForMachine;
+        mOnKeyboardManagerListener = onKeyboardManagerListener;
     }
 
     public void changeState(boolean closedState) {
@@ -133,7 +136,7 @@ public class WidgetAdapter extends Adapter {
         switch (viewType) {
             case NUMERIC: {
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                        mContext, mDashboardCentralContainerListener, mReportFieldsForMachine, mHeight, mWidth);
+                        mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
 //                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false));
             }
             case RANGE: {
@@ -158,7 +161,7 @@ public class WidgetAdapter extends Adapter {
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                mContext, mDashboardCentralContainerListener, mReportFieldsForMachine, mHeight, mWidth);
+                mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
     }
 
     @SuppressLint("SimpleDateFormat")
