@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,20 +18,29 @@ public class SingleLineKeyboard implements View.OnClickListener {
     private String[] mChars;
     private String mText = "";
     private static boolean isKeyBoardOpen = false;
-
     private final static int DELETE = 123;
 
     private OnKeyboardClickListener mListener;
 
 
-    public SingleLineKeyboard(LinearLayout linearLayout, Context context, String[] chars, OnKeyboardClickListener listener) {
+    public SingleLineKeyboard(LinearLayout linearLayout, Context context, String[] chars) {
         mLinearLayout = linearLayout;
         mContext = context;
         mChars = chars;
-        mListener = listener;
+    }
+
+    public OnKeyboardClickListener getmListener() {
+        return mListener;
+    }
+
+    public void setListener(OnKeyboardClickListener mListener) {
+        this.mListener = mListener;
     }
 
     public void openKeyBoard() {
+
+        mText = "";
+
         closeKeyBoard();
 
         if (!isKeyBoardOpen)
@@ -71,12 +81,13 @@ public class SingleLineKeyboard implements View.OnClickListener {
 
     private void crateNewTextView(String text, int id, LinearLayout parent) {
 
-        TextView textView = new TextView(mContext);
+        Button textView = new Button(mContext);
         textView.setText(text);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
         textView.setGravity(Gravity.CENTER);
         textView.setId(id);
-        textView.setBackground(mContext.getResources().getDrawable(R.drawable.keyboard_border));
+        textView.setTextSize(25);
+//        textView.setBackground(mContext.getResources().getDrawable(R.drawable.keyboard_border));
 
         textView.setOnClickListener(this);
         parent.addView(textView);
