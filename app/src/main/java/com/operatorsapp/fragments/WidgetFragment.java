@@ -40,6 +40,8 @@ import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
+import com.operatorsapp.view.SingleLineKeyboard;
+import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ import static org.acra.ACRA.LOG_TAG;
  */
 
 public class WidgetFragment extends Fragment implements
-        DashboardUICallbackListener {
+        DashboardUICallbackListener, NumericViewHolder.OnKeyboardManagerListener {
 
     private static final int CHART_POINTS_LIST_LIMIT_SIZE = 1500;
     private boolean mIsOpen;
@@ -94,6 +96,9 @@ public class WidgetFragment extends Fragment implements
     private LinearLayout row2_lil;
     private ReportFieldsForMachine mReportFieldForMachine;
     private MachineStatus mMachineStatus;
+
+    private LinearLayout mKeyBoardLayout;
+    private SingleLineKeyboard mKeyBoard;
 
     public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine) {
         WidgetFragment widgetFragment = new WidgetFragment();
@@ -151,7 +156,7 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
             mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
                     true, mRecyclersHeight, mWidgetsLayoutWidth,
-                    mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus);
+                    mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,this);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -167,6 +172,8 @@ public class WidgetFragment extends Fragment implements
         View includeTopFive_1 = view.findViewById(R.id.fragment_dashboard_top_five_1);
         View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
 
+
+        mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
 
         row1_lil = view.findViewById(R.id.row1_top_five_lil);
         row2_lil = view.findViewById(R.id.row2_top_five_lil);
@@ -184,20 +191,19 @@ public class WidgetFragment extends Fragment implements
         include1_row2_stat3_num = includeTopFive_1.findViewById(R.id.row2_title_stat3_top_five_number_tv);
 
 
-
         mTopStops_rv = includeTopFive_1.findViewById(R.id.top_five_recyclerView);
-        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()){
+        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
             @Override
-            public boolean canScrollVertically(){
+            public boolean canScrollVertically() {
                 return false;
             }
         });
         mTopStops_rv.setAdapter(new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP));
 
         mTopRejects_rv = includeTopFive_2.findViewById(R.id.top_five_recyclerView);
-        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()){
+        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
             @Override
-            public boolean canScrollVertically(){
+            public boolean canScrollVertically() {
                 return false;
             }
         });
@@ -275,7 +281,7 @@ public class WidgetFragment extends Fragment implements
             } else {
                 mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
                         !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
-                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus);
+                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, this);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
@@ -297,7 +303,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0){
+                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                 }
             }
@@ -312,7 +318,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopStopAndCriticalEvents(request, new Callback<StopAndCriticalEventsResponse>() {
             @Override
             public void onResponse(Call<StopAndCriticalEventsResponse> call, Response<StopAndCriticalEventsResponse> response) {
-                if (response != null && response.body() != null && response.body().getmError() == null){
+                if (response != null && response.body() != null && response.body().getmError() == null) {
 
                     if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
                         ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
@@ -320,7 +326,7 @@ public class WidgetFragment extends Fragment implements
 
                     if (response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
                         initCritical(response.body());
-                    }else {
+                    } else {
                         row1_lil.setVisibility(View.GONE);
                         row2_lil.setVisibility(View.GONE);
                     }
@@ -337,25 +343,25 @@ public class WidgetFragment extends Fragment implements
     private void initCritical(StopAndCriticalEventsResponse response) {
         ArrayList<CriticalEvent> critList = response.getmCriticalEvents();
 
-        if (critList != null && critList.size() >= 1){
+        if (critList != null && critList.size() >= 1) {
             CriticalEvent crit1 = critList.get(0);
             row1_lil.setVisibility(View.VISIBLE);
             row1_title.setText(crit1.getmName());
             include1_row1_stat1_num.setText(crit1.getmDuration());
             include1_row1_stat2_num.setText(crit1.getmPercentageDuration() + "%");
             include1_row1_stat3_num.setText(crit1.getmEventsCount());
-        }else {
+        } else {
             row1_lil.setVisibility(View.GONE);
         }
 
-        if (critList != null && critList.size() >= 2){
+        if (critList != null && critList.size() >= 2) {
             CriticalEvent crit2 = critList.get(1);
             row2_lil.setVisibility(View.VISIBLE);
             row2_title.setText(crit2.getmName());
             include1_row2_stat1_num.setText(crit2.getmDuration());
             include1_row2_stat2_num.setText(crit2.getmPercentageDuration() + "%");
             include1_row2_stat3_num.setText(crit2.getmEventsCount());
-        }else {
+        } else {
             row2_lil.setVisibility(View.GONE);
         }
 
@@ -466,7 +472,7 @@ public class WidgetFragment extends Fragment implements
             }
         }
 
-        for (Widget.HistoricData historicDataToRemove: toRemove){
+        for (Widget.HistoricData historicDataToRemove : toRemove) {
 
             widget.getMachineParamHistoricData().remove(historicDataToRemove);
         }
@@ -502,7 +508,7 @@ public class WidgetFragment extends Fragment implements
 
     public void setReportFieldForMachine(ReportFieldsForMachine reportFieldsForMachine) {
         mReportFieldForMachine = reportFieldsForMachine;
-        if (mWidgetAdapter != null){
+        if (mWidgetAdapter != null) {
             mWidgetAdapter.setReportFieldsForMachine(reportFieldsForMachine);
         }
     }
@@ -511,4 +517,20 @@ public class WidgetFragment extends Fragment implements
         mWidgetRecycler.scrollToPosition(position);
     }
 
+
+    @Override
+    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener) {
+        mKeyBoardLayout.setVisibility(View.VISIBLE);
+        if (mKeyBoard == null)
+            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext(), new String[]{".", "-"});
+
+        mKeyBoard.openKeyBoard();
+        mKeyBoard.setListener(listener);
+    }
+
+    @Override
+    public void onCloseKeyboard() {
+        mKeyBoardLayout.setVisibility(View.GONE);
+        mKeyBoard.setListener(null);
+    }
 }
