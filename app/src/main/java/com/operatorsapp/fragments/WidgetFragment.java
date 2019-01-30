@@ -95,6 +95,7 @@ public class WidgetFragment extends Fragment implements
     private LinearLayout row1_lil;
     private LinearLayout row2_lil;
     private ReportFieldsForMachine mReportFieldForMachine;
+    private MachineStatus mMachineStatus;
 
     private LinearLayout mKeyBoardLayout;
     private SingleLineKeyboard mKeyBoard;
@@ -155,7 +156,7 @@ public class WidgetFragment extends Fragment implements
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
             mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
                     true, mRecyclersHeight, mWidgetsLayoutWidth,
-                    mDashboardCentralContainerListener, mReportFieldForMachine, this);
+                    mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,this);
             mWidgetRecycler.setAdapter(mWidgetAdapter);
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -248,7 +249,10 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
-
+        this.mMachineStatus = machineStatus;
+        if (mWidgetAdapter != null){
+            mWidgetAdapter.setMachineStatus(mMachineStatus);
+        }
     }
 
     @Override
@@ -267,7 +271,7 @@ public class WidgetFragment extends Fragment implements
         mWidgets = widgetList;
         if (widgetList != null && widgetList.size() > 0) {
             saveAndRestoreChartData(widgetList);
-            PersistenceManager.getInstance().setMachineDataStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+            PersistenceManager.getInstance().setMachineDataStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 //            mNoDataView.setVisibility(View.GONE);
             mLoadingDataView.setVisibility(View.GONE);
 
@@ -277,7 +281,7 @@ public class WidgetFragment extends Fragment implements
             } else {
                 mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
                         !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
-                        mDashboardCentralContainerListener, mReportFieldForMachine, this);
+                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, this);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
@@ -394,7 +398,9 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
-
+        if (mWidgetAdapter != null){
+            mWidgetAdapter.setApproveFirstItemFeedBack();
+        }
     }
 
     private void saveAndRestoreChartData(ArrayList<Widget> widgetList) {

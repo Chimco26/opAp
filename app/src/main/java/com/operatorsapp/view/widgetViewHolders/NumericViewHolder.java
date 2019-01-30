@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -88,6 +89,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditStep1Ly = itemView.findViewById(R.id.NWC_edit_step_1_ly);
         mEditNumberEt = itemView.findViewById(R.id.NWC_edit_number_et);
+        mEditNumberEt.setInputType(InputType.TYPE_NULL);
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
 //        mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
@@ -102,6 +104,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
         mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
+        mEditCycleEt.setInputType(InputType.TYPE_NULL);
         mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
         mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
 

@@ -130,7 +130,6 @@
                     android:layout_marginTop="3dp"
                     android:background="@drawable/box_grey_stroke"
                     android:gravity="center"
-                    android:inputType="numberSigned|numberDecimal"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -299,7 +298,6 @@
             android:textColor="@color/blue1"
             android:textSize="35sp"
             android:gravity="center"
-            android:inputType="number"
             android:textStyle="bold"/>
 
         <RelativeLayout

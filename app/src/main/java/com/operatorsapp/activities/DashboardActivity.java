@@ -1544,7 +1544,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                 dashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
-
             }
 
         }
@@ -1760,6 +1759,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onJobActionItemClick() {
 
+        startPendingJobsActivity();
+    }
+
+    public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
@@ -2268,6 +2271,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onReportCycleUnit(String value) {
         sendCycleUnitReport(Double.parseDouble(value));
+    }
+
+    @Override
+    public void onOpenPendingJobs() {
+        startPendingJobsActivity();
+    }
+
+    @Override
+    public void onEndSetup() {
+        onShowSetupEndDialog();
     }
 
     private void sendCycleUnitReport(double value) {

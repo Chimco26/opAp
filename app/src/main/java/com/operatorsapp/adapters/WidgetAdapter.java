@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
+import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -48,13 +49,15 @@ public class WidgetAdapter extends Adapter {
     private int mHeight;
     private int mWidth;
     private ReportFieldsForMachine mReportFieldsForMachine;
+    private MachineStatus mMachineStatus;
     private int mSelectedReasonId;
     private int mSelectedCauseId;
+    private boolean mEndSetupDisable;
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
                          boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
-                         ReportFieldsForMachine reportFieldsForMachine,
+                         ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
                          NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener) {
         mWidgets = widgets;
         mContext = context;
@@ -64,6 +67,7 @@ public class WidgetAdapter extends Adapter {
         mWidth = width;
         mDashboardCentralContainerListener = dashboardCentralContainerListener;
         mReportFieldsForMachine = reportFieldsForMachine;
+        mMachineStatus = machineStatus;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
     }
 
@@ -87,9 +91,9 @@ public class WidgetAdapter extends Adapter {
     }
 
     public void updateNewWidgetWithEditMode(ArrayList<Widget> toUpdate) {
-            for (Widget widget1: toUpdate) {
-                for (Widget widget: mWidgets){
-                    if (widget.getID() == widget1.getID()) {
+        for (Widget widget1 : toUpdate) {
+            for (Widget widget : mWidgets) {
+                if (widget.getID() == widget1.getID()) {
                     widget.setEditStep(widget1.getEditStep());
                     break;
                 }
@@ -100,15 +104,15 @@ public class WidgetAdapter extends Adapter {
     @NonNull
     public ArrayList<Widget> getWidgetIneditMode() {
         ArrayList<Widget> toUpdate = new ArrayList<>();
-        for (Widget widget: mWidgets){
-            if (widget.getEditStep() > 0){
+        for (Widget widget : mWidgets) {
+            if (widget.getEditStep() > 0) {
                 toUpdate.add(widget);
             }
         }
         return toUpdate;
     }
 
-    private class ImageViewHolder extends ViewHolder{
+    private class ImageViewHolder extends ViewHolder {
 
         private ImageView mImageLayout;
         private RelativeLayout mParentLayout;
@@ -121,6 +125,7 @@ public class WidgetAdapter extends Adapter {
 
         }
     }
+
     private void setSizes(final RelativeLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
@@ -129,6 +134,7 @@ public class WidgetAdapter extends Adapter {
         parent.requestLayout();
 
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -157,7 +163,7 @@ public class WidgetAdapter extends Adapter {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
             }
             case TIME_LEFT: {
-                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false));
+                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false), mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -185,8 +191,6 @@ public class WidgetAdapter extends Adapter {
                 case NUMERIC:
                     final NumericViewHolder numericViewHolder = (NumericViewHolder) holder;
                     numericViewHolder.setNumericItem(widget);
-//                    final TimeLeftViewHolder timeLeftViewHolder1 = (TimeLeftViewHolder) holder;
-//                    timeLeftViewHolder1.setData(widget);
                     break;
                 case TIME:
                     final TimeViewHolder timeViewHolder = (TimeViewHolder) holder;
@@ -202,7 +206,7 @@ public class WidgetAdapter extends Adapter {
                     break;
                 case TIME_LEFT:
                     final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
-                    timeLeftViewHolder.setData(widget);
+                    timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -222,6 +226,17 @@ public class WidgetAdapter extends Adapter {
 
     public void setReportFieldsForMachine(ReportFieldsForMachine reportFieldsForMachine) {
         mReportFieldsForMachine = reportFieldsForMachine;
+        if (!mEndSetupDisable) {mEndSetupDisable = false;}
+    }
+
+    public void setMachineStatus(MachineStatus machineStatus) {
+        this.mMachineStatus = machineStatus;
+        {mEndSetupDisable = false;}
+    }
+
+    public void setApproveFirstItemFeedBack() {
+        mEndSetupDisable = true;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -252,6 +267,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 5:
                 type = IMAGE;
+                break;
+            case 6:
+                type = TIME_LEFT;
                 break;
             default:
                 type = NUMERIC;

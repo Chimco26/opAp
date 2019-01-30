@@ -7,4 +7,6 @@ public interface DashboardCentralContainerListener {
     void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId);
     void onScrollToPosition(int position);
     void onReportCycleUnit(String value);
+    void onOpenPendingJobs();
+    void onEndSetup();
 }
