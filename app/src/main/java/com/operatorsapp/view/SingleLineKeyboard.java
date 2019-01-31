@@ -78,21 +78,36 @@ public class SingleLineKeyboard implements View.OnClickListener {
 
     private void crateNewTextView(String text, int id, LinearLayout parent) {
 
-        Button textView = new Button(mContext);
-        textView.setText(text);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
-        textView.setGravity(Gravity.CENTER);
-        textView.setId(id);
-        textView.setTextSize(25);
-//        textView.setBackground(mContext.getResources().getDrawable(R.drawable.keyboard_border));
+        Button button = new Button(mContext);
+        button.setText(text);
+        button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+        button.setGravity(Gravity.CENTER);
+        button.setId(id);
+        button.setTextSize(25);
 
-        textView.setOnClickListener(this);
-        parent.addView(textView);
+        button.setOnClickListener(this);
+        parent.addView(button);
 
     }
 
     private void addText(String text) {
-        mText += text;
+
+        switch (text) {
+            case "-":
+                if (mText.length() == 0) {
+                    mText += text;
+                }
+                break;
+            case ".":
+                if (mText.length() > 0)
+                    if (!mText.substring(mText.length() - 1).equals(".")) {
+                        mText += text;
+                    }
+                break;
+            default:
+                mText += text;
+                break;
+        }
 
         if (mListener != null) {
             mListener.onKeyboardClick(mText);
