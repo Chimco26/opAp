@@ -11,7 +11,7 @@ import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
 
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private boolean mEndSetupDiable;
+    private boolean mEndSetupDisable;
     private TextView mTitle;
     private TextView mSubTitle;
     private View m1Ly;
@@ -31,7 +31,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 
         mListener = listener;
         mMachineStatus = machineStatus;
-        mEndSetupDiable = endSetupDisable;
+        mEndSetupDisable = endSetupDisable;
         mTitle = itemView.findViewById(R.id.TLWC_title);
         mSubTitle = itemView.findViewById(R.id.TLWC_subtitle);
         m1Ly = itemView.findViewById(R.id.TLWC_time_ly);
@@ -47,7 +47,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 
     public void setData(Widget widget, MachineStatus machineStatus, boolean endSetupDisable) {
         mMachineStatus = machineStatus;
-        mEndSetupDiable = endSetupDisable;
+        mEndSetupDisable = endSetupDisable;
         initListener();
         setView(widget);
     }
@@ -58,6 +58,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         if (mMachineStatus != null &&
                 mMachineStatus.getAllMachinesData() != null
                 && mMachineStatus.getAllMachinesData().get(0) != null &&
+//                !mEndSetupDisable &&
                 mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                         && mMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
 
@@ -84,9 +85,13 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         if (time > endLimit) {
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
+            m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
+            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
+            m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
+            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
     }
 
@@ -111,7 +116,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 if (mMachineStatus != null &&
                         mMachineStatus.getAllMachinesData() != null
                         && mMachineStatus.getAllMachinesData().get(0) != null &&
-                        !mEndSetupDiable &&
+//                        !mEndSetupDisable &&
                         mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                         && mMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
                     mListener.onEndSetup();

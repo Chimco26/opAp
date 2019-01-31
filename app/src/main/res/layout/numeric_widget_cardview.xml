@@ -130,7 +130,9 @@
                     android:layout_marginTop="3dp"
                     android:background="@drawable/box_grey_stroke"
                     android:gravity="center"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
             </LinearLayout>
 
@@ -298,7 +300,9 @@
             android:textColor="@color/blue1"
             android:textSize="35sp"
             android:gravity="center"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

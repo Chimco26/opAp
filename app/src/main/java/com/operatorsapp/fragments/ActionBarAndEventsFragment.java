@@ -2034,7 +2034,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
 
-            if (!mEndSetupDisable) {
+             if (!mEndSetupDisable) {
                 disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                                 && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
                         , mJobActionsSpinnerItems.get(4).getUniqueID());

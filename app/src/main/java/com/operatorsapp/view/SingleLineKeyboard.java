@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.operatorsapp.R;
-
 
 public class SingleLineKeyboard implements View.OnClickListener {
 
@@ -23,10 +21,9 @@ public class SingleLineKeyboard implements View.OnClickListener {
     private OnKeyboardClickListener mListener;
 
 
-    public SingleLineKeyboard(LinearLayout linearLayout, Context context, String[] chars) {
+    public SingleLineKeyboard(LinearLayout linearLayout, Context context) {
         mLinearLayout = linearLayout;
         mContext = context;
-        mChars = chars;
     }
 
     public OnKeyboardClickListener getmListener() {
@@ -37,9 +34,9 @@ public class SingleLineKeyboard implements View.OnClickListener {
         this.mListener = mListener;
     }
 
-    public void openKeyBoard() {
+    public void openKeyBoard(String text) {
 
-        mText = "";
+        mText = text;
 
         closeKeyBoard();
 
@@ -127,6 +124,10 @@ public class SingleLineKeyboard implements View.OnClickListener {
                 break;
         }
 
+    }
+
+    public void setChars(String[] mChars) {
+        this.mChars = mChars;
     }
 
     public interface OnKeyboardClickListener {

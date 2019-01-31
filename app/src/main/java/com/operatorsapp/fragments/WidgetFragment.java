@@ -519,12 +519,13 @@ public class WidgetFragment extends Fragment implements
 
 
     @Override
-    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener) {
+    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         mKeyBoardLayout.setVisibility(View.VISIBLE);
         if (mKeyBoard == null)
-            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext(), new String[]{".", "-"});
+            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
-        mKeyBoard.openKeyBoard();
+        mKeyBoard.setChars(complementChars);
+        mKeyBoard.openKeyBoard(text);
         mKeyBoard.setListener(listener);
     }
 

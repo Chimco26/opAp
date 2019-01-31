@@ -143,7 +143,6 @@ public class WidgetAdapter extends Adapter {
             case NUMERIC: {
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                         mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
-//                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false));
             }
             case RANGE: {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
@@ -207,6 +206,7 @@ public class WidgetAdapter extends Adapter {
                 case TIME_LEFT:
                     final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
                     timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable);
+                    mEndSetupDisable = false;
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -231,7 +231,7 @@ public class WidgetAdapter extends Adapter {
 
     public void setMachineStatus(MachineStatus machineStatus) {
         this.mMachineStatus = machineStatus;
-        {mEndSetupDisable = false;}
+//        {mEndSetupDisable = false;}
     }
 
     public void setApproveFirstItemFeedBack() {
