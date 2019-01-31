@@ -1522,9 +1522,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onRefreshPollingRequest() {
         OppAppLogger.getInstance().i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
 
-        mAllDashboardDataCore.stopPolling();
-
-        NetworkManager.getInstance().clearPollingRequest();
+//        mAllDashboardDataCore.stopPolling();
+//
+//        NetworkManager.getInstance().clearPollingRequest();
 //        mAllDashboardDataCore.startPolling(null);
 
         dashboardDataStartPolling();
@@ -2382,7 +2382,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportSuccess(Object o) {//TODO crouton error
             ErrorResponseNewVersion response = objectToNewError(o);
-            SendBroadcast.refreshPolling(DashboardActivity.this);
+//            SendBroadcast.refreshPolling(DashboardActivity.this);
+            dashboardDataStartPolling();
             ProgressDialogManager.dismiss();
 
             if (response.isFunctionSucceed()) {

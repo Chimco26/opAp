@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,7 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -23,7 +23,6 @@ import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.view.SingleLineKeyboard;
 
 import me.grantland.widget.AutofitTextView;
@@ -89,7 +88,17 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditStep1Ly = itemView.findViewById(R.id.NWC_edit_step_1_ly);
         mEditNumberEt = itemView.findViewById(R.id.NWC_edit_number_et);
-        mEditNumberEt.setInputType(InputType.TYPE_NULL);
+        mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int inType = mEditNumberEt.getInputType(); // backup the input type
+                mEditNumberEt.setInputType(InputType.TYPE_NULL); // disable soft input
+                mEditNumberEt.onTouchEvent(event); // call native handler
+                mEditNumberEt.setInputType(inType); // restore input type
+                setKeyBoard(mEditNumberEt, new String[]{".", "-"});
+                return false; // consume touch event
+            }
+        });
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
 //        mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
@@ -104,7 +113,17 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
         mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
-        mEditCycleEt.setInputType(InputType.TYPE_NULL);
+        mEditCycleEt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int inType = mEditCycleEt.getInputType(); // backup the input type
+                mEditCycleEt.setInputType(InputType.TYPE_NULL); // disable soft input
+                mEditCycleEt.onTouchEvent(event); // call native handler
+                mEditCycleEt.setInputType(inType); // restore input type
+                setKeyBoard(mEditCycleEt, new String[]{"."});
+                return false; // consume touch event
+            }
+        });
         mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
         mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
 
@@ -130,14 +149,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             initNumericDiplayLy(widget);
         } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)) {
             initEditCycleLy(widget);
-            if (mOnKeyboardManagerListener != null){
-                mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                    @Override
-                    public void onKeyboardClick(String text) {
-                        mEditCycleEt.setText(text);
-                    }
-                });
-            }
+            setKeyBoard(mEditCycleEt, new String[]{"."});
         }
 
         closeKeyboard(widget.getEditStep());
@@ -149,19 +161,22 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             initNumericDiplayLy(widget);
         } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep1(widget);
-
-            if (mOnKeyboardManagerListener != null){
-                mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
-                    @Override
-                    public void onKeyboardClick(String text) {
-                        mEditNumberEt.setText(text);
-                    }
-                });
-            }
+            setKeyBoard(mEditNumberEt, new String[]{".", "-"});
         } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep2(widget);
         }
         closeKeyboard(widget.getEditStep());
+    }
+
+    private void setKeyBoard(final EditText editText, String[] complementChars) {
+        if (mOnKeyboardManagerListener != null) {
+            mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
+                @Override
+                public void onKeyboardClick(String text) {
+                    editText.setText(text);
+                }
+            }, editText.getText().toString(), complementChars);
+        }
     }
 
     private void closeKeyboard(int editStop){
@@ -177,27 +192,29 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditStep2Ly.setVisibility(View.GONE);
         mEditCycleLy.setVisibility(View.VISIBLE);
 //        mEditCycleEt.requestFocus();
-        KeyboardUtils.showKeyboard(mContext);
+//        KeyboardUtils.showKeyboard(mContext);
 
         mEditCycleCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 widget.setEditStep(0);
-                setupNumericCycleItem(widget);
                 mEditCycleEt.clearFocus();
+                setupNumericCycleItem(widget);
                 mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
             }
         });
         mEditCycleReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                widget.setEditStep(0);
-                mDashboardCentralContainerListener.onReportCycleUnit(
-                        mEditCycleEt.getText().toString());
-                setupNumericCycleItem(widget);
-                mEditCycleEt.clearFocus();
-                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
-
+                if (!mEditCycleEt.getText().toString().isEmpty() &&
+                !mEditCycleEt.getText().toString().equals("0")) {
+                    widget.setEditStep(0);
+                    mDashboardCentralContainerListener.onReportCycleUnit(
+                            mEditCycleEt.getText().toString());
+                    mEditCycleEt.clearFocus();
+                    setupNumericCycleItem(widget);
+                    mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                }
             }
         });
     }
@@ -224,15 +241,14 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mStep2ReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                widget.setEditStep(0);
-                mDashboardCentralContainerListener.onReportReject(
-                        mEditNumberEt.getText().toString(),
-                        mUnitRadioBtn.isChecked(),
-                        mSelectedCauseId,
-                        mSelectedReasonId);
-                setupNumericRejectItem(widget);
-                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
-
+                    widget.setEditStep(0);
+                    mDashboardCentralContainerListener.onReportReject(
+                            mEditNumberEt.getText().toString(),
+                            mUnitRadioBtn.isChecked(),
+                            mSelectedCauseId,
+                            mSelectedReasonId);
+                    setupNumericRejectItem(widget);
+                    mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
             }
         });
     }
@@ -292,7 +308,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditStep2Ly.setVisibility(View.GONE);
         mEditCycleLy.setVisibility(View.GONE);
 //        mEditNumberEt.requestFocus();
-        KeyboardUtils.showKeyboard(mContext);
+//        KeyboardUtils.showKeyboard(mContext);
 
         mStep1CancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -306,10 +322,13 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mStep1NextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                widget.setEditStep(2);
-                setupNumericRejectItem(widget);
-                mEditNumberEt.clearFocus();
-                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                if (!mEditNumberEt.getText().toString().isEmpty() &&
+                        !mEditNumberEt.getText().toString().equals("0")) {
+                    widget.setEditStep(2);
+                    setupNumericRejectItem(widget);
+                    mEditNumberEt.clearFocus();
+                    mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                }
             }
         });
     }
@@ -383,7 +402,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
 
     public interface OnKeyboardManagerListener{
-        void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener);
+        void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars);
         void onCloseKeyboard();
     }
 }
