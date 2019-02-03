@@ -531,7 +531,11 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onCloseKeyboard() {
-        mKeyBoardLayout.setVisibility(View.GONE);
-        mKeyBoard.setListener(null);
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.GONE);
+        }
+        if (mKeyBoard != null) {
+            mKeyBoard.setListener(null);
+        }
     }
 }
