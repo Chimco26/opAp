@@ -231,7 +231,7 @@
                                 android:layout_height="match_parent" />
 
                         </LinearLayout>
-
+                        <!--//todo kuti-->
                         <LinearLayout
                             android:id="@+id/fragment_dashboard_shiftlog"
                             android:layout_width="124dp"

@@ -2055,7 +2055,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events) {//todo kuti
 
         int deletedEvents = clearOver24HShift();
 

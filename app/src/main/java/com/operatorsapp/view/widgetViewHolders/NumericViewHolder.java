@@ -25,6 +25,8 @@ import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
 
+import java.util.Locale;
+
 import me.grantland.widget.AutofitTextView;
 
 import static com.operatorsapp.activities.DashboardActivity.REPORT_REJECT_TAG;
@@ -88,6 +90,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditStep1Ly = itemView.findViewById(R.id.NWC_edit_step_1_ly);
         mEditNumberEt = itemView.findViewById(R.id.NWC_edit_number_et);
+        mStep1NextBtn = itemView.findViewById(R.id.NWC_edit_next_btn);
         mEditNumberEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -95,14 +98,13 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                 mEditNumberEt.setInputType(InputType.TYPE_NULL); // disable soft input
                 mEditNumberEt.onTouchEvent(event); // call native handler
                 mEditNumberEt.setInputType(inType); // restore input type
-                setKeyBoard(mEditNumberEt, new String[]{".", "-"});
+                setKeyBoard(mEditNumberEt, new String[]{".", "-"}, mStep1NextBtn);
                 return false; // consume touch event
             }
         });
         mUnitRadioBtn = itemView.findViewById(R.id.NWC_edit_unit_btn);
 //        mWeightRadioBtn = itemView.findViewById(R.id.NWC_edit_weight_btn);
         mStep1CancelBtn = itemView.findViewById(R.id.NWC_edit_cancel_btn);
-        mStep1NextBtn = itemView.findViewById(R.id.NWC_edit_next_btn);
 
         mEditStep2Ly = itemView.findViewById(R.id.NWC_edit_step_2_ly);
         mSpinner1 = itemView.findViewById(R.id.NWC_reason_spinner);
@@ -113,6 +115,8 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
         mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
         mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
+        mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
+        mEditCycleEt.setHint(String.format(Locale.getDefault(), "%s%d", mEditCycleEt.getContext().getString(R.string.max_value_is), PersistenceManager.getInstance().getMaxUnitReport()));
         mEditCycleEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -120,12 +124,11 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
                 mEditCycleEt.setInputType(InputType.TYPE_NULL); // disable soft input
                 mEditCycleEt.onTouchEvent(event); // call native handler
                 mEditCycleEt.setInputType(inType); // restore input type
-                setKeyBoard(mEditCycleEt, new String[]{"."});
+                setKeyBoard(mEditCycleEt, new String[]{"."}, mEditCycleReportBtn);
                 return false; // consume touch event
             }
         });
         mEditCycleCancelBtn = itemView.findViewById(R.id.NWC_edit_quantity_cancel_btn);
-        mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
 
     }
 
@@ -149,7 +152,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             initNumericDiplayLy(widget);
         } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_UNIT_CYCLE_TAG)) {
             initEditCycleLy(widget);
-            setKeyBoard(mEditCycleEt, new String[]{"."});
+            setKeyBoard(mEditCycleEt, new String[]{"."}, mEditCycleReportBtn);
         }
 
         closeKeyboard(widget.getEditStep());
@@ -161,21 +164,30 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             initNumericDiplayLy(widget);
         } else if (widget.getEditStep() == 1 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep1(widget);
-            setKeyBoard(mEditNumberEt, new String[]{".", "-"});
+            setKeyBoard(mEditNumberEt, new String[]{".", "-"}, mStep1NextBtn);
         } else if (widget.getEditStep() == 2 && widget.getTargetScreen().equals(REPORT_REJECT_TAG)) {
             initEditNumericStep2(widget);
         }
         closeKeyboard(widget.getEditStep());
     }
 
-    private void setKeyBoard(final EditText editText, String[] complementChars) {
+    private void setKeyBoard(final EditText editText, String[] complementChars, final View nextBtn) {
         if (mOnKeyboardManagerListener != null) {
             mOnKeyboardManagerListener.onOpenKeyboard(new SingleLineKeyboard.OnKeyboardClickListener() {
                 @Override
                 public void onKeyboardClick(String text) {
                     editText.setText(text);
+                    enableNextBtn(text, nextBtn, editText);
                 }
             }, editText.getText().toString(), complementChars);
+        }
+    }
+
+    public void enableNextBtn(String text, View nextBtn, EditText editText) {
+        if (!text.isEmpty()) {
+            nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.blue1));
+        }else {
+            nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.grey_lite));
         }
     }
 
@@ -206,17 +218,26 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mEditCycleEt.getText().toString().isEmpty() &&
-                !mEditCycleEt.getText().toString().equals("0")) {
+                if (!mEditCycleEt.getText().toString().isEmpty()) {
                     widget.setEditStep(0);
-                    mDashboardCentralContainerListener.onReportCycleUnit(
-                            mEditCycleEt.getText().toString());
+                    mDashboardCentralContainerListener.onReportCycleUnit(getCycleReportValue(Double.parseDouble(mEditCycleEt.getText().toString())));
                     mEditCycleEt.clearFocus();
                     setupNumericCycleItem(widget);
                     mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
                 }
             }
         });
+    }
+
+    private String getCycleReportValue(Double value) {
+        if (value <= 0){
+            return String.valueOf(1);
+        }
+        int max = PersistenceManager.getInstance().getMaxUnitReport();
+        if (value > max){
+            return String.valueOf(max);
+        }
+        return String.valueOf(value);
     }
 
     private void initEditNumericStep2(final Widget widget) {
