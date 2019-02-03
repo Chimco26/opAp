@@ -539,3 +539,4 @@ public class WidgetFragment extends Fragment implements
         }
     }
 }
+
