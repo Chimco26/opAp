@@ -6,6 +6,7 @@ import android.content.Context;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
@@ -87,6 +88,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SHIFT_START = "pref.PREF_SHIFT_START";
     private static final String PREF_SHIFT_END = "pref.PREF_SHIFT_END";
     private static final String PREF_RECENT_TECH_CALL = "pref.RECENT_TECH_CALL";
+    private static final String PREF_STOP_REASON_DESIGN = "pref.STOP_REASON_DESIGN";
 
 
     private static PersistenceManager msInstance;
@@ -170,6 +172,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     @Override
     public String getOperatorId() {
         return SecurePreferences.getInstance().getString(PREF_OPERATOR_ID);
+        //return SecurePreferences.getInstance().getString(PREF_OPERATOR_ID, "0");
     }
 
     @Override
@@ -618,7 +621,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public void setCalledTechnicianList(ArrayList<TechCallInfo> techCallInfoList) {
         if (techCallInfoList == null){
-            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(new ArrayList<>()));
+            SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, null);
         }else {
             SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(techCallInfoList));
         }
@@ -626,22 +629,24 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public ArrayList<TechCallInfo> getCalledTechnician(){
 
-        String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN,  mGson.toJson(new ArrayList<>()));
+        String str = SecurePreferences.getInstance().getString(CALLED_TECHNICIAN, "");
         Type listType = new TypeToken<ArrayList<TechCallInfo>>() {
         }.getType();
 
-        ArrayList<TechCallInfo> techCallInfoList = new ArrayList<>();
-        if (str.length() > 0){
-            techCallInfoList = mGson.fromJson(str, listType);
+        ArrayList<TechCallInfo> techCallInfoList = new ArrayList<TechCallInfo>();
+        if (str != null && str.length() > 0){
+            try {
+                techCallInfoList = mGson.fromJson(str, listType);
+            }catch (Exception e){
+
+            }
         }
 
 //        TechCallInfo t = mGson.fromJson(str, TechCallInfo.class);
 //        if (t == null){
 //            t = new TechCallInfo(-1, "", "", 0);
 //        }
-        if (techCallInfoList == null){
-            techCallInfoList = new ArrayList<TechCallInfo>();
-        }else if(techCallInfoList != null && techCallInfoList.size() > 0) {
+        if(techCallInfoList != null && techCallInfoList.size() > 0) {
                 Collections.sort(techCallInfoList, new Comparator<TechCallInfo>() {
                     @Override
                     public int compare(TechCallInfo o1, TechCallInfo o2) {
@@ -665,5 +670,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public int getRecentTechCallId() {
         return SecurePreferences.getInstance().getInt(PREF_RECENT_TECH_CALL);
+    }
+
+    public boolean isNewStopReasonDesign() {
+        return SecurePreferences.getInstance().getBoolean(PREF_STOP_REASON_DESIGN, true);
+    }
+
+    public void setisNewStopReasonDesign(boolean selected) {
+        SecurePreferences.getInstance().setBoolean(PREF_STOP_REASON_DESIGN, selected);
     }
 }

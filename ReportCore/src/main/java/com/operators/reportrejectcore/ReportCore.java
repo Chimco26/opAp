@@ -34,9 +34,13 @@ public class ReportCore {
 
     public void sendReportReject(int rejectReasonId, int rejectReasonCause, Double units, Double weight, Integer jobId) {
         if (mReportPersistenceManagerInterface != null) {
+            String workerID = mReportPersistenceManagerInterface.getOperatorId();
+            if (workerID != null && workerID.equals("0")){
+                workerID = "";
+            }
             mReportRejectNetworkBridgeInterface.sendReportReject(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), rejectReasonId, rejectReasonCause, units, weight, jobId, new SendReportRejectCallback() {
+                    , workerID, rejectReasonId, rejectReasonCause, units, weight, jobId, new SendReportRejectCallback() {
                         @Override
                         public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {

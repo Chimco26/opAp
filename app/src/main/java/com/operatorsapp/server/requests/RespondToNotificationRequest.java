@@ -41,7 +41,13 @@ public class RespondToNotificationRequest {
     @SerializedName("targetUserName")
     private String mTargetUserName;
 
-    public RespondToNotificationRequest(String mSessionID, String mTitle, String mText, String mMachineID, String mMsgID, int mResponseType, int mNotificationType, int mResponseTarget, String mSourceUserID, String mSourceUserName, String mTargetUserName) {
+    @SerializedName("SourceWorkerID")
+    private String mSourceWorkerID;
+
+    @SerializedName("targetUserID")
+    private String mTargetUserID;
+
+    public RespondToNotificationRequest(String mSessionID, String mTitle, String mText, String mMachineID, String mMsgID, int mResponseType, int mNotificationType, int mResponseTarget, String mSourceUserID, String mSourceUserName, String mTargetUserName, String mSourceWorkerID, String mTargetUserId) {
         this.mSessionID = mSessionID;
         this.mTitle = mTitle;
         this.mText = mText;
@@ -52,11 +58,17 @@ public class RespondToNotificationRequest {
         this.mResponseTarget = mResponseTarget;
         this.mSourceUserName = mSourceUserName;
         this.mTargetUserName = mTargetUserName;
+        this.mSourceWorkerID = mSourceWorkerID;
+        this.mTargetUserID = mTargetUserId;
         try{
             this.mSourceUserID = Integer.parseInt(mSourceUserID);
         }catch (Exception e){
             this.mSourceUserID = 0;
         }
+    }
+
+    public String getmSourceWorkerID() {
+        return mSourceWorkerID;
     }
 
     public String getmSessionID() {

@@ -21,6 +21,7 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -76,9 +77,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     if (response != null && response.body() != null && response.isSuccessful()) {
                         Log.d(LOG_TAG, "token sent");
                         pm.setNeedUpdateToken(false);
-                        pm.tryToUpdateToken("success + android id: " + id);
+                       // pm.tryToUpdateToken("success + android id: " + id);
                     }else {
-                        pm.tryToUpdateToken("failed + android id: " + id);
+                       // pm.tryToUpdateToken("failed + android id: " + id);
                         pm.setNeedUpdateToken(true);
                         Log.d(LOG_TAG, "token failed");
                         if (retry[0]){
@@ -147,6 +148,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             int responseType = Integer.parseInt(data.get("ResponseType"));
             int id = Integer.parseInt(data.get("ID"));
             String time = TimeUtils.getStringNoTFormatForNotification(data.get("ResponseDate"));
+            if (time == null || time.equals("")){
+                time = TimeUtils.getDate(new Date().getTime(), TimeUtils.SQL_NO_T_FORMAT);
+            }
             String targetName = data.get("TargetUserName");
             String sourceName = data.get("SourceUserName");
 
@@ -160,6 +164,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     id,
                     notificationType);
 
+            notification.setmResponseDate(time);
             ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
 
             notificationList.add(notification);

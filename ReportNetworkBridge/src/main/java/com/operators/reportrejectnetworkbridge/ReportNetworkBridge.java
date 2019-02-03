@@ -130,8 +130,12 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                         OppAppLogger.getInstance().w(LOG_TAG, "sendMultipleReportReject(), onResponse() callback is null");
                     }
                 } else {
+                    String msg = "response not successful";
+                    if (response!=null && response.body() != null){
+                        msg = response.body().getErrorDesc();
+                    }
 
-                    onFailure(call, new Exception("response not successful"));
+                    onFailure(call, new Throwable(msg));
                 }
 
             }
@@ -145,7 +149,7 @@ public class ReportNetworkBridge implements ReportRejectNetworkBridgeInterface {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "Send_Report_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                         callback.onSendStopReportFailed(errorObject);
                     }
                 } else {

@@ -608,13 +608,45 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+
+                    tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
+
+                    switch (notification.getmResponseType()){
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                            tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
+                            break;
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                            tvBody.setText(String.format(getResources().getString(R.string.call_declined2), notification.getmSender()));
+                            break;
+
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                            tvBody.setText(String.format(getResources().getString(R.string.started_service2), notification.getmSender()));
+                            break;
+
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                            tvBody.setText(String.format(getResources().getString(R.string.service_completed2), notification.getmSender()));
+                            break;
+
+                        case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
+                            tvBody.setText(String.format(getResources().getString(R.string.call_cancelled2), notification.getmSender()));
+                            break;
+
+                        default:
+                            tvBody.setText(notification.getmBody());
+                            break;
+                    }
+
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
-                    tvSender.setText(getString(R.string.message_from) + " " + notification.getmTargetName());
                 }else {
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
+                    tvBody.setText(notification.getmBody());
                 }
 
-                tvBody.setText(notification.getmBody());
+
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
                     @Override
@@ -1149,7 +1181,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onCleanTech(TechCallInfo techCallInfo) {
-//                cleanTech(0, techCallInfo);
+                cleanTech(0, techCallInfo);
                 getNotificationsFromServer(false);
                 setTechnicianCallStatus();
             }
@@ -1229,7 +1261,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             long delay = -1;
             switch (techCallInfo.getmResponseType()) {
                 case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
-                    mTechnicianIndicatorTv.setText(getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
                     //calculate 5 minutes from call and display a message
                     if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET && technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
@@ -1244,8 +1276,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         final AlertDialog.Builder builder;
                                         builder = new AlertDialog.Builder(getActivity());
                                         builder.setCancelable(true);
-                                        final AlertDialog alertDialog = builder.setTitle(getString(R.string.call_technician_title))
-                                                .setMessage(getString(R.string.call_for_technician_unresponsive))
+                                        final AlertDialog alertDialog = builder.setTitle(getResources().getString(R.string.call_technician_title))
+                                                .setMessage(getResources().getString(R.string.call_for_technician_unresponsive))
                                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         dialog.dismiss();
@@ -1260,27 +1292,27 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                    mTechnicianIndicatorTv.setText(getString(R.string.call_approved) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_approved) + "\n" + techCallInfo.getmName());
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_recieved));
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                     delay = 1000 * 60 * 10;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_declined));
-                    mTechnicianIndicatorTv.setText(getString(R.string.call_declined) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_declined) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.at_work));
-                    mTechnicianIndicatorTv.setText(getString(R.string.started_service) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.started_service) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                     delay = 0;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.work_completed));
-                    mTechnicianIndicatorTv.setText(getString(R.string.service_completed) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.service_completed) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                     delay = 0;
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.cancel));
-                    mTechnicianIndicatorTv.setText(getString(R.string.call_cancelled) + "\n" + techCallInfo.getmName());
+                    mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_cancelled) + "\n" + techCallInfo.getmName());
                     break;
                 default:
                     mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
@@ -1338,6 +1370,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void cleanTech(int delay, final TechCallInfo techCallInfo){
 
+        mHandlerTechnicianCall.removeCallbacksAndMessages(null);
         if (delay >= 0) {
             mHandlerTechnicianCall.postDelayed(new Runnable() {
                 @Override
@@ -1384,7 +1417,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openTechniciansList() {
-        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)) {
+        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity) ) {
             return;
         }
 
@@ -1450,14 +1483,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 title += operatorName;
 
                 final String techName = OperatorApplication.isEnglishLang() ? techniciansList.get(position).getEName() : techniciansList.get(position).getLName();
+                String sourceUserId = PersistenceManager.getInstance().getOperatorId();
+                if (sourceUserId == null || sourceUserId.equals("")){
+                    sourceUserId = "0";
+                }
                 final int technicianId = techniciansList.get(position).getID();
 
-                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName());
+                PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName(), sourceUserId);
                 NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
                     @Override
                     public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
                         if (response.body() != null && response.body().getmError() == null) {
 
+                            mCallCounterHandler.removeCallbacksAndMessages(null);
                             PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                             PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
@@ -1667,6 +1705,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (notification[0] != null) {
 
+            String opId = pm.getOperatorId();
+            if (opId == null || opId.equals("")){
+                opId = "0";
+            }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     getResources().getString(R.string.respond_notification_title),
                     notification[0].getmBody(),
@@ -1675,9 +1717,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     responseType,
                     Consts.NOTIFICATION_TYPE_FROM_WEB,
                     Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
-                    pm.getOperatorId(),
+                    opId,
                     pm.getOperatorName(),
-                    notification[0].getmSender());
+                    notification[0].getmSender(),
+                    opId,
+                    notification[0].getmTargetUserId()+"");
 
             ProgressDialogManager.show(getActivity());
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
@@ -2713,12 +2757,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (response != null && response.body() != null && response.body().getmError() == null) {
 
+                    ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
+                        if (techList != null && techList.size() > 0){
+                            for (TechCallInfo tech : techList) {
+                                if (tech.getmNotificationId() == not.getmNotificationID()){
+                                    tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
+                    PersistenceManager.getInstance().setCalledTechnicianList(techList);
                     if (openNotifications) {
                         openNotificationsList();
                     }

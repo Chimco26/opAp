@@ -451,7 +451,7 @@ public class SimpleRequests {
         call.enqueue(new Callback<ErrorResponseNewVersion>() {
             @Override
             public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
-                if (response.isSuccessful()) {
+                if (response != null && response.body() != null && response.body().isFunctionSucceed()) {
                     if (callback != null) {
 
                         callback.onPostSplitEventSuccess(response.body());
@@ -461,8 +461,12 @@ public class SimpleRequests {
                         OppAppLogger.getInstance().w(LOG_TAG, "PostSplit(), onResponse() callback is null");
                     }
                 } else {
-
-                    onFailure(call, new Exception("response not successful"));
+                    String msg = "";
+                    if (response != null && response.body() != null && response.body().getmError() != null){
+                        msg = response.body().getmError().getErrorDesc();
+                    }
+                    onFailure(call, new Throwable(msg));
+                    //onFailure(call, new Exception("response not successful"));
                 }
 
             }
@@ -476,7 +480,7 @@ public class SimpleRequests {
                     } else {
                         retryCount[0] = 0;
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
-                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostSplitEvent_Failed Error");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, t.getMessage());
                         callback.onPostSplitEventFailed(errorObject);
                     }
                 } else {
