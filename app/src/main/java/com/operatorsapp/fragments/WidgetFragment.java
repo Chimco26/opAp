@@ -161,6 +161,7 @@ public class WidgetFragment extends Fragment implements
 
             mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
             mLoadingDataView.setVisibility(View.VISIBLE);
+            mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
 
             initTopFive(view);
         }
@@ -171,9 +172,6 @@ public class WidgetFragment extends Fragment implements
 
         View includeTopFive_1 = view.findViewById(R.id.fragment_dashboard_top_five_1);
         View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
-
-
-        mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
 
         row1_lil = view.findViewById(R.id.row1_top_five_lil);
         row2_lil = view.findViewById(R.id.row2_top_five_lil);
@@ -520,13 +518,15 @@ public class WidgetFragment extends Fragment implements
 
     @Override
     public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
-        mKeyBoardLayout.setVisibility(View.VISIBLE);
-        if (mKeyBoard == null)
-            mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.VISIBLE);
+            if (mKeyBoard == null)
+                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
-        mKeyBoard.setChars(complementChars);
-        mKeyBoard.openKeyBoard(text);
-        mKeyBoard.setListener(listener);
+            mKeyBoard.setChars(complementChars);
+            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.setListener(listener);
+        }
     }
 
     @Override
