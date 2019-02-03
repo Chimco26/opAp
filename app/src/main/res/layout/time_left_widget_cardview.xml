@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/counter_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/widget_height"
+    android:layout_centerInParent="true"
+    android:background="@drawable/widget_background_selector"
+    android:orientation="vertical">
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/TLWC_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:singleLine="false"
+        android:text="@string/time_left_to_current_job"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        autofit:minTextSize="12sp" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/TLWC_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TLWC_title"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/hr"
+        android:textSize="14sp"
+        autofit:minTextSize="8sp" />
+
+    <View
+        android:id="@+id/TLWC_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/TLWC_subtitle"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="15dp"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/TLWC_divider">
+
+        <LinearLayout
+            android:id="@+id/TLWC_time_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/TLWC_time_tv"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/blue1"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/TLWC_see_jobs_btn"
+                android:layout_width="180dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/blue1"
+                android:gravity="center"
+                android:text="@string/see_pending_jobs"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/TLWC_end_setup_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/end_set_up" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/you_are_in_setup_mode"
+                    android:textColor="@color/red_line"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/TLWC_end_setup_btn"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/red_line"
+                    android:gravity="center"
+                    android:text="@string/end_setup"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/TLWC_countdown_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="-50dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.operatorsapp.view.widgetViewHolders.CountDownView
+                android:id="@+id/TLWC_countdown"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TLWC_countdown_text_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/get_ready_for_your_next_job"
+                    android:textColor="@color/blue1"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/TLWC_countdown_btn"
+                    android:layout_width="130dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/blue1"
+                    android:gravity="center"
+                    android:text="@string/see_job"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -311,6 +311,14 @@
     <string name="waiting_for_replay">Waiting for replay</string>
     <string name="more_details">Waiting for more details</string>
     <string name="technician">Technician</string>
+    <string name="time_left_to_current_job">Time left to current job</string>
+    <string name="hr">(Hr)</string>
+    <string name="see_pending_jobs">See pending jobs</string>
+    <string name="end_setup">End Setup</string>
+    <string name="you_are_in_setup_mode">You are in setup mode</string>
+    <string name="get_ready_for_your_next_job">Get ready for your next job</string>
+    <string name="see_job">See Job</string>
+    <string name="dont_forget_to_activate_job">Don\'t forget to activate job!</string>
 
 
     <string-array name="color_array">

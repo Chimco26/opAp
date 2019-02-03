@@ -80,4 +80,28 @@
         <attr name="aspectRatioWidth" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="CountDownView">
+        <attr name="padding" format="integer"/>
+        <attr name="startAngle" format="integer"/>
+        <attr name="percentAngle" format="integer"/>
+        <attr name="indicatorRadius" format="integer"/>
+        <attr name="textSize" format="integer"/>
+        <attr name="text" format="string"/>
+        <attr name="totalTimeInMinute" format="integer"/>
+        <attr name="strokeWidth" format="integer"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="centerColor" format="color"/>
+        <attr name="percentBackgroundColor" format="color"/>
+        <attr name="percentEndBackgroundColor" format="color"/>
+        <attr name="percentColor" format="color"/>
+        <attr name="percentEndColor" format="color"/>
+        <attr name="indicatorCenterColor" format="color"/>
+        <attr name="indicatorEndCenterColor" format="color"/>
+        <attr name="indicatorStrokeColor" format="color"/>
+        <attr name="indicatorEndStrokeColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textEndColor" format="color"/>
+        <attr name="isReverse" format="boolean"/>
+        <attr name="endModeTimeInMinute" format="integer"/>
+    </declare-styleable>
 </resources>

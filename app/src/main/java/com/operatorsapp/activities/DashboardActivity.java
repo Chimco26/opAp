@@ -329,23 +329,26 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
                 });
             } else {
-                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(LOG_TAG, "getInstanceId failed", task.getException());
-                            return;
+                try {
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w(LOG_TAG, "getInstanceId failed", task.getException());
+                                return;
+                            }
+
+                            // Get new Instance ID token
+
+                            PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
+                            checkUpdateNotificationToken();
+
                         }
-
-                        // Get new Instance ID token
-
-                        PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
-                        checkUpdateNotificationToken();
-
-                    }
-                });
+                    });
+                } catch (IllegalStateException e) {
+                }
             }
-
         }
 
     }
@@ -474,8 +477,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                         first = !first;
                     }
-                    setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                    setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                            && mCurrentMachineStatus.getAllMachinesData().size() > 0
+                            && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
+                        setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+                        setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    }
                 }
             }
         };
@@ -1103,7 +1110,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                if (fragment instanceof ApproveFirstItemFragment) {
 //                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //                } else {
-                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+                    getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //                }
 
             } else {
@@ -1515,9 +1522,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onRefreshPollingRequest() {
         OppAppLogger.getInstance().i(LOG_TAG, "onRefreshPollingRequest() command received from settings screen");
 
-        mAllDashboardDataCore.stopPolling();
-
-        NetworkManager.getInstance().clearPollingRequest();
+//        mAllDashboardDataCore.stopPolling();
+//
+//        NetworkManager.getInstance().clearPollingRequest();
 //        mAllDashboardDataCore.startPolling(null);
 
         dashboardDataStartPolling();
@@ -1537,7 +1544,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
 
                 dashboardUICallbackListener.onApproveFirstItemEnabledChanged(false); // disable the button at least until next polling cycle
-
             }
 
         }
@@ -1753,6 +1759,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onJobActionItemClick() {
 
+        startPendingJobsActivity();
+    }
+
+    public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
@@ -2213,13 +2223,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowCrouton(String errorResponse, boolean isError) {
 
-        if (errorResponse == null || errorResponse.length() == 0){
+        if (errorResponse == null || errorResponse.length() == 0) {
             errorResponse = " ";
         }
-        if (isError){
+        if (isError) {
             ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, errorResponse);
             ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
-        }else {
+        } else {
             mCroutonCreator.showCrouton(DashboardActivity.this, errorResponse, 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
         }
 
@@ -2268,6 +2278,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             value = "0";
         }
         sendCycleUnitReport(Double.parseDouble(value));
+    }
+
+    @Override
+    public void onOpenPendingJobs() {
+        startPendingJobsActivity();
+    }
+
+    @Override
+    public void onEndSetup() {
+        onShowSetupEndDialog();
     }
 
     private void sendCycleUnitReport(double value) {
@@ -2369,7 +2389,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         @Override
         public void sendReportSuccess(Object o) {//TODO crouton error
             ErrorResponseNewVersion response = objectToNewError(o);
-            SendBroadcast.refreshPolling(DashboardActivity.this);
+//            SendBroadcast.refreshPolling(DashboardActivity.this);
+            dashboardDataStartPolling();
             ProgressDialogManager.dismiss();
 
             if (response.isFunctionSucceed()) {
