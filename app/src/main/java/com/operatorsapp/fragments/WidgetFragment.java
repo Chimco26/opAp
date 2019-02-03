@@ -500,8 +500,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine mActiveJobsListForMachine) {
-
+    public void onActiveJobsListForMachineUICallbackListener(ActiveJobsListForMachine activeJobsListForMachine) {
     }
 
     public void setReportFieldForMachine(ReportFieldsForMachine reportFieldsForMachine) {

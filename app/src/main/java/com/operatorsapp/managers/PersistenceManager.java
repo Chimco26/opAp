@@ -87,6 +87,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SHIFT_START = "pref.PREF_SHIFT_START";
     private static final String PREF_SHIFT_END = "pref.PREF_SHIFT_END";
     private static final String PREF_RECENT_TECH_CALL = "pref.RECENT_TECH_CALL";
+    private static final String PREF_RECENT_MAX_UNIT_REPORT = "pref.PREF_RECENT_MAX_UNIT_REPORT";
 
 
     private static PersistenceManager msInstance;
@@ -665,5 +666,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public int getRecentTechCallId() {
         return SecurePreferences.getInstance().getInt(PREF_RECENT_TECH_CALL);
+    }
+    public void setMaxUnitReport(int maxUnitReport) {
+        SecurePreferences.getInstance().setInt(PREF_RECENT_MAX_UNIT_REPORT, maxUnitReport);
+    }
+
+    public int getMaxUnitReport() {
+        return SecurePreferences.getInstance().getInt(PREF_RECENT_MAX_UNIT_REPORT, 1000);
     }
 }

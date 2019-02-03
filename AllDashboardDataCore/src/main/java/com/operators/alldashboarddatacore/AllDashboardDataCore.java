@@ -135,8 +135,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             jobId = 0;
         }
 
-        getMachineData(onJobFinishedListener, jobId);
         getMachineStatus(onJobFinishedListener, jobId);
+        getMachineData(onJobFinishedListener, jobId);
         getShiftLogs(onJobFinishedListener);
     }
 

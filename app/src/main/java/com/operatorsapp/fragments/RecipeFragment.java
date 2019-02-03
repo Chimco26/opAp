@@ -214,16 +214,17 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
     private void initView() {
 
-        initChannel0View();
+        if (getActivity() != null) {
+            initChannel0View();
 
-        initChannel100View();
+            initChannel100View();
 
-        initChanne1_1_99_View();
+            initChanne1_1_99_View();
 
-        if (mRecipeResponse!= null && mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
-            mNoteTv.setText(mRecipeResponse.getNote());
+            if (mRecipeResponse != null && mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
+                mNoteTv.setText(mRecipeResponse.getNote());
+            }
         }
-
     }
 
     private void initChannel100View() {

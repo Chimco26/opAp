@@ -17,7 +17,7 @@
         android:layout_marginEnd="15dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Change material"
+        android:text="@string/change_material"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         autofit:minTextSize="12sp" />
@@ -32,7 +32,7 @@
         android:layout_marginBottom="2dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="More info"
+        android:text="@string/more_info"
         android:textSize="14sp"
         autofit:minTextSize="8sp" />
 
