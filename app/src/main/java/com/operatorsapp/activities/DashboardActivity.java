@@ -633,6 +633,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (activeJobsListForMachine != null) {
 
                 mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
+                PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
 
                 mReportFieldsForMachineCore.stopPolling();
                 mReportFieldsForMachineCore.startPolling();

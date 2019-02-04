@@ -162,7 +162,8 @@ public class WidgetAdapter extends Adapter {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
             }
             case TIME_LEFT: {
-                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false), mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable);
+                return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
+                        mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable, mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),

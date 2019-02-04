@@ -25,6 +25,8 @@ import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.SingleLineKeyboard;
 
+import java.util.Locale;
+
 import me.grantland.widget.AutofitTextView;
 
 import static com.operatorsapp.activities.DashboardActivity.REPORT_REJECT_TAG;
@@ -114,6 +116,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
         mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
         mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
+        mEditCycleEt.setHint(String.format(Locale.getDefault(), "%s%d", mEditCycleEt.getContext().getString(R.string.max_value_is), PersistenceManager.getInstance().getMaxUnitReport()));
         mEditCycleEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -181,7 +184,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void enableNextBtn(String text, View nextBtn, EditText editText) {
-        if (!text.isEmpty() && !text.equals("0")) {
+        if (!text.isEmpty()) {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.blue1));
         }else {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.grey_lite));
@@ -215,17 +218,26 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mEditCycleEt.getText().toString().isEmpty() &&
-                !mEditCycleEt.getText().toString().equals("0")) {
+                if (!mEditCycleEt.getText().toString().isEmpty()) {
                     widget.setEditStep(0);
-                    mDashboardCentralContainerListener.onReportCycleUnit(
-                            mEditCycleEt.getText().toString());
+                    mDashboardCentralContainerListener.onReportCycleUnit(getCycleReportValue(Double.parseDouble(mEditCycleEt.getText().toString())));
                     mEditCycleEt.clearFocus();
                     setupNumericCycleItem(widget);
                     mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
                 }
             }
         });
+    }
+
+    private String getCycleReportValue(Double value) {
+        if (value <= 0){
+            return String.valueOf(1);
+        }
+        int max = PersistenceManager.getInstance().getMaxUnitReport();
+        if (value > max){
+            return String.valueOf(max);
+        }
+        return String.valueOf(value);
     }
 
     private void initEditNumericStep2(final Widget widget) {

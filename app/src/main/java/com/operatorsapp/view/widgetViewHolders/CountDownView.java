@@ -95,6 +95,12 @@ public class CountDownView extends View {
             indicatorCenterColor = typedArray.getColor(R.styleable.CountDownView_indicatorCenterColor, ContextCompat.getColor(getContext(), R.color.white));
             indicatorStrokeColor = typedArray.getColor(R.styleable.CountDownView_indicatorStrokeColor, ContextCompat.getColor(getContext(), R.color.blue1));
             textColor = typedArray.getColor(R.styleable.CountDownView_textColor, ContextCompat.getColor(getContext(), R.color.blue1));
+        }else {
+            percentBackgroundColor = ContextCompat.getColor(getContext(), R.color.black);
+            percentColor = ContextCompat.getColor(getContext(), R.color.blue1);
+            indicatorCenterColor = ContextCompat.getColor(getContext(), R.color.white);
+            indicatorStrokeColor = ContextCompat.getColor(getContext(), R.color.blue1);
+            textColor = ContextCompat.getColor(getContext(), R.color.blue1);
         }
     }
 
@@ -182,16 +188,16 @@ public class CountDownView extends View {
 
     public void update(int minute, String minuteStartText){
         if (isReverse(minute)){
-            percentAngle = minuteToPercent(minute - totalTimeInMinute);
+            percentAngle = minuteToPercent(-minute);
         }else {
-            percentAngle = minuteToPercent(minute);
+            percentAngle = minuteToPercent(totalTimeInMinute - minute);
         }
         text = getMinuteText(minute, minuteStartText);
         invalidate();
     }
 
     private String getMinuteText(int minute, String minuteStartText) {
-        if (minute < endModeTimeInMinute){
+        if (isReverse){
             return minuteStartText + StringUtil.add0ToNumber(minute);
         }else {
             return minuteStartText + StringUtil.add0ToNumber(totalTimeInMinute - minute);
@@ -203,16 +209,16 @@ public class CountDownView extends View {
     }
 
     public boolean isReverse(int minute) {
-        if (minute < endModeTimeInMinute){
-            if (isReverse) {
-                setReverse(false);
-            }
-            return false;
-        }else{
+        if (minute <= endModeTimeInMinute){
             if (!isReverse) {
                 setReverse(true);
             }
             return true;
+        }else{
+            if (isReverse) {
+                setReverse(false);
+            }
+            return false;
         }
     }
 

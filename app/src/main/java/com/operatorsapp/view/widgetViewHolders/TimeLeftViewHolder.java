@@ -2,6 +2,8 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
@@ -11,6 +13,9 @@ import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
 
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private final int mHeight;
+    private final int mWidth;
+    private final RelativeLayout mParentLayout;
     private boolean mEndSetupDisable;
     private TextView mTitle;
     private TextView mSubTitle;
@@ -25,13 +30,18 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private TextView m3Btn;
     private DashboardCentralContainerListener mListener;
     private MachineStatus mMachineStatus;
+    private View mDivider;
 
-    public TimeLeftViewHolder(View itemView, DashboardCentralContainerListener listener, MachineStatus machineStatus, boolean endSetupDisable) {
+    public TimeLeftViewHolder(View itemView, DashboardCentralContainerListener listener, MachineStatus machineStatus, boolean endSetupDisable, int height, int width) {
         super(itemView);
 
         mListener = listener;
+        mHeight = height;
+        mWidth = width;
         mMachineStatus = machineStatus;
         mEndSetupDisable = endSetupDisable;
+        mParentLayout = itemView.findViewById(R.id.TLWC_parent_layout);
+        mDivider = itemView.findViewById(R.id.TLWC_divider);
         mTitle = itemView.findViewById(R.id.TLWC_title);
         mSubTitle = itemView.findViewById(R.id.TLWC_subtitle);
         m1Ly = itemView.findViewById(R.id.TLWC_time_ly);
@@ -53,8 +63,21 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     private void setView(Widget widget) {
+        mDivider.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.MarginLayoutParams mItemViewParams4;
+                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mDivider.requestLayout();
+            }
+        });
+
+
+        setSizes(mParentLayout);
         int time = Integer.parseInt(widget.getCurrentValue());
-        int endLimit = 50;
+        int endLimit = 10;
+//        time = 60;
         if (mMachineStatus != null &&
                 mMachineStatus.getAllMachinesData() != null
                 && mMachineStatus.getAllMachinesData().get(0) != null &&
@@ -82,7 +105,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     private void update2LyViews(int time, int endLimit) {
-        if (time > endLimit) {
+        if (time <= endLimit) {
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
@@ -126,5 +149,14 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 mListener.onOpenPendingJobs();
                 break;
         }
+    }
+
+    private void setSizes(final RelativeLayout parent) {
+        ViewGroup.LayoutParams layoutParams;
+        layoutParams = parent.getLayoutParams();
+        layoutParams.height = (int) (mHeight * 0.45);
+        layoutParams.width = (int) (mWidth * 0.325);
+        parent.requestLayout();
+
     }
 }
