@@ -232,6 +232,8 @@
 
                         </LinearLayout>
                         <!--//todo kuti-->
+
+
                         <LinearLayout
                             android:id="@+id/fragment_dashboard_shiftlog"
                             android:layout_width="124dp"
@@ -239,6 +241,33 @@
                             android:layout_toEndOf="@id/FAAE_lenox_machines_ly"
                             android:background="@drawable/side_menu"
                             android:orientation="vertical">
+
+                            <ScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <com.operatorsapp.view.TimeLineView
+                                        android:id="@+id/FAAE_time_container"
+                                        android:layout_width="50dp"
+                                        android:layout_height="match_parent" />
+
+
+                                    <LinearLayout
+                                        android:id="@+id/FAAE_scroll_container"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" />
+
+
+                                </LinearLayout>
+                            </ScrollView>
+
 
                             <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"

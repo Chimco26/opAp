@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +52,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -118,17 +121,22 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -158,6 +166,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private static final long ONE_HOUR = 1000 * 60 * 60;
     private static final long HALF_HOUR = 1000 * 60 * 30;
     private static final int PRODUCTION_ID = 1;
+    private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
+
 
     private View mToolBarView;
     private GoToScreenListener mOnGoToScreenListener;
@@ -242,6 +252,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mCycleWarningViewShow;
     private EmeraldSpinner mJobsSpinner;
     private Handler mCallCounterHandler;
+    private LinearLayout mScrollView;
+    private TimeLineView mTimeView;
+    private ArrayList<String> mTimes;
+    public static final int PIXEL_FOR_MINUTE = 20;
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -392,6 +406,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+
+
+        mScrollView = view.findViewById(R.id.FAAE_scroll_container);
+        mTimeView = view.findViewById(R.id.FAAE_time_container);
+
 
         initLenoxMachineRv(view);
 
@@ -611,7 +630,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmTargetName());
-                }else {
+                } else {
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                 }
 
@@ -783,6 +802,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             setShiftLogAdapter(tempCursor);
 
         }
+        //todo kuti
+
+        initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+
 
         if (DataSupport.count(Event.class) > 0) {
             mNoData = false;
@@ -1305,13 +1328,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @SuppressLint("DefaultLocale")
     private void setTimeForTechTimer(final TechCallInfo techCallInfo) {
-        if (mCallCounterHandler == null){
+        if (mCallCounterHandler == null) {
             mCallCounterHandler = new Handler();
         }
-        if (techCallInfo == null){
+        if (techCallInfo == null) {
             mCallCounterHandler.removeCallbacksAndMessages(null);
             mTechnicianTimerTv.setText("");
-        }else {
+        } else {
             mCallCounterHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -1319,21 +1342,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     int postDelay;
                     String callTime;
 
-                    if (callDuration < ( 60 * 60 * 1000)){
+                    if (callDuration < (60 * 60 * 1000)) {
                         postDelay = 1000 * 60;
-                        callTime = String.format("%d Min.",TimeUnit.MILLISECONDS.toMinutes(callDuration));
-                    }else if (callDuration < 1000 * 60 * 60 * 24) {
+                        callTime = String.format("%d Min.", TimeUnit.MILLISECONDS.toMinutes(callDuration));
+                    } else if (callDuration < 1000 * 60 * 60 * 24) {
                         postDelay = 1000 * 60;
-                        callTime = String.format("%d Hrs., %d Min.",TimeUnit.MILLISECONDS.toHours(callDuration),
+                        callTime = String.format("%d Hrs., %d Min.", TimeUnit.MILLISECONDS.toHours(callDuration),
                                 TimeUnit.MILLISECONDS.toMinutes(callDuration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(callDuration)));
-                    }else {
-                            postDelay = 1000 * 60 * 60;
-                            callTime = String.format("%d Days, %d Hrs.", TimeUnit.MILLISECONDS.toDays(callDuration),
-                                    TimeUnit.MILLISECONDS.toHours(callDuration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(callDuration)));
+                    } else {
+                        postDelay = 1000 * 60 * 60;
+                        callTime = String.format("%d Days, %d Hrs.", TimeUnit.MILLISECONDS.toDays(callDuration),
+                                TimeUnit.MILLISECONDS.toHours(callDuration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(callDuration)));
                     }
 
                     mTechnicianTimerTv.setText(callTime);
-                    if (mCallCounterHandler == null){
+                    if (mCallCounterHandler == null) {
                         mCallCounterHandler = new Handler();
                     }
                     mCallCounterHandler.postDelayed(this, postDelay);
@@ -1342,7 +1365,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void cleanTech(int delay, final TechCallInfo techCallInfo){
+    private void cleanTech(int delay, final TechCallInfo techCallInfo) {
 
         if (delay >= 0) {
             mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1352,7 +1375,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     ArrayList<TechCallInfo> list = PersistenceManager.getInstance().getCalledTechnician();
                     if (list != null && list.size() > 0) {
                         for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).getmNotificationId() == techCallInfo.getmNotificationId()){
+                            if (list.get(i).getmNotificationId() == techCallInfo.getmNotificationId()) {
                                 list.remove(i);
                                 break;
                             }
@@ -1362,7 +1385,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (list.size() > 0) {
                         PersistenceManager.getInstance().setRecentTechCallId(list.get(0).getmNotificationId());
                         setTechnicianCallStatus();
-                    }else {
+                    } else {
                         PersistenceManager.getInstance().setRecentTechCallId(-1);
                         mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
                         mTechnicianIndicatorTv.setText("");
@@ -1961,7 +1984,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onStopEventSelected(Integer event, boolean b) {
+    public void onStopEventSelected(Integer event, boolean b) {//todo kuti
         mListener.onEventSelected(event, b);
     }
 
@@ -2034,7 +2057,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
             disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
 
-             if (!mEndSetupDisable) {
+            if (!mEndSetupDisable) {
                 disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                                 && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
                         , mJobActionsSpinnerItems.get(4).getUniqueID());
@@ -2127,7 +2150,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 cursor = getCursorByType();
             }
-            setShiftLogAdapter(cursor);
+            setShiftLogAdapter(cursor);//todo kuti
+
+            initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2171,6 +2197,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     cursor = getCursorByType();
                 }
                 setShiftLogAdapter(cursor);
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
             }
         }
 
@@ -2179,6 +2206,133 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mShiftLogAdapter != null)
             mShiftLogAdapter.notifyDataSetChanged();
+
+
+    }
+
+    private void initEvents(ArrayList<Event> events) {//todo kuti
+        if (mScrollView.getChildCount() > 0) {
+            mScrollView.removeAllViews();
+        }
+
+        Collections.reverse(events);
+
+
+        if (events.size() < 1) {
+            return;
+        }
+
+        for (int i = 0; i < events.size() - 1; i++) {
+
+
+            Event event = events.get(i);
+
+//            Long eventStartMilli = convertDateToMillisecond(event.getEventTime());
+//            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
+
+
+//            RelativeLayout relativeLayout = new RelativeLayout(getContext());
+//            relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//
+//            relativeLayout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+////                    event.getEventID()
+//                }
+//            });
+
+
+//            ViewGroup.LayoutParams layoutParams = relativeLayout.getLayoutParams();
+//            layoutParams.height = 300;
+//
+//            relativeLayout.setLayoutParams(layoutParams);
+////            relativeLayout.setGravity(Gravity.CENTER);
+//            relativeLayout.setBackgroundColor(Color.BLUE);
+
+            if (event.getDuration() > 0) {
+
+                event.setColor("#4Dbf1620");
+                addItem(event);
+
+
+            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
+            Long eventStartMilliddd = convertDateToMillisecond(events.get(i + 1).getEventTime());
+
+           if (eventEndMilli < eventStartMilliddd){
+
+            Log.e("initEventsDDDD: ",  convertDateToMillisecond(event.getEventEndTime()) +" | " +convertDateToMillisecond(events.get(i + 1).getEventTime()) + "");
+           };
+
+
+            if (convertDateToMillisecond(event.getEventEndTime()) < convertDateToMillisecond(events.get(i + 1).getEventTime())) {
+
+                Event newEvent = new Event();
+                newEvent.setEventTime(event.getEventEndTime());
+                newEvent.setEventEndTime(events.get(i + 1).getEventTime());
+
+//                    newEvent.setDuration();
+                event.setColor("#1aa917");
+
+                addItem(newEvent);
+            }
+
+            }
+
+//                View view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, mScrollView, false);
+//                TextView text = view.findViewById(R.id.EI_text);
+//                text.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
+//
+//                text.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
+//                text.setBackgroundColor(Color.parseColor("#4Dbf1620"));
+
+
+//                TextView button = new TextView(getContext());
+//                button.setText(event.getDuration() + " | " + event.getSubtitleEname());
+//                button.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
+
+//                button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                button.setGravity(Gravity.CENTER);
+//                button.setTextSize(15);
+//                button.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
+
+//                relativeLayout.addView(button);
+
+//                mScrollView.addView(view);
+
+
+        }
+
+        mTimeView.addTimesToList(events.get(0).getEventTime(), events.get(events.size() - 1).getEventEndTime());
+//        mTimeView.setTimes(mTimes);
+        mTimeView.invalidate();
+    }
+
+
+    private void addItem(Event event) {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, mScrollView, false);
+        TextView text = view.findViewById(R.id.EI_text);
+
+
+        text.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
+
+        text.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
+        text.setBackgroundColor(Color.parseColor(event.getColor()));
+        mScrollView.addView(view);
+    }
+
+
+    public static Long convertDateToMillisecond(String dateToConvert) {
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
+
+        try {
+            Date date = format.parse(dateToConvert);
+            return date.getTime();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
@@ -2382,9 +2536,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mHandlerTechnicianCall != null) {
             mHandlerTechnicianCall.removeCallbacksAndMessages(null);
         }
-        if (mCallCounterHandler != null){
+        if (mCallCounterHandler != null) {
             mCallCounterHandler.removeCallbacksAndMessages(null);
-    }
+        }
     }
 
 

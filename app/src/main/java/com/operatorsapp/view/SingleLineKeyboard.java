@@ -94,15 +94,13 @@ public class SingleLineKeyboard implements View.OnClickListener {
 
         switch (text) {
             case "-":
-                if (mText.length() == 0) {
+                if (mText.length() == 0)
                     mText += text;
-                }
+
                 break;
             case ".":
-                if (mText.length() > 0)
-                    if (!mText.substring(mText.length() - 1).equals(".")) {
-                        mText += text;
-                    }
+                if (mText.length() > 0 && !mText.contains("."))
+                    mText += text;
                 break;
             default:
                 mText += text;
