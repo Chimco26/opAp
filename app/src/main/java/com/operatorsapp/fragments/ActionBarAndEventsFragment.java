@@ -46,6 +46,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -255,7 +256,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private LinearLayout mScrollView;
     private TimeLineView mTimeView;
     private ArrayList<String> mTimes;
-    public static final int PIXEL_FOR_MINUTE = 20;
+    public static final int PIXEL_FOR_MINUTE = 10;
+    private boolean mIsSelectionEventsMode = false;
+    private ImageView mCloseSelectEvents;
+
 
     public static ActionBarAndEventsFragment newInstance() {
         return new ActionBarAndEventsFragment();
@@ -408,7 +412,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
 
+        mCloseSelectEvents = view.findViewById(R.id.FAAE_close_select_events);
+        mCloseSelectEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mCloseSelectEvents.setVisibility(View.GONE);
+
+                mIsSelectionEventsMode = false;
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+
+            }
+        });
+
         mScrollView = view.findViewById(R.id.FAAE_scroll_container);
+        mScrollView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//todo kuti
+
+                if (!mIsSelectionEventsMode) {
+                    mIsSelectionEventsMode = true;
+
+                    mCloseSelectEvents.setVisibility(View.VISIBLE);
+                    initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+                }
+
+
+            }
+        });
         mTimeView = view.findViewById(R.id.FAAE_time_container);
 
 
@@ -2227,96 +2258,84 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             Event event = events.get(i);
 
-//            Long eventStartMilli = convertDateToMillisecond(event.getEventTime());
-//            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-
-
-//            RelativeLayout relativeLayout = new RelativeLayout(getContext());
-//            relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//
-//            relativeLayout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    event.getEventID()
-//                }
-//            });
-
-
-//            ViewGroup.LayoutParams layoutParams = relativeLayout.getLayoutParams();
-//            layoutParams.height = 300;
-//
-//            relativeLayout.setLayoutParams(layoutParams);
-////            relativeLayout.setGravity(Gravity.CENTER);
-//            relativeLayout.setBackgroundColor(Color.BLUE);
-
             if (event.getDuration() > 0) {
 
-                event.setColor("#4Dbf1620");
+                event.setColor("#bf1620");
                 addItem(event);
 
 
-            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-            Long eventStartMilliddd = convertDateToMillisecond(events.get(i + 1).getEventTime());
-
-           if (eventEndMilli < eventStartMilliddd){
-
-            Log.e("initEventsDDDD: ",  convertDateToMillisecond(event.getEventEndTime()) +" | " +convertDateToMillisecond(events.get(i + 1).getEventTime()) + "");
-           };
+                Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
+                Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
 
 
-            if (convertDateToMillisecond(event.getEventEndTime()) < convertDateToMillisecond(events.get(i + 1).getEventTime())) {
+                if (convertDateToMillisecond(event.getEventEndTime()) < convertDateToMillisecond(events.get(i + 1).getEventTime())) {
 
-                Event newEvent = new Event();
-                newEvent.setEventTime(event.getEventEndTime());
-                newEvent.setEventEndTime(events.get(i + 1).getEventTime());
+                    Event newEvent = new Event();
+                    newEvent.setEventTime(event.getEventEndTime());
+                    newEvent.setEventEndTime(events.get(i + 1).getEventTime());
 
-//                    newEvent.setDuration();
-                event.setColor("#1aa917");
+                    newEvent.setColor("#1aa917");
 
-                addItem(newEvent);
+                    long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
+
+                    newEvent.setDuration(minute);
+
+                    addItem(newEvent);
+                }
             }
-
-            }
-
-//                View view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, mScrollView, false);
-//                TextView text = view.findViewById(R.id.EI_text);
-//                text.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
-//
-//                text.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
-//                text.setBackgroundColor(Color.parseColor("#4Dbf1620"));
-
-
-//                TextView button = new TextView(getContext());
-//                button.setText(event.getDuration() + " | " + event.getSubtitleEname());
-//                button.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
-
-//                button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                button.setGravity(Gravity.CENTER);
-//                button.setTextSize(15);
-//                button.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
-
-//                relativeLayout.addView(button);
-
-//                mScrollView.addView(view);
-
-
         }
 
-        mTimeView.addTimesToList(events.get(0).getEventTime(), events.get(events.size() - 1).getEventEndTime());
-//        mTimeView.setTimes(mTimes);
+        mTimeView.addTimesToList(events.get(0).getEventTime(), events.get(events.size() - 1).getEventTime());
         mTimeView.invalidate();
     }
 
 
-    private void addItem(Event event) {
+
+    private void addItem(final Event event) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, mScrollView, false);
         TextView text = view.findViewById(R.id.EI_text);
 
+        View border = view.findViewById(R.id.EI_border);
 
-        text.setText(event.getEventTime() + " | \n" + event.getEventEndTime() + " |\n " + event.getDuration() + "\n");
+        RelativeLayout relativeLayout = view.findViewById(R.id.EI_relative);
+        LinearLayout checkContainer = view.findViewById(R.id.EI_check_container);
+        CheckBox checkBox = view.findViewById(R.id.EI_check_box);
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+                event.setChecked(checked);
+
+                //todo kuti
+
+            }
+        });
+
+        if (mIsSelectionEventsMode) {
+
+            checkContainer.setVisibility(View.VISIBLE);
+
+            if (event.getDuration() > 2) {
+                checkBox.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (event.getColor() != null) {
+
+            String color = event.getColor().substring(1);
+
+            border.setBackgroundColor(Color.parseColor("#" + color));
+            relativeLayout.setBackgroundColor(Color.parseColor("#4D" + color));
+        }
+
+        if (event.getSubtitleLname() != null)
+            if (event.getDuration() > 1)
+                text.setText(event.getDuration() + " | " + event.getSubtitleLname());
 
         text.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
-        text.setBackgroundColor(Color.parseColor(event.getColor()));
+
+
         mScrollView.addView(view);
     }
 

@@ -30,6 +30,7 @@ public class TimeLineView extends View {
     private Paint mPaint;
     private int textPosition = 25;
     private int mStartTimeSpace = 0;
+    private int mEndTimeSpace = 0;
 
 
     public TimeLineView(Context context) {
@@ -54,7 +55,7 @@ public class TimeLineView extends View {
 
         mPaint = new Paint();
         mPaint.setColor(Color.BLACK);
-        mPaint.setTextSize(25);
+        mPaint.setTextSize(10);
 
     }
 
@@ -68,13 +69,13 @@ public class TimeLineView extends View {
 
             for (int i = 0; i < mTimes.size(); i++) {
 
-                canvas.drawText(mTimes.get(i), 50, textPosition, mPaint);
+                canvas.drawText(mTimes.get(i), 5, textPosition, mPaint);
 //                canvas.drawLine(mStartLinePosition, textPosition - 10, mEndLinePosition, mTextPositionY - 10, mLinePaint);
                 if (i == 0)
                     textPosition += mStartTimeSpace * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
                 else if (i == mTimes.size() - 2)
-//                    textPosition += mEndTimeSpace * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
-                    textPosition +=  ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
+                    textPosition += mEndTimeSpace;// * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
+//                    textPosition += ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
                 else
                     textPosition += 30 * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
 
@@ -99,6 +100,8 @@ public class TimeLineView extends View {
 
         int startHour = convertStringDateToHour(startTime);
         int startMinute = convertStringDateToMinute(startTime);
+        int endHour = convertStringDateToHour(endTime);
+        int endMinute = convertStringDateToMinute(endTime);
 
         for (int i = 0; i < 25; i++) {
 
@@ -106,34 +109,55 @@ public class TimeLineView extends View {
                 startHour = startHour - 24;
             }
 
-            if (i == 0) {
+            switch (i) {
+                case 0:
+                    if (startMinute >= 30) {
+                        mTimes.add(hourToTime(startHour, startMinute));
+//                        mTimes.add(startHour + ":" + startMinute);
+                        mStartTimeSpace = 60 - startMinute;
 
-                if (startMinute >= 30) {
-                    mTimes.add(startHour + ":" + startMinute);
-                    mStartTimeSpace = 60 - startMinute;
+                    } else if (startMinute >= 0) {
+                        mTimes.add(hourToTime(startHour, startMinute));
+//                        mTimes.add(startHour + ":" + startMinute);
+                        mStartTimeSpace = 30 - startMinute;
+                        mTimes.add(startHour + ":30");
+                    }
+                    break;
 
-                } else if (startMinute >= 0) {
-                    mTimes.add(startHour + ":" + startMinute);
-                    mStartTimeSpace = 30 - startMinute;
+                case 24:
+                    if (endMinute >= 30) {
+                        mTimes.add(endHour + ":00");
+                        mTimes.add(hourToTime(endHour, endMinute));
+//                        mTimes.add(endHour + ":" + endMinute);
+                        mEndTimeSpace = endMinute * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE;
+
+                    } else if (endMinute >= 0) {
+                        mTimes.add(hourToTime(endHour, endMinute));
+//                        mTimes.add(endHour + ":" + endMinute);
+                        mEndTimeSpace = (30 + endMinute) * ActionBarAndEventsFragment.PIXEL_FOR_MINUTE - (int) mPaint.getTextSize() - 10;
+                    }
+                    break;
+                default:
+                    mTimes.add(startHour + ":00");
                     mTimes.add(startHour + ":30");
-                }
-
-
-            } else {
-                mTimes.add(startHour + ":00");
-                mTimes.add(startHour + ":30");
+                    break;
             }
 
             startHour++;
 
-            if (i == 23) {
-                mTimes.add(startHour + ":00");
-                mTimes.add(startHour + ":30");
-            }
         }
 
 
     }
+
+
+    private String hourToTime(int hour, int minute) {
+        if (minute < 10)
+            return String.valueOf(hour) + ":0" + String.valueOf(minute);
+        else
+            return String.valueOf(hour) + ":" + String.valueOf(minute);
+    }
+
 
 
     public static int convertStringDateToHour(String startTime) {
@@ -166,13 +190,4 @@ public class TimeLineView extends View {
         }
     }
 
-//    private void setViewHeight() {
-//        long startMilliSecond = TimeUtils.convertDateToMillisecond(mStartDate);
-//        long endMilliSecond = TimeUtils.convertDateToMillisecond(mEndDate);
-//        long minute = TimeUnit.MILLISECONDS.toMinutes(endMilliSecond - startMilliSecond);
-//
-//        ViewGroup.LayoutParams params = getLayoutParams();
-//        params.height = (int) minute * (int) mDpForMinute + (int) dipToPixels(mContext, 120);
-//        setLayoutParams(params);
-//    }
 }
