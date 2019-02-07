@@ -130,7 +130,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         }
 
-        holder.mBodyTv.setText(notification.getmBody());
+        holder.mBodyTv.setText(notification.getmBody(mContext));
         holder.mTimeTv.setText(time);
 
         switch (notification.getmResponseType()){

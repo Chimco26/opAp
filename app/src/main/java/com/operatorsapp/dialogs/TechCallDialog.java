@@ -95,7 +95,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
                     RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                             notificationToRemove.getmTitle(),
-                            notificationToRemove.getmBody(),
+                            notificationToRemove.getmBody(getContext()),
                             pm.getMachineId() + "",
                             notificationToRemove.getmNotificationID() + "",
                             responseType,

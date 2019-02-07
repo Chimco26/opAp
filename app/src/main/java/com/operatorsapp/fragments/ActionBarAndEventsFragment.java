@@ -636,14 +636,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             break;
 
                         default:
-                            tvBody.setText(notification.getmBody());
+                            tvBody.setText(notification.getmBody(getActivity()));
                             break;
                     }
 
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
                 }else {
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
-                    tvBody.setText(notification.getmBody());
+                    tvBody.setText(notification.getmBody(getActivity()));
                 }
 
 
@@ -1711,7 +1711,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     getResources().getString(R.string.respond_notification_title),
-                    notification[0].getmBody(),
+                    notification[0].getmBody(getActivity()),
                     pm.getMachineId() + "",
                     notification[0].getmNotificationID() + "",
                     responseType,

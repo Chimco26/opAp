@@ -17,6 +17,7 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.Notification;
+import com.operatorsapp.server.responses.NotificationText;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -163,6 +164,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     targetName,
                     id,
                     notificationType);
+
+            if (notificationType == Consts.NOTIFICATION_TYPE_REAL_TIME) {
+                String insightText = data.get("InsightText");
+                NotificationText nt = new NotificationText(insightText, "", "");
+                try {
+                    if (insightText != null && insightText.length() > 0) {
+                        String[] body = insightText.split(";");
+                        nt = new NotificationText(body[1], body[3], body[5]);
+                    }
+                } catch (Exception e) {
+                }
+                notification.setmInsightBody(nt);
+            }
 
             notification.setmResponseDate(time);
             ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
