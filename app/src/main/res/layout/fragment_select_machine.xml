@@ -65,6 +65,7 @@
                 android:background="@android:color/white"
                 android:completionThreshold="1"
                 android:dropDownVerticalOffset="2dp"
+                android:dropDownHeight="150dp"
                 android:hint="@string/machine_id_name"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
