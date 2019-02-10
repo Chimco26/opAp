@@ -26,22 +26,28 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operators.infra.Machine;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
+import com.operatorsapp.fragments.SelectMachineFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
+import com.ravtech.david.sqlcore.Event;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int STORAGE_REQUEST_CODE = 1;
     public static final String MACHINE_LIST = "MACHINE_LIST";
+    public static final String GO_TO_SELECT_MACHINE_FRAGMENT = "GO_TO_SELECT_MACHINE_FRAGMENT";
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
     private Fragment mCurrentFragment;
@@ -87,19 +94,27 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         setupAlarm();
 
         mCroutonCreator = new CroutonCreator();
-        goToFragment(LoginFragment.newInstance(), true, false);
+
+        Bundle intent = getIntent().getExtras();
+        if (intent != null && intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT)) {
+            goToFragment(LoginFragment.newInstance(true), true, false);
+        } else {
+
+            goToFragment(LoginFragment.newInstance(false), true, false);
+        }
 
         updateAndroidSecurityProvider(this);
 
         checkFlavor();
+
     }
 
     private void checkFlavor() {
-        if(BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
+        if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
             Log.d(TAG, "onCreate: emerald");
 
-        }else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+        } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
             Log.d(TAG, "onCreate: Lenox");
         }
@@ -117,7 +132,13 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     @Override
     public void onBackPressed() {
         if (!mIsTryToLogin) {
-            super.onBackPressed();
+
+            if (mCurrentFragment != null && mCurrentFragment instanceof SelectMachineFragment) {
+                cleanData();
+                goToFragment(LoginFragment.newInstance(false), false, false);
+            } else {
+               finish();
+            }
         }
     }
 
@@ -154,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     }
 
-    private void getNotifications(){
+    private void getNotifications() {
 
         NetworkManager.getInstance().getNotificationHistory(new Callback<NotificationHistoryResponse>() {
             @Override
@@ -168,10 +189,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
-                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()){
+                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && not.isOpenCall()) {
                             boolean isNew = true;
                             for (TechCallInfo techCall : techList) {
-                                if (not.getmNotificationID() == techCall.getmNotificationId()){
+                                if (not.getmNotificationID() == techCall.getmNotificationId()) {
                                     isNew = false;
                                     break;
                                 }
@@ -184,14 +205,14 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
                     PersistenceManager.getInstance().setCalledTechnicianList(techList);
-                    if (techList.size() > 0){
+                    if (techList.size() > 0) {
                         PersistenceManager.getInstance().setRecentTechCallId(techList.get(0).getmNotificationId());
-                    }else {
+                    } else {
                         PersistenceManager.getInstance().setRecentTechCallId(0);
                     }
 
                     finish();
-                }else {
+                } else {
                     PersistenceManager.getInstance().setNotificationHistory(null);
                     finish();
                 }
@@ -285,7 +306,9 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         OppAppLogger.initInstance(this);
 
-        goToFragment(LoginFragment.newInstance(), false, false);
+        // TODO: 2/10/2019 way to go to LoginFragment from here 
+
+        //     goToFragment(LoginFragment.newInstance(false), false, false);
     }
 
     private void setupAlarm() {
@@ -296,20 +319,48 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
                 MainActivity.this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Calendar firingCal= Calendar.getInstance();
+        Calendar firingCal = Calendar.getInstance();
         Calendar currentCal = Calendar.getInstance();
 
         firingCal.set(Calendar.HOUR_OF_DAY, 0); // At the hour you wanna fire
         firingCal.set(Calendar.MINUTE, 0); // Particular minute
         firingCal.set(Calendar.SECOND, 0); // particular second
 
-        if(firingCal.compareTo(currentCal) < 0) {
+        if (firingCal.compareTo(currentCal) < 0) {
             firingCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         Long intendedTime = firingCal.getTimeInMillis();
         if (alarmManager != null) {
             alarmManager.setRepeating(AlarmManager.RTC, intendedTime, INTERVAL_DAY, pendingIntent);
         }
+    }
+
+
+    public static void cleanData() {
+        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+
+            }
+        });
+
+        DataSupport.deleteAll(Event.class);
+
+        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+
+        PersistenceManager.getInstance().clear();
+
+        PersistenceManager.getInstance().items.clear();
+
+        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
     }
 
 }

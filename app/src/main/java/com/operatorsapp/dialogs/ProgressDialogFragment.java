@@ -10,7 +10,6 @@ import android.widget.ProgressBar;
 
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
-import com.zemingo.logrecorder.ZLogger;
 
 public class ProgressDialogFragment extends DialogFragment {
     private static String LOG_TAG = ProgressDialogFragment.class.getSimpleName();
@@ -47,5 +46,10 @@ public class ProgressDialogFragment extends DialogFragment {
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
     }
 }

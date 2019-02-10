@@ -4,6 +4,7 @@ import com.operatorsapp.fragments.interfaces.OnReportFieldsUpdatedCallbackListen
 
 public interface SettingsInterface {
     void onClearAppDataRequest();
+    void onChangeMachineRequest();
     void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener);
     void onRefreshApplicationRequest();
     void onRefreshPollingRequest();

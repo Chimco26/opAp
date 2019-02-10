@@ -48,6 +48,7 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class LoginFragment extends Fragment {
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
+    private final static String GO_TO_SELECT_MACHINE = "GO_TO_SELECT_MACHINE";
     private GoToScreenListener mNavigationCallback;
     private OnCroutonRequestListener mCroutonCallback;
     private EditText mSiteUrl;
@@ -57,9 +58,16 @@ public class LoginFragment extends Fragment {
     private ImageView mLoginBtnBackground;
     private ImageView mShowHidePass;
     private boolean mPasswordIsVisible = false;
+    private boolean mGoToSelectMachine;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static LoginFragment newInstance(boolean goToSelectMachine) {
+
+        LoginFragment loginFragment = new LoginFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(GO_TO_SELECT_MACHINE, goToSelectMachine);
+        loginFragment.setArguments(args);
+
+        return loginFragment;
     }
 
     @Override
@@ -76,6 +84,10 @@ public class LoginFragment extends Fragment {
         mTracker.setHostname(pm.getSiteName());
         mTracker.setScreenName(LOG_TAG);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        if (getArguments() != null) {
+            mGoToSelectMachine = getArguments().getBoolean(GO_TO_SELECT_MACHINE);
+        }
     }
 
     @Override
@@ -232,9 +244,9 @@ public class LoginFragment extends Fragment {
                 actionBar.setDisplayShowTitleEnabled(false);
                 actionBar.setDisplayShowCustomEnabled(true);
                 actionBar.setDisplayUseLogoEnabled(true);
-                if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+                if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                     actionBar.setIcon(R.drawable.lenox_logo_new_medium);
-                }else {
+                } else {
                     actionBar.setIcon(R.drawable.logo_new_medium);
                 }
             }
@@ -259,7 +271,7 @@ public class LoginFragment extends Fragment {
         mNavigationCallback.isTryToLogin(true);
         PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
 
-        ProgressDialogManager.show(getActivity());
+        ProgressDialogManager.show(getActivity());//todo kuti
         String siteUrl = mSiteUrl.getText().toString();
         String userName = mUserName.getText().toString().toLowerCase();
         String password = mPassword.getText().toString().toLowerCase();
@@ -296,7 +308,7 @@ public class LoginFragment extends Fragment {
 
 //            if (BuildConfig.FLAVOR.equals(getString(R.string.emerald_flavor_name))) {
 
-                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
+            mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), true, true);
 
 //            } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 //
@@ -313,13 +325,20 @@ public class LoginFragment extends Fragment {
     // Silent - setUsername & password from preferences, It is only when preferences.isSelectedMachine().
     private void doSilentLogin() {
         mNavigationCallback.isTryToLogin(true);
-        ProgressDialogManager.show(getActivity());
+        ProgressDialogManager.show(getActivity());//todo kuti
         LoginCore.getInstance().login(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(),  go Next");
-               // getNotifications();
-                getVersion(machines, false);
+                // getNotifications();
+
+//                if (mGoToSelectMachine) {
+//
+//                    getVersion(machines, true);
+//                } else {
+//
+//                }
+                    getVersion(machines, false);
                 PersistenceManager.getInstance().setSiteName(siteName);
             }
 
@@ -340,7 +359,12 @@ public class LoginFragment extends Fragment {
     private void loginSuccess(ArrayList<Machine> machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
-            mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
+            if (mGoToSelectMachine) {
+                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), false, false);
+            } else {
+
+                mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
+            }
             mNavigationCallback.isTryToLogin(false);
         }
     }
