@@ -25,20 +25,28 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.operators.infra.Machine;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.utils.SoftKeyboardUtil;
+import com.ravtech.david.sqlcore.Event;
+
+import org.litepal.crud.DataSupport;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener
-{
+import retrofit2.Call;
+import retrofit2.Callback;
+
+public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
@@ -50,6 +58,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private boolean canGoNext = false;
     private String mMachineName;
+
 
     public static SelectMachineFragment newInstance(ArrayList machinesList)
     {
@@ -125,6 +134,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
                 }
             }
         });
+
+        rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
+
 
 
         mSearchField = rootView.findViewById(R.id.machine_id_name);
@@ -254,4 +266,43 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
         }
     };
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.FSM_change_factory_btn:
+
+                if (mNavigationCallback != null){
+                    mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
+
+                    PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+                    NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+                        @Override
+                        public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+
+                        }
+                    });
+
+                    DataSupport.deleteAll(Event.class);
+
+                    String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+                    String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+
+                    PersistenceManager.getInstance().clear();
+
+                    PersistenceManager.getInstance().items.clear();
+
+                    PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+                    PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
+                }
+                break;
+        }
+
+    }
 }

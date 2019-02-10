@@ -49,8 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider
-{
+public class SettingsFragment extends BackStackAwareFragment implements View.OnClickListener, OnReportFieldsUpdatedCallbackListener, CroutonRootProvider {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private Spinner mLanguagesSpinner;
@@ -64,11 +63,13 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     private Button mButtonChange;
     private GoToScreenListener mGoToScreenListener;
     private SettingsInterface mSettingsInterface;
+    private Button mButtonChangeMachine;
 
     public static SettingsFragment newInstance() {
 
         return new SettingsFragment();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -110,8 +111,8 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         final LanguagesSpinnerAdapter spinnerArrayAdapter = new LanguagesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, getResources().getStringArray(R.array.languages_spinner_array));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLanguagesSpinner.setAdapter(spinnerArrayAdapter);
-        ((TextView)view.findViewById(R.id.FS_version)).setText(String.valueOf(BuildConfig.VERSION_NAME));
-        ((TextView)view.findViewById(R.id.FS_username)).setText(String.valueOf(PersistenceManager.getInstance().getUserName()));
+        ((TextView) view.findViewById(R.id.FS_version)).setText(String.valueOf(BuildConfig.VERSION_NAME));
+        ((TextView) view.findViewById(R.id.FS_username)).setText(String.valueOf(PersistenceManager.getInstance().getUserName()));
 
         if (getActivity() != null) {
             mLanguagesSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
@@ -148,6 +149,11 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             mFactoryUrlTextView.setText(R.string.dashes);
         }
 
+        String machineName = String.valueOf(PersistenceManager.getInstance().getMachineName());
+        if (machineName != null)
+            ((TextView) view.findViewById(R.id.machine_name_text_view)).setText(machineName);
+
+
         mRefreshStatusTextView = view.findViewById(R.id.refresh_status_text_view);
         mRefreshStatusTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_checkmark, 0);
         mRefreshStatusTextView.setVisibility(View.GONE);
@@ -172,6 +178,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mSaveButton = view.findViewById(R.id.button_save);
         mCancelButton = view.findViewById(R.id.button_cancel);
         mButtonChange = view.findViewById(R.id.button_change);
+        mButtonChangeMachine = view.findViewById(R.id.button_change_machine);
     }
 
     @Override
@@ -182,6 +189,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mCancelButton.setOnClickListener(null);
         mRefreshButton.setOnClickListener(null);
         mButtonChange.setOnClickListener(null);
+        mButtonChangeMachine.setOnClickListener(null);
     }
 
     @Override
@@ -192,6 +200,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         mCancelButton.setOnClickListener(this);
         mRefreshButton.setOnClickListener(this);
         mButtonChange.setOnClickListener(this);
+        mButtonChangeMachine.setOnClickListener(this);
     }
 
     public void setActionBar() {
@@ -251,8 +260,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 break;
             }
             case R.id.refresh_button: {
-                if(NetworkAvailable.isNetworkAvailable(getActivity()))
-                {
+                if (NetworkAvailable.isNetworkAvailable(getActivity())) {
                     ProgressDialogManager.show(getActivity());
                     mSettingsInterface.onRefreshReportFieldsRequest(this);
                 }
@@ -264,12 +272,17 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                 PersistenceManager.getInstance().setDisplayToolbarTutorial(isShowTutorial);
                 break;
             }
+
+            case R.id.button_change_machine: {//todo kuti
+                mSettingsInterface.onChangeMachineRequest();
+                break;
+            }
         }
     }
 
     private void sendTokenWithSessionIdToServer() {
         final PersistenceManager pm = PersistenceManager.getInstance();
-        final String id = Settings.Secure.getString(getActivity().getContentResolver(),Settings.Secure.ANDROID_ID);
+        final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
         NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
             @Override
@@ -279,7 +292,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
                     pm.tryToUpdateToken("success + android id: " + id);
                     mSettingsInterface.onRefreshApplicationRequest();
 
-                }else {
+                } else {
                     pm.tryToUpdateToken("failed + android id: " + id);
                     Log.d(LOG_TAG, "token failed");
                 }
@@ -315,12 +328,11 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
     }
 
     @Override
-    public int getCroutonRoot()
-    {
+    public int getCroutonRoot() {
         return R.id.settings_crouton_root;
     }
 
-    public void updateApp(){
+    public void updateApp() {
 
     }
 
