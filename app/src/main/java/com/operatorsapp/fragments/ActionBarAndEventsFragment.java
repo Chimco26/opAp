@@ -82,6 +82,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
+import com.operatorsapp.adapters.EventsAdapter;
 import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapterActionBar;
@@ -259,6 +260,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int PIXEL_FOR_MINUTE = 10;
     private boolean mIsSelectionEventsMode = false;
     private ImageView mCloseSelectEvents;
+    private RecyclerView mEventsRecycler;
+    private EventsAdapter mEventsAdapter;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -424,6 +427,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
+
+        initEventRecycler(view);
 
         mScrollView = view.findViewById(R.id.FAAE_scroll_container);
         mScrollView.setOnClickListener(new View.OnClickListener() {
@@ -750,6 +755,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (mShiftLogAdapter != null) {
                     mShiftLogAdapter.changeState(true);
                 }
+                if (mEventsAdapter != null) {
+                    mEventsAdapter.setClosedState(true);
+                }
             }
 
             @Override
@@ -887,6 +895,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        mListener.onWidgetUpdatemargine(newWidth);
         mListener.onResize(newWidth + mLenoxMachineLyWidth, mStatusLayout.getLayoutParams().height);
         mShiftLogAdapter.changeState(!isOpen);
+
+        if (mEventsAdapter != null) {
+            mEventsAdapter.setClosedState(isOpen);
+            mEventsAdapter.notifyDataSetChanged();
+
+        }
 
         mListener.onWidgetChangeState(!isOpen);
 
@@ -2050,6 +2064,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
         setShiftLogAdapter(cursor);
+//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
         onStopEventSelected(event.getEventID(), true);
 
         mShowAlarmCheckBox.setVisibility(View.GONE);
@@ -2241,10 +2256,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    private void initEventRecycler(View view) {
+        mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
+        mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
+//
+//        mEventsRecycler.setAdapter(mEventsAdapter);
+    }
+
     private void initEvents(ArrayList<Event> events) {//todo kuti
-        if (mScrollView.getChildCount() > 0) {
-            mScrollView.removeAllViews();
-        }
 
         Collections.reverse(events);
 
@@ -2253,106 +2274,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        for (int i = 0; i < events.size() - 1; i++) {
+        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events);
+
+        mEventsRecycler.setAdapter(mEventsAdapter);
+
+//        if (mEventsAdapter != null)
+//            mEventsAdapter.setEvents(events);
 
 
-            Event event = events.get(i);
-
-            if (event.getDuration() > 0) {
-
-                event.setColor("#bf1620");
-                addItem(event);
-
-
-                Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-                Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
-
-
-                if (convertDateToMillisecond(event.getEventEndTime()) < convertDateToMillisecond(events.get(i + 1).getEventTime())) {
-
-                    Event newEvent = new Event();
-                    newEvent.setEventTime(event.getEventEndTime());
-                    newEvent.setEventEndTime(events.get(i + 1).getEventTime());
-
-                    newEvent.setColor("#1aa917");
-
-                    long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
-
-                    newEvent.setDuration(minute);
-
-                    addItem(newEvent);
-                }
-            }
-        }
-
-        mTimeView.addTimesToList(events.get(0).getEventTime(), events.get(events.size() - 1).getEventTime());
-        mTimeView.invalidate();
     }
 
 
 
-    private void addItem(final Event event) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, mScrollView, false);
-        TextView text = view.findViewById(R.id.EI_text);
-
-        View border = view.findViewById(R.id.EI_border);
-
-        RelativeLayout relativeLayout = view.findViewById(R.id.EI_relative);
-        LinearLayout checkContainer = view.findViewById(R.id.EI_check_container);
-        CheckBox checkBox = view.findViewById(R.id.EI_check_box);
-
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-
-                event.setChecked(checked);
-
-                //todo kuti
-
-            }
-        });
-
-        if (mIsSelectionEventsMode) {
-
-            checkContainer.setVisibility(View.VISIBLE);
-
-            if (event.getDuration() > 2) {
-                checkBox.setVisibility(View.VISIBLE);
-            }
-        }
-
-        if (event.getColor() != null) {
-
-            String color = event.getColor().substring(1);
-
-            border.setBackgroundColor(Color.parseColor("#" + color));
-            relativeLayout.setBackgroundColor(Color.parseColor("#4D" + color));
-        }
-
-        if (event.getSubtitleLname() != null)
-            if (event.getDuration() > 1)
-                text.setText(event.getDuration() + " | " + event.getSubtitleLname());
-
-        text.setHeight((int) event.getDuration() * PIXEL_FOR_MINUTE);
-
-
-        mScrollView.addView(view);
-    }
-
-
-    public static Long convertDateToMillisecond(String dateToConvert) {
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
-
-        try {
-            Date date = format.parse(dateToConvert);
-            return date.getTime();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0L;
-    }
 
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
         if (checkedAlarms != null) {
@@ -2698,6 +2631,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mSelectedNumberLy.setVisibility(View.GONE);
 
         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+
+        mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+        mEventsAdapter.notifyDataSetChanged();
 
     }
 

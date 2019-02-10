@@ -244,17 +244,17 @@
 
                             <ImageView
                                 android:id="@+id/FAAE_close_select_events"
-                                android:layout_gravity="end"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:layout_margin="5dp"
                                 android:src="@drawable/close"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                             <ScrollView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -399,6 +399,11 @@
                                             android:background="@color/default_gray" />
 
                                     </LinearLayout>
+                                    <!--todo kuti-->
+                                    <android.support.v7.widget.RecyclerView
+                                        android:id="@+id/FAAE_events_recycler"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent" />
 
                                     <android.support.v7.widget.RecyclerView
                                         android:id="@+id/fragment_dashboard_shift_log"
