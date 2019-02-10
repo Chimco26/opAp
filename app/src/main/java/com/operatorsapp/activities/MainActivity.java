@@ -26,26 +26,31 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operators.infra.Machine;
+import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
+import com.operatorsapp.fragments.SelectMachineFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
+import com.ravtech.david.sqlcore.Event;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -127,12 +132,14 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     @Override
     public void onBackPressed() {
         if (!mIsTryToLogin) {
-            super.onBackPressed();
-        }
 
-//        if (getVisibleFragment() instanceof SelectMachineFragment){
-////            FragmentManager.
-//        }
+            if (mCurrentFragment != null && mCurrentFragment instanceof SelectMachineFragment) {
+                cleanData();
+                goToFragment(LoginFragment.newInstance(false), false, false);
+            } else {
+               finish();
+            }
+        }
     }
 
     @Override
@@ -301,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
         // TODO: 2/10/2019 way to go to LoginFragment from here 
 
-   //     goToFragment(LoginFragment.newInstance(false), false, false);
+        //     goToFragment(LoginFragment.newInstance(false), false, false);
     }
 
     private void setupAlarm() {
@@ -329,18 +336,31 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     }
 
 
-    public Fragment getVisibleFragment() {
-        Fragment f = null;
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
-        if (fragments != null) {
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment.isVisible()) {
-                    f = fragment;
-                }
+    public static void cleanData() {
+        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+            @Override
+            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+
             }
-        }
-        return f;
+
+            @Override
+            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+
+            }
+        });
+
+        DataSupport.deleteAll(Event.class);
+
+        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+
+        PersistenceManager.getInstance().clear();
+
+        PersistenceManager.getInstance().items.clear();
+
+        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
     }
 
 }

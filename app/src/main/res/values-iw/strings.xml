@@ -280,6 +280,8 @@
     <string name="username">שם משתמש</string>
     <string name="attention">שים לב!</string>
     <string name="empty_job_list_msg">רשימת פקעות ריקה</string>
+    <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
+
 
 
 
