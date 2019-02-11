@@ -54,7 +54,7 @@ import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.EN_NAME
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.IL_NAME;
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.REASON_ID;
 
-public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener, CroutonRootProvider {
+public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener{
 
     public static final String LOG_TAG = SelectStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -410,9 +410,10 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             });
         }
     }
-
-    @Override
-    public int getCroutonRoot() {
-        return R.id.selected_stop_crouton_root;
-    }
+//
+//    @Override
+//    public int getCroutonRoot() {
+//        //return R.id.parent_layouts;
+//        return R.id.selected_stop_crouton_root;
+//    }
 }

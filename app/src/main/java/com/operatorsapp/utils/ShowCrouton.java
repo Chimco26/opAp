@@ -59,7 +59,9 @@ public class ShowCrouton {
                 String credentialsError = OperatorApplication.getAppContext().getString(R.string.error_shift_log);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.CREDENTIALS_ERROR,prefix,credentialsError,null);
                 */
-            } else {
+            } else if (reason.getDetailedDescription() != null && reason.getDetailedDescription().length() > 0){
+                createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR, reason.getDetailedDescription(),"");
+            }else {
                 String prefix = OperatorApplication.getAppContext().getString(R.string.could_not_log_in).concat(" ");
                 String networkError = OperatorApplication.getAppContext().getString(R.string.no_communication);
                 createCrouton(onCroutonRequestListener, CroutonCreator.CroutonType.NETWORK_ERROR,prefix,networkError);

@@ -29,7 +29,10 @@ public class PostTechnicianCallRequest {
     @SerializedName("targetUserName")
     private String technicianName;
 
-    public PostTechnicianCallRequest(String sessionID, int machineId, String title, int technicianId, String text, String userName, String technicianName) {
+    @SerializedName("SourceWorkerID")
+    private String sourceUserID;
+
+    public PostTechnicianCallRequest(String sessionID, int machineId, String title, int technicianId, String text, String userName, String technicianName, String sourceUserId) {
         this.sessionID = sessionID;
         this.machineId = machineId;
         this.title = title;
@@ -37,6 +40,11 @@ public class PostTechnicianCallRequest {
         this.text = text;
         this.userName = userName;
         this.technicianName = technicianName;
+        this.sourceUserID = sourceUserId;
+    }
+
+    public String getSourceUserID() {
+        return sourceUserID;
     }
 
     public String getUserName() {

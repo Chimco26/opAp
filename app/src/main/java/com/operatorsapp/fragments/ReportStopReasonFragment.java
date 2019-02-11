@@ -56,7 +56,7 @@ import com.operatorsapp.view.GridSpacingItemDecorationRTL;
 
 import java.util.ArrayList;
 
-public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener, CroutonRootProvider {
+public class ReportStopReasonFragment extends BackStackAwareFragment implements OnStopReasonSelectedCallbackListener {
     private static final String LOG_TAG = ReportStopReasonFragment.class.getSimpleName();
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final String IS_OPEN = "IS_OPEN";
@@ -181,10 +181,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             }
             initNewStopReasons();
 
-            // TODO: 27/12/2018 change icon
             mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    PersistenceManager.getInstance().setisNewStopReasonDesign(isChecked);
                     if (isChecked){
                         initNewStopReasons();
                     }else {
@@ -196,6 +196,8 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             setSpanCount(mIsOpen);
 
         }
+
+        mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
 
     }
 
@@ -300,10 +302,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 //        mActiveJobsProgressBar.setVisibility(View.GONE);
 //    }
 
-    @Override
-    public int getCroutonRoot() {
-        return R.id.report_stop_reason_crouton_root;
-    }
+//    @Override
+//    public int getCroutonRoot() {
+//        return R.id.report_stop_reason_crouton_root;
+//    }
 
     private void sendReport() {
 
@@ -323,10 +325,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             eventsId[i] = mSelectedEvents.get(i);
 
-            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
-                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
-                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
-                    mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
+//            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
+//                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
+//                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
+//                    mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
 
         }
 
@@ -363,6 +365,17 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
                 OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
                 Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "sendReportSuccess");
+
+                for (int i = 0; i < mSelectedEvents.size(); i++) {
+
+                    SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
+                            mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
+                            mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
+                            mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
+
+                }
+
+
             } else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
             }
@@ -404,8 +417,11 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                     }
                 });
             } else {
-
-                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                String msg = "missing reports";
+                if (reason != null && reason.getDetailedDescription() != null){
+                    msg = reason.getDetailedDescription();
+                }
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, msg);
                 ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener, errorObject);
             }
 

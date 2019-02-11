@@ -3,6 +3,7 @@ package com.ravtech.david.sqlcore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.litepal.annotation.Column;
@@ -50,6 +51,8 @@ public class Event extends DataSupport implements Parcelable {
     private float mAlarmValue;
     @SerializedName("EventReasonID")
     private int mEventReasonID;
+    @SerializedName("Color")
+    private String color;
 
     private long mTimeOfAdded;
 
@@ -95,6 +98,13 @@ public class Event extends DataSupport implements Parcelable {
 
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public boolean isIsDismiss() {
         return mIsDismiss;

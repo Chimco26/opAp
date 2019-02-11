@@ -57,10 +57,10 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (mTechList.get(position).getmResponseType()){
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
-                icon = R.drawable.call_sent_blue;
+                icon = R.drawable.call_recieved;
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                icon = R.drawable.call_recieved;
+                icon = R.drawable.call_sent_blue;
                 break;
             case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                 icon = R.drawable.call_declined;

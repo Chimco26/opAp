@@ -232,6 +232,8 @@
 
                         </LinearLayout>
                         <!--//todo kuti-->
+
+
                         <LinearLayout
                             android:id="@+id/fragment_dashboard_shiftlog"
                             android:layout_width="124dp"
@@ -239,6 +241,42 @@
                             android:layout_toEndOf="@id/FAAE_lenox_machines_ly"
                             android:background="@drawable/side_menu"
                             android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/FAAE_close_select_events"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_margin="5dp"
+                                android:src="@drawable/close"
+                                android:visibility="gone" />
+
+                            <ScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <com.operatorsapp.view.TimeLineView
+                                        android:id="@+id/FAAE_time_container"
+                                        android:layout_width="50dp"
+                                        android:layout_height="match_parent" />
+
+
+                                    <LinearLayout
+                                        android:id="@+id/FAAE_scroll_container"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical" />
+
+
+                                </LinearLayout>
+                            </ScrollView>
+
 
                             <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"
@@ -361,6 +399,11 @@
                                             android:background="@color/default_gray" />
 
                                     </LinearLayout>
+                                    <!--todo kuti-->
+                                    <android.support.v7.widget.RecyclerView
+                                        android:id="@+id/FAAE_events_recycler"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent" />
 
                                     <android.support.v7.widget.RecyclerView
                                         android:id="@+id/fragment_dashboard_shift_log"

@@ -56,15 +56,21 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         for (int i = 0; i < mNotificationsList.size(); i++) {
 
             notification = mNotificationsList.get(i);
-            date = TimeUtils.getDateForNotification(notification.getmSentTime());
-            c.setTime(date);
-
-            if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && i < mFirstTodayPosition){
-                mFirstTodayPosition = i;
+            date = TimeUtils.getDateForNotification(notification.getmResponseDate());
+            if (date == null){
+                date = TimeUtils.getDateForNotification(notification.getmSentTime());
             }
 
-            if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)+1 && i < mFirstYesterdayPosition){
-                mFirstYesterdayPosition = i;
+            if (date != null) {
+                c.setTime(date);
+
+                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && i < mFirstTodayPosition) {
+                    mFirstTodayPosition = i;
+                }
+
+                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) + 1 && i < mFirstYesterdayPosition) {
+                    mFirstYesterdayPosition = i;
+                }
             }
 
         }
@@ -83,9 +89,9 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
     public void onBindViewHolder(@NonNull NotificationHistoryAdapter.ViewHolder holder, final int position) {
 
         Notification notification = mNotificationsList.get(position);
-        Date date = TimeUtils.getDateForNotification(notification.getmSentTime());
+        Date date = TimeUtils.getDateForNotification(notification.getmResponseDate());
         if (position > 0){
-            mCalendar.setTime(TimeUtils.getDateForNotification(mNotificationsList.get(position -1).getmSentTime()));
+            mCalendar.setTime(TimeUtils.getDateForNotification(mNotificationsList.get(position -1).getmResponseDate()));
         }
 
         String time = "";
@@ -124,7 +130,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         }
 
-        holder.mBodyTv.setText(notification.getmBody());
+        holder.mBodyTv.setText(notification.getmBody(mContext));
         holder.mTimeTv.setText(time);
 
         switch (notification.getmResponseType()){
@@ -132,7 +138,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mClarifyBtn.setVisibility(View.GONE);
                 holder.mApproveBtn.setVisibility(View.GONE);
                 holder.mDeclineBtn.setVisibility(View.GONE);
-                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_mark));
+                holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.question_circle_outline));
                 holder.mSubtextTv.setText(mContext.getResources().getString(R.string.more_details));
                 break;
 
@@ -144,9 +150,9 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.call_approved));
                     holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_approved2), notification.getmSender()));
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
                 }else {
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.v));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.baseline_check_circle));
                 }
                 break;
 
@@ -160,7 +166,7 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                     holder.mBodyTv.setText(String.format(mContext.getResources().getString(R.string.call_declined2), notification.getmSender()));
                     holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_declined));
                 }else {
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.x));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.close_circle_outline));
                 }
                 break;
 
@@ -190,11 +196,11 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
                 holder.mDeclineBtn.setVisibility(View.VISIBLE);
 
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_sent_blue));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.call_recieved));
                     holder.mSubtextTv.setText(mContext.getResources().getString(R.string.waiting_for_replay));
                 }else {
                     holder.mSubtextTv.setText("");
-                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
+                    holder.mIconIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_icon));
                 }
 
                 break;
