@@ -1334,8 +1334,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mCallCounterHandler == null){
             mCallCounterHandler = new Handler();
         }
+        mCallCounterHandler.removeCallbacksAndMessages(null);
         if (techCallInfo == null){
-            mCallCounterHandler.removeCallbacksAndMessages(null);
             mTechnicianTimerTv.setText("");
         }else {
             mCallCounterHandler.post(new Runnable() {
@@ -1362,6 +1362,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mCallCounterHandler == null){
                         mCallCounterHandler = new Handler();
                     }
+                    mCallCounterHandler.removeCallbacksAndMessages(null);
                     mCallCounterHandler.postDelayed(this, postDelay);
                 }
             });
