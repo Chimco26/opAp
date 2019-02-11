@@ -155,6 +155,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ATATV_job_indicator_ly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -244,12 +245,12 @@
                         android:id="@+id/toolbar_technician_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/toolbar_technician_iv"
                         android:gravity="center"
                         android:maxLines="2"
                         android:ellipsize="end"
+                        android:layout_marginTop="10dp"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="14sp"

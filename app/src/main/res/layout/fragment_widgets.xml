@@ -1,120 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
 
-    <FrameLayout
-        android:id="@+id/fragment_dashboard_widgets_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/fragment_dashboard_no_data"
+        <FrameLayout
+            android:id="@+id/fragment_dashboard_widgets_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/ic_cloud" />
-
-            <TextView
-                style="@style/FontStyle_T7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/no_data"
-                android:textColor="@color/divider_gray"
-                android:textSize="50sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fragment_dashboard_loading_data_widgets"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/C16"
-                android:indeterminateTintMode="src_atop" />
-
-            <TextView
-                style="@style/FontStyle_T7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/loading_data"
-                android:textColor="@color/divider_gray"
-                android:textSize="50sp" />
-        </LinearLayout>
-
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_gravity="center">
 
             <LinearLayout
+                android:id="@+id/fragment_dashboard_no_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/fragment_dashboard_widgets"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="7dp"
-                    android:scrollbarFadeDuration="0"
-                    android:scrollbars="vertical" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/ic_cloud" />
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_dashboard_loading_data_widgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/C16"
+                    android:indeterminateTintMode="src_atop" />
+
+                <TextView
+                    style="@style/FontStyle_T7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/loading_data"
+                    android:textColor="@color/divider_gray"
+                    android:textSize="50sp" />
+            </LinearLayout>
+
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/fragment_dashboard_top_five_1"
-                        layout="@layout/top_five"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/fragment_dashboard_widgets"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="7dp"
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbars="vertical" />
 
-                    <include
-                        android:id="@+id/fragment_dashboard_top_five_2"
-                        layout="@layout/top_five"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <include
+                            android:id="@+id/fragment_dashboard_top_five_1"
+                            layout="@layout/top_five"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/fragment_dashboard_top_five_2"
+                            layout="@layout/top_five"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/FW_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:visibility="gone"
+        />
 
 
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-    </FrameLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

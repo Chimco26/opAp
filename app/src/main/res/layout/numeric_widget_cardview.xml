@@ -17,7 +17,7 @@
         android:layout_marginEnd="15dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Change material"
+        android:text="@string/change_material"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         autofit:minTextSize="12sp" />
@@ -32,7 +32,7 @@
         android:layout_marginBottom="2dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="More info"
+        android:text="@string/more_info"
         android:textSize="14sp"
         autofit:minTextSize="8sp" />
 
@@ -130,8 +130,9 @@
                     android:layout_marginTop="3dp"
                     android:background="@drawable/box_grey_stroke"
                     android:gravity="center"
-                    android:inputType="numberSigned"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
             </LinearLayout>
 
@@ -189,7 +190,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:background="@color/blue1"
+                android:background="@color/grey_lite"
                 android:gravity="center"
                 android:text="@string/next"
                 android:textColor="@color/white"
@@ -299,8 +300,9 @@
             android:textColor="@color/blue1"
             android:textSize="35sp"
             android:gravity="center"
-            android:inputType="number"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -325,7 +327,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:background="@color/blue1"
+                android:background="@color/grey_lite"
                 android:gravity="center"
                 android:text="@string/report"
                 android:textColor="@color/white"

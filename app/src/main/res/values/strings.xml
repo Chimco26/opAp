@@ -311,6 +311,18 @@
     <string name="waiting_for_replay">Waiting for replay</string>
     <string name="more_details">Waiting for more details</string>
     <string name="technician">Technician</string>
+    <string name="time_left_to_current_job">Time left to current job</string>
+    <string name="hr">(Hr)</string>
+    <string name="see_pending_jobs">See pending jobs</string>
+    <string name="end_setup">End Setup</string>
+    <string name="you_are_in_setup_mode">You are in setup mode</string>
+    <string name="get_ready_for_your_next_job">Get ready for your next job</string>
+    <string name="see_job">See Job</string>
+    <string name="dont_forget_to_activate_job">Don\'t forget to activate job!</string>
+    <string name="change_material">Change material</string>
+    <string name="more_info">More info</string>
+    <string name="max_value_is">max value is:</string>
+    <string name="change_factory">Change factory</string>
 
     <!--keys for insights-->
     <string name="NoProgressMinFromStartShift">It\'s %2$s minutes into the shift and machine %1$s have not yet begun production.</string>

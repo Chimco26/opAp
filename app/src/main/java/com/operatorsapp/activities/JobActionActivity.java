@@ -2,7 +2,6 @@ package com.operatorsapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -818,10 +817,13 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         mPendingJobsNoHeadersFiltered.clear();
         mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
         sortHeaders();
-        mHeadersAdapter.notifyDataSetChanged();
-        mPendingJobsAdapter.notifyDataSetChanged();
-
-        filterPendingJobsByHeaders();
+        if (mHeadersAdapter != null) {
+            mHeadersAdapter.notifyDataSetChanged();
+        }
+        if (mPendingJobsAdapter != null) {
+            mPendingJobsAdapter.notifyDataSetChanged();
+            filterPendingJobsByHeaders();
+        }
     }
 
     public void filterPendingJobsByHeaders() {
