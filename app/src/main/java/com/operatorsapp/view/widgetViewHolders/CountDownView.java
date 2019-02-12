@@ -200,7 +200,7 @@ public class CountDownView extends View {
         if (isReverse){
             return minuteStartText + StringUtil.add0ToNumber(minute);
         }else {
-            return minuteStartText + StringUtil.add0ToNumber(totalTimeInMinute - minute);
+            return minuteStartText + StringUtil.add0ToNumber(minute);
         }
     }
 

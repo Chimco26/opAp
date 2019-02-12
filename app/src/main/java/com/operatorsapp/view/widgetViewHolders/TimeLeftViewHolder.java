@@ -77,7 +77,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         setSizes(mParentLayout);
         int time = Integer.parseInt(widget.getCurrentValue());
         int endLimit = 10;
-//        time = 60;
+//        time = 7; test states
         if (mMachineStatus != null &&
                 mMachineStatus.getAllMachinesData() != null
                 && mMachineStatus.getAllMachinesData().get(0) != null &&
