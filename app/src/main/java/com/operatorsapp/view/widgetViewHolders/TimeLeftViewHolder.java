@@ -68,7 +68,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             public void run() {
                 ViewGroup.MarginLayoutParams mItemViewParams4;
                 mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
                 mDivider.requestLayout();
             }
         });
@@ -77,7 +77,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         setSizes(mParentLayout);
         int time = Integer.parseInt(widget.getCurrentValue());
         int endLimit = 10;
-//        time = 60;
+//        time = 7; test states
         if (mMachineStatus != null &&
                 mMachineStatus.getAllMachinesData() != null
                 && mMachineStatus.getAllMachinesData().get(0) != null &&

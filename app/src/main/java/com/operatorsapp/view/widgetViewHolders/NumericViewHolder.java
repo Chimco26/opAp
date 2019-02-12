@@ -366,7 +366,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
             public void run() {
                 ViewGroup.MarginLayoutParams mItemViewParams1;
                 mItemViewParams1 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams1.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mItemViewParams1.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
                 mDivider.requestLayout();
             }
         });
