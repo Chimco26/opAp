@@ -69,7 +69,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
             public void run() {
                 ViewGroup.MarginLayoutParams mItemViewParams3;
                 mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
                 mDivider.requestLayout();
             }
         });

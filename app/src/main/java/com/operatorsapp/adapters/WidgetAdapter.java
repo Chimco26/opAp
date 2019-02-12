@@ -18,7 +18,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
-import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
@@ -149,8 +149,7 @@ public class WidgetAdapter extends Adapter {
                         mContext, mClosedState, mHeight, mWidth);
             }
             case PROJECTION: {
-                return new ProjectionViewHolder(inflater.inflate(R.layout.projection_widget_cardview, parent, false),
-                        mContext, mHeight, mWidth);
+                return new ProjectionViewHolderNew(inflater.inflate(R.layout.projection_widget_cardview_new, parent, false), mHeight, mWidth);
             }
             case TIME: {
                 return new TimeViewHolder(inflater.inflate(R.layout.time_widget_cardview, parent, false), mContext, mGoToScreenListener, mHeight, mWidth);
@@ -201,7 +200,7 @@ public class WidgetAdapter extends Adapter {
                     rangeViewHolder.setRangeItem(widget);
                     break;
                 case PROJECTION:
-                    final ProjectionViewHolder projectionViewHolder = (ProjectionViewHolder) holder;
+                    final ProjectionViewHolderNew projectionViewHolder = (ProjectionViewHolderNew) holder;
                     projectionViewHolder.setProjectionItem(widget);
                     break;
                 case TIME_LEFT:

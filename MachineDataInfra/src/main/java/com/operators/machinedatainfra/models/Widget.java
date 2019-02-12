@@ -125,6 +125,18 @@ public class Widget {
         this.mTargetScreen = mTargetScreen;
     }
 
+    public void setCurrentValue(String mCurrentValue) {
+        this.mCurrentValue = mCurrentValue;
+    }
+
+    public void setProjection(Float mProjection) {
+        this.mProjection = mProjection;
+    }
+
+    public void setTarget(Float mTarget) {
+        this.mTarget = mTarget;
+    }
+
     public String getCurrentValue() {
         if(mCurrentValue == null){
             mCurrentValue = "--";
