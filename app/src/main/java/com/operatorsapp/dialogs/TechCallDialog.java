@@ -69,10 +69,10 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
         mCloseIv.setOnClickListener(this);
         mNewCall.setOnClickListener(this);
-        setRecyclerVew();
+        setRecyclerVew(0);
     }
 
-    private void setRecyclerVew() {
+    private void setRecyclerVew(int position) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, new TechCallAdapter.TechCallItemListener() {
             @Override
@@ -95,7 +95,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
                     RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                             notificationToRemove.getmTitle(),
-                            notificationToRemove.getmBody(),
+                            notificationToRemove.getmBody(getContext()),
                             pm.getMachineId() + "",
                             notificationToRemove.getmNotificationID() + "",
                             responseType,
@@ -103,7 +103,9 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                             Consts.NOTIFICATION_RESPONSE_TARGET_TECHNICIAN,
                             techCallInfo.getmTechnicianId()+"",
                             pm.getOperatorName(),
-                            techCallInfo.getmName());
+                            techCallInfo.getmName(),
+                            pm.getOperatorId(),
+                            notificationToRemove.getmTargetUserId() +"");
 
                     NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
                         @Override
@@ -119,7 +121,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                                     PersistenceManager.getInstance().setRecentTechCallId(0);
                                 }
                                 mListener.onCleanTech(techCallInfo);
-                                setRecyclerVew();
+                                setRecyclerVew(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
 
 
                             }else {
@@ -138,6 +140,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                 }
             }
         }));
+        ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPosition(position);
     }
 
     @Override

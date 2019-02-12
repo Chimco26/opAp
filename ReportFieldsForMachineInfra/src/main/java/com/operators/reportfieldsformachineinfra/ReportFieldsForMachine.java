@@ -57,6 +57,9 @@ public class ReportFieldsForMachine implements Parcelable {
 
     public List<Technician> getTechnicians()
     {
+        if (technicians == null){
+            technicians = new ArrayList<>();
+        }
         return technicians;
     }
 

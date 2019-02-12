@@ -1,5 +1,7 @@
 package com.operatorsapp.server.responses;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
 import com.operatorsapp.utils.Consts;
 
@@ -11,6 +13,9 @@ public class Notification {
 
     @SerializedName("Text")
     private String mBody;
+
+    @SerializedName("InsightText")
+    private NotificationText mInsightBody;
 
     @SerializedName("SourceUserName")
     private String mSender;
@@ -86,8 +91,21 @@ public class Notification {
         this.mTitle = mTitle;
     }
 
-    public String getmBody() {
-        return mBody;
+    public String getmBody(Context context) {
+
+        if (getmResponseType() == Consts.NOTIFICATION_TYPE_REAL_TIME){
+            return getmInsightBody().getFullText(context);
+        }else {
+            return mBody;
+        }
+    }
+
+    public NotificationText getmInsightBody() {
+        return mInsightBody;
+    }
+
+    public void setmInsightBody(NotificationText mInsightBody) {
+        this.mInsightBody = mInsightBody;
     }
 
     public String getmTargetName() {

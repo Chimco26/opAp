@@ -1928,7 +1928,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onPostSplitEventFailed(ErrorObjectInterface reason) {
-                ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, getString(R.string.split_event_failed));
+                String msg = reason.getDetailedDescription();
+                if (msg == null || msg.equals("")){
+                    msg = getString(R.string.split_event_failed);
+                }
+                ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, msg);
 
             }
         }, NetworkManager.getInstance(), new SplitEventRequest(persistenceManager.getSessionId(), String.valueOf(eventID)), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
@@ -2282,6 +2286,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onReportCycleUnit(String value) {
+        if (value == null || value.equals("")){
+            value = "0";
+        }
         sendCycleUnitReport(Double.parseDouble(value));
     }
 

@@ -324,6 +324,17 @@
     <string name="max_value_is">max value is:</string>
     <string name="change_factory">Change factory</string>
 
+    <!--keys for insights-->
+    <string name="NoProgressMinFromStartShift">It\'s %2$s minutes into the shift and machine %1$s have not yet begun production.</string>
+    <string name="SetupDurationMinActual">Machine %1$s is in setup for over %2$s minutes.</string>
+    <string name="SetupInjectionsCount">Machine %1$s has done over %2$s cycles in setup.</string>
+    <string name="UnReportedStopsPC">Machine %1$s: over %2$s %% of stop time this shift is uncategorized.</string>
+    <string name="RejectsPC">Machine %1$s has over %2$s %% Rejects.</string>
+    <string name="OpenEventDuration">Current stop time for machine %1$s is over %2$s minutes.</string>
+    <string name="ProductionModeInjectionsCount">%2$s cycles detected on %1$s in non production status.</string>
+    <string name="CycleTimeDeviation">%2$s %% exceeded Cycle Time standard on %1$s.</string>
+    <string name="ShortEventsFromProductionPC">Machine %1$s : Total short stops from the total production time exceeds %2$s %%.</string>
+    <string name="WorkerNotSigned">Machine %1$s: There isn\'t operator login to the machine %2$s minutes after the beginning of the shift.</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
