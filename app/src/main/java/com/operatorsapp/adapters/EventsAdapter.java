@@ -7,12 +7,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.utils.L;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.Event;
 
@@ -36,6 +40,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private static final int PIXEL_FOR_MINUTE = 20;
     private static final int NEW_EVENT_ID = 5555;
+    private final ArrayList<TechCallInfo> mTechs;
     private boolean mClosedState;
     private boolean mIsSelectionMode;
     private final OnStopClickListener mOnStopClickListener;
@@ -52,6 +57,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         mEvents = new ArrayList<>();
         updateList(events);
+
+        mTechs = PersistenceManager.getInstance().getCalledTechnician();
+
+        for (TechCallInfo techCallInfo : mTechs) {
+            Log.e("EventsAdapter: ", techCallInfo.toString());
+        }
+
 //        updateList(events);
     }
 
@@ -146,6 +158,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private RelativeLayout mRelative;
         private CheckBox mCheckBox;
         private Event mEvent;
+//        private ImageView mTechCall;
+        private LinearLayout mTecContainer;
 
 //        private Event mEvent;
 
@@ -164,6 +178,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mRelative = itemView.findViewById(R.id.EI_relative);
             mCheckBox = itemView.findViewById(R.id.EI_check_box);
             mCheckBox.setOnCheckedChangeListener(this);
+//            mTechCall = itemView.findViewById(R.id.EI_tech_call);
 
         }
 
@@ -178,7 +193,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
             circleBackground.setColor(Color.parseColor(mEvent.getColor()));
 
-            String startTime = mEvent.getEventTime().substring(10, 16);
+            String startTime = "";
+            if (mEvent.getEventTime() != null && mEvent.getEventTime().length() > 0) {
+                startTime = mEvent.getEventTime().substring(10, 16);
+            }
             mTime.setText(startTime);
 
             if (!mEvent.getColor().equals("#1aa917")) {
@@ -217,6 +235,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
             updateTime(position);
+
+            updateTech();
+        }
+
+        private void updateTech() {
+            Long eventStartMilli = convertDateToMillisecond(mEvent.getEventTime());
+            Long eventEndMilli = convertDateToMillisecond(mEvent.getEventEndTime());
+
+            for (TechCallInfo techCallInfo : mTechs) {
+                if (techCallInfo.getmCallTime() > eventStartMilli && techCallInfo.getmCallTime() < eventEndMilli) {
+//                    mTechCall.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technician_called));
+                }
+            }
+
+
         }
 
         private void updateTime(int position) {

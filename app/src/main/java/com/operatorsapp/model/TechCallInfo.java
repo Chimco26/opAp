@@ -100,5 +100,15 @@ public class TechCallInfo {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "TechCallInfo{" +
+                "mResponseType=" + mResponseType +
+                ", mNotificationId=" + mNotificationId +
+                ", mTechnicianId=" + mTechnicianId +
+                ", mName='" + mName + '\'' +
+                ", mStatus='" + mStatus + '\'' +
+                ", mCallTime=" + mCallTime +
+                '}';
+    }
 }

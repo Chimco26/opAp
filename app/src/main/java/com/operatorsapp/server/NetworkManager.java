@@ -58,6 +58,8 @@ import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequ
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
+import com.operatorsapp.server.requests.MachineJoshDataRequest;
+import com.operatorsapp.server.responses.GetMachineJoshData.MachineJoshDataResponse;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -67,11 +69,9 @@ import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
-import com.operatorsapp.server.responses.TopRejectReason;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -920,6 +920,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void postDeleteToken(PostDeleteTokenRequest request, final Callback<ErrorResponseNewVersion> callback){
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ErrorResponseNewVersion> call = mRetrofit.create(OpAppServiceRequests.class).postDeleteToken(request);
+        call.enqueue(callback);
+    }
+
+    public void getMachineJoshData(MachineJoshDataRequest request, final Callback<MachineJoshDataResponse> callback){
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<MachineJoshDataResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMachineJoshData(request);
         call.enqueue(callback);
     }
 }
