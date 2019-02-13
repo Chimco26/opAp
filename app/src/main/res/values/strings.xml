@@ -336,6 +336,9 @@
     <string name="ShortEventsFromProductionPC">Machine %1$s : Total short stops from the total production time exceeds %2$s %%.</string>
     <string name="WorkerNotSigned">Machine %1$s: There isn\'t operator login to the machine %2$s minutes after the beginning of the shift.</string>
     <string name="you_ve_reached_the_production_target">You’ve reached the production target!</string>
+    <string name="reported_stop_event">Reported stop event</string>
+    <string name="time_min">Time (min)</string>
+    <string name="report_events_reason">Report events reason</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

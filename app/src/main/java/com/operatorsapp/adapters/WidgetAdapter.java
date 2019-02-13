@@ -20,6 +20,7 @@ import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
+import com.operatorsapp.view.widgetViewHolders.ReportStopViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeLeftViewHolder;
 import com.operatorsapp.view.widgetViewHolders.TimeViewHolder;
 
@@ -42,6 +43,7 @@ public class WidgetAdapter extends Adapter {
     private final int COUNTER = 4;
     private final int IMAGE = 5;
     private final int TIME_LEFT = 6; // current value is the time left in minutes
+    private static final int REPORT_PERCENT = 7;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -159,10 +161,16 @@ public class WidgetAdapter extends Adapter {
             }
             case IMAGE: {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
+//                return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
+//                        mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case TIME_LEFT: {
                 return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
                         mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable, mHeight, mWidth);
+            }
+            case REPORT_PERCENT: {
+                return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
+                        mDashboardCentralContainerListener, mHeight, mWidth);
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
@@ -182,6 +190,8 @@ public class WidgetAdapter extends Adapter {
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
                     setSizes(imageViewHolder.mParentLayout);
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
+//                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
+//                    reportStopViewHolder.setData(widget);
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
@@ -207,6 +217,9 @@ public class WidgetAdapter extends Adapter {
                     final TimeLeftViewHolder timeLeftViewHolder = (TimeLeftViewHolder) holder;
                     timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable);
                     mEndSetupDisable = false;
+                case REPORT_PERCENT:
+                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
+                    reportStopViewHolder.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -226,7 +239,9 @@ public class WidgetAdapter extends Adapter {
 
     public void setReportFieldsForMachine(ReportFieldsForMachine reportFieldsForMachine) {
         mReportFieldsForMachine = reportFieldsForMachine;
-        if (!mEndSetupDisable) {mEndSetupDisable = false;}
+        if (!mEndSetupDisable) {
+            mEndSetupDisable = false;
+        }
     }
 
     public void setMachineStatus(MachineStatus machineStatus) {
