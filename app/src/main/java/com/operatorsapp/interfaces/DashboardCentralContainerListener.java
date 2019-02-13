@@ -9,4 +9,5 @@ public interface DashboardCentralContainerListener {
     void onReportCycleUnit(String value);
     void onOpenPendingJobs();
     void onEndSetup();
+    void onReportStopEvent();
 }

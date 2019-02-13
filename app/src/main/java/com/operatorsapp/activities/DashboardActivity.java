@@ -934,6 +934,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onGetShiftLogSucceeded(ArrayList<Event> events) {
+
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
                     int minDuration = PersistenceManager.getInstance().getMinEventDuration();
@@ -1111,7 +1112,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                if (fragment instanceof ApproveFirstItemFragment) {
 //                    getSupportFragmentManager().beginTransaction().add(R.id.fragments_container_dialog, fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //                } else {
-                    getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
+                getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), fragment).addToBackStack(DASHBOARD_FRAGMENT).commit();
 //                }
 
             } else {
@@ -1929,7 +1930,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onPostSplitEventFailed(ErrorObjectInterface reason) {
                 String msg = reason.getDetailedDescription();
-                if (msg == null || msg.equals("")){
+                if (msg == null || msg.equals("")) {
                     msg = getString(R.string.split_event_failed);
                 }
                 ShowCrouton.jobsLoadingAlertCrouton(DashboardActivity.this, msg);
@@ -2286,7 +2287,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onReportCycleUnit(String value) {
-        if (value == null || value.equals("")){
+        if (value == null || value.equals("")) {
             value = "0";
         }
         sendCycleUnitReport(Double.parseDouble(value));
@@ -2300,6 +2301,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onEndSetup() {
         onShowSetupEndDialog();
+    }
+
+    @Override
+    public void onReportStopEvent() {
+        if (mActionBarAndEventsFragment != null) {
+            mActionBarAndEventsFragment.startSelectMode(null);
+        }
     }
 
     private void sendCycleUnitReport(double value) {
