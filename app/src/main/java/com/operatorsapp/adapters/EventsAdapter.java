@@ -39,6 +39,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private static final int PIXEL_FOR_MINUTE = 20;
+    private static final int PIXEL_FOR_BIG_MINUTE = 10;
     private static final int NEW_EVENT_ID = 5555;
     private final ArrayList<TechCallInfo> mTechs;
     private boolean mClosedState;
@@ -158,8 +159,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private RelativeLayout mRelative;
         private CheckBox mCheckBox;
         private Event mEvent;
-//        private ImageView mTechCall;
-        private LinearLayout mTecContainer;
+        //        private ImageView mTechCall;
+        private RelativeLayout mTechContainer;
 
 //        private Event mEvent;
 
@@ -179,6 +180,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mCheckBox = itemView.findViewById(R.id.EI_check_box);
             mCheckBox.setOnCheckedChangeListener(this);
 //            mTechCall = itemView.findViewById(R.id.EI_tech_call);
+            mTechContainer = itemView.findViewById(R.id.EI_service_call_container);
 
         }
 
@@ -186,7 +188,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mEvent = mEvents.get(position);
 
             ViewGroup.LayoutParams params = mView.getLayoutParams();
-            params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
+
+
+            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID) {
+                params.height = 0;
+            } else {
+                if (mEvent.getDuration() < 5) {
+                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
+                } else {
+                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE;
+                }
+            }
             mView.setLayoutParams(params);
 
             mLine.setBackgroundColor(Color.parseColor(mEvent.getColor()));
@@ -202,11 +214,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (!mEvent.getColor().equals("#1aa917")) {
 
                 mText.setVisibility(View.VISIBLE);
+
+                String text = mEvent.getDuration() + "m " + mEvent.getSubtitleLname();
                 if (mClosedState) {
 
-                    mText.setText(mEvent.getDuration() + "m " + mEvent.getSubtitleLname());
+                    mText.setText(text);
                 } else {
-                    mText.setText(mEvent.getDuration() + "m");
+                    if (text.length() > 12) {
+
+                        mText.setText(String.format("%s...", text.substring(0, 12)));
+                    }
 
                 }
                 GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
@@ -240,12 +257,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
 
         private void updateTech() {
+            if (mTechContainer.getChildCount() > 0) {
+                mTechContainer.removeAllViews();
+            }
+
             Long eventStartMilli = convertDateToMillisecond(mEvent.getEventTime());
             Long eventEndMilli = convertDateToMillisecond(mEvent.getEventEndTime());
 
             for (TechCallInfo techCallInfo : mTechs) {
                 if (techCallInfo.getmCallTime() > eventStartMilli && techCallInfo.getmCallTime() < eventEndMilli) {
-//                    mTechCall.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technician_called));
+                    View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
+//                    view.findViewById(R.id.SCI_time).se
+                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
+                    if (height > mView.getHeight()) {
+                        view.setPadding(0, mView.getHeight() - view.getHeight(), 0, 0);
+                    } else {
+                        view.setPadding(0, (int) height, 0, 0);
+                    }
+
+                    mTechContainer.addView(view);
+
                 }
             }
 
