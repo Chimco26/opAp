@@ -66,29 +66,35 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
 //        widget.setProjection(100f);
 //        widget.setTarget(200f);
         mCurrentValue = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);
-        final float finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
-        final float finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
-        initValuesTv(widget);
-        initWidgetHeight();
+        mTargetRl.post(new Runnable() {
+            @Override
+            public void run() {
+                final float finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
+                final float finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
 
-        if (mCurrentValue < widget.getTarget()) {
-            updateColors(widget);
-            mProducedCompleteView.setVisibility(View.GONE);
-            mProducedCompleteTv.setVisibility(View.GONE);
-            mTargetReachedTv.setVisibility(View.GONE);
-            showProducedValue();
-            showTheoricalValue(widget);
-            updateViewsWidth(finalCurrentWidth, finalProjectionWidth);
-        } else {
-            updateViewsWidth(mTargetRl.getWidth(), 0);
-            mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
-            mProducedCompleteView.setVisibility(View.VISIBLE);
-            mProducedCompleteTv.setVisibility(View.VISIBLE);
-            mTargetReachedTv.setVisibility(View.VISIBLE);
-            mProducedTv.setVisibility(View.GONE);
-            mTheoricalTv.setVisibility(View.GONE);
-            mTheoricalView.setVisibility(View.GONE);
-        }
+                initValuesTv(widget);
+                initWidgetHeight();
+
+                if (mCurrentValue < widget.getTarget()) {
+                    updateColors(widget);
+                    mProducedCompleteView.setVisibility(View.GONE);
+                    mProducedCompleteTv.setVisibility(View.GONE);
+                    mTargetReachedTv.setVisibility(View.GONE);
+                    showProducedValue();
+                    showTheoricalValue(widget);
+                    updateViewsWidth(finalCurrentWidth, finalProjectionWidth);
+                } else {
+                    updateViewsWidth(mTargetRl.getWidth(), 0);
+                    mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
+                    mProducedCompleteView.setVisibility(View.VISIBLE);
+                    mProducedCompleteTv.setVisibility(View.VISIBLE);
+                    mTargetReachedTv.setVisibility(View.VISIBLE);
+                    mProducedTv.setVisibility(View.GONE);
+                    mTheoricalTv.setVisibility(View.GONE);
+                    mTheoricalView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void updateColors(Widget widget) {

@@ -104,4 +104,18 @@
         <attr name="isReverse" format="boolean"/>
         <attr name="endModeTimeInMinute" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="PercentageView">
+        <attr name="percentage_padding" format="integer"/>
+        <attr name="percentage_startAngle" format="integer"/>
+        <attr name="percentage_percentAngle" format="integer"/>
+        <attr name="percentage_textSize" format="integer"/>
+        <attr name="percentage_text" format="string"/>
+        <attr name="percentage_strokeWidth" format="integer"/>
+        <attr name="percentage_backgroundColor" format="color"/>
+        <attr name="percentage_centerColor" format="color"/>
+        <attr name="percentage_percentBackgroundColor" format="color"/>
+        <attr name="percentage_percentColor" format="color"/>
+        <attr name="percentage_textColor" format="color"/>
+    </declare-styleable>
 </resources>
