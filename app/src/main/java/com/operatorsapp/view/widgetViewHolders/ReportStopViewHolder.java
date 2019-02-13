@@ -11,11 +11,16 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
+import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;
+
 public class ReportStopViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final int END_LIMIT = 10;//in minute
     private final int mHeight;
     private final int mWidth;
     private final RelativeLayout mParentLayout;
+    private final TextView mCurrentValueTv;
+    private final TextView mTargetValueTv;
+    private final TextView mPercentValueTv;
     private TextView mTitle;
     private TextView mSubTitle;
     private PercentageView mPercentageView;
@@ -37,15 +42,23 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mPercentageView = itemView.findViewById(R.id.RPWC_percentage);
         mText = itemView.findViewById(R.id.RPWC_percentage_text_tv);
         mBtn = itemView.findViewById(R.id.RPWC_percentage_btn);
+
+        mCurrentValueTv = itemView.findViewById(R.id.RPWC_current_value_tv);
+        mTargetValueTv = itemView.findViewById(R.id.RPWC_target_value_tv);
+        mPercentValueTv = itemView.findViewById(R.id.RPWC_percent_value_tv);
     }
 
     public void setData(Widget widget) {
         initListener();
-        setView(widget);
-        initPercentage(WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT), widget.getTarget());
+        setView();
+        float currentValue = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);
+//        currentValue = 0;
+        float target = widget.getTarget();
+        int percent = initPercentage(currentValue, target);
+        updateTextViews(percent, currentValue, target);
     }
 
-    private void setView(Widget widget) {
+    private void setView() {
         mDivider.post(new Runnable() {
             @Override
             public void run() {
@@ -59,17 +72,19 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         setSizes(mParentLayout);
     }
 
-    private void update2LyViews(int time, int endLimit) {
-        if (time <= endLimit) {
-            mText.setText(mText.getContext().getString(R.string.dont_forget_to_activate_job));
-            mBtn.setText(mBtn.getContext().getString(R.string.activate));
-            mText.setTextColor(mText.getContext().getResources().getColor(R.color.red_line));
-            mBtn.setBackgroundColor(mBtn.getContext().getResources().getColor(R.color.red_line));
-        } else {
-            mText.setText(mText.getContext().getString(R.string.get_ready_for_your_next_job));
-            mBtn.setText(mBtn.getContext().getString(R.string.see_job));
+    private void updateTextViews(int percent, float currentValue, Float target) {
+        if (percent < 50) {
+            mText.setText(mText.getContext().getString(R.string.report_events_reason));
             mText.setTextColor(mText.getContext().getResources().getColor(R.color.blue1));
-            mBtn.setBackgroundColor(mBtn.getContext().getResources().getColor(R.color.blue1));
+            mBtn.setVisibility(View.VISIBLE);
+        } else if (currentValue < target){
+            mText.setText(mText.getContext().getString(R.string.keep_reporting_events_reason));
+            mText.setTextColor(mText.getContext().getResources().getColor(R.color.blue1));
+            mBtn.setVisibility(View.VISIBLE);
+        }else {
+            mText.setText(mText.getContext().getString(R.string.target_reached));
+            mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
+            mBtn.setVisibility(View.GONE);
         }
     }
 
@@ -77,19 +92,23 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mBtn.setOnClickListener(this);
     }
 
-    private void initPercentage(float currentValue, float target) {
-        currentValue = 75;
-        target = 100;
+    private int initPercentage(float currentValue, float target) {
+        int percent = 0;
         if (target != 0) {
-            mPercentageView.update((int) (currentValue * 100 / target));
+            percent = (int) (currentValue * 100 / target);
+            mCurrentValueTv.setText(valueInK(currentValue));
+            mTargetValueTv.setText(String.format("/%s min", valueInK(target)));
+            mPercentValueTv.setText(String.format("%s%%", valueInK(percent)));
+            mPercentageView.update(percent);
         }
+        return percent;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.RPWC_percentage_btn:
-                mListener.onOpenPendingJobs();
+                mListener.onReportStopEvent();
                 break;
         }
     }

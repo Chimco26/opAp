@@ -339,6 +339,8 @@
     <string name="reported_stop_event">Reported stop event</string>
     <string name="time_min">Time (min)</string>
     <string name="report_events_reason">Report events reason</string>
+    <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
+    <string name="target_reached">Target \nReached!</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
