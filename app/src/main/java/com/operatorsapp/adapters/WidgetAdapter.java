@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -159,9 +160,9 @@ public class WidgetAdapter extends Adapter {
                 return new CounterViewHolder(inflater.inflate(R.layout.counter_widget_cardview, parent, false), mContext, mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case IMAGE: {
-//                return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
-                return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
-                        mDashboardCentralContainerListener, mHeight, mWidth);
+                return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
+//                return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
+//                        mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case TIME_LEFT: {
                 return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
@@ -186,11 +187,11 @@ public class WidgetAdapter extends Adapter {
             switch (type) {
 
                 case IMAGE:
-//                    final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-//                    setSizes(imageViewHolder.mParentLayout);
-//                    ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
-                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
-                    reportStopViewHolder.setData(widget);
+                    final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                    setSizes(imageViewHolder.mParentLayout);
+                    ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
+//                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
+//                    reportStopViewHolder.setData(widget);
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
@@ -217,8 +218,8 @@ public class WidgetAdapter extends Adapter {
                     timeLeftViewHolder.setData(widget, mMachineStatus, mEndSetupDisable);
                     mEndSetupDisable = false;
                 case REPORT_PERCENT:
-//                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
-//                    reportStopViewHolder.setData(widget);
+                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
+                    reportStopViewHolder.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
