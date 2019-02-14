@@ -61,10 +61,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         mTechs = PersistenceManager.getInstance().getCalledTechnician();
 
-        for (TechCallInfo techCallInfo : mTechs) {
-            Log.e("EventsAdapter: ", techCallInfo.toString());
-        }
-
 //        updateList(events);
     }
 
@@ -88,10 +84,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         for (int i = 0; i < events.size() - 1; i++) {
 
-
             Event event = events.get(i);
-
-//            event.setColor("#bf1620");
             mEvents.add(event);
 
             Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
@@ -114,17 +107,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
             if (i == events.size() - 2) {
-                Event event2 = events.get(i + 1);
-
-                event2.setColor("#bf1620");
-
-                mEvents.add(event2);
+                mEvents.add(events.get(i + 1));
             }
-
-
         }
-
-
     }
 
 
@@ -218,15 +203,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setVisibility(View.VISIBLE);
 
                 String text = mEvent.getDuration() + "m " + mEvent.getSubtitleLname();
-                if (mClosedState) {
+                if (!mClosedState && text.length() > 12) {
+                    mText.setText(String.format("%s...", text.substring(0, 12)));
 
-                    mText.setText(text);
                 } else {
-                    if (text.length() > 12) {
-
-                        mText.setText(String.format("%s...", text.substring(0, 12)));
-                    }
-
+                    mText.setText(text);
                 }
                 GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
                 textBackground.setColor(Color.parseColor(mEvent.getColor()));
@@ -253,9 +234,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             }
 
-            updateTime(position);
-
-            updateTech();
+//            updateTech();
         }
 
         private void updateTech() {
@@ -281,91 +260,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                 }
             }
-
-
-        }
-
-        private void updateTime(int position) {
-
-//            if (mEvent.getDuration() > 2) {
-//
-//
-//                String startTime = mEvent.getEventTime().substring(10, 16);
-//                mTime.setText(startTime);
-//            }else {
-//                mTime.setText("");
-//
-//            }
-/*
-            if (position == 0) {
-                mTime.setText(startTime);
-            } else {
-
-//                Long eventStartMilli = convertDateToMillisecond(event.getEventTime());
-//                Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-                mTime.setText("");
-
-                if (mEvent.getDuration() < 30) {
-
-                    int startMinute = convertStringDateToMinute(mEvent.getEventTime());
-
-                    if (startMinute + mEvent.getDuration() >= 60) {
-                        if (mEvent.getDuration() > 2) {
-                            int minute = 60 - startMinute;
-
-                            if (minute * PIXEL_FOR_MINUTE > mTimeContainer.getHeight()) {
-
-                                mTime.setPadding(0, mTimeContainer.getHeight() - mTime.getHeight(), 0, 0);
-                            } else {
-                                mTime.setPadding(0, minute * PIXEL_FOR_MINUTE, 0, 0);
-
-                            }
-                        } else {
-                            mTime.setPadding(0, 0, 0, 0);
-
-                        }
-
-//                        int minute = 60 - startMinute;
-//
-//                        if (mEvent.getDuration() == 1) {
-//                            mTime.setPadding(0, 0, 0, 0);
-//                        } else {
-//                            if (minute * PIXEL_FOR_MINUTE > mTimeContainer.getHeight()) {
-//
-//                                mTime.setPadding(0, mTimeContainer.getHeight() - mTime.getHeight(), 0, 0);
-//                            } else {
-//
-//                                mTime.setPadding(0, minute * PIXEL_FOR_MINUTE, 0, 0);
-//                            }
-//                        }
-
-                        int startHour = convertStringDateToHour(mEvent.getEventEndTime());
-
-                        mTime.setText(startHour + ":00");
-
-                    } else if (startMinute + mEvent.getDuration() >= 30) {
-
-                        int minute = 30 - startMinute;
-
-                        mTime.setPadding(0, minute * PIXEL_FOR_MINUTE, 0, 0);
-
-                        int startHour = convertStringDateToHour(mEvent.getEventTime());
-
-                        mTime.setText(startHour + ":30");
-                    }
-
-
-//                    long minute = TimeUnit.MILLISECONDS.toMinutes(endMilliSecond - startMilliSecond);
-
-
-                } else {
-//                    for (int i = 0; i < mEvent.getDuration() / 30; i++) {
-//
-//                    }
-                }
-
-            }*/
-
         }
 
         @Override
@@ -374,18 +268,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             if (!mIsSelectionMode) {
 
-
                 if (mOnStopClickListener != null && mEvent.getEventID() != NEW_EVENT_ID) {
                     mIsSelectionMode = true;
                     mOnStopClickListener.onSelectMode(mEvent);
                     notifyDataSetChanged();
                 }
-
             } else {
                 mCheckBox.setChecked(mEvent.isChecked());
             }
-
-
         }
 
         @Override
@@ -400,46 +290,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
 
     public static Long convertDateToMillisecond(String dateToConvert) {
-
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
-
         try {
             Date date = format.parse(dateToConvert);
             return date.getTime();
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return 0L;
-    }
-
-    public static int convertStringDateToHour(String startTime) {
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
-        try {
-            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-            Date date = format.parse(startTime);
-            calendar.setTime(date);   // assigns calendar to given date
-            return calendar.get(Calendar.HOUR_OF_DAY);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-
-    public static int convertStringDateToMinute(String startTime) {
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
-        try {
-            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-            Date date = format.parse(startTime);
-            calendar.setTime(date);   // assigns calendar to given date
-            return calendar.get(Calendar.MINUTE);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
     }
 }

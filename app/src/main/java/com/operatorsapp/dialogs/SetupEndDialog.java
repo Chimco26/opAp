@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.RejectReasons;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -48,6 +49,13 @@ public class SetupEndDialog {
             view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
             view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
+        }
+
+        TextView setupText = view.findViewById(R.id.FAFI_setup_end_text);
+        if (true){
+            setupText.setText(R.string.setup_rejects_dialog_text);
+        }else {
+            setupText.setText(R.string.setup_good_units_dialog_text);
         }
 
         builder.setCancelable(true);
