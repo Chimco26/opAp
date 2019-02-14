@@ -11,6 +11,8 @@ import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
+import java.util.Locale;
+
 import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;
 
 public class ReportStopViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -97,8 +99,8 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         if (target != 0) {
             percent = (int) (currentValue * 100 / target);
             mCurrentValueTv.setText(valueInK(currentValue));
-            mTargetValueTv.setText(String.format("/%s min", valueInK(target)));
-            mPercentValueTv.setText(String.format("%s%%", valueInK(percent)));
+            mTargetValueTv.setText(String.format(Locale.getDefault(), "/%s min", valueInK(target)));
+            mPercentValueTv.setText(String.format(Locale.getDefault(),"%s%%", valueInK(percent)));
             mPercentageView.update(percent);
         }
         return percent;

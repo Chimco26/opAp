@@ -2311,7 +2311,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         Collections.reverse(events);
 
-
         if (events.size() < 1) {
             return;
         }
