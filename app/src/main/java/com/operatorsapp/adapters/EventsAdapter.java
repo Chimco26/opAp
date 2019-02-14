@@ -91,7 +91,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             Event event = events.get(i);
 
-            event.setColor("#bf1620");
+//            event.setColor("#bf1620");
             mEvents.add(event);
 
             Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
@@ -195,7 +195,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 if (mEvent.getDuration() < 5) {
                     params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
-                } else {
+                } else if ((int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE > 300){
+                    params.height = 300;
+                }else {
                     params.height = (int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE;
                 }
             }

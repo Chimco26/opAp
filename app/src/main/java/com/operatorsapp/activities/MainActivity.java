@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
     public static final String GO_TO_SELECT_MACHINE_FRAGMENT = "GO_TO_SELECT_MACHINE_FRAGMENT";
     private CroutonCreator mCroutonCreator;
     private boolean mIsTryToLogin;
+    private boolean mGoToSelectMachine = false;
     private Fragment mCurrentFragment;
 
     @Override
@@ -96,7 +97,10 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         mCroutonCreator = new CroutonCreator();
 
         Bundle intent = getIntent().getExtras();
-        if (intent != null && intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT)) {
+        if (intent != null){
+            mGoToSelectMachine = intent.getBoolean(GO_TO_SELECT_MACHINE_FRAGMENT);
+        }
+        if (mGoToSelectMachine) {
             goToFragment(LoginFragment.newInstance(true), true, false);
         } else {
 
@@ -131,15 +135,17 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
     @Override
     public void onBackPressed() {
-        if (!mIsTryToLogin) {
-
-            if (mCurrentFragment != null && mCurrentFragment instanceof SelectMachineFragment) {
-                cleanData();
-                goToFragment(LoginFragment.newInstance(false), false, false);
-            } else {
-               finish();
-            }
-        }
+//        if (!mIsTryToLogin) {
+//
+//            if (mCurrentFragment instanceof SelectMachineFragment && !mGoToSelectMachine) {
+//                cleanData();
+//                goToFragment(LoginFragment.newInstance(false), false, false);
+//            } else {
+//               finish();
+//            }
+//        }else {
+            finish();
+//        }
     }
 
     @Override

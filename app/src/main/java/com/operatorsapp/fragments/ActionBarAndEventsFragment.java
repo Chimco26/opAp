@@ -663,11 +663,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     btnDecline.setVisibility(View.GONE);
                 }
 
-                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
 
                     tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
 
-                    switch (notification.getmResponseType()){
+                    switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                             tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
@@ -697,11 +697,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
-                }else {
+                } else {
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                     tvBody.setText(notification.getmBody(getActivity()));
                 }
-
 
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
@@ -1409,7 +1408,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCallCounterHandler = new Handler();
         }
         mCallCounterHandler.removeCallbacksAndMessages(null);
-        if (techCallInfo == null){
+        if (techCallInfo == null) {
             mTechnicianTimerTv.setText("");
         } else {
             mCallCounterHandler.post(new Runnable() {
@@ -1492,7 +1491,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openTechniciansList() {
-        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity) ) {
+        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)) {
             return;
         }
 
@@ -1559,7 +1558,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 final String techName = OperatorApplication.isEnglishLang() ? techniciansList.get(position).getEName() : techniciansList.get(position).getLName();
                 String sourceUserId = PersistenceManager.getInstance().getOperatorId();
-                if (sourceUserId == null || sourceUserId.equals("")){
+                if (sourceUserId == null || sourceUserId.equals("")) {
                     sourceUserId = "0";
                 }
                 final int technicianId = techniciansList.get(position).getID();
@@ -1783,7 +1782,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notification[0] != null) {
 
             String opId = pm.getOperatorId();
-            if (opId == null || opId.equals("")){
+            if (opId == null || opId.equals("")) {
                 opId = "0";
             }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
@@ -1798,7 +1797,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     pm.getOperatorName(),
                     notification[0].getmSender(),
                     opId,
-                    notification[0].getmTargetUserId()+"");
+                    notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
@@ -2330,8 +2329,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
 
-
-
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
         if (checkedAlarms != null) {
 
@@ -2677,8 +2674,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
 
-        mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
-        mEventsAdapter.notifyDataSetChanged();
+
+        if (mEventsAdapter != null) {
+            mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+            mEventsAdapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -2894,9 +2894,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
-                        if (techList != null && techList.size() > 0){
+                        if (techList != null && techList.size() > 0) {
                             for (TechCallInfo tech : techList) {
-                                if (tech.getmNotificationId() == not.getmNotificationID()){
+                                if (tech.getmNotificationId() == not.getmNotificationID()) {
                                     tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
                                     break;
                                 }

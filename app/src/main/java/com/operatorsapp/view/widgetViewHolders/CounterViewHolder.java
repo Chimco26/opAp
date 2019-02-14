@@ -59,7 +59,7 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
             public void run() {
                 ViewGroup.MarginLayoutParams mItemViewParams4;
                 mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
                 mDivider.requestLayout();
             }
         });

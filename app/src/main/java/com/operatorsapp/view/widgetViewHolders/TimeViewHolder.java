@@ -61,7 +61,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
             public void run() {
                 ViewGroup.MarginLayoutParams mItemViewParams2;
                 mItemViewParams2 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams2.setMargins(0, (int) (mParentLayout.getHeight() * 0.4), 0, 0);
+                mItemViewParams2.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
                 mDivider.requestLayout();
             }
         });

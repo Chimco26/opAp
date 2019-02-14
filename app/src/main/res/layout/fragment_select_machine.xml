@@ -16,6 +16,7 @@
         android:text="@string/change_factory"
         android:textColor="@color/white"
         android:textSize="22sp"
+        android:textAllCaps="false"
         android:visibility="visible"/>
 
     <ImageView

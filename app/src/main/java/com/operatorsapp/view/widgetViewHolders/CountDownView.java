@@ -188,9 +188,9 @@ public class CountDownView extends View {
 
     public void update(int minute, String minuteStartText){
         if (isReverse(minute)){
-            percentAngle = minuteToPercent(-minute);
+            percentAngle = minuteToDegree(-minute);
         }else {
-            percentAngle = minuteToPercent(totalTimeInMinute - minute);
+            percentAngle = minuteToDegree(totalTimeInMinute - minute);
         }
         text = getMinuteText(minute, minuteStartText);
         invalidate();
@@ -200,11 +200,11 @@ public class CountDownView extends View {
         if (isReverse){
             return minuteStartText + StringUtil.add0ToNumber(minute);
         }else {
-            return minuteStartText + StringUtil.add0ToNumber(totalTimeInMinute - minute);
+            return minuteStartText + StringUtil.add0ToNumber(minute);
         }
     }
 
-    private float minuteToPercent(int minute){
+    private float minuteToDegree(int minute){
         return minute * 360 / (float)totalTimeInMinute;
     }
 
