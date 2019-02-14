@@ -161,8 +161,6 @@ public class WidgetAdapter extends Adapter {
             }
             case IMAGE: {
                 return new ImageViewHolder(inflater.inflate(R.layout.image_widget_cardview, parent, false));
-//                return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
-//                        mDashboardCentralContainerListener, mHeight, mWidth);
             }
             case TIME_LEFT: {
                 return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
@@ -190,8 +188,6 @@ public class WidgetAdapter extends Adapter {
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
                     setSizes(imageViewHolder.mParentLayout);
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
-//                    final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
-//                    reportStopViewHolder.setData(widget);
                     break;
                 case COUNTER:
                     final CounterViewHolder counterViewHolder = (CounterViewHolder) holder;
@@ -285,6 +281,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 6:
                 type = TIME_LEFT;
+                break;
+            case 7:
+                type = REPORT_PERCENT;
                 break;
             default:
                 type = NUMERIC;

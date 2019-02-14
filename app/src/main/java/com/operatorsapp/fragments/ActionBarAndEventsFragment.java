@@ -9,12 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,14 +44,12 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -129,16 +125,12 @@ import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -2098,7 +2090,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         startSelectMode(event);
     }
 
-    private void startSelectMode(Event event) {
+    public void startSelectMode(Event event) {
+        if (event == null) {
+            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(getCursorByType());
+            if (events.size() > 0) {
+                event = events.get(events.size() - 1);
+            }
+        }
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
 
@@ -2312,7 +2310,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initEvents(ArrayList<Event> events) {//todo kuti
 
         Collections.reverse(events);
-
 
         if (events.size() < 1) {
             return;

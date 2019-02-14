@@ -315,7 +315,7 @@
     <string name="hr">(Hr)</string>
     <string name="see_pending_jobs">See pending jobs</string>
     <string name="end_setup">End Setup</string>
-    <string name="you_are_in_setup_mode">You are in setup mode</string>
+    <string name="you_are_in_setup_mode">"the machine ‌is in setup mode  "</string>
     <string name="get_ready_for_your_next_job">Get ready for your next job</string>
     <string name="see_job">See Job</string>
     <string name="dont_forget_to_activate_job">Don\'t forget to activate job!</string>
@@ -339,6 +339,8 @@
     <string name="reported_stop_event">Reported stop event</string>
     <string name="time_min">Time (min)</string>
     <string name="report_events_reason">Report events reason</string>
+    <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
+    <string name="target_reached">Target \nReached!</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
