@@ -1,6 +1,8 @@
 package com.operatorsapp.server.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operatorsapp.server.requests.MachineJoshDataRequest;
+import com.operatorsapp.server.responses.GetMachineJoshData.MachineJoshDataResponse;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -11,8 +13,6 @@ import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -47,4 +47,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/DeleteToken")
     Call<ErrorResponseNewVersion> postDeleteToken(@Body PostDeleteTokenRequest request);
+
+    @POST("/LeaderMESApi/GetMachineJoshData")
+    Call<MachineJoshDataResponse> getMachineJoshData(@Body MachineJoshDataRequest request);
 }

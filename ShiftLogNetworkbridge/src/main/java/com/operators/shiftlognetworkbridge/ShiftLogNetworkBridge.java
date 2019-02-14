@@ -12,7 +12,6 @@ import com.operators.shiftlognetworkbridge.server.requests.GetShiftLogRequest;
 import com.operators.shiftlognetworkbridge.server.responses.ErrorResponse;
 import com.operators.shiftlognetworkbridge.server.responses.ShiftLogResponse;
 import com.ravtech.david.sqlcore.Event;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +36,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface
     @Override
     public void getShiftLog(String siteUrl, String sessionId, int machineId, String startingFrom, final ShiftLogCoreCallback<Event> shiftLogCoreCallback, final int totalRetries, int specificRequestTimeout)
     {
+//        startingFrom = "2019-02-14 14:00:00.000";
         GetShiftLogRequest getShiftLogRequest = new GetShiftLogRequest(sessionId, machineId, startingFrom);
         Call<ShiftLogResponse> call = mShiftLogNetworkManagerInterface.getShiftLogRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineShiftLog(getShiftLogRequest);
         call.enqueue(new Callback<ShiftLogResponse>()

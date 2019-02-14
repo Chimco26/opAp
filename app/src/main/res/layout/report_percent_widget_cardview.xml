@@ -89,7 +89,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="205"
                             android:textColor="@color/red_line"
                             android:textSize="23sp" />
 
@@ -98,7 +97,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="/210 min"
                             android:textColor="@color/red_line"
                             android:textSize="17sp" />
                     </LinearLayout>
@@ -113,7 +111,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="99%"
                         android:textColor="@color/red_line"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -128,7 +125,7 @@
 
                 <TextView
                     android:id="@+id/RPWC_percentage_text_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="@string/report_events_reason"

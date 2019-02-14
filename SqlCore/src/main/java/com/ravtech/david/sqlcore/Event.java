@@ -3,7 +3,6 @@ package com.ravtech.david.sqlcore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.litepal.annotation.Column;
@@ -69,13 +68,13 @@ public class Event extends DataSupport implements Parcelable {
 
     public Event(int mEventID) {
 
-        this.mEventID = mEventID ;
+        this.mEventID = mEventID;
 
     }
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
                  String endTime, int groupId, int id, int priority, String groupEname, String groupLname, int duration,
-                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId) {
+                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color) {
 
         mEventTitle = title;
         mEventETitle = eTitle;
@@ -95,7 +94,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmLValue = alarmLValue;
         mAlarmStandardValue = alarmStandardValue;
         mEventReasonID = reasonId;
-
+        this.color = color;
     }
 
     public String getColor() {
@@ -340,6 +339,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeLong(this.mTimeOfAdded);
         dest.writeByte(this.mTreated ? (byte) 1 : (byte) 0);
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
+        dest.writeString(this.color);
     }
 
     protected Event(Parcel in) {
@@ -365,6 +365,7 @@ public class Event extends DataSupport implements Parcelable {
         this.mTimeOfAdded = in.readLong();
         this.mTreated = in.readByte() != 0;
         this.mIsDismiss = in.readByte() != 0;
+        this.color = in.readString();
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
