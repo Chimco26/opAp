@@ -341,32 +341,32 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         }
     }
 
-
-    public static void cleanData() {
-        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
-        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
-            @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
-
-            }
-        });
-
-        DataSupport.deleteAll(Event.class);
-
-        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
-        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
-
-        PersistenceManager.getInstance().clear();
-
-        PersistenceManager.getInstance().items.clear();
-
-        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
-        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
-    }
+//
+//    public static void cleanData() {
+//        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+//        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+//            @Override
+//            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+//
+//            }
+//        });
+//
+//        DataSupport.deleteAll(Event.class);
+//
+//        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+//        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+//
+//        PersistenceManager.getInstance().clear();
+//
+//        PersistenceManager.getInstance().items.clear();
+//
+//        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+//        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
+//    }
 
 }

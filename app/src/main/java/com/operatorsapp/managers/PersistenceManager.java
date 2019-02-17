@@ -620,6 +620,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, mGson.toJson(list));
     }
 
+    public void clearCalledTechnician(){
+        SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, "");
+    }
+
     public void setCalledTechnicianList(ArrayList<TechCallInfo> techCallInfoList) {
         if (techCallInfoList == null){
             SecurePreferences.getInstance().setString(CALLED_TECHNICIAN, null);
