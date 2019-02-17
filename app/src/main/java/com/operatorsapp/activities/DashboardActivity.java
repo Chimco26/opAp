@@ -126,6 +126,7 @@ import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.utils.ChangeLang;
+import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
@@ -1374,6 +1375,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     public void onChangeMachineRequest() {
         Log.i(LOG_TAG, "onChangeMachineRequest() command received from settings screen");
 
+        ClearData.clearMachineData();
         Intent myIntent = new Intent(this, MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         myIntent.putExtra(MainActivity.GO_TO_SELECT_MACHINE_FRAGMENT, true);

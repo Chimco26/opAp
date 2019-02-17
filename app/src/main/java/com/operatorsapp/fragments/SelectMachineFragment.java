@@ -31,6 +31,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
@@ -266,7 +267,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
             case R.id.FSM_change_factory_btn:
 
                 if (mNavigationCallback != null){
-                    MainActivity.cleanData();
+                    ClearData.clearData();
                     mNavigationCallback.goToFragment(LoginFragment.newInstance(false), false, false);
 
                 }
