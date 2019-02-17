@@ -53,6 +53,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetwork
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.shiftlognetworkbridge.interfaces.EmeraldActualBarExtraDetailsServiceRequest;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
@@ -267,6 +268,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         }
         return mRetrofit.create(EmeraldShiftForMachineServiceRequests.class);
     }
+
+    @Override
+    public EmeraldActualBarExtraDetailsServiceRequest getActualBarExtraDetails(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldActualBarExtraDetailsServiceRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getActualBarExtraDetails");
+        }
+        return mRetrofit.create(EmeraldActualBarExtraDetailsServiceRequest.class);    }
 
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         ConnectionPool pool = new ConnectionPool(5, 10000, TimeUnit.MILLISECONDS);

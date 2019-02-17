@@ -81,7 +81,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/divider">
+        android:layout_below="@+id/divider"
+        android:layoutDirection="ltr">
 
         <RelativeLayout
             android:id="@+id/PWCN_projection_rl"

@@ -1,7 +1,6 @@
-package com.operators.shiftloginfra;
+package com.operators.shiftloginfra.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.operators.errorobject.ErrorObjectInterface;
 
 public class ShiftForMachineResponse {
 

@@ -1,0 +1,115 @@
+package com.operators.shiftloginfra.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class Inventory implements Parcelable {
+    @SerializedName("ID")
+    @Expose
+    private Integer iD;
+    @SerializedName("ShiftID")
+    @Expose
+    private Integer shiftID;
+    @SerializedName("EName")
+    @Expose
+    private String eName;
+    @SerializedName("LName")
+    @Expose
+    private String lName;
+    @SerializedName("Time")
+    @Expose
+    private String time;
+    @SerializedName("Amount")
+    @Expose
+    private Integer amount;
+
+    public Integer getID() {
+        return iD;
+    }
+
+    public void setID(Integer iD) {
+        this.iD = iD;
+    }
+
+    public Integer getShiftID() {
+        return shiftID;
+    }
+
+    public void setShiftID(Integer shiftID) {
+        this.shiftID = shiftID;
+    }
+
+    public String getEName() {
+        return eName;
+    }
+
+    public void setEName(String eName) {
+        this.eName = eName;
+    }
+
+    public String getLName() {
+        return lName;
+    }
+
+    public void setLName(String lName) {
+        this.lName = lName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.iD);
+        dest.writeValue(this.shiftID);
+        dest.writeString(this.eName);
+        dest.writeString(this.lName);
+        dest.writeString(this.time);
+        dest.writeValue(this.amount);
+    }
+
+    public Inventory() {
+    }
+
+    protected Inventory(Parcel in) {
+        this.iD = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.shiftID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eName = in.readString();
+        this.lName = in.readString();
+        this.time = in.readString();
+        this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Inventory> CREATOR = new Parcelable.Creator<Inventory>() {
+        @Override
+        public Inventory createFromParcel(Parcel source) {
+            return new Inventory(source);
+        }
+
+        @Override
+        public Inventory[] newArray(int size) {
+            return new Inventory[size];
+        }
+    };
+}
