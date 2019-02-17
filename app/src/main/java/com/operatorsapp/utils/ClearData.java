@@ -46,5 +46,13 @@ public class ClearData {
     public static void clearMachineData(){
         PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
         DataSupport.deleteAll(Event.class);
+        PersistenceManager.getInstance().setOperatorId(null);
+        PersistenceManager.getInstance().setOperatorName(null);
+        PersistenceManager.getInstance().clearCalledTechnician();
+        PersistenceManager.getInstance().setCalledTechnicianList(null);
+        PersistenceManager.getInstance().setCalledTechnicianName(null);
+        PersistenceManager.getInstance().setTechnicianCallTime(0);
+        PersistenceManager.getInstance().setRecentTechCallId(0);
+
     }
 }
