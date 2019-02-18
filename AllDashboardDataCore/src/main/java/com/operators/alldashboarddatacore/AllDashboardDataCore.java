@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
 
-import static android.text.format.DateUtils.DAY_IN_MILLIS;
-
 public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
@@ -322,8 +320,8 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
         try {
             Date date = dateFormat.parse(startingFrom);
-//            startingFrom = getTimeForRequest(date, dateFormat);
-            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
+            startingFrom = getTimeForRequest(date, dateFormat);
+//            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
         } catch (java.text.ParseException e) {
             if (e.getMessage() != null) {
                 Log.e(LOG_TAG, e.getMessage());
