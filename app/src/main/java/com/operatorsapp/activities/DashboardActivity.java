@@ -43,6 +43,7 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
+import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
 import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
@@ -81,7 +82,8 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
-import com.operators.shiftloginfra.ShiftForMachineResponse;
+import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
@@ -226,6 +228,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mSelectedReasonId;
     private int mSelectedTechnicianId;
     private SendRejectObject mSendRejectObject;
+    private ActualBarExtraResponse mActualBarExtraResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -607,7 +610,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void dashboardDataStartPolling() {
 
-        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback());
+        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback(), getActualBarUICallback());
 
         mAllDashboardDataCore.stopPolling();
 
@@ -615,6 +618,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
+    }
+
+    private ActualBarExtraDetailsUICallback getActualBarUICallback() {
+        return new ActualBarExtraDetailsUICallback() {
+            @Override
+            public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
+                Log.d(LOG_TAG, "onActualBarExtraDetailsSucceeded: ");
+//                if (mActualBarExtraResponse == null){mActualBarExtraResponse = new ActualBarExtraResponse();}
+//                mActualBarExtraResponse.getInventory().addAll(actualBarExtraResponse.getInventory());
+//                mActualBarExtraResponse.getNotification().addAll(actualBarExtraResponse.getNotification());
+//                mActualBarExtraResponse.getRejects().addAll(actualBarExtraResponse.getRejects());
+                mActualBarExtraResponse = actualBarExtraResponse;
+            }
+
+            @Override
+            public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
+
+            }
+        };
     }
 
     private void getActiveJobs() {
