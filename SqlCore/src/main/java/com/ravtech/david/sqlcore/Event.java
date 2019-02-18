@@ -53,6 +53,8 @@ public class Event extends DataSupport implements Parcelable {
     @SerializedName("Color")
     private String color;
 
+    private int type;
+
     private long mTimeOfAdded;
 
     private boolean mTreated;
@@ -74,7 +76,7 @@ public class Event extends DataSupport implements Parcelable {
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
                  String endTime, int groupId, int id, int priority, String groupEname, String groupLname, int duration,
-                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color) {
+                 boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color, int type) {
 
         mEventTitle = title;
         mEventETitle = eTitle;
@@ -95,6 +97,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmStandardValue = alarmStandardValue;
         mEventReasonID = reasonId;
         this.color = color;
+        this.type = type;
     }
 
     public String getColor() {
@@ -281,6 +284,14 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmStandardValue = alarmStandardValue;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public void setEventReasonID(int mEventReasonID) {
         this.mEventReasonID = mEventReasonID;
     }
@@ -340,6 +351,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeByte(this.mTreated ? (byte) 1 : (byte) 0);
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
         dest.writeString(this.color);
+        dest.writeInt(this.type);
     }
 
     protected Event(Parcel in) {
@@ -366,6 +378,7 @@ public class Event extends DataSupport implements Parcelable {
         this.mTreated = in.readByte() != 0;
         this.mIsDismiss = in.readByte() != 0;
         this.color = in.readString();
+        this.type = in.readInt();
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {

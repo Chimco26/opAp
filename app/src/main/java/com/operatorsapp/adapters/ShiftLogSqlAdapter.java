@@ -183,7 +183,8 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_L_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_STANDARD_VALUE)),
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_REASON_ID)),
-                cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_COLOR))
+                cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_COLOR)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TYPE))
         );
 
 
