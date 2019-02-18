@@ -254,6 +254,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ImageView mCloseSelectEvents;
     private RecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
+    private Switch mTimeLineType;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -383,6 +384,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isShowAlarms = isChecked;
                 setShiftLogAdapter(getCursorByType());
+            }
+        });
+
+        mTimeLineType = view.findViewById(R.id.FAAE_shift_type_checkbox);
+        mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    mEventsRecycler.setVisibility(View.VISIBLE);
+                    mShiftLogRecycler.setVisibility(View.GONE);
+                    mShowAlarmCheckBox.setVisibility(View.GONE);
+                }else {
+                    mEventsRecycler.setVisibility(View.GONE);
+                    mShiftLogRecycler.setVisibility(View.VISIBLE);
+                    mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -548,7 +565,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByType() {
         Cursor cursor;
-        if (isShowAlarms) {
+         if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
         } else {
             cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
@@ -2238,7 +2255,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 cursor = getCursorByType();
             }
-            setShiftLogAdapter(cursor);//todo kuti
+            setShiftLogAdapter(cursor);
 
             initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
 

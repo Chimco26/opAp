@@ -279,6 +279,20 @@
 
 
                             <Switch
+                                android:id="@+id/FAAE_shift_type_checkbox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:gravity="start|center_vertical"
+                                android:switchPadding="30dp"
+                                android:text="@string/timeline"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:checked="true"
+                                android:thumb="@drawable/drawable_switch"
+                                android:track="@drawable/drawable_bg"
+                                android:visibility="gone"/>
+
+                            <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"
                                 android:layout_width="wrap_content"
                                 android:layout_height="40dp"
@@ -297,7 +311,8 @@
                                 android:gravity="center"
                                 android:orientation="horizontal"
                                 android:paddingTop="3dp"
-                                android:paddingBottom="3dp">
+                                android:paddingBottom="3dp"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:layout_width="110dp"
