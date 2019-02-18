@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
-    private static final int PIXEL_FOR_MINUTE = 20;
+    private static final int PIXEL_FOR_MINUTE = 4;
     private static final int PIXEL_FOR_BIG_MINUTE = 10;
     private static final int NEW_EVENT_ID = 5555;
     private final ArrayList<TechCallInfo> mTechs;
@@ -113,6 +113,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
 
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -172,21 +174,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private void updateItem(int position) {
             mEvent = mEvents.get(position);
 
-            ViewGroup.LayoutParams params = mView.getLayoutParams();
-
-
-            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID) {
-                params.height = 0;
-            } else {
-                if (mEvent.getDuration() < 5) {
-                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
-                } else if ((int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE > 300){
-                    params.height = 300;
-                }else {
-                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE;
-                }
-            }
-            mView.setLayoutParams(params);
+            setViewHeight();
 
             mLine.setBackgroundColor(Color.parseColor(mEvent.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
@@ -235,6 +223,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
 //            updateTech();
+        }
+
+        private void setViewHeight(){
+
+            ViewGroup.LayoutParams params = mView.getLayoutParams();
+
+            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID || mEvent.getDuration() == 0) {
+                params.height = 0;
+            } else if ((int) mEvent.getDuration() * PIXEL_FOR_MINUTE > 300) {
+                params.height = 300;
+            } else if (mEvent.getDuration() > 4) {
+                params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
+            } else if (mEvent.getDuration() > 0){
+                params.height = 5 * PIXEL_FOR_MINUTE;
+            }
+            mView.setLayoutParams(params);
         }
 
         private void updateTech() {

@@ -951,7 +951,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             }
                         }
                     }
-
+//TODO kuti
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
                     }
