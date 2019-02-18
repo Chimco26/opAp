@@ -16,6 +16,7 @@ public class MachineStatusDataResponse extends ErrorBaseResponse {
 
     @SerializedName("MissingMachineIds")
     private Object mMissingMachineIds;
+
     @SerializedName("allMachinesData")
     private List<AllMachinesData> mAllMachinesData = new ArrayList<>();
 

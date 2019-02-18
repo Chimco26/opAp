@@ -154,6 +154,7 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -1801,6 +1802,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void startPendingJobsActivity() {
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
+
+        intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
 

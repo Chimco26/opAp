@@ -340,9 +340,14 @@
     <string name="time_min">Time (min)</string>
     <string name="report_events_reason">Report events reason</string>
     <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
-    <string name="target_reached">Target \nReached!</string>
+    <string name="target_reached">Target  Reached!</string>
     <string name="setup_rejects_dialog_text">On the setup you produced X rejects. Do you want to report same of them as good units?</string>
     <string name="setup_good_units_dialog_text">On the setup you produced X good units. Do you want to report same of them as rejects?</string>
+    <string name="activate_last_job">Activate last job</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Do you want to activate the last job you work on? job</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
