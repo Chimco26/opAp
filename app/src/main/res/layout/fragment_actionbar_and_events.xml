@@ -289,8 +289,7 @@
                                 android:textStyle="bold"
                                 android:checked="true"
                                 android:thumb="@drawable/drawable_switch"
-                                android:track="@drawable/drawable_bg"
-                                android:visibility="gone"/>
+                                android:track="@drawable/drawable_bg" />
 
                             <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"
@@ -301,6 +300,7 @@
                                 android:text="@string/alarms"
                                 android:textSize="24sp"
                                 android:textStyle="bold"
+                                android:visibility="gone"
                                 android:thumb="@drawable/drawable_switch"
                                 android:track="@drawable/drawable_bg" />
 

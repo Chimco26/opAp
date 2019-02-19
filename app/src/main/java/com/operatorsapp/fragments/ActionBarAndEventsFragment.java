@@ -10,13 +10,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -131,6 +129,7 @@ import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedInputStream;
@@ -161,6 +160,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
@@ -221,7 +221,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ActionBarAndEventsFragmentListener mListener;
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
-    private ArrayList<Long> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private TextView mSelectedNumberTv;
     private View mSelectedNumberLy;
     private Event mLastEvent;
@@ -2270,12 +2270,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onStopEventSelected(Long event, boolean b) {//todo kuti
+    public void onStopEventSelected(float event, boolean b) {//todo kuti
         mListener.onEventSelected(event, b);
     }
 
     @Override
-    public void onSplitEventPressed(long eventID) {
+    public void onSplitEventPressed(Float eventID) {
         // TODO: 05/07/2018 call server split event
 
 
@@ -2433,6 +2433,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
             mNoNotificationsText.setVisibility(View.GONE);
+//todo request only new events from sql database
+            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration())));
 
             Cursor cursor;
             if (mIsSelectionMode) {
@@ -2501,6 +2503,42 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShiftLogAdapter.notifyDataSetChanged();
 
 
+    }
+
+    private ArrayList<Event> updateList(ArrayList<Event> events) {
+
+        for (int i = 0; i < events.size() - 1; i++) {
+
+            Event event = events.get(i);
+
+            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
+            Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
+
+            if (eventStartMilli < eventEndMilli) {
+
+                Event workingEvent = new Event();
+                workingEvent.setEventTime(events.get(i + 1).getEventEndTime());
+                workingEvent.setEventEndTime(event.getEventTime());
+
+                workingEvent.setEventSubTitleLname(getString(R.string.working));
+                workingEvent.setColor("#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
+
+                workingEvent.setEventID(event.getEventID() - 0.5f);
+                workingEvent.setType(1);
+
+                long minute = TimeUnit.MILLISECONDS.toMinutes(eventEndMilli - eventStartMilli);
+
+                workingEvent.setDuration(minute);
+
+                if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
+
+                    workingEvent.save();
+                }
+            }
+
+        }
+
+        return events;
     }
 
     private void initEventRecycler(View view) {
@@ -2882,7 +2920,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Float> selectedEvents) {
         mSelectedEvents = selectedEvents;
 
         if (mShiftLogAdapter != null) {
@@ -3142,13 +3180,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment);
 
-        void onEventSelected(Long event, boolean b);
+        void onEventSelected(Float event, boolean b);
 
         void onClearAllSelectedEvents();
 
         void onJobActionItemClick();
 
-        void onSplitEventPressed(long eventID);
+        void onSplitEventPressed(Float eventID);
 
         void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 

@@ -47,13 +47,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private OnStopClickListener mOnStopClickListener;
     public LayoutInflater inflater;
     private boolean mIsSelectionMode;
-    private ArrayList<Long> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private ArrayList<Event> mUpdatedAlarms;
     private int mFirstStopEventPosition;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
-                              boolean selectMode, ArrayList<Long> selectedEvents) {
+                              boolean selectMode, ArrayList<Float> selectedEvents) {
         super(cursor);
         mContext = context;
         mClosedState = closedState;
@@ -67,7 +67,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mFirstStopEventPosition = getItemCount();
     }
 
-    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Float> selectedEvents) {
         mSelectedEvents = selectedEvents;
     }
 
@@ -172,7 +172,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_END_TIME)),
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_GROUP_ID)),
-                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)),
+                cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID)),
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_PRIORITY)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_GROUP_E_NAME)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_GROUP_L_NAME)),
@@ -236,7 +236,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             }
 
             if (mSelectedEvents != null) {
-                for (Long event1 : mSelectedEvents) {
+                for (Float event1 : mSelectedEvents) {
                     if (event.getEventID() == event1) {
                         event.setChecked(true);
                     }
@@ -485,7 +485,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         }
     }
 
-    private void validateDialog(final long eventID) {
+    private void validateDialog(final float eventID) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

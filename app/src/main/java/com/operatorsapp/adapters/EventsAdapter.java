@@ -1,39 +1,26 @@
 package com.operatorsapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.utils.L;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
-import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.Event;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
@@ -56,14 +43,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
         mClosedState = closedState;
-
-
         mEvents = events;
-//        updateList(events);
-
         mTechs = PersistenceManager.getInstance().getCalledTechnician();
 
-//        updateList(events);
     }
 
 //    public void setEvents(ArrayList<Event> events) {
@@ -78,42 +60,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     public void setClosedState(boolean isSelectionMode) {
         mClosedState = isSelectionMode;
     }
-
-//
-//    private void updateList(ArrayList<Event> events) {
-//
-//        mEvents.clear();
-//
-//        for (int i = 0; i < events.size() - 1; i++) {
-//
-//            Event event = events.get(i);
-//            mEvents.add(event);
-//
-//            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-//            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
-//
-//            if (eventEndMilli < eventStartMilli) {
-//
-//                Event newEvent = new Event();
-//                newEvent.setEventTime(event.getEventEndTime());
-//                newEvent.setEventEndTime(events.get(i + 1).getEventTime());
-//
-//                newEvent.setEventSubTitleLname("Working");
-//                newEvent.setColor("#1aa917");
-//                newEvent.setEventID(NEW_EVENT_ID);
-//
-//                long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
-//
-//                newEvent.setDuration(minute);
-//                mEvents.add(newEvent);
-//            }
-//
-//            if (i == events.size() - 2) {
-//                mEvents.add(events.get(i + 1));
-//            }
-//        }
-//    }
-
 
     @NonNull
     @Override
@@ -243,7 +189,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 params.height = 5 * PIXEL_FOR_MINUTE;
             }
-            params.height = 20;
+//            params.height = 20;
             mView.setLayoutParams(params);
         }
 

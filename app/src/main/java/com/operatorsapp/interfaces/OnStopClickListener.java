@@ -7,9 +7,9 @@ public interface OnStopClickListener {
 
     void onSelectMode(Event eventID);
 
-    void onStopEventSelected(Long event, boolean b);
+    void onStopEventSelected(float event, boolean b);
 
-    void onSplitEventPressed(long eventID);
+    void onSplitEventPressed(Float eventID);
 
     void onLastItemUpdated();
 }

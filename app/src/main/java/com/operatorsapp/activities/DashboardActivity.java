@@ -154,7 +154,6 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -198,7 +197,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer2;
-    private ArrayList<Long> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
@@ -976,8 +975,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         }
                     }
 //TODO kuti
-
-                    events = updateList(events);
+//                    events = updateList(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
@@ -1012,57 +1010,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
-    }
-
-
-
-    private ArrayList<Event> updateList(ArrayList<Event> events) {
-
-        ArrayList<Event> mEvents = new ArrayList<>();
-
-        for (int i = 0; i < events.size() - 1; i++) {
-
-            Event event = events.get(i);
-            mEvents.add(event);
-
-//            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-//            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
-
-//
-
-            Long eventEndMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
-            Long eventStartMilli = convertDateToMillisecond(event.getEventTime());
-//            eventEndMilli < eventStartMilli
-            if (eventEndMilli < eventStartMilli) {
-
-                Event newEvent = new Event();
-                newEvent.setEventTime(events.get(i + 1).getEventEndTime());
-                newEvent.setEventEndTime(event.getEventTime());
-
-                newEvent.setEventSubTitleLname("Working");
-                newEvent.setColor("#1aa917");
-
-
-                long time= System.currentTimeMillis();
-                newEvent.setEventID(event.getEventID() - 1);
-                newEvent.setType(1);
-
-                long minute = TimeUnit.MILLISECONDS.toMinutes( eventStartMilli - eventEndMilli);
-
-                newEvent.setDuration(minute);
-                mEvents.add(newEvent);
-            }
-
-            if (i == events.size() - 2) {
-                mEvents.add(events.get(i + 1));
-            }
-        }
-
-        for (Event ev : mEvents) {
-
-        android.util.Log.i("Time Class ", " Time value in millisecinds " +ev.getEventTime() + " ; end " + ev.getEventEndTime() + "; duration : " + ev.getDuration() + "; Type" + ev.getType() + "; ID " + ev.getEventID());
-        }
-        return mEvents;
     }
 
 
@@ -1778,11 +1725,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onEventSelected(Long event, boolean checked) {
+    public void onEventSelected(Float event, boolean checked) {
 
         if (mSelectedEvents == null) {
 
-            mSelectedEvents = new ArrayList<>();
+            mSelectedEvents = new ArrayList<Float>();
         }
 
         if (checked) {
@@ -1791,13 +1738,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         } else {
 
-            ArrayList<Long> toDelete = new ArrayList<>();
-            for (Long event1 : mSelectedEvents) {
+            ArrayList<Float> toDelete = new ArrayList<>();
+            for (Float event1 : mSelectedEvents) {
                 if (event.compareTo(event1) == 0) {
                     toDelete.add(event1);
                 }
             }
-            for (Long event1 : toDelete) {
+            for (Float event1 : toDelete) {
                 mSelectedEvents.remove(event1);
             }
         }
@@ -1998,7 +1945,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     @Override
-    public void onSplitEventPressed(long eventID) {
+    public void onSplitEventPressed(Float eventID) {
         // TODO: 05/07/2018 call server
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();
