@@ -45,7 +45,7 @@ public class LoginNetworkBridge implements LoginNetworkBridgeInterface {
                     SessionResponse.UserSessionIDResult sessionResult = response.body().getUserSessionIDResult();
                     if (sessionResult.getErrorResponse() == null) {
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequestSucceed(), " + response.body().getUserSessionIDResult());
-                        loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId(), sessionResult.getSessionIds().get(0).getmSiteName());
+                        loginCoreCallback.onLoginSucceeded(response.body().getUserSessionIDResult().getSessionIds().get(0).getSessionId(), sessionResult.getSessionIds().get(0).getmSiteName(), sessionResult.getSessionIds().get(0).getUserID());
                     } else {
                         OppAppLogger.getInstance().d(LOG_TAG, "onRequest(), getSessionId failed");
                         ErrorObject errorObject = errorObjectWithErrorCode(sessionResult.getErrorResponse());

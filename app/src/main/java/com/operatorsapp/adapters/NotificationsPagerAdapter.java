@@ -26,7 +26,7 @@ public class NotificationsPagerAdapter extends PagerAdapter {
     private static final int ITEM_RIGHT = 1;
     private static final int ITEM_LEFT = 0;
 
-    private static int NUM_ITEMS = 2;
+    private static int NUM_ITEMS = 1;
     private final Context mContext;
     private final ArrayList<Notification> mNotificationList;
     private final NotificationHistoryAdapter.OnNotificationResponseSelected mListener;

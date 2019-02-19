@@ -58,8 +58,12 @@ public class RespondToNotificationRequest {
         this.mResponseTarget = mResponseTarget;
         this.mSourceUserName = mSourceUserName;
         this.mTargetUserName = mTargetUserName;
-        this.mSourceWorkerID = mSourceWorkerID;
         this.mTargetUserID = mTargetUserId;
+
+        if (!(mSourceWorkerID == null || mSourceWorkerID.equals(""))){
+            this.mSourceWorkerID = mSourceWorkerID;
+        }
+
         try{
             this.mSourceUserID = Integer.parseInt(mSourceUserID);
         }catch (Exception e){

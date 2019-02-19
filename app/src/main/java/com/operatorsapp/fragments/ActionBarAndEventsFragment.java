@@ -1,25 +1,31 @@
 package com.operatorsapp.fragments;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,17 +52,16 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
@@ -126,11 +131,15 @@ import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 import com.ravtech.david.sqlcore.Event;
-
 import org.litepal.crud.DataSupport;
 
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -138,7 +147,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -147,6 +155,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,7 +166,7 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener {
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks{
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -262,6 +271,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ImageView mCloseSelectEvents;
     private RecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
+    private File outputFile;
+    private TextView mTechOpenCallsIv;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1061,6 +1072,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             technicianRl = mToolBarView.findViewById(R.id.toolbar_technician_button);
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIconIv = mToolBarView.findViewById(R.id.toolbar_technician_iv);
+            mTechOpenCallsIv = mToolBarView.findViewById(R.id.toolbar_technician_open_calls_tv);
             mTechnicianTimerTv = mToolBarView.findViewById(R.id.toolbar_technician_chronometer);
             mTechnicianIndicatorTv = mToolBarView.findViewById(R.id.toolbar_technician_tv);
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
@@ -1245,6 +1257,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onNewCallPressed() {
                 mPopUpDialog.dismiss();
+                //getFile();
                 openTechniciansList();
             }
 
@@ -1262,6 +1275,167 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
         mPopUpDialog.show();
     }
+
+    private void getFile() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+
+            //check if app has permission to write to the external storage.
+            if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //Get the URL entered
+                String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
+                new DownloadFile().execute(url);
+
+            } else {
+                //If permission is not present request for the same.
+                EasyPermissions.requestPermissions(getActivity(), "aaaaaa", REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+
+
+        } else {
+            Toast.makeText(getActivity(),"SD Card not found", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+
+    private static final int REQUEST_WRITE_PERMISSION = 786;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        //Download the file once permission is granted
+        String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
+        new DownloadFile().execute(url);
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(getActivity(),"Permission has been denied", Toast.LENGTH_LONG).show();
+
+    }
+
+                    private class DownloadFile extends AsyncTask<String, String, String> {
+
+                        private ProgressDialog progressDialog;
+                        private String fileName;
+                        private String folder;
+                        private boolean isDownloaded;
+                        private File directory;
+
+                        /**
+                         * Before starting background thread
+                         * Show Progress Bar Dialog
+                         */
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            this.progressDialog = new ProgressDialog(getActivity());
+                            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            this.progressDialog.setCancelable(false);
+                            this.progressDialog.show();
+                        }
+
+                        /**
+                         * Downloading file in background thread
+                         */
+                        @Override
+                        protected String doInBackground(String... f_url) {
+                            int count;
+                            try {
+                                URL url = new URL(f_url[0]);
+                                URLConnection connection = url.openConnection();
+                                connection.connect();
+                                // getting file length
+                                int lengthOfFile = connection.getContentLength();
+
+
+                                // input stream to read file - with 8k buffer
+                                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+
+                                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+
+                                //Extract file name from URL
+                                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
+
+                                //Append timestamp to file name
+                                fileName = "bbbbbb.apk";
+
+                                //External directory path to save file
+                                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+
+                                //Create androiddeft folder if it does not exist
+                                directory = new File(folder);
+
+                                if (!directory.exists()) {
+                                    directory.mkdirs();
+                                }
+
+                                outputFile = new File(directory, fileName);
+                                // Output stream to write file
+                                OutputStream output = new FileOutputStream(outputFile);
+
+                                byte data[] = new byte[1024];
+
+                                long total = 0;
+
+                                while ((count = input.read(data)) != -1) {
+                                    total += count;
+                                    // publishing the progress....
+                                    // After this onProgressUpdate will be called
+                                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                                    // writing data to file
+                                    output.write(data, 0, count);
+                                }
+
+                                // flushing output
+                                output.flush();
+
+                                // closing streams
+                                output.close();
+                                input.close();
+                                return "Downloaded at: " + folder + fileName;
+
+                            } catch (Exception e) {
+                                Log.e("Error: ", e.getMessage());
+                            }
+
+                            return "Something went wrong";
+                        }
+
+                        /**
+                         * Updating progress bar
+                         */
+                        protected void onProgressUpdate(String... progress) {
+                            // setting progress percentage
+                            progressDialog.setProgress(Integer.parseInt(progress[0]));
+                        }
+
+
+                        @Override
+                        protected void onPostExecute(String message) {
+                            // dismiss the dialog after the file was downloaded
+                            this.progressDialog.dismiss();
+
+                            // Display File path after downloading
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
+
+                            Intent install = new Intent(Intent.ACTION_VIEW);
+                            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                            install.normalizeMimeType("application/vnd.android.package-archive");
+                            startActivity(install);
+                        }
+                    }
 
     public void openActivateJobScreen() {
         OppAppLogger.getInstance().d(LOG_TAG, "New Job");
@@ -1320,6 +1494,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
         int callId = PersistenceManager.getInstance().getRecentTechCallId();
         if (techList != null && techList.size() > 0) {
+            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue));
+            mTechOpenCallsIv.setVisibility(View.VISIBLE);
+            mTechOpenCallsIv.setText(techList.size() + "");
             TechCallInfo techCallInfo = techList.get(0);
             for (TechCallInfo call : techList) {
                 if (callId > 0 && call.getmNotificationId() == callId) {
@@ -1336,7 +1513,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             switch (techCallInfo.getmResponseType()) {
                 case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.called_technician) + "\n" + techCallInfo.getmName());
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.called));
                     //calculate 5 minutes from call and display a message
                     if (techCallInfo.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET && technicianCallTime > 0 && technicianCallTime > (now - TECHNICIAN_CALL_WAITING_RESPONSE)) {
                         mHandlerTechnicianCall.postDelayed(new Runnable() {
@@ -1367,35 +1544,36 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_approved) + "\n" + techCallInfo.getmName());
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_recieved));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_recieved));
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
                     delay = 1000 * 60 * 10;
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_declined));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.message_declined));
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_declined) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.at_work));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.at_work));
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.started_service) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
                     delay = 0;
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.work_completed));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.work_completed));
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.service_completed) + "\n" + techCallInfo.getmName());
                     break;
                 case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
                     delay = 0;
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.cancel));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.cancel));
                     mTechnicianIndicatorTv.setText(getResources().getString(R.string.call_cancelled) + "\n" + techCallInfo.getmName());
                     break;
                 default:
-                    mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
+                    //mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
                     mTechnicianIndicatorTv.setText("");
                     break;
             }
             cleanTech((int) delay, techCallInfo);
         } else {
-            mTechnicianIconIv.setImageResource(R.drawable.technicaian);
+            mTechOpenCallsIv.setVisibility(View.INVISIBLE);
+            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician));
             mTechnicianIndicatorTv.setText("");
             setTimeForTechTimer(null);
             PersistenceManager.getInstance().setRecentTechCallId(0);
@@ -1466,8 +1644,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         setTechnicianCallStatus();
                     } else {
                         PersistenceManager.getInstance().setRecentTechCallId(-1);
-                        mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
+                        mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician));
                         mTechnicianIndicatorTv.setText("");
+                        mTechOpenCallsIv.setVisibility(View.INVISIBLE);
                     }
                 }
             }, delay);
@@ -1671,9 +1850,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mPopUpDialog.setContentView(R.layout.notification_view_pager);
 
             final ViewPager vpDialog = mPopUpDialog.findViewById(R.id.NVP_view_pager);
-            final TextView rightTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_right_tab);
+            //final TextView rightTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_right_tab);
             final TextView leftTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_left_tab);
-            final View rightTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_right_tab_underline);
+            //final View rightTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_right_tab_underline);
             final View leftTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_left_tab_underline);
             final SwipeRefreshLayout swipeRefresh = mPopUpDialog.findViewById(R.id.NVP_swipe);
 
@@ -1704,12 +1883,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         case 0:
                             leftTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
                             leftTabUnderline.setVisibility(View.VISIBLE);
-                            rightTab.setTextColor(getResources().getColor(R.color.dark_indigo));
-                            rightTabUnderline.setVisibility(View.INVISIBLE);
+//                            rightTab.setTextColor(getResources().getColor(R.color.dark_indigo));
+//                            rightTabUnderline.setVisibility(View.INVISIBLE);
                             break;
                         case 1:
-                            rightTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
-                            rightTabUnderline.setVisibility(View.VISIBLE);
+//                            rightTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
+//                            rightTabUnderline.setVisibility(View.VISIBLE);
                             leftTab.setTextColor(getResources().getColor(R.color.dark_indigo));
                             leftTabUnderline.setVisibility(View.INVISIBLE);
                             break;
@@ -1731,12 +1910,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            rightTab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    vpDialog.setCurrentItem(1);
-                }
-            });
+//            rightTab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    vpDialog.setCurrentItem(1);
+//                }
+//            });
 
             Point point = new Point(1, 1);
             ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
@@ -1783,9 +1962,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notification[0] != null) {
 
             String opId = pm.getOperatorId();
-            if (opId == null || opId.equals("")){
-                opId = "0";
-            }
+//            if (opId == null || opId.equals("")){
+//                opId = "0";
+//            }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     getResources().getString(R.string.respond_notification_title),
                     notification[0].getmBody(getActivity()),
@@ -1794,7 +1973,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     responseType,
                     Consts.NOTIFICATION_TYPE_FROM_WEB,
                     Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
-                    opId,
+                    pm.getUserId() + "",
                     pm.getOperatorName(),
                     notification[0].getmSender(),
                     opId,
@@ -2677,9 +2856,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
 
-        mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
-        mEventsAdapter.notifyDataSetChanged();
-
+        if(mEventsAdapter != null) {
+            mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+            mEventsAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
