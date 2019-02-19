@@ -95,6 +95,7 @@ dependencies {
     implementation project(':ReportInfra')
     implementation project(':ReportNetworkBridge')
     implementation project(':AllDashboardDataCore')
+    implementation project(':common')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.google.code.gson:gson:2.8.4'

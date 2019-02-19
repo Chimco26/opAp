@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.common.Event;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
@@ -28,7 +29,6 @@ import com.operatorsapp.utils.ReasonImage;
 import com.operatorsapp.utils.ReasonImageLenox;
 import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.DatabaseHelper;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 

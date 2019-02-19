@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -83,6 +84,7 @@ import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOu
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.operators.shiftloginfra.model.Notification;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -136,7 +138,6 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
@@ -979,6 +980,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     events = updateList(events);
 
+                    addServiceCallsToEvents(events);
+
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
                     }
@@ -1014,6 +1017,23 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
+    private void addServiceCallsToEvents(ArrayList<Event> events) {
+        for (Event event : events) {
+
+            Long eventStart = convertDateToMillisecond(event.getEventTime());
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
+
+            for (Notification notification: mActualBarExtraResponse.getNotification()) {
+
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
+
+                
+
+
+            }
+
+        }
+    }
 
 
     private ArrayList<Event> updateList(ArrayList<Event> events) {

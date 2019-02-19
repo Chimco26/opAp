@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.common.Event;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

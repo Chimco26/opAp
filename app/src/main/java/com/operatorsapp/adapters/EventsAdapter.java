@@ -1,39 +1,26 @@
 package com.operatorsapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.utils.L;
+import com.example.common.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
-import com.operatorsapp.utils.TimeUtils;
-import com.ravtech.david.sqlcore.Event;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 

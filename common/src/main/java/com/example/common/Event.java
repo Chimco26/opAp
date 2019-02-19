@@ -1,4 +1,4 @@
-package com.ravtech.david.sqlcore;
+package com.example.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
