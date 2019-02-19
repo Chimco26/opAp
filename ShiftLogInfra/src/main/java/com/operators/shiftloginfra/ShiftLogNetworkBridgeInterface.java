@@ -1,9 +1,9 @@
 package com.operators.shiftloginfra;
 
 
+import com.example.common.Event;
 import com.operators.shiftloginfra.model.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
-import com.ravtech.david.sqlcore.Event;
 
 public interface ShiftLogNetworkBridgeInterface {
     void getShiftLog(String siteUrl, String sessionId, int machineId, String startingFrom, ShiftLogCoreCallback<Event> shiftLogCoreCallback, final int totalRetries, int specificRequestTimeout);

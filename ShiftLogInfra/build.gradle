@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.1'
     implementation project(':ErrorObjectInterface')
     implementation project(':SqlCore')
+    implementation project(':common')
     //sql library
     implementation 'org.litepal.android:core:1.6.1'
 }

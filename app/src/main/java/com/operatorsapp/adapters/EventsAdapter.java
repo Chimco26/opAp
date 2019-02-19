@@ -13,12 +13,11 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.example.common.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 
@@ -130,9 +129,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (mEvent.getEventTime() != null && mEvent.getEventTime().length() > 0) {
                 startTime = mEvent.getEventTime().substring(10, 16);
             }
-            if (mEvent.getEventEndTime() != null && mEvent.getEventEndTime().length() > 0) {
-                startTime += "; " + mEvent.getEventEndTime().substring(10, 16) + " id; " + mEvent.getEventID();
-            }
+//            if (mEvent.getEventEndTime() != null && mEvent.getEventEndTime().length() > 0) {
+//                startTime += "; " + mEvent.getEventEndTime().substring(10, 16) + " id; " + mEvent.getEventID();
+//            }
             mTime.setText(startTime);
 
 //            if (!mEvent.getColor().equals("#1aa917")) {
@@ -144,7 +143,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setText(String.format("%s...", text.substring(0, 12)));
 
             } else {
-                mText.setText(text + "; " + startTime);
+                mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
             textBackground.setColor(Color.parseColor(mEvent.getColor()));

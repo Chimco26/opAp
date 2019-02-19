@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +24,6 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
-import com.ravtech.david.sqlcore.Event;
 
 import org.acra.ACRA;
 

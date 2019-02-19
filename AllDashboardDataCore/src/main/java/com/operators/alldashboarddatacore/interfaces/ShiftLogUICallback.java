@@ -1,8 +1,8 @@
 package com.operators.alldashboarddatacore.interfaces;
 
 
+import com.example.common.Event;
 import com.operators.errorobject.ErrorObjectInterface;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 
