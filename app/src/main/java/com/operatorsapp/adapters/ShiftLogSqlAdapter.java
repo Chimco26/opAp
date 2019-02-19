@@ -2,7 +2,6 @@ package com.operatorsapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -22,15 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operatorsapp.BuildConfig;
-import com.operatorsapp.utils.ReasonImageLenox;
-import com.ravtech.david.sqlcore.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.utils.ReasonImage;
+import com.operatorsapp.utils.ReasonImageLenox;
 import com.operatorsapp.utils.TimeUtils;
 import com.ravtech.david.sqlcore.DatabaseHelper;
-
+import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 
@@ -184,7 +182,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_H_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_L_VALUE)),
                 cursor.getFloat(cursor.getColumnIndex(DatabaseHelper.KEY_ALARM_STANDARD_VALUE)),
-                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_REASON_ID))
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_REASON_ID)),
+                cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_COLOR)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_TYPE))
         );
 
 

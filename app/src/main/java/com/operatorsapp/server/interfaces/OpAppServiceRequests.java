@@ -1,6 +1,8 @@
 package com.operatorsapp.server.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operatorsapp.server.requests.MachineJoshDataRequest;
+import com.operatorsapp.server.responses.GetMachineJoshData.MachineJoshDataResponse;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -50,6 +52,9 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/DeleteToken")
     Call<ErrorResponseNewVersion> postDeleteToken(@Body PostDeleteTokenRequest request);
+
+    @POST("/LeaderMESApi/GetMachineJoshData")
+    Call<MachineJoshDataResponse> getMachineJoshData(@Body MachineJoshDataRequest request);
 
     @Streaming
     @GET("/files/1Mb.dat")

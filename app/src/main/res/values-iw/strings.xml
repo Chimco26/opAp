@@ -284,9 +284,16 @@
 
     <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
     <string name="change_factory">שנה מפעל</string>
-
-
-
+    <string name="you_ve_reached_the_production_target">"הגעת ליעד היצור של פקודת העבודה!  "</string>
+    <string name="end_setup">סיום setup</string>
+    <string name="you_are_in_setup_mode">המכונה במצב setup</string>
+    <string name="reported_stop_event">דווח על אירוע עצור</string>
+    <string name="time_min">זמן(דק)</string>
+    <string name="report_events_reason">דווח אירועים סיבה</string>
+    <string name="keep_reporting_events_reason">שמור על הסיבה לאירועים לדיווח</string>
+    <string name="target_reached">היעד הגיע!</string>
+    <string name="setup_rejects_dialog_text">על ההתקנה שהפקת X דוחה. האם אתה רוצה לדווח על אותם יחידות טובות?</string>
+    <string name="setup_good_units_dialog_text">על ההתקנה שהפקת X יחידות טובות. האם אתה רוצה לדווח על אותם כמו דוחה?</string>
 
 
 </resources>

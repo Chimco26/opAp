@@ -273,6 +273,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private EventsAdapter mEventsAdapter;
     private File outputFile;
     private TextView mTechOpenCallsIv;
+    private Switch mTimeLineType;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -402,6 +403,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isShowAlarms = isChecked;
                 setShiftLogAdapter(getCursorByType());
+            }
+        });
+
+        mTimeLineType = view.findViewById(R.id.FAAE_shift_type_checkbox);
+        mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    mEventsRecycler.setVisibility(View.VISIBLE);
+                    mShiftLogRecycler.setVisibility(View.GONE);
+                    mShowAlarmCheckBox.setVisibility(View.GONE);
+                }else {
+                    mEventsRecycler.setVisibility(View.GONE);
+                    mShiftLogRecycler.setVisibility(View.VISIBLE);
+                    mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -567,7 +584,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByType() {
         Cursor cursor;
-        if (isShowAlarms) {
+         if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
         } else {
             cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
@@ -674,11 +691,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     btnDecline.setVisibility(View.GONE);
                 }
 
-                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
 
                     tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
 
-                    switch (notification.getmResponseType()){
+                    switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
                             tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
@@ -708,7 +725,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     icon.setImageDrawable(getResources().getDrawable(R.drawable.technician_dark));
-                }else {
+                } else {
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                     tvBody.setText(notification.getmBody(getActivity()));
                 }
@@ -1587,7 +1604,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mCallCounterHandler = new Handler();
         }
         mCallCounterHandler.removeCallbacksAndMessages(null);
-        if (techCallInfo == null){
+        if (techCallInfo == null) {
             mTechnicianTimerTv.setText("");
         } else {
             mCallCounterHandler.post(new Runnable() {
@@ -1671,7 +1688,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void openTechniciansList() {
-        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity) ) {
+        if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)) {
             return;
         }
 
@@ -1738,7 +1755,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 final String techName = OperatorApplication.isEnglishLang() ? techniciansList.get(position).getEName() : techniciansList.get(position).getLName();
                 String sourceUserId = PersistenceManager.getInstance().getOperatorId();
-                if (sourceUserId == null || sourceUserId.equals("")){
+                if (sourceUserId == null || sourceUserId.equals("")) {
                     sourceUserId = "0";
                 }
                 final int technicianId = techniciansList.get(position).getID();
@@ -1962,9 +1979,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notification[0] != null) {
 
             String opId = pm.getOperatorId();
-//            if (opId == null || opId.equals("")){
-//                opId = "0";
-//            }
+            if (opId == null){
+                opId = "";
+            }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                     getResources().getString(R.string.respond_notification_title),
                     notification[0].getmBody(getActivity()),
@@ -1977,7 +1994,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     pm.getOperatorName(),
                     notification[0].getmSender(),
                     opId,
-                    notification[0].getmTargetUserId()+"");
+                    notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
@@ -2278,7 +2295,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         startSelectMode(event);
     }
 
-    private void startSelectMode(Event event) {
+    public void startSelectMode(Event event) {
+        if (event == null) {
+            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(getCursorByType());
+            if (events.size() > 0) {
+                event = events.get(events.size() - 1);
+            }
+        }
 
         mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
 
@@ -2348,7 +2371,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {//todo kuti
+    public void onShiftLogDataReceived(ArrayList<Event> events) {
 
         int deletedEvents = clearOver24HShift();
 
@@ -2420,7 +2443,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 cursor = getCursorByType();
             }
-            setShiftLogAdapter(cursor);//todo kuti
+            setShiftLogAdapter(cursor);
 
             initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
 
@@ -2493,7 +2516,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         Collections.reverse(events);
 
-
         if (events.size() < 1) {
             return;
         }
@@ -2507,8 +2529,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     }
-
-
 
 
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
@@ -3074,9 +3094,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
-                        if (techList != null && techList.size() > 0){
+                        if (techList != null && techList.size() > 0) {
                             for (TechCallInfo tech : techList) {
-                                if (tech.getmNotificationId() == not.getmNotificationID()){
+                                if (tech.getmNotificationId() == not.getmNotificationID()) {
                                     tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
                                     break;
                                 }

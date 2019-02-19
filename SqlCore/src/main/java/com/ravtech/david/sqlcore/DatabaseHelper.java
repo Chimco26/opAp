@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -61,6 +61,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_CHECKED = "mchecked";
     public static final String KEY_TIME_MILLIS = "meventtimeinmillis";
+    public static final String KEY_COLOR = "color";
+    public static final String KEY_TYPE = "type";
 
 
     // Table Create Statements
@@ -92,7 +94,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_CHECKED + " BOOLEAN," +
             KEY_IS_DISMISS + " BOOLEAN," +
             KEY_CREATED_AT + " DATETIME," +
-            KEY_TIME_MILLIS + " BIGINT" +
+            KEY_TIME_MILLIS + " BIGINT," +
+            KEY_TYPE + " BIGINT," +
+            KEY_COLOR + " TEXT" +
             ")";
 
 
@@ -367,6 +371,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TIME_OF_ADDED, event.getTimeOfAdded());
         values.put(KEY_TREATED, event.isTreated());
         values.put(KEY_IS_DISMISS, event.isIsDismiss());
+        values.put(KEY_COLOR, event.getColor());
+        values.put(KEY_TYPE, event.getType());
 
         return values;
     }
@@ -416,7 +422,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setTimeOfAdded(c.getInt(c.getColumnIndex(KEY_TIME_OF_ADDED)));
             event.setTreated(c.getInt(c.getColumnIndex(KEY_TREATED)) > 0);
             event.setIsDismiss(c.getInt(c.getColumnIndex(KEY_IS_DISMISS)) > 0);
-
+            event.setColor(c.getString(c.getColumnIndex(KEY_COLOR)));
+            event.setType(c.getInt(c.getColumnIndex(KEY_TYPE)));
 
         }
         return event;

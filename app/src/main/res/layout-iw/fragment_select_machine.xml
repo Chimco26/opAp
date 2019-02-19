@@ -69,6 +69,7 @@
                 android:hint="@string/machine_id_name"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
+                android:dropDownHeight="150dp"
                 android:singleLine="true"
                 android:textColorHint="@color/C2"
                 android:textSize="22sp"

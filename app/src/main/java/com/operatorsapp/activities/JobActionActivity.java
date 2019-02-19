@@ -65,6 +65,7 @@ import com.operatorsapp.adapters.JobMaterialsSplitAdapter;
 import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -106,6 +107,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     public static final String EXTRA_ACTIVATE_JOB_RESPONSE = "EXTRA_ACTIVATE_JOB_RESPONSE";
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
+    public static final String EXTRA_LAST_JOB_ID = "EXTRA_LAST_JOB_ID";
     private static final int NUMBER_OF_COLUMNS = 2;
     private static final int PROPOS_RV_HEIGHT = 87;
     private TextView mTitleTv;
@@ -147,6 +149,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private TextView mProductPdfNoImageTv;
     private RecyclerView mPropsRv;
     private View mPropsRvOpenButton;
+    private String mLastJobId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +168,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mCroutonCreator = new CroutonCreator();
 
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(EXTRA_LAST_JOB_ID)) {
+            mLastJobId = getIntent().getExtras().getString(EXTRA_LAST_JOB_ID);
+        }
+
         initVars();
 
         initListener();
@@ -173,6 +180,37 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         getPendingJoblist();
 
+        if (mLastJobId != null && mLastJobId.length() > 0) {
+            showLastJobDialog(getString(R.string.activate_last_job),
+                    String.format(Locale.getDefault(), "%s %s", getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job), mLastJobId),
+                    getString(R.string.yes), getString(R.string.no), true);
+        }
+    }
+
+    private void showLastJobDialog(String title, String msg, String positiveBtn, String negativeBtn, final boolean firstSteps) {
+        BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
+                new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
+                    @Override
+                    public void onClickPositiveBtn() {
+                        if (firstSteps) {
+                            showLastJobDialog(getString(R.string.setup_end),
+                                    getString(R.string.do_you_need_to_end_setup_before),
+                                    getString(R.string.yes), getString(R.string.no), false);
+                        }else {
+                            validateDialog(Integer.valueOf(mLastJobId), true);
+                        }
+                    }
+
+                    @Override
+                    public void onClickNegativeBtn() {
+                        if (!firstSteps){
+                            validateDialog(Integer.valueOf(mLastJobId), false);
+                        }
+                    }
+                }, title, msg, positiveBtn, negativeBtn
+        );
+
+        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
     }
 
     private void getPendingJoblist() {
@@ -354,7 +392,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog.isShowing()){
+                if (alertDialog.isShowing()) {
                     alertDialog.dismiss();
                 }
 
@@ -379,7 +417,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog.isShowing()){
+                if (alertDialog.isShowing()) {
                     alertDialog.dismiss();
                 }
 
@@ -940,7 +978,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
-                validateDialog();
+                validateDialog(mCurrentJobDetails.getJobs().get(0).getID(), false);
 
                 break;
 
@@ -978,10 +1016,9 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void validateDialog() {
+    private void validateDialog(final Integer jobId, final boolean isToSetupEnd) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
 
         LayoutInflater inflater = this.getLayoutInflater();
         @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
@@ -995,7 +1032,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
 
         submitBtn.setText(R.string.activate);
-        bodyTv.setText(R.string.activate_job_dialog_message );
+        bodyTv.setText(R.string.activate_job_dialog_message);
         bodyTv.setTextSize(16);
         titleTv.setText(R.string.activate_job_dialog_title);
         titleTv.setTextSize(28);
@@ -1004,35 +1041,17 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
-//        builder.setCancelable(true)
-//                .setMessage(R.string.activate_job_dialog_message)
-//                .setTitle(R.string.activate_job_dialog_title)
-//                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//
-//                        postUpdateActions(mUpdatedActions);
-//
-//                        if (mCurrentJobDetails != null) {
-//                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
-//                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
-//                                    String.valueOf(persistenceManager.getMachineId()),
-//                                    String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-//                                    persistenceManager.getOperatorId()));
-//                        }
-//
-//                    }
-//                });
-
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postUpdateActions(mUpdatedActions);
-                if (mCurrentJobDetails != null) {
+                if (jobId != null) {
                     PersistenceManager persistenceManager = PersistenceManager.getInstance();
                     postActivateJob(alertDialog, new ActivateJobRequest(persistenceManager.getSessionId(),
                             String.valueOf(persistenceManager.getMachineId()),
-                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()),
-                            persistenceManager.getOperatorId()));
+                            String.valueOf(jobId),
+                            persistenceManager.getOperatorId(),
+                            isToSetupEnd));
                 }
             }
         });

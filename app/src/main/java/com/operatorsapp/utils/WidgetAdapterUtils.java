@@ -52,5 +52,11 @@ public class WidgetAdapterUtils {
             return false;
         }
     }
+    public static boolean isNotNearestTextsNew(Widget widget, float currentValue) {
+        float size = Math.abs(widget.getProjection() - currentValue);
+        return size * 100 / widget.getTarget() > 15;
+//        return !(currentValue * 100 / widget.getProjection() > 90
+//        && currentValue * 100 / widget.getProjection() < 110);
+    }
 
 }
