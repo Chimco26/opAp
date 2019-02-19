@@ -335,14 +335,22 @@
     <string name="CycleTimeDeviation">%2$s %% exceeded Cycle Time standard on %1$s.</string>
     <string name="ShortEventsFromProductionPC">Machine %1$s : Total short stops from the total production time exceeds %2$s %%.</string>
     <string name="WorkerNotSigned">Machine %1$s: There isn\'t operator login to the machine %2$s minutes after the beginning of the shift.</string>
+    <string name="open_calls">Open Calls</string>
+    <string name="last_24h">Last 24hrs</string>
     <string name="you_ve_reached_the_production_target">You’ve reached the production target!</string>
     <string name="reported_stop_event">Reported stop event</string>
     <string name="time_min">Time (min)</string>
     <string name="report_events_reason">Report events reason</string>
     <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
-    <string name="target_reached">Target \nReached!</string>
+    <string name="target_reached">Target  Reached!</string>
     <string name="setup_rejects_dialog_text">On the setup you produced X rejects. Do you want to report same of them as good units?</string>
     <string name="setup_good_units_dialog_text">On the setup you produced X good units. Do you want to report same of them as rejects?</string>
+    <string name="activate_last_job">Activate last job</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Do you want to activate the last job you work on? job</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
+    <string name="timeline">Timeline</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

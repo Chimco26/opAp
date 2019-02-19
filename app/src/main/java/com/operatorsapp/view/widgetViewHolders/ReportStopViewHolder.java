@@ -1,6 +1,7 @@
 package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -23,6 +24,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final TextView mCurrentValueTv;
     private final TextView mTargetValueTv;
     private final TextView mPercentValueTv;
+    private final View mNoDataFilterView;
     private TextView mTitle;
     private TextView mSubTitle;
     private PercentageView mPercentageView;
@@ -48,6 +50,8 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mCurrentValueTv = itemView.findViewById(R.id.RPWC_current_value_tv);
         mTargetValueTv = itemView.findViewById(R.id.RPWC_target_value_tv);
         mPercentValueTv = itemView.findViewById(R.id.RPWC_percent_value_tv);
+
+        mNoDataFilterView = itemView.findViewById(R.id.RPWC_no_data_filter);
     }
 
     public void setData(Widget widget) {
@@ -56,8 +60,14 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         float currentValue = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);
 //        currentValue = 0;
         float target = widget.getTarget();
-        int percent = initPercentage(currentValue, target);
-        updateTextViews(percent, currentValue, target);
+
+        if (target <= 0){
+            mNoDataFilterView.setVisibility(View.VISIBLE);
+        }else {
+            mNoDataFilterView.setVisibility(View.GONE);
+            int percent = initPercentage(currentValue, target);
+            updateTextViews(percent, currentValue, target);
+        }
     }
 
     private void setView() {
@@ -92,6 +102,12 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void initListener() {
         mBtn.setOnClickListener(this);
+        mNoDataFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     private int initPercentage(float currentValue, float target) {

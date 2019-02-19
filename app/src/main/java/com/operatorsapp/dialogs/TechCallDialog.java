@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
@@ -21,8 +22,11 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.utils.Consts;
+import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +44,10 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
     private TextView mTitleTv;
     private ImageView mCloseIv;
     private TextView mNewCall;
+    private TextView mRightTab;
+    private TextView mLeftTab;
+    private View mRightTabUnderline;
+    private View mLeftTabUnderline;
     private TechDialogListener mListener;
     private FrameLayout mProgressBarFl;
 
@@ -65,14 +73,51 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
         mTitleTv = (TextView) findViewById(R.id.tech_dialog_title_tv);
         mCloseIv = (ImageView) findViewById(R.id.tech_dialog_x_iv);
         mNewCall = (TextView) findViewById(R.id.tech_dialog_new_call);
+        mRightTab = findViewById(R.id.tech_dialog_tv_right_tab);
+        mLeftTab = findViewById(R.id.tech_dialog_tv_left_tab);
+        mRightTabUnderline = findViewById(R.id.tech_dialog_right_tab_underline);
+        mLeftTabUnderline = findViewById(R.id.tech_dialog_left_tab_underline);
         mProgressBarFl = (FrameLayout) findViewById(R.id.tech_dialog_progress_fl);
 
         mCloseIv.setOnClickListener(this);
         mNewCall.setOnClickListener(this);
-        setRecyclerVew(0);
+        mRightTab.setOnClickListener(this);
+        mLeftTab.setOnClickListener(this);
+        setOpenCalls(0);
     }
 
-    private void setRecyclerVew(int position) {
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tech_dialog_new_call:
+                mListener.onNewCallPressed();
+                break;
+            case R.id.tech_dialog_x_iv:
+                mListener.onCancelPressed();
+                break;
+            case R.id.tech_dialog_tv_left_tab:
+                mLeftTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
+                mLeftTabUnderline.setVisibility(View.VISIBLE);
+                mSubtitleTv.setVisibility(View.VISIBLE);
+                mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mRightTabUnderline.setVisibility(View.INVISIBLE);
+                setOpenCalls(0);
+
+                break;
+            case R.id.tech_dialog_tv_right_tab:
+                mRightTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
+                mRightTabUnderline.setVisibility(View.VISIBLE);
+                mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mLeftTabUnderline.setVisibility(View.INVISIBLE);
+                mSubtitleTv.setVisibility(View.INVISIBLE);
+                setLast24hrsCalls();
+
+                break;
+        }
+    }
+
+    private void setOpenCalls(int position) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new TechCallAdapter(getContext(), mTechList, new TechCallAdapter.TechCallItemListener() {
             @Override
@@ -121,7 +166,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                                     PersistenceManager.getInstance().setRecentTechCallId(0);
                                 }
                                 mListener.onCleanTech(techCallInfo);
-                                setRecyclerVew(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
+                                setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
 
 
                             }else {
@@ -143,16 +188,22 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
         ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPosition(position);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.tech_dialog_new_call:
-                mListener.onNewCallPressed();
-                break;
-            case R.id.tech_dialog_x_iv:
-                mListener.onCancelPressed();
-                break;
+
+    private void setLast24hrsCalls() {
+        ArrayList<Notification> notList = new ArrayList<>();
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR,-1);
+        Date date24hrs = cal.getTime();
+
+        for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
+            if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED
+                && TimeUtils.getDateForNotification(notification.getmResponseDate()).after(date24hrs)) {
+                notList.add(notification);
+            }
         }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
     }
 
     public interface TechDialogListener{

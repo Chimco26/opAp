@@ -44,11 +44,74 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:id="@+id/tech_dialog_ly_tabs"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layoutDirection="ltr"
+            android:layout_height="55dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp">
+
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tech_dialog_tv_left_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textAlignment="center"
+                    android:text="@string/open_calls"
+                    android:textColor="@color/C16"
+                    android:textSize="24sp" />
+
+                <View
+                    android:id="@+id/tech_dialog_left_tab_underline"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/tabNotificationColor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tech_dialog_tv_right_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textAlignment="center"
+                    android:text="@string/last_24h"
+                    android:textColor="@color/dark_indigo"
+                    android:textSize="24sp" />
+
+                <View
+                    android:id="@+id/tech_dialog_right_tab_underline"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:visibility="invisible"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/tabNotificationColor" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tech_dialog_subtitle_tv"
             android:layout_gravity="center"
             android:gravity="center"
+            android:layout_margin="10dp"
             android:textAlignment="center"
             style="@style/ProximaNovaSemiBold"
             android:textSize="20sp"

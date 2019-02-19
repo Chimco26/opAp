@@ -53,6 +53,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.ReportInventoryNetwork
 import com.operators.reportrejectnetworkbridge.interfaces.ReportRejectNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ReportStopNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.shiftlognetworkbridge.interfaces.EmeraldActualBarExtraDetailsServiceRequest;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftForMachineServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.EmeraldShiftLogServiceRequests;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
@@ -78,6 +79,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -268,6 +270,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         return mRetrofit.create(EmeraldShiftForMachineServiceRequests.class);
     }
 
+    @Override
+    public EmeraldActualBarExtraDetailsServiceRequest getActualBarExtraDetails(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldActualBarExtraDetailsServiceRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "getActualBarExtraDetails");
+        }
+        return mRetrofit.create(EmeraldActualBarExtraDetailsServiceRequest.class);    }
+
     private Retrofit getRetrofit(String siteUrl, int timeout, TimeUnit timeUnit) {
         ConnectionPool pool = new ConnectionPool(5, 10000, TimeUnit.MILLISECONDS);
 
@@ -310,7 +325,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
 
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
 
             String s = "siteUrl" + siteUrl;
 
@@ -926,6 +941,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getMachineJoshData(MachineJoshDataRequest request, final Callback<MachineJoshDataResponse> callback){
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<MachineJoshDataResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMachineJoshData(request);
+        call.enqueue(callback);
+    }
+
+    public void getNewVersionFile(final Callback<ResponseBody> callback){
+        mRetrofit = getRetrofit("http://www.ovh.net", PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ResponseBody> call = mRetrofit.create(OpAppServiceRequests.class).getNewVersionFile();
         call.enqueue(callback);
     }
 }

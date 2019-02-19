@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
 
             } else {
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.REQUEST_INSTALL_PACKAGES}, STORAGE_REQUEST_CODE);
 
             }
         }
@@ -341,32 +341,32 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         }
     }
 
-
-    public static void cleanData() {
-        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
-        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
-            @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
-
-            }
-        });
-
-        DataSupport.deleteAll(Event.class);
-
-        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
-        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
-
-        PersistenceManager.getInstance().clear();
-
-        PersistenceManager.getInstance().items.clear();
-
-        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
-        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
-    }
+//
+//    public static void cleanData() {
+//        PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
+//        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+//            @Override
+//            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+//
+//            }
+//        });
+//
+//        DataSupport.deleteAll(Event.class);
+//
+//        String tmpLanguage = PersistenceManager.getInstance().getCurrentLang();
+//        String tmpLanguageName = PersistenceManager.getInstance().getCurrentLanguageName();
+//
+//        PersistenceManager.getInstance().clear();
+//
+//        PersistenceManager.getInstance().items.clear();
+//
+//        PersistenceManager.getInstance().setCurrentLang(tmpLanguage);
+//        PersistenceManager.getInstance().setCurrentLanguageName(tmpLanguageName);
+//    }
 
 }

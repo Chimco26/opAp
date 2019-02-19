@@ -1,9 +1,9 @@
 package com.operators.alldashboarddatacore;
 
-import android.net.ParseException;
 import android.util.Log;
 
 import com.example.oppapplog.OppAppLogger;
+import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
 import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
@@ -20,11 +20,13 @@ import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.interfaces.MachineStatusPersistenceManagerInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operators.shiftloginfra.ActualBarExtraDetailsCallback;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
-import com.operators.shiftloginfra.ShiftForMachineResponse;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
+import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.ravtech.david.sqlcore.Event;
 
 import java.text.SimpleDateFormat;
@@ -50,6 +52,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private GetMachineDataNetworkBridgeInterface mGetMachineDataNetworkBridgeInterface;
     private MachineDataPersistenceManagerInterface mMachineDataPersistenceManagerInterface;
     private MachineDataUICallback mMachineDataUICallback;
+    private ActualBarExtraDetailsUICallback mActualBarExtraUICallback;
 
     private ShiftLogPersistenceManagerInterface mShiftLogPersistenceManagerInterface;
     private ShiftLogNetworkBridgeInterface mShiftLogNetworkBridgeInterface;
@@ -82,10 +85,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     }
 
-    public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback, ShiftLogUICallback shiftLogUICallback) {
+    public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback,
+                                 ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback) {
         mMachineStatusUICallback = machineStatusUICallback;
         mMachineDataUICallback = machineDataUICallback;
         mShiftLogUICallback = shiftLogUICallback;
+        mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
     }
 
     public void unregisterListener() {
@@ -97,6 +102,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
         if (mShiftLogUICallback != null) {
             mShiftLogUICallback = null;
+        }
+        if (mActualBarExtraUICallback != null) {
+            mActualBarExtraUICallback = null;
         }
     }
 
@@ -137,6 +145,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
+        getActualBarExtraDetails();
         getShiftLogs(onJobFinishedListener);
     }
 
@@ -226,17 +235,14 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         // remove seconds and milliseconds from shift log starting from.
         String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
+
         try {
             Date date = dateFormat.parse(startingFrom);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            startingFrom = dateFormat.format(cal.getTime());
-        } catch (ParseException ignored) {
+            startingFrom = getTimeForRequest(date, dateFormat);
         } catch (java.text.ParseException e) {
-            if (e.getMessage() != null)
+            if (e.getMessage() != null) {
                 Log.e(LOG_TAG, e.getMessage());
+            }
         }
 
         Log.d(LOG_TAG, "shift log startingfrom: " + startingFrom);
@@ -272,6 +278,13 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
     }
 
+    private String getTimeForRequest(Date date, SimpleDateFormat dateFormat) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return dateFormat.format(cal.getTime());
+    }
 
 
     private void setJobFinishToAll(JobBase.OnJobFinishedListener onJobFinishedListener) {
@@ -302,6 +315,41 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     }
 
+    public void getActualBarExtraDetails() {
+        String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
+        try {
+            Date date = dateFormat.parse(startingFrom);
+            startingFrom = getTimeForRequest(date, dateFormat);
+//            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
+        } catch (java.text.ParseException e) {
+            if (e.getMessage() != null) {
+                Log.e(LOG_TAG, e.getMessage());
+            }
+        }
+        String endTime = getTimeForRequest(new Date(), dateFormat);
+        mShiftLogNetworkBridgeInterface.GetActualBarExtraDetails(mShiftLogPersistenceManagerInterface.getSiteUrl(),
+                mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
+            @Override
+            public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
+                if (mActualBarExtraUICallback != null) {
+                    mActualBarExtraUICallback.onActualBarExtraDetailsSucceeded(actualBarExtraResponse);
+                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsSucceeded");
+                }
+            }
+
+            @Override
+            public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
+                if (mActualBarExtraUICallback != null) {
+                    mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
+                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
+                }
+            }
+
+        }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+
+    }
+
 
     private void startTimer(int timeInSeconds) {
         if (mTimeToEndCounter == null) {
@@ -319,7 +367,17 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
     }
 
-    public interface AllDashboardDataCoreListener{
+    public static String getDate(long milliSeconds, String dateFormat) {
+        // Create a DateFormatter object for displaying date in specified format.
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat, Locale.getDefault());
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
+    }
+
+    public interface AllDashboardDataCoreListener {
 
         void onExecuteJob(JobBase.OnJobFinishedListener onJobFinishedListener);
     }

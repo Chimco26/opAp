@@ -32,4 +32,5 @@ public interface LoginPersistenceManagerInterface {
 
     void setCurrentLang(String lang);
 
+    void setUserId(int userId);
 }

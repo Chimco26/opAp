@@ -10,4 +10,6 @@ public interface ShiftLogNetworkManagerInterface {
     EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl);
 
     EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
+
+    EmeraldActualBarExtraDetailsServiceRequest getActualBarExtraDetails(String siteUrl, int timeout, TimeUnit timeUnit);
 }

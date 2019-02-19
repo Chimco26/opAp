@@ -16,6 +16,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "opapp.apk"
+                }
+            }
         }
 
 
@@ -29,6 +34,7 @@ android {
     }
     lintOptions {
         disable 'MissingTranslation'
+        abortOnError false
     }
 
     // Specifies one flavor dimension.
@@ -49,6 +55,7 @@ android {
 
 
 dependencies {
+    implementation 'pub.devrel:easypermissions:0.2.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation(name: 'pollingmachanaim-release', ext: 'aar')
     implementation(name: 'logrecorder', ext: 'aar')
