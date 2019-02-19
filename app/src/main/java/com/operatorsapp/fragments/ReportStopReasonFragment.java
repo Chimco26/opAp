@@ -77,7 +77,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private ReportCore mReportCore;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private SubReasons mSelectedSubreason;
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Long> mSelectedEvents;
     private int mSelectedPosition;
     private int mFlavorSpanDif;
     private Switch mSwitch;
@@ -293,7 +293,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     }
 
-    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
 
         mSelectedEvents = selectedEvents;
     }

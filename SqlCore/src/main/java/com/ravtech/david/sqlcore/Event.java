@@ -37,7 +37,7 @@ public class Event extends DataSupport implements Parcelable {
     private String mEventGroupEname;
     @SerializedName("EventID")
     @Column(unique = true)
-    private int mEventID;
+    private long mEventID;
     @SerializedName("AlarmDismissed")
     private boolean mAlarmDismissed;
     @SerializedName("AlarmHValue")
@@ -68,14 +68,14 @@ public class Event extends DataSupport implements Parcelable {
     public Event() {
     }
 
-    public Event(int mEventID) {
+    public Event(long mEventID) {
 
         this.mEventID = mEventID;
 
     }
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
-                 String endTime, int groupId, int id, int priority, String groupEname, String groupLname, int duration,
+                 String endTime, int groupId, long id, int priority, String groupEname, String groupLname, int duration,
                  boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color, int type) {
 
         mEventTitle = title;
@@ -184,7 +184,7 @@ public class Event extends DataSupport implements Parcelable {
         return mEventGroupEname;
     }
 
-    public int getEventID() {
+    public long getEventID() {
         return mEventID;
     }
 
@@ -268,7 +268,7 @@ public class Event extends DataSupport implements Parcelable {
         mEventGroupLname = eventGroupLname;
     }
 
-    public void setEventID(int eventID) {
+    public void setEventID(long eventID) {
         mEventID = eventID;
     }
 
@@ -300,7 +300,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmValue = alarmValue;
     }
 
-    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, int mEventID) {
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, long mEventID) {
         this.mEventTitle = mEventTitle;
         this.mEventSubTitleEname = mEventSubTitleEname;
         this.mEventTime = mEventTime;
@@ -340,7 +340,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeInt(this.mEventGroupID);
         dest.writeString(this.mEventGroupLname);
         dest.writeString(this.mEventGroupEname);
-        dest.writeInt(this.mEventID);
+        dest.writeLong(this.mEventID);
         dest.writeByte(this.mAlarmDismissed ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.mAlarmHValue);
         dest.writeFloat(this.mAlarmLValue);
@@ -367,7 +367,7 @@ public class Event extends DataSupport implements Parcelable {
         this.mEventGroupID = in.readInt();
         this.mEventGroupLname = in.readString();
         this.mEventGroupEname = in.readString();
-        this.mEventID = in.readInt();
+        this.mEventID = in.readLong();
         this.mAlarmDismissed = in.readByte() != 0;
         this.mAlarmHValue = in.readFloat();
         this.mAlarmLValue = in.readFloat();

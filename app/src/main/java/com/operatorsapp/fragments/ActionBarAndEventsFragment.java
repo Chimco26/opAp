@@ -204,7 +204,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ActionBarAndEventsFragmentListener mListener;
     private int mRecyclersHeight;
     private boolean mIsSelectionMode;
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Long> mSelectedEvents;
     private TextView mSelectedNumberTv;
     private View mSelectedNumberLy;
     private Event mLastEvent;
@@ -2065,12 +2065,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onStopEventSelected(Integer event, boolean b) {//todo kuti
+    public void onStopEventSelected(Long event, boolean b) {//todo kuti
         mListener.onEventSelected(event, b);
     }
 
     @Override
-    public void onSplitEventPressed(int eventID) {
+    public void onSplitEventPressed(long eventID) {
         // TODO: 05/07/2018 call server split event
 
 
@@ -2309,7 +2309,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initEvents(ArrayList<Event> events) {//todo kuti
 
-        Collections.reverse(events);
+//        Collections.reverse(events);
 
         if (events.size() < 1) {
             return;
@@ -2679,7 +2679,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
         mSelectedEvents = selectedEvents;
 
         if (mShiftLogAdapter != null) {
@@ -2939,13 +2939,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment);
 
-        void onEventSelected(Integer event, boolean b);
+        void onEventSelected(Long event, boolean b);
 
         void onClearAllSelectedEvents();
 
         void onJobActionItemClick();
 
-        void onSplitEventPressed(int eventID);
+        void onSplitEventPressed(long eventID);
 
         void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
 

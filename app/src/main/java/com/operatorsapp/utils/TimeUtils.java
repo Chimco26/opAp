@@ -408,4 +408,15 @@ public class TimeUtils {
 
         return output;
     }
+
+    public static Long convertDateToMillisecond(String dateToConvert) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
+        try {
+            Date date = format.parse(dateToConvert);
+            return date.getTime();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
 }

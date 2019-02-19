@@ -47,13 +47,13 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
     private OnStopClickListener mOnStopClickListener;
     public LayoutInflater inflater;
     private boolean mIsSelectionMode;
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Long> mSelectedEvents;
     private ArrayList<Event> mUpdatedAlarms;
     private int mFirstStopEventPosition;
 
     public ShiftLogSqlAdapter(Context context, Cursor cursor, boolean closedState, int closeWidth,
                               OnStopClickListener onStopClickListener, int openWidth, int height,
-                              boolean selectMode, ArrayList<Integer> selectedEvents) {
+                              boolean selectMode, ArrayList<Long> selectedEvents) {
         super(cursor);
         mContext = context;
         mClosedState = closedState;
@@ -67,7 +67,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         mFirstStopEventPosition = getItemCount();
     }
 
-    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
         mSelectedEvents = selectedEvents;
     }
 
@@ -236,7 +236,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             }
 
             if (mSelectedEvents != null) {
-                for (Integer event1 : mSelectedEvents) {
+                for (Long event1 : mSelectedEvents) {
                     if (event.getEventID() == event1) {
                         event.setChecked(true);
                     }
@@ -485,7 +485,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         }
     }
 
-    private void validateDialog(final int eventID) {
+    private void validateDialog(final long eventID) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
