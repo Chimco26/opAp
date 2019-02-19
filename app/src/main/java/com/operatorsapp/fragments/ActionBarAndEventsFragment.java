@@ -451,7 +451,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mCloseSelectEvents.setVisibility(View.GONE);
 
                 mIsSelectionEventsMode = false;
-                initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
             }
         });
@@ -467,7 +467,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mIsSelectionEventsMode = true;
 
                     mCloseSelectEvents.setVisibility(View.VISIBLE);
-                    initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+                    initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                 }
 
 
@@ -583,6 +583,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Nullable
     public Cursor getCursorByType() {
+        Cursor cursor;
+         if (isShowAlarms) {
+            cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
+        } else {
+            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
+        }
+        return cursor;
+    }
+
+    @Nullable
+    public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
          if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
@@ -903,7 +914,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         //todo kuti
 
-        initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
 
         if (DataSupport.count(Event.class) > 0) {
@@ -2390,8 +2401,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mEventsQueue.clear();
 
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-
             mNoData = false;
 
             for (Event event : events) {
@@ -2436,6 +2445,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //todo request only new events from sql database
             updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration())));
 
+            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+
             Cursor cursor;
             if (mIsSelectionMode) {
 
@@ -2447,7 +2458,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             setShiftLogAdapter(cursor);
 
-            initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+            initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
 
             if (mEventsQueue.size() > 0) {
@@ -2492,7 +2503,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     cursor = getCursorByType();
                 }
                 setShiftLogAdapter(cursor);
-                initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
             }
         }
 
