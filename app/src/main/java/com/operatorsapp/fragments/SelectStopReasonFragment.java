@@ -36,7 +36,6 @@ import com.operatorsapp.adapters.StopSubReasonAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnSelectedSubReasonListener;
-import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -75,7 +74,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportCore mReportCore;
 
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private int mSelectedPosition;
     private int mReasonId;
     private String mEnName;
@@ -142,7 +141,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         mOnCroutonRequestListener = null;
     }
 
-    public void setSelectedEvents(ArrayList<Integer> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Float> selectedEvents) {
 
         mSelectedEvents = selectedEvents;
     }
@@ -264,9 +263,9 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
         for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-            eventsId[i] = mSelectedEvents.get(i);
+            eventsId[i] = mSelectedEvents.get(i).intValue();
 
-            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReasonId, mEnName, mILName, mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
+            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i).intValue(), mReasonId, mEnName, mILName, mSelectedSubreason.getEName(), mSelectedSubreason.getLName());
 
         }
 
@@ -274,7 +273,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mSelectedEvents.get(i), mJobId);
+                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJobId);
 
             }
 

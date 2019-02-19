@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -83,6 +84,7 @@ import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOu
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.operators.shiftloginfra.model.Notification;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -136,7 +138,6 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
@@ -155,6 +156,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
+import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -197,7 +199,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer2;
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
@@ -974,6 +976,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             }
                         }
                     }
+//TODO kuti
+//                    events = updateList(events);
+
+                    addServiceCallsToEvents(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
@@ -1008,6 +1014,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
+    }
+
+    private void addServiceCallsToEvents(ArrayList<Event> events) {
+        for (Event event : events) {
+
+            Long eventStart = convertDateToMillisecond(event.getEventTime());
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
+
+            for (Notification notification: mActualBarExtraResponse.getNotification()) {
+
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
+
+                
+
+
+            }
+
+        }
     }
 
     ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback = new ReportFieldsForMachineUICallback() {
@@ -1722,11 +1746,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onEventSelected(Integer event, boolean checked) {
+    public void onEventSelected(Float event, boolean checked) {
 
         if (mSelectedEvents == null) {
 
-            mSelectedEvents = new ArrayList<>();
+            mSelectedEvents = new ArrayList<Float>();
         }
 
         if (checked) {
@@ -1735,13 +1759,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         } else {
 
-            ArrayList<Integer> toDelete = new ArrayList<>();
-            for (Integer event1 : mSelectedEvents) {
+            ArrayList<Float> toDelete = new ArrayList<>();
+            for (Float event1 : mSelectedEvents) {
                 if (event.compareTo(event1) == 0) {
                     toDelete.add(event1);
                 }
             }
-            for (Integer event1 : toDelete) {
+            for (Float event1 : toDelete) {
                 mSelectedEvents.remove(event1);
             }
         }
@@ -1942,7 +1966,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     @Override
-    public void onSplitEventPressed(int eventID) {
+    public void onSplitEventPressed(Float eventID) {
         // TODO: 05/07/2018 call server
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();

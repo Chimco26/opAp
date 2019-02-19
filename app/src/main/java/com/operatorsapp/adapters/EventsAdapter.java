@@ -1,44 +1,32 @@
 package com.operatorsapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.utils.L;
+import com.example.common.Event;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
-import com.operatorsapp.utils.TimeUtils;
-import com.ravtech.david.sqlcore.Event;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
+
+import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
-    private static final int PIXEL_FOR_MINUTE = 20;
+    private static final int PIXEL_FOR_MINUTE = 4;
     private static final int PIXEL_FOR_BIG_MINUTE = 10;
     private static final int NEW_EVENT_ID = 5555;
     private final ArrayList<TechCallInfo> mTechs;
@@ -54,14 +42,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
         mClosedState = closedState;
-
-
-        mEvents = new ArrayList<>();
-        updateList(events);
-
+        mEvents = events;
         mTechs = PersistenceManager.getInstance().getCalledTechnician();
 
-//        updateList(events);
     }
 
 //    public void setEvents(ArrayList<Event> events) {
@@ -76,42 +59,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     public void setClosedState(boolean isSelectionMode) {
         mClosedState = isSelectionMode;
     }
-
-
-    private void updateList(ArrayList<Event> events) {
-
-        mEvents.clear();
-
-        for (int i = 0; i < events.size() - 1; i++) {
-
-            Event event = events.get(i);
-            mEvents.add(event);
-
-            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
-
-            if (eventEndMilli < eventStartMilli) {
-
-                Event newEvent = new Event();
-                newEvent.setEventTime(event.getEventEndTime());
-                newEvent.setEventEndTime(events.get(i + 1).getEventTime());
-
-                newEvent.setEventSubTitleLname("Working");
-                newEvent.setColor("#1aa917");
-                newEvent.setEventID(NEW_EVENT_ID);
-
-                long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
-
-                newEvent.setDuration(minute);
-                mEvents.add(newEvent);
-            }
-
-            if (i == events.size() - 2) {
-                mEvents.add(events.get(i + 1));
-            }
-        }
-    }
-
 
     @NonNull
     @Override
@@ -172,21 +119,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private void updateItem(int position) {
             mEvent = mEvents.get(position);
 
-            ViewGroup.LayoutParams params = mView.getLayoutParams();
-
-
-            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID) {
-                params.height = 0;
-            } else {
-                if (mEvent.getDuration() < 5) {
-                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
-                } else if ((int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE > 300){
-                    params.height = 300;
-                }else {
-                    params.height = (int) mEvent.getDuration() * PIXEL_FOR_BIG_MINUTE;
-                }
-            }
-            mView.setLayoutParams(params);
+            setViewHeight();
 
             mLine.setBackgroundColor(Color.parseColor(mEvent.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
@@ -196,25 +129,28 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (mEvent.getEventTime() != null && mEvent.getEventTime().length() > 0) {
                 startTime = mEvent.getEventTime().substring(10, 16);
             }
+//            if (mEvent.getEventEndTime() != null && mEvent.getEventEndTime().length() > 0) {
+//                startTime += "; " + mEvent.getEventEndTime().substring(10, 16) + " id; " + mEvent.getEventID();
+//            }
             mTime.setText(startTime);
 
-            if (!mEvent.getColor().equals("#1aa917")) {
+//            if (!mEvent.getColor().equals("#1aa917")) {
 
-                mText.setVisibility(View.VISIBLE);
+            mText.setVisibility(View.VISIBLE);
 
-                String text = mEvent.getDuration() + "m " + mEvent.getSubtitleLname();
-                if (!mClosedState && text.length() > 12) {
-                    mText.setText(String.format("%s...", text.substring(0, 12)));
-
-                } else {
-                    mText.setText(text);
-                }
-                GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                textBackground.setColor(Color.parseColor(mEvent.getColor()));
+            String text = mEvent.getDuration() + "m " + mEvent.getSubtitleLname();
+            if (!mClosedState && text.length() > 12) {
+                mText.setText(String.format("%s...", text.substring(0, 12)));
 
             } else {
-                mText.setVisibility(View.GONE);
+                mText.setText(text);
             }
+            GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+            textBackground.setColor(Color.parseColor(mEvent.getColor()));
+
+//            } else {
+//                mText.setVisibility(View.GONE);
+//            }
 
 
             if (mIsSelectionMode) {
@@ -235,6 +171,25 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
 //            updateTech();
+        }
+
+        private void setViewHeight() {
+
+            ViewGroup.LayoutParams params = mView.getLayoutParams();
+
+//            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID || mEvent.getDuration() == 0) {
+            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID) {
+                params.height = 0;
+            } else if ((int) mEvent.getDuration() * PIXEL_FOR_MINUTE > 300) {
+                params.height = 300;
+            } else if (mEvent.getDuration() > 4) {
+                params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
+//            } else if (mEvent.getDuration() > 0){
+            } else {
+                params.height = 5 * PIXEL_FOR_MINUTE;
+            }
+//            params.height = 20;
+            mView.setLayoutParams(params);
         }
 
         private void updateTech() {
@@ -289,14 +244,4 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
 
-    public static Long convertDateToMillisecond(String dateToConvert) {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
-        try {
-            Date date = format.parse(dateToConvert);
-            return date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0L;
-    }
 }

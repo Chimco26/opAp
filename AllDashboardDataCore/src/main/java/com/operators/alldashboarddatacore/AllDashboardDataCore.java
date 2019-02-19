@@ -2,6 +2,7 @@ package com.operators.alldashboarddatacore;
 
 import android.util.Log;
 
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -27,7 +28,6 @@ import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
 import com.operators.shiftloginfra.model.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
-import com.ravtech.david.sqlcore.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

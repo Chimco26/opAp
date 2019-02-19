@@ -20,7 +20,7 @@ import static com.operatorsapp.utils.broadcast.SendLogsBroadcast.ACTION_SEND_LOG
 
 public class SendBroadcast {
 
-    public static void sendReason(Context context, int eventId, int reasonId, String mEnName, String mILName, String eSubName, String lSubName) {
+    public static void sendReason(Context context, long eventId, int reasonId, String mEnName, String mILName, String eSubName, String lSubName) {
 
         Intent intent = new Intent();
 

@@ -1,5 +1,6 @@
 package com.operators.shiftlognetworkbridge;
 
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.shiftloginfra.ActualBarExtraDetailsCallback;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
@@ -14,7 +15,6 @@ import com.operators.shiftlognetworkbridge.server.requests.GetShiftForMachineReq
 import com.operators.shiftlognetworkbridge.server.requests.GetShiftLogRequest;
 import com.operators.shiftlognetworkbridge.server.responses.ErrorResponse;
 import com.operators.shiftlognetworkbridge.server.responses.ShiftLogResponse;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.common.Event;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -69,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Event table create statement
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
-            KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
+            KEY_EVENT_ID + " FLOAT PRIMARY KEY," +
             KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
@@ -257,6 +259,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
@@ -270,11 +284,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationAndStartTime(int minEventDuration, String newEventsStartTime) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
+                KEY_TIME + " >= " + newEventsStartTime + " AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TIME + " >= " + newEventsStartTime + " AND "
+                + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
     public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND " +
                 KEY_DURATION + " >= " + minEventDuration +
-                ") OR (" + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -317,7 +359,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deleting a event
      */
-    public void deleteEvent(long event_id) {
+    public void deleteEvent(float event_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -399,7 +441,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (c != null) {
 
-            event.setEventID(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
+            event.setEventID(c.getFloat(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
             event.setEventTime(c.getString(c.getColumnIndex(KEY_TIME)));
             event.setEventTimeInMillis(c.getLong(c.getColumnIndex(KEY_TIME_MILLIS)));

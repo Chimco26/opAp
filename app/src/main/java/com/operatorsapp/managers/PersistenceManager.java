@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
+import com.example.common.Event;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
 import com.operators.infra.PersistenceManagerInterface;
@@ -24,7 +24,6 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.SecurePreferences;
 import com.operatorsapp.utils.SendReportUtil;
 import com.operatorsapp.utils.TimeUtils;
-import com.ravtech.david.sqlcore.Event;
 
 import org.acra.ACRA;
 
@@ -96,7 +95,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static PersistenceManager msInstance;
     private Gson mGson;
     @SuppressLint("UseSparseArrays")
-    public HashMap<Integer, Event> items = new HashMap<>();
+    public HashMap<Float, Event> items = new HashMap<>();
 
     public static void initInstance(Context context) {
         if (msInstance == null) {
