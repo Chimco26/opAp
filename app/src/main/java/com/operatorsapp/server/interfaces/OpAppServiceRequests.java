@@ -14,9 +14,14 @@ import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 
+import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Streaming;
 
 /**
  * Created by alex on 07/10/2018.
@@ -50,4 +55,8 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetMachineJoshData")
     Call<MachineJoshDataResponse> getMachineJoshData(@Body MachineJoshDataRequest request);
+
+    @Streaming
+    @GET("/files/1Mb.dat")
+    Call<ResponseBody> getNewVersionFile();
 }

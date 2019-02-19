@@ -52,6 +52,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private GetMachineDataNetworkBridgeInterface mGetMachineDataNetworkBridgeInterface;
     private MachineDataPersistenceManagerInterface mMachineDataPersistenceManagerInterface;
     private MachineDataUICallback mMachineDataUICallback;
+    private ActualBarExtraDetailsUICallback mActualBarExtraUICallback;
 
     private ShiftLogPersistenceManagerInterface mShiftLogPersistenceManagerInterface;
     private ShiftLogNetworkBridgeInterface mShiftLogNetworkBridgeInterface;
@@ -62,7 +63,6 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private boolean mGetShiftLogFinish;
 
     private TimeToEndCounter mTimeToEndCounter;
-    private ActualBarExtraDetailsUICallback mActualBarExtraUICallback;
 
 
     public AllDashboardDataCore(AllDashboardDataCoreListener listener, GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge,
@@ -332,14 +332,18 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
             @Override
             public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
-                mActualBarExtraUICallback.onActualBarExtraDetailsSucceeded(actualBarExtraResponse);
-                OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsSucceeded");
+                if (mActualBarExtraUICallback != null) {
+                    mActualBarExtraUICallback.onActualBarExtraDetailsSucceeded(actualBarExtraResponse);
+                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsSucceeded");
+                }
             }
 
             @Override
             public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
-                mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
-                OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
+                if (mActualBarExtraUICallback != null) {
+                    mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
+                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
+                }
             }
 
         }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());

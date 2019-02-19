@@ -61,6 +61,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_SHIFT_LOG_STARTING_FROM = "pref.PREF_SHIFT_LOG_STARTING_FROM";
     private static final String PREF_MACHINE_DATA_STARTING_FROM = "pref.PREF_MACHINE_DATA_STARTING_FROM";
     private static final String PREF_FORCE_LOCAL = "pref.PREF_FORCE_LOCAL";
+    private static final String PREF_USERID = "pref.PREF_USERID";
     private static final String PREF_FORCE_LOCAL_NAME = "pref.PREF_FORCE_LOCAL_NAME";
     private static final String PREF_POLLING_FREQUENCY = "pref.PREF_POLLING_FREQUENCY";
     private static final String PREF_NEW_SHIFTLOG = "pref.PREF_NEW_SHIFTLOG";
@@ -334,6 +335,15 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(PREF_FORCE_LOCAL, lang);
     }
 
+    @Override
+    public void setUserId(int userId) {
+        SecurePreferences.getInstance().setInt(PREF_USERID, userId);
+    }
+
+
+    public int getUserId(){
+        return SecurePreferences.getInstance().getInt(PREF_USERID);
+    }
 
     public String getCurrentLanguageName() {
         return SecurePreferences.getInstance().getString(PREF_FORCE_LOCAL_NAME, DEFAULT_LANGUAGE_NAME_VALUE);

@@ -159,7 +159,7 @@ public class SimpleRequests {
                 if (response.isSuccessful()) {
                     if (callback != null) {
 
-                        callback.onGetVersionSuccess(response.body());
+                         callback.onGetVersionSuccess(response.body());
                     } else {
 
                         OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onResponse() callback is null");

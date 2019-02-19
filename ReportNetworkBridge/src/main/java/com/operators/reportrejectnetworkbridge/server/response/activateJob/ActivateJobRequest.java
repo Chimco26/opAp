@@ -21,6 +21,9 @@ public class ActivateJobRequest implements Parcelable {
     @SerializedName("WorkerID")
     @Expose
     private String workerID;
+    @SerializedName("EndSetup")
+    @Expose
+    private boolean isToEndSetup;
 
     public String getSessionID() {
         return sessionID;
@@ -54,6 +57,14 @@ public class ActivateJobRequest implements Parcelable {
         this.workerID = workerID;
     }
 
+    public boolean isToEndSetup() {
+        return isToEndSetup;
+    }
+
+    public void setToEndSetup(boolean toEndSetup) {
+        isToEndSetup = toEndSetup;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,16 +76,18 @@ public class ActivateJobRequest implements Parcelable {
         dest.writeValue(this.machineID);
         dest.writeValue(this.jobID);
         dest.writeString(this.workerID);
+        dest.writeByte(this.isToEndSetup ? (byte) 1 : (byte) 0);
     }
 
     public ActivateJobRequest() {
     }
 
-    public ActivateJobRequest(String sessionID, String machineID, String jobID, String workerID) {
+    public ActivateJobRequest(String sessionID, String machineID, String jobID, String workerID, boolean isToEndSetup) {
         this.sessionID = sessionID;
         this.machineID = machineID;
         this.jobID = jobID;
         this.workerID = workerID;
+        this.isToEndSetup = isToEndSetup;
     }
 
     protected ActivateJobRequest(Parcel in) {
@@ -82,6 +95,7 @@ public class ActivateJobRequest implements Parcelable {
         this.machineID = in.readString();
         this.jobID = in.readString();
         this.workerID = in.readString();
+        this.isToEndSetup = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<ActivateJobRequest> CREATOR = new Parcelable.Creator<ActivateJobRequest>() {

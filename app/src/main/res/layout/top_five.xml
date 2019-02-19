@@ -25,6 +25,17 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"/>
 
+    <!--top 5 list-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/top_five_recyclerView"
+        android:scrollbars="none"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+
+
     <LinearLayout
         android:id="@+id/row1_top_five_lil"
         android:visibility="gone"
@@ -207,7 +218,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:padding="15dp"
                     android:layout_gravity="center"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
@@ -218,7 +228,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:padding="15dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/minutes_long"
                     android:layout_gravity="center"
                     style="@style/ProximaNovaSemiBold"
@@ -239,7 +249,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:padding="15dp"
                     android:layout_gravity="center"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
@@ -269,7 +278,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:padding="15dp"
                     android:layout_gravity="center"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
@@ -280,7 +288,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:maxLines="1"
-                    android:padding="15dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/events"
                     android:layout_gravity="center"
                     style="@style/ProximaNovaSemiBold"
@@ -298,14 +306,6 @@
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"/>
     </LinearLayout>
-    <!--top 5 list-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/top_five_recyclerView"
-        android:scrollbars="none"
-        android:layout_margin="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

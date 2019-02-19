@@ -84,6 +84,12 @@ public class AllMachinesData {
     private int mCurrentStatusTimeMin;
     @SerializedName("RejectMesuaring")
     private String mRejectMesuaring;
+    @SerializedName("LastJobID")
+    private String lastJobId;
+
+    public String getLastJobId() {
+        return lastJobId;
+    }
 
     // TODO: 29/07/2018 worker sign in name + number
 

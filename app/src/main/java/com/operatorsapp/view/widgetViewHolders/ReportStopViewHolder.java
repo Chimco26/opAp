@@ -1,6 +1,7 @@
 package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -101,6 +102,12 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void initListener() {
         mBtn.setOnClickListener(this);
+        mNoDataFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     private int initPercentage(float currentValue, float target) {
