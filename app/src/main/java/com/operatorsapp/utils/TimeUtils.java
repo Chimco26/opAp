@@ -409,6 +409,17 @@ public class TimeUtils {
         return output;
     }
 
+    public static Long convertDateToMillisecond(String dateToConvert, String format) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        try {
+            Date date = simpleDateFormat.parse(dateToConvert);
+            return date.getTime();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
+
     public static Long convertDateToMillisecond(String dateToConvert) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
         try {
@@ -419,4 +430,5 @@ public class TimeUtils {
         }
         return 0L;
     }
+
 }

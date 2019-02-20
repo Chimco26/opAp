@@ -3,10 +3,15 @@ package com.example.common;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.google.gson.annotations.SerializedName;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
 
 public class Event extends DataSupport implements Parcelable {
 
@@ -64,6 +69,14 @@ public class Event extends DataSupport implements Parcelable {
     private boolean mChecked;
 
     private long mEventTimeInMillis;
+
+    private ArrayList<Notification> notifications;
+
+    private ArrayList<Reject> rejects;
+
+    private ArrayList<Inventory> inventories;
+
+
 
     public Event() {
     }
@@ -352,6 +365,9 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
         dest.writeString(this.color);
         dest.writeInt(this.type);
+        dest.writeTypedList(this.notifications);
+        dest.writeTypedList(this.rejects);
+        dest.writeTypedList(this.inventories);
     }
 
     protected Event(Parcel in) {
@@ -379,6 +395,9 @@ public class Event extends DataSupport implements Parcelable {
         this.mIsDismiss = in.readByte() != 0;
         this.color = in.readString();
         this.type = in.readInt();
+        this.notifications = in.createTypedArrayList(Notification.CREATOR);
+        this.rejects = in.createTypedArrayList(Reject.CREATOR);
+        this.inventories = in.createTypedArrayList(Inventory.CREATOR);
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -407,5 +426,29 @@ public class Event extends DataSupport implements Parcelable {
 
     public long getEventTimeInMillis() {
         return mEventTimeInMillis;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public ArrayList<Reject> getRejects() {
+        return rejects;
+    }
+
+    public void setRejects(ArrayList<Reject> rejects) {
+        this.rejects = rejects;
+    }
+
+    public ArrayList<Inventory> getInventories() {
+        return inventories;
+    }
+
+    public void setInventories(ArrayList<Inventory> inventories) {
+        this.inventories = inventories;
     }
 }

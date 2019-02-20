@@ -2,7 +2,7 @@ package com.operators.shiftloginfra;
 
 
 import com.example.common.Event;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 
 public interface ShiftLogNetworkBridgeInterface {

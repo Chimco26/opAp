@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.Notification;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
@@ -26,11 +28,7 @@ import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
-    private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
     private static final int PIXEL_FOR_MINUTE = 4;
-    private static final int PIXEL_FOR_BIG_MINUTE = 10;
-    private static final int NEW_EVENT_ID = 5555;
-    private final ArrayList<TechCallInfo> mTechs;
     private boolean mClosedState;
     private boolean mIsSelectionMode;
     private final OnStopClickListener mOnStopClickListener;
@@ -46,11 +44,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
 
         mEvents = events;
-//        updateList(events);
-
-        mTechs = PersistenceManager.getInstance().getCalledTechnician();
-
-//        updateList(events);
     }
 
 //    public void setEvents(ArrayList<Event> events) {
@@ -65,42 +58,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     public void setClosedState(boolean isSelectionMode) {
         mClosedState = isSelectionMode;
     }
-
-//
-//    private void updateList(ArrayList<Event> events) {
-//
-//        mEvents.clear();
-//
-//        for (int i = 0; i < events.size() - 1; i++) {
-//
-//            Event event = events.get(i);
-//            mEvents.add(event);
-//
-//            Long eventEndMilli = convertDateToMillisecond(event.getEventEndTime());
-//            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
-//
-//            if (eventEndMilli < eventStartMilli) {
-//
-//                Event newEvent = new Event();
-//                newEvent.setEventTime(event.getEventEndTime());
-//                newEvent.setEventEndTime(events.get(i + 1).getEventTime());
-//
-//                newEvent.setEventSubTitleLname("Working");
-//                newEvent.setColor("#1aa917");
-//                newEvent.setEventID(NEW_EVENT_ID);
-//
-//                long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
-//
-//                newEvent.setDuration(minute);
-//                mEvents.add(newEvent);
-//            }
-//
-//            if (i == events.size() - 2) {
-//                mEvents.add(events.get(i + 1));
-//            }
-//        }
-//    }
-
 
     @NonNull
     @Override
@@ -162,6 +119,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mEvent = mEvents.get(position);
 
             setViewHeight();
+            updateNotification();
 
             mLine.setBackgroundColor(Color.parseColor(mEvent.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
@@ -198,7 +156,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (mIsSelectionMode) {
                 mCheckContainer.setVisibility(View.VISIBLE);
 
-                if (mEvent.getEventID() != NEW_EVENT_ID) {
+                if (mEvent.getType() != 1) {
 
                     mCheckBox.setVisibility(View.VISIBLE);
                     mCheckBox.setChecked(mEvent.isChecked());
@@ -220,7 +178,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             ViewGroup.LayoutParams params = mView.getLayoutParams();
 
 //            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID || mEvent.getDuration() == 0) {
-            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID) {
+            if (mIsSelectionMode && mEvent.getType() == 1) {
                 params.height = 0;
             } else if ((int) mEvent.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
@@ -234,30 +192,114 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mView.setLayoutParams(params);
         }
 
-        private void updateTech() {
+        private void updateNotification() {
             if (mTechContainer.getChildCount() > 0) {
                 mTechContainer.removeAllViews();
             }
 
-            Long eventStartMilli = convertDateToMillisecond(mEvent.getEventTime());
-            Long eventEndMilli = convertDateToMillisecond(mEvent.getEventEndTime());
+            if (mEvent.getNotifications() != null) {
 
-            for (TechCallInfo techCallInfo : mTechs) {
-                if (techCallInfo.getmCallTime() > eventStartMilli && techCallInfo.getmCallTime() < eventEndMilli) {
-                    View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
-//                    view.findViewById(R.id.SCI_time).se
-                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
-                    if (height > mView.getHeight()) {
-                        view.setPadding(0, mView.getHeight() - view.getHeight(), 0, 0);
-                    } else {
-                        view.setPadding(0, (int) height, 0, 0);
-                    }
-
-                    mTechContainer.addView(view);
-
+                for (Notification notification : mEvent.getNotifications()) {
+                    setNotification(1, notification.getSentTime().substring(11, 16), notification.getText(), notification.getNotificationType());
                 }
             }
+//            for ( REJECTS : mEvent.getREJECTSs()) {
+//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
+//            }
+//            for (Notification notification : mEvent.getNotifications()) {
+//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
+//            }
+//            for (Notification notification : mEvent.getNotifications()) {
+//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
+//            }
+
+
+//                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
+//                    if (height > mView.getHeight()) {
+//                        view.setPadding(0, mView.getHeight() - view.getHeight(), 0, 0);
+//                    } else {
+//                        view.setPadding(0, (int) height, 0, 0);
+//                    }
+
+
+//                }
         }
+
+        private void setNotification(int type, String time, String details, int icon) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
+            TextView timeTV = view.findViewById(R.id.SCI_time);
+            TextView detailsTV = view.findViewById(R.id.SCI_details);
+            ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
+
+
+            switch (type) {
+                case 1:
+                    timeTV.setVisibility(View.VISIBLE);
+                    timeTV.setText(time);
+                    detailsTV.setText(details);
+                    setNotificationIcon(iconIV, icon);
+                    break;
+
+                case 2:
+                    timeTV.setVisibility(View.VISIBLE);
+                    timeTV.setText(time);
+                    detailsTV.setText(details);
+                    setNotificationIcon(iconIV, 11);
+                    break;
+                case 3:
+                    timeTV.setVisibility(View.GONE);
+                    timeTV.setText(time);
+                    detailsTV.setText(details);
+                    setNotificationIcon(iconIV, 12);
+                    break;
+
+                case 4:
+                    timeTV.setVisibility(View.GONE);
+                    timeTV.setText(time);
+                    detailsTV.setText(details);
+                    setNotificationIcon(iconIV, 13);
+                    break;
+
+                default:
+                    timeTV.setVisibility(View.GONE);
+                    detailsTV.setVisibility(View.GONE);
+                    iconIV.setVisibility(View.GONE);
+                    break;
+            }
+            mTechContainer.addView(view);
+
+        }
+
+
+        /**
+         * @param iconIV
+         * @param icon   the number of icon
+         *               1 - 9 service calls
+         *               case 10 message
+         *               case 11 production
+         *               case 12 rejects
+         */
+        private void setNotificationIcon(ImageView iconIV, int icon) {
+
+            switch (icon) {
+                case 1:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technicaian_black));
+                    break;
+
+                case 10:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
+                    break;
+
+                case 11:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
+                    break;
+
+                case 12:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
+                    break;
+            }
+        }
+
 
         @Override
         public void onClick(View view) {
@@ -265,7 +307,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             if (!mIsSelectionMode) {
 
-                if (mOnStopClickListener != null && mEvent.getEventID() != NEW_EVENT_ID) {
+                if (mOnStopClickListener != null && mEvent.getType() != 1) {
                     mIsSelectionMode = true;
                     mOnStopClickListener.onSelectMode(mEvent);
                     notifyDataSetChanged();
@@ -279,7 +321,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
             mEvent.setChecked(checked);
 
-            if (mOnStopClickListener != null && mEvent.getEventID() != NEW_EVENT_ID) {
+            if (mOnStopClickListener != null && mEvent.getType() != 1) {
                 mOnStopClickListener.onStopEventSelected(mEvent.getEventID(), checked);
             }
         }

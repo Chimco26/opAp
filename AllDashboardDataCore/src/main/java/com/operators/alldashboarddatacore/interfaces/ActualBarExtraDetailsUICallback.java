@@ -1,7 +1,7 @@
 package com.operators.alldashboarddatacore.interfaces;
 
 import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 
 public interface ActualBarExtraDetailsUICallback {
 

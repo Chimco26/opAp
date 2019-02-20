@@ -6,7 +6,7 @@ import com.operators.shiftloginfra.ActualBarExtraDetailsCallback;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInterface;
 import com.operators.shiftlognetworkbridge.server.ErrorObject;

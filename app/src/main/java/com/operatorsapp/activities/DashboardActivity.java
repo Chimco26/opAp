@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -83,8 +85,8 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
-import com.operators.shiftloginfra.model.Notification;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.Notification;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -155,6 +157,8 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 
@@ -980,7 +984,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                     events = updateList(events);
 
-                    addServiceCallsToEvents(events);
+
+                    addDetailsToEvents(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
                         dashboardUICallbackListener.onShiftLogDataReceived(events);
@@ -1017,21 +1022,87 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
-    private void addServiceCallsToEvents(ArrayList<Event> events) {
+    private void addDetailsToEvents(ArrayList<Event> events) {
         for (Event event : events) {
 
-            Long eventStart = convertDateToMillisecond(event.getEventTime());
-            Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
+            Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
 
-            for (Notification notification: mActualBarExtraResponse.getNotification()) {
+            addNotificationsToEvents(eventStart, eventEnd, event);
+            addRejectsToEvents(eventStart, eventEnd, event);
+            addInventoryToEvents(eventStart, eventEnd, event);
 
-                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
+        }
+    }
 
-                
+    private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event) {
 
+        ArrayList<Notification> notifications = mActualBarExtraResponse.getNotification();
+        if (notifications != null && notifications.size() > 0) {
 
+//            ArrayList<Notification> notificationArrayList = null;
+            ArrayList<Notification> notificationArrayList = new ArrayList<>();
+
+            for (Notification notification : notifications) {
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
+
+                if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
+
+//                    if (notificationArrayList == null) {
+//                        notificationArrayList = new ArrayList<>();
+//                    }
+                    notificationArrayList.add(notification);
+                }
             }
+            if (notificationArrayList != null) {
+                event.setNotifications(notificationArrayList);
+            }
+        }
+    }
 
+    private void addRejectsToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Reject> rejects = mActualBarExtraResponse.getRejects();
+        if (rejects != null && rejects.size() > 0) {
+
+            ArrayList<Reject> rejectArrayList = null;
+
+            for (Reject reject : rejects) {
+                Long rejectTime = convertDateToMillisecond(reject.getTime(), SQL_T_FORMAT);
+
+                if (eventStart <= rejectTime && rejectTime <= eventEnd) {
+                    if (rejectArrayList == null) {
+                        rejectArrayList = new ArrayList<>();
+                    }
+                    rejectArrayList.add(reject);
+                }
+            }
+            if (rejectArrayList != null) {
+                event.setRejects(rejectArrayList);
+            }
+        }
+    }
+
+    private void addInventoryToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Inventory> inventories = mActualBarExtraResponse.getInventory();
+        if (inventories != null && inventories.size() > 0) {
+
+            ArrayList<Inventory> inventoriesArrayList = null;
+
+            for (Inventory inventory : inventories) {
+                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SQL_T_FORMAT);
+
+                if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
+                    if (inventoriesArrayList == null) {
+                        inventoriesArrayList = new ArrayList<>();
+                    }
+                    inventoriesArrayList.add(inventory);
+                }
+            }
+            if (inventoriesArrayList != null) {
+                event.setInventories(inventoriesArrayList);
+            }
         }
     }
 
@@ -1063,11 +1134,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 newEvent.setColor("#1aa917");
 
 
-                long time= System.currentTimeMillis();
+                long time = System.currentTimeMillis();
                 newEvent.setEventID(event.getEventID() - 1);
                 newEvent.setType(1);
 
-                long minute = TimeUnit.MILLISECONDS.toMinutes( eventStartMilli - eventEndMilli);
+                long minute = TimeUnit.MILLISECONDS.toMinutes(eventStartMilli - eventEndMilli);
 
                 newEvent.setDuration(minute);
                 mEvents.add(newEvent);
@@ -1080,7 +1151,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         for (Event ev : mEvents) {
 
-        android.util.Log.i("Time Class ", " Time value in millisecinds " +ev.getEventTime() + " ; end " + ev.getEventEndTime() + "; duration : " + ev.getDuration() + "; Type" + ev.getType() + "; ID " + ev.getEventID());
+            android.util.Log.i("Time Class ", " Time value in millisecinds " + ev.getEventTime() + " ; end " + ev.getEventEndTime() + "; duration : " + ev.getDuration() + "; Type" + ev.getType() + "; ID " + ev.getEventID());
         }
         return mEvents;
     }

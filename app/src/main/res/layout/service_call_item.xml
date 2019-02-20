@@ -19,9 +19,15 @@
         android:src="@drawable/white"/>
 
     <ImageView
-        android:id="@+id/SCI_service_call"
+        android:id="@+id/SCI_service_call_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/service_done"/>
+
+    <TextView
+        android:id="@+id/SCI_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Send"/>
 
 </LinearLayout>
