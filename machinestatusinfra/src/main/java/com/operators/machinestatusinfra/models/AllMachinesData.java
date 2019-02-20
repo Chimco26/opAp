@@ -86,6 +86,10 @@ public class AllMachinesData {
     private String mRejectMesuaring;
     @SerializedName("LastJobID")
     private String lastJobId;
+    @SerializedName("LastERPJobID")
+    private String LastErpJobId;
+    @SerializedName("LastProductName")
+    private String lastProductName;
 
     public String getLastJobId() {
         return lastJobId;
@@ -93,6 +97,14 @@ public class AllMachinesData {
 
     // TODO: 29/07/2018 worker sign in name + number
 
+
+    public String getLastErpJobId() {
+        return LastErpJobId;
+    }
+
+    public String getLastProductName() {
+        return lastProductName;
+    }
 
     public String getRejectMesuaring() {
         return mRejectMesuaring;

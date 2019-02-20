@@ -155,7 +155,10 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -1022,11 +1025,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             Long eventStart = convertDateToMillisecond(event.getEventTime());
             Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
 
-            for (Notification notification: mActualBarExtraResponse.getNotification()) {
+            for (Notification notification : mActualBarExtraResponse.getNotification()) {
 
                 Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
-
-                
 
 
             }
@@ -1828,6 +1829,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
+        intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
+        intent.putExtra(EXTRA_LAST_PRODUCT_NAME, mCurrentMachineStatus.getAllMachinesData().get(0).getLastProductName());
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+            intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+        }
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
 

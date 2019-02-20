@@ -294,6 +294,15 @@
     <string name="target_reached">היעד הגיע!</string>
     <string name="setup_rejects_dialog_text">על ההתקנה שהפקת X דוחה. האם אתה רוצה לדווח על אותם יחידות טובות?</string>
     <string name="setup_good_units_dialog_text">על ההתקנה שהפקת X יחידות טובות. האם אתה רוצה לדווח על אותם כמו דוחה?</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">האם ברצונך להפעיל את העבודה האחרונה שבה אתה עובד?</string>
+    <string name="no">לא</string>
+    <string name="yes">כן</string>
+    <string name="do_you_need_to_end_setup_before">האם אתה צריך לעשות להגדיר לפני שמתחילים לייצר על עבודה זו שוב?</string>
+    <string name="working">עובד</string>
+    <string name="timeline">ציר זמן</string>
+    <string name="see_pending_jobs">ראה עבודות ממתינות</string>
+    <string name="time_left_to_current_job">הזמן נשאר לעבודה הנוכחית</string>
+
 
 
 </resources>
