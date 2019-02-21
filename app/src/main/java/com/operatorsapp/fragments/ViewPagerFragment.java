@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
@@ -195,7 +196,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 //        if (mSwipeRefresh.isRefreshing()){
 //            mSwipeRefresh.setRefreshing(false);
 //        }

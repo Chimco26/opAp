@@ -26,7 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
-import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -84,6 +85,7 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -154,10 +156,17 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+<<<<<<< HEAD
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
+=======
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
+>>>>>>> 9fab79ff15b156e413312619056a83a866c8e396
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
+import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -1016,6 +1025,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
+<<<<<<< HEAD
+    private void addServiceCallsToEvents(ArrayList<Event> events) {
+        for (Event event : events) {
+
+            Long eventStart = convertDateToMillisecond(event.getEventTime());
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
+
+            for (Notification notification : mActualBarExtraResponse.getNotification()) {
+
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
+
+
+            }
+
+        }
+    }
+
+=======
+>>>>>>> 9fab79ff15b156e413312619056a83a866c8e396
     ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback = new ReportFieldsForMachineUICallback() {
         @Override
         public void onReportFieldsReceivedSuccessfully(ReportFieldsForMachine reportFieldsForMachine) {

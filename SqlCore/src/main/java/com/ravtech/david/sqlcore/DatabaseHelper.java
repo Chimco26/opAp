@@ -9,7 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.Reject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,11 +30,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
+
     //Database instance
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -65,6 +72,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TIME_MILLIS = "meventtimeinmillis";
     public static final String KEY_COLOR = "color";
     public static final String KEY_TYPE = "type";
+    private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_INVENTORY = "inventories";
+    private static final String KEY_REJECTS = "rejects";
 
 
     // Table Create Statements
@@ -98,7 +108,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_CREATED_AT + " DATETIME," +
             KEY_TIME_MILLIS + " BIGINT," +
             KEY_TYPE + " BIGINT," +
-            KEY_COLOR + " TEXT" +
+            KEY_COLOR + " TEXT," +
+            KEY_NOTIFICATIONS + " TEXT," +
+            KEY_REJECTS + " TEXT," +
+            KEY_INVENTORY + " TEXT" +
             ")";
 
 
@@ -414,6 +427,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IS_DISMISS, event.isIsDismiss());
         values.put(KEY_COLOR, event.getColor());
         values.put(KEY_TYPE, event.getType());
+        values.put(KEY_NOTIFICATIONS, event.getNotificationsJson());
+        values.put(KEY_REJECTS, event.getRejectsJson());
+        values.put(KEY_INVENTORY, event.getInventoriesJson());
 
         return values;
     }
@@ -437,6 +453,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Event convertRawToEvent(Cursor c) {
 
         Event event = new Event();
+        Gson mGson = new Gson();
 
         if (c != null) {
 
@@ -465,6 +482,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setIsDismiss(c.getInt(c.getColumnIndex(KEY_IS_DISMISS)) > 0);
             event.setColor(c.getString(c.getColumnIndex(KEY_COLOR)));
             event.setType(c.getInt(c.getColumnIndex(KEY_TYPE)));
+            event.setNotificationsJson(c.getString(c.getColumnIndex(KEY_NOTIFICATIONS)));
+            event.setRejectsJson(c.getString(c.getColumnIndex(KEY_REJECTS)));
+            event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
 
         }
         return event;

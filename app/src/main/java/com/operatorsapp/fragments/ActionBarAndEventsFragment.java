@@ -63,6 +63,9 @@ import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -116,6 +119,7 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
+
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -129,6 +133,7 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedInputStream;
@@ -159,13 +164,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks{
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -274,6 +281,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
+    private ActualBarExtraResponse mActualBarExtraResponse;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -415,7 +423,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
-                }else {
+                } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
                     if (!isShowAlarms) {
@@ -743,7 +751,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                     tvBody.setText(notification.getmBody(getActivity()));
                 }
-
 
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
@@ -1308,7 +1315,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void getFile() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
             //check if app has permission to write to the external storage.
             if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1323,7 +1330,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         } else {
-            Toast.makeText(getActivity(),"SD Card not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "SD Card not found", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -1348,7 +1355,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Toast.makeText(getActivity(),"Permission has been denied", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
 
     }
 
@@ -1993,7 +2000,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notification[0] != null) {
 
             String opId = pm.getOperatorId();
-            if (opId == null){
+            if (opId == null) {
                 opId = "";
             }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
@@ -2385,7 +2392,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+
+        mActualBarExtraResponse = actualBarExtraResponse;
 
         int deletedEvents = clearOver24HShift();
 
@@ -2426,6 +2435,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
+                    addDetailsToEvents(event);
+//                    ArrayList<Reject> rejects = new ArrayList<Reject>();
+//                    Reject reject = new Reject();
+//                    reject.setEName("a");
+//                    rejects.add(reject);
+//                    event.setRejects(rejects);
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2546,6 +2561,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
+                    addDetailsToEvents(workingEvent);
+//                    ArrayList<Reject> rejects = new ArrayList<Reject>();
+//                    Reject reject = new Reject();
+//                    reject.setEName("a");
+//                    rejects.add(reject);
+//                    event.setRejects(rejects);
                     workingEvent.save();
                 }
             }
@@ -2553,6 +2574,99 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         return events;
+    }
+
+    private void addDetailsToEvents(Event event) {
+
+        Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+        Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+
+        addNotificationsToEvents(eventStart, eventEnd, event);
+        addRejectsToEvents(eventStart, eventEnd, event);
+        addInventoryToEvents(eventStart, eventEnd, event);
+
+    }
+
+    private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = mActualBarExtraResponse.getNotification();
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
+        if (notifications != null && notifications.size() > 0) {
+
+            ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = null;
+
+
+            for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
+
+                if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
+
+                    if (notificationArrayList == null) {
+                        notificationArrayList = new ArrayList<>();
+                    }
+
+                    notificationArrayList.add(notification);
+                    toDelete.add(notification);
+                }
+            }
+            if (notificationArrayList != null) {
+                event.setNotifications(notificationArrayList);
+                notifications.removeAll(toDelete);
+            }
+        }
+    }
+
+    private void addRejectsToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Reject> rejects = mActualBarExtraResponse.getRejects();
+        ArrayList<Reject> toDelete = new ArrayList<>();
+        if (rejects != null && rejects.size() > 0) {
+
+            ArrayList<Reject> rejectArrayList = null;
+
+            for (Reject reject : rejects) {
+                Long rejectTime = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
+
+                if (eventStart <= rejectTime && rejectTime <= eventEnd) {
+                    if (rejectArrayList == null) {
+                        rejectArrayList = new ArrayList<>();
+                    }
+                    rejectArrayList.add(reject);
+                    toDelete.add(reject);
+                }
+            }
+            if (rejectArrayList != null) {
+                event.setRejects(rejectArrayList);
+                rejects.removeAll(toDelete);
+            }
+        }
+    }
+
+    private void addInventoryToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Inventory> inventories = mActualBarExtraResponse.getInventory();
+        ArrayList<Inventory> toDelete = new ArrayList<>();
+
+        if (inventories != null && inventories.size() > 0) {
+
+            ArrayList<Inventory> inventoriesArrayList = null;
+
+            for (Inventory inventory : inventories) {
+                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SQL_T_FORMAT);
+
+                if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
+                    if (inventoriesArrayList == null) {
+                        inventoriesArrayList = new ArrayList<>();
+                    }
+                    inventoriesArrayList.add(inventory);
+                    toDelete.add(inventory);
+                }
+            }
+            if (inventoriesArrayList != null) {
+                event.setInventories(inventoriesArrayList);
+                inventories.removeAll(toDelete);
+            }
+        }
     }
 
     private void initEventRecycler(View view) {
@@ -2930,7 +3044,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mShowAlarmCheckBox.setVisibility(View.VISIBLE);
         }
 
-        if(mEventsAdapter != null) {
+        if (mEventsAdapter != null) {
             mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
             mEventsAdapter.notifyDataSetChanged();
         }

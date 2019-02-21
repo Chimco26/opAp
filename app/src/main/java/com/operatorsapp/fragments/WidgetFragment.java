@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -378,7 +379,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
     }
 
