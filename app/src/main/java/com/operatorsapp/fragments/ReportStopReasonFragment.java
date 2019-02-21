@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -42,7 +41,6 @@ import com.operatorsapp.adapters.StopReasonsAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.fragments.interfaces.OnStopReasonSelectedCallbackListener;
-import com.operatorsapp.interfaces.CroutonRootProvider;
 import com.operatorsapp.interfaces.ReportFieldsFragmentCallbackListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
@@ -77,7 +75,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private ReportCore mReportCore;
     private ShowDashboardCroutonListener mDashboardCroutonListener;
     private SubReasons mSelectedSubreason;
-    private ArrayList<Long> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private int mSelectedPosition;
     private int mFlavorSpanDif;
     private Switch mSwitch;
@@ -293,7 +291,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
     }
 
-    public void setSelectedEvents(ArrayList<Long> selectedEvents) {
+    public void setSelectedEvents(ArrayList<Float> selectedEvents) {
 
         mSelectedEvents = selectedEvents;
     }
@@ -323,7 +321,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-            eventsId[i] = mSelectedEvents.get(i);
+            eventsId[i] = mSelectedEvents.get(i).intValue();
 
 //            SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
 //                    mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
@@ -337,7 +335,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             for (int i = 0; i < mSelectedEvents.size(); i++) {
 
                 mReportCore.sendStopReport(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId()
-                        , mSelectedSubreason.getId(), mSelectedEvents.get(i), mJobId);
+                        , mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJobId);
 
             }
 
@@ -368,7 +366,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
                 for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-                    SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
+                    SendBroadcast.sendReason(getContext(), mSelectedEvents.get(i).intValue(), mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
                             mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName(),
                             mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getLName(),
                             mSelectedSubreason.getEName(), mSelectedSubreason.getLName());

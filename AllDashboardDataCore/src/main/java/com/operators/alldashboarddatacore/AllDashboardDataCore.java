@@ -329,7 +329,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
         String endTime = getTimeForRequest(new Date(), dateFormat);
         mShiftLogNetworkBridgeInterface.GetActualBarExtraDetails(mShiftLogPersistenceManagerInterface.getSiteUrl(),
-                mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
+                mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
             @Override
             public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
                 if (mActualBarExtraUICallback != null) {

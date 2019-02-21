@@ -411,11 +411,13 @@ public class TimeUtils {
 
     public static Long convertDateToMillisecond(String dateToConvert, String format) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-        try {
-            Date date = simpleDateFormat.parse(dateToConvert);
-            return date.getTime();
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
+        if (dateToConvert != null && dateToConvert.length() > 0) {
+            try {
+                Date date = simpleDateFormat.parse(dateToConvert);
+                return date.getTime();
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
         }
         return 0L;
     }
@@ -431,4 +433,16 @@ public class TimeUtils {
         return 0L;
     }
 
+
+    public static String convertMillisecondDateTo(Long millis) {
+
+        Date date = new Date(millis);
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
+
+
+        return format.format(date);
+
+
+    }
 }

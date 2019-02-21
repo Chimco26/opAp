@@ -351,6 +351,7 @@
     <string name="yes">Yes</string>
     <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
     <string name="timeline">Timeline</string>
+    <string name="working">Working</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

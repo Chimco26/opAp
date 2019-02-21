@@ -116,9 +116,9 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
     }
 
     @Override
-    public void GetActualBarExtraDetails(String siteUrl, String sessionId, String startTime, String endTime, final ActualBarExtraDetailsCallback<ActualBarExtraResponse> actualBarExtraResponseActualBarExtraDetailsCallback, final int totalRetries, int specificRequestTimeout) {
+    public void GetActualBarExtraDetails(String siteUrl, String sessionId, String startTime, String endTime, String machineId, final ActualBarExtraDetailsCallback<ActualBarExtraResponse> actualBarExtraResponseActualBarExtraDetailsCallback, final int totalRetries, int specificRequestTimeout) {
 //        startTime = "2019-02-14 14:00:00.000";
-        ActualBarExtraDetailsRequest actualBarExtraDetailsRequest = new ActualBarExtraDetailsRequest(sessionId, startTime, endTime);
+        ActualBarExtraDetailsRequest actualBarExtraDetailsRequest = new ActualBarExtraDetailsRequest(sessionId, startTime, endTime, machineId);
         Call<ActualBarExtraResponse> call = mShiftLogNetworkManagerInterface.getActualBarExtraDetails(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getActualBarExtra(actualBarExtraDetailsRequest);
         call.enqueue(new Callback<ActualBarExtraResponse>() {
 

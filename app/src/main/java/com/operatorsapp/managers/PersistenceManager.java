@@ -95,7 +95,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static PersistenceManager msInstance;
     private Gson mGson;
     @SuppressLint("UseSparseArrays")
-    public HashMap<Long, Event> items = new HashMap<>();
+    public HashMap<Float, Event> items = new HashMap<>();
 
     public static void initInstance(Context context) {
         if (msInstance == null) {

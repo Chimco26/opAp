@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 12;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -72,16 +72,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TIME_MILLIS = "meventtimeinmillis";
     public static final String KEY_COLOR = "color";
     public static final String KEY_TYPE = "type";
-    private static final String KEY_NOTIFICATIONS = "keyNotifications";
-    private static final String KEY_INVENTORY = "keyInventory";
-    private static final String KEY_REJECTS = "keyRejects";
+    private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_INVENTORY = "inventories";
+    private static final String KEY_REJECTS = "rejects";
 
 
     // Table Create Statements
     // Event table create statement
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
-            KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
+            KEY_EVENT_ID + " FLOAT PRIMARY KEY," +
             KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
@@ -108,10 +108,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_CREATED_AT + " DATETIME," +
             KEY_TIME_MILLIS + " BIGINT," +
             KEY_TYPE + " BIGINT," +
-            KEY_COLOR + " TEXT" +
-            KEY_NOTIFICATIONS + "TEXT" +
-            KEY_REJECTS + "TEXT" +
-            KEY_INVENTORY+ "TEXT" +
+            KEY_COLOR + " TEXT," +
+            KEY_NOTIFICATIONS + " TEXT," +
+            KEY_REJECTS + " TEXT," +
+            KEY_INVENTORY + " TEXT" +
             ")";
 
 
@@ -272,6 +272,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
@@ -285,11 +297,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationAndStartTime(int minEventDuration, String newEventsStartTime) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
+                KEY_TIME + " >= " + newEventsStartTime + " AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TIME + " >= " + newEventsStartTime + " AND "
+                + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
     public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND " +
                 KEY_DURATION + " >= " + minEventDuration +
-                ") OR (" + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -332,7 +372,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deleting a event
      */
-    public void deleteEvent(long event_id) {
+    public void deleteEvent(float event_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -388,14 +428,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IS_DISMISS, event.isIsDismiss());
         values.put(KEY_COLOR, event.getColor());
         values.put(KEY_TYPE, event.getType());
-
-        String notificationString = new Gson().toJson(event.getNotifications());
-        values.put(KEY_NOTIFICATIONS, notificationString);
-
-//        String rejectsString = new Gson().toJson(event.getRejects());
-//        values.put(KEY_REJECTS, rejectsString);
-//        String inventoryString = new Gson().toJson(event.getInventories());
-//        values.put(KEY_INVENTORY, inventoryString);
+        values.put(KEY_NOTIFICATIONS, event.getNotificationsJson());
+        values.put(KEY_REJECTS, event.getRejectsJson());
+        values.put(KEY_INVENTORY, event.getInventoriesJson());
 
         return values;
     }
@@ -423,7 +458,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (c != null) {
 
-            event.setEventID(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
+            event.setEventID(c.getFloat(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
             event.setEventTime(c.getString(c.getColumnIndex(KEY_TIME)));
             event.setEventTimeInMillis(c.getLong(c.getColumnIndex(KEY_TIME_MILLIS)));
@@ -448,19 +483,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setIsDismiss(c.getInt(c.getColumnIndex(KEY_IS_DISMISS)) > 0);
             event.setColor(c.getString(c.getColumnIndex(KEY_COLOR)));
             event.setType(c.getInt(c.getColumnIndex(KEY_TYPE)));
-
-            String notificationString = c.getString(c.getColumnIndex(KEY_NOTIFICATIONS));
-            event.setNotifications(mGson.fromJson(notificationString, new TypeToken<ArrayList<Notification>>() {
-            }.getType()));
-
-//            String rejectString = c.getString(c.getColumnIndex(KEY_REJECTS));
-//            event.setRejects(mGson.fromJson(rejectString, new TypeToken<ArrayList<Reject>>() {
-//            }.getType()));
-
-//            String inventoryString = c.getString(c.getColumnIndex(KEY_INVENTORY));
-//            event.setInventories(mGson.fromJson(inventoryString, new TypeToken<ArrayList<Inventory>>() {
-//            }.getType()));
-
+            event.setNotificationsJson(c.getString(c.getColumnIndex(KEY_NOTIFICATIONS)));
+            event.setRejectsJson(c.getString(c.getColumnIndex(KEY_REJECTS)));
+            event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
 
         }
         return event;

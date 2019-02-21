@@ -16,15 +16,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
 
 import java.util.ArrayList;
-
-import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
@@ -41,8 +42,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
         mClosedState = closedState;
-
-
         mEvents = events;
     }
 
@@ -90,11 +89,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private RelativeLayout mRelative;
         private CheckBox mCheckBox;
         private Event mEvent;
-        //        private ImageView mTechCall;
         private RelativeLayout mTechContainer;
-
-//        private Event mEvent;
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -129,34 +124,32 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (mEvent.getEventTime() != null && mEvent.getEventTime().length() > 0) {
                 startTime = mEvent.getEventTime().substring(10, 16);
             }
-            if (mEvent.getEventEndTime() != null && mEvent.getEventEndTime().length() > 0) {
-                startTime += "; " + mEvent.getEventEndTime().substring(10, 16) + " id; " + mEvent.getEventID();
-            }
-            mTime.setText(startTime);
 
-//            if (!mEvent.getColor().equals("#1aa917")) {
+            mTime.setText(startTime);
 
             mText.setVisibility(View.VISIBLE);
 
-            String text = mEvent.getDuration() + "m " + mEvent.getSubtitleLname();
+            long duration = mEvent.getDuration();
+            if (duration == 0) {
+                duration = 1;
+            }
+
+            String text = duration + "m " + mEvent.getSubtitleLname();
             if (!mClosedState && text.length() > 12) {
                 mText.setText(String.format("%s...", text.substring(0, 12)));
 
             } else {
-                mText.setText(text + "; " + startTime);
+                mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
             textBackground.setColor(Color.parseColor(mEvent.getColor()));
 
-//            } else {
-//                mText.setVisibility(View.GONE);
-//            }
-
 
             if (mIsSelectionMode) {
                 mCheckContainer.setVisibility(View.VISIBLE);
+                mTechContainer.setVisibility(View.GONE);
 
-                if (mEvent.getType() != 1) {
+                if (mEvent.getType() != 1 || mEvent.getEventGroupID() != 20) {
 
                     mCheckBox.setVisibility(View.VISIBLE);
                     mCheckBox.setChecked(mEvent.isChecked());
@@ -167,28 +160,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 mCheckContainer.setVisibility(View.GONE);
                 mCheckBox.setVisibility(View.GONE);
-
+                mTechContainer.setVisibility(View.VISIBLE);
             }
 
-//            updateTech();
         }
 
         private void setViewHeight() {
-
             ViewGroup.LayoutParams params = mView.getLayoutParams();
 
-//            if (mIsSelectionMode && mEvent.getEventID() == NEW_EVENT_ID || mEvent.getDuration() == 0) {
             if (mIsSelectionMode && mEvent.getType() == 1) {
                 params.height = 0;
             } else if ((int) mEvent.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
             } else if (mEvent.getDuration() > 4) {
                 params.height = (int) mEvent.getDuration() * PIXEL_FOR_MINUTE;
-//            } else if (mEvent.getDuration() > 0){
             } else {
                 params.height = 5 * PIXEL_FOR_MINUTE;
             }
-            params.height = 20;
             mView.setLayoutParams(params);
         }
 
@@ -197,22 +185,27 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mTechContainer.removeAllViews();
             }
 
-            if (mEvent.getNotifications() != null) {
 
+            if (mEvent.getNotifications() != null && mEvent.getNotifications().size() > 0) {
                 for (Notification notification : mEvent.getNotifications()) {
-                    setNotification(1, notification.getSentTime().substring(11, 16), notification.getText(), notification.getNotificationType());
+                    setNotification(2, notification.getSentTime().substring(11, 16), notification.getText(), notification.getNotificationType());
                 }
             }
-//            for ( REJECTS : mEvent.getREJECTSs()) {
-//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
-//            }
-//            for (Notification notification : mEvent.getNotifications()) {
-//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
-//            }
-//            for (Notification notification : mEvent.getNotifications()) {
-//            setNotification(1, notification.startTime(), notification.details(), notification.getType());
-//            }
 
+            if (mEvent.getRejects() != null && mEvent.getRejects().size() > 0) {
+                for (Reject reject : mEvent.getRejects()) {
+
+                    String name = OperatorApplication.isEnglishLang() ? reject.getEName() : reject.getLName();
+
+                    setNotification(3, reject.getTime().substring(11, 16), reject.getAmount() + " " + name, 0);
+                }
+            }
+
+            if (mEvent.getInventories() != null && mEvent.getInventories().size() > 0) {
+                for (Inventory inventory : mEvent.getInventories()) {
+                    setNotification(1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
+                }
+            }
 
 //                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
 //                    if (height > mView.getHeight()) {
@@ -231,43 +224,39 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             TextView detailsTV = view.findViewById(R.id.SCI_details);
             ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
 
+            if (mEvent.getDuration() <= 5) {
+                timeTV.setVisibility(View.GONE);
+            } else {
+                timeTV.setVisibility(View.VISIBLE);
+            }
 
             switch (type) {
                 case 1:
-                    timeTV.setVisibility(View.VISIBLE);
+                    timeTV.setText(time);
+                    detailsTV.setText(details);
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
+                    break;
+
+                case 2:
                     timeTV.setText(time);
                     detailsTV.setText(details);
                     setNotificationIcon(iconIV, icon);
                     break;
 
-                case 2:
-                    timeTV.setVisibility(View.VISIBLE);
-                    timeTV.setText(time);
-                    detailsTV.setText(details);
-                    setNotificationIcon(iconIV, 11);
-                    break;
                 case 3:
-                    timeTV.setVisibility(View.GONE);
                     timeTV.setText(time);
                     detailsTV.setText(details);
-                    setNotificationIcon(iconIV, 12);
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
                     break;
 
-                case 4:
-                    timeTV.setVisibility(View.GONE);
-                    timeTV.setText(time);
-                    detailsTV.setText(details);
-                    setNotificationIcon(iconIV, 13);
-                    break;
 
-                default:
-                    timeTV.setVisibility(View.GONE);
-                    detailsTV.setVisibility(View.GONE);
-                    iconIV.setVisibility(View.GONE);
-                    break;
+//                default:
+//                    timeTV.setVisibility(View.GONE);
+//                    detailsTV.setVisibility(View.GONE);
+//                    iconIV.setVisibility(View.GONE);
+//                    break;
             }
             mTechContainer.addView(view);
-
         }
 
 
@@ -283,19 +272,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             switch (icon) {
                 case 1:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technicaian_black));
-                    break;
-
-                case 10:
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
                     break;
-
-                case 11:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
+                case 2:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technicaian_black));
+                    break;
+                case 3:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.called_black));
+                    break;
+                case 4:
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_declined_black));
                     break;
 
-                case 12:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
+                default:
+                    iconIV.setImageDrawable(null);
                     break;
             }
         }
@@ -307,7 +297,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             if (!mIsSelectionMode) {
 
-                if (mOnStopClickListener != null && mEvent.getType() != 1) {
+                if (mOnStopClickListener != null && mEvent.getType() != 1 && mEvent.getEventGroupID() != 20) {
                     mIsSelectionMode = true;
                     mOnStopClickListener.onSelectMode(mEvent);
                     notifyDataSetChanged();
@@ -326,6 +316,5 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
         }
     }
-
 
 }

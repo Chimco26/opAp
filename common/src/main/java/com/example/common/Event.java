@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
 import com.example.common.actualBarExtraResponse.Reject;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
@@ -42,7 +44,7 @@ public class Event extends DataSupport implements Parcelable {
     private String mEventGroupEname;
     @SerializedName("EventID")
     @Column(unique = true)
-    private long mEventID;
+    private float mEventID;
     @SerializedName("AlarmDismissed")
     private boolean mAlarmDismissed;
     @SerializedName("AlarmHValue")
@@ -70,12 +72,11 @@ public class Event extends DataSupport implements Parcelable {
 
     private long mEventTimeInMillis;
 
-    private ArrayList<Notification> notifications;
+    private String notifications;
 
-    private ArrayList<Reject> rejects;
+    private String rejects;
 
-    private ArrayList<Inventory> inventories;
-
+    private String inventories;
 
 
     public Event() {
@@ -88,7 +89,7 @@ public class Event extends DataSupport implements Parcelable {
     }
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
-                 String endTime, int groupId, long id, int priority, String groupEname, String groupLname, int duration,
+                 String endTime, int groupId, float id, int priority, String groupEname, String groupLname, int duration,
                  boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color, int type) {
 
         mEventTitle = title;
@@ -197,7 +198,7 @@ public class Event extends DataSupport implements Parcelable {
         return mEventGroupEname;
     }
 
-    public long getEventID() {
+    public float getEventID() {
         return mEventID;
     }
 
@@ -281,7 +282,7 @@ public class Event extends DataSupport implements Parcelable {
         mEventGroupLname = eventGroupLname;
     }
 
-    public void setEventID(long eventID) {
+    public void setEventID(float eventID) {
         mEventID = eventID;
     }
 
@@ -353,7 +354,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeInt(this.mEventGroupID);
         dest.writeString(this.mEventGroupLname);
         dest.writeString(this.mEventGroupEname);
-        dest.writeLong(this.mEventID);
+        dest.writeFloat(this.mEventID);
         dest.writeByte(this.mAlarmDismissed ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.mAlarmHValue);
         dest.writeFloat(this.mAlarmLValue);
@@ -365,9 +366,9 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
         dest.writeString(this.color);
         dest.writeInt(this.type);
-        dest.writeTypedList(this.notifications);
-        dest.writeTypedList(this.rejects);
-        dest.writeTypedList(this.inventories);
+        dest.writeString(this.notifications);
+        dest.writeString(this.rejects);
+        dest.writeString(this.inventories);
     }
 
     protected Event(Parcel in) {
@@ -383,7 +384,7 @@ public class Event extends DataSupport implements Parcelable {
         this.mEventGroupID = in.readInt();
         this.mEventGroupLname = in.readString();
         this.mEventGroupEname = in.readString();
-        this.mEventID = in.readLong();
+        this.mEventID = in.readFloat();
         this.mAlarmDismissed = in.readByte() != 0;
         this.mAlarmHValue = in.readFloat();
         this.mAlarmLValue = in.readFloat();
@@ -395,9 +396,9 @@ public class Event extends DataSupport implements Parcelable {
         this.mIsDismiss = in.readByte() != 0;
         this.color = in.readString();
         this.type = in.readInt();
-        this.notifications = in.createTypedArrayList(Notification.CREATOR);
-        this.rejects = in.createTypedArrayList(Reject.CREATOR);
-        this.inventories = in.createTypedArrayList(Inventory.CREATOR);
+        this.notifications = in.readString();
+        this.rejects = in.readString();
+        this.inventories = in.readString();
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -429,26 +430,53 @@ public class Event extends DataSupport implements Parcelable {
     }
 
     public ArrayList<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(ArrayList<Notification> notifications) {
-        this.notifications = notifications;
+        return new Gson().fromJson(notifications, new TypeToken<ArrayList<Notification>>() {
+        }.getType());
     }
 
     public ArrayList<Reject> getRejects() {
-        return rejects;
-    }
-
-    public void setRejects(ArrayList<Reject> rejects) {
-        this.rejects = rejects;
+        return new Gson().fromJson(rejects, new TypeToken<ArrayList<Reject>>() {
+        }.getType());
     }
 
     public ArrayList<Inventory> getInventories() {
+        return new Gson().fromJson(inventories, new TypeToken<ArrayList<Inventory>>() {
+        }.getType());
+    }
+
+    public String getNotificationsJson() {
+        return notifications;
+    }
+
+    public String getRejectsJson() {
+        return rejects;
+    }
+
+    public String getInventoriesJson() {
         return inventories;
     }
 
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = new Gson().toJson(notifications);
+    }
+
+    public void setRejects(ArrayList<Reject> rejects) {
+        this.rejects = new Gson().toJson(rejects);
+    }
+
     public void setInventories(ArrayList<Inventory> inventories) {
+        this.inventories = new Gson().toJson(inventories);
+    }
+
+    public void setNotificationsJson(String notifications) {
+        this.notifications = notifications;
+    }
+
+    public void setRejectsJson(String rejects) {
+        this.rejects = rejects;
+    }
+
+    public void setInventoriesJson(String inventories) {
         this.inventories = inventories;
     }
 }
