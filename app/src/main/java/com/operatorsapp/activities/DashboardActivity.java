@@ -492,6 +492,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
                         setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                         setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                        setFilterWarningText(true);
                     }
                 }
             }
@@ -759,8 +760,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-//                    setFilterWarningText(true);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                    setFilterWarningText(true);
                 }
 
             }

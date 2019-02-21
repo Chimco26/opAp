@@ -273,6 +273,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private File outputFile;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
+    private boolean mIsTimeLine = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -409,6 +410,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsTimeLine = isChecked;
                 if (isChecked){
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
@@ -416,7 +418,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
-                    mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                    if (!isShowAlarms) {
+                        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -594,11 +598,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
-         if (isShowAlarms) {
+//         if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-        } else {
-            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-        }
+//        } else {
+//            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+//        }
         return cursor;
     }
 
@@ -2442,7 +2446,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             mNoNotificationsText.setVisibility(View.GONE);
 //todo request only new events from sql database
-            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration())));
+            updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
             PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
@@ -2922,7 +2926,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
-        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+        if (!mIsTimeLine) {
+            mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+        }
 
         if(mEventsAdapter != null) {
             mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
