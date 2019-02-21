@@ -423,11 +423,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
+                    if (mEventsAdapter != null){
+                        mEventsAdapter.notifyDataSetChanged();
+                    }
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
-                    if (!isShowAlarms) {
+                    if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                    }
+                    if (mShiftLogAdapter != null && mIsSelectionMode){
+                        Cursor cursor;
+                        cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+                        setShiftLogAdapter(cursor);
                     }
                 }
             }
@@ -2318,7 +2326,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void startSelectMode(Event event) {
         if (event == null) {
-            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(getCursorByType());
+            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
             if (events.size() > 0) {
                 event = events.get(events.size() - 1);
             }
@@ -2332,7 +2340,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
         setShiftLogAdapter(cursor);
-//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+
+        initEvents(mDatabaseHelper.getListFromCursor(cursor));
+
         onStopEventSelected(event.getEventID(), true);
 
         mShowAlarmCheckBox.setVisibility(View.GONE);
@@ -2436,11 +2446,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
                     addDetailsToEvents(event);
-//                    ArrayList<Reject> rejects = new ArrayList<Reject>();
-//                    Reject reject = new Reject();
-//                    reject.setEName("a");
-//                    rejects.add(reject);
-//                    event.setRejects(rejects);
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2460,8 +2465,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
             mNoNotificationsText.setVisibility(View.GONE);
-//todo request only new events from sql database
-            updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+
+            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())));
 
             PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
@@ -2469,15 +2474,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (mIsSelectionMode) {
 
                 cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+                initEvents(mDatabaseHelper.getListFromCursor(cursor));
 
             } else {
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
                 cursor = getCursorByType();
             }
             setShiftLogAdapter(cursor);
-
-            initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2686,7 +2690,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events);
+        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 
         mEventsRecycler.setAdapter(mEventsAdapter);
 
@@ -3037,6 +3041,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = getCursorByType();
         setShiftLogAdapter(cursor);
+        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
@@ -3046,7 +3051,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mEventsAdapter != null) {
             mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
-            mEventsAdapter.notifyDataSetChanged();
         }
     }
 
@@ -3056,6 +3060,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogAdapter != null) {
 
             mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
+        }
+
+        if (mEventsAdapter != null) {
+
+            mEventsAdapter.setSelectedEvents(mSelectedEvents);
         }
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {

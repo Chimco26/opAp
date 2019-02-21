@@ -9,13 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.common.Event;
-import com.example.common.actualBarExtraResponse.Inventory;
-import com.example.common.actualBarExtraResponse.Notification;
-import com.example.common.actualBarExtraResponse.Reject;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -264,6 +259,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
                 " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
+    public Cursor getCursorOrderByTimeFilterByDurationStartFromOneEvent(int minEventDuration, float eventId) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
+                " AND " + KEY_EVENT_ID + " >= " + eventId +
+                " OR (" + KEY_EVENT_ID + " >= " + eventId + " AND " +
+                KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
