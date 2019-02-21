@@ -62,10 +62,8 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
         mAlarmAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mListener.onClickNegativeBtn();
             }
         });
-//        mAlarmAlertDialog.getWindow().getDecorView().setTop(100);
 
         return mAlarmAlertDialog;
     }

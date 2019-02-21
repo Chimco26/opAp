@@ -115,8 +115,8 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         if (target != 0) {
             percent = (int) (currentValue * 100 / target);
             mCurrentValueTv.setText(valueInK(currentValue));
-            mTargetValueTv.setText(String.format(Locale.getDefault(), "/%s min", valueInK(target)));
-            mPercentValueTv.setText(String.format(Locale.getDefault(),"%s%%", valueInK(percent)));
+            mTargetValueTv.setText(String.format(Locale.US, "/%s min", valueInK(target)));
+            mPercentValueTv.setText(String.format(Locale.US,"%s%%", valueInK(percent)));
             mPercentageView.update(percent);
         }
         return percent;

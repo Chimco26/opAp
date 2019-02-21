@@ -63,6 +63,9 @@ import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Reject;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -116,6 +119,7 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
+
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -129,6 +133,7 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedInputStream;
@@ -159,13 +164,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks{
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -273,6 +280,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private File outputFile;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
+    private boolean mIsTimeLine = true;
+    private ActualBarExtraResponse mActualBarExtraResponse;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -409,14 +418,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsTimeLine = isChecked;
                 if (isChecked){
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
-                }else {
+                    if (mEventsAdapter != null){
+                        mEventsAdapter.notifyDataSetChanged();
+                    }
+                } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
-                    mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                    if (!mIsSelectionMode) {
+                        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                    }
+                    if (mShiftLogAdapter != null && mIsSelectionMode){
+                        Cursor cursor;
+                        cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+                        setShiftLogAdapter(cursor);
+                    }
                 }
             }
         });
@@ -594,11 +614,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
-         if (isShowAlarms) {
+//         if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-        } else {
-            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
-        }
+//        } else {
+//            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+//        }
         return cursor;
     }
 
@@ -739,7 +759,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     tvSender.setText(getString(R.string.message_from) + " " + notification.getmSender());
                     tvBody.setText(notification.getmBody(getActivity()));
                 }
-
 
 
                 View.OnClickListener thisDialogListener = new View.OnClickListener() {
@@ -1304,7 +1323,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void getFile() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
             //check if app has permission to write to the external storage.
             if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1319,7 +1338,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         } else {
-            Toast.makeText(getActivity(),"SD Card not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "SD Card not found", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -1344,7 +1363,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Toast.makeText(getActivity(),"Permission has been denied", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
 
     }
 
@@ -1989,7 +2008,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (notification[0] != null) {
 
             String opId = pm.getOperatorId();
-            if (opId == null){
+            if (opId == null) {
                 opId = "";
             }
             RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
@@ -2307,7 +2326,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void startSelectMode(Event event) {
         if (event == null) {
-            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(getCursorByType());
+            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
             if (events.size() > 0) {
                 event = events.get(events.size() - 1);
             }
@@ -2321,7 +2340,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
         setShiftLogAdapter(cursor);
-//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByType()));
+
+        initEvents(mDatabaseHelper.getListFromCursor(cursor));
+
         onStopEventSelected(event.getEventID(), true);
 
         mShowAlarmCheckBox.setVisibility(View.GONE);
@@ -2381,7 +2402,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+
+        mActualBarExtraResponse = actualBarExtraResponse;
 
         int deletedEvents = clearOver24HShift();
 
@@ -2422,6 +2445,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
+                    addDetailsToEvents(event);
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2441,8 +2465,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
             mNoNotificationsText.setVisibility(View.GONE);
-//todo request only new events from sql database
-            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration())));
+
+            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())));
 
             PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
@@ -2450,15 +2474,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (mIsSelectionMode) {
 
                 cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+                initEvents(mDatabaseHelper.getListFromCursor(cursor));
 
             } else {
+                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
                 cursor = getCursorByType();
             }
             setShiftLogAdapter(cursor);
-
-            initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2542,6 +2565,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
+                    addDetailsToEvents(workingEvent);
+//                    ArrayList<Reject> rejects = new ArrayList<Reject>();
+//                    Reject reject = new Reject();
+//                    reject.setEName("a");
+//                    rejects.add(reject);
+//                    event.setRejects(rejects);
                     workingEvent.save();
                 }
             }
@@ -2549,6 +2578,99 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         return events;
+    }
+
+    private void addDetailsToEvents(Event event) {
+
+        Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+        Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+
+        addNotificationsToEvents(eventStart, eventEnd, event);
+        addRejectsToEvents(eventStart, eventEnd, event);
+        addInventoryToEvents(eventStart, eventEnd, event);
+
+    }
+
+    private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = mActualBarExtraResponse.getNotification();
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
+        if (notifications != null && notifications.size() > 0) {
+
+            ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = null;
+
+
+            for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
+
+                if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
+
+                    if (notificationArrayList == null) {
+                        notificationArrayList = new ArrayList<>();
+                    }
+
+                    notificationArrayList.add(notification);
+                    toDelete.add(notification);
+                }
+            }
+            if (notificationArrayList != null) {
+                event.setNotifications(notificationArrayList);
+                notifications.removeAll(toDelete);
+            }
+        }
+    }
+
+    private void addRejectsToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Reject> rejects = mActualBarExtraResponse.getRejects();
+        ArrayList<Reject> toDelete = new ArrayList<>();
+        if (rejects != null && rejects.size() > 0) {
+
+            ArrayList<Reject> rejectArrayList = null;
+
+            for (Reject reject : rejects) {
+                Long rejectTime = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
+
+                if (eventStart <= rejectTime && rejectTime <= eventEnd) {
+                    if (rejectArrayList == null) {
+                        rejectArrayList = new ArrayList<>();
+                    }
+                    rejectArrayList.add(reject);
+                    toDelete.add(reject);
+                }
+            }
+            if (rejectArrayList != null) {
+                event.setRejects(rejectArrayList);
+                rejects.removeAll(toDelete);
+            }
+        }
+    }
+
+    private void addInventoryToEvents(Long eventStart, Long eventEnd, Event event) {
+
+        ArrayList<Inventory> inventories = mActualBarExtraResponse.getInventory();
+        ArrayList<Inventory> toDelete = new ArrayList<>();
+
+        if (inventories != null && inventories.size() > 0) {
+
+            ArrayList<Inventory> inventoriesArrayList = null;
+
+            for (Inventory inventory : inventories) {
+                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SQL_T_FORMAT);
+
+                if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
+                    if (inventoriesArrayList == null) {
+                        inventoriesArrayList = new ArrayList<>();
+                    }
+                    inventoriesArrayList.add(inventory);
+                    toDelete.add(inventory);
+                }
+            }
+            if (inventoriesArrayList != null) {
+                event.setInventories(inventoriesArrayList);
+                inventories.removeAll(toDelete);
+            }
+        }
     }
 
     private void initEventRecycler(View view) {
@@ -2568,7 +2690,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events);
+        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 
         mEventsRecycler.setAdapter(mEventsAdapter);
 
@@ -2919,14 +3041,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = getCursorByType();
         setShiftLogAdapter(cursor);
+        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
-        mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+        if (!mIsTimeLine) {
+            mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+        }
 
-        if(mEventsAdapter != null) {
+        if (mEventsAdapter != null) {
             mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
-            mEventsAdapter.notifyDataSetChanged();
         }
     }
 
@@ -2936,6 +3060,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogAdapter != null) {
 
             mShiftLogAdapter.setSelectedEvents(mSelectedEvents);
+        }
+
+        if (mEventsAdapter != null) {
+
+            mEventsAdapter.setSelectedEvents(mSelectedEvents);
         }
 
         if (mSelectedEvents != null && mSelectedEvents.size() > 0) {

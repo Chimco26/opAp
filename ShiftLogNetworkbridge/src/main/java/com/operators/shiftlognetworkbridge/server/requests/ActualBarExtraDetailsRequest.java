@@ -10,10 +10,13 @@ public class ActualBarExtraDetailsRequest {
     private String StartTime;
     @SerializedName("EndTime")
     private String EndTime;
+    @SerializedName("MachineID")
+    private String MachineID;
 
-    public ActualBarExtraDetailsRequest(String mSessionID, String startTime, String endTime) {
+    public ActualBarExtraDetailsRequest(String mSessionID, String startTime, String endTime, String machineId) {
         this.mSessionID = mSessionID;
         StartTime = startTime;
         EndTime = endTime;
+        MachineID = machineId;
     }
 }

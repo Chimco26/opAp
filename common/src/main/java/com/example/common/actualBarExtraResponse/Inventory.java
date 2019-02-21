@@ -1,4 +1,4 @@
-package com.operators.shiftloginfra.model;
+package com.example.common.actualBarExtraResponse;
 
 import android.os.Parcel;
 import android.os.Parcelable;

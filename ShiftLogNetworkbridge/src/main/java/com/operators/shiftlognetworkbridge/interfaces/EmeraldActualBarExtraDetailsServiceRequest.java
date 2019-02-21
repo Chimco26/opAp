@@ -1,6 +1,6 @@
 package com.operators.shiftlognetworkbridge.interfaces;
 
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftlognetworkbridge.server.requests.ActualBarExtraDetailsRequest;
 
 import retrofit2.Call;

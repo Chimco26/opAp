@@ -3,10 +3,17 @@ package com.example.common;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.Reject;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
 
 public class Event extends DataSupport implements Parcelable {
 
@@ -64,6 +71,13 @@ public class Event extends DataSupport implements Parcelable {
     private boolean mChecked;
 
     private long mEventTimeInMillis;
+
+    private String notifications;
+
+    private String rejects;
+
+    private String inventories;
+
 
     public Event() {
     }
@@ -352,6 +366,9 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
         dest.writeString(this.color);
         dest.writeInt(this.type);
+        dest.writeString(this.notifications);
+        dest.writeString(this.rejects);
+        dest.writeString(this.inventories);
     }
 
     protected Event(Parcel in) {
@@ -379,6 +396,9 @@ public class Event extends DataSupport implements Parcelable {
         this.mIsDismiss = in.readByte() != 0;
         this.color = in.readString();
         this.type = in.readInt();
+        this.notifications = in.readString();
+        this.rejects = in.readString();
+        this.inventories = in.readString();
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -409,4 +429,54 @@ public class Event extends DataSupport implements Parcelable {
         return mEventTimeInMillis;
     }
 
+    public ArrayList<Notification> getNotifications() {
+        return new Gson().fromJson(notifications, new TypeToken<ArrayList<Notification>>() {
+        }.getType());
+    }
+
+    public ArrayList<Reject> getRejects() {
+        return new Gson().fromJson(rejects, new TypeToken<ArrayList<Reject>>() {
+        }.getType());
+    }
+
+    public ArrayList<Inventory> getInventories() {
+        return new Gson().fromJson(inventories, new TypeToken<ArrayList<Inventory>>() {
+        }.getType());
+    }
+
+    public String getNotificationsJson() {
+        return notifications;
+    }
+
+    public String getRejectsJson() {
+        return rejects;
+    }
+
+    public String getInventoriesJson() {
+        return inventories;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = new Gson().toJson(notifications);
+    }
+
+    public void setRejects(ArrayList<Reject> rejects) {
+        this.rejects = new Gson().toJson(rejects);
+    }
+
+    public void setInventories(ArrayList<Inventory> inventories) {
+        this.inventories = new Gson().toJson(inventories);
+    }
+
+    public void setNotificationsJson(String notifications) {
+        this.notifications = notifications;
+    }
+
+    public void setRejectsJson(String rejects) {
+        this.rejects = rejects;
+    }
+
+    public void setInventoriesJson(String inventories) {
+        this.inventories = inventories;
+    }
 }

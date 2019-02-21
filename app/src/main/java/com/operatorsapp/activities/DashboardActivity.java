@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -83,8 +84,6 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
-import com.operators.shiftloginfra.model.Notification;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -155,8 +154,10 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
-import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -489,6 +490,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
                         setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                         setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                        setFilterWarningText(true);
                     }
                 }
             }
@@ -756,8 +758,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-//                    setFilterWarningText(true);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                    setFilterWarningText(true);
                 }
 
             }
@@ -979,10 +981,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //TODO kuti
 //                    events = updateList(events);
 
-                    addServiceCallsToEvents(events);
-
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onShiftLogDataReceived(events);
+                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse);
                     }
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
@@ -1014,24 +1014,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
-    }
-
-    private void addServiceCallsToEvents(ArrayList<Event> events) {
-        for (Event event : events) {
-
-            Long eventStart = convertDateToMillisecond(event.getEventTime());
-            Long eventEnd = convertDateToMillisecond(event.getEventEndTime());
-
-            for (Notification notification: mActualBarExtraResponse.getNotification()) {
-
-                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime());
-
-                
-
-
-            }
-
-        }
     }
 
     ReportFieldsForMachineUICallback mReportFieldsForMachineUICallback = new ReportFieldsForMachineUICallback() {
@@ -1828,6 +1810,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
+        intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
+        intent.putExtra(EXTRA_LAST_PRODUCT_NAME, mCurrentMachineStatus.getAllMachinesData().get(0).getLastProductName());
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+            intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+        }
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
 
