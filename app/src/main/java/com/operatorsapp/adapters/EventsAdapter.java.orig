@@ -205,7 +205,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private void setViewHeight(Event event) {
             ViewGroup.LayoutParams params = mView.getLayoutParams();
 
-            if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+<<<<<<< HEAD
+            if (mIsSelectionMode && event.getType() == 1) {
+=======
+            if (mIsSelectionMode && (mEvent.getType() == 1 || mEvent.getEventGroupID() == 20)) {
+>>>>>>> 09c4f72d8789de0b9a0a5a4161048dc18112d24f
                 params.height = 0;
             } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
@@ -222,17 +226,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mTechContainer.removeAllViews();
             }
 
-            if (event.getInventories() != null && event.getInventories().size() > 0) {
-                for (Inventory inventory : event.getInventories()) {
-                    setNotification(event, 1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
+            if (mEvent.getInventories() != null && mEvent.getInventories().size() > 0) {
+                for (Inventory inventory : mEvent.getInventories()) {
+                    setNotification(1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
                 }
             }
 
+<<<<<<< HEAD
             if (event.getNotifications() != null && event.getNotifications().size() > 0) {
                 for (Notification notification : event.getNotifications()) {
+                    setNotification(event, 2, notification.getSentTime().substring(11, 16), notification.getText(), notification.getNotificationType());
+=======
+            if (mEvent.getNotifications() != null && mEvent.getNotifications().size() > 0) {
+                for (Notification notification : mEvent.getNotifications()) {
 
                     String text = notification.getSourceUserName() + " " + notification.getText();
-                    setNotification(event, 2, notification.getSentTime().substring(11, 16), text, notification.getNotificationType());
+                    setNotification(2, notification.getSentTime().substring(11, 16), text, notification.getNotificationType());
+>>>>>>> 09c4f72d8789de0b9a0a5a4161048dc18112d24f
                 }
             }
 
@@ -245,6 +255,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 }
             }
 
+<<<<<<< HEAD
+            if (event.getInventories() != null && event.getInventories().size() > 0) {
+                for (Inventory inventory : event.getInventories()) {
+                    setNotification(event, 1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
+                }
+            }
+=======
+>>>>>>> 09c4f72d8789de0b9a0a5a4161048dc18112d24f
 
 //                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
 //                    if (height > mView.getHeight()) {
