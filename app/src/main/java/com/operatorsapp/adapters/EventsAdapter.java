@@ -168,7 +168,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private void setViewHeight() {
             ViewGroup.LayoutParams params = mView.getLayoutParams();
 
-            if (mIsSelectionMode && mEvent.getType() == 1) {
+            if (mIsSelectionMode && (mEvent.getType() == 1 || mEvent.getEventGroupID() == 20)) {
                 params.height = 0;
             } else if ((int) mEvent.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
@@ -185,10 +185,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mTechContainer.removeAllViews();
             }
 
+            if (mEvent.getInventories() != null && mEvent.getInventories().size() > 0) {
+                for (Inventory inventory : mEvent.getInventories()) {
+                    setNotification(1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
+                }
+            }
 
             if (mEvent.getNotifications() != null && mEvent.getNotifications().size() > 0) {
                 for (Notification notification : mEvent.getNotifications()) {
-                    setNotification(2, notification.getSentTime().substring(11, 16), notification.getText(), notification.getNotificationType());
+
+                    String text = notification.getSourceUserName() + " " + notification.getText();
+                    setNotification(2, notification.getSentTime().substring(11, 16), text, notification.getNotificationType());
                 }
             }
 
@@ -201,11 +208,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 }
             }
 
-            if (mEvent.getInventories() != null && mEvent.getInventories().size() > 0) {
-                for (Inventory inventory : mEvent.getInventories()) {
-                    setNotification(1, inventory.getTime(), inventory.getAmount() + " " + inventory.getLName(), 0);
-                }
-            }
 
 //                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
 //                    if (height > mView.getHeight()) {
@@ -222,6 +224,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
             TextView timeTV = view.findViewById(R.id.SCI_time);
             TextView detailsTV = view.findViewById(R.id.SCI_details);
+//            TextView textTV = itemView.findViewById(R.id.SCI_text);
+
             ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
 
             if (mEvent.getDuration() <= 5) {
@@ -229,6 +233,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 timeTV.setVisibility(View.VISIBLE);
             }
+
+
 
             switch (type) {
                 case 1:
@@ -272,7 +278,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             switch (icon) {
                 case 1:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_dark));
+                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
                     break;
                 case 2:
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.technicaian_black));

@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/SCI_time"
@@ -23,8 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
         <!--android:background="@drawable/service_call_border"-->
 
 
@@ -41,6 +39,14 @@
             android:textColor="@color/black"
             tools:text="Send" />
 
-
     </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:id="@+id/SCI_text"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="170dp"-->
+        <!--android:maxLines="1"-->
+        <!--tools:text="More info Lorem ipsum dolor sit amet, consectetur adipiscing elit. "/>-->
+
 </RelativeLayout>
