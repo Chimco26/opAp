@@ -50,6 +50,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -172,7 +173,7 @@ import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks {
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks, CompoundButton.OnCheckedChangeListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -282,6 +283,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
+    private CheckBox mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -362,6 +365,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         //TODO Lenox uncomment
 
         //        }
+
+        initFilterEvents(view);
     }
 
     private void initLenoxMachineRv(View view) {
@@ -419,11 +424,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsTimeLine = isChecked;
-                if (isChecked){
+                if (isChecked) {
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
-                    if (mEventsAdapter != null){
+                    if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     }
                 } else {
@@ -432,7 +437,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
-                    if (mShiftLogAdapter != null && mIsSelectionMode){
+                    if (mShiftLogAdapter != null && mIsSelectionMode) {
                         Cursor cursor;
                         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
                         setShiftLogAdapter(cursor);
@@ -603,7 +608,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByType() {
         Cursor cursor;
-         if (isShowAlarms) {
+        if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
         } else {
             cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
@@ -615,7 +620,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
 //         if (isShowAlarms) {
-            cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        } else {
 //            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        }
@@ -1367,121 +1372,144 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-                    private class DownloadFile extends AsyncTask<String, String, String> {
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
 
-                        private ProgressDialog progressDialog;
-                        private String fileName;
-                        private String folder;
-                        private boolean isDownloaded;
-                        private File directory;
+        switch (compoundButton.getId()) {
+            case R.id.FAAE_event_details:
+                mIsEventDetailsChecked = checked;
+                break;
+            case R.id.FAAE_service_alls:
+                mIsServiceCallsChecked = checked;
+                break;
+            case R.id.FAAE_messages:
+                mIsmMessagesChecked = checked;
+                break;
+            case R.id.FAAE_rejects:
+                mIsRejectsChecked = checked;
+                break;
+            case R.id.FAAE_production_report:
+                mIsProductionReportChecked = checked;
+                break;
+        }
+        mEventsAdapter.setCheckedFilters(mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
+    }
 
-                        /**
-                         * Before starting background thread
-                         * Show Progress Bar Dialog
-                         */
-                        @Override
-                        protected void onPreExecute() {
-                            super.onPreExecute();
-                            this.progressDialog = new ProgressDialog(getActivity());
-                            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                            this.progressDialog.setCancelable(false);
-                            this.progressDialog.show();
-                        }
+    private class DownloadFile extends AsyncTask<String, String, String> {
 
-                        /**
-                         * Downloading file in background thread
-                         */
-                        @Override
-                        protected String doInBackground(String... f_url) {
-                            int count;
-                            try {
-                                URL url = new URL(f_url[0]);
-                                URLConnection connection = url.openConnection();
-                                connection.connect();
-                                // getting file length
-                                int lengthOfFile = connection.getContentLength();
+        private ProgressDialog progressDialog;
+        private String fileName;
+        private String folder;
+        private boolean isDownloaded;
+        private File directory;
 
+        /**
+         * Before starting background thread
+         * Show Progress Bar Dialog
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog = new ProgressDialog(getActivity());
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
 
-                                // input stream to read file - with 8k buffer
-                                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-
-                                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-
-                                //Extract file name from URL
-                                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
-
-                                //Append timestamp to file name
-                                fileName = "bbbbbb.apk";
-
-                                //External directory path to save file
-                                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
-
-                                //Create androiddeft folder if it does not exist
-                                directory = new File(folder);
-
-                                if (!directory.exists()) {
-                                    directory.mkdirs();
-                                }
-
-                                outputFile = new File(directory, fileName);
-                                // Output stream to write file
-                                OutputStream output = new FileOutputStream(outputFile);
-
-                                byte data[] = new byte[1024];
-
-                                long total = 0;
-
-                                while ((count = input.read(data)) != -1) {
-                                    total += count;
-                                    // publishing the progress....
-                                    // After this onProgressUpdate will be called
-                                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
-
-                                    // writing data to file
-                                    output.write(data, 0, count);
-                                }
-
-                                // flushing output
-                                output.flush();
-
-                                // closing streams
-                                output.close();
-                                input.close();
-                                return "Downloaded at: " + folder + fileName;
-
-                            } catch (Exception e) {
-                                Log.e("Error: ", e.getMessage());
-                            }
-
-                            return "Something went wrong";
-                        }
-
-                        /**
-                         * Updating progress bar
-                         */
-                        protected void onProgressUpdate(String... progress) {
-                            // setting progress percentage
-                            progressDialog.setProgress(Integer.parseInt(progress[0]));
-                        }
+        /**
+         * Downloading file in background thread
+         */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // getting file length
+                int lengthOfFile = connection.getContentLength();
 
 
-                        @Override
-                        protected void onPostExecute(String message) {
-                            // dismiss the dialog after the file was downloaded
-                            this.progressDialog.dismiss();
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
-                            // Display File path after downloading
-                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
+                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 
-                            Intent install = new Intent(Intent.ACTION_VIEW);
-                            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
-                            install.normalizeMimeType("application/vnd.android.package-archive");
-                            startActivity(install);
-                        }
-                    }
+                //Extract file name from URL
+                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
+
+                //Append timestamp to file name
+                fileName = "bbbbbb.apk";
+
+                //External directory path to save file
+                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+
+                //Create androiddeft folder if it does not exist
+                directory = new File(folder);
+
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                outputFile = new File(directory, fileName);
+                // Output stream to write file
+                OutputStream output = new FileOutputStream(outputFile);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+                return "Downloaded at: " + folder + fileName;
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return "Something went wrong";
+        }
+
+        /**
+         * Updating progress bar
+         */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            progressDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+
+        @Override
+        protected void onPostExecute(String message) {
+            // dismiss the dialog after the file was downloaded
+            this.progressDialog.dismiss();
+
+            // Display File path after downloading
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
+
+            Intent install = new Intent(Intent.ACTION_VIEW);
+            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            install.normalizeMimeType("application/vnd.android.package-archive");
+            startActivity(install);
+        }
+    }
 
     public void openActivateJobScreen() {
         OppAppLogger.getInstance().d(LOG_TAG, "New Job");
@@ -2553,7 +2581,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 workingEvent.setEventTime(events.get(i + 1).getEventEndTime());
                 workingEvent.setEventEndTime(event.getEventTime());
 
-                workingEvent.setEventSubTitleLname(getString(R.string.working));
+                workingEvent.setEventSubTitleLname("עובד");
+                workingEvent.setEventSubTitleEname("Working");
                 workingEvent.setColor("#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
 
                 workingEvent.setEventID(event.getEventID() - 0.5f);
@@ -2674,27 +2703,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
-//
-//        mEventsRecycler.setAdapter(mEventsAdapter);
+        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
+        mEventsRecycler.setAdapter(mEventsAdapter);
     }
 
-    private void initEvents(ArrayList<Event> events) {//todo kuti
-
-//        Collections.reverse(events);
+    private void initEvents(ArrayList<Event> events) {
 
         if (events.size() < 1) {
             return;
         }
 
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
+//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
+//        mEventsRecycler.setAdapter(mEventsAdapter);
 
-        mEventsRecycler.setAdapter(mEventsAdapter);
+        if (mEventsAdapter != null){
+            mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+            mEventsAdapter.setEvents(events);
+            mEventsAdapter.setSelectedEvents(mSelectedEvents);
 
-//        if (mEventsAdapter != null)
-//            mEventsAdapter.setEvents(events);
+        }
 
 
+    }
+
+    public void initFilterEvents(View view) {
+        mEventDetails = view.findViewById(R.id.FAAE_event_details);
+        mEventDetails.setOnCheckedChangeListener(this);
+        mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
+        mServiceCalls.setOnCheckedChangeListener(this);
+        mMessages = view.findViewById(R.id.FAAE_messages);
+        mMessages.setOnCheckedChangeListener(this);
+        mRejects = view.findViewById(R.id.FAAE_rejects);
+        mRejects.setOnCheckedChangeListener(this);
+        mProductionReport = view.findViewById(R.id.FAAE_production_report);
+        mProductionReport.setOnCheckedChangeListener(this);
     }
 
 

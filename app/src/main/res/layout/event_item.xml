@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="50dp">
 
     <LinearLayout
@@ -8,19 +9,15 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/EI_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginEnd="5dp"
+            android:textSize="15px"
+            tools:text="12:00" />
 
-        <RelativeLayout
-            android:id="@+id/time_container"
-            android:layout_width="40dp"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/EI_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15px" />
-
-        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/EI_check_container"
@@ -35,7 +32,6 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorPrimaryDark"
                 android:visibility="gone" />
-            <!--android:button="@drawable/event_checkbox_selector"-->
 
         </LinearLayout>
 
@@ -60,18 +56,13 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/EI_relative"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="10dp">
-
 
             <TextView
                 android:id="@+id/EI_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"
                 android:background="@drawable/event_item_border"
                 android:paddingStart="7dp"
                 android:paddingTop="4dp"
@@ -79,24 +70,14 @@
                 android:paddingBottom="4dp"
                 android:textColor="@color/white"
                 android:textSize="10px"
+                tools:text="@string/working"
                 android:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/EI_tech_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="100dp" />
-        </RelativeLayout>
 
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/EI_service_call_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </RelativeLayout>
-
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
