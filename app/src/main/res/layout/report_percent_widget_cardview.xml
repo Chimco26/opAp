@@ -63,19 +63,13 @@
 
             <RelativeLayout
                 android:layout_width="150dp"
-                android:layout_height="150dp">
-
-                <!--<com.operatorsapp.view.widgetViewHolders.PercentageView-->
-                    <!--android:id="@+id/RPWC_percentage"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_marginTop="10dp" />-->
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp">
 
                 <com.operatorsapp.view.widgetViewHolders.CounterView
                     android:id="@+id/RPWC_percentage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     autofit:indicatorEndStrokeColor="@color/red_line"
                     autofit:percentColor="@color/red_line"
                     autofit:cv_indicatorStrokeColor="@color/red_line"

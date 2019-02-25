@@ -172,8 +172,13 @@ public class CounterView extends View {
     }
 
     public void update(int percent, String text){
-        percentAngle = percent;
+        percentAngle = percentToDegree(percent);
+        this.text = text;
         invalidate();
+    }
+
+    private float percentToDegree(int percent) {
+        return percent * 360 / 100f;
     }
 
     public float getPadding() {

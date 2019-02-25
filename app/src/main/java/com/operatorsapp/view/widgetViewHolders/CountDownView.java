@@ -16,7 +16,7 @@ import com.operatorsapp.utils.StringUtil;
 public class CountDownView extends View {
 
     private Paint mBasePaint, mDegreesPaint, mCenterPaint, mBackgroundPaint,
-    mIndicatorPaint, mIndicatorStrokePaint, mTextPaint;
+            mIndicatorPaint, mIndicatorStrokePaint, mTextPaint;
     private RectF mRect;
     private int centerX, centerY, radius;
     private float padding;
@@ -58,8 +58,7 @@ public class CountDownView extends View {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attributeSet)
-    {
+    private void init(Context context, AttributeSet attributeSet) {
         initVars(context, attributeSet);
         initPaints();
     }
@@ -95,7 +94,7 @@ public class CountDownView extends View {
             indicatorCenterColor = typedArray.getColor(R.styleable.CountDownView_indicatorCenterColor, ContextCompat.getColor(getContext(), R.color.white));
             indicatorStrokeColor = typedArray.getColor(R.styleable.CountDownView_indicatorStrokeColor, ContextCompat.getColor(getContext(), R.color.blue1));
             textColor = typedArray.getColor(R.styleable.CountDownView_textColor, ContextCompat.getColor(getContext(), R.color.blue1));
-        }else {
+        } else {
             percentBackgroundColor = ContextCompat.getColor(getContext(), R.color.black);
             percentColor = ContextCompat.getColor(getContext(), R.color.blue1);
             indicatorCenterColor = ContextCompat.getColor(getContext(), R.color.white);
@@ -143,14 +142,13 @@ public class CountDownView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         // getHeight() is not reliable, use getMeasuredHeight() on first run:
         // Note: mRect will also be null after a configuration change,
         // so in this case the new measured height and width values will be used:
         if (mRect == null) {
-            centerX = getMeasuredWidth()/ 2;
-            centerY = getMeasuredHeight()/ 2;
-            radius = Math.min(centerX,centerY);
+            centerX = getMeasuredWidth() / 2;
+            centerY = getMeasuredHeight() / 2;
+            radius = Math.min(centerX, centerY);
 
             float start = strokeWidth / 2f + padding;
             float end = 2 * radius - start;
@@ -169,7 +167,7 @@ public class CountDownView extends View {
 
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         text = text == null ? "" : text;
-        canvas.drawText(text, centerX, centerY + textSize/2, mTextPaint);
+        canvas.drawText(text, centerX, centerY + textSize / 2, mTextPaint);
     }
 
     private Point getPercentArcEndPoint(double angle){
@@ -181,15 +179,15 @@ public class CountDownView extends View {
         return point;
     }
 
-    private class Point{
+    private class Point {
         private float x;
         private float y;
     }
 
-    public void update(int minute, String minuteStartText){
-        if (isReverse(minute)){
+    public void update(int minute, String minuteStartText) {
+        if (isReverse(minute)) {
             percentAngle = minuteToDegree(-minute);
-        }else {
+        } else {
             percentAngle = minuteToDegree(totalTimeInMinute - minute);
         }
         text = getMinuteText(minute, minuteStartText);
@@ -197,24 +195,24 @@ public class CountDownView extends View {
     }
 
     private String getMinuteText(int minute, String minuteStartText) {
-        if (isReverse){
+        if (isReverse) {
             return minuteStartText + StringUtil.add0ToNumber(minute);
-        }else {
+        } else {
             return minuteStartText + StringUtil.add0ToNumber(minute);
         }
     }
 
-    private float minuteToDegree(int minute){
-        return minute * 360 / (float)totalTimeInMinute;
+    private float minuteToDegree(int minute) {
+        return minute * 360 / (float) totalTimeInMinute;
     }
 
     public boolean isReverse(int minute) {
-        if (minute <= endModeTimeInMinute){
+        if (minute <= endModeTimeInMinute) {
             if (!isReverse) {
                 setReverse(true);
             }
             return true;
-        }else{
+        } else {
             if (isReverse) {
                 setReverse(false);
             }
@@ -224,13 +222,13 @@ public class CountDownView extends View {
 
     public void setReverse(boolean reverse) {
         isReverse = reverse;
-        if (reverse){
+        if (reverse) {
             percentBackgroundColor = percentEndBackgroundColor;
             percentColor = percentEndColor;
             indicatorCenterColor = indicatorEndCenterColor;
             indicatorStrokeColor = indicatorEndStrokeColor;
             textColor = textEndColor;
-        }else {
+        } else {
             initPercentAndPercentBackgroundColors();
         }
         initPaints();
