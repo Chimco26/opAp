@@ -78,6 +78,8 @@ public class Event extends DataSupport implements Parcelable {
 
     private String inventories;
 
+    private boolean extra;
+
 
     public Event() {
     }
@@ -369,6 +371,8 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeString(this.notifications);
         dest.writeString(this.rejects);
         dest.writeString(this.inventories);
+        dest.writeByte(this.extra ? (byte) 1 : (byte) 0);
+
     }
 
     protected Event(Parcel in) {
@@ -399,6 +403,8 @@ public class Event extends DataSupport implements Parcelable {
         this.notifications = in.readString();
         this.rejects = in.readString();
         this.inventories = in.readString();
+        this.extra = in.readByte() != 0;
+
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -478,5 +484,12 @@ public class Event extends DataSupport implements Parcelable {
 
     public void setInventoriesJson(String inventories) {
         this.inventories = inventories;
+    }
+
+    public void setHaveExtra(boolean haveInventoryToEvents) {
+        this.extra = haveInventoryToEvents;
+    }
+    public boolean haveExtra() {
+        return extra;
     }
 }

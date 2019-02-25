@@ -2462,7 +2462,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     public void run() {
                         if (show) {
                             mNoNotificationsText.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             mNoNotificationsText.setVisibility(View.GONE);
                         }
                     }
@@ -2638,6 +2638,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
+        updateOldExtras(actualBarExtraResponse);
+
         for (int i = 0; i < events.size() - 1; i++) {
 
             Event event = events.get(i);
@@ -2674,21 +2676,63 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return events;
     }
 
+    private void updateOldExtras(ActualBarExtraResponse actualBarExtraResponse) {
+
+        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
+
+        for (Event event : events) {
+
+            if (event.getInventories() != null && event.getInventories().size() > 0
+            && actualBarExtraResponse.getInventory() != null && actualBarExtraResponse.getInventory().size() > 0) {
+                for (Inventory inventory : actualBarExtraResponse.getInventory()) {
+                    for (Inventory eventInventory : event.getInventories()) {
+                        if (inventory.getID().equals(eventInventory.getID())) {
+                            eventInventory = inventory;
+                        }
+                    }
+                }
+            }
+            if (event.getRejects() != null && event.getRejects().size() > 0
+                && actualBarExtraResponse.getRejects() != null && actualBarExtraResponse.getRejects().size() > 0) {
+                for (Reject reject : actualBarExtraResponse.getRejects()) {
+                    for (Reject eventReject : event.getRejects()) {
+                        if (reject.getID().equals(eventReject.getID())) {
+                            eventReject = reject;
+                        }
+                    }
+                }
+            }
+            if (event.getNotifications() != null && event.getNotifications().size() > 0
+                    && actualBarExtraResponse.getNotification() != null && actualBarExtraResponse.getNotification().size() > 0) {
+                for (com.example.common.actualBarExtraResponse.Notification notification : actualBarExtraResponse.getNotification()) {
+                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : event.getNotifications()) {
+                        if (notification.getID().equals(eventsNotification.getID())) {
+                            eventsNotification = notification;
+                        }
+                    }
+                }
+            }
+            event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+        }
+    }
+
     private void addDetailsToEvents(Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
         if (actualBarExtraResponse != null) {
             Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
             Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
 
-            addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
-            addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
-            addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
+            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
+                event.setHaveExtra(true);
+            }
         }
     }
 
-    private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = mActualBarExtraResponse.getNotification();
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
         ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
         if (notifications != null && notifications.size() > 0) {
 
@@ -2711,13 +2755,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (notificationArrayList != null) {
                 event.setNotifications(notificationArrayList);
                 notifications.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
-    private void addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<Reject> rejects = mActualBarExtraResponse.getRejects();
+        ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
         ArrayList<Reject> toDelete = new ArrayList<>();
         if (rejects != null && rejects.size() > 0) {
 
@@ -2737,13 +2783,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (rejectArrayList != null) {
                 event.setRejects(rejectArrayList);
                 rejects.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
-    private void addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<Inventory> inventories = mActualBarExtraResponse.getInventory();
+        ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
         ArrayList<Inventory> toDelete = new ArrayList<>();
 
         if (inventories != null && inventories.size() > 0) {
@@ -2764,8 +2812,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (inventoriesArrayList != null) {
                 event.setInventories(inventoriesArrayList);
                 inventories.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
     private void initEventRecycler(View view) {
