@@ -27,7 +27,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final View mNoDataFilterView;
     private TextView mTitle;
     private TextView mSubTitle;
-    private PercentageView mPercentageView;
+    private CounterView mPercentageView;
     private TextView mText;
     private TextView mBtn;
     private DashboardCentralContainerListener mListener;
@@ -117,7 +117,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
             mCurrentValueTv.setText(valueInK(currentValue));
             mTargetValueTv.setText(String.format(Locale.US, "/%s min", valueInK(target)));
             mPercentValueTv.setText(String.format(Locale.US,"%s%%", valueInK(percent)));
-            mPercentageView.update(percent);
+            mPercentageView.update(percent, "");
         }
         return percent;
     }

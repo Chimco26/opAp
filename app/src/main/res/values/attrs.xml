@@ -118,4 +118,22 @@
         <attr name="percentage_percentColor" format="color"/>
         <attr name="percentage_textColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="CounterView">
+        <attr name="cv_padding" format="integer"/>
+        <attr name="cv_startAngle" format="integer"/>
+        <attr name="cv_percentAngle" format="integer"/>
+        <attr name="cv_indicatorRadius" format="integer"/>
+        <attr name="cv_textSize" format="integer"/>
+        <attr name="cv_text" format="string"/>
+        <attr name="cv_strokeWidth" format="integer"/>
+        <attr name="cv_backgroundColor" format="color"/>
+        <attr name="cv_centerColor" format="color"/>
+        <attr name="cv_percentBackgroundColor" format="color"/>
+        <attr name="cv_percentColor" format="color"/>
+        <attr name="cv_indicatorCenterColor" format="color"/>
+        <attr name="cv_indicatorStrokeColor" format="color"/>
+        <attr name="cv_textColor" format="color"/>
+    </declare-styleable>
+
 </resources>
