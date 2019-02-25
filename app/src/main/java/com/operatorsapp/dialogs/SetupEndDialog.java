@@ -6,36 +6,49 @@ import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.RejectReasons;
+import com.operators.activejobslistformachineinfra.ActiveJob;
+import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
+import com.operatorsapp.adapters.ReportNumericAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
-import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.view.FocusableRecycleView;
+import com.operatorsapp.view.SingleLineKeyboard;
+import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListener {
 
-public class SetupEndDialog {
-
+    private static final int STATIC_REASON_ID = 100;
     private final Activity mContext;
+    private final ActiveJobsListForMachine mActiveJobListForMAchine;
     private AlertDialog mAlaramAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mSelectedReasonId;
     private int mSelectedTechnicianId;
+    private boolean isRejects = true;
+    private FocusableRecycleView mReportRv;
+    private LinearLayout mKeyBoardLayout;
+    private SingleLineKeyboard mKeyBoard;
 
 
-    public SetupEndDialog(Activity activity, ReportFieldsForMachine reportFieldsForMachine) {
+    public SetupEndDialog(Activity activity, ReportFieldsForMachine reportFieldsForMachine, ActiveJobsListForMachine activeJobsListForMachine) {
         mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
+        mActiveJobListForMAchine = activeJobsListForMachine;
+
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     public AlertDialog showNoProductionAlarm(final SetupEndDialogListener listener) {
@@ -45,21 +58,35 @@ public class SetupEndDialog {
         LayoutInflater inflater = mContext.getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_approve_first_item, null);
         builder.setView(view);
-        if (!PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
-            view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
-            view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
-            view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
-        }
+        isRejects = PersistenceManager.getInstance().getAddRejectsOnSetupEnd();
 
+        mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
         TextView setupText = view.findViewById(R.id.FAFI_setup_end_text);
-        if (true){
+        if (isRejects) {
             setupText.setText(R.string.setup_rejects_dialog_text);
-        }else {
+        } else {
             setupText.setText(R.string.setup_good_units_dialog_text);
         }
-
+        initRv(view);
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();
+
+        setListeners(listener, view);
+        setUpTechnicianSpinner(view);
+
+        return mAlaramAlertDialog;
+    }
+
+    private void initRv(View view) {
+
+        mReportRv = view.findViewById(R.id.FAFI_report_rv);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        mReportRv.setLayoutManager(layoutManager);
+        ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobListForMAchine.getActiveJobs(), isRejects, this);
+        mReportRv.setAdapter(reportNumericAdapter);
+    }
+
+    public void setListeners(final SetupEndDialogListener listener, View view) {
         view.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,20 +97,21 @@ public class SetupEndDialog {
             @Override
             public void onClick(View v) {
                 mAlaramAlertDialog.dismiss();
+                for (ActiveJob activeJob : mActiveJobListForMAchine.getActiveJobs()) {
+                    if (activeJob.isEdited()) {
+                        listener.onReportReject(String.valueOf(activeJob.getReportValue()), activeJob.isUnit(), 0, STATIC_REASON_ID);
+                    }
+                }
                 listener.sendReport(mSelectedReasonId, mSelectedTechnicianId);
             }
         });
-        setUpSpinnerReason(view);
-        setUpTechnicianSpinner(view);
         mAlaramAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                 listener.onDismissSetupEndDialog();
             }
         });
-        mAlaramAlertDialog.getWindow().getDecorView().setTop(100);
-
-        return mAlaramAlertDialog;
     }
 
     private void setUpTechnicianSpinner(View view) {
@@ -111,65 +139,34 @@ public class SetupEndDialog {
         });
     }
 
-    private void setUpSpinnerReason(View view) {
+    @Override
+    public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.VISIBLE);
+            if (mKeyBoard == null)
+                mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, mContext);
 
-        sortRejectReasons();
-        if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
-            Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
-
-            final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
-            reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-            rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(mContext, R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-
-            rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                    reasonSpinnerArrayAdapter.setTitle(position);
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-        } else {
-            for (RejectReasons rejectReason : mReportFieldsForMachine.getRejectReasons()) {
-                String nameByLang = OperatorApplication.isEnglishLang() ? rejectReason.getEName() : rejectReason.getLName();
-                if (nameByLang.equals(mContext.getString(R.string.reject_reason_setup))) {
-                    mSelectedReasonId = rejectReason.getId();
-                    break;
-                }
-            }
+            mKeyBoard.setChars(complementChars);
+            mKeyBoard.openKeyBoard(text);
+            mKeyBoard.setListener(listener);
         }
     }
 
-    private void sortRejectReasons() {
-        List<RejectReasons> list = mReportFieldsForMachine.getRejectReasons();
-        Collections.sort(list, new Comparator<RejectReasons>() {
-            public int compare(RejectReasons o1, RejectReasons o2) {
-                if (OperatorApplication.isEnglishLang()) {
-                    return o1.getEName().compareTo(o2.getEName());
-                } else {
-                    return o1.getLName().compareTo(o2.getLName());
-                }
-            }
-        });
-        for (RejectReasons rr : list) {
-            if (rr.getEName().equals("Setup")) {
-                list.remove(rr);
-                list.add(0, rr);
-                break;
-            }
+    @Override
+    public void onCloseKeyboard() {
+        if (mKeyBoardLayout != null) {
+            mKeyBoardLayout.setVisibility(View.GONE);
         }
-        mReportFieldsForMachine.setRejectReasons(list);
+        if (mKeyBoard != null) {
+            mKeyBoard.setListener(null);
+        }
     }
 
-    public interface SetupEndDialogListener{
+    public interface SetupEndDialogListener {
 
-        void sendReport(int mSelectedReasonId, int mSelectedTechnicianId);
+        void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId);
+
+        void sendReport(int selectedReasonId, int selectedTechnicianId);
 
         void onDismissSetupEndDialog();
     }

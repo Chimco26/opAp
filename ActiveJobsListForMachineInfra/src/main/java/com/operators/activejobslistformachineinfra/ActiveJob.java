@@ -32,6 +32,45 @@ public class ActiveJob implements Parcelable {
     private String productCatalogId;
     @SerializedName("JobName")
     private String jobName;
+    @SerializedName("JobUnitsProducedOK")
+    private String jobUnitsProducedOK;
+    @SerializedName("JoshUnitsProducedOK")
+    private String joshUnitsProducedOK;
+    private boolean isUnit;
+    private float reportValue;
+    private boolean isEdited;
+
+    public boolean isEdited() {
+        return isEdited;
+    }
+
+    public void setEdited(boolean edited) {
+        isEdited = edited;
+    }
+
+    public boolean isUnit() {
+        return isUnit;
+    }
+
+    public void setUnit(boolean unit) {
+        isUnit = unit;
+    }
+
+    public float getReportValue() {
+        return reportValue;
+    }
+
+    public void setReportValue(float reportValue) {
+        this.reportValue = reportValue;
+    }
+
+    public String getJobUnitsProducedOK() {
+        return jobUnitsProducedOK;
+    }
+
+    public String getJoshUnitsProducedOK() {
+        return joshUnitsProducedOK;
+    }
 
     public String getJobName() {
         return jobName;
@@ -89,33 +128,27 @@ public class ActiveJob implements Parcelable {
         this.productCatalogId = productCatalogId;
     }
 
-    public Integer getCavitiesStandard()
-    {
+    public Integer getCavitiesStandard() {
         return cavitiesStandard;
     }
 
-    public Double getCavitiesActual()
-    {
+    public Double getCavitiesActual() {
         return cavitiesActual;
     }
 
-    public Integer getDepartment()
-    {
+    public Integer getDepartment() {
         return department;
     }
 
-    public Integer getJobID()
-    {
+    public Integer getJobID() {
         return jobID;
     }
 
-    public Integer getMachineID()
-    {
+    public Integer getMachineID() {
         return machineID;
     }
 
-    public Integer getShiftID()
-    {
+    public Integer getShiftID() {
         return shiftID;
     }
 
@@ -145,6 +178,8 @@ public class ActiveJob implements Parcelable {
         dest.writeString(this.productName);
         dest.writeString(this.productCatalogId);
         dest.writeString(this.jobName);
+        dest.writeString(this.jobUnitsProducedOK);
+        dest.writeString(this.joshUnitsProducedOK);
     }
 
     public ActiveJob() {
@@ -162,6 +197,8 @@ public class ActiveJob implements Parcelable {
         this.productName = in.readString();
         this.productCatalogId = in.readString();
         this.jobName = in.readString();
+        this.jobUnitsProducedOK = in.readString();
+        this.joshUnitsProducedOK = in.readString();
     }
 
     public static final Parcelable.Creator<ActiveJob> CREATOR = new Parcelable.Creator<ActiveJob>() {
