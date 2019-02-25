@@ -40,7 +40,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
-import com.operatorsapp.adapters.RejectReasonSpinnerAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -148,9 +147,9 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!PersistenceManager.getInstance().getAddRejectsOnSetupEnd()) {
-            view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
-            view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
-            view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
+//            view.findViewById(R.id.reject_reason_tv).setVisibility(View.GONE);
+//            view.findViewById(R.id.reject_reason_spinner).setVisibility(View.GONE);
+//            view.findViewById(R.id.reject_reason_rl).setVisibility(View.GONE);
         }
 //        getActiveJobs();
         mCancelButton = view.findViewById(R.id.button_cancel);
@@ -167,37 +166,37 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
 
         if (mReportFieldsForMachine != null) {
 
-            sortRejectReasons();
-            if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd() && getActivity() != null) {
-                Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
-
-                final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
-                reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
-                rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
-
-                rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                        mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
-                        reasonSpinnerArrayAdapter.setTitle(position);
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                });
-            } else {
-                for (RejectReasons rejectReason : mReportFieldsForMachine.getRejectReasons()) {
-                    String nameByLang = OperatorApplication.isEnglishLang() ? rejectReason.getEName() : rejectReason.getLName();
-                    if (nameByLang.equals(getString(R.string.reject_reason_setup))) {
-                        mSelectedReasonId = rejectReason.getId();
-                        break;
-                    }
-                }
-            }
+//            sortRejectReasons();
+//            if (PersistenceManager.getInstance().getAddRejectsOnSetupEnd() && getActivity() != null) {
+//                Spinner rejectReasonSpinner = view.findViewById(R.id.reject_reason_spinner);
+//
+//                final RejectReasonSpinnerAdapter reasonSpinnerArrayAdapter = new RejectReasonSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getRejectReasons());
+//                reasonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                rejectReasonSpinner.setAdapter(reasonSpinnerArrayAdapter);
+//                rejectReasonSpinner.getBackground().setColorFilter(ContextCompat.getColor(getActivity(), R.color.T12_color), PorterDuff.Mode.SRC_ATOP);
+//
+//                rejectReasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                        mSelectedReasonId = mReportFieldsForMachine.getRejectReasons().get(position).getId();
+//                        reasonSpinnerArrayAdapter.setTitle(position);
+//
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//                    }
+//                });
+//            } else {
+//                for (RejectReasons rejectReason : mReportFieldsForMachine.getRejectReasons()) {
+//                    String nameByLang = OperatorApplication.isEnglishLang() ? rejectReason.getEName() : rejectReason.getLName();
+//                    if (nameByLang.equals(getString(R.string.reject_reason_setup))) {
+//                        mSelectedReasonId = rejectReason.getId();
+//                        break;
+//                    }
+//                }
+//            }
 
             Spinner technicianSpinner = view.findViewById(R.id.technician_spinner);
             final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(getActivity(), R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());

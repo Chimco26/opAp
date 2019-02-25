@@ -1066,8 +1066,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     };
 
     private void showSetUpEndDialog() {
-        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine);
+        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
         mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
+            @Override
+            public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+                sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
+            }
+
             @Override
             public void sendReport(int selectedReasonId, int selectedTechnicianId) {
                 sendSetupEndReport(selectedReasonId, selectedTechnicianId);

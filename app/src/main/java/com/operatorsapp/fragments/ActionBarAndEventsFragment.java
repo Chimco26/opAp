@@ -2328,7 +2328,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (event == null) {
             ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
             if (events.size() > 0) {
-                event = events.get(events.size() - 1);
+                event = events.get(0);
             }
         }
 
@@ -2566,11 +2566,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
                     addDetailsToEvents(workingEvent);
-//                    ArrayList<Reject> rejects = new ArrayList<Reject>();
-//                    Reject reject = new Reject();
-//                    reject.setEName("a");
-//                    rejects.add(reject);
-//                    event.setRejects(rejects);
+
                     workingEvent.save();
                 }
             }
@@ -2582,13 +2578,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void addDetailsToEvents(Event event) {
 
-        Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
-        Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+        if (mActualBarExtraResponse != null) {
+            Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
 
-        addNotificationsToEvents(eventStart, eventEnd, event);
-        addRejectsToEvents(eventStart, eventEnd, event);
-        addInventoryToEvents(eventStart, eventEnd, event);
-
+            addNotificationsToEvents(eventStart, eventEnd, event);
+            addRejectsToEvents(eventStart, eventEnd, event);
+            addInventoryToEvents(eventStart, eventEnd, event);
+        }
     }
 
     private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event) {
