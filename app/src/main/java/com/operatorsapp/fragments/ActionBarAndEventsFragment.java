@@ -50,6 +50,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -171,7 +172,7 @@ import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
         OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks {
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks, CompoundButton.OnCheckedChangeListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -281,6 +282,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
+    private CheckBox mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -361,6 +364,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         //TODO Lenox uncomment
 
         //        }
+
+        initFilterEvents(view);
     }
 
     private void initLenoxMachineRv(View view) {
@@ -1364,6 +1369,29 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+        switch (compoundButton.getId()) {
+            case R.id.FAAE_event_details:
+                mIsEventDetailsChecked = checked;
+                break;
+            case R.id.FAAE_service_alls:
+                mIsServiceCallsChecked = checked;
+                break;
+            case R.id.FAAE_messages:
+                mIsmMessagesChecked = checked;
+                break;
+            case R.id.FAAE_rejects:
+                mIsRejectsChecked = checked;
+                break;
+            case R.id.FAAE_production_report:
+                mIsProductionReportChecked = checked;
+                break;
+        }
+        mEventsAdapter.setCheckedFilters(mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -2653,7 +2681,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 workingEvent.setEventTime(events.get(i + 1).getEventEndTime());
                 workingEvent.setEventEndTime(event.getEventTime());
 
-                workingEvent.setEventSubTitleLname(getString(R.string.working));
+                workingEvent.setEventSubTitleLname("עובד");
+                workingEvent.setEventSubTitleEname("Working");
                 workingEvent.setColor("#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
 
                 workingEvent.setEventID(event.getEventID() - 0.5f);
@@ -2683,7 +2712,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         for (Event event : events) {
 
             if (event.getInventories() != null && event.getInventories().size() > 0
-            && actualBarExtraResponse.getInventory() != null && actualBarExtraResponse.getInventory().size() > 0) {
+                    && actualBarExtraResponse.getInventory() != null && actualBarExtraResponse.getInventory().size() > 0) {
                 for (Inventory inventory : actualBarExtraResponse.getInventory()) {
                     for (Inventory eventInventory : event.getInventories()) {
                         if (inventory.getID().equals(eventInventory.getID())) {
@@ -2693,7 +2722,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             }
             if (event.getRejects() != null && event.getRejects().size() > 0
-                && actualBarExtraResponse.getRejects() != null && actualBarExtraResponse.getRejects().size() > 0) {
+                    && actualBarExtraResponse.getRejects() != null && actualBarExtraResponse.getRejects().size() > 0) {
                 for (Reject reject : actualBarExtraResponse.getRejects()) {
                     for (Reject eventReject : event.getRejects()) {
                         if (reject.getID().equals(eventReject.getID())) {
@@ -2822,27 +2851,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
-//
-//        mEventsRecycler.setAdapter(mEventsAdapter);
+        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
+        mEventsRecycler.setAdapter(mEventsAdapter);
     }
 
-    private void initEvents(ArrayList<Event> events) {//todo kuti
-
-//        Collections.reverse(events);
+    private void initEvents(ArrayList<Event> events) {
 
         if (events.size() < 1) {
             return;
         }
 
-        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
+//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
+//        mEventsRecycler.setAdapter(mEventsAdapter);
 
-        mEventsRecycler.setAdapter(mEventsAdapter);
+        if (mEventsAdapter == null && getView() != null) {
+            initEventRecycler(getView());
+        }
+        mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+        mEventsAdapter.setEvents(events);
+        mEventsAdapter.setSelectedEvents(mSelectedEvents);
+        mEventsAdapter.notifyDataSetChanged();
 
-//        if (mEventsAdapter != null)
-//            mEventsAdapter.setEvents(events);
+    }
 
-
+    public void initFilterEvents(View view) {
+        mEventDetails = view.findViewById(R.id.FAAE_event_details);
+        mEventDetails.setOnCheckedChangeListener(this);
+        mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
+        mServiceCalls.setOnCheckedChangeListener(this);
+        mMessages = view.findViewById(R.id.FAAE_messages);
+        mMessages.setOnCheckedChangeListener(this);
+        mRejects = view.findViewById(R.id.FAAE_rejects);
+        mRejects.setOnCheckedChangeListener(this);
+        mProductionReport = view.findViewById(R.id.FAAE_production_report);
+        mProductionReport.setOnCheckedChangeListener(this);
     }
 
 
@@ -3196,6 +3238,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mEventsAdapter != null) {
             mEventsAdapter.setIsSelectionMode(mIsSelectionMode);
+            mEventsAdapter.notifyDataSetChanged();
         }
     }
 

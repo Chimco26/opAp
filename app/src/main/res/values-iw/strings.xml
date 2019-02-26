@@ -287,9 +287,9 @@
     <string name="you_ve_reached_the_production_target">"הגעת ליעד היצור של פקודת העבודה!  "</string>
     <string name="end_setup">סיום setup</string>
     <string name="you_are_in_setup_mode">המכונה במצב setup</string>
-    <string name="reported_stop_event">דווח על אירוע עצור</string>
+    <string name="reported_stop_event">עצירות מדווחות</string>
     <string name="time_min">זמן(דק)</string>
-    <string name="report_events_reason">דווח אירועים סיבה</string>
+    <string name="report_events_reason">דווח סיבות עצירה</string>
     <string name="keep_reporting_events_reason">שמור על הסיבה לאירועים לדיווח</string>
     <string name="target_reached">היעד הגיע!</string>
     <string name="setup_rejects_dialog_text">על ההתקנה שהפקת דוחה. האם אתה רוצה לדווח על אותם יחידות טובות?</string>
@@ -300,8 +300,8 @@
     <string name="do_you_need_to_end_setup_before">האם אתה צריך לעשות להגדיר לפני שמתחילים לייצר על עבודה זו שוב?</string>
     <string name="working">עובד</string>
     <string name="timeline">ציר זמן</string>
-    <string name="see_pending_jobs">ראה עבודות ממתינות</string>
-    <string name="time_left_to_current_job">הזמן נשאר לעבודה הנוכחית</string>
+    <string name="see_pending_jobs">רשימת פק”עות ממתינות</string>
+    <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
 
 
 

@@ -8,18 +8,19 @@
         android:id="@+id/SCI_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         tools:text="10:30" />
 
     <ImageView
         android:id="@+id/SCI_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="49dp"
         android:src="@drawable/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginStart="70dp"
         android:background="@color/white">
         <!--android:background="@drawable/service_call_border"-->
