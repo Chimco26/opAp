@@ -39,7 +39,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private Context mContext;
     private ArrayList<Event> mEvents = new ArrayList<>();
     private ArrayList<Float> mSelectedEvents;
-    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState, ArrayList<Event> events, ArrayList<Float> selectedEvents) {
@@ -70,8 +70,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         this.mIsSelectionMode = mIsSelectionMode;
     }
 
-    public void setCheckedFilters(boolean isEventDetailsChecked, boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
+    public void setCheckedFilters(boolean isWorkingEventChecked, boolean isEventDetailsChecked, boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
 
+        mIsWorkingEventChecked = isWorkingEventChecked;
         mIsEventDetailsChecked = isEventDetailsChecked;
         mIsServiceCallsChecked = isServiceCallsChecked;
         mIsmMessagesChecked = isMessagesChecked;
@@ -231,8 +232,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         private void setViewHeight(Event event) {
             ViewGroup.LayoutParams params = mView.getLayoutParams();
-
             if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+                params.height = 0;
+            } else if (!mIsWorkingEventChecked && event.getType() == 1) {
                 params.height = 0;
             } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
