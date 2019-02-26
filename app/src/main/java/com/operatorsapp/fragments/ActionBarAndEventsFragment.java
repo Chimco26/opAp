@@ -284,6 +284,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ActualBarExtraResponse mActualBarExtraResponse;
     private CheckBox mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
     private boolean mIsWorkingEventChecked, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private View mFilterLy;
+    private View mFilterBtn;
+    private View mFiltersView;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -409,6 +412,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
+        mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
+        mFiltersView = view.findViewById(R.id.FAAE_filters_view);
+
+        mFilterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonClick(mShiftLogParams);
+            }
+        });
         mShowAlarmCheckBox = view.findViewById(R.id.FAAE_alarm_chekbox);
         mShowAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -427,12 +440,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
+                    mFilterLy.setVisibility(View.GONE);
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
+                    mFilterLy.setVisibility(View.VISIBLE);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
@@ -807,6 +822,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
+                mFiltersView.setVisibility(View.VISIBLE);
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -839,6 +855,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
+        mFiltersView.setVisibility(View.GONE);
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
         mShiftLogLayout.startAnimation(anim);
