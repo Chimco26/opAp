@@ -440,14 +440,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
-                    mFilterLy.setVisibility(View.GONE);
+                    mFilterLy.setVisibility(View.VISIBLE);
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
-                    mFilterLy.setVisibility(View.VISIBLE);
+                    mFilterLy.setVisibility(View.GONE);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
@@ -857,7 +857,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
-        mFiltersView.setVisibility(View.GONE);
+        if (mIsTimeLine) {
+            mFiltersView.setVisibility(View.GONE);
+        }
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
         mShiftLogLayout.startAnimation(anim);
@@ -2910,7 +2912,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         if (events.get(0).getEventEndTime() != null
-                && events.get(0).getEventEndTime().length() > 0) {
+                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
             Event event = events.get(0);
             Event intermediateEvent = new Event();
