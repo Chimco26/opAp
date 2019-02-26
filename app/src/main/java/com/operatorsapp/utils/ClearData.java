@@ -53,6 +53,7 @@ public class ClearData {
         PersistenceManager.getInstance().setCalledTechnicianName(null);
         PersistenceManager.getInstance().setTechnicianCallTime(0);
         PersistenceManager.getInstance().setRecentTechCallId(0);
+        PersistenceManager.getInstance().setNeedUpdateToken(true);
 
     }
 }

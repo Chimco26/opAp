@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.common.Event;
-import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -70,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String KEY_INVENTORY = "inventories";
     private static final String KEY_REJECTS = "rejects";
+    private static final String KEY_HAVE_EXTRA = "extra";
 
 
     // Table Create Statements
@@ -100,6 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_TREATED + " BOOLEAN," +
             KEY_CHECKED + " BOOLEAN," +
             KEY_IS_DISMISS + " BOOLEAN," +
+            KEY_HAVE_EXTRA + " BOOLEAN," +
             KEY_CREATED_AT + " DATETIME," +
             KEY_TIME_MILLIS + " BIGINT," +
             KEY_TYPE + " BIGINT," +
@@ -260,6 +261,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
                 " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+    public Cursor getCursorIfHaveExtra() {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_HAVE_EXTRA + " AND " +  KEY_GROUP_ID + " != 20 )";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -439,6 +449,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_NOTIFICATIONS, event.getNotificationsJson());
         values.put(KEY_REJECTS, event.getRejectsJson());
         values.put(KEY_INVENTORY, event.getInventoriesJson());
+        values.put(KEY_HAVE_EXTRA, event.haveExtra());
 
         return values;
     }
@@ -462,7 +473,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Event convertRawToEvent(Cursor c) {
 
         Event event = new Event();
-        Gson mGson = new Gson();
 
         if (c != null) {
 
@@ -494,6 +504,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setNotificationsJson(c.getString(c.getColumnIndex(KEY_NOTIFICATIONS)));
             event.setRejectsJson(c.getString(c.getColumnIndex(KEY_REJECTS)));
             event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
+            event.setHaveExtra(c.getInt(c.getColumnIndex(KEY_HAVE_EXTRA)) > 0);
+
 
         }
         return event;

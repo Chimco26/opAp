@@ -2350,7 +2350,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onReportStopEvent() {
         if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.startSelectMode(null);
+            mActionBarAndEventsFragment.startSelectMode(null, null);
         }
     }
 

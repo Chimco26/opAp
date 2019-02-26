@@ -11,9 +11,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.operatorsapp.R;
-import com.operatorsapp.utils.StringUtil;
 
-public class CountDownView extends View {
+public class CounterView extends View {
 
     private Paint mBasePaint, mDegreesPaint, mCenterPaint, mBackgroundPaint,
             mIndicatorPaint, mIndicatorStrokePaint, mTextPaint;
@@ -35,66 +34,54 @@ public class CountDownView extends View {
     private int indicatorCenterColor;
     private int indicatorStrokeColor;
     private int textColor;
-    private int percentEndBackgroundColor;
-    private int percentEndColor;
-    private int indicatorEndCenterColor;
-    private int indicatorEndStrokeColor;
-    private int textEndColor;
-    private int endModeTimeInMinute;
     private TypedArray typedArray;
 
-    public CountDownView(Context context) {
+    public CounterView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public CountDownView(Context context, AttributeSet attrs) {
+    public CounterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public CountDownView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CounterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attributeSet) {
+    private void init(Context context, AttributeSet attributeSet)
+    {
         initVars(context, attributeSet);
         initPaints();
     }
 
     private void initVars(Context context, AttributeSet attributeSet) {
         float density = getResources().getDisplayMetrics().density;
-        typedArray = context.getTheme().obtainStyledAttributes(attributeSet, R.styleable.CountDownView, 0, 0);
+        typedArray = context.getTheme().obtainStyledAttributes(attributeSet, R.styleable.CounterView, 0, 0);
         if (typedArray != null) {
-            padding = typedArray.getInteger(R.styleable.CountDownView_padding, 7);
-            startAngle = typedArray.getInteger(R.styleable.CountDownView_startAngle, 0) - 90;//because arc start at 90 degrees and need be in radians for trigonometric functions
-            percentAngle = typedArray.getInteger(R.styleable.CountDownView_percentAngle, 0);
-            indicatorRadius = typedArray.getInteger(R.styleable.CountDownView_indicatorRadius, 6) * density;
-            textSize = typedArray.getInteger(R.styleable.CountDownView_textSize, 28) * density;
-            text = typedArray.getString(R.styleable.CountDownView_text);
-            totalTimeInMinute = typedArray.getInteger(R.styleable.CountDownView_totalTimeInMinute, 60);
-            strokeWidth = typedArray.getInteger(R.styleable.CountDownView_strokeWidth, 5);
-            backgroundColor = typedArray.getColor(R.styleable.CountDownView_backgroundColor, ContextCompat.getColor(getContext(), R.color.divider_gray));
-            centerColor = typedArray.getColor(R.styleable.CountDownView_centerColor, ContextCompat.getColor(getContext(), R.color.white));
+            padding = typedArray.getInteger(R.styleable.CounterView_cv_padding, 7);
+            startAngle = typedArray.getInteger(R.styleable.CounterView_cv_startAngle, 0) - 90;//because arc start at 90 degrees and need be in radians for trigonometric functions
+            percentAngle = typedArray.getInteger(R.styleable.CounterView_cv_percentAngle, 0);
+            indicatorRadius = typedArray.getInteger(R.styleable.CounterView_cv_indicatorRadius, 6) * density;
+            textSize = typedArray.getInteger(R.styleable.CounterView_cv_textSize, 28) * density;
+            text = typedArray.getString(R.styleable.CounterView_cv_text);
+            strokeWidth = typedArray.getInteger(R.styleable.CounterView_cv_strokeWidth, 5);
+            backgroundColor = typedArray.getColor(R.styleable.CounterView_cv_backgroundColor, ContextCompat.getColor(getContext(), R.color.divider_gray));
+            centerColor = typedArray.getColor(R.styleable.CounterView_cv_centerColor, ContextCompat.getColor(getContext(), R.color.white));
             initPercentAndPercentBackgroundColors();
-            percentEndBackgroundColor = typedArray.getColor(R.styleable.CountDownView_percentEndBackgroundColor, ContextCompat.getColor(getContext(), R.color.grey_lite));
-            percentEndColor = typedArray.getColor(R.styleable.CountDownView_percentEndColor, ContextCompat.getColor(getContext(), R.color.red_line));
-            indicatorEndCenterColor = typedArray.getColor(R.styleable.CountDownView_indicatorEndCenterColor, ContextCompat.getColor(getContext(), R.color.white));
-            indicatorEndStrokeColor = typedArray.getColor(R.styleable.CountDownView_indicatorEndStrokeColor, ContextCompat.getColor(getContext(), R.color.red_line));
-            textEndColor = typedArray.getColor(R.styleable.CountDownView_textEndColor, ContextCompat.getColor(getContext(), R.color.red_line));
-            endModeTimeInMinute = typedArray.getInteger(R.styleable.CountDownView_endModeTimeInMinute, totalTimeInMinute);
         }
     }
 
     private void initPercentAndPercentBackgroundColors() {
         if (typedArray != null) {
-            percentBackgroundColor = typedArray.getColor(R.styleable.CountDownView_percentBackgroundColor, ContextCompat.getColor(getContext(), R.color.black));
-            percentColor = typedArray.getColor(R.styleable.CountDownView_percentColor, ContextCompat.getColor(getContext(), R.color.blue1));
-            indicatorCenterColor = typedArray.getColor(R.styleable.CountDownView_indicatorCenterColor, ContextCompat.getColor(getContext(), R.color.white));
-            indicatorStrokeColor = typedArray.getColor(R.styleable.CountDownView_indicatorStrokeColor, ContextCompat.getColor(getContext(), R.color.blue1));
-            textColor = typedArray.getColor(R.styleable.CountDownView_textColor, ContextCompat.getColor(getContext(), R.color.blue1));
-        } else {
+            percentBackgroundColor = typedArray.getColor(R.styleable.CounterView_cv_percentBackgroundColor, ContextCompat.getColor(getContext(), R.color.black));
+            percentColor = typedArray.getColor(R.styleable.CounterView_cv_percentColor, ContextCompat.getColor(getContext(), R.color.blue1));
+            indicatorCenterColor = typedArray.getColor(R.styleable.CounterView_cv_indicatorCenterColor, ContextCompat.getColor(getContext(), R.color.white));
+            indicatorStrokeColor = typedArray.getColor(R.styleable.CounterView_cv_indicatorStrokeColor, ContextCompat.getColor(getContext(), R.color.blue1));
+            textColor = typedArray.getColor(R.styleable.CounterView_cv_textColor, ContextCompat.getColor(getContext(), R.color.blue1));
+        }else {
             percentBackgroundColor = ContextCompat.getColor(getContext(), R.color.black);
             percentColor = ContextCompat.getColor(getContext(), R.color.blue1);
             indicatorCenterColor = ContextCompat.getColor(getContext(), R.color.white);
@@ -179,59 +166,19 @@ public class CountDownView extends View {
         return point;
     }
 
-    private class Point {
+    private class Point{
         private float x;
         private float y;
     }
 
-    public void update(int minute, String minuteStartText) {
-        if (isReverse(minute)) {
-            percentAngle = minuteToDegree(-minute);
-        } else {
-            percentAngle = minuteToDegree(totalTimeInMinute - minute);
-        }
-        text = getMinuteText(minute, minuteStartText);
+    public void update(int percent, String text){
+        percentAngle = percentToDegree(percent);
+        this.text = text;
         invalidate();
     }
 
-    private String getMinuteText(int minute, String minuteStartText) {
-        if (isReverse) {
-            return minuteStartText + StringUtil.add0ToNumber(minute);
-        } else {
-            return minuteStartText + StringUtil.add0ToNumber(minute);
-        }
-    }
-
-    private float minuteToDegree(int minute) {
-        return minute * 360 / (float) totalTimeInMinute;
-    }
-
-    public boolean isReverse(int minute) {
-        if (minute <= endModeTimeInMinute) {
-            if (!isReverse) {
-                setReverse(true);
-            }
-            return true;
-        } else {
-            if (isReverse) {
-                setReverse(false);
-            }
-            return false;
-        }
-    }
-
-    public void setReverse(boolean reverse) {
-        isReverse = reverse;
-        if (reverse) {
-            percentBackgroundColor = percentEndBackgroundColor;
-            percentColor = percentEndColor;
-            indicatorCenterColor = indicatorEndCenterColor;
-            indicatorStrokeColor = indicatorEndStrokeColor;
-            textColor = textEndColor;
-        } else {
-            initPercentAndPercentBackgroundColors();
-        }
-        initPaints();
+    private float percentToDegree(int percent) {
+        return percent * 360 / 100f;
     }
 
     public float getPadding() {
@@ -355,51 +302,4 @@ public class CountDownView extends View {
         this.textColor = textColor;
     }
 
-    public int getPercentEndBackgroundColor() {
-        return percentEndBackgroundColor;
-    }
-
-    public void setPercentEndBackgroundColor(int percentEndBackgroundColor) {
-        this.percentEndBackgroundColor = percentEndBackgroundColor;
-    }
-
-    public int getPercentEndColor() {
-        return percentEndColor;
-    }
-
-    public void setPercentEndColor(int percentEndColor) {
-        this.percentEndColor = percentEndColor;
-    }
-
-    public int getIndicatorEndCenterColor() {
-        return indicatorEndCenterColor;
-    }
-
-    public void setIndicatorEndCenterColor(int indicatorEndCenterColor) {
-        this.indicatorEndCenterColor = indicatorEndCenterColor;
-    }
-
-    public int getIndicatorEndStrokeColor() {
-        return indicatorEndStrokeColor;
-    }
-
-    public void setIndicatorEndStrokeColor(int indicatorEndStrokeColor) {
-        this.indicatorEndStrokeColor = indicatorEndStrokeColor;
-    }
-
-    public int getTextEndColor() {
-        return textEndColor;
-    }
-
-    public void setTextEndColor(int textEndColor) {
-        this.textEndColor = textEndColor;
-    }
-
-    public int getEndModeTimeInMinute() {
-        return endModeTimeInMinute;
-    }
-
-    public void setEndModeTimeInMinute(int endModeTimeInMinute) {
-        this.endModeTimeInMinute = endModeTimeInMinute;
-    }
 }

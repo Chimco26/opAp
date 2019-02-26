@@ -119,7 +119,6 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
-
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
@@ -419,11 +418,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsTimeLine = isChecked;
-                if (isChecked){
+                if (isChecked) {
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
-                    if (mEventsAdapter != null){
+                    if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     }
                 } else {
@@ -432,7 +431,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
-                    if (mShiftLogAdapter != null && mIsSelectionMode){
+                    if (mShiftLogAdapter != null && mIsSelectionMode) {
                         Cursor cursor;
                         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
                         setShiftLogAdapter(cursor);
@@ -603,7 +602,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Nullable
     public Cursor getCursorByType() {
         Cursor cursor;
-         if (isShowAlarms) {
+        if (isShowAlarms) {
             cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
         } else {
             cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration());
@@ -615,7 +614,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
 //         if (isShowAlarms) {
-            cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        } else {
 //            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        }
@@ -1367,121 +1366,121 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-                    private class DownloadFile extends AsyncTask<String, String, String> {
+    private class DownloadFile extends AsyncTask<String, String, String> {
 
-                        private ProgressDialog progressDialog;
-                        private String fileName;
-                        private String folder;
-                        private boolean isDownloaded;
-                        private File directory;
+        private ProgressDialog progressDialog;
+        private String fileName;
+        private String folder;
+        private boolean isDownloaded;
+        private File directory;
 
-                        /**
-                         * Before starting background thread
-                         * Show Progress Bar Dialog
-                         */
-                        @Override
-                        protected void onPreExecute() {
-                            super.onPreExecute();
-                            this.progressDialog = new ProgressDialog(getActivity());
-                            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                            this.progressDialog.setCancelable(false);
-                            this.progressDialog.show();
-                        }
+        /**
+         * Before starting background thread
+         * Show Progress Bar Dialog
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog = new ProgressDialog(getActivity());
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
 
-                        /**
-                         * Downloading file in background thread
-                         */
-                        @Override
-                        protected String doInBackground(String... f_url) {
-                            int count;
-                            try {
-                                URL url = new URL(f_url[0]);
-                                URLConnection connection = url.openConnection();
-                                connection.connect();
-                                // getting file length
-                                int lengthOfFile = connection.getContentLength();
-
-
-                                // input stream to read file - with 8k buffer
-                                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-
-                                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-
-                                //Extract file name from URL
-                                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
-
-                                //Append timestamp to file name
-                                fileName = "bbbbbb.apk";
-
-                                //External directory path to save file
-                                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
-
-                                //Create androiddeft folder if it does not exist
-                                directory = new File(folder);
-
-                                if (!directory.exists()) {
-                                    directory.mkdirs();
-                                }
-
-                                outputFile = new File(directory, fileName);
-                                // Output stream to write file
-                                OutputStream output = new FileOutputStream(outputFile);
-
-                                byte data[] = new byte[1024];
-
-                                long total = 0;
-
-                                while ((count = input.read(data)) != -1) {
-                                    total += count;
-                                    // publishing the progress....
-                                    // After this onProgressUpdate will be called
-                                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
-
-                                    // writing data to file
-                                    output.write(data, 0, count);
-                                }
-
-                                // flushing output
-                                output.flush();
-
-                                // closing streams
-                                output.close();
-                                input.close();
-                                return "Downloaded at: " + folder + fileName;
-
-                            } catch (Exception e) {
-                                Log.e("Error: ", e.getMessage());
-                            }
-
-                            return "Something went wrong";
-                        }
-
-                        /**
-                         * Updating progress bar
-                         */
-                        protected void onProgressUpdate(String... progress) {
-                            // setting progress percentage
-                            progressDialog.setProgress(Integer.parseInt(progress[0]));
-                        }
+        /**
+         * Downloading file in background thread
+         */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // getting file length
+                int lengthOfFile = connection.getContentLength();
 
 
-                        @Override
-                        protected void onPostExecute(String message) {
-                            // dismiss the dialog after the file was downloaded
-                            this.progressDialog.dismiss();
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
-                            // Display File path after downloading
-                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
+                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 
-                            Intent install = new Intent(Intent.ACTION_VIEW);
-                            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
-                            install.normalizeMimeType("application/vnd.android.package-archive");
-                            startActivity(install);
-                        }
-                    }
+                //Extract file name from URL
+                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
+
+                //Append timestamp to file name
+                fileName = "bbbbbb.apk";
+
+                //External directory path to save file
+                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+
+                //Create androiddeft folder if it does not exist
+                directory = new File(folder);
+
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                outputFile = new File(directory, fileName);
+                // Output stream to write file
+                OutputStream output = new FileOutputStream(outputFile);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+                return "Downloaded at: " + folder + fileName;
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return "Something went wrong";
+        }
+
+        /**
+         * Updating progress bar
+         */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            progressDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+
+        @Override
+        protected void onPostExecute(String message) {
+            // dismiss the dialog after the file was downloaded
+            this.progressDialog.dismiss();
+
+            // Display File path after downloading
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
+
+            Intent install = new Intent(Intent.ACTION_VIEW);
+            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            install.normalizeMimeType("application/vnd.android.package-archive");
+            startActivity(install);
+        }
+    }
 
     public void openActivateJobScreen() {
         OppAppLogger.getInstance().d(LOG_TAG, "New Job");
@@ -2289,7 +2288,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onReportClick(Event event) {
         //TODO    openStopReportScreen(eventId, start, end, duration);mEvent.getEventID(), mEvent.getTime(), mEvent.getEventEndTime(), mEvent.getDuration()
-        startSelectMode(event);
+        startSelectMode(event, null);
     }
 
     @Override
@@ -2307,7 +2306,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onSplitEventPressed(Float eventID) {
         // TODO: 05/07/2018 call server split event
 
-
         mListener.onSplitEventPressed(eventID);
 
     }
@@ -2321,10 +2319,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSelectMode(Event event) {
 
-        startSelectMode(event);
+        startSelectMode(event, null);
     }
 
-    public void startSelectMode(Event event) {
+    public void startSelectMode(Event event, MyTaskListener myTaskListener) {
         if (event == null) {
             ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
             if (events.size() > 0) {
@@ -2339,13 +2337,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         Cursor cursor;
         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-        setShiftLogAdapter(cursor);
 
-        initEvents(mDatabaseHelper.getListFromCursor(cursor));
+        if (myTaskListener == null) {
+            setShiftLogAdapter(cursor);
 
-        onStopEventSelected(event.getEventID(), true);
+            initEvents(mDatabaseHelper.getListFromCursor(cursor));
 
-        mShowAlarmCheckBox.setVisibility(View.GONE);
+            onStopEventSelected(event.getEventID(), true);
+
+            mShowAlarmCheckBox.setVisibility(View.GONE);
+        } else {
+            myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
+            myTaskListener.onStartSelectMode(event);
+        }
     }
 
     public void setShiftLogAdapter(Cursor cursor) {
@@ -2406,14 +2410,108 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mActualBarExtraResponse = actualBarExtraResponse;
 
-        int deletedEvents = clearOver24HShift();
-
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
+//before
+        new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
+            @Override
+            public void onComplete() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mShiftLogAdapter != null)
+                            mShiftLogAdapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setShiftLogAdapter(oldCursor);
+                        initEvents(newEvents);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onStartSelectMode(final Event event) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onStopEventSelected(event.getEventID(), true);
+
+                        mShowAlarmCheckBox.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowNotificationText(final boolean show) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (show) {
+                            mNoNotificationsText.setVisibility(View.VISIBLE);
+                        } else {
+                            mNoNotificationsText.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        }).execute();
+//after
+    }
+
+    private class MyTask extends AsyncTask<Void, Void, String> {
+
+        private final ArrayList<Event> events;
+        private final ActualBarExtraResponse actualBarExtraResponse;
+        private final MyTaskListener myTaskListener;
+
+        public MyTask(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
+            this.events = events;
+            this.actualBarExtraResponse = actualBarExtraResponse;
+            this.myTaskListener = myTaskListener;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            updateEvents(events, actualBarExtraResponse, myTaskListener);
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            // do something with result
+        }
+
+    }
+
+    public interface MyTaskListener {
+
+        void onComplete();
+
+        void onUpdateEventsRecyclerViews(Cursor oldCursor, ArrayList<Event> newEvents);
+
+        void onStartSelectMode(Event event);
+
+        void onShowNotificationText(boolean show);
+    }
+
+    public void updateEvents(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
+
+        int deletedEvents = clearOver24HShift();
 
         if (events != null && events.size() > 0) {
 
@@ -2445,7 +2543,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
-                    addDetailsToEvents(event);
+                    addDetailsToEvents(event, actualBarExtraResponse);
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2464,24 +2562,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
-            mNoNotificationsText.setVisibility(View.GONE);
+            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())), actualBarExtraResponse);
 
-            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())));
+            PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
-            PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+            myTaskListener.onShowNotificationText(false);
 
             Cursor cursor;
             if (mIsSelectionMode) {
 
                 cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-                initEvents(mDatabaseHelper.getListFromCursor(cursor));
+//                initEvents(mDatabaseHelper.getListFromCursor(cursor));
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
 
             } else {
-                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
+//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                 cursor = getCursorByType();
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
             }
-            setShiftLogAdapter(cursor);
+//            setShiftLogAdapter(cursor);
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2489,7 +2589,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (event.getEventGroupID() != TYPE_ALERT && TextUtils.isEmpty(event.getEventEndTime()) && event.getEventReasonID() == REASON_UNREPORTED) {
 
                     if (!mIsSelectionMode) {
-                        startSelectMode(event);
+                        startSelectMode(event, myTaskListener);
                         mAutoSelectMode = true;
                     } else if (mustBeClosed) {
                         mListener.onClearAllSelectedEvents();
@@ -2511,7 +2611,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             if (DataSupport.count(Event.class) == 0) {
                 mNoData = true;
-                mNoNotificationsText.setVisibility(View.VISIBLE);
+                myTaskListener.onShowNotificationText(true);
             }
             if (deletedEvents > 0) {
 
@@ -2524,21 +2624,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     cursor = getCursorByType();
                 }
-                setShiftLogAdapter(cursor);
-                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+//                setShiftLogAdapter(cursor);
+//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
             }
         }
 
         mIsNewShiftLogs = true;
         PersistenceManager.getInstance().setIsNewShiftLogs(true);
 
-        if (mShiftLogAdapter != null)
-            mShiftLogAdapter.notifyDataSetChanged();
-
-
+        myTaskListener.onComplete();
     }
 
-    private ArrayList<Event> updateList(ArrayList<Event> events) {
+    private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+
+        updateOldExtras(actualBarExtraResponse);
 
         for (int i = 0; i < events.size() - 1; i++) {
 
@@ -2565,7 +2665,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
-                    addDetailsToEvents(workingEvent);
+                    addDetailsToEvents(workingEvent, actualBarExtraResponse);
 
                     workingEvent.save();
                 }
@@ -2576,21 +2676,63 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return events;
     }
 
-    private void addDetailsToEvents(Event event) {
+    private void updateOldExtras(ActualBarExtraResponse actualBarExtraResponse) {
 
-        if (mActualBarExtraResponse != null) {
-            Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
-            Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
 
-            addNotificationsToEvents(eventStart, eventEnd, event);
-            addRejectsToEvents(eventStart, eventEnd, event);
-            addInventoryToEvents(eventStart, eventEnd, event);
+        for (Event event : events) {
+
+            if (event.getInventories() != null && event.getInventories().size() > 0
+            && actualBarExtraResponse.getInventory() != null && actualBarExtraResponse.getInventory().size() > 0) {
+                for (Inventory inventory : actualBarExtraResponse.getInventory()) {
+                    for (Inventory eventInventory : event.getInventories()) {
+                        if (inventory.getID().equals(eventInventory.getID())) {
+                            eventInventory = inventory;
+                        }
+                    }
+                }
+            }
+            if (event.getRejects() != null && event.getRejects().size() > 0
+                && actualBarExtraResponse.getRejects() != null && actualBarExtraResponse.getRejects().size() > 0) {
+                for (Reject reject : actualBarExtraResponse.getRejects()) {
+                    for (Reject eventReject : event.getRejects()) {
+                        if (reject.getID().equals(eventReject.getID())) {
+                            eventReject = reject;
+                        }
+                    }
+                }
+            }
+            if (event.getNotifications() != null && event.getNotifications().size() > 0
+                    && actualBarExtraResponse.getNotification() != null && actualBarExtraResponse.getNotification().size() > 0) {
+                for (com.example.common.actualBarExtraResponse.Notification notification : actualBarExtraResponse.getNotification()) {
+                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : event.getNotifications()) {
+                        if (notification.getID().equals(eventsNotification.getID())) {
+                            eventsNotification = notification;
+                        }
+                    }
+                }
+            }
+            event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
         }
     }
 
-    private void addNotificationsToEvents(Long eventStart, Long eventEnd, Event event) {
+    private void addDetailsToEvents(Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = mActualBarExtraResponse.getNotification();
+        if (actualBarExtraResponse != null) {
+            Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+            Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+
+            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
+                event.setHaveExtra(true);
+            }
+        }
+    }
+
+    private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+
+        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
         ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
         if (notifications != null && notifications.size() > 0) {
 
@@ -2613,13 +2755,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (notificationArrayList != null) {
                 event.setNotifications(notificationArrayList);
                 notifications.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
-    private void addRejectsToEvents(Long eventStart, Long eventEnd, Event event) {
+    private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<Reject> rejects = mActualBarExtraResponse.getRejects();
+        ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
         ArrayList<Reject> toDelete = new ArrayList<>();
         if (rejects != null && rejects.size() > 0) {
 
@@ -2639,13 +2783,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (rejectArrayList != null) {
                 event.setRejects(rejectArrayList);
                 rejects.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
-    private void addInventoryToEvents(Long eventStart, Long eventEnd, Event event) {
+    private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        ArrayList<Inventory> inventories = mActualBarExtraResponse.getInventory();
+        ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
         ArrayList<Inventory> toDelete = new ArrayList<>();
 
         if (inventories != null && inventories.size() > 0) {
@@ -2666,8 +2812,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (inventoriesArrayList != null) {
                 event.setInventories(inventoriesArrayList);
                 inventories.removeAll(toDelete);
+                return true;
             }
         }
+        return false;
     }
 
     private void initEventRecycler(View view) {
