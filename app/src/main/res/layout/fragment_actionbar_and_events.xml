@@ -264,6 +264,14 @@
                                         android:layout_height="wrap_content">
 
                                         <CheckBox
+                                            android:id="@+id/FAAE_working_events"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:buttonTint="@color/colorPrimaryDark"
+                                            android:checked="true"
+                                            android:text="Working Event" />
+
+                                        <CheckBox
                                             android:id="@+id/FAAE_event_details"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"

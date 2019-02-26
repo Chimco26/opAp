@@ -282,8 +282,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private CheckBox mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
-    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private CheckBox mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private boolean mIsWorkingEventChecked, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1375,6 +1375,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
 
         switch (compoundButton.getId()) {
+            case R.id.FAAE_working_events:
+                mIsWorkingEventChecked = checked;
+                break;
             case R.id.FAAE_event_details:
                 mIsEventDetailsChecked = checked;
                 break;
@@ -1391,7 +1394,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mIsProductionReportChecked = checked;
                 break;
         }
-        mEventsAdapter.setCheckedFilters(mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
+        mEventsAdapter.setCheckedFilters(mIsWorkingEventChecked, mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -2887,6 +2890,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void initFilterEvents(View view) {
+        mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
+        mWorkingEvents.setOnCheckedChangeListener(this);
         mEventDetails = view.findViewById(R.id.FAAE_event_details);
         mEventDetails.setOnCheckedChangeListener(this);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
