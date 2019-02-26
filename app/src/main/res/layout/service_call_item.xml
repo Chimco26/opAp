@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/SCI_time"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         tools:text="10:30" />
@@ -22,7 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="70dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingEnd="2dp">
         <!--android:background="@drawable/service_call_border"-->
 
 
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textColor="@color/black"
-            tools:text="Send" />
+            tools:text="Send"
+            />
 
     </LinearLayout>
 

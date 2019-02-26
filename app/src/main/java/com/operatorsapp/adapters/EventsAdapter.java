@@ -22,6 +22,7 @@ import com.example.common.actualBarExtraResponse.Reject;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private static final int PIXEL_FOR_MINUTE = 4;
-    private boolean mClosedState;
+    private boolean mIsOpenState;
     private boolean mIsSelectionMode;
     private final OnStopClickListener mOnStopClickListener;
 
@@ -46,7 +47,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mContext = context;
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
-        mClosedState = closedState;
+        mIsOpenState = closedState;
         mEvents = events;
         mSelectedEvents = selectedEvents;
     }
@@ -55,7 +56,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mContext = context;
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
-        mClosedState = closedState;
+        mIsOpenState = closedState;
     }
 
     public void setSelectedEvents(ArrayList<Float> selectedEvents) {
@@ -82,7 +83,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     public void setClosedState(boolean isSelectionMode) {
-        mClosedState = isSelectionMode;
+        mIsOpenState = isSelectionMode;
     }
 
     @NonNull
@@ -186,7 +187,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             String text = duration + "m " + (OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
 
-            if (!mClosedState && text.length() > 12) {
+            if (!mIsOpenState && text.length() > 12) {
                 mText.setText(String.format("%s...", text.substring(0, 12)));
 
             } else {
@@ -299,29 +300,28 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 timeTV.setVisibility(View.VISIBLE);
             }
 
-
             switch (type) {
                 case 1:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
                     break;
 
                 case 2:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     setNotificationIcon(iconIV, icon);
                     break;
 
                 case 3:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
                     break;
 
                 case 4:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
                     break;
             }
@@ -367,6 +367,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     iconIV.setImageDrawable(null);
                     break;
             }
+        }
+    }
+
+    private String getTextByState(String details) {
+        if (mIsOpenState){
+            return details;
+        }else {
+            return StringUtil.getResizedString(details, 6);
         }
     }
 

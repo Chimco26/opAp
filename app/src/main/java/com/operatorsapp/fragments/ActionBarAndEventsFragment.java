@@ -822,7 +822,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
-                mFiltersView.setVisibility(View.VISIBLE);
+                if (mIsTimeLine) {
+                    mFiltersView.setVisibility(View.VISIBLE);
+                }
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -2709,20 +2711,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (eventStartMilli < eventEndMilli) {
 
-                Event workingEvent = new Event();
-                workingEvent.setEventTime(events.get(i + 1).getEventEndTime());
-                workingEvent.setEventEndTime(event.getEventTime());
-
-                workingEvent.setEventSubTitleLname("עובד");
-                workingEvent.setEventSubTitleEname("Working");
-                workingEvent.setColor("#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
-
-                workingEvent.setEventID(event.getEventID() - 0.5f);
-                workingEvent.setType(1);
-
-                long minute = TimeUnit.MILLISECONDS.toMinutes(eventEndMilli - eventStartMilli);
-
-                workingEvent.setDuration(minute);
+                Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
+                        event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
+                        -0.5f, "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2735,6 +2726,31 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         return events;
+    }
+
+    @NonNull
+    private Event createIntermediateEvent(String eventTime, String eventEndTime, float id, Long eventStartMilli,
+                                          Long eventEndMilli, String lName, String eName,
+                                          float differenceForNewId, String color) {
+        Event workingEvent = new Event();
+        workingEvent.setEventTime(eventTime);
+        workingEvent.setEventEndTime(eventEndTime);
+
+        workingEvent.setEventSubTitleLname(lName);
+        workingEvent.setEventSubTitleEname(eName);
+        workingEvent.setColor(color);
+
+        workingEvent.setEventID(id + differenceForNewId);
+        workingEvent.setType(1);
+
+        long duration = eventEndMilli - eventStartMilli;
+        if (duration > DAY_IN_MILLIS) {
+            duration = 1;
+        }
+        long minute = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        workingEvent.setDuration(minute);
+        return workingEvent;
     }
 
     private void updateOldExtras(ActualBarExtraResponse actualBarExtraResponse) {
@@ -2893,6 +2909,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
+        if (events.get(0).getEventEndTime() != null
+                && events.get(0).getEventEndTime().length() > 0) {
+
+            Event event = events.get(0);
+            Event intermediateEvent = new Event();
+            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
+            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
+                    "", event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
+                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
+                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()));
+            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
+            events.add(0, intermediateEvent);
+        }
 //        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 //        mEventsRecycler.setAdapter(mEventsAdapter);
 
@@ -2904,6 +2933,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsAdapter.setSelectedEvents(mSelectedEvents);
         mEventsAdapter.notifyDataSetChanged();
 
+    }
+
+    private String getColorByMachineStatus(int machineStatusID) {
+        switch (machineStatusID) {
+            case 1:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+            case 2:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
+            case 5:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark));
+            default:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+
+        }
+    }
+
+    private void setEventTextByMachineStatus(int machineStatusID, Event event) {
+        switch (machineStatusID) {
+            case 1:
+                event.setEventSubTitleEname("Working");
+                event.setEventSubTitleLname("עבודה");
+                break;
+            case 2:
+                event.setEventSubTitleEname("Working Setup");
+                event.setEventSubTitleLname("סטאפ - עבודה");
+                break;
+            case 5:
+                event.setEventSubTitleEname("Parameter Deviation");
+                event.setEventSubTitleLname("חריגה מפרמטר");
+                break;
+            default:
+                event.setEventSubTitleEname("Working");
+                event.setEventSubTitleLname("עבודה");
+        }
     }
 
     public void initFilterEvents(View view) {
