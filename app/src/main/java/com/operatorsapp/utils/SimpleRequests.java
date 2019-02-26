@@ -298,6 +298,53 @@ public class SimpleRequests {
         });
     }
 
+//    public void reportMultipleRejects(String siteUrl, final SimpleCallback callback, GetPendingJobListNetworkManager getPendingJobListNetworkManager,
+//                                      GetPendingJobListRequest getPendingJobListRequest, final int totalRetries, int requestTimeout) {
+//
+//        final int[] retryCount = {0};
+//
+//        Call<PendingJobResponse> call = getPendingJobListNetworkManager.emeraldGetPendingJobList(siteUrl, requestTimeout, TimeUnit.SECONDS).getPendingJobListRequest(getPendingJobListRequest);
+//
+//        call.enqueue(new Callback<PendingJobResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<PendingJobResponse> call, @NonNull Response<PendingJobResponse> response) {
+//
+//                if (response.isSuccessful()) {
+//                    if (callback != null) {
+//
+//                        callback.onGetPendingJobListSuccess(response.body());
+//
+//                    } else {
+//
+//                        OppAppLogger.getInstance().w(LOG_TAG, "getPendingJobList(), onResponse() callback is null");
+//                    }
+//                } else {
+//
+//                    onFailure(call, new Exception("response not successful"));
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<PendingJobResponse> call, @NonNull Throwable t) {
+//                if (callback != null) {
+//                    if (retryCount[0]++ < totalRetries) {
+//                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+//                        call.clone().enqueue(this);
+//                    } else {
+//                        retryCount[0] = 0;
+//                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+//                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getPendingJobList_Failed Error");
+//                        callback.onGetPendingJobListFailed(errorObject);
+//                    }
+//                } else {
+//                    OppAppLogger.getInstance().w(LOG_TAG, "getPendingJobList(), onFailure() callback is null");
+//
+//                }
+//            }
+//        });
+//    }
+
     public void getJobDetails(String siteUrl, final GetJobDetailsCallback callback, GetJobDetailsNetworkManager getJobDetailsNetworkManager,
                               JobDetailsRequest jobDetailsRequest, final int totalRetries, int requestTimeout) {
 
@@ -345,7 +392,7 @@ public class SimpleRequests {
         });
     }
 
-    public void postUpdtaeActions(String siteUrl, final PostUpdtaeActionsCallback callback, PostUpdtaeActionsNetworkManager postUpdateActionsNetworkManager,
+    public void postUpdateActions(String siteUrl, final PostUpdtaeActionsCallback callback, PostUpdtaeActionsNetworkManager postUpdateActionsNetworkManager,
                                   ActionsUpdateRequest actionsUpdateRequest, final int totalRetries, int requestTimeout) {
 
         final int[] retryCount = {0};
@@ -364,7 +411,7 @@ public class SimpleRequests {
 
                     } else {
 
-                        OppAppLogger.getInstance().w(LOG_TAG, "postUpdtaeActions(), onResponse() callback is null");
+                        OppAppLogger.getInstance().w(LOG_TAG, "postUpdateActions(), onResponse() callback is null");
                     }
                 } else {
 
@@ -386,7 +433,7 @@ public class SimpleRequests {
                         callback.onPostUpdtaeActionsFailed(errorObject);
                     }
                 } else {
-                    OppAppLogger.getInstance().w(LOG_TAG, "postUpdtaeActions(), onFailure() callback is null");
+                    OppAppLogger.getInstance().w(LOG_TAG, "postUpdateActions(), onFailure() callback is null");
 
                 }
             }

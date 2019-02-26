@@ -2388,6 +2388,21 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        SendBroadcast.refreshPolling(getContext());
     }
 
+//    private void sendMultipleRejectReport(ArrayList<RejectRequest> rejectRequests) {
+//        ProgressDialogManager.show(this);
+//        SimpleRequests simpleRequests = new SimpleRequests();
+//        simpleRequests.reportMultipleRejects();
+//        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
+//        mReportCore.registerListener(mReportCallbackListener);
+//        if (isUnit) {
+//            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value),
+//                    (double) 0, new MultipleRejectRequestModel(PersistenceManager.getInstance().getSessionId(), rejectRequests));
+//        } else {
+//            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
+//        }
+////        SendBroadcast.refreshPolling(getContext());
+//    }
+
     private void sendSetupEndReport(int selectedReasonId, int selectedTechnicianId) {
         mSelectedReasonId = selectedReasonId;
         mSelectedTechnicianId = selectedTechnicianId;
