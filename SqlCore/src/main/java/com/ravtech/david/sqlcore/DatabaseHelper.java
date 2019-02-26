@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.common.Event;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,11 +24,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Logcat tag
     private static final String LOG = DatabaseHelper.class.getSimpleName();
 
+
     //Database instance
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 13;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -63,13 +66,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TIME_MILLIS = "meventtimeinmillis";
     public static final String KEY_COLOR = "color";
     public static final String KEY_TYPE = "type";
+    private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_INVENTORY = "inventories";
+    private static final String KEY_REJECTS = "rejects";
+    private static final String KEY_HAVE_EXTRA = "extra";
 
 
     // Table Create Statements
     // Event table create statement
     private static final String CREATE_TABLE_EVENTS = "CREATE TABLE " + TABLE_EVENT +
             "(" +
-            KEY_EVENT_ID + " INTEGER PRIMARY KEY," +
+            KEY_EVENT_ID + " FLOAT PRIMARY KEY," +
             KEY_ID + " INTEGER," +
             KEY_PRIORITY + " INTEGER," +
             KEY_TIME + " TEXT," +
@@ -93,10 +100,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_TREATED + " BOOLEAN," +
             KEY_CHECKED + " BOOLEAN," +
             KEY_IS_DISMISS + " BOOLEAN," +
+            KEY_HAVE_EXTRA + " BOOLEAN," +
             KEY_CREATED_AT + " DATETIME," +
             KEY_TIME_MILLIS + " BIGINT," +
             KEY_TYPE + " BIGINT," +
-            KEY_COLOR + " TEXT" +
+            KEY_COLOR + " TEXT," +
+            KEY_NOTIFICATIONS + " TEXT," +
+            KEY_REJECTS + " TEXT," +
+            KEY_INVENTORY + " TEXT" +
             ")";
 
 
@@ -256,6 +267,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(countQuery, null);
 
     }
+    public Cursor getCursorIfHaveExtra() {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_HAVE_EXTRA + " AND " +  KEY_GROUP_ID + " != 20 )";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
+    public Cursor getCursorOrderByTimeFilterByDurationStartFromOneEvent(int minEventDuration, float eventId) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
+                " AND " + KEY_EVENT_ID + " >= " + eventId +
+                " OR (" + KEY_EVENT_ID + " >= " + eventId + " AND " +
+                KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
+    public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TYPE + " = 0 AND " + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
 
     public Cursor getStopTypeShiftOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
@@ -270,11 +328,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getStopTypeShiftOrderByTimeFilterByDurationAndStartTime(int minEventDuration, String newEventsStartTime) {
+        String countQuery = "SELECT  * FROM " + TABLE_EVENT +
+                " WHERE (" + KEY_GROUP_ID + " != 20 AND " +
+                KEY_TIME + " >= " + newEventsStartTime + " AND " +
+                KEY_DURATION + " >= " + minEventDuration + ")" +
+                " OR (" + KEY_TIME + " >= " + newEventsStartTime + " AND "
+                + KEY_GROUP_ID + " != 20 AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                " ORDER BY " + KEY_EVENT_ID + " DESC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.rawQuery(countQuery, null);
+
+    }
+
     public Cursor getStopByReasonIdShiftOrderByTimeFilterByDuration(int minEventDuration, int reasonId) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
-                " WHERE (" + KEY_REASON_ID + " = " + reasonId + " AND " +
+                " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND " +
                 KEY_DURATION + " >= " + minEventDuration +
-                ") OR (" + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
+                ") OR (" + KEY_TYPE + " = 0 AND " + KEY_REASON_ID + " = " + reasonId + " AND (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + " = ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -317,7 +390,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deleting a event
      */
-    public void deleteEvent(long event_id) {
+    public void deleteEvent(float event_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -373,6 +446,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IS_DISMISS, event.isIsDismiss());
         values.put(KEY_COLOR, event.getColor());
         values.put(KEY_TYPE, event.getType());
+        values.put(KEY_NOTIFICATIONS, event.getNotificationsJson());
+        values.put(KEY_REJECTS, event.getRejectsJson());
+        values.put(KEY_INVENTORY, event.getInventoriesJson());
+        values.put(KEY_HAVE_EXTRA, event.haveExtra());
 
         return values;
     }
@@ -399,7 +476,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (c != null) {
 
-            event.setEventID(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
+            event.setEventID(c.getFloat(c.getColumnIndex(KEY_EVENT_ID)));
             event.setPriority(c.getInt(c.getColumnIndex(KEY_PRIORITY)));
             event.setEventTime(c.getString(c.getColumnIndex(KEY_TIME)));
             event.setEventTimeInMillis(c.getLong(c.getColumnIndex(KEY_TIME_MILLIS)));
@@ -424,6 +501,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setIsDismiss(c.getInt(c.getColumnIndex(KEY_IS_DISMISS)) > 0);
             event.setColor(c.getString(c.getColumnIndex(KEY_COLOR)));
             event.setType(c.getInt(c.getColumnIndex(KEY_TYPE)));
+            event.setNotificationsJson(c.getString(c.getColumnIndex(KEY_NOTIFICATIONS)));
+            event.setRejectsJson(c.getString(c.getColumnIndex(KEY_REJECTS)));
+            event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
+            event.setHaveExtra(c.getInt(c.getColumnIndex(KEY_HAVE_EXTRA)) > 0);
+
 
         }
         return event;

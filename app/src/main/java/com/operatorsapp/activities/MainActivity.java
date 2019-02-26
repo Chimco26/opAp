@@ -26,28 +26,22 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.operators.infra.Machine;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.fragments.LoginFragment;
-import com.operatorsapp.fragments.SelectMachineFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
-import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.BroadcastAlarmManager;
-import com.ravtech.david.sqlcore.Event;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Calendar;

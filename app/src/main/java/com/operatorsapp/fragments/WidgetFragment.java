@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
@@ -42,7 +44,6 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.GridSpacingItemDecoration;
 import com.operatorsapp.view.SingleLineKeyboard;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -378,7 +379,7 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
     }
 

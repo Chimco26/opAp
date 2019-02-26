@@ -1,12 +1,19 @@
-package com.ravtech.david.sqlcore;
+package com.example.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.actualBarExtraResponse.Inventory;
+import com.example.common.actualBarExtraResponse.Notification;
+import com.example.common.actualBarExtraResponse.Reject;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
 
 public class Event extends DataSupport implements Parcelable {
 
@@ -37,7 +44,7 @@ public class Event extends DataSupport implements Parcelable {
     private String mEventGroupEname;
     @SerializedName("EventID")
     @Column(unique = true)
-    private int mEventID;
+    private float mEventID;
     @SerializedName("AlarmDismissed")
     private boolean mAlarmDismissed;
     @SerializedName("AlarmHValue")
@@ -65,17 +72,26 @@ public class Event extends DataSupport implements Parcelable {
 
     private long mEventTimeInMillis;
 
+    private String notifications;
+
+    private String rejects;
+
+    private String inventories;
+
+    private boolean extra;
+
+
     public Event() {
     }
 
-    public Event(int mEventID) {
+    public Event(long mEventID) {
 
         this.mEventID = mEventID;
 
     }
 
     public Event(String title, String eTitle, String lTitle, String subETitle, String time,
-                 String endTime, int groupId, int id, int priority, String groupEname, String groupLname, int duration,
+                 String endTime, int groupId, float id, int priority, String groupEname, String groupLname, int duration,
                  boolean treated, float alarmValue, float alarmHValue, float alarmLValue, float alarmStandardValue, int reasonId, String color, int type) {
 
         mEventTitle = title;
@@ -184,7 +200,7 @@ public class Event extends DataSupport implements Parcelable {
         return mEventGroupEname;
     }
 
-    public int getEventID() {
+    public float getEventID() {
         return mEventID;
     }
 
@@ -268,7 +284,7 @@ public class Event extends DataSupport implements Parcelable {
         mEventGroupLname = eventGroupLname;
     }
 
-    public void setEventID(int eventID) {
+    public void setEventID(float eventID) {
         mEventID = eventID;
     }
 
@@ -300,7 +316,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmValue = alarmValue;
     }
 
-    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, int mEventID) {
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, long mEventID) {
         this.mEventTitle = mEventTitle;
         this.mEventSubTitleEname = mEventSubTitleEname;
         this.mEventTime = mEventTime;
@@ -340,7 +356,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeInt(this.mEventGroupID);
         dest.writeString(this.mEventGroupLname);
         dest.writeString(this.mEventGroupEname);
-        dest.writeInt(this.mEventID);
+        dest.writeFloat(this.mEventID);
         dest.writeByte(this.mAlarmDismissed ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.mAlarmHValue);
         dest.writeFloat(this.mAlarmLValue);
@@ -352,6 +368,11 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeByte(this.mIsDismiss ? (byte) 1 : (byte) 0);
         dest.writeString(this.color);
         dest.writeInt(this.type);
+        dest.writeString(this.notifications);
+        dest.writeString(this.rejects);
+        dest.writeString(this.inventories);
+        dest.writeByte(this.extra ? (byte) 1 : (byte) 0);
+
     }
 
     protected Event(Parcel in) {
@@ -367,7 +388,7 @@ public class Event extends DataSupport implements Parcelable {
         this.mEventGroupID = in.readInt();
         this.mEventGroupLname = in.readString();
         this.mEventGroupEname = in.readString();
-        this.mEventID = in.readInt();
+        this.mEventID = in.readFloat();
         this.mAlarmDismissed = in.readByte() != 0;
         this.mAlarmHValue = in.readFloat();
         this.mAlarmLValue = in.readFloat();
@@ -379,6 +400,11 @@ public class Event extends DataSupport implements Parcelable {
         this.mIsDismiss = in.readByte() != 0;
         this.color = in.readString();
         this.type = in.readInt();
+        this.notifications = in.readString();
+        this.rejects = in.readString();
+        this.inventories = in.readString();
+        this.extra = in.readByte() != 0;
+
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -407,5 +433,63 @@ public class Event extends DataSupport implements Parcelable {
 
     public long getEventTimeInMillis() {
         return mEventTimeInMillis;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return new Gson().fromJson(notifications, new TypeToken<ArrayList<Notification>>() {
+        }.getType());
+    }
+
+    public ArrayList<Reject> getRejects() {
+        return new Gson().fromJson(rejects, new TypeToken<ArrayList<Reject>>() {
+        }.getType());
+    }
+
+    public ArrayList<Inventory> getInventories() {
+        return new Gson().fromJson(inventories, new TypeToken<ArrayList<Inventory>>() {
+        }.getType());
+    }
+
+    public String getNotificationsJson() {
+        return notifications;
+    }
+
+    public String getRejectsJson() {
+        return rejects;
+    }
+
+    public String getInventoriesJson() {
+        return inventories;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = new Gson().toJson(notifications);
+    }
+
+    public void setRejects(ArrayList<Reject> rejects) {
+        this.rejects = new Gson().toJson(rejects);
+    }
+
+    public void setInventories(ArrayList<Inventory> inventories) {
+        this.inventories = new Gson().toJson(inventories);
+    }
+
+    public void setNotificationsJson(String notifications) {
+        this.notifications = notifications;
+    }
+
+    public void setRejectsJson(String rejects) {
+        this.rejects = rejects;
+    }
+
+    public void setInventoriesJson(String inventories) {
+        this.inventories = inventories;
+    }
+
+    public void setHaveExtra(boolean haveInventoryToEvents) {
+        this.extra = haveInventoryToEvents;
+    }
+    public boolean haveExtra() {
+        return extra;
     }
 }

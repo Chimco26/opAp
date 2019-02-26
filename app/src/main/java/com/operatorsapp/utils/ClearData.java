@@ -1,10 +1,10 @@
 package com.operatorsapp.utils;
 
+import com.example.common.Event;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
-import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 

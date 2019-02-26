@@ -1,15 +1,16 @@
 package com.operatorsapp.interfaces;
 
-import com.ravtech.david.sqlcore.Event;
+
+import com.example.common.Event;
 
 public interface OnStopClickListener {
     void onStopClicked(int eventId,String startTime, String endTime, long duration);
 
     void onSelectMode(Event eventID);
 
-    void onStopEventSelected(Integer event, boolean b);
+    void onStopEventSelected(float event, boolean b);
 
-    void onSplitEventPressed(int eventID);
+    void onSplitEventPressed(Float eventID);
 
     void onLastItemUpdated();
 }

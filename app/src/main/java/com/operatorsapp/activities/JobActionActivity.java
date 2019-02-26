@@ -107,9 +107,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     public static final String EXTRA_ACTIVATE_JOB_RESPONSE = "EXTRA_ACTIVATE_JOB_RESPONSE";
     public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
-    public static final String EXTRA_LAST_JOB_ID = "EXTRA_LAST_JOB_ID";
     private static final int NUMBER_OF_COLUMNS = 2;
     private static final int PROPOS_RV_HEIGHT = 87;
+    public static final String EXTRA_LAST_JOB_ID = "EXTRA_LAST_JOB_ID";
+    public static final String EXTRA_IS_NO_PRODUCTION = "EXTRA_IS_NO_PRODUCTION";
+    public static final String EXTRA_LAST_ERP_JOB_ID = "EXTRA_LAST_ERP_JOB_ID";
+    public static final String EXTRA_LAST_PRODUCT_NAME = "EXTRA_LAST_PRODUCT_NAME";
     private TextView mTitleTv;
     private PDFView mProductPdfView;
     private ImageView mProductImage;
@@ -149,7 +152,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private TextView mProductPdfNoImageTv;
     private RecyclerView mPropsRv;
     private View mPropsRvOpenButton;
-    private String mLastJobId;
+    private boolean mIsNoProduction;
+    private String mLastJobId = "";
+    private String mLastJobErpId = "";
+    private String mLastProductName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,23 +174,53 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mCroutonCreator = new CroutonCreator();
 
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(EXTRA_LAST_JOB_ID)) {
-            mLastJobId = getIntent().getExtras().getString(EXTRA_LAST_JOB_ID);
-        }
-
+        getExtras();
         initVars();
-
         initListener();
 
         mDownloadHelper = new DownloadHelper(this, this);
 
+
         getPendingJoblist();
 
-        if (mLastJobId != null && mLastJobId.length() > 0) {
+        initLastJobDialog();
+    }
+
+    private void initLastJobDialog() {
+        if (mIsNoProduction && mLastJobId != null && mLastJobId.length() > 0) {
             showLastJobDialog(getString(R.string.activate_last_job),
-                    String.format(Locale.getDefault(), "%s %s", getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job), mLastJobId),
+                    String.format(Locale.getDefault(), "%s \n %s: %s \n %s: %s \n %s: %s",
+                            getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job),
+                            getString(R.string.job), mLastJobId,
+                            getString(R.string.erp_job_id), mLastJobErpId,
+                            getString(R.string.product), mLastProductName),
                     getString(R.string.yes), getString(R.string.no), true);
         }
+    }
+
+    private void getExtras() {
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().containsKey(EXTRA_LAST_JOB_ID)) {
+                mLastJobId = getNotNullText(getIntent().getExtras().getString(EXTRA_LAST_JOB_ID));
+            }
+            if (getIntent().getExtras().containsKey(EXTRA_LAST_ERP_JOB_ID)) {
+                mLastJobErpId = getNotNullText(getIntent().getExtras().getString(EXTRA_LAST_ERP_JOB_ID));
+            }
+            if (getIntent().getExtras().containsKey(EXTRA_LAST_PRODUCT_NAME)) {
+                mLastProductName = getNotNullText(getIntent().getExtras().getString(EXTRA_LAST_PRODUCT_NAME));
+            }
+
+            if (getIntent().getExtras().containsKey(EXTRA_IS_NO_PRODUCTION)) {
+                mIsNoProduction = getIntent().getExtras().getBoolean(EXTRA_IS_NO_PRODUCTION);
+            }
+        }
+    }
+
+    private String getNotNullText(String string) {
+        if (string == null){
+            return "";
+        }
+        return string;
     }
 
     private void showLastJobDialog(String title, String msg, String positiveBtn, String negativeBtn, final boolean firstSteps) {
@@ -196,15 +232,15 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                             showLastJobDialog(getString(R.string.setup_end),
                                     getString(R.string.do_you_need_to_end_setup_before),
                                     getString(R.string.yes), getString(R.string.no), false);
-                        }else {
-                            validateDialog(Integer.valueOf(mLastJobId), true);
+                        } else {
+                            validateDialog(Integer.valueOf(mLastJobId), false);
                         }
                     }
 
                     @Override
                     public void onClickNegativeBtn() {
-                        if (!firstSteps){
-                            validateDialog(Integer.valueOf(mLastJobId), false);
+                        if (!firstSteps) {
+                            validateDialog(Integer.valueOf(mLastJobId), true);
                         }
                     }
                 }, title, msg, positiveBtn, negativeBtn

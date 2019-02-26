@@ -1,7 +1,6 @@
 package com.operators.shiftloginfra;
 
-
-import com.ravtech.david.sqlcore.Event;
+import com.example.common.Event;
 
 import java.util.ArrayList;
 

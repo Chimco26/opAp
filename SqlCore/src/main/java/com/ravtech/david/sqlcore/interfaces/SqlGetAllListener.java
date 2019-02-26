@@ -1,7 +1,8 @@
 package com.ravtech.david.sqlcore.interfaces;
 
 
-import com.ravtech.david.sqlcore.Event;
+import com.example.common.Event;
+
 
 import java.util.List;
 

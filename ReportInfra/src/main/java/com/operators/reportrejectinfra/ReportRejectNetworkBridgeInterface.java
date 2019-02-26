@@ -7,7 +7,7 @@ public interface ReportRejectNetworkBridgeInterface {
     void sendApproveFirstItem(String siteUrl, String sessionId, String machineId, String operatorId, int rejectReasonId, int aprovingTechnicianId, Integer jobId,
                               SendReportCallback callback, int totalRetries, int specificRequestTimeout);
 
-    void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, int eventId, Integer jobId,
+    void sendReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long eventId, Integer jobId,
                         SendReportStopCallback callback, int totalRetries, int specificRequestTimeout);
 
     void sendMultipleReportStop(String siteUrl, String sessionId, String machineId, String operatorId, int stopReasonId, int stopSubReasonId, long[] eventId, Integer jobId,

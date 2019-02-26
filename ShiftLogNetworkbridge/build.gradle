@@ -31,4 +31,5 @@ dependencies {
     implementation 'org.litepal.android:core:1.6.1'
     implementation project(':ErrorObjectInterface')
     implementation project((':oppapplog'))
+    implementation project((':common'))
 }

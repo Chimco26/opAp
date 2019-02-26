@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -82,7 +84,6 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewV
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
-import com.operators.shiftloginfra.model.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
 import com.operatorsapp.BuildConfig;
@@ -136,7 +137,6 @@ import com.operatorsapp.utils.SimpleRequests;
 import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.RefreshPollingBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.ravtech.david.sqlcore.Event;
 
 import org.litepal.crud.DataSupport;
 
@@ -154,7 +154,10 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
+import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -197,7 +200,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
     private View mContainer2;
-    private ArrayList<Integer> mSelectedEvents;
+    private ArrayList<Float> mSelectedEvents;
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
@@ -487,6 +490,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
                         setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                         setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                        setFilterWarningText(true);
                     }
                 }
             }
@@ -754,8 +758,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-//                    setFilterWarningText(true);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                    setFilterWarningText(true);
                 }
 
             }
@@ -974,9 +978,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             }
                         }
                     }
+//TODO kuti
+//                    events = updateList(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onShiftLogDataReceived(events);
+                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse);
                     }
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
@@ -1060,8 +1066,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     };
 
     private void showSetUpEndDialog() {
-        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine);
+        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
         mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
+            @Override
+            public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+                sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
+            }
+
             @Override
             public void sendReport(int selectedReasonId, int selectedTechnicianId) {
                 sendSetupEndReport(selectedReasonId, selectedTechnicianId);
@@ -1722,11 +1733,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onEventSelected(Integer event, boolean checked) {
+    public void onEventSelected(Float event, boolean checked) {
 
         if (mSelectedEvents == null) {
 
-            mSelectedEvents = new ArrayList<>();
+            mSelectedEvents = new ArrayList<Float>();
         }
 
         if (checked) {
@@ -1735,13 +1746,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         } else {
 
-            ArrayList<Integer> toDelete = new ArrayList<>();
-            for (Integer event1 : mSelectedEvents) {
+            ArrayList<Float> toDelete = new ArrayList<>();
+            for (Float event1 : mSelectedEvents) {
                 if (event.compareTo(event1) == 0) {
                     toDelete.add(event1);
                 }
             }
-            for (Integer event1 : toDelete) {
+            for (Float event1 : toDelete) {
                 mSelectedEvents.remove(event1);
             }
         }
@@ -1804,6 +1815,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
 
         intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
+        intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
+        intent.putExtra(EXTRA_LAST_PRODUCT_NAME, mCurrentMachineStatus.getAllMachinesData().get(0).getLastProductName());
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+            intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+        }
 
         startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
 
@@ -1942,7 +1959,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 
     @Override
-    public void onSplitEventPressed(int eventID) {
+    public void onSplitEventPressed(Float eventID) {
         // TODO: 05/07/2018 call server
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         SimpleRequests simpleRequests = new SimpleRequests();
@@ -2333,7 +2350,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onReportStopEvent() {
         if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.startSelectMode(null);
+            mActionBarAndEventsFragment.startSelectMode(null, null);
         }
     }
 

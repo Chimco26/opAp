@@ -137,8 +137,8 @@
 
             <com.operatorsapp.view.widgetViewHolders.CountDownView
                 android:id="@+id/TLWC_countdown"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:layout_marginTop="10dp" />
 
             <LinearLayout

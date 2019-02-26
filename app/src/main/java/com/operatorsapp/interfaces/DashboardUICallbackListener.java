@@ -1,10 +1,11 @@
 package com.operatorsapp.interfaces;
 
+import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.ravtech.david.sqlcore.Event;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public interface DashboardUICallbackListener {
 
     void onMachineDataReceived(ArrayList<Widget> widgetList);
 
-    void onShiftLogDataReceived(ArrayList<Event> events);
+    void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse);
 
     void onTimerChanged(String timeToEndInHours);
 
