@@ -84,7 +84,7 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.Technician;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -1817,9 +1817,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final int technicianId = techniciansList.get(position).getID();
 
                 PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName(), sourceUserId);
-                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
+                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ResponseStatus>() {
                     @Override
-                    public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                    public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
                         if (response.body() != null && response.body().getmError() == null) {
 
                             mCallCounterHandler.removeCallbacksAndMessages(null);
@@ -1851,7 +1851,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
                         ProgressDialogManager.dismiss();
                         PersistenceManager.getInstance().setCalledTechnicianName("");
 
@@ -2053,9 +2053,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
-            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
+            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
                 @Override
-                public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
 
                     ArrayList<Notification> nList = pm.getNotificationHistory();
                     notification[0].setmResponseType(responseType);
@@ -2068,7 +2068,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
@@ -3425,9 +3425,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-        NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     pm.tryToUpdateToken("success + android id: " + id);
@@ -3441,7 +3441,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
                 pm.tryToUpdateToken("failed + android id: " + id);
                 pm.setNeedUpdateToken(true);
                 Log.d(LOG_TAG, "token failed");

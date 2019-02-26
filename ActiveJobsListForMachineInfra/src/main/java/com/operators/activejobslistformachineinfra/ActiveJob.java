@@ -36,7 +36,7 @@ public class ActiveJob implements Parcelable {
     private String jobUnitsProducedOK;
     @SerializedName("JoshUnitsProducedOK")
     private String joshUnitsProducedOK;
-    private boolean isUnit;
+    private boolean isUnit = true;
     private float reportValue;
     private boolean isEdited;
 

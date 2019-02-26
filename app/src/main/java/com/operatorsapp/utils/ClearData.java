@@ -1,7 +1,7 @@
 package com.operatorsapp.utils;
 
 import com.example.common.Event;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -17,14 +17,14 @@ public class ClearData {
 
     public static void clearData() {
         PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
-        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postDeleteToken(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
 
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
 
             }
         });

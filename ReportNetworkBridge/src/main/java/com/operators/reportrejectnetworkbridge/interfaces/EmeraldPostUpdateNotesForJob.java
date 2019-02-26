@@ -1,7 +1,7 @@
 package com.operators.reportrejectnetworkbridge.interfaces;
 
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,5 +14,5 @@ import retrofit2.http.POST;
 public interface EmeraldPostUpdateNotesForJob {
 
     @POST("/LeaderMESApi/UpdateJobNotes")
-    Call<ErrorResponseNewVersion> postUpdateNotesForJobRequest(@Body PostUpdateNotesForJobRequest postUpdateNotesForJobRequest);
+    Call<ResponseStatus> postUpdateNotesForJobRequest(@Body PostUpdateNotesForJobRequest postUpdateNotesForJobRequest);
 }

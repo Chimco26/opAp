@@ -1,4 +1,4 @@
-package com.operatorsapp.model;
+package com.example.common;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,9 +12,9 @@ public class MultipleRejectRequestModel {
     private String sessionID;
     @SerializedName("Rejects")
     @Expose
-    private List<RejectRequest> rejects = null;
+    private List<RejectForMultipleRequest> rejects = null;
 
-    public MultipleRejectRequestModel(String sessionID, List<RejectRequest> rejects) {
+    public MultipleRejectRequestModel(String sessionID, List<RejectForMultipleRequest> rejects) {
         this.sessionID = sessionID;
         this.rejects = rejects;
     }
@@ -27,11 +27,11 @@ public class MultipleRejectRequestModel {
         this.sessionID = sessionID;
     }
 
-    public List<RejectRequest> getRejects() {
+    public List<RejectForMultipleRequest> getRejects() {
         return rejects;
     }
 
-    public void setRejects(List<RejectRequest> rejects) {
+    public void setRejects(List<RejectForMultipleRequest> rejects) {
         this.rejects = rejects;
     }
 

@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
@@ -284,9 +284,9 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-        NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     pm.tryToUpdateToken("success + android id: " + id);
@@ -299,7 +299,7 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
                 pm.tryToUpdateToken("failed + android id: " + id);
                 pm.setNeedUpdateToken(true);
                 Log.d(LOG_TAG, "token failed");

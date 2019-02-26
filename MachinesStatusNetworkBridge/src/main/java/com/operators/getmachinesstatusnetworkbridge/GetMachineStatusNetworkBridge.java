@@ -12,7 +12,7 @@ import com.operators.getmachinesstatusnetworkbridge.server.responses.MachineStat
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusCallback;
 import com.operators.machinestatusinfra.interfaces.GetMachineStatusNetworkBridgeInterface;
 import com.operators.machinestatusinfra.models.MachineStatus;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 import java.util.concurrent.TimeUnit;
 
@@ -102,16 +102,16 @@ public class GetMachineStatusNetworkBridge implements GetMachineStatusNetworkBri
     public void setProductionModeForMachine(String siteUrl,int specificRequestTimeout, String sessionId, int machineId, int productionModeId)
     {
         SetProductionModeForMachineRequest setProductionModeForMachineRequest = new SetProductionModeForMachineRequest(sessionId, machineId, productionModeId);
-        Call<ErrorResponseNewVersion> call = mGetMachineStatusNetworkManagerInterface.postProductionModeForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).postProductionModeForMachine(setProductionModeForMachineRequest);
-        call.enqueue(new Callback<ErrorResponseNewVersion>(){
+        Call<ResponseStatus> call = mGetMachineStatusNetworkManagerInterface.postProductionModeForMachineRetroFitServiceRequests(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).postProductionModeForMachine(setProductionModeForMachineRequest);
+        call.enqueue(new Callback<ResponseStatus>(){
 
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
 
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
 
             }
         });

@@ -1,9 +1,9 @@
-package com.operatorsapp.model;
+package com.example.common;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RejectRequest {
+public class RejectForMultipleRequest {
     @SerializedName("MachineID")
     @Expose
     private Integer machineID;
@@ -15,18 +15,18 @@ public class RejectRequest {
     private Integer rejectReasonID;
     @SerializedName("Units")
     @Expose
-    private Integer units;
+    private Float units;
     @SerializedName("RejectCauseID")
     @Expose
     private Integer rejectCauseID;
     @SerializedName("Weight")
     @Expose
-    private Integer weight;
+    private Float weight;
     @SerializedName("JoshID")
     @Expose
     private Integer joshID;
 
-    public RejectRequest(Integer machineID, String operatorID, Integer rejectReasonID, Integer units, Integer rejectCauseID, Integer weight, Integer joshID) {
+    public RejectForMultipleRequest(Integer machineID, String operatorID, Integer rejectReasonID, Float units, Integer rejectCauseID, Float weight, Integer joshID) {
         this.machineID = machineID;
         this.operatorID = operatorID;
         this.rejectReasonID = rejectReasonID;
@@ -60,11 +60,11 @@ public class RejectRequest {
         this.rejectReasonID = rejectReasonID;
     }
 
-    public Integer getUnits() {
+    public Float getUnits() {
         return units;
     }
 
-    public void setUnits(Integer units) {
+    public void setUnits(Float units) {
         this.units = units;
     }
 
@@ -76,11 +76,11 @@ public class RejectRequest {
         this.rejectCauseID = rejectCauseID;
     }
 
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 

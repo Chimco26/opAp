@@ -76,11 +76,12 @@ import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
+import com.operators.reportrejectinfra.SimpleCallback;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
@@ -121,7 +122,9 @@ import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
+import com.example.common.MultipleRejectRequestModel;
 import com.operatorsapp.model.PdfObject;
+import com.example.common.RejectForMultipleRequest;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
@@ -311,9 +314,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 final String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
                 PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-                NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+                NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
                     @Override
-                    public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+                    public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
                         if (response != null && response.body() != null && response.errorBody() == null) {
                             Log.d(LOG_TAG, "token sent");
                             pm.setNeedUpdateToken(false);
@@ -325,7 +328,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     }
 
                     @Override
-                    public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                    public void onFailure(Call<ResponseStatus> call, Throwable t) {
                         pm.setNeedUpdateToken(true);
                         pm.tryToUpdateToken("failed + android id: " + id);
 
@@ -1069,8 +1072,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
         mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
             @Override
-            public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
-                sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
+            public void onReportMultipleRejects(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
+                sendMultipleRejectReport(rejectForMultipleRequests);
             }
 
             @Override
@@ -1421,14 +1424,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void clearData() {
 
         PostDeleteTokenRequest request = new PostDeleteTokenRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId(), PersistenceManager.getInstance().getNotificationToken());
-        NetworkManager.getInstance().postDeleteToken(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postDeleteToken(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
 
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
 
             }
         });
@@ -1850,7 +1853,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         SimpleRequests simpleRequests = new SimpleRequests();
         simpleRequests.postProductionMode(persistenceManager.getSiteUrl(), new PostProductionModeCallback() {
             @Override
-            public void onPostProductionModeSuccess(ErrorResponseNewVersion response) {
+            public void onPostProductionModeSuccess(ResponseStatus response) {
                 // TODO: 31/07/2018 display crouton
                 if (response.isFunctionSucceed()) {
                     dashboardDataStartPolling();
@@ -2304,15 +2307,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onCounterPressedInCentralDashboardContainer(int count) {
         PostIncrementCounterRequest request = new PostIncrementCounterRequest(PersistenceManager.getInstance().getMachineId(), PersistenceManager.getInstance().getSessionId());
-        NetworkManager.getInstance().postIncrementCounter(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postIncrementCounter(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, retrofit2.Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
                 onRefreshPollingRequest();
                 mCroutonCreator.showCrouton(DashboardActivity.this, getString(R.string.incremented_successfully), 0, getCroutonRoot(), CroutonCreator.CroutonType.SUCCESS);
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
                 mCroutonCreator.showCrouton(DashboardActivity.this, getString(R.string.incremented_failure), 0, getCroutonRoot(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
             }
         });
@@ -2388,20 +2391,28 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        SendBroadcast.refreshPolling(getContext());
     }
 
-//    private void sendMultipleRejectReport(ArrayList<RejectRequest> rejectRequests) {
-//        ProgressDialogManager.show(this);
-//        SimpleRequests simpleRequests = new SimpleRequests();
-//        simpleRequests.reportMultipleRejects();
-//        mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
-//        mReportCore.registerListener(mReportCallbackListener);
-//        if (isUnit) {
-//            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value),
-//                    (double) 0, new MultipleRejectRequestModel(PersistenceManager.getInstance().getSessionId(), rejectRequests));
-//        } else {
-//            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
-//        }
-////        SendBroadcast.refreshPolling(getContext());
-//    }
+    private void sendMultipleRejectReport(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
+        SimpleRequests simpleRequests = new SimpleRequests();
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        simpleRequests.reportMultipleRejects(persistenceManager.getSiteUrl(), new SimpleCallback() {
+            @Override
+            public void onRequestSuccess(Object response) {
+                ResponseStatus responseStatus = objectToNewError(response);
+                OppAppLogger.getInstance().i(LOG_TAG, "sendMultipleReportSuccess()");
+                if (responseStatus.isFunctionSucceed()) {
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, responseStatus.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                } else {
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, responseStatus.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                }
+
+            }
+            @Override
+            public void onRequestFailed(ErrorObjectInterface reason) {
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.NETWORK_ERROR);
+            }
+        }, NetworkManager.getInstance(), new MultipleRejectRequestModel(persistenceManager.getSessionId(),
+                rejectForMultipleRequests), persistenceManager.getTotalRetries(), persistenceManager.getRequestTimeout());
+    }
 
     private void sendSetupEndReport(int selectedReasonId, int selectedTechnicianId) {
         mSelectedReasonId = selectedReasonId;
@@ -2420,7 +2431,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         public void sendReportSuccess(Object errorResponse) {
-            ErrorResponseNewVersion response = objectToNewError(errorResponse);
+            ResponseStatus response = objectToNewError(errorResponse);
             ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
@@ -2467,7 +2478,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     ReportCallbackListener mReportCallbackEndSetupListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(Object o) {//TODO crouton error
-            ErrorResponseNewVersion response = objectToNewError(o);
+            ResponseStatus response = objectToNewError(o);
 //            SendBroadcast.refreshPolling(DashboardActivity.this);
             dashboardDataStartPolling();
             ProgressDialogManager.dismiss();
@@ -2513,16 +2524,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     };
 
-    private ErrorResponseNewVersion objectToNewError(Object o) {
-        ErrorResponseNewVersion responseNewVersion;
-        if (o instanceof ErrorResponseNewVersion) {
-            responseNewVersion = (ErrorResponseNewVersion) o;
+    private ResponseStatus objectToNewError(Object o) {
+        ResponseStatus responseNewVersion;
+        if (o instanceof ResponseStatus) {
+            responseNewVersion = (ResponseStatus) o;
         } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            responseNewVersion = new ResponseStatus(true, 0, er);
             if (responseNewVersion.getmError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
