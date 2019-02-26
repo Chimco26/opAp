@@ -160,7 +160,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 holder.mCheckBox.setChecked(false);
             }
-            setViewHeight(event);
+            mView.setLayoutParams(getViewHeight(event));
             updateNotification(event);
 
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
@@ -231,7 +231,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         }
 
-        private void setViewHeight(Event event) {
+        private ViewGroup.LayoutParams getViewHeight(Event event) {
             ViewGroup.LayoutParams params = mView.getLayoutParams();
             if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
                 params.height = 0;
@@ -244,7 +244,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 params.height = 5 * PIXEL_FOR_MINUTE;
             }
-            mView.setLayoutParams(params);
+            return params;
         }
 
         private void updateNotification(Event event) {
@@ -302,6 +302,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             switch (type) {
                 case 1:
+//                    timeTV.setText(getNotificationTime(event, time));
                     timeTV.setText(time);
                     detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
@@ -369,6 +370,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
         }
     }
+
+//    private String getNotificationTime(Event event, String time) {
+//        long duration = event.getDuration() * 60 * 60 * 1000;
+//        if (duration == 0){
+//            duration = 1;
+//        }
+//        long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(time);
+//        if ((difference * 100 / (duration * PIXEL_FOR_MINUTE) > getviewHeight())
+//    }
 
     private String getTextByState(String details) {
         if (mIsOpenState){

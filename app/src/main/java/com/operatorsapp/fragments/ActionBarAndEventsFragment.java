@@ -2956,12 +2956,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 event.setEventSubTitleLname("עבודה");
                 break;
             case 2:
-                event.setEventSubTitleEname("Working Setup");
-                event.setEventSubTitleLname("סטאפ - עבודה");
-                break;
-            case 5:
                 event.setEventSubTitleEname("Parameter Deviation");
                 event.setEventSubTitleLname("חריגה מפרמטר");
+                break;
+            case 5:
+                event.setEventSubTitleEname("Working Setup");
+                event.setEventSubTitleLname("סטאפ - עבודה");
                 break;
             default:
                 event.setEventSubTitleEname("Working");
