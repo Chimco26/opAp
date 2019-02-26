@@ -2243,7 +2243,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
-        private void openDialog (Event event){
+        private void onOpenDialog (Event event){
 
             String message;
 
@@ -2496,7 +2496,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         mEventsQueue.pop();
 
                     } else if (event.getEventGroupID() == TYPE_ALERT) {
-                        openDialog(event);
+                        onOpenDialog(event);
                         mLastEvent = event;
                         mEventsQueue.pop();
                         if (mustBeClosed) {

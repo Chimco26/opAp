@@ -2496,6 +2496,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                 });
             }
+
+            @Override
+            public void onOpenDialog(final Event event) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        openDialog(event);
+                    }
+                });
+            }
         }).execute();
 //after
     }
@@ -2535,6 +2545,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onStartSelectMode(Event event);
 
         void onShowNotificationText(boolean show);
+
+        void onOpenDialog(Event event);
     }
 
     public void updateEvents(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
@@ -2625,7 +2637,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsQueue.pop();
 
                 } else if (event.getEventGroupID() == TYPE_ALERT) {
-                    openDialog(event);
+                    myTaskListener.onOpenDialog(event);
                     mLastEvent = event;
                     mEventsQueue.pop();
                     if (mustBeClosed) {

@@ -398,7 +398,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         SimpleRequests simpleRequests = new SimpleRequests();
 
-        simpleRequests.postUpdtaeActions(persistanceManager.getSiteUrl(), new PostUpdtaeActionsCallback() {
+        simpleRequests.postUpdateActions(persistanceManager.getSiteUrl(), new PostUpdtaeActionsCallback() {
 
             @Override
             public void onPostUpdtaeActionsSuccess(Object response) {
