@@ -299,7 +299,6 @@
     <string name="yes">כן</string>
     <string name="do_you_need_to_end_setup_before">האם אתה צריך לעשות להגדיר לפני שמתחילים לייצר על עבודה זו שוב?</string>
     <string name="working">עובד</string>
-    <string name="timeline">ציר זמן</string>
     <string name="see_pending_jobs">רשימת פק”עות ממתינות</string>
     <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
 

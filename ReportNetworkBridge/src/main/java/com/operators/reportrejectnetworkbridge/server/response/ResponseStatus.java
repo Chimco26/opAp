@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by alex on 17/07/2018.
  */
 
-public class ErrorResponseNewVersion implements Parcelable{
+public class ResponseStatus implements Parcelable{
 
     @SerializedName("FunctionSucceed")
     boolean isFunctionSucceed;
@@ -20,7 +20,7 @@ public class ErrorResponseNewVersion implements Parcelable{
     @SerializedName("error")
     ErrorResponse mError;
 
-    public ErrorResponseNewVersion(boolean isFunctionSucceed, int mLeaderRecordID, ErrorResponse mError) {
+    public ResponseStatus(boolean isFunctionSucceed, int mLeaderRecordID, ErrorResponse mError) {
         this.isFunctionSucceed = isFunctionSucceed;
         this.mLeaderRecordID = mLeaderRecordID;
         this.mError = mError;
@@ -50,7 +50,7 @@ public class ErrorResponseNewVersion implements Parcelable{
         this.mError = mError;
     }
 
-    protected ErrorResponseNewVersion(Parcel in) {
+    protected ResponseStatus(Parcel in) {
         isFunctionSucceed = in.readByte() != 0;
         mLeaderRecordID = in.readInt();
         mError = in.readParcelable(ErrorResponse.class.getClassLoader());
@@ -68,15 +68,15 @@ public class ErrorResponseNewVersion implements Parcelable{
         return 0;
     }
 
-    public static final Creator<ErrorResponseNewVersion> CREATOR = new Creator<ErrorResponseNewVersion>() {
+    public static final Creator<ResponseStatus> CREATOR = new Creator<ResponseStatus>() {
         @Override
-        public ErrorResponseNewVersion createFromParcel(Parcel in) {
-            return new ErrorResponseNewVersion(in);
+        public ResponseStatus createFromParcel(Parcel in) {
+            return new ResponseStatus(in);
         }
 
         @Override
-        public ErrorResponseNewVersion[] newArray(int size) {
-            return new ErrorResponseNewVersion[size];
+        public ResponseStatus[] newArray(int size) {
+            return new ResponseStatus[size];
         }
     };
 }

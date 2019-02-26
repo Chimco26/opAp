@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
@@ -152,9 +152,9 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                             pm.getOperatorId(),
                             notificationToRemove.getmTargetUserId() +"");
 
-                    NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
+                    NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
                         @Override
-                        public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                        public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
 
                             if (response != null && response.body() != null && response.body().getmError() == null){
 
@@ -176,7 +176,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
                             mProgressBarFl.setVisibility(View.GONE);
                         }
                     });

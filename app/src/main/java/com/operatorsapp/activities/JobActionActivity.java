@@ -44,7 +44,7 @@ import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Action;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsByJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
@@ -1154,7 +1154,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), mCurrentPendingJob.getID(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
-            public void onUpdateNotesSuccess(ErrorResponseNewVersion responseNewVersion) {
+            public void onUpdateNotesSuccess(ResponseStatus responseNewVersion) {
                 mProductNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();

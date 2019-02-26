@@ -1,7 +1,7 @@
 package com.operators.getmachinesstatusnetworkbridge.interfaces;
 
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,5 +13,5 @@ import retrofit2.http.POST;
 
 public interface EmeraldSetProductionModeForMachineRequest {
     @POST("/LeaderMESApi/SetProductionModeForMachine")
-    Call<ErrorResponseNewVersion> postProductionModeForMachine(@Body SetProductionModeForMachineRequest setProductionModeForMachineRequest);
+    Call<ResponseStatus> postProductionModeForMachine(@Body SetProductionModeForMachineRequest setProductionModeForMachineRequest);
 }

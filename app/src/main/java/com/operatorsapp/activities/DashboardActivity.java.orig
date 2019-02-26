@@ -2342,7 +2342,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+    public void onReportMultipleRejects(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
 
         sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
     }

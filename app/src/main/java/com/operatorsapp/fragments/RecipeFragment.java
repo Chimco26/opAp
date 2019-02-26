@@ -24,7 +24,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.ChannelSplits;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeData;
@@ -394,7 +394,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
         PostUpdateNotesForJobRequest updateNotesRequest = new PostUpdateNotesForJobRequest(pm.getSessionId(), pm.getJobId(), note);
         simpleRequests.postUpdateNotesForJob(pm.getSiteUrl(), new PostUpdateNotesForJobCallback() {
             @Override
-            public void onUpdateNotesSuccess(ErrorResponseNewVersion responseNewVersion) {
+            public void onUpdateNotesSuccess(ResponseStatus responseNewVersion) {
                 mNoteTv.setText(note);
                 ProgressDialogManager.dismiss();
                 alert.dismiss();

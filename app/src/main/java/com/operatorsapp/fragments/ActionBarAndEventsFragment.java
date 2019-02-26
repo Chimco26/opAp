@@ -84,7 +84,7 @@ import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListene
 import com.operators.reportfieldsformachineinfra.PackageTypes;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.Technician;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -282,8 +282,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private CheckBox mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
-    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private CheckBox mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private boolean mIsWorkingEventChecked, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private View mFilterLy;
+    private View mFilterBtn;
+    private View mFiltersView;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -409,6 +412,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
+        mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
+        mFiltersView = view.findViewById(R.id.FAAE_filters_view);
+
+        mFilterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonClick(mShiftLogParams);
+            }
+        });
         mShowAlarmCheckBox = view.findViewById(R.id.FAAE_alarm_chekbox);
         mShowAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -427,12 +440,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
+                    mFilterLy.setVisibility(View.VISIBLE);
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     }
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
+                    mFilterLy.setVisibility(View.GONE);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
@@ -807,6 +822,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mOpenWidth);
                 anim.setDuration(ANIM_DURATION_MILLIS);
                 mShiftLogLayout.startAnimation(anim);
+                if (mIsTimeLine) {
+                    mFiltersView.setVisibility(View.VISIBLE);
+                }
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -839,6 +857,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
+        if (mIsTimeLine) {
+            mFiltersView.setVisibility(View.GONE);
+        }
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
         mShiftLogLayout.startAnimation(anim);
@@ -1375,6 +1396,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
 
         switch (compoundButton.getId()) {
+            case R.id.FAAE_working_events:
+                mIsWorkingEventChecked = checked;
+                break;
             case R.id.FAAE_event_details:
                 mIsEventDetailsChecked = checked;
                 break;
@@ -1391,7 +1415,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mIsProductionReportChecked = checked;
                 break;
         }
-        mEventsAdapter.setCheckedFilters(mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
+        mEventsAdapter.setCheckedFilters(mIsWorkingEventChecked, mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -1817,9 +1841,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 final int technicianId = techniciansList.get(position).getID();
 
                 PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technicianId, body, operatorName, techniciansList.get(position).getEName(), sourceUserId);
-                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ErrorResponseNewVersion>() {
+                NetworkManager.getInstance().postTechnicianCall(request, new Callback<ResponseStatus>() {
                     @Override
-                    public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                    public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
                         if (response.body() != null && response.body().getmError() == null) {
 
                             mCallCounterHandler.removeCallbacksAndMessages(null);
@@ -1851,7 +1875,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
                         ProgressDialogManager.dismiss();
                         PersistenceManager.getInstance().setCalledTechnicianName("");
 
@@ -2053,9 +2077,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
-            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ErrorResponseNewVersion>() {
+            NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
                 @Override
-                public void onResponse(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Response<ErrorResponseNewVersion> response) {
+                public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
 
                     ArrayList<Notification> nList = pm.getNotificationHistory();
                     notification[0].setmResponseType(responseType);
@@ -2068,7 +2092,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ErrorResponseNewVersion> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
@@ -2689,20 +2713,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (eventStartMilli < eventEndMilli) {
 
-                Event workingEvent = new Event();
-                workingEvent.setEventTime(events.get(i + 1).getEventEndTime());
-                workingEvent.setEventEndTime(event.getEventTime());
-
-                workingEvent.setEventSubTitleLname("עובד");
-                workingEvent.setEventSubTitleEname("Working");
-                workingEvent.setColor("#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
-
-                workingEvent.setEventID(event.getEventID() - 0.5f);
-                workingEvent.setType(1);
-
-                long minute = TimeUnit.MILLISECONDS.toMinutes(eventEndMilli - eventStartMilli);
-
-                workingEvent.setDuration(minute);
+                Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
+                        event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
+                        -0.5f, "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2715,6 +2728,31 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
 
         return events;
+    }
+
+    @NonNull
+    private Event createIntermediateEvent(String eventTime, String eventEndTime, float id, Long eventStartMilli,
+                                          Long eventEndMilli, String lName, String eName,
+                                          float differenceForNewId, String color) {
+        Event workingEvent = new Event();
+        workingEvent.setEventTime(eventTime);
+        workingEvent.setEventEndTime(eventEndTime);
+
+        workingEvent.setEventSubTitleLname(lName);
+        workingEvent.setEventSubTitleEname(eName);
+        workingEvent.setColor(color);
+
+        workingEvent.setEventID(id + differenceForNewId);
+        workingEvent.setType(1);
+
+        long duration = eventEndMilli - eventStartMilli;
+        if (duration > DAY_IN_MILLIS) {
+            duration = 1;
+        }
+        long minute = TimeUnit.MILLISECONDS.toMinutes(duration);
+
+        workingEvent.setDuration(minute);
+        return workingEvent;
     }
 
     private void updateOldExtras(ActualBarExtraResponse actualBarExtraResponse) {
@@ -2873,6 +2911,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
+        if (events.get(0).getEventEndTime() != null
+                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+
+            Event event = events.get(0);
+            Event intermediateEvent = new Event();
+            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
+            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
+                    "", event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
+                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
+                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()));
+            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
+            events.add(0, intermediateEvent);
+        }
 //        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 //        mEventsRecycler.setAdapter(mEventsAdapter);
 
@@ -2886,7 +2938,43 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
+    private String getColorByMachineStatus(int machineStatusID) {
+        switch (machineStatusID) {
+            case 1:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+            case 2:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
+            case 5:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark));
+            default:
+                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+
+        }
+    }
+
+    private void setEventTextByMachineStatus(int machineStatusID, Event event) {
+        switch (machineStatusID) {
+            case 1:
+                event.setEventSubTitleEname("Working");
+                event.setEventSubTitleLname("עבודה");
+                break;
+            case 2:
+                event.setEventSubTitleEname("Parameter Deviation");
+                event.setEventSubTitleLname("חריגה מפרמטר");
+                break;
+            case 5:
+                event.setEventSubTitleEname("Working Setup");
+                event.setEventSubTitleLname("סטאפ - עבודה");
+                break;
+            default:
+                event.setEventSubTitleEname("Working");
+                event.setEventSubTitleLname("עבודה");
+        }
+    }
+
     public void initFilterEvents(View view) {
+        mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
+        mWorkingEvents.setOnCheckedChangeListener(this);
         mEventDetails = view.findViewById(R.id.FAAE_event_details);
         mEventDetails.setOnCheckedChangeListener(this);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
@@ -3425,9 +3513,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final PersistenceManager pm = PersistenceManager.getInstance();
         final String id = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-        NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+        NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
             @Override
-            public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+            public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
                     pm.tryToUpdateToken("success + android id: " + id);
@@ -3441,7 +3529,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             @Override
-            public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+            public void onFailure(Call<ResponseStatus> call, Throwable t) {
                 pm.tryToUpdateToken("failed + android id: " + id);
                 pm.setNeedUpdateToken(true);
                 Log.d(LOG_TAG, "token failed");

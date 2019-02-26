@@ -22,6 +22,7 @@ import com.example.common.actualBarExtraResponse.Reject;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
+import com.operatorsapp.utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -32,21 +33,21 @@ import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private static final int PIXEL_FOR_MINUTE = 4;
-    private boolean mClosedState;
+    private boolean mIsOpenState;
     private boolean mIsSelectionMode;
     private final OnStopClickListener mOnStopClickListener;
 
     private Context mContext;
     private ArrayList<Event> mEvents = new ArrayList<>();
     private ArrayList<Float> mSelectedEvents;
-    private boolean mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState, ArrayList<Event> events, ArrayList<Float> selectedEvents) {
         mContext = context;
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
-        mClosedState = closedState;
+        mIsOpenState = closedState;
         mEvents = events;
         mSelectedEvents = selectedEvents;
     }
@@ -55,7 +56,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mContext = context;
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
-        mClosedState = closedState;
+        mIsOpenState = closedState;
     }
 
     public void setSelectedEvents(ArrayList<Float> selectedEvents) {
@@ -70,8 +71,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         this.mIsSelectionMode = mIsSelectionMode;
     }
 
-    public void setCheckedFilters(boolean isEventDetailsChecked, boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
+    public void setCheckedFilters(boolean isWorkingEventChecked, boolean isEventDetailsChecked, boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
 
+        mIsWorkingEventChecked = isWorkingEventChecked;
         mIsEventDetailsChecked = isEventDetailsChecked;
         mIsServiceCallsChecked = isServiceCallsChecked;
         mIsmMessagesChecked = isMessagesChecked;
@@ -81,7 +83,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     public void setClosedState(boolean isSelectionMode) {
-        mClosedState = isSelectionMode;
+        mIsOpenState = isSelectionMode;
     }
 
     @NonNull
@@ -158,7 +160,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 holder.mCheckBox.setChecked(false);
             }
-            setViewHeight(event);
+            mView.setLayoutParams(getViewHeight(event));
             updateNotification(event);
 
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
@@ -185,7 +187,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             String text = duration + "m " + (OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
 
-            if (!mClosedState && text.length() > 12) {
+            if (!mIsOpenState && text.length() > 12) {
                 mText.setText(String.format("%s...", text.substring(0, 12)));
 
             } else {
@@ -229,10 +231,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         }
 
-        private void setViewHeight(Event event) {
+        private ViewGroup.LayoutParams getViewHeight(Event event) {
             ViewGroup.LayoutParams params = mView.getLayoutParams();
-
             if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+                params.height = 0;
+            } else if (!mIsWorkingEventChecked && event.getType() == 1) {
                 params.height = 0;
             } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
                 params.height = 300;
@@ -241,7 +244,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 params.height = 5 * PIXEL_FOR_MINUTE;
             }
-            mView.setLayoutParams(params);
+            return params;
         }
 
         private void updateNotification(Event event) {
@@ -297,29 +300,29 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 timeTV.setVisibility(View.VISIBLE);
             }
 
-
             switch (type) {
                 case 1:
+//                    timeTV.setText(getNotificationTime(event, time));
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
                     break;
 
                 case 2:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     setNotificationIcon(iconIV, icon);
                     break;
 
                 case 3:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
                     break;
 
                 case 4:
                     timeTV.setText(time);
-                    detailsTV.setText(details);
+                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
                     break;
             }
@@ -365,6 +368,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     iconIV.setImageDrawable(null);
                     break;
             }
+        }
+    }
+
+//    private String getNotificationTime(Event event, String time) {
+//        long duration = event.getDuration() * 60 * 60 * 1000;
+//        if (duration == 0){
+//            duration = 1;
+//        }
+//        long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(time);
+//        if ((difference * 100 / (duration * PIXEL_FOR_MINUTE) > getviewHeight())
+//    }
+
+    private String getTextByState(String details) {
+        if (mIsOpenState){
+            return details;
+        }else {
+            return StringUtil.getResizedString(details, 6);
         }
     }
 
