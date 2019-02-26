@@ -20,7 +20,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="550dp">
 
         <ImageView
             android:id="@+id/tech_dialog_x_iv"
@@ -39,8 +39,8 @@
             style="@style/ProximaNovaSemiBold"
             android:textSize="24sp"
             android:padding="10dp"
-            android:textColor="@color/black"
-            android:text="@string/service_call_exists"
+            android:textColor="@color/blue1"
+            android:text="@string/service_calls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -126,7 +126,11 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+            android:scrollbars="vertical"
+            android:scrollbarFadeDuration="10000"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tech_dialog_new_call"

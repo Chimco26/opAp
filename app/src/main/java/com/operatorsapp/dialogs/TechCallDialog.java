@@ -110,7 +110,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                 mRightTabUnderline.setVisibility(View.VISIBLE);
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mLeftTabUnderline.setVisibility(View.INVISIBLE);
-                mSubtitleTv.setVisibility(View.INVISIBLE);
+                mSubtitleTv.setVisibility(View.GONE);
                 setLast24hrsCalls();
 
                 break;
