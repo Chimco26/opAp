@@ -274,7 +274,6 @@
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
     <string name="default_unanswered_technician_call">Operator %1$s opened a service call. Waiting for the technician to reply</string>
     <string name="general">General</string>
-    <string name="service_calls">Service Calls</string>
     <string name="split_event_success">The Event was Split Successfully</string>
     <string name="split_event_failed">Split Event Failed</string>
     <string name="midnight">midnight</string>
@@ -350,11 +349,16 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
-    <string name="shiftlog">Shiftlog</string>
+    <string name="shiftlog">Shift log</string>
     <string name="working">Working</string>
     <string name="erp_job_id">ERP Job ID</string>
     <string name="rejects">rejects</string>
     <string name="good_units">Good units</string>
+    <string name="working_event">Working Event</string>
+    <string name="event_details">Event details</string>
+    <string name="service_calls">Service Calls</string>
+    <string name="messages">Messages</string>
+    <string name="production_report">Production Report</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
