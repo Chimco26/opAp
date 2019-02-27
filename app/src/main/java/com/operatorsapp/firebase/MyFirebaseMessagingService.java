@@ -12,7 +12,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
@@ -72,9 +72,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         if (machineId > 0 && siteUrl.length() > 0) {
             final String id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
             PostNotificationTokenRequest request = new PostNotificationTokenRequest(sessionID, machineId, token, id);
-            NetworkManager.getInstance().postNotificationToken(request, new Callback<ErrorResponseNewVersion>() {
+            NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
                 @Override
-                public void onResponse(Call<ErrorResponseNewVersion> call, Response<ErrorResponseNewVersion> response) {
+                public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                     if (response != null && response.body() != null && response.isSuccessful()) {
                         Log.d(LOG_TAG, "token sent");
                         pm.setNeedUpdateToken(false);
@@ -91,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 }
 
                 @Override
-                public void onFailure(Call<ErrorResponseNewVersion> call, Throwable t) {
+                public void onFailure(Call<ResponseStatus> call, Throwable t) {
                     pm.tryToUpdateToken("failed + android id: " + id);
                     pm.setNeedUpdateToken(true);
                     Log.d(LOG_TAG, "token failed");

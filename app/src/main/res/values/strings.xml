@@ -350,7 +350,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="do_you_need_to_end_setup_before">Do you need to do set up before starting to produce on this job again?</string>
-    <string name="timeline">Timeline</string>
+    <string name="shiftlog">Shiftlog</string>
     <string name="working">Working</string>
     <string name="erp_job_id">ERP Job ID</string>
     <string name="rejects">rejects</string>

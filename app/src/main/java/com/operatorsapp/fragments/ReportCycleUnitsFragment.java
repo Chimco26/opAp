@@ -36,7 +36,7 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.adapters.ActiveJobsSpinnerAdapter;
@@ -387,7 +387,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
         @Override
         public void sendReportSuccess(Object o) {
 
-            ErrorResponseNewVersion response = objectToNewError(o);
+            ResponseStatus response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             OppAppLogger.getInstance().i(LOG_TAG, "sendReportSuccess() units value is: " + mUnitsCounter);
             mReportCore.unregisterListener();
@@ -427,16 +427,16 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
     };
 
-    private ErrorResponseNewVersion objectToNewError(Object o) {
-        ErrorResponseNewVersion responseNewVersion;
-        if (o instanceof ErrorResponseNewVersion){
-            responseNewVersion = (ErrorResponseNewVersion)o;
+    private ResponseStatus objectToNewError(Object o) {
+        ResponseStatus responseNewVersion;
+        if (o instanceof ResponseStatus){
+            responseNewVersion = (ResponseStatus)o;
         }else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            responseNewVersion = new ResponseStatus(true, 0, er);
             if (responseNewVersion.getmError().getErrorCode() != 0){
                 responseNewVersion.setFunctionSucceed(false);
             }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -26,6 +28,8 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.view.FocusableRecycleView;
 import com.operatorsapp.view.SingleLineKeyboard;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
+
+import java.util.ArrayList;
 
 public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListener {
 
@@ -97,11 +101,8 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
             @Override
             public void onClick(View v) {
                 mAlaramAlertDialog.dismiss();
-                for (ActiveJob activeJob : mActiveJobListForMAchine.getActiveJobs()) {
-                    if (activeJob.isEdited()) {
-                        listener.onReportReject(String.valueOf(activeJob.getReportValue()), activeJob.isUnit(), 0, STATIC_REASON_ID);
-                    }
-                }
+                ArrayList<RejectForMultipleRequest> rejectForMultipleRequests = createReportRejectList();
+                listener.onReportMultipleRejects(rejectForMultipleRequests);
                 listener.sendReport(mSelectedReasonId, mSelectedTechnicianId);
             }
         });
@@ -114,6 +115,32 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         });
     }
 
+    @NonNull
+    public ArrayList<RejectForMultipleRequest> createReportRejectList() {
+        PersistenceManager persistenceManager = PersistenceManager.getInstance();
+        ArrayList<RejectForMultipleRequest> rejectForMultipleRequests = new ArrayList<>();
+        for (ActiveJob activeJob : mActiveJobListForMAchine.getActiveJobs()) {
+            if (activeJob.isEdited()) {
+                if (activeJob.isUnit()) {
+                    rejectForMultipleRequests.add(new RejectForMultipleRequest(persistenceManager.getMachineId(),
+                            persistenceManager.getOperatorId(), STATIC_REASON_ID, activeJob.getReportValue(),
+                            0, 0f, activeJob.getJoshID()));
+                }else {
+                    rejectForMultipleRequests.add(new RejectForMultipleRequest(persistenceManager.getMachineId(),
+                            persistenceManager.getOperatorId(), STATIC_REASON_ID, 0f,
+                            0, activeJob.getReportValue(), activeJob.getJoshID()));
+                }
+            }
+        }
+        return rejectForMultipleRequests;
+    }
+
+    //if (isUnit) {
+//        mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value),
+//                (double) 0, new MultipleRejectRequestModel(PersistenceManager.getInstance().getSessionId(), rejectRequests));
+//    } else {
+//        mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
+//    }
     private void setUpTechnicianSpinner(View view) {
         Spinner technicianSpinner = view.findViewById(R.id.technician_spinner);
         final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
@@ -164,7 +191,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     public interface SetupEndDialogListener {
 
-        void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId);
+        void onReportMultipleRejects(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests);
 
         void sendReport(int selectedReasonId, int selectedTechnicianId);
 

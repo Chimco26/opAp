@@ -26,7 +26,7 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ErrorResponseNewVersion;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -290,7 +290,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     ReportCallbackListener mReportCallbackListener = new ReportCallbackListener() {
         @Override
         public void sendReportSuccess(Object o) {
-            ErrorResponseNewVersion response = objectToNewError(o);
+            ResponseStatus response = objectToNewError(o);
             SendBroadcast.refreshPolling(getContext());
             dismissProgressDialog();
             Tracker tracker = null;
@@ -382,16 +382,16 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         }
     };
 
-    private ErrorResponseNewVersion objectToNewError(Object o) {
-        ErrorResponseNewVersion responseNewVersion;
-        if (o instanceof ErrorResponseNewVersion){
-            responseNewVersion = (ErrorResponseNewVersion)o;
+    private ResponseStatus objectToNewError(Object o) {
+        ResponseStatus responseNewVersion;
+        if (o instanceof ResponseStatus){
+            responseNewVersion = (ResponseStatus)o;
         }else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
-            responseNewVersion = new ErrorResponseNewVersion(true, 0, er);
+            responseNewVersion = new ResponseStatus(true, 0, er);
             if (responseNewVersion.getmError().getErrorCode() != 0){
                 responseNewVersion.setFunctionSucceed(false);
             }

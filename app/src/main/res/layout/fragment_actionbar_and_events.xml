@@ -243,77 +243,116 @@
                             android:background="@drawable/side_menu"
                             android:orientation="vertical">
 
+                            <Switch
+                                android:id="@+id/FAAE_shift_type_checkbox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:checked="true"
+                                android:gravity="start|center_vertical"
+                                android:switchPadding="30dp"
+                                android:text="@string/shiftlog"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:thumb="@drawable/drawable_switch"
+                                android:track="@drawable/drawable_bg" />
 
                             <LinearLayout
+                                android:id="@+id/FAAE_filter_ly"
                                 android:layout_width="match_parent"
-                                android:layout_height="20dp"
-                                android:orientation="horizontal"
-                                android:visibility="visible">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/path" />
-
-                                <HorizontalScrollView
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="20dp"
+                                    android:orientation="horizontal"
+                                    android:visibility="visible">
 
-                                    <LinearLayout
+                                    <ImageView
+                                        android:id="@+id/FAAE_filter_btn"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/path" />
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_working_events"
+                                    <HorizontalScrollView
+                                        android:id="@+id/FAAE_filters_view"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="gone">
+
+                                        <LinearLayout
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Working Event" />
+                                            android:layout_height="wrap_content">
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_event_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Event details" />
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_service_alls"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Service Calls" />
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_messages"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Messages" />
+                                            <CheckBox
+                                                android:id="@+id/FAAE_select_all"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Select all" />
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_rejects"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Rejects" />
+                                            <CheckBox
+                                                android:id="@+id/FAAE_working_events"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Working Event" />
 
-                                        <CheckBox
-                                            android:id="@+id/FAAE_production_report"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:buttonTint="@color/colorPrimaryDark"
-                                            android:checked="true"
-                                            android:text="Production Report" />
 
-                                    </LinearLayout>
-                                </HorizontalScrollView>
+                                            <CheckBox
+                                                android:id="@+id/FAAE_event_details"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Event details" />
 
+                                            <CheckBox
+                                                android:id="@+id/FAAE_service_alls"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Service Calls" />
+
+                                            <CheckBox
+                                                android:id="@+id/FAAE_messages"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Messages" />
+
+                                            <CheckBox
+                                                android:id="@+id/FAAE_rejects"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Rejects" />
+
+                                            <CheckBox
+                                                android:id="@+id/FAAE_production_report"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimaryDark"
+                                                android:checked="true"
+                                                android:text="Production Report" />
+
+                                        </LinearLayout>
+                                    </HorizontalScrollView>
+
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@color/divider_gray" />
                             </LinearLayout>
 
                             <ImageView
@@ -350,20 +389,6 @@
 
                                 </LinearLayout>
                             </ScrollView>
-
-
-                            <Switch
-                                android:id="@+id/FAAE_shift_type_checkbox"
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:checked="true"
-                                android:gravity="start|center_vertical"
-                                android:switchPadding="30dp"
-                                android:text="@string/timeline"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                android:thumb="@drawable/drawable_switch"
-                                android:track="@drawable/drawable_bg" />
 
                             <Switch
                                 android:id="@+id/FAAE_alarm_chekbox"
