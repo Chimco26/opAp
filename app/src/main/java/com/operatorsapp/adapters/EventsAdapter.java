@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
@@ -79,6 +81,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mIsRejectsChecked = isRejectsChecked;
         mIsProductionReportChecked = isProductionReportChecked;
         notifyDataSetChanged();
+
     }
 
     public void setClosedState(boolean isSelectionMode) {
@@ -113,6 +116,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private LinearLayout mCheckContainer;
         private CheckBox mCheckBox;
         private RelativeLayout mTechContainer;
+        Event mEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -132,43 +136,43 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (position > mEvents.size() - 1) {
                 return;
             }
-            final Event event = mEvents.get(position);
+            mEvent = mEvents.get(position);
 
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (mOnStopClickListener != null && event.getType() != 1) {
-                        mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
+                    if (mOnStopClickListener != null && mEvent.getType() != 1) {
+                        mOnStopClickListener.onStopEventSelected(mEvent.getEventID(), isChecked);
                     }
 
                 }
             });
-            event.setChecked(false);
+            mEvent.setChecked(false);
             if (mSelectedEvents != null) {
                 for (Float event1 : mSelectedEvents) {
-                    if (event.getEventID() == event1) {
-                        event.setChecked(true);
+                    if (mEvent.getEventID() == event1) {
+                        mEvent.setChecked(true);
                     }
                 }
             }
 
-            if (mIsSelectionMode && event.isChecked()) {
+            if (mIsSelectionMode && mEvent.isChecked()) {
 
                 holder.mCheckBox.setChecked(true);
             } else {
                 holder.mCheckBox.setChecked(false);
             }
-            setViewHeight(event);
-            updateNotification(event);
+            setViewHeight(mEvent);
+            updateNotification(mEvent);
 
-            mLine.setBackgroundColor(Color.parseColor(event.getColor()));
+            mLine.setBackgroundColor(Color.parseColor(mEvent.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
-            circleBackground.setColor(Color.parseColor(event.getColor()));
+            circleBackground.setColor(Color.parseColor(mEvent.getColor()));
 
             String startTime = "";
-            if (event.getEventTime() != null && event.getEventTime().length() > 0) {
-                startTime = event.getEventTime().substring(10, 16);
+            if (mEvent.getEventTime() != null && mEvent.getEventTime().length() > 0) {
+                startTime = mEvent.getEventTime().substring(10, 16);
             }
 
             mTime.setText(startTime);
@@ -179,12 +183,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setVisibility(View.GONE);
             }
 
-            long duration = event.getDuration();
+            long duration = mEvent.getDuration();
             if (duration == 0) {
                 duration = 1;
             }
 
-            String text = duration + "m " + (OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
+            String text = duration + "m " + (OperatorApplication.isEnglishLang() ? mEvent.getSubtitleEname() : mEvent.getSubtitleLname());
 
             if (!mClosedState && text.length() > 12) {
                 mText.setText(String.format("%s...", text.substring(0, 12)));
@@ -193,17 +197,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-            textBackground.setColor(Color.parseColor(event.getColor()));
+            textBackground.setColor(Color.parseColor(mEvent.getColor()));
 
 
             if (mIsSelectionMode) {
                 mCheckContainer.setVisibility(View.VISIBLE);
                 mTechContainer.setVisibility(View.GONE);
 
-                if (event.getType() != 1 || event.getEventGroupID() != 20) {
+                if (mEvent.getType() != 1 || mEvent.getEventGroupID() != 20) {
 
                     holder.mCheckBox.setVisibility(View.VISIBLE);
-                    holder.mCheckBox.setChecked(event.isChecked());
+                    holder.mCheckBox.setChecked(mEvent.isChecked());
                 } else {
                     holder.mCheckBox.setVisibility(View.GONE);
 
@@ -219,8 +223,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 public void onClick(View v) {
 
                     if (!mIsSelectionMode) {
-                        if (mOnStopClickListener != null && event.getType() != 1 && event.getEventGroupID() != 20) {
-                            mOnStopClickListener.onSelectMode(event);
+                        if (mOnStopClickListener != null && mEvent.getType() != 1 && mEvent.getEventGroupID() != 20) {
+                            mOnStopClickListener.onSelectMode(mEvent);
                         }
                     } else {
                         holder.mCheckBox.setChecked(true);
@@ -325,49 +329,54 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
                     break;
             }
-            setViewLocation(event.getEventTimeInMillis(), time);
+//            setViewLocation(view, startTimeMilli);
             mTechContainer.addView(view);
         }
 
-        private void setViewLocation(long eventTimeInMillis, String time) {
+        private void setViewLocation(View view, long notificationTimeMillis) {
+            long eventTimeMillis = convertDateToMillisecond(mEvent.getEventTime(), SIMPLE_FORMAT_FORMAT);
 
-//                    long height = (techCallInfo.getmCallTime() - eventStartMilli) * PIXEL_FOR_MINUTE;
-//                    if (height > mView.getHeight()) {
-//                        view.setPadding(0, mView.getHeight() - view.getHeight(), 0, 0);
-//                    } else {
-//                        view.setPadding(0, (int) height, 0, 0);
-//                    }
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(notificationTimeMillis - eventTimeMillis);
 
+            minutes = minutes * PIXEL_FOR_MINUTE;
 
-//                }
-        }
-
-        private void setNotificationIcon(ImageView iconIV, int icon) {
-            switch (icon) {
-                case 0:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.called_black));
-                    break;
-                case 1:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_recieved_black));
-                    break;
-                case 2:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_declined_black));
-                    break;
-                case 3:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_black));
-                    break;
-                case 4:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_black));
-                    break;
-                case 5:
-                    iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.work_completed_black));
-                    break;
-
-                default:
-                    iconIV.setImageDrawable(null);
-                    break;
+            if (minutes > (mView.getHeight())) {
+//                    Log.e( "setViewLocation: ", "minutes " + minutes + "; OK "  + mView.getHeight());
+                view.setPadding(0, (int) mView.getHeight() - view.getHeight(), 0, 0);
+            } else {
+//                    Log.e( "setViewLocation: ", "minutes " + minutes + "; False" );
+                view.setPadding(0, (int) minutes, 0, 0);
             }
+
         }
     }
 
+    private void setNotificationIcon(ImageView iconIV, int icon) {
+        switch (icon) {
+            case 0:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.called_black));
+                break;
+            case 1:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_recieved_black));
+                break;
+            case 2:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_declined_black));
+                break;
+            case 3:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cancel_black));
+                break;
+            case 4:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.at_work_black));
+                break;
+            case 5:
+                iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.work_completed_black));
+                break;
+
+            default:
+                iconIV.setImageDrawable(null);
+                break;
+        }
+    }
 }
+
+

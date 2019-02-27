@@ -282,8 +282,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private CheckBox mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
-    private boolean mIsWorkingEventChecked, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -2890,17 +2889,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void initFilterEvents(View view) {
-        mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
+        CheckBox mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
         mWorkingEvents.setOnCheckedChangeListener(this);
-        mEventDetails = view.findViewById(R.id.FAAE_event_details);
+        CheckBox mEventDetails = view.findViewById(R.id.FAAE_event_details);
         mEventDetails.setOnCheckedChangeListener(this);
-        mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
+        CheckBox mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
         mServiceCalls.setOnCheckedChangeListener(this);
-        mMessages = view.findViewById(R.id.FAAE_messages);
+        CheckBox mMessages = view.findViewById(R.id.FAAE_messages);
         mMessages.setOnCheckedChangeListener(this);
-        mRejects = view.findViewById(R.id.FAAE_rejects);
+        CheckBox mRejects = view.findViewById(R.id.FAAE_rejects);
         mRejects.setOnCheckedChangeListener(this);
-        mProductionReport = view.findViewById(R.id.FAAE_production_report);
+        CheckBox mProductionReport = view.findViewById(R.id.FAAE_production_report);
         mProductionReport.setOnCheckedChangeListener(this);
     }
 
