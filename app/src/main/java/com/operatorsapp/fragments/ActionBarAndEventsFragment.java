@@ -282,11 +282,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine = true;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private CheckBox mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
-    private boolean mIsWorkingEventChecked, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+    private CheckBox mSelectAll, mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
     private View mFilterLy;
     private View mFilterBtn;
     private View mFiltersView;
+    private boolean mSelectAllIsChecked = true;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1403,25 +1404,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         switch (compoundButton.getId()) {
             case R.id.FAAE_working_events:
-                mIsWorkingEventChecked = checked;
-                break;
             case R.id.FAAE_event_details:
-                mIsEventDetailsChecked = checked;
-                break;
             case R.id.FAAE_service_alls:
-                mIsServiceCallsChecked = checked;
-                break;
             case R.id.FAAE_messages:
-                mIsmMessagesChecked = checked;
-                break;
             case R.id.FAAE_rejects:
-                mIsRejectsChecked = checked;
-                break;
             case R.id.FAAE_production_report:
-                mIsProductionReportChecked = checked;
+                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
+                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
                 break;
         }
-        mEventsAdapter.setCheckedFilters(mIsWorkingEventChecked, mIsEventDetailsChecked, mIsServiceCallsChecked, mIsmMessagesChecked, mIsRejectsChecked, mIsProductionReportChecked);
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -2991,6 +2982,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void initFilterEvents(View view) {
+        mSelectAll = view.findViewById(R.id.FAAE_select_all);
+        mSelectAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean checked = mSelectAll.isChecked();
+                mWorkingEvents.setChecked(checked);
+                mEventDetails.setChecked(checked);
+                mServiceCalls.setChecked(checked);
+                mMessages.setChecked(checked);
+                mRejects.setChecked(checked);
+                mProductionReport.setChecked(checked);
+            }
+        });
         mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
         mWorkingEvents.setOnCheckedChangeListener(this);
         mEventDetails = view.findViewById(R.id.FAAE_event_details);
