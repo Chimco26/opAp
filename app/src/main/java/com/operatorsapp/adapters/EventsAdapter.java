@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.utils.StringUtil;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
@@ -164,7 +162,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 holder.mCheckBox.setChecked(false);
             }
 
-            mView.setLayoutParams(getViewHeight(event));
+            ViewGroup.LayoutParams params = itemView.getLayoutParams();
+            params.height = getViewHeight(event);
+            mView.setLayoutParams(params);
             updateNotification(event);
 
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
@@ -235,22 +235,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         }
 
-        private ViewGroup.LayoutParams getViewHeight(Event event) {
-            ViewGroup.LayoutParams params = mView.getLayoutParams();
-            if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
-                params.height = 0;
-            } else if (!mIsWorkingEventChecked && (event.getType() == 1 || event.getEventGroupID() == 20)) {
-                params.height = 0;
-            } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
-                params.height = 300;
-            } else if (event.getDuration() > 4) {
-                params.height = (int) event.getDuration() * PIXEL_FOR_MINUTE;
-            } else {
-                params.height = 5 * PIXEL_FOR_MINUTE;
-            }
-            return params;
-        }
-
         private void updateNotification(Event event) {
             if (mTechContainer.getChildCount() > 0) {
                 mTechContainer.removeAllViews();
@@ -304,52 +288,60 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 timeTV.setVisibility(View.VISIBLE);
             }
 
+            int eventViewHeight = getViewHeight(event);
+            int margin = getNotificationRelativePosition(event, time, eventViewHeight);
+            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,  RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            params1.setMargins(0, margin, 0, 0);
+            params1.setMarginStart(4);
+
+            view.setLayoutParams(params1);
+            timeTV.setText(getNotificationTime(time, margin, eventViewHeight));
+//                    timeTV.setText(time);
+            detailsTV.setText(getTextByState(details));
+
             switch (type) {
                 case 1:
-//                    timeTV.setText(getNotificationTime(event, time));
-                    timeTV.setText(time);
-                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.message_black));
                     break;
 
                 case 2:
-                    timeTV.setText(time);
-                    detailsTV.setText(getTextByState(details));
                     setNotificationIcon(iconIV, icon);
                     break;
 
                 case 3:
-                    timeTV.setText(time);
-                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.production_black));
                     break;
 
                 case 4:
-                    timeTV.setText(time);
-                    detailsTV.setText(getTextByState(details));
                     iconIV.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rejects_black));
                     break;
             }
-//            setViewLocation(view, startTimeMilli);
             mTechContainer.addView(view);
         }
 
-//        private void setViewLocation(View view, long notificationTimeMillis) {
-//            long eventTimeMillis = convertDateToMillisecond(mEvent.getEventTime(), SIMPLE_FORMAT_FORMAT);
-//
-//            long minutes = TimeUnit.MILLISECONDS.toMinutes(notificationTimeMillis - eventTimeMillis);
-//
-//            minutes = minutes * PIXEL_FOR_MINUTE;
-//
-//            if (minutes > (mView.getHeight())) {
-////                    Log.e( "setViewLocation: ", "minutes " + minutes + "; OK "  + mView.getHeight());
-//                view.setPadding(0, (int) mView.getHeight() - view.getHeight(), 0, 0);
-//            } else {
-////                    Log.e( "setViewLocation: ", "minutes " + minutes + "; False" );
-//                view.setPadding(0, (int) minutes, 0, 0);
-//            }
-//
-//        }
+    }
+
+    private String getNotificationTime(String time, int margin, int eventViewHeight) {
+        if (margin > 10 && margin < eventViewHeight - 10){
+            return time;
+        }else {
+            return "";
+        }
+    }
+
+    private int getViewHeight(Event event) {
+        if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+            return  0;
+        } else if (!mIsWorkingEventChecked && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+            return  0;
+        } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
+            return  300;
+        } else if (event.getDuration() > 4) {
+            return  (int) event.getDuration() * PIXEL_FOR_MINUTE;
+        } else {
+            return  5 * PIXEL_FOR_MINUTE;
+        }
     }
 
     private void setNotificationIcon(ImageView iconIV, int icon) {
@@ -378,14 +370,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 break;
         }
     }
-//    private String getNotificationTime(Event event, String time) {
-//        long duration = event.getDuration() * 60 * 60 * 1000;
-//        if (duration == 0){
-//            duration = 1;
-//        }
-//        long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(time);
-//        if ((difference * 100 / (duration * PIXEL_FOR_MINUTE) > getviewHeight())
-//    }
+    private int getNotificationRelativePosition(Event event, String time, int eventViewHeight) {
+        long duration = event.getDuration() * 60 * 1000;
+        if (duration == 0){
+            duration = 1;
+        }
+        String eventTime = event.getEventEndTime().replace(event.getEventEndTime().subSequence(11, 16), time);
+        long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(eventTime);
+        long marging = difference * eventViewHeight / duration;
+        return (int)marging;
+    }
 
     private String getTextByState(String details) {
         if (mIsOpenState){
