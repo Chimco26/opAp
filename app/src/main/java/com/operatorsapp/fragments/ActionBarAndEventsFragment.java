@@ -2506,7 +2506,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onStartSelectMode(final Event event) {
                 if (getActivity() != null) {
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2521,7 +2520,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onShowNotificationText(final boolean show) {
                 if (getActivity() != null) {
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2538,7 +2536,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             @Override
             public void onOpenDialog(final Event event) {
                 if (getActivity() != null) {
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -2730,9 +2727,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             if (eventStartMilli < eventEndMilli) {
 
+                String color = "#1aa917";
+                if (getActivity() != null){
+                    color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+                }
                 Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
                         event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
-                        -0.5f, "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green)));
+                        -0.5f, color);
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
