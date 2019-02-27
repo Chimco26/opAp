@@ -412,6 +412,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
+        mShiftLogParams = mShiftLogLayout.getLayoutParams();
+        mShiftLogParams.width = mCloseWidth;
+        mShiftLogLayout.requestLayout();
+
+        mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mShiftLogRecycler.setLayoutManager(linearLayoutManager);
+        initEventRecycler(view);
+
         mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
         mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
         mFiltersView = view.findViewById(R.id.FAAE_filters_view);
@@ -431,6 +441,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
+
         mTimeLineType = view.findViewById(R.id.FAAE_shift_type_checkbox);
         mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -443,7 +454,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mFilterLy.setVisibility(View.VISIBLE);
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
+                    }else {
+                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                     }
+                    PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
@@ -451,15 +465,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
-                    if (mShiftLogAdapter != null && mIsSelectionMode) {
+                    if (mIsSelectionMode && mFirstSeletedEvent != null) {
                         Cursor cursor;
                         cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
                         setShiftLogAdapter(cursor);
                     }
+                    PersistenceManager.getInstance().setIsNewShiftLog(false);
                 }
             }
         });
 
+        if (PersistenceManager.getInstance().getIsNewShiftLog()){
+            mTimeLineType.setChecked(true);
+        }
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
         mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
         mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
@@ -470,15 +488,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
 
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
-
-        mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
-        mShiftLogParams = mShiftLogLayout.getLayoutParams();
-        mShiftLogParams.width = mCloseWidth;
-        mShiftLogLayout.requestLayout();
-
-        mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mShiftLogRecycler.setLayoutManager(linearLayoutManager);
 
 
         mCloseSelectEvents = view.findViewById(R.id.FAAE_close_select_events);
@@ -493,9 +502,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
-
-        initEventRecycler(view);
-
         mScrollView = view.findViewById(R.id.FAAE_scroll_container);
         mScrollView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2472,63 +2478,74 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
             @Override
             public void onComplete() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mShiftLogAdapter != null)
-                            mShiftLogAdapter.notifyDataSetChanged();
-                    }
-                });
-
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mShiftLogAdapter != null)
+                                mShiftLogAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
 
             @Override
             public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
+                if (getActivity() != null) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setShiftLogAdapter(oldCursor);
-                        initEvents(newEvents);
-                    }
-                });
-
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setShiftLogAdapter(oldCursor);
+                            initEvents(newEvents);
+                        }
+                    });
+                }
             }
 
             @Override
             public void onStartSelectMode(final Event event) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onStopEventSelected(event.getEventID(), true);
+                if (getActivity() != null) {
 
-                        mShowAlarmCheckBox.setVisibility(View.GONE);
-                    }
-                });
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onStopEventSelected(event.getEventID(), true);
+
+                            mShowAlarmCheckBox.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
 
             @Override
             public void onShowNotificationText(final boolean show) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (show) {
-                            mNoNotificationsText.setVisibility(View.VISIBLE);
-                        } else {
-                            mNoNotificationsText.setVisibility(View.GONE);
+                if (getActivity() != null) {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (show) {
+                                mNoNotificationsText.setVisibility(View.VISIBLE);
+                            } else {
+                                mNoNotificationsText.setVisibility(View.GONE);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override
             public void onOpenDialog(final Event event) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        openDialog(event);
-                    }
-                });
+                if (getActivity() != null) {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            openDialog(event);
+                        }
+                    });
+                }
             }
         }).execute();
 //after
@@ -2963,8 +2980,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 event.setEventSubTitleLname("חריגה מפרמטר");
                 break;
             case 5:
-                event.setEventSubTitleEname("Working Setup");
-                event.setEventSubTitleLname("סטאפ - עבודה");
+                event.setEventSubTitleEname("Working time on set up");
+                event.setEventSubTitleLname("זמן עבודה ב setup");
                 break;
             default:
                 event.setEventSubTitleEname("Working");

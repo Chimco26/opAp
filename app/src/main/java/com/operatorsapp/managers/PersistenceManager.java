@@ -90,6 +90,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_RECENT_TECH_CALL = "pref.RECENT_TECH_CALL";
     private static final String PREF_STOP_REASON_DESIGN = "pref.STOP_REASON_DESIGN";
     private static final String PREF_RECENT_MAX_UNIT_REPORT = "pref.PREF_RECENT_MAX_UNIT_REPORT";
+    private static final String PREF_IS_NEW_SHIFTLOG_DISPLAY = "pref.PREF_IS_NEW_SHIFTLOG_DISPLAY";
 
 
     private static PersistenceManager msInstance;
@@ -699,5 +700,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
 
     public int getMaxUnitReport() {
         return SecurePreferences.getInstance().getInt(PREF_RECENT_MAX_UNIT_REPORT, 1000);
+    }
+
+    public void setIsNewShiftLog(boolean isNewShiftLog) {
+        SecurePreferences.getInstance().setBoolean(PREF_IS_NEW_SHIFTLOG_DISPLAY, isNewShiftLog);
+    }
+    public boolean getIsNewShiftLog() {
+        return SecurePreferences.getInstance().getBoolean(PREF_IS_NEW_SHIFTLOG_DISPLAY, false);
     }
 }

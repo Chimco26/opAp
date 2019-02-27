@@ -72,6 +72,8 @@
                 android:paddingEnd="14dp"
                 android:textSize="24sp"
                 android:singleLine="true"
+                android:fadeScrollbars="false"
+                android:scrollbarFadeDuration="0"
                 android:textColorHint="@color/C2"
                 tools:ignore="NestedWeights,RtlSymmetry">
 

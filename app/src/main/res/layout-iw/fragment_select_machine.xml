@@ -73,6 +73,8 @@
                 android:singleLine="true"
                 android:textColorHint="@color/C2"
                 android:textSize="22sp"
+                android:fadeScrollbars="false"
+                android:scrollbarFadeDuration="0"
                 tools:ignore="NestedWeights,RtlSymmetry">
 
                 <requestFocus />

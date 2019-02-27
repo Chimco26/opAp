@@ -269,7 +269,6 @@
     <string name="search_job_id_or_product_name">חפש מק\"ט פק\"ע או שם מוצר</string>
     <string name="sent_service_call">נשלחה קריאת שירות ממכונה</string>
     <string name="service_call_made">קריאת שירות נשלחה אליך ממכונה</string>
-    <string name="service_calls">קריאת שירות</string>
     <string name="split_event_failed">פיצול האירוע נכשל</string>
     <string name="split_event_success">פיצול האירוע בוצע בהצלחה</string>
     <string name="split">פיצול</string>
@@ -297,11 +296,16 @@
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">האם ברצונך להפעיל את העבודה האחרונה שבה אתה עובד?</string>
     <string name="no">לא</string>
     <string name="yes">כן</string>
-    <string name="do_you_need_to_end_setup_before">האם אתה צריך לעשות להגדיר לפני שמתחילים לייצר על עבודה זו שוב?</string>
+    <string name="do_you_need_to_end_setup_before">האם דרוש תהליך setup לפני התחלת ייצור על פק”ע זו?</string>
     <string name="working">עובד</string>
     <string name="see_pending_jobs">רשימת פק”עות ממתינות</string>
     <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
-
-
+    <string name="get_ready_for_your_next_job">התכונן לעבודה הבאה שלך</string>
+    <string name="shiftlog">יומן אירועים</string>
+    <string name="working_event">אירוע עבודה</string>
+    <string name="event_details">פרטי האירוע</string>
+    <string name="service_calls">קריאת שירות</string>
+    <string name="messages">הודעות</string>
+    <string name="production_report">דו"ח הייצור</string>
 
 </resources>
