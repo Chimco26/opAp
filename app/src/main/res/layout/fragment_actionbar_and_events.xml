@@ -402,7 +402,7 @@
                                 android:textStyle="bold"
                                 android:thumb="@drawable/drawable_switch"
                                 android:track="@drawable/drawable_bg"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                             <LinearLayout
                                 android:id="@+id/fragment_dashboard_min_duration_lil"

@@ -288,6 +288,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFilterBtn;
     private View mFiltersView;
     private boolean mSelectAllIsChecked = true;
+    private AsyncTask<Void, Void, String> mAsyncTask;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -455,7 +456,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mFilterLy.setVisibility(View.VISIBLE);
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                     }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
@@ -476,7 +477,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
-        if (PersistenceManager.getInstance().getIsNewShiftLog()){
+        if (PersistenceManager.getInstance().getIsNewShiftLog()) {
             mTimeLineType.setChecked(true);
         }
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
@@ -2465,78 +2466,80 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
-//before
-        new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
-            @Override
-            public void onComplete() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mShiftLogAdapter != null)
-                                mShiftLogAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
 
-            @Override
-            public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
-                if (getActivity() != null) {
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setShiftLogAdapter(oldCursor);
-                            initEvents(newEvents);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onStartSelectMode(final Event event) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onStopEventSelected(event.getEventID(), true);
-
-                            mShowAlarmCheckBox.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onShowNotificationText(final boolean show) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (show) {
-                                mNoNotificationsText.setVisibility(View.VISIBLE);
-                            } else {
-                                mNoNotificationsText.setVisibility(View.GONE);
+        if (isAdded()) {
+            mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
+                @Override
+                public void onComplete() {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mShiftLogAdapter != null) {
+                                    mShiftLogAdapter.notifyDataSetChanged();
+                                }
+                                PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
 
-            @Override
-            public void onOpenDialog(final Event event) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            openDialog(event);
-                        }
-                    });
+                @Override
+                public void onUpdateEventsRecyclerViews(final Cursor oldCursor, final ArrayList<Event> newEvents) {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setShiftLogAdapter(oldCursor);
+                                initEvents(newEvents);
+                            }
+                        });
+                    }
                 }
-            }
-        }).execute();
-//after
+
+                @Override
+                public void onStartSelectMode(final Event event) {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onStopEventSelected(event.getEventID(), true);
+
+                                mShowAlarmCheckBox.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onShowNotificationText(final boolean show) {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (show) {
+                                    mNoNotificationsText.setVisibility(View.VISIBLE);
+                                } else {
+                                    mNoNotificationsText.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onOpenDialog(final Event event) {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                openDialog(event);
+                            }
+                        });
+                    }
+                }
+            }).execute();
+        }
     }
 
     private class MyTask extends AsyncTask<Void, Void, String> {
@@ -2553,7 +2556,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         protected String doInBackground(Void... params) {
-            updateEvents(events, actualBarExtraResponse, myTaskListener);
+            if (isAdded()) {
+                updateEvents(events, actualBarExtraResponse, myTaskListener);
+            }
             return "";
         }
 
@@ -2562,7 +2567,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             super.onPostExecute(result);
             // do something with result
         }
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAsyncTask != null){
+            mAsyncTask.cancel(true);
+        }
     }
 
     public interface MyTaskListener {
@@ -2580,6 +2592,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     public void updateEvents(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
 
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
         int deletedEvents = clearOver24HShift();
 
         if (events != null && events.size() > 0) {
@@ -2632,8 +2647,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
             updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())), actualBarExtraResponse);
-
-            PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
 
             myTaskListener.onShowNotificationText(false);
 
@@ -2719,7 +2732,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (eventStartMilli < eventEndMilli) {
 
                 String color = "#1aa917";
-                if (getActivity() != null){
+                if (getActivity() != null) {
                     color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
                 }
                 Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
@@ -2948,16 +2961,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private String getColorByMachineStatus(int machineStatusID) {
-        switch (machineStatusID) {
-            case 1:
-                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-            case 2:
-                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
-            case 5:
-                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark));
-            default:
-                return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+        if (getActivity() != null) {
+            switch (machineStatusID) {
+                case 1:
+                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+                case 2:
+                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
+                case 5:
+                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark));
+                default:
+                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
 
+            }
+        }else {
+            return "#1aa917";
         }
     }
 
