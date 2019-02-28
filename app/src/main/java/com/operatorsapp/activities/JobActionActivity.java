@@ -187,7 +187,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initLastJobDialog() {
-        if (mIsNoProduction && mLastJobId != null && mLastJobId.length() > 0) {
+        if (mIsNoProduction && mLastJobId != null && mLastJobId.length() > 0 && !mLastJobId.equals("0")) {
             showLastJobDialog(getString(R.string.activate_last_job),
                     String.format(Locale.getDefault(), "%s \n %s: %s \n %s: %s \n %s: %s",
                             getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job),
