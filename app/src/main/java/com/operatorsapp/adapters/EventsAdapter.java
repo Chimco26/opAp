@@ -140,7 +140,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (mOnStopClickListener != null && event.getType() != 1) {
+                    if (mOnStopClickListener != null && event.getType() < 1) {
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
                     }
 
@@ -171,12 +171,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
             circleBackground.setColor(Color.parseColor(event.getColor()));
 
-            String startTime = "";
-            if (event.getEventTime() != null && event.getEventTime().length() > 0) {
-                startTime = event.getEventTime().substring(10, 16);
+            String textTime = "";
+            if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
+                textTime = event.getEventTime().substring(10, 16);
+            }else if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0){
+                textTime = event.getEventEndTime().substring(10, 16);
             }
 
-            mTime.setText(startTime);
+            mTime.setText(textTime);
 
             if (mIsEventDetailsChecked) {
                 mText.setVisibility(View.VISIBLE);
@@ -205,7 +207,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mCheckContainer.setVisibility(View.VISIBLE);
                 mTechContainer.setVisibility(View.GONE);
 
-                if (event.getType() != 1 || event.getEventGroupID() != 20) {
+                if (event.getType() < 1 || event.getEventGroupID() != 20) {
 
                     holder.mCheckBox.setVisibility(View.VISIBLE);
                     holder.mCheckBox.setChecked(event.isChecked());
@@ -224,7 +226,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 public void onClick(View v) {
 
                     if (!mIsSelectionMode) {
-                        if (mOnStopClickListener != null && event.getType() != 1 && event.getEventGroupID() != 20) {
+                        if (mOnStopClickListener != null && event.getType() < 1 && event.getEventGroupID() != 20) {
                             mOnStopClickListener.onSelectMode(event);
                         }
                     } else {
@@ -331,9 +333,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     private int getViewHeight(Event event) {
-        if (mIsSelectionMode && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+        if (mIsSelectionMode && (event.getType() >= 1 || event.getEventGroupID() == 20)) {
             return  0;
-        } else if (!mIsWorkingEventChecked && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+        } else if (!mIsWorkingEventChecked && (event.getType() >= 1 || event.getEventGroupID() == 20)) {
             return  0;
         } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
             return  300;

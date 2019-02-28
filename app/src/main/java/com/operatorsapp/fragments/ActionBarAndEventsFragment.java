@@ -167,6 +167,7 @@ import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
+import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
@@ -2737,7 +2738,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
                 Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
                         event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
-                        -0.5f, color);
+                        -0.5f, color, 1);
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2755,7 +2756,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @NonNull
     private Event createIntermediateEvent(String eventTime, String eventEndTime, float id, Long eventStartMilli,
                                           Long eventEndMilli, String lName, String eName,
-                                          float differenceForNewId, String color) {
+                                          float differenceForNewId, String color, int type) {
         Event workingEvent = new Event();
         workingEvent.setEventTime(eventTime);
         workingEvent.setEventEndTime(eventEndTime);
@@ -2765,7 +2766,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         workingEvent.setColor(color);
 
         workingEvent.setEventID(id + differenceForNewId);
-        workingEvent.setType(1);
+        workingEvent.setType(type);
 
         long duration = eventEndMilli - eventStartMilli;
         if (duration > DAY_IN_MILLIS) {
@@ -2941,9 +2942,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             Event intermediateEvent = new Event();
             setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
             intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
-                    "", event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
+                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
                     intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()));
+                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
             addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
             events.add(0, intermediateEvent);
         }
