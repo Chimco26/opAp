@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -116,15 +117,15 @@ public class ReportNumericAdapter extends FocusableRecycleView.Adapter<ReportNum
 
     private void initTitle(@NonNull ViewHolder holder, int position, Context context) {
         if (isReject) {
-            holder.title.setText(String.format(Locale.getDefault(), "%s %s - %s %s",
+            holder.title.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s %s - <b>%s</b> %s",
                     context.getString(R.string.product), mActiveJobs.get(position).getProductName(),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
-                    context.getString(R.string.rejects)));
+                    context.getString(R.string.rejects))));
         } else {
-            holder.title.setText(String.format(Locale.getDefault(), "%s %s - %s %s",
+            holder.title.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s %s - <b>%s</b> %s",
                     context.getString(R.string.product), mActiveJobs.get(position).getProductName(),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
-                    context.getString(R.string.good_units)));
+                    context.getString(R.string.good_units))));
         }
     }
 
