@@ -12,10 +12,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
+import com.operatorsapp.adapters.TechnicianAdapter;
+import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
 import com.operatorsapp.server.NetworkManager;
@@ -26,7 +31,10 @@ import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +44,7 @@ import retrofit2.Response;
  * Created by alex on 07/01/2019.
  */
 
-public class TechCallDialog extends Dialog implements View.OnClickListener {
+public class TechCallDialog extends Dialog implements View.OnClickListener, TechnicianAdapter.TechItemListener {
 
     private ArrayList<TechCallInfo> mTechList;
     private RecyclerView mRecyclerView;
@@ -50,8 +58,9 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
     private View mLeftTabUnderline;
     private TechDialogListener mListener;
     private FrameLayout mProgressBarFl;
+    private List<Technician> mTechniciansList;
 
-    public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, TechDialogListener listener) {
+    public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, List<Technician> techniciansList, TechDialogListener listener) {
         super(context);
         mTechList = new ArrayList<>();
         for (TechCallInfo call : techList) {
@@ -59,6 +68,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
                 mTechList.add(call);
             }
         }
+        mTechniciansList = techniciansList;
 
         mListener = listener;
     }
@@ -91,7 +101,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tech_dialog_new_call:
-                mListener.onNewCallPressed();
+                openTechList();
+                //mListener.onNewCallPressed();
                 break;
             case R.id.tech_dialog_x_iv:
                 mListener.onCancelPressed();
@@ -115,6 +126,26 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
 
                 break;
         }
+    }
+
+    private void openTechList() {
+        mSubtitleTv.setVisibility(View.GONE);
+
+        if (mTechniciansList != null && mTechniciansList.size() > 0) {
+            Collections.sort(mTechniciansList, new Comparator<Technician>() {
+                @Override
+                public int compare(Technician o1, Technician o2) {
+                    if (OperatorApplication.isEnglishLang()) {
+                        return o1.getEName().compareTo(o2.getEName());
+                    } else {
+                        return o1.getLName().compareTo(o2.getLName());
+                    }
+                }
+            });
+
+        }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(new TechnicianAdapter(getContext(), mTechniciansList, this));
     }
 
     private void setOpenCalls(int position) {
@@ -206,10 +237,20 @@ public class TechCallDialog extends Dialog implements View.OnClickListener {
         mRecyclerView.setAdapter(new NotificationHistoryAdapter(getContext(), notList, null));
     }
 
+    @Override
+    public void onTechnicianSelected(Technician technician) {
+        mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+        mRightTabUnderline.setVisibility(View.INVISIBLE);
+        mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+        mLeftTabUnderline.setVisibility(View.INVISIBLE);
+        mListener.onTechnicianSelected(technician);
+    }
+
     public interface TechDialogListener{
         void onNewCallPressed();
         void onCancelPressed();
         void onCleanTech(TechCallInfo techCallInfo);
+        void onTechnicianSelected(Technician technician);
     }
 
 }

@@ -1319,21 +1319,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void checkTechCalls() {
         ArrayList<TechCallInfo> tech = PersistenceManager.getInstance().getCalledTechnician();
-        if (tech != null && tech.size() > 0) {
-            for (TechCallInfo call : tech) {
-                if (call.isOpenCall()) {
-                    openDeleteTechCallDialog(tech);
-                    return;
-                }
-            }
-
-        }
-
-        openTechniciansList();
+        openDeleteTechCallDialog(tech);
+//        if (tech != null && tech.size() > 0) {
+//            for (TechCallInfo call : tech) {
+//                if (call.isOpenCall()) {
+//                    openDeleteTechCallDialog(tech);
+//                    return;
+//                }
+//            }
+//
+//        }
+//
+//        openTechniciansList();
     }
 
     private void openDeleteTechCallDialog(ArrayList<TechCallInfo> tech) {
-        mPopUpDialog = new TechCallDialog(getActivity(), tech, new TechCallDialog.TechDialogListener() {
+        final List<Technician> techniciansList = ((DashboardActivity) getActivity()).getReportForMachine().getTechnicians();
+        mPopUpDialog = new TechCallDialog(getActivity(), tech, techniciansList, new TechCallDialog.TechDialogListener() {
             @Override
             public void onNewCallPressed() {
                 mPopUpDialog.dismiss();
@@ -1352,8 +1354,112 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 getNotificationsFromServer(false);
                 setTechnicianCallStatus();
             }
+
+            @Override
+            public void onTechnicianSelected(Technician technician) {
+                createNewTechCall(technician);
+            }
         });
         mPopUpDialog.show();
+    }
+
+    private void createNewTechCall(final Technician technician) {
+        PersistenceManager pm = PersistenceManager.getInstance();
+
+        ProgressDialogManager.show(getActivity());
+
+        String body;
+        String operatorName = "";
+        String title = getString(R.string.operator) + " ";
+        if (pm.getOperatorName() != null && pm.getOperatorName().length() > 0) {
+            operatorName = pm.getOperatorName();
+        } else {
+            operatorName = pm.getUserName();
+        }
+        body = getString(R.string.service_call_made_new);
+        body = String.format(body, operatorName);
+        body += " " + pm.getMachineName();
+        title += operatorName;
+
+        final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
+        String sourceUserId = PersistenceManager.getInstance().getOperatorId();
+        if (sourceUserId == null || sourceUserId.equals("")) {
+            sourceUserId = "0";
+        }
+
+
+        PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, operatorName, technician.getEName(), sourceUserId);
+        NetworkManager.getInstance().postTechnicianCall(request, new Callback<ResponseStatus>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseStatus> call, @NonNull Response<ResponseStatus> response) {
+                if (response.body() != null && response.body().getmError() == null) {
+
+                    mCallCounterHandler.removeCallbacksAndMessages(null);
+                    PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
+                    PersistenceManager.getInstance().setCalledTechnicianName(techName);
+
+                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID() );
+                    PersistenceManager.getInstance().setCalledTechnician(techCall);
+                    PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
+                    setTechnicianCallStatus();
+                    getNotificationsFromServer(false);
+                    ProgressDialogManager.dismiss();
+
+
+                    Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                    tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+                    tracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Technician Call")
+                            .setAction("Technician was called Successfully")
+                            .setLabel("technician name: " + techName)
+                            .build());
+                } else {
+                    String msg = "failed";
+                    if (response.body() != null && response.body().getmError() != null) {
+                        msg = response.body().getmError().getErrorDesc();
+                    }
+                    onFailure(call, new Throwable(msg));
+                }
+                mPopUpDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseStatus> call, @NonNull Throwable t) {
+                ProgressDialogManager.dismiss();
+                PersistenceManager.getInstance().setCalledTechnicianName("");
+
+                String m = "";
+                if (t != null && t.getMessage() != null) {
+                    m = t.getMessage();
+                }
+                Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
+                tracker.setHostname(PersistenceManager.getInstance().getSiteName());
+                tracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Technician Call")
+                        .setAction("Call for Technician failed")
+                        .setLabel("reason: " + m)
+                        .build());
+
+                final GenericDialog dialog = new GenericDialog(getActivity(), t.getMessage(), getString(R.string.call_technician_title), getString(R.string.ok), true);
+                dialog.setListener(new GenericDialog.OnGenericDialogListener() {
+                    @Override
+                    public void onActionYes() {
+                        dialog.cancel();
+                    }
+
+                    @Override
+                    public void onActionNo() {
+                    }
+
+                    @Override
+                    public void onActionAnother() {
+                    }
+                });
+                dialog.show();
+                mPopUpDialog.dismiss();
+                //ShowCrouton.showSimpleCrouton(((DashboardActivity) getActivity()), "Call for Technician failed", CroutonCreator.CroutonType.ALERT_DIALOG);
+            }
+        });
     }
 
     private void getFile() {
@@ -2969,7 +3075,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 case 2:
                     return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
                 case 5:
-                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark));
+                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark_2));
                 default:
                     return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
 
