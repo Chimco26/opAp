@@ -129,6 +129,10 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     }
 
     private void openTechList() {
+        mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+        mRightTabUnderline.setVisibility(View.INVISIBLE);
+        mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+        mLeftTabUnderline.setVisibility(View.INVISIBLE);
         mSubtitleTv.setVisibility(View.GONE);
 
         if (mTechniciansList != null && mTechniciansList.size() > 0) {
@@ -239,10 +243,6 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
 
     @Override
     public void onTechnicianSelected(Technician technician) {
-        mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-        mRightTabUnderline.setVisibility(View.INVISIBLE);
-        mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-        mLeftTabUnderline.setVisibility(View.INVISIBLE);
         mListener.onTechnicianSelected(technician);
     }
 
