@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.operatorsapp.managers.PersistenceManager;
 
@@ -12,6 +13,8 @@ import java.text.Bidi;
 import java.util.Locale;
 
 public class ChangeLang {
+
+    private static final String TAG = ChangeLang.class.getSimpleName();
 
     @SuppressWarnings("unused")
     public static void changeHebrew(final Context context) {
@@ -40,13 +43,15 @@ public class ChangeLang {
     }
 
     public static void changeLanguage(final Context context) {
-
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
+//Async cause bug because the screens layout direction is created before the language is set.
+//        it's not a long task so i set it in main thread
+//        new AsyncTask<Void, Void, Void>() {
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
                 if (PersistenceManager.getInstance() != null) {
                     String app_locale = PersistenceManager.getInstance().getCurrentLang();
+                    Log.d(TAG, "changeLanguage: " + app_locale);
                     Locale locale = new Locale(app_locale);
                     Locale.setDefault(locale);
 
@@ -61,10 +66,10 @@ public class ChangeLang {
                     YourGlobalClass.updateLanguage(context, app_locale);
 
                 }
-                return null;
-            }
-
-        }.execute();
+//                return null;
+//            }
+//
+//        }.execute();
     }
 
     private static class YourGlobalClass extends Application {

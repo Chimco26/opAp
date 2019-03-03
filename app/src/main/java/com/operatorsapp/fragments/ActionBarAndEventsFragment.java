@@ -270,12 +270,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private boolean mCycleWarningViewShow;
     private EmeraldSpinner mJobsSpinner;
     private Handler mCallCounterHandler;
-    private LinearLayout mScrollView;
     private TimeLineView mTimeView;
     private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
     private boolean mIsSelectionEventsMode = false;
-    private ImageView mCloseSelectEvents;
     private RecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
     private File outputFile;
@@ -492,34 +490,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
 
-
-        mCloseSelectEvents = view.findViewById(R.id.FAAE_close_select_events);
-        mCloseSelectEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mCloseSelectEvents.setVisibility(View.GONE);
-
-                mIsSelectionEventsMode = false;
-                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-
-            }
-        });
-        mScrollView = view.findViewById(R.id.FAAE_scroll_container);
-        mScrollView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//todo kuti
-
-                if (!mIsSelectionEventsMode) {
-                    mIsSelectionEventsMode = true;
-
-                    mCloseSelectEvents.setVisibility(View.VISIBLE);
-                    initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-                }
-
-
-            }
-        });
         mTimeView = view.findViewById(R.id.FAAE_time_container);
 
 
@@ -540,8 +510,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
         final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
-
-        view.findViewById(R.id.FAAE_unselect_all).setOnClickListener(this);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
@@ -2484,6 +2452,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
             if (events.size() > 0) {
                 event = events.get(0);
+                event.setEventReasonID(0);
             }
         }
 
@@ -2573,7 +2542,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
-
+        final Event finalLatestEvent;
+        if (events.size() > 0) {
+            finalLatestEvent = events.get(0);
+        }else {
+            finalLatestEvent = null;
+        }
         if (isAdded()) {
             mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
                 @Override
@@ -2585,7 +2559,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 if (mShiftLogAdapter != null) {
                                     mShiftLogAdapter.notifyDataSetChanged();
                                 }
-                                PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
+                                        && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                        mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+
+                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                } else { PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                }
                             }
                         });
                     }
@@ -3522,11 +3502,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         switch (v.getId()) {
 
-            case R.id.FAAE_unselect_all:
-
-                mListener.onClearAllSelectedEvents();
-
-                break;
             case R.id.ATATV_job_indicator_ly:
 
                 if (!mEndSetupDisable &&

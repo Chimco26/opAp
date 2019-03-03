@@ -53,7 +53,7 @@ import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.EN_NAME
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.IL_NAME;
 import static com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast.REASON_ID;
 
-public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener{
+public class SelectStopReasonFragment extends BackStackAwareFragment implements OnSelectedSubReasonListener, View.OnClickListener {
 
     public static final String LOG_TAG = SelectStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
@@ -152,7 +152,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         final View view = inflater.inflate(R.layout.fragment_select_stop_reason_new, container, false);
 
         mSelectedReason = mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId();
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
         }
 
@@ -187,6 +187,14 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         initSubReasons();
 
         setSpanCount(mIsOpen);
+
+        view.findViewById(R.id.FSSRN_close_select_events).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                close();
+            }
+        });
     }
 
     private void initSubReasons() {
@@ -296,11 +304,11 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
             Tracker tracker = null;
             try {
                 tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
 
             }
 
-            if (response.isFunctionSucceed()){
+            if (response.isFunctionSucceed()) {
                 // TODO: 17/07/2018 add crouton for success
                 // ShowCrouton.showSimpleCrouton(mOnCroutonRequestListener, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), false);
@@ -315,7 +323,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
                             .setLabel("Screen: SelectStopReasonFragment, Stop Reason: " + mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getEName() + ", Subreason: " + mSelectedSubreason.getEName())
                             .build());
                 }
-            }else {
+            } else {
                 mDashboardCroutonListener.onShowCrouton(response.getmError().getErrorDesc(), true);
                 if (tracker != null) {
                     tracker.send(new HitBuilders.EventBuilder()
@@ -330,10 +338,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
                 mReportCore.unregisterListener();
 
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                    getActivity().onBackPressed();
-                }
+                close();
 
             } catch (NullPointerException e) {
 
@@ -382,17 +387,24 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         }
     };
 
+    public void close() {
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+            getActivity().onBackPressed();
+        }
+    }
+
     private ResponseStatus objectToNewError(Object o) {
         ResponseStatus responseNewVersion;
-        if (o instanceof ResponseStatus){
-            responseNewVersion = (ResponseStatus)o;
-        }else {
+        if (o instanceof ResponseStatus) {
+            responseNewVersion = (ResponseStatus) o;
+        } else {
             Gson gson = new GsonBuilder().create();
 
             ErrorResponse er = gson.fromJson(new Gson().toJson(o), ErrorResponse.class);
 
             responseNewVersion = new ResponseStatus(true, 0, er);
-            if (responseNewVersion.getmError().getErrorCode() != 0){
+            if (responseNewVersion.getmError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
         }
