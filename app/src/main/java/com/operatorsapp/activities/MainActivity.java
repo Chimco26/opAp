@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         mTracker.setScreenName(this.getLocalClassName());
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
+        Log.d(TAG, "ChangeLang: ");
         ChangeLang.changeLanguage(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

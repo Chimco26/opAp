@@ -197,6 +197,13 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         mSwitch.setChecked(PersistenceManager.getInstance().isNewStopReasonDesign());
 
+        view.findViewById(R.id.FRSRN_close_select_events).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                close();
+            }
+        });
     }
 
     public void setSpanCount(boolean isOpen) {
@@ -382,9 +389,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
                 mReportCore.unregisterListener();
 
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
+                close();
 
             } catch (NullPointerException e) {
 
@@ -425,6 +430,12 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         }
     };
+
+    public void close() {
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
+    }
 
     private void dismissProgressDialog() {
         if (getActivity() != null) {
