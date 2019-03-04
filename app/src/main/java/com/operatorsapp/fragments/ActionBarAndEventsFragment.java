@@ -2448,11 +2448,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void startSelectMode(Event event, MyTaskListener myTaskListener) {
+        int eventReasonId;
         if (event == null) {
-            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
+            eventReasonId = 0;
+        }else {
+            eventReasonId = event.getEventReasonID();
+        }
+
+        Cursor cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), eventReasonId);
+        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(cursor);
+
+        if (event == null) {
             if (events.size() > 0) {
                 event = events.get(0);
-                event.setEventReasonID(0);
+            }else {
+                return;
             }
         }
 
@@ -2461,19 +2471,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsSelectionMode = true;
         mFirstSeletedEvent = event;
 
-        Cursor cursor;
-        cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-
         if (myTaskListener == null) {
             setShiftLogAdapter(cursor);
 
-            initEvents(mDatabaseHelper.getListFromCursor(cursor));
+            initEvents(events);
 
             onStopEventSelected(event.getEventID(), true);
 
             mShowAlarmCheckBox.setVisibility(View.GONE);
         } else {
-            myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
+            myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
         }
     }
@@ -2564,7 +2571,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else { PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                } else {
+                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
                         });

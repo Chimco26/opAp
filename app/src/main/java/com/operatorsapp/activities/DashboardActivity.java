@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.common.Event;
+import com.example.common.MultipleRejectRequestModel;
+import com.example.common.RejectForMultipleRequest;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -81,9 +83,9 @@ import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
 import com.operators.reportrejectnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -122,9 +124,7 @@ import com.operatorsapp.interfaces.SettingsInterface;
 import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
-import com.example.common.MultipleRejectRequestModel;
 import com.operatorsapp.model.PdfObject;
-import com.example.common.RejectForMultipleRequest;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
@@ -236,6 +236,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private int mSelectedTechnicianId;
     private SendRejectObject mSendRejectObject;
     private ActualBarExtraResponse mActualBarExtraResponse;
+    private ArrayList<RejectForMultipleRequest> mRejectForMultipleRequests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1072,12 +1073,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
         mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
             @Override
-            public void onReportMultipleRejects(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
-                sendMultipleRejectReport(rejectForMultipleRequests);
-            }
-
-            @Override
-            public void sendReport(int selectedReasonId, int selectedTechnicianId) {
+            public void sendReport(int selectedReasonId, int selectedTechnicianId, ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
+                mRejectForMultipleRequests = rejectForMultipleRequests;
                 sendSetupEndReport(selectedReasonId, selectedTechnicianId);
             }
 
@@ -2404,10 +2401,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } else {
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, responseStatus.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
                 }
+                mRejectForMultipleRequests = null;
 
             }
+
             @Override
             public void onRequestFailed(ErrorObjectInterface reason) {
+                mRejectForMultipleRequests = null;
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason.getDetailedDescription(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
         }, NetworkManager.getInstance(), new MultipleRejectRequestModel(persistenceManager.getSessionId(),
@@ -2484,11 +2484,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             ProgressDialogManager.dismiss();
 
             if (response.isFunctionSucceed()) {
-                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                if (mRejectForMultipleRequests != null && mRejectForMultipleRequests.size() > 0) {
+                    sendMultipleRejectReport(mRejectForMultipleRequests);
+                }else {
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                    mRejectForMultipleRequests = null;
+                }
             } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
+                mRejectForMultipleRequests = null;
             }
-
             OppAppLogger.getInstance().i(TAG, "sendReportSuccess()");
             mReportCore.unregisterListener();
             onApproveFirstItemComplete();
@@ -2499,6 +2504,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         public void sendReportFailure(ErrorObjectInterface reason) {
             ProgressDialogManager.dismiss();
             OppAppLogger.getInstance().w(TAG, "sendReportFailure()");
+            mRejectForMultipleRequests = null;
             if (reason.getError() == ErrorObjectInterface.ErrorCode.Credentials_mismatch) {
                 silentLoginFromDashBoard(DashboardActivity.this, new SilentLoginCallback() {
                     @Override

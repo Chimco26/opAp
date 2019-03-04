@@ -1,75 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/box_grey_stroke"
-    android:padding="5dp">
+    android:layout_height="wrap_content">
 
 
-    <TextView
-        android:id="@+id/IRN_title"
+    <RelativeLayout
+        android:id="@+id/IRN_box_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:background="@drawable/box_grey_stroke"
+        android:padding="5dp">
 
-    <LinearLayout
-        android:layout_below="@+id/IRN_title"
-        android:id="@+id/IRN_content_layout"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible">
-
-        <EditText
-            android:id="@+id/IRN_edit_number_et"
-            android:layout_width="155dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/box_grey_stroke"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-
-        <RadioGroup
-            android:id="@+id/IRN_radio_group"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/IRN_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp">
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-            <RadioButton
-                android:id="@+id/IRN_edit_unit_btn"
+        <LinearLayout
+            android:id="@+id/IRN_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/IRN_title"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/IRN_edit_number_et"
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/box_grey_stroke"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:textSize="20sp" />
+
+
+            <RadioGroup
+                android:id="@+id/IRN_radio_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/radio_btn_selector_grey_blue"
-                android:checked="true"
-                android:paddingStart="3dp"
-                android:paddingEnd="3dp"
-                android:text="@string/units"
-                android:textColor="@color/black"
-                android:textSize="24sp" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp">
 
-            <RadioButton
-                android:id="@+id/IRN_edit_weight_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:button="@drawable/radio_btn_selector_grey_blue"
-                android:paddingStart="3dp"
-                android:paddingEnd="3dp"
-                android:text="@string/weight"
-                android:textColor="@color/black"
-                android:textSize="24sp" />
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/IRN_edit_unit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/radio_btn_selector_grey_blue"
+                    android:checked="true"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
+                    android:text="@string/units"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
 
-    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/IRN_edit_weight_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:button="@drawable/radio_btn_selector_grey_blue"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
+                    android:text="@string/weight"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+            </RadioGroup>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@+id/IRN_content_layout" />
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:layout_below="@+id/IRN_content_layout"/>
+        android:layout_below="@+id/IRN_box_layout" />
 </RelativeLayout>

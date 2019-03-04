@@ -297,7 +297,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/blue1"
                                                 android:checked="true"
-                                                android:text="@string/working_event" />
+                                                android:text="@string/working_time" />
 
 
                                             <CheckBox
@@ -306,7 +306,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/blue1"
                                                 android:checked="true"
-                                                android:text="@string/event_details" />
+                                                android:text="@string/stop_event" />
 
                                             <CheckBox
                                                 android:id="@+id/FAAE_service_alls"

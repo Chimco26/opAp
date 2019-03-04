@@ -303,11 +303,11 @@
     <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
     <string name="get_ready_for_your_next_job">התכונן לעבודה הבאה שלך</string>
     <string name="shiftlog">יומן אירועים</string>
-    <string name="working_event">אירוע עבודה</string>
+    <string name="working_time">זמן עבודה</string>
     <string name="event_details">פרטי האירוע</string>
     <string name="service_calls">קריאת שירות</string>
     <string name="messages">הודעות</string>
-    <string name="production_report">דו"ח הייצור</string>
+    <string name="production_report">דיווח יצור</string>
     <string name="rejects">פסולים</string>
     <string name="select_all">בחר הכל</string>
     <string name="see_job">רשימת פק”עות</string>
