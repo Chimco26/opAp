@@ -2539,7 +2539,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
         mActualBarExtraResponse = actualBarExtraResponse;
 
@@ -2563,15 +2563,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (mShiftLogAdapter != null) {
-                                    mShiftLogAdapter.notifyDataSetChanged();
-                                }
+//                                if (mShiftLogAdapter != null) {
+//                                    mShiftLogAdapter.notifyDataSetChanged();
+//                                }
                                 if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
                                         && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else {
+                                } else if (finalLatestEvent != null){
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
@@ -2790,7 +2790,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mNoData = true;
                 myTaskListener.onShowNotificationText(true);
             }
-            if (deletedEvents > 0) {
+            if (deletedEvents > 0 || isActualBarExtraResponse(actualBarExtraResponse)) {
 
                 Cursor cursor;
                 if (mIsSelectionMode) {
@@ -2811,6 +2811,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         PersistenceManager.getInstance().setIsNewShiftLogs(true);
 
         myTaskListener.onComplete();
+    }
+
+    private boolean isActualBarExtraResponse(ActualBarExtraResponse actualBarExtraResponse) {
+        return actualBarExtraResponse != null && (actualBarExtraResponse.getNotification() != null ||
+                actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null);
     }
 
     private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {

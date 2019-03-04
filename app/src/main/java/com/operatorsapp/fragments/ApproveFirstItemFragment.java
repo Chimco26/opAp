@@ -323,7 +323,7 @@ public class ApproveFirstItemFragment extends DialogFragment implements View.OnC
         reportNetworkBridge.injectApproveFirstItem(NetworkManager.getInstance());
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        mReportCore.sendApproveFirstItem(mSelectedReasonId, mSelectedTechnicianId, mJobId, null);
+        mReportCore.sendApproveFirstItem(mSelectedReasonId, mSelectedTechnicianId, mJobId);
 //        SendBroadcast.refreshPolling(getContext());
 
     }
