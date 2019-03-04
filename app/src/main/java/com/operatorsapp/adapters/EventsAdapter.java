@@ -292,6 +292,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             int eventViewHeight = getViewHeight(event);
             int margin = getNotificationRelativePosition(event, time, eventViewHeight);
+            if (eventViewHeight - margin < 20){
+                margin = eventViewHeight - 20;
+            }
+
             RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,  RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             params1.setMargins(0, margin, 0, 0);
@@ -333,9 +337,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     private int getViewHeight(Event event) {
-        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() == 1 || event.getEventGroupID() == 20)) {
+        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() == 1 || event.getType() == 2 || event.getEventGroupID() == 20)) {
             return  0;
-        } else if (!mIsStopEventChecked && (event.getType() != 2 && event.getType() != 1 && event.getEventGroupID() != 20)) {
+        } else if (!mIsStopEventChecked && ((event.getType() != 1 || event.getType() != 2) && event.getEventGroupID() != 20)) {
             return  0;
         } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
             return  300;
