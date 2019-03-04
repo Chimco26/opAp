@@ -1366,7 +1366,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID() );
+                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID());
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1481,14 +1481,22 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         switch (compoundButton.getId()) {
             case R.id.FAAE_working_events:
             case R.id.FAAE_event_details:
+                mServiceCalls.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
+                mMessages.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
+                mRejects.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
+                mProductionReport.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
+                break;
+
             case R.id.FAAE_service_alls:
             case R.id.FAAE_messages:
             case R.id.FAAE_rejects:
             case R.id.FAAE_production_report:
-                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
-                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
+                mWorkingEvents.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
+                mEventDetails.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
                 break;
         }
+        mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
+        mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -2451,7 +2459,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         int eventReasonId;
         if (event == null) {
             eventReasonId = 0;
-        }else {
+        } else {
             eventReasonId = event.getEventReasonID();
         }
 
@@ -2461,7 +2469,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (event == null) {
             if (events.size() > 0) {
                 event = events.get(0);
-            }else {
+            } else {
                 return;
             }
         }
@@ -2552,7 +2560,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final Event finalLatestEvent;
         if (events.size() > 0) {
             finalLatestEvent = events.get(0);
-        }else {
+        } else {
             finalLatestEvent = null;
         }
         if (isAdded()) {
@@ -2667,7 +2675,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onStop() {
         super.onStop();
-        if (mAsyncTask != null){
+        if (mAsyncTask != null) {
             mAsyncTask.cancel(true);
         }
     }
@@ -3073,7 +3081,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
 
             }
-        }else {
+        } else {
             return "#1aa917";
         }
     }
@@ -3099,31 +3107,71 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void initFilterEvents(View view) {
-        mSelectAll = view.findViewById(R.id.FAAE_select_all);
-        mSelectAll.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean checked = mSelectAll.isChecked();
-                mWorkingEvents.setChecked(checked);
-                mEventDetails.setChecked(checked);
-                mServiceCalls.setChecked(checked);
-                mMessages.setChecked(checked);
-                mRejects.setChecked(checked);
-                mProductionReport.setChecked(checked);
+
+                switch (view.getId()) {
+                    case R.id.FAAE_select_all:
+                        boolean checked = mSelectAll.isChecked();
+                        mWorkingEvents.setChecked(checked);
+                        mEventDetails.setChecked(checked);
+                        mServiceCalls.setChecked(checked);
+                        mMessages.setChecked(checked);
+                        mRejects.setChecked(checked);
+                        mProductionReport.setChecked(checked);
+                        break;
+
+                    case R.id.FAAE_working_events:
+                    case R.id.FAAE_event_details:
+                        mServiceCalls.setChecked(false);
+                        mMessages.setChecked(false);
+                        mRejects.setChecked(false);
+                        mProductionReport.setChecked(false);
+                        break;
+
+                    case R.id.FAAE_service_alls:
+                    case R.id.FAAE_messages:
+                    case R.id.FAAE_rejects:
+                    case R.id.FAAE_production_report:
+                        mWorkingEvents.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
+                        mEventDetails.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
+                        break;
+                }
+                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
+                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
             }
-        });
+        };
+        mSelectAll = view.findViewById(R.id.FAAE_select_all);
+        mSelectAll.setOnClickListener(onClickListener);
+//        mSelectAll.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                boolean checked = mSelectAll.isChecked();
+//                mWorkingEvents.setChecked(checked);
+//                mEventDetails.setChecked(checked);
+//                mServiceCalls.setChecked(checked);
+//                mMessages.setChecked(checked);
+//                mRejects.setChecked(checked);
+//                mProductionReport.setChecked(checked);
+//            }
+//        });
         mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
-        mWorkingEvents.setOnCheckedChangeListener(this);
+//        mWorkingEvents.setOnCheckedChangeListener(this);
+        mWorkingEvents.setOnClickListener(onClickListener);
         mEventDetails = view.findViewById(R.id.FAAE_event_details);
-        mEventDetails.setOnCheckedChangeListener(this);
+        mEventDetails.setOnClickListener(onClickListener);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
-        mServiceCalls.setOnCheckedChangeListener(this);
+        mServiceCalls.setOnClickListener(onClickListener);
         mMessages = view.findViewById(R.id.FAAE_messages);
-        mMessages.setOnCheckedChangeListener(this);
+        mMessages.setOnClickListener(onClickListener);
         mRejects = view.findViewById(R.id.FAAE_rejects);
-        mRejects.setOnCheckedChangeListener(this);
+        mRejects.setOnClickListener(onClickListener);
         mProductionReport = view.findViewById(R.id.FAAE_production_report);
-        mProductionReport.setOnCheckedChangeListener(this);
+        mProductionReport.setOnClickListener(onClickListener);
+
+
     }
 
 

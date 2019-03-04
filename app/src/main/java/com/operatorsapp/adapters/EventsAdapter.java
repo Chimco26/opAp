@@ -333,9 +333,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     private int getViewHeight(Event event) {
-        if (mIsSelectionMode && (event.getType() >= 1 || event.getEventGroupID() == 20)) {
+        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() == 1 || event.getEventGroupID() == 20)) {
             return  0;
-        } else if (mIsWorkingTimeChecked && (event.getType() > 2 && event.getEventGroupID() != 20)) {
+        } else if (!mIsStopEventChecked && (event.getType() != 2 && event.getType() != 1 && event.getEventGroupID() != 20)) {
             return  0;
         } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
             return  300;
