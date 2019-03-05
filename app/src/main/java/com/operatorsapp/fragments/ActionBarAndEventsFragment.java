@@ -172,8 +172,11 @@ import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
-        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks, CompoundButton.OnCheckedChangeListener {
+        OnStopClickListener, CroutonRootProvider,
+        SelectStopReasonBroadcast.SelectStopReasonListener,
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener,
+        EmeraldSpinner.OnSpinnerEventsListener,
+        EasyPermissions.PermissionCallbacks {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -1366,7 +1369,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setTechnicianCallTime(Calendar.getInstance().getTimeInMillis());
                     PersistenceManager.getInstance().setCalledTechnicianName(techName);
 
-                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID() );
+                    TechCallInfo techCall = new TechCallInfo(0, techName, getString(R.string.called_technician) + "\n" + techName, Calendar.getInstance().getTimeInMillis(), response.body().getmLeaderRecordID(), technician.getID());
                     PersistenceManager.getInstance().setCalledTechnician(techCall);
                     PersistenceManager.getInstance().setRecentTechCallId(techCall.getmNotificationId());
                     setTechnicianCallStatus();
@@ -1473,22 +1476,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
 
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-
-        switch (compoundButton.getId()) {
-            case R.id.FAAE_working_events:
-            case R.id.FAAE_event_details:
-            case R.id.FAAE_service_alls:
-            case R.id.FAAE_messages:
-            case R.id.FAAE_rejects:
-            case R.id.FAAE_production_report:
-                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
-                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
-                break;
-        }
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -2448,11 +2435,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void startSelectMode(Event event, MyTaskListener myTaskListener) {
+        int eventReasonId;
         if (event == null) {
-            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDurationWithoutWork(PersistenceManager.getInstance().getMinEventDuration()));
+            eventReasonId = 0;
+        } else {
+            eventReasonId = event.getEventReasonID();
+        }
+
+        Cursor cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), eventReasonId);
+        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(cursor);
+
+        if (event == null) {
             if (events.size() > 0) {
                 event = events.get(0);
-                event.setEventReasonID(0);
+            } else {
+                return;
             }
         }
 
@@ -2461,19 +2458,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mIsSelectionMode = true;
         mFirstSeletedEvent = event;
 
-        Cursor cursor;
-        cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-
         if (myTaskListener == null) {
             setShiftLogAdapter(cursor);
 
-            initEvents(mDatabaseHelper.getListFromCursor(cursor));
+            initEvents(events);
 
             onStopEventSelected(event.getEventID(), true);
 
             mShowAlarmCheckBox.setVisibility(View.GONE);
         } else {
-            myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
+            myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
         }
     }
@@ -2532,7 +2526,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
         mActualBarExtraResponse = actualBarExtraResponse;
 
@@ -2545,7 +2539,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final Event finalLatestEvent;
         if (events.size() > 0) {
             finalLatestEvent = events.get(0);
-        }else {
+        } else {
             finalLatestEvent = null;
         }
         if (isAdded()) {
@@ -2556,15 +2550,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (mShiftLogAdapter != null) {
-                                    mShiftLogAdapter.notifyDataSetChanged();
-                                }
+//                                if (mShiftLogAdapter != null) {
+//                                    mShiftLogAdapter.notifyDataSetChanged();
+//                                }
                                 if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
                                         && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else { PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                } else if (finalLatestEvent != null){
+                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
                         });
@@ -2625,6 +2620,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         });
                     }
                 }
+
+                @Override
+                public void onClearAllSelectedEvents() {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListener.onClearAllSelectedEvents();
+                            }
+                        });
+                    }
+                }
             }).execute();
         }
     }
@@ -2659,7 +2666,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onStop() {
         super.onStop();
-        if (mAsyncTask != null){
+        if (mAsyncTask != null) {
             mAsyncTask.cancel(true);
         }
     }
@@ -2675,6 +2682,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onShowNotificationText(boolean show);
 
         void onOpenDialog(Event event);
+
+        void onClearAllSelectedEvents();
     }
 
     public void updateEvents(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
@@ -2761,7 +2770,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         startSelectMode(event, myTaskListener);
                         mAutoSelectMode = true;
                     } else if (mustBeClosed) {
-                        mListener.onClearAllSelectedEvents();
+                        myTaskListener.onClearAllSelectedEvents();
                     }
                     mEventsQueue.pop();
 
@@ -2770,19 +2779,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mLastEvent = event;
                     mEventsQueue.pop();
                     if (mustBeClosed) {
-                        mListener.onClearAllSelectedEvents();
+                        myTaskListener.onClearAllSelectedEvents();
                     }
                 }
 
             } else if (mustBeClosed) {
-                mListener.onClearAllSelectedEvents();
+                myTaskListener.onClearAllSelectedEvents();
             }
         } else {
             if (DataSupport.count(Event.class) == 0) {
                 mNoData = true;
                 myTaskListener.onShowNotificationText(true);
             }
-            if (deletedEvents > 0) {
+            if (deletedEvents > 0 || isActualBarExtraResponse(actualBarExtraResponse)) {
 
                 Cursor cursor;
                 if (mIsSelectionMode) {
@@ -2803,6 +2812,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         PersistenceManager.getInstance().setIsNewShiftLogs(true);
 
         myTaskListener.onComplete();
+    }
+
+    private boolean isActualBarExtraResponse(ActualBarExtraResponse actualBarExtraResponse) {
+        return actualBarExtraResponse != null && (actualBarExtraResponse.getNotification() != null ||
+                actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null);
     }
 
     private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
@@ -3060,7 +3074,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
 
             }
-        }else {
+        } else {
             return "#1aa917";
         }
     }
@@ -3086,31 +3100,73 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void initFilterEvents(View view) {
-        mSelectAll = view.findViewById(R.id.FAAE_select_all);
-        mSelectAll.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean checked = mSelectAll.isChecked();
-                mWorkingEvents.setChecked(checked);
-                mEventDetails.setChecked(checked);
-                mServiceCalls.setChecked(checked);
-                mMessages.setChecked(checked);
-                mRejects.setChecked(checked);
-                mProductionReport.setChecked(checked);
+
+                switch (view.getId()) {
+                    case R.id.FAAE_select_all:
+                        boolean checked = mSelectAll.isChecked();
+                        mWorkingEvents.setChecked(checked);
+                        mEventDetails.setChecked(checked);
+                        mServiceCalls.setChecked(checked);
+                        mMessages.setChecked(checked);
+                        mRejects.setChecked(checked);
+                        mProductionReport.setChecked(checked);
+                        break;
+
+                    case R.id.FAAE_working_events:
+                    case R.id.FAAE_event_details:
+                        mServiceCalls.setChecked(false);
+                        mMessages.setChecked(false);
+                        mRejects.setChecked(false);
+                        mProductionReport.setChecked(false);
+                        break;
+
+                    case R.id.FAAE_service_alls:
+                    case R.id.FAAE_messages:
+                    case R.id.FAAE_rejects:
+                    case R.id.FAAE_production_report:
+                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()){
+                            mWorkingEvents.setChecked(true);
+                            mEventDetails.setChecked(true);
+                        }
+                        break;
+                }
+                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
+                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
             }
-        });
+        };
+        mSelectAll = view.findViewById(R.id.FAAE_select_all);
+        mSelectAll.setOnClickListener(onClickListener);
+//        mSelectAll.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                boolean checked = mSelectAll.isChecked();
+//                mWorkingEvents.setChecked(checked);
+//                mEventDetails.setChecked(checked);
+//                mServiceCalls.setChecked(checked);
+//                mMessages.setChecked(checked);
+//                mRejects.setChecked(checked);
+//                mProductionReport.setChecked(checked);
+//            }
+//        });
         mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
-        mWorkingEvents.setOnCheckedChangeListener(this);
+//        mWorkingEvents.setOnCheckedChangeListener(this);
+        mWorkingEvents.setOnClickListener(onClickListener);
         mEventDetails = view.findViewById(R.id.FAAE_event_details);
-        mEventDetails.setOnCheckedChangeListener(this);
+        mEventDetails.setOnClickListener(onClickListener);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
-        mServiceCalls.setOnCheckedChangeListener(this);
+        mServiceCalls.setOnClickListener(onClickListener);
         mMessages = view.findViewById(R.id.FAAE_messages);
-        mMessages.setOnCheckedChangeListener(this);
+        mMessages.setOnClickListener(onClickListener);
         mRejects = view.findViewById(R.id.FAAE_rejects);
-        mRejects.setOnCheckedChangeListener(this);
+        mRejects.setOnClickListener(onClickListener);
         mProductionReport = view.findViewById(R.id.FAAE_production_report);
-        mProductionReport.setOnCheckedChangeListener(this);
+        mProductionReport.setOnClickListener(onClickListener);
+
+
     }
 
 

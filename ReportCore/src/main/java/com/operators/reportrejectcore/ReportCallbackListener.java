@@ -7,7 +7,7 @@ import com.operators.errorobject.ErrorObjectInterface;
  */
 public interface ReportCallbackListener {
 
-    void sendReportSuccess(Object errorResponse);
+    void sendReportSuccess(Object object);
 
     void sendReportFailure(ErrorObjectInterface reason);
 }
