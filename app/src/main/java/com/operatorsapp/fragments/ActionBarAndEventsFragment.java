@@ -2641,6 +2641,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         });
                     }
                 }
+
+                @Override
+                public void onClearAllSelectedEvents() {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListener.onClearAllSelectedEvents();
+                            }
+                        });
+                    }
+                }
             }).execute();
         }
     }
@@ -2691,6 +2703,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onShowNotificationText(boolean show);
 
         void onOpenDialog(Event event);
+
+        void onClearAllSelectedEvents();
     }
 
     public void updateEvents(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MyTaskListener myTaskListener) {
@@ -2777,7 +2791,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         startSelectMode(event, myTaskListener);
                         mAutoSelectMode = true;
                     } else if (mustBeClosed) {
-                        mListener.onClearAllSelectedEvents();
+                        myTaskListener.onClearAllSelectedEvents();
                     }
                     mEventsQueue.pop();
 
@@ -2786,12 +2800,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mLastEvent = event;
                     mEventsQueue.pop();
                     if (mustBeClosed) {
-                        mListener.onClearAllSelectedEvents();
+                        myTaskListener.onClearAllSelectedEvents();
                     }
                 }
 
             } else if (mustBeClosed) {
-                mListener.onClearAllSelectedEvents();
+                myTaskListener.onClearAllSelectedEvents();
             }
         } else {
             if (DataSupport.count(Event.class) == 0) {

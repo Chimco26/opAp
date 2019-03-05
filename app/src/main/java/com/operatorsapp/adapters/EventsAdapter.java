@@ -42,7 +42,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private ArrayList<Float> mSelectedEvents;
     private boolean mIsWorkingTimeChecked = true, mIsStopEventChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
 
-
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState, ArrayList<Event> events, ArrayList<Float> selectedEvents) {
         mContext = context;
         mOnStopClickListener = onStopClickListener;
@@ -337,9 +336,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     }
 
     private int getViewHeight(Event event) {
-        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() == 1 || event.getType() == 2 || event.getEventGroupID() == 20)) {
+        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20)) {
             return  0;
-        } else if (!mIsStopEventChecked && ((event.getType() != 1 || event.getType() != 2) && event.getEventGroupID() != 20)) {
+        } else if (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20)) {
             return  0;
         } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
             return  300;
