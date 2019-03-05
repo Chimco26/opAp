@@ -163,6 +163,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             ViewGroup.LayoutParams params = itemView.getLayoutParams();
             params.height = getViewHeight(event);
+            params.height = filterHeight(params.height, event);
             mView.setLayoutParams(params);
             updateNotification(event);
 
@@ -173,14 +174,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             String textTime = "";
             if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
                 textTime = event.getEventTime().substring(10, 16);
-            }else if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0){
+            } else if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0) {
                 textTime = event.getEventEndTime().substring(10, 16);
             }
 
             mTime.setText(textTime);
 
 //            if (mIsStopEventChecked) {
-                mText.setVisibility(View.VISIBLE);
+            mText.setVisibility(View.VISIBLE);
 //            } else {
 //                mText.setVisibility(View.GONE);
 //            }
@@ -290,12 +291,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
             int eventViewHeight = getViewHeight(event);
+            eventViewHeight = filterHeight(eventViewHeight, event);
             int margin = getNotificationRelativePosition(event, time, eventViewHeight);
-            if (eventViewHeight - margin < 20){
+            if (eventViewHeight - margin < 20) {
                 margin = eventViewHeight - 20;
             }
 
-            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,  RelativeLayout.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             params1.setMargins(0, margin, 0, 0);
             params1.setMarginStart(4);
@@ -327,25 +329,30 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     }
 
-    private String getNotificationTime(String time, int margin, int eventViewHeight) {
-        if (margin > 10 && margin < eventViewHeight - 10){
-            return time;
+    private int filterHeight(int height, Event event) {
+        if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
+                || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
+            return 0;
         }else {
+            return height;
+        }
+    }
+
+    private String getNotificationTime(String time, int margin, int eventViewHeight) {
+        if (margin > 10 && margin < eventViewHeight - 10) {
+            return time;
+        } else {
             return "";
         }
     }
 
     private int getViewHeight(Event event) {
-        if ((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20)) {
-            return  0;
-        } else if (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20)) {
-            return  0;
-        } else if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
-            return  300;
+        if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
+            return 300;
         } else if (event.getDuration() > 4) {
-            return  (int) event.getDuration() * PIXEL_FOR_MINUTE;
+            return (int) event.getDuration() * PIXEL_FOR_MINUTE;
         } else {
-            return  5 * PIXEL_FOR_MINUTE;
+            return 5 * PIXEL_FOR_MINUTE;
         }
     }
 
@@ -375,21 +382,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 break;
         }
     }
+
     private int getNotificationRelativePosition(Event event, String time, int eventViewHeight) {
         long duration = event.getDuration() * 60 * 1000;
-        if (duration == 0){
+        if (duration == 0) {
             duration = 1;
         }
         String eventTime = event.getEventEndTime().replace(event.getEventEndTime().subSequence(11, 16), time);
         long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(eventTime);
         long marging = difference * eventViewHeight / duration;
-        return (int)marging;
+        return (int) marging;
     }
 
     private String getTextByState(String details) {
-        if (mIsOpenState){
+        if (mIsOpenState) {
             return details;
-        }else {
+        } else {
             return StringUtil.getResizedString(details, 6);
         }
     }
