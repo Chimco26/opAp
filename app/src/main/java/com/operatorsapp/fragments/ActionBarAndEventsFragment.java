@@ -172,8 +172,11 @@ import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
         DashboardUICallbackListener,
-        OnStopClickListener, CroutonRootProvider, SelectStopReasonBroadcast.SelectStopReasonListener,
-        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener, EmeraldSpinner.OnSpinnerEventsListener, EasyPermissions.PermissionCallbacks, CompoundButton.OnCheckedChangeListener {
+        OnStopClickListener, CroutonRootProvider,
+        SelectStopReasonBroadcast.SelectStopReasonListener,
+        View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener,
+        EmeraldSpinner.OnSpinnerEventsListener,
+        EasyPermissions.PermissionCallbacks {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -1473,30 +1476,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
 
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-
-        switch (compoundButton.getId()) {
-            case R.id.FAAE_working_events:
-            case R.id.FAAE_event_details:
-                mServiceCalls.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
-                mMessages.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
-                mRejects.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
-                mProductionReport.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked());
-                break;
-
-            case R.id.FAAE_service_alls:
-            case R.id.FAAE_messages:
-            case R.id.FAAE_rejects:
-            case R.id.FAAE_production_report:
-                mWorkingEvents.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
-                mEventDetails.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
-                break;
-        }
-        mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
-        mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
     }
 
     private class DownloadFile extends AsyncTask<String, String, String> {
@@ -3149,8 +3128,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     case R.id.FAAE_messages:
                     case R.id.FAAE_rejects:
                     case R.id.FAAE_production_report:
-                        mWorkingEvents.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
-                        mEventDetails.setChecked(mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked());
+                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()){
+                            mWorkingEvents.setChecked(true);
+                            mEventDetails.setChecked(true);
+                        }
                         break;
                 }
                 mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
