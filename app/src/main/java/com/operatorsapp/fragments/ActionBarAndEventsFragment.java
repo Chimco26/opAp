@@ -104,6 +104,7 @@ import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.dialogs.GenericDialog;
+import com.operatorsapp.dialogs.LegendDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -291,6 +292,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFiltersView;
     private boolean mSelectAllIsChecked = true;
     private AsyncTask<Void, Void, String> mAsyncTask;
+    private ImageView mLegendBtn;
+    private LegendDialog mLegendDialog;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -425,6 +428,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
         initEventRecycler(view);
+        initLegendDialog(view);
 
         mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
         mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
@@ -587,6 +591,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         initCycleAlarmView(view);
 
         return statusBarParams;
+    }
+
+    private void initLegendDialog(View view) {
+        mLegendBtn = view.findViewById(R.id.FAAE_legend_btn);
+        mLegendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLegendDialog == null)
+                    mLegendDialog = LegendDialog.newInstants();
+                if (getFragmentManager() != null)
+                    mLegendDialog.show(getFragmentManager(), null);
+            }
+        });
     }
 
     private void initCycleAlarmView(View view) {
@@ -2558,7 +2575,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else if (finalLatestEvent != null){
+                                } else if (finalLatestEvent != null) {
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
@@ -3128,7 +3145,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     case R.id.FAAE_messages:
                     case R.id.FAAE_rejects:
                     case R.id.FAAE_production_report:
-                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()){
+                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()) {
                             mWorkingEvents.setChecked(true);
                             mEventDetails.setChecked(true);
                         }
