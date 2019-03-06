@@ -166,6 +166,7 @@ import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
+import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
@@ -282,7 +283,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private File outputFile;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
-    private boolean mIsTimeLine = true;
+    private boolean mIsTimeLine;
     private ActualBarExtraResponse mActualBarExtraResponse;
     private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
     private CheckBox mSelectAll, mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
@@ -459,6 +460,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
                     mFilterLy.setVisibility(View.VISIBLE);
+                    if (mIsOpen) {
+                        showLegendBtnVisibility(true);
+                    }
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     } else {
@@ -469,6 +473,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
                     mFilterLy.setVisibility(View.GONE);
+                    showLegendBtnVisibility(false);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
@@ -603,6 +608,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mLegendDialog.show(getFragmentManager(), null);
             }
         });
+    }
+
+    private void showLegendBtnVisibility(boolean show) {
+        if (mLegendBtn != null) {
+            if (show) {
+                mLegendBtn.setVisibility(View.VISIBLE);
+            } else {
+                mLegendBtn.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initCycleAlarmView(View view) {
@@ -820,6 +835,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogLayout.startAnimation(anim);
                 if (mIsTimeLine) {
                     mFiltersView.setVisibility(View.VISIBLE);
+                    showLegendBtnVisibility(true);
                 }
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -855,6 +871,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
         if (mIsTimeLine) {
             mFiltersView.setVisibility(View.GONE);
+            showLegendBtnVisibility(false);
         }
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
@@ -3012,7 +3029,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SIMPLE_FORMAT_FORMAT);
+                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
 
                 if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
 

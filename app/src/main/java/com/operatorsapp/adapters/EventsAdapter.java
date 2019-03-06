@@ -111,7 +111,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mFilter;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private final View mView;
         private final View mCircle;
@@ -123,7 +123,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private RelativeLayout mTechContainer;
         private ImageView mCheckV;
         private ImageView mScissors;
-        private Event mEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -138,11 +137,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTechContainer = itemView.findViewById(R.id.EI_service_call_container);
             mCheckV = itemView.findViewById(R.id.EI_check_sign);
             mScissors = itemView.findViewById(R.id.EI_Scissors);
-            mScissors.setOnClickListener(this);
         }
 
         private void updateItem(int position, final ViewHolder holder) {
-            mEvent = mEvents.get(position);
+
             if (position > mEventsFiltered.size() - 1) {
                 return;
             }
@@ -260,6 +258,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 }
             });
 
+            holder.mScissors.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    validateDialog(event.getEventID());
+                }
+            });
         }
 
         private void updateNotification(Event event) {
@@ -350,15 +354,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     break;
             }
             mTechContainer.addView(view);
-        }
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.EI_Scissors:
-                    validateDialog(mEvent.getEventID());
-                    break;
-            }
         }
 
     private void validateDialog(final float eventID) {
