@@ -1,17 +1,21 @@
 package com.operatorsapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -107,7 +111,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mFilter;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private final View mView;
         private final View mCircle;
@@ -117,6 +121,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private LinearLayout mCheckContainer;
         private CheckBox mCheckBox;
         private RelativeLayout mTechContainer;
+        private ImageView mCheckV;
+        private ImageView mScissors;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -129,10 +135,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mCheckContainer = itemView.findViewById(R.id.EI_check_container);
             mCheckBox = itemView.findViewById(R.id.EI_check_box);
             mTechContainer = itemView.findViewById(R.id.EI_service_call_container);
-
+            mCheckV = itemView.findViewById(R.id.EI_check_sign);
+            mScissors = itemView.findViewById(R.id.EI_Scissors);
         }
 
         private void updateItem(int position, final ViewHolder holder) {
+
             if (position > mEventsFiltered.size() - 1) {
                 return;
             }
@@ -205,6 +213,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
             textBackground.setColor(Color.parseColor(event.getColor()));
 
+            if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
+                mCheckV.setVisibility(View.VISIBLE);
+            } else {
+                mCheckV.setVisibility(View.GONE);
+            }
+
+            if (!mIsSelectionMode && position == 0 && event.getEventEndTime().isEmpty()) {
+                mScissors.setVisibility(View.VISIBLE);
+            } else {
+                mScissors.setVisibility(View.GONE);
+            }
+
 
             if (mIsSelectionMode) {
                 mCheckContainer.setVisibility(View.VISIBLE);
@@ -238,6 +258,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 }
             });
 
+            holder.mScissors.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    validateDialog(event.getEventID());
+                }
+            });
         }
 
         private void updateNotification(Event event) {
@@ -330,7 +356,50 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTechContainer.addView(view);
         }
 
+    private void validateDialog(final float eventID) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+        builder.setView(dialogView);
+
+        TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
+        TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
+        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+        dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
+
+
+        submitBtn.setText(R.string.split);
+        bodyTv.setText(R.string.split_event_validation_text);
+        bodyTv.setTextSize(16);
+        titleTv.setText(R.string.split_event_validation_title);
+        titleTv.setTextSize(28);
+
+        builder.setCancelable(true);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnStopClickListener.onSplitEventPressed(eventID);
+                alertDialog.dismiss();
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+
     }
+
+    }
+
 
     private int filterHeight(int height, Event event) {
         if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))

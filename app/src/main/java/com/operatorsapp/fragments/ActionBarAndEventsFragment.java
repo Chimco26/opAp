@@ -104,6 +104,7 @@ import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.dialogs.GenericDialog;
+import com.operatorsapp.dialogs.LegendDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -282,7 +283,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private File outputFile;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
-    private boolean mIsTimeLine = true;
+    private boolean mIsTimeLine;
     private ActualBarExtraResponse mActualBarExtraResponse;
     private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
     private CheckBox mSelectAll, mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
@@ -291,6 +292,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFiltersView;
     private boolean mSelectAllIsChecked = true;
     private AsyncTask<Void, Void, String> mAsyncTask;
+    private ImageView mLegendBtn;
+    private LegendDialog mLegendDialog;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -425,6 +428,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
         initEventRecycler(view);
+        initLegendDialog(view);
 
         mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
         mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
@@ -456,6 +460,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
                     mFilterLy.setVisibility(View.VISIBLE);
+                    if (mIsOpen) {
+                        showLegendBtnVisibility(true);
+                    }
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     } else {
@@ -466,6 +473,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.GONE);
                     mShiftLogRecycler.setVisibility(View.VISIBLE);
                     mFilterLy.setVisibility(View.GONE);
+                    showLegendBtnVisibility(false);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
                     }
@@ -587,6 +595,29 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         initCycleAlarmView(view);
 
         return statusBarParams;
+    }
+
+    private void initLegendDialog(View view) {
+        mLegendBtn = view.findViewById(R.id.FAAE_legend_btn);
+        mLegendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLegendDialog == null)
+                    mLegendDialog = LegendDialog.newInstants();
+                if (getFragmentManager() != null)
+                    mLegendDialog.show(getFragmentManager(), null);
+            }
+        });
+    }
+
+    private void showLegendBtnVisibility(boolean show) {
+        if (mLegendBtn != null) {
+            if (show) {
+                mLegendBtn.setVisibility(View.VISIBLE);
+            } else {
+                mLegendBtn.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initCycleAlarmView(View view) {
@@ -804,6 +835,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mShiftLogLayout.startAnimation(anim);
                 if (mIsTimeLine) {
                     mFiltersView.setVisibility(View.VISIBLE);
+                    showLegendBtnVisibility(true);
                 }
                 anim.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -839,6 +871,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void closeWoopList(final ViewGroup.LayoutParams leftLayoutParams) {
         if (mIsTimeLine) {
             mFiltersView.setVisibility(View.GONE);
+            showLegendBtnVisibility(false);
         }
         final ResizeWidthAnimation anim = new ResizeWidthAnimation(mShiftLogLayout, mCloseWidth);
         anim.setDuration(ANIM_DURATION_MILLIS);
@@ -2558,7 +2591,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else if (finalLatestEvent != null){
+                                } else if (finalLatestEvent != null) {
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
@@ -2691,6 +2724,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null || !isAdded()) {
             return;
         }
+        removeOldUpdatedExtras(actualBarExtraResponse);
+
         int deletedEvents = clearOver24HShift();
 
         if (events != null && events.size() > 0) {
@@ -2821,7 +2856,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
-        updateOldExtras(actualBarExtraResponse);
+        addNotificationsToPasteEvents(actualBarExtraResponse);
 
         for (int i = 0; i < events.size() - 1; i++) {
 
@@ -2878,47 +2913,97 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return workingEvent;
     }
 
-    private void updateOldExtras(ActualBarExtraResponse actualBarExtraResponse) {
+    private void removeOldUpdatedExtras(ActualBarExtraResponse actualBarExtraResponse) {
 
         ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
 
         for (Event event : events) {
 
-            if (event.getInventories() != null && event.getInventories().size() > 0
-                    && actualBarExtraResponse.getInventory() != null && actualBarExtraResponse.getInventory().size() > 0) {
-                for (Inventory inventory : actualBarExtraResponse.getInventory()) {
-                    for (Inventory eventInventory : event.getInventories()) {
+            ArrayList<Inventory> eventInventories = event.getInventories();
+            ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
+            if (eventInventories != null && eventInventories.size() > 0
+                    && inventories != null && inventories.size() > 0) {
+                ArrayList<Inventory> toDelete = new ArrayList<>();
+                for (Inventory inventory : inventories) {
+                    for (Inventory eventInventory : eventInventories) {
                         if (inventory.getID().equals(eventInventory.getID())) {
-                            eventInventory = inventory;
+                            toDelete.add(eventInventory);
                         }
                     }
                 }
+                eventInventories.removeAll(toDelete);
+                if (eventInventories.size() == 0) {
+                    eventInventories = null;
+                }
+                event.setInventories(eventInventories);
             }
-            if (event.getRejects() != null && event.getRejects().size() > 0
-                    && actualBarExtraResponse.getRejects() != null && actualBarExtraResponse.getRejects().size() > 0) {
-                for (Reject reject : actualBarExtraResponse.getRejects()) {
-                    for (Reject eventReject : event.getRejects()) {
+            ArrayList<Reject> eventRejects = event.getRejects();
+            ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
+            if (eventRejects != null && eventRejects.size() > 0
+                    && rejects != null && rejects.size() > 0) {
+                ArrayList<Reject> toDelete = new ArrayList<>();
+                for (Reject reject : rejects) {
+                    for (Reject eventReject : eventRejects) {
                         if (reject.getID().equals(eventReject.getID())) {
-                            eventReject = reject;
+                            toDelete.add(eventReject);
                         }
                     }
                 }
+                eventRejects.removeAll(toDelete);
+                if (eventRejects.size() == 0) {
+                    eventRejects = null;
+                }
+                event.setRejects(eventRejects);
             }
-            if (event.getNotifications() != null && event.getNotifications().size() > 0
-                    && actualBarExtraResponse.getNotification() != null && actualBarExtraResponse.getNotification().size() > 0) {
-                for (com.example.common.actualBarExtraResponse.Notification notification : actualBarExtraResponse.getNotification()) {
-                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : event.getNotifications()) {
+            ArrayList<com.example.common.actualBarExtraResponse.Notification> eventNotifications = event.getNotifications();
+            ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
+            if (eventNotifications != null && eventNotifications.size() > 0
+                    && notifications != null && notifications.size() > 0) {
+                ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
+                for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
+                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : eventNotifications) {
                         if (notification.getID().equals(eventsNotification.getID())) {
-                            eventsNotification = notification;
+                            toDelete.add(eventsNotification);
                         }
                     }
                 }
+                eventNotifications.removeAll(toDelete);
+                if (eventNotifications.size() == 0) {
+                    eventNotifications = null;
+                }
+                event.setNotifications(eventNotifications);
             }
+            event.setHaveExtra(event.getNotifications() != null || event.getInventories() != null || event.getRejects() != null);
+
             event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
         }
     }
 
-    private void addDetailsToEvents(Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private void addNotificationsToPasteEvents(ActualBarExtraResponse actualBarExtraResponse) {
+
+        if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
+                actualBarExtraResponse.getRejects() != null) {
+            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTime());
+
+            for (Event event : events) {
+                if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
+                        actualBarExtraResponse.getRejects() != null) {
+                    if (addDetailsToEvents(event, actualBarExtraResponse)) {
+                        event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isDuringAnEvent(Event event, String notifTime) {
+        Long notificationSentTime = convertDateToMillisecond(notifTime, SIMPLE_FORMAT_FORMAT);
+        Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
+        Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+        return eventStart <= notificationSentTime && notificationSentTime <= eventEnd;
+    }
+
+    private boolean addDetailsToEvents(Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
         if (actualBarExtraResponse != null) {
             Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
@@ -2928,8 +3013,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
                 event.setHaveExtra(true);
+                return true;
             }
         }
+        return false;
     }
 
     private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
@@ -2957,6 +3044,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (notificationArrayList != null) {
                 event.setNotifications(notificationArrayList);
                 notifications.removeAll(toDelete);
+                if (notifications.size() == 0){
+                    notifications = null;
+                }
                 return true;
             }
         }
@@ -2985,6 +3075,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (rejectArrayList != null) {
                 event.setRejects(rejectArrayList);
                 rejects.removeAll(toDelete);
+                if (rejects.size() == 0){
+                    rejects = null;
+                }
                 return true;
             }
         }
@@ -3001,7 +3094,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ArrayList<Inventory> inventoriesArrayList = null;
 
             for (Inventory inventory : inventories) {
-                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SQL_T_FORMAT);
+                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SIMPLE_FORMAT_FORMAT);
 
                 if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
                     if (inventoriesArrayList == null) {
@@ -3014,6 +3107,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (inventoriesArrayList != null) {
                 event.setInventories(inventoriesArrayList);
                 inventories.removeAll(toDelete);
+                if (inventories.size() == 0){
+                    inventories = null;
+                }
                 return true;
             }
         }
@@ -3128,7 +3224,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     case R.id.FAAE_messages:
                     case R.id.FAAE_rejects:
                     case R.id.FAAE_production_report:
-                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()){
+                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()) {
                             mWorkingEvents.setChecked(true);
                             mEventDetails.setChecked(true);
                         }
