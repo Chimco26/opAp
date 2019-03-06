@@ -54,6 +54,13 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle_blue" />
 
+            <ImageView
+                android:id="@+id/EI_check_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/v"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
 
@@ -71,6 +78,14 @@
                 android:textSize="10px"
                 tools:text="@string/working"
                 android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/EI_Scissors"
+            android:layout_marginStart="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/scissors"
+            android:visibility="visible"/>
 
     </LinearLayout>
 

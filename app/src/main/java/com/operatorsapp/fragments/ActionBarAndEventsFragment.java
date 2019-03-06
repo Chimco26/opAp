@@ -104,6 +104,7 @@ import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.dialogs.GenericDialog;
+import com.operatorsapp.dialogs.LegendDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -290,6 +291,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private View mFiltersView;
     private boolean mSelectAllIsChecked = true;
     private AsyncTask<Void, Void, String> mAsyncTask;
+    private ImageView mLegendBtn;
+    private LegendDialog mLegendDialog;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -424,6 +427,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
         initEventRecycler(view);
+        initLegendDialog(view);
 
         mFilterLy = view.findViewById(R.id.FAAE_filter_ly);
         mFilterBtn = view.findViewById(R.id.FAAE_filter_btn);
@@ -586,6 +590,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         initCycleAlarmView(view);
 
         return statusBarParams;
+    }
+
+    private void initLegendDialog(View view) {
+        mLegendBtn = view.findViewById(R.id.FAAE_legend_btn);
+        mLegendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLegendDialog == null)
+                    mLegendDialog = LegendDialog.newInstants();
+                if (getFragmentManager() != null)
+                    mLegendDialog.show(getFragmentManager(), null);
+            }
+        });
     }
 
     private void initCycleAlarmView(View view) {

@@ -300,6 +300,13 @@
     <string name="activate_last_job">הפעלת פק”ע אחרונה</string>
     <string name="do_you_need_to_end_setup_before">האם דרוש תהליך setup לפני התחלת ייצור על פק”ע זו?</string>
     <string name="working">עובד</string>
+    <string name="working_setup">סטאפ - עבודה</string>
+    <string name="parameter_deviation">חריגה מפרמטר</string>
+    <string name="stop">עצירה</string>
+    <string name="stop_setup">סטאפ - עצירה</string>
+    <string name="idle">בטלה</string>
+    <string name="working_no_production">עבודה בחוסר יצור</string>
+    <string name="no_communication_p">חוסר תקשורת</string>
     <string name="see_pending_jobs">רשימת פק”עות ממתינות</string>
     <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
     <string name="get_ready_for_your_next_job">התכונן לעבודה הבאה שלך</string>
