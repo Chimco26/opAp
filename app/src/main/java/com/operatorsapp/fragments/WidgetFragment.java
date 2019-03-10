@@ -526,6 +526,7 @@ public class WidgetFragment extends Fragment implements
             mKeyBoard.setChars(complementChars);
             mKeyBoard.openKeyBoard(text);
             mKeyBoard.setListener(listener);
+            mDashboardCentralContainerListener.onKeyboardEvent(true);
         }
     }
 
@@ -537,6 +538,8 @@ public class WidgetFragment extends Fragment implements
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
         }
+        mDashboardCentralContainerListener.onKeyboardEvent(false);
     }
+
 }
 

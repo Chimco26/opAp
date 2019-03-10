@@ -110,12 +110,12 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
-            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
+//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
-            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
+//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
     }
 

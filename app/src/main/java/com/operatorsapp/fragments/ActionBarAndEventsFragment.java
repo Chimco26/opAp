@@ -459,6 +459,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
+                    mMinDurationLil.setVisibility(View.GONE);
                     mFilterLy.setVisibility(View.VISIBLE);
                     if (mIsOpen) {
                         showLegendBtnVisibility(true);
@@ -476,6 +477,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     showLegendBtnVisibility(false);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                        mMinDurationLil.setVisibility(View.VISIBLE);
                     }
                     if (mIsSelectionMode && mFirstSeletedEvent != null) {
                         Cursor cursor;
@@ -2499,6 +2501,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             onStopEventSelected(event.getEventID(), true);
 
             mShowAlarmCheckBox.setVisibility(View.GONE);
+            mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
@@ -2621,6 +2624,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 onStopEventSelected(event.getEventID(), true);
 
                                 mShowAlarmCheckBox.setVisibility(View.GONE);
+                                mMinDurationLil.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -3612,6 +3616,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (!mIsTimeLine) {
             mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+            mMinDurationLil.setVisibility(View.VISIBLE);
         }
 
         if (mEventsAdapter != null) {
