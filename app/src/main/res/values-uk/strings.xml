@@ -253,5 +253,12 @@
     <string name="tutorial_split_event_title">Розділити подію</string>
     <string name="tutorial_swipe">Проведіть вбік щоб побачити рецепт поточного завдання</string>
     <string name="under_maintenance">На техобслуговуванні</string>
+    <string name="call_decline">Виклик відхилено</string>
+    <string name="call_approved">Виклик ухвалено</string>
+    <string name="started_service">Відвідування виклика</string>
+    <string name="service_completed">Обслуговування завершено</string>
+    <string name="call_cancelled">Виклик скасовано</string>
+    <string name="waiting_for_replay">Очікування відтворення</string>
+    <string name="service_call_was_canceled">Цей виклик скасовано</string>
 
 </resources>

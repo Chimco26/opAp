@@ -237,6 +237,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SendRejectObject mSendRejectObject;
     private ActualBarExtraResponse mActualBarExtraResponse;
     private ArrayList<RejectForMultipleRequest> mRejectForMultipleRequests;
+    private boolean mCustomKeyBoardIsOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -2005,7 +2006,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-        if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
+        if (mCustomKeyBoardIsOpen && mWidgetFragment != null){
+            mWidgetFragment.onCloseKeyboard();
+
+        }else if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
 
             if (mReportStopReasonFragment != null && mSelectStopReasonFragment == null) {
 
@@ -2352,6 +2356,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (mActionBarAndEventsFragment != null) {
             mActionBarAndEventsFragment.startSelectMode(null, null);
         }
+    }
+
+    @Override
+    public void onKeyboardEvent(boolean isOpen) {
+        mCustomKeyBoardIsOpen = isOpen;
     }
 
     private void sendCycleUnitReport(double value) {

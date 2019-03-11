@@ -170,7 +170,7 @@ public class CountDownView extends View {
         canvas.drawText(text, centerX, centerY + textSize / 2, mTextPaint);
     }
 
-    private Point getPercentArcEndPoint(double angle){
+    private Point getPercentArcEndPoint(double angle) {
         angle = Math.toRadians(angle + startAngle);
         Point point = new Point();
         point.x = (float) (centerX + (radius - indicatorRadius - strokeWidth / 2f) * Math.cos(angle));
@@ -184,22 +184,22 @@ public class CountDownView extends View {
         private float y;
     }
 
-    public void update(int minute, String minuteStartText) {
+    public void update(int minute, String minuteEndText) {
         if (isReverse(minute)) {
             percentAngle = minuteToDegree(-minute);
         } else {
             percentAngle = minuteToDegree(totalTimeInMinute - minute);
         }
-        text = getMinuteText(minute, minuteStartText);
+        text = getMinuteText(minute, minuteEndText);
         invalidate();
     }
 
-    private String getMinuteText(int minute, String minuteStartText) {
-        if (isReverse) {
-            return minuteStartText + StringUtil.add0ToNumber(minute);
-        } else {
-            return minuteStartText + StringUtil.add0ToNumber(minute);
-        }
+    private String getMinuteText(int minute, String minuteEndText) {
+//        if (isReverse) {
+        return StringUtil.add0ToNumber(minute) + minuteEndText;
+//        } else {
+//            return minuteEndText + StringUtil.add0ToNumber(minute);
+//        }
     }
 
     private float minuteToDegree(int minute) {

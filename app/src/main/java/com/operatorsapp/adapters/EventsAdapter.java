@@ -111,17 +111,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mFilter;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final View mView;
         private final View mCircle;
+        private final ImageView mCheckIc;
         private TextView mText;
         private TextView mTime;
         private View mLine;
         private LinearLayout mCheckContainer;
         private CheckBox mCheckBox;
         private RelativeLayout mTechContainer;
-        private ImageView mCheckV;
         private ImageView mScissors;
 
         public ViewHolder(View itemView) {
@@ -132,10 +132,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTime = itemView.findViewById(R.id.EI_time);
             mLine = itemView.findViewById(R.id.EI_line);
             mCircle = itemView.findViewById(R.id.EI_circle);
+            mCheckIc = itemView.findViewById(R.id.EI_check_ic);
             mCheckContainer = itemView.findViewById(R.id.EI_check_container);
             mCheckBox = itemView.findViewById(R.id.EI_check_box);
             mTechContainer = itemView.findViewById(R.id.EI_service_call_container);
-            mCheckV = itemView.findViewById(R.id.EI_check_sign);
             mScissors = itemView.findViewById(R.id.EI_Scissors);
         }
 
@@ -214,9 +214,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             textBackground.setColor(Color.parseColor(event.getColor()));
 
             if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
-                mCheckV.setVisibility(View.VISIBLE);
+                mCheckIc.setVisibility(View.VISIBLE);
+                mCheckIc.setColorFilter(Color.parseColor(event.getColor()));
             } else {
-                mCheckV.setVisibility(View.GONE);
+                mCheckIc.setVisibility(View.GONE);
             }
 
             if (!mIsSelectionMode && position == 0 && event.getEventEndTime().isEmpty()) {
@@ -275,7 +276,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (event.getNotifications() != null && event.getNotifications().size() > 0) {
                 for (Notification notification : event.getNotifications()) {
 
-                    String text = notification.getSourceUserName() + " " + notification.getText();
+                    String text = getCallTextById(notification.getResponseTypeID());
                     if (notification.getNotificationType() == 1 && mIsmMessagesChecked) {
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
                         setNotification(event, 1, notification.getSentTime().substring(11, 16), startTimeMilli, text, 0);
@@ -356,48 +357,69 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTechContainer.addView(view);
         }
 
-    private void validateDialog(final float eventID) {
+        private void validateDialog(final float eventID) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
-        builder.setView(dialogView);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
+            builder.setView(dialogView);
 
-        TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
-        TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
-        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
-        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
-        dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
+            TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
+            TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
+            Button submitBtn = dialogView.findViewById(R.id.DN_btn);
+            ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
+            dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
 
 
-        submitBtn.setText(R.string.split);
-        bodyTv.setText(R.string.split_event_validation_text);
-        bodyTv.setTextSize(16);
-        titleTv.setText(R.string.split_event_validation_title);
-        titleTv.setTextSize(28);
+            submitBtn.setText(R.string.split);
+            bodyTv.setText(R.string.split_event_validation_text);
+            bodyTv.setTextSize(16);
+            titleTv.setText(R.string.split_event_validation_title);
+            titleTv.setTextSize(28);
 
-        builder.setCancelable(true);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+            builder.setCancelable(true);
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnStopClickListener.onSplitEventPressed(eventID);
-                alertDialog.dismiss();
-            }
-        });
+            submitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnStopClickListener.onSplitEventPressed(eventID);
+                    alertDialog.dismiss();
+                }
+            });
 
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
 
+
+        }
 
     }
 
+    private String getCallTextById(Integer textByKeysValues) {
+        switch (textByKeysValues) {
+            case 1:
+                return mContext.getString(R.string.call_approved);
+            case 2:
+                return mContext.getString(R.string.call_decline);
+            case 3:
+                return mContext.getString(R.string.started_service);
+            case 4:
+                return mContext.getString(R.string.service_completed);
+            case 5:
+                return mContext.getString(R.string.call_cancelled);
+            case 6:
+                return mContext.getString(R.string.waiting_for_replay);
+            case 7:
+                return mContext.getString(R.string.service_call_was_canceled);
+            default:
+                return mContext.getString(R.string.call_approved);
+        }
     }
 
 

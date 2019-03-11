@@ -67,6 +67,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Reject;
+import com.example.common.actualBarExtraResponse.WorkingEvent;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -419,6 +420,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         statusBarParams.height = (int) (mTollBarsHeight * 0.35);
         mStatusLayout.requestLayout();
 
+        mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
+        mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
+
         mShiftLogLayout = view.findViewById(R.id.fragment_dashboard_shiftlog);
         mShiftLogParams = mShiftLogLayout.getLayoutParams();
         mShiftLogParams.width = mCloseWidth;
@@ -459,6 +463,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsRecycler.setVisibility(View.VISIBLE);
                     mShiftLogRecycler.setVisibility(View.GONE);
                     mShowAlarmCheckBox.setVisibility(View.GONE);
+                    mMinDurationLil.setVisibility(View.GONE);
                     mFilterLy.setVisibility(View.VISIBLE);
                     if (mIsOpen) {
                         showLegendBtnVisibility(true);
@@ -476,6 +481,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     showLegendBtnVisibility(false);
                     if (!mIsSelectionMode) {
                         mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+                        mMinDurationLil.setVisibility(View.VISIBLE);
                     }
                     if (mIsSelectionMode && mFirstSeletedEvent != null) {
                         Cursor cursor;
@@ -517,8 +523,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
         mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
-        mMinDurationLil = view.findViewById(R.id.fragment_dashboard_min_duration_lil);
 
         final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
 
@@ -2499,6 +2503,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             onStopEventSelected(event.getEventID(), true);
 
             mShowAlarmCheckBox.setVisibility(View.GONE);
+            mMinDurationLil.setVisibility(View.GONE);
         } else {
             myTaskListener.onUpdateEventsRecyclerViews(cursor, events);
             myTaskListener.onStartSelectMode(event);
@@ -2621,6 +2626,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 onStopEventSelected(event.getEventID(), true);
 
                                 mShowAlarmCheckBox.setVisibility(View.GONE);
+                                mMinDurationLil.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -3009,6 +3015,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
             Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
 
+            addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
             if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
@@ -3017,6 +3024,55 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
         return false;
+    }
+
+    private void addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+
+        if (event.getType() != 1) {
+            return;
+        }
+        ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
+        if (workingEvents != null && workingEvents.size() > 0) {
+
+            for (WorkingEvent workingEvent : workingEvents) {
+                Long workingEventSentTime = convertDateToMillisecond(workingEvent.getStartTime(), SQL_T_FORMAT);
+
+                if (eventStart <= workingEventSentTime && workingEventSentTime <= eventEnd) {
+
+                    if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
+                        event.setEventSubTitleLname(workingEvent.getEventReason());
+                        event.setEventSubTitleEname(workingEvent.getEventReason());
+                    } else {
+                        event.setEventSubTitleEname(getWorkingSubTitle(workingEvent));
+                        event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
+                    }
+                    event.setColor(workingEvent.getColor());
+                }
+            }
+        }
+    }
+
+    private String getWorkingSubTitle(WorkingEvent workingEvent) {
+        switch (workingEvent.getEventDistributionID()) {
+            case 1:
+                return getString(R.string.working);
+            case 2:
+                return getString(R.string.stop);
+            case 3:
+                return getString(R.string.working_setup);
+            case 4:
+                return getString(R.string.stop_setup);
+            case 5:
+                return getString(R.string.idle);
+            case 6:
+                return getString(R.string.no_communication_p);
+            case 7:
+                return getString(R.string.parameter_deviation);
+            case 8:
+                return getString(R.string.working_no_production);
+            default:
+                return getString(R.string.working);
+        }
     }
 
     private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
@@ -3044,7 +3100,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (notificationArrayList != null) {
                 event.setNotifications(notificationArrayList);
                 notifications.removeAll(toDelete);
-                if (notifications.size() == 0){
+                if (notifications.size() == 0) {
                     notifications = null;
                 }
                 return true;
@@ -3075,7 +3131,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (rejectArrayList != null) {
                 event.setRejects(rejectArrayList);
                 rejects.removeAll(toDelete);
-                if (rejects.size() == 0){
+                if (rejects.size() == 0) {
                     rejects = null;
                 }
                 return true;
@@ -3107,7 +3163,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (inventoriesArrayList != null) {
                 event.setInventories(inventoriesArrayList);
                 inventories.removeAll(toDelete);
-                if (inventories.size() == 0){
+                if (inventories.size() == 0) {
                     inventories = null;
                 }
                 return true;
@@ -3612,6 +3668,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (!mIsTimeLine) {
             mShowAlarmCheckBox.setVisibility(View.VISIBLE);
+            mMinDurationLil.setVisibility(View.VISIBLE);
         }
 
         if (mEventsAdapter != null) {

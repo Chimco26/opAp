@@ -259,4 +259,12 @@
     <string name="tutorial_event_log_title">Ereignisdaten</string>
     <string name="tutorial_event_log_desc">Füge mehrere Reports zusammen, wenn diese den gleichen Stillstandsgrund haben.</string>
     <string name="split_event_validation_title">Aufspalten Ereignis</string>
+    <string name="call_decline">Anruf wurde abgelehnt</string>
+    <string name="_100">call_decline</string>
+    <string name="call_approved">Anruf ist genehmigt</string>
+    <string name="started_service">Anruf wird bearbeitet</string>
+    <string name="service_completed">Service abgeschlossen</string>
+    <string name="call_cancelled">Anruf abgebrochen</string>
+    <string name="waiting_for_replay">Warten auf Wiedergabe</string>
+    <string name="service_call_was_canceled">Dieser Anruf wurde abgebrochen</string>
 </resources>

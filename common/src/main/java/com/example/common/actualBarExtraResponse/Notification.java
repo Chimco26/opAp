@@ -220,7 +220,7 @@ public class Notification implements Parcelable {
         this.senderUserDisplayHName = senderUserDisplayHName;
     }
 
-    public String getTextKeysValues() {
+    public String getTextByKeysValues() {
         return textKeysValues;
     }
 

@@ -42,25 +42,33 @@
 
             <View
                 android:id="@+id/EI_line"
-                android:layout_width="5dp"
+                android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:background="@color/red_light" />
 
-            <View
+            <RelativeLayout
                 android:id="@+id/EI_circle"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/circle_blue" />
+                android:background="@drawable/circle_blue">
 
-            <ImageView
-                android:id="@+id/EI_check_sign"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/done"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true"/>
+                <View
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/circle_white"/>
+
+                <ImageView
+                    android:id="@+id/EI_check_ic"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_check_black_24dp"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -82,8 +90,8 @@
 
         <ImageView
             android:id="@+id/EI_Scissors"
-            android:layout_marginStart="10dp"
-            android:layout_width="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_width="30dp"
             android:layout_height="20dp"
             android:src="@drawable/scissors"
             android:visibility="visible"/>

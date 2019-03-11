@@ -251,4 +251,11 @@
     <string name="work_comlpeted">Работа завершена</string>
     <string name="yesterday">Вчера</string>
     <string name="you_can_add_a_note">Вы можете добавить заметку</string>
+    <string name="call_decline">Вызов отклонен</string>
+    <string name="call_approved">Вызов утвержден</string>
+    <string name="started_service">Посещение вызова</string>
+    <string name="service_completed">Обслуживание завершено</string>
+    <string name="call_cancelled">Вызов отменен</string>
+    <string name="waiting_for_replay">В ожидании повтора</string>
+    <string name="service_call_was_canceled">Этот вызов был отменен</string>
 </resources>

@@ -146,6 +146,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         mActiveJobsProgressBar = view.findViewById(R.id.active_jobs_progressBar);
 
 //        getActiveJobs();
+        mUnitsCounter = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getProductEffectiveAmount().intValue();
 
         mButtonReport = view.findViewById(R.id.button_report);
 

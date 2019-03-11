@@ -260,4 +260,11 @@
     <string name="split_event_validation_title">"Scinder l'événement "</string>
     <string name="split">"Partager "</string>
     <string name="username">"Nom utilisateur "</string>
+    <string name="call_decline">L\'appel a été rejeté</string>
+    <string name="call_approved">L\'appel a été approuvé</string>
+    <string name="started_service">Appel pris en compte</string>
+    <string name="service_completed">Service terminé</string>
+    <string name="call_cancelled">Appel annulé</string>
+    <string name="waiting_for_replay">En attente de rediffusion</string>
+    <string name="service_call_was_canceled">Cet appel a été annulé</string>
 </resources>
