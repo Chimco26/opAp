@@ -260,5 +260,12 @@
     <string name="work_comlpeted">Werk voltooid</string>
     <string name="yesterday">Gisteren</string>
     <string name="you_can_add_a_note">U kunt een opmerking toevoegen</string>
+    <string name="call_decline">Oproep was afgewezen</string>
+    <string name="call_approved">Oproep is goedgekeurd</string>
+    <string name="started_service">Deelnemen aan oproep</string>
+    <string name="service_completed">Dienstverlening afgerond</string>
+    <string name="call_cancelled">Oproep geannuleerd</string>
+    <string name="waiting_for_replay">Op herhaling wachten</string>
+    <string name="service_call_was_canceled">Deze oproep was geannuleerd</string>
 
 </resources>

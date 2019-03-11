@@ -23,6 +23,17 @@ public class ActualBarExtraResponse implements Parcelable {
     @SerializedName("Notification")
     @Expose
     private ArrayList<Notification> notification = null;
+    @SerializedName("WorkingEvents")
+    @Expose
+    private ArrayList<WorkingEvent> workingEvents = null;
+
+    public ArrayList<WorkingEvent> getWorkingEvents() {
+        return workingEvents;
+    }
+
+    public void setWorkingEvents(ArrayList<WorkingEvent> workingEvents) {
+        this.workingEvents = workingEvents;
+    }
 
     public Boolean getFunctionSucceed() {
         return functionSucceed;

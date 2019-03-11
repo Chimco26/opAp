@@ -368,10 +368,16 @@
     <string name="idle">Idle</string>
     <string name="working_no_production">Working no production</string>
     <string name="no_communication_p">No Communication</string>
+
     <string name="_100">100%</string>
     <string name="filter_short">Filter short</string>
     <string name="reported">Reported</string>
     <string name="unreported">Unreported</string>
+    <string name="setup">Setup</string>
+    <string name="min">min</string>
+    <string name="estimated_date">Estimated date</string>
+    <string name="required_setup">Required setup?</string>
+    <string name="call_decline">Call was declined</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

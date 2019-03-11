@@ -36,9 +36,19 @@ public class ActiveJob implements Parcelable {
     private String jobUnitsProducedOK;
     @SerializedName("JoshUnitsProducedOK")
     private String joshUnitsProducedOK;
+    @SerializedName("ProductEffectiveAmount")
+    private Double productEffectiveAmount;
     private boolean isUnit = true;
     private float reportValue;
     private boolean isEdited;
+
+    public Double getProductEffectiveAmount() {
+        return productEffectiveAmount;
+    }
+
+    public void setProductEffectiveAmount(Double productEffectiveAmount) {
+        this.productEffectiveAmount = productEffectiveAmount;
+    }
 
     public boolean isEdited() {
         return isEdited;

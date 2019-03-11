@@ -229,11 +229,19 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClickPositiveBtn() {
                         if (firstSteps) {
-                            showLastJobDialog(getString(R.string.setup_end),
-                                    getString(R.string.do_you_need_to_end_setup_before),
-                                    getString(R.string.yes), getString(R.string.no), false);
+                            showLastJobDialog(null,
+                                    getString(R.string.required_setup),
+                                    getString(R.string.no), getString(R.string.yes), false);
                         } else {
-                            validateDialog(Integer.valueOf(mLastJobId), false);
+                            postUpdateActions(mUpdatedActions);
+                            if (mLastJobId != null) {
+                                PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                                postActivateJob(null, new ActivateJobRequest(persistenceManager.getSessionId(),
+                                        String.valueOf(persistenceManager.getMachineId()),
+                                        String.valueOf(mLastJobId),
+                                        persistenceManager.getOperatorId(),
+                                        false));
+                            }
                         }
                     }
 
@@ -428,7 +436,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog.isShowing()) {
+                if (alertDialog != null && alertDialog.isShowing()) {
                     alertDialog.dismiss();
                 }
 
@@ -453,7 +461,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog.isShowing()) {
+                if (alertDialog != null && alertDialog.isShowing()) {
                     alertDialog.dismiss();
                 }
 

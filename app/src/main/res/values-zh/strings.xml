@@ -254,6 +254,13 @@
     <string name="split">拆分</string>
     <string name="version">"版本 "</string>
     <string name="username">"使用者名稱 "</string>
+    <string name="call_decline">通話已被拒絕</string>
+    <string name="call_approved">通話已獲批准</string>
+    <string name="started_service">參加電話會議</string>
+    <string name="service_completed">服務已完成</string>
+    <string name="call_cancelled">通話已取消</string>
+    <string name="waiting_for_replay">等待重放</string>
+    <string name="service_call_was_canceled">此通話已被取消</string>
 
 
 </resources>
