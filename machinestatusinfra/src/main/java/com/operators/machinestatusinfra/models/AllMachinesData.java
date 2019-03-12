@@ -90,6 +90,12 @@ public class AllMachinesData {
     private String LastErpJobId;
     @SerializedName("LastProductName")
     private String lastProductName;
+    @SerializedName("AllowProductionModeOnOpApp")
+    private boolean AllowProductionModeOnOpApp = true;
+
+    public boolean isAllowProductionModeOnOpApp() {
+        return AllowProductionModeOnOpApp;
+    }
 
     public String getLastJobId() {
         return lastJobId;

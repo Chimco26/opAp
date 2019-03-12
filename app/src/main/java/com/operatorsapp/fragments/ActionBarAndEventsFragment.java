@@ -278,7 +278,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TimeLineView mTimeView;
     private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
-    private boolean mIsSelectionEventsMode = false;
     private RecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
     private File outputFile;
@@ -286,12 +285,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private Switch mTimeLineType;
     private boolean mIsTimeLine;
     private ActualBarExtraResponse mActualBarExtraResponse;
-    private boolean mIsWorkingEventChecked = true, mIsEventDetailsChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
-    private CheckBox mSelectAll, mWorkingEvents, mEventDetails, mServiceCalls, mMessages, mRejects, mProductionReport;
+    private CheckBox mSelectAll, mServiceCalls, mMessages, mRejects, mProductionReport;
     private View mFilterLy;
     private View mFilterBtn;
     private View mFiltersView;
-    private boolean mSelectAllIsChecked = true;
     private AsyncTask<Void, Void, String> mAsyncTask;
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
@@ -2203,9 +2200,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null) {
             return;
         }
-
+        if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()){
+            mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.INVISIBLE);
+            return;
+        }
         int selected = 0;
-
+        mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.VISIBLE);
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
         final LinearLayout productionStatusSpinnerLil = mToolBarView.findViewById(R.id.toolbar_production_spinner_lil);
         productionStatusSpinnerLil.setOnClickListener(new View.OnClickListener() {
@@ -3083,7 +3083,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = null;
 
-
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
                 Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
 
@@ -3186,7 +3185,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             return;
         }
 
-        if (events.get(0).getEventEndTime() != null
+        if (!mIsSelectionMode && events.get(0).getEventEndTime() != null
                 && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                 mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
@@ -3260,34 +3259,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 switch (view.getId()) {
                     case R.id.FAAE_select_all:
                         boolean checked = mSelectAll.isChecked();
-                        mWorkingEvents.setChecked(checked);
-                        mEventDetails.setChecked(checked);
                         mServiceCalls.setChecked(checked);
                         mMessages.setChecked(checked);
                         mRejects.setChecked(checked);
                         mProductionReport.setChecked(checked);
                         break;
-
-                    case R.id.FAAE_working_events:
-                    case R.id.FAAE_event_details:
-                        mServiceCalls.setChecked(false);
-                        mMessages.setChecked(false);
-                        mRejects.setChecked(false);
-                        mProductionReport.setChecked(false);
-                        break;
-
-                    case R.id.FAAE_service_alls:
-                    case R.id.FAAE_messages:
-                    case R.id.FAAE_rejects:
-                    case R.id.FAAE_production_report:
-                        if (mServiceCalls.isChecked() || mMessages.isChecked() || mRejects.isChecked() || mProductionReport.isChecked()) {
-                            mWorkingEvents.setChecked(true);
-                            mEventDetails.setChecked(true);
-                        }
-                        break;
                 }
-                mSelectAll.setChecked(mWorkingEvents.isChecked() && mEventDetails.isChecked() && mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
-                mEventsAdapter.setCheckedFilters(mWorkingEvents.isChecked(), mEventDetails.isChecked(), mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
+                mSelectAll.setChecked(mServiceCalls.isChecked() && mMessages.isChecked() && mRejects.isChecked() && mProductionReport.isChecked());
+                mEventsAdapter.setCheckedFilters(mServiceCalls.isChecked(), mMessages.isChecked(), mRejects.isChecked(), mProductionReport.isChecked());
             }
         };
         mSelectAll = view.findViewById(R.id.FAAE_select_all);
@@ -3304,11 +3283,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                mProductionReport.setChecked(checked);
 //            }
 //        });
-        mWorkingEvents = view.findViewById(R.id.FAAE_working_events);
 //        mWorkingEvents.setOnCheckedChangeListener(this);
-        mWorkingEvents.setOnClickListener(onClickListener);
-        mEventDetails = view.findViewById(R.id.FAAE_event_details);
-        mEventDetails.setOnClickListener(onClickListener);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
         mServiceCalls.setOnClickListener(onClickListener);
         mMessages = view.findViewById(R.id.FAAE_messages);
@@ -3831,12 +3806,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void setCycleWarningViewShow(boolean show) {
+        boolean wasShow = mCycleWarningViewShow;
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             mCycleWarningViewShow = true;
         } else {
             mCycleWarningViewShow = false;
         }
-        setCycleWarningView(show);
+        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
+            setCycleWarningView(false);
+        } else {
+            setCycleWarningView(show);
+        }
     }
 
     private void sendTokenWithSessionIdToServer() {

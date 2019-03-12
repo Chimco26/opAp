@@ -358,6 +358,7 @@
     <string name="event_details">Event details</string>
     <string name="service_calls">Service Calls</string>
     <string name="messages">Messages</string>
+    <string name="message">Message</string>
     <string name="production_report">Production Report</string>
     <string name="select_all">Select all</string>
 

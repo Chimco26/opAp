@@ -13,11 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,7 +33,8 @@ import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> implements Filterable {
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
+//        implements Filterable {
 
     private static final int PIXEL_FOR_MINUTE = 4;
     private boolean mIsOpenState;
@@ -46,8 +44,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private Context mContext;
     private ArrayList<Event> mEvents = new ArrayList<>();
     private ArrayList<Float> mSelectedEvents;
-    private boolean mIsWorkingTimeChecked = true, mIsStopEventChecked = true, mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
-    private EventsFilter mFilter;
+    private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
+//    private EventsFilter mFilter;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
@@ -55,8 +53,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mOnStopClickListener = onStopClickListener;
         mIsSelectionMode = selectMode;
         mIsOpenState = closedState;
-        mFilter = new EventsFilter();
-        getFilter().filter("");
+//        mFilter = new EventsFilter();
+//        getFilter().filter("");
     }
 
     public void setSelectedEvents(ArrayList<Float> selectedEvents) {
@@ -65,22 +63,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     public void setEvents(ArrayList<Event> events) {
         mEvents = events;
-        getFilter().filter("");
+        mEventsFiltered = events;
+//        getFilter().filter("");
     }
 
     public void setIsSelectionMode(boolean mIsSelectionMode) {
         this.mIsSelectionMode = mIsSelectionMode;
     }
 
-    public void setCheckedFilters(boolean isWorkingEventChecked, boolean isEventDetailsChecked, boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
+    public void setCheckedFilters(boolean isServiceCallsChecked, boolean isMessagesChecked, boolean isRejectsChecked, boolean isProductionReportChecked) {
 
-        mIsWorkingTimeChecked = isWorkingEventChecked;
-        mIsStopEventChecked = isEventDetailsChecked;
         mIsServiceCallsChecked = isServiceCallsChecked;
         mIsmMessagesChecked = isMessagesChecked;
         mIsRejectsChecked = isRejectsChecked;
         mIsProductionReportChecked = isProductionReportChecked;
-        getFilter().filter("");
+//        getFilter().filter("");
 
     }
 
@@ -106,10 +103,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mEventsFiltered.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return mFilter;
-    }
+//    @Override
+//    public Filter getFilter() {
+//        return mFilter;
+//    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -119,7 +116,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private TextView mText;
         private TextView mTime;
         private View mLine;
-        private LinearLayout mCheckContainer;
+        private RelativeLayout mCheckContainer;
         private CheckBox mCheckBox;
         private RelativeLayout mTechContainer;
         private ImageView mScissors;
@@ -134,7 +131,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mCircle = itemView.findViewById(R.id.EI_circle);
             mCheckIc = itemView.findViewById(R.id.EI_check_ic);
             mCheckContainer = itemView.findViewById(R.id.EI_check_container);
-            mCheckBox = itemView.findViewById(R.id.EI_check_box);
+            mCheckBox = itemView.findViewById(R.id.EI_text_check);
             mTechContainer = itemView.findViewById(R.id.EI_service_call_container);
             mScissors = itemView.findViewById(R.id.EI_Scissors);
         }
@@ -152,6 +149,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                     if (mOnStopClickListener != null && event.getType() < 1) {
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
+                    }
+                    if (isChecked){
+                        GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                        textBackground.setColor(mText.getContext().getResources().getColor(R.color.blue1));
+                    }else {
+                        GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                        textBackground.setColor(Color.parseColor(event.getColor()));
                     }
 
                 }
@@ -210,9 +214,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 mText.setText(text);
             }
-            GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-            textBackground.setColor(Color.parseColor(event.getColor()));
-
+            if (event.isChecked() && mIsSelectionMode){
+                GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                textBackground.setColor(mText.getContext().getResources().getColor(R.color.blue1));
+            }else {
+                GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                textBackground.setColor(Color.parseColor(event.getColor()));
+            }
             if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
                 mCheckIc.setVisibility(View.VISIBLE);
                 mCheckIc.setColorFilter(Color.parseColor(event.getColor()));
@@ -276,11 +284,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (event.getNotifications() != null && event.getNotifications().size() > 0) {
                 for (Notification notification : event.getNotifications()) {
 
-                    String text = getCallTextById(notification.getResponseTypeID());
+                    String text = mTechContainer.getContext().getString(R.string.message);
                     if (notification.getNotificationType() == 1 && mIsmMessagesChecked) {
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
                         setNotification(event, 1, notification.getSentTime().substring(11, 16), startTimeMilli, text, 0);
                     } else if (notification.getNotificationType() == 2 && mIsServiceCallsChecked) {
+                         text = String.format("%s - %s", getCallTextById(notification.getResponseTypeID()), notification.getTargetUserName());
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
                         setNotification(event, 2, notification.getSentTime().substring(11, 16), startTimeMilli, text, notification.getResponseTypeID());
                     }
@@ -407,49 +416,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 return mContext.getString(R.string.call_approved);
             case 2:
                 return mContext.getString(R.string.call_decline);
-            case 3:
-                return mContext.getString(R.string.started_service);
             case 4:
-                return mContext.getString(R.string.service_completed);
+                return mContext.getString(R.string.started_service);
             case 5:
-                return mContext.getString(R.string.call_cancelled);
+                return mContext.getString(R.string.service_completed);
             case 6:
+                return mContext.getString(R.string.call_cancelled);
+            case 0:
                 return mContext.getString(R.string.waiting_for_replay);
-            case 7:
-                return mContext.getString(R.string.service_call_was_canceled);
             default:
-                return mContext.getString(R.string.call_approved);
+                return mContext.getString(R.string.waiting_for_replay);
         }
     }
-
-
-    private int filterHeight(int height, Event event) {
-        if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
-                || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
-            return 0;
-        } else {
-            return height;
-        }
-    }
-
-    private String getNotificationTime(String time, int margin, int eventViewHeight) {
-        if (margin > 10 && margin < eventViewHeight - 10) {
-            return time;
-        } else {
-            return "";
-        }
-    }
-
-    private int getViewHeight(Event event) {
-        if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
-            return 300;
-        } else if (event.getDuration() > 4) {
-            return (int) event.getDuration() * PIXEL_FOR_MINUTE;
-        } else {
-            return 5 * PIXEL_FOR_MINUTE;
-        }
-    }
-
     private void setNotificationIcon(ImageView iconIV, int icon) {
         switch (icon) {
             case 0:
@@ -477,6 +455,34 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
     }
 
+
+//    private int filterHeight(int height, Event event) {
+//        if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
+//                || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
+//            return 0;
+//        } else {
+//            return height;
+//        }
+//    }
+
+    private String getNotificationTime(String time, int margin, int eventViewHeight) {
+        if (margin > 10 && margin < eventViewHeight - 10) {
+            return time;
+        } else {
+            return "";
+        }
+    }
+
+    private int getViewHeight(Event event) {
+        if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
+            return 300;
+        } else if (event.getDuration() > 4) {
+            return (int) event.getDuration() * PIXEL_FOR_MINUTE;
+        } else {
+            return 5 * PIXEL_FOR_MINUTE;
+        }
+    }
+
     private int getNotificationRelativePosition(Event event, String time, int eventViewHeight) {
         long duration = event.getDuration() * 60 * 1000;
         if (duration == 0) {
@@ -496,44 +502,43 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
     }
 
-    private class EventsFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            FilterResults results = new FilterResults();
-
-            ArrayList<Event> filtered = new ArrayList<>();
-            ArrayList<Event> toDelete = new ArrayList<>();
-            filtered.addAll(mEvents);
-
-            for (Event event : filtered) {
-
-                if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
-                        || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
-                    toDelete.add(event);
-                }
-
-            }
-            filtered.removeAll(toDelete);
-
-            results.values = filtered;
-            results.count = filtered.size();
-
-            return results;
-        }
-
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-            mEventsFiltered = (ArrayList<Event>) results.values;
-
-            notifyDataSetChanged();
-        }
-
-    }
+//    private class EventsFilter extends Filter {
+//
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//
+//            FilterResults results = new FilterResults();
+//
+//            ArrayList<Event> filtered = new ArrayList<>();
+//            ArrayList<Event> toDelete = new ArrayList<>();
+//            filtered.addAll(mEvents);
+//
+//            for (Event event : filtered) {
+//
+//                if (((mIsSelectionMode) && (event.getType() != 0 || event.getEventGroupID() == 20))) {
+//                    toDelete.add(event);
+//                }
+//
+//            }
+//            filtered.removeAll(toDelete);
+//
+//            results.values = filtered;
+//            results.count = filtered.size();
+//
+//            return results;
+//        }
+//
+//
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        protected void publishResults(CharSequence constraint, FilterResults results) {
+//
+//            mEventsFiltered = (ArrayList<Event>) results.values;
+//
+//            notifyDataSetChanged();
+//        }
+//
+//    }
 }
 
 

@@ -315,6 +315,7 @@
     <string name="event_details">פרטי האירוע</string>
     <string name="service_calls">קריאת שירות</string>
     <string name="messages">הודעות</string>
+    <string name="message">הודעה</string>
     <string name="production_report">דיווח יצור</string>
     <string name="rejects">פסולים</string>
     <string name="estimated_date">תאריך משוער</string>
