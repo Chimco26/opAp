@@ -3083,7 +3083,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = null;
 
-
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
                 Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
 
@@ -3831,12 +3830,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void setCycleWarningViewShow(boolean show) {
+        boolean wasShow = mCycleWarningViewShow;
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             mCycleWarningViewShow = true;
         } else {
             mCycleWarningViewShow = false;
         }
-        setCycleWarningView(show);
+        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
+            setCycleWarningView(false);
+        } else {
+            setCycleWarningView(show);
+        }
     }
 
     private void sendTokenWithSessionIdToServer() {
