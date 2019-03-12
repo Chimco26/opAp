@@ -92,6 +92,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
+            mSubTitle.setText(mSubTitle.getContext().getString(R.string.setup));
         } else {
             if (time >= 60) {
                 m1Ly.setVisibility(View.VISIBLE);
@@ -105,6 +106,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                     m1TimeTv.setText(String.format("%sh%smin", StringUtil.add0ToNumber(time / 60), StringUtil.add0ToNumber(time % 60)));
                     m1TimeTv.setTextSize(2, 50);
                 }
+                mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
             } else {
                 m1Ly.setVisibility(View.GONE);
                 m2CountDownLy.setVisibility(View.VISIBLE);
@@ -120,7 +122,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
-            mSubTitle.setText(mSubTitle.getContext().getString(R.string.setup));
+            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
 //            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));

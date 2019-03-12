@@ -25,11 +25,12 @@
 
     <me.grantland.widget.AutofitTextView
         android:id="@+id/RPWC_subtitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/RPWC_title"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:layout_alignParentStart="true"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="16sp"
@@ -60,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:layoutDirection="ltr"
             android:orientation="vertical">
 
             <View
@@ -68,16 +70,6 @@
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:background="@color/black" />
-
-            <TextView
-                android:id="@+id/RPWC_not_reported_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/RPWC_not_reported"
-                android:maxLines="1"
-                android:text="@string/_100"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
 
             <View
                 android:id="@+id/RPWC_reported"
@@ -88,6 +80,14 @@
 
             <TextView
                 android:id="@+id/RPWC_reported_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/RPWC_reported"
+                android:maxLines="1"
+                android:textColor="#850f16"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/RPWC_reported_min_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/RPWC_reported"
@@ -112,6 +112,16 @@
                 android:textColor="@color/red_line"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/RPWC_filter_short_min_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/RPWC_filter_short"
+                android:layout_alignParentBottom="true"
+                android:maxLines="1"
+                android:textColor="@color/red_line"
+                android:textSize="14sp" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -119,7 +129,8 @@
             android:layout_height="40dp"
             android:layout_below="@+id/RPWC_graph_rl"
             android:layout_marginTop="10dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:layoutDirection="ltr">
 
             <RelativeLayout
                 android:layout_width="0dp"
