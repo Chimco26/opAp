@@ -282,8 +282,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
                 ImageLoader.getInstance().displayImage(mRecipeResponse.getProductData().getFileUrl().get(0), mLayoutChannel0Image);
             }
 
-            mLayoutChannel0ItemTitleTv.setText(getActivity().getResources().getString(R.string.production_parameters));
-
+            if (getActivity().getResources() != null) {
+                mLayoutChannel0ItemTitleTv.setText(getActivity().getResources().getString(R.string.production_parameters));
+            }
             if (recipeChannel0.getChannelSplits().get(0).getMaterialInformation() != null) {
 
                 mLayoutChannel0ItemSubTitleTv.setText(recipeChannel0.getChannelSplits().get(0).getMaterialInformation().getCatalogID());

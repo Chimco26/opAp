@@ -150,13 +150,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     if (mOnStopClickListener != null && event.getType() < 1) {
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
                     }
+                    GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
                     if (isChecked){
-                        GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                        textBackground.setColor(mText.getContext().getResources().getColor(R.color.blue1));
+                        textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
                     }else {
-                        GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                        textBackground.setColor(Color.parseColor(event.getColor()));
+                        textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
                     }
+                    textBackground.setColor(Color.parseColor(event.getColor()));
 
                 }
             });
@@ -214,13 +214,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             } else {
                 mText.setText(text);
             }
+            GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
             if (event.isChecked() && mIsSelectionMode){
-                GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                textBackground.setColor(mText.getContext().getResources().getColor(R.color.blue1));
+                textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
             }else {
-                GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                textBackground.setColor(Color.parseColor(event.getColor()));
+                textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
             }
+            textBackground.setColor(Color.parseColor(event.getColor()));
+
             if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
                 mCheckIc.setVisibility(View.VISIBLE);
                 mCheckIc.setColorFilter(Color.parseColor(event.getColor()));

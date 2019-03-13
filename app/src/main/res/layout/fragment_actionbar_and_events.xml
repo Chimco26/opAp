@@ -261,7 +261,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:visibility="gone"
                                 android:padding="3dp"
-                                android:src="@drawable/legend"/>
+                                android:src="@drawable/ic_legend"/>
 
                             </RelativeLayout>
 

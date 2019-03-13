@@ -3042,9 +3042,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
                         event.setEventSubTitleLname(workingEvent.getEventReason());
                         event.setEventSubTitleEname(workingEvent.getEventReason());
-                    } else {
+                    } else if (isAdded()){
                         event.setEventSubTitleEname(getWorkingSubTitle(workingEvent));
                         event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
+                    }else {
+                        event.setEventSubTitleEname("Working");
+                        event.setEventSubTitleLname("Working");
                     }
                     event.setColor(workingEvent.getColor());
                 }

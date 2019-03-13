@@ -28,6 +28,8 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final TextView mLegNotReportedTv;
     private final TextView mFilterShortMinTv;
     private final TextView mReportedMinTv;
+    private final TextView mNotReportedTv;
+    private final TextView mNotReportedMinTv;
     private int mHeight;
     private int mWidth;
     private RelativeLayout mParentLayout;
@@ -65,6 +67,8 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mFilterShortMinTv = itemView.findViewById(R.id.RPWC_filter_short_min_tv);
         mReportedTv = itemView.findViewById(R.id.RPWC_reported_tv);
         mReportedMinTv = itemView.findViewById(R.id.RPWC_reported_min_tv);
+        mNotReportedTv = itemView.findViewById(R.id.RPWC_not_reported_tv);
+        mNotReportedMinTv = itemView.findViewById(R.id.RPWC_not_reported_min_tv);
 
         mLegFilterShort = itemView.findViewById(R.id.filter_square);
         mLegFilterShortTv = itemView.findViewById(R.id.filter_square_tv);
@@ -81,17 +85,19 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         setColors(widget);
         int reportedValue = (int) (WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT));
         int totalMinutes = (int) (widget.getProjection() + reportedValue + widget.getTarget());
+        int noReportedValue = totalMinutes - reportedValue - widget.getProjection().intValue();
         int filterShortPercent = 0;
         int reportedPercent = 0;
+        int notReportedPercent = 0;
         if (totalMinutes != 0) {
             filterShortPercent = (int) (widget.getProjection() * 100 / totalMinutes);
             reportedPercent = (int) reportedValue * 100 / totalMinutes;
-            reportedPercent += filterShortPercent;
+            notReportedPercent = 100 - filterShortPercent - reportedPercent;
         }
 
-        updateViews(reportedPercent, filterShortPercent, reportedValue + widget.getProjection().intValue(), widget.getProjection().intValue());
+        updateViews(reportedPercent, filterShortPercent, notReportedPercent, reportedValue, widget.getProjection().intValue(), noReportedValue);
         if (totalMinutes >= 1) {
-            mSubTitle.setText(String.format("%s/%s min", (int) (reportedValue + widget.getProjection()), totalMinutes));
+            mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", (int) (reportedValue + widget.getProjection()), totalMinutes, reportedPercent + filterShortPercent));
             updateTextViews(reportedPercent);
         } else {
             setEmptyMode(widget);
@@ -99,40 +105,61 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     private void setEmptyMode(Widget widget) {
-        mSubTitle.setText(String.format("%s/%s min", 0, 0));
+        mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", 0, 0, 0));
         updateTextViews(100);
         if (widget.getCurrentColor() != null && widget.getCurrentColor().length() > 0) {
             mNotReported.setBackgroundColor(Color.parseColor(widget.getCurrentColor()));
-        }else {
+        } else {
             mNotReported.setBackgroundColor(mNotReported.getContext().getResources().getColor(R.color.red_line));
         }
     }
 
-    private void updateViews(final int reportedPercent, final int filterShortPercent, int reportedValue, int filterValue) {
+    private void updateViews(final int reportedPercent, final int filterShortPercent, final int noReportedPercent, int reportedValue, int filterValue, int noReportedValue) {
 
-        if (reportedPercent - filterShortPercent < 14) {
-            mFilterShortTv.setVisibility(View.GONE);
-            mFilterShortMinTv.setVisibility(View.GONE);
-        } else {
-            mFilterShortTv.setVisibility(View.VISIBLE);
-            mFilterShortMinTv.setVisibility(View.VISIBLE);
-            mFilterShortTv.setText(String.format("%s%%", filterShortPercent));
-            mFilterShortMinTv.setText(String.format(Locale.US,"%d%s", filterValue, mFilterShortMinTv.getContext().getString(R.string.min)));
-        }
-        mReportedTv.setText(String.format("%s%%", reportedPercent));
-        mReportedMinTv.setText(String.format(Locale.US,"%d%s", reportedValue, mReportedMinTv.getContext().getString(R.string.min)));
+        showTextValues(reportedPercent, filterShortPercent, noReportedPercent, filterValue, reportedValue, noReportedValue);
         mCenterLayout.post(new Runnable() {
             @Override
             public void run() {
                 final float reportedWidth = mCenterLayout.getWidth() * reportedPercent / 100;
                 final float filterShortWidth = mCenterLayout.getWidth() * filterShortPercent / 100;
-                updateViewsWidth(reportedWidth, filterShortWidth);
+                final float noReportedWidth = mCenterLayout.getWidth() * noReportedPercent / 100;
+                updateViewsWidth(reportedWidth, filterShortWidth, noReportedWidth);
             }
         });
     }
 
+    private void showTextValues(int reportedPercent, int filterShortPercent, int noReportedPercent, int filterValue, int reportedValue, int noReportedValue) {
+        if (filterShortPercent > 14) {
+            mFilterShortTv.setVisibility(View.VISIBLE);
+            mFilterShortMinTv.setVisibility(View.VISIBLE);
+            mFilterShortTv.setText(String.format("%s%%", filterShortPercent));
+            mFilterShortMinTv.setText(String.format(Locale.US, "%d%s", filterValue, mFilterShortMinTv.getContext().getString(R.string.min)));
+        } else {
+            mFilterShortTv.setVisibility(View.GONE);
+            mFilterShortMinTv.setVisibility(View.GONE);
+        }
+        if (reportedPercent > 14) {
+            mReportedTv.setVisibility(View.VISIBLE);
+            mReportedMinTv.setVisibility(View.VISIBLE);
+            mReportedTv.setText(String.format("%s%%", reportedPercent));
+            mReportedMinTv.setText(String.format(Locale.US, "%d%s", reportedValue, mReportedMinTv.getContext().getString(R.string.min)));
+        } else {
+            mReportedTv.setVisibility(View.GONE);
+            mReportedMinTv.setVisibility(View.GONE);
+        }
+        if (noReportedPercent > 14) {
+            mNotReportedTv.setVisibility(View.VISIBLE);
+            mNotReportedMinTv.setVisibility(View.VISIBLE);
+            mNotReportedTv.setText(String.format("%s%%", noReportedPercent));
+            mNotReportedMinTv.setText(String.format(Locale.US, "%d%s", noReportedValue, mFilterShortMinTv.getContext().getString(R.string.min)));
+        } else {
+            mNotReportedTv.setVisibility(View.GONE);
+            mNotReportedMinTv.setVisibility(View.GONE);
+        }
+    }
 
-    private void updateViewsWidth(final float reportedWidth, final float filterShortWidth) {
+
+    private void updateViewsWidth(final float reportedWidth, final float filterShortWidth, final float noReportedPercent) {
         mFilterShort.post(new Runnable() {
             @Override
             public void run() {
@@ -148,6 +175,15 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
                 ViewGroup.MarginLayoutParams mItemViewParams4;
                 mItemViewParams4 = (ViewGroup.MarginLayoutParams) mReported.getLayoutParams();
                 mItemViewParams4.width = (int) reportedWidth;
+                mReported.requestLayout();
+            }
+        });
+        mNotReported.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.MarginLayoutParams mItemViewParams4;
+                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mNotReported.getLayoutParams();
+                mItemViewParams4.width = (int) noReportedPercent;
                 mReported.requestLayout();
             }
         });
@@ -178,6 +214,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         if (widget.getProjectionColor() != null && widget.getProjectionColor().length() > 0) {
             mFilterShort.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
             mFilterShortTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
+            mFilterShortMinTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
             mLegFilterShortTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
             mLegFilterShort.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
         }
@@ -185,12 +222,15 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
             mReported.setBackgroundColor(Color.parseColor(widget.getCurrentColor()));
             mLegReported.setBackgroundColor(Color.parseColor(widget.getCurrentColor()));
             mReportedTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
+            mReportedMinTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
             mLegReportedTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
         }
         if (widget.getTargetColor() != null && widget.getTargetColor().length() > 0) {
             mNotReported.setBackgroundColor(Color.parseColor(widget.getTargetColor()));
             mLegNotReported.setBackgroundColor(Color.parseColor(widget.getTargetColor()));
             mLegNotReportedTv.setTextColor(Color.parseColor(widget.getTargetColor()));
+            mNotReportedTv.setTextColor(Color.parseColor(widget.getTargetColor()));
+            mNotReportedMinTv.setTextColor(Color.parseColor(widget.getTargetColor()));
         }
 
     }
