@@ -49,20 +49,44 @@
                 android:id="@+id/FAFI_setup_end_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                tools:text="@string/setup_rejects_dialog_text"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                tools:text="@string/setup_rejects_dialog_text" />
 
-            <com.operatorsapp.view.FocusableRecycleView
-                android:id="@+id/FAFI_report_rv"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:layout_marginTop="10dp"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                />
+                android:layout_height="wrap_content">
 
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/FAFI_report_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="20dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="ltr">
+
+                    <ImageView
+                        android:id="@+id/FAFI_back_btn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="55dp"
+                        android:src="@drawable/ic_chevron_pressed_copy_r_t_l" />
+
+                    <ImageView
+                        android:id="@+id/FAFI_next_btn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="55dp"
+                        android:src="@drawable/ic_chevron_pressed" />
+                </RelativeLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,9 +134,8 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:background="@color/white"
-        android:visibility="gone"
-        />
+        android:orientation="horizontal"
+        android:visibility="visible" />
 
 </RelativeLayout>

@@ -828,10 +828,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setWhiteFilterViews(boolean show) {
-        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
+        if (findViewById(R.id.FAAE_white_filter) != null) {
+            if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+                findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
+            }
         }
         if (mActionBarAndEventsFragment != null) {
             mActionBarAndEventsFragment.setWhiteFilter(show);

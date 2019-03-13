@@ -67,35 +67,14 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/event_item_border"
                 android:gravity="center_vertical"
+                android:padding="3dp"
                 android:paddingStart="7dp"
                 android:paddingEnd="7dp"
                 android:textColor="@color/white"
-                android:textSize="10px"
+                android:textSize="10dp"
                 android:visibility="visible"
                 tools:text="@string/working" />
 
-            <RelativeLayout
-                android:id="@+id/EI_check_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <CheckBox
-                    android:id="@+id/EI_text_check"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@color/transparentColor"
-                    android:button="@null"
-                    android:gravity="center_vertical"
-                    android:paddingStart="7dp"
-                    android:paddingEnd="7dp"
-                    android:textColor="@color/white"
-                    android:textSize="10px"
-                    android:visibility="visible"
-                    tools:text="@string/working" />
-            </RelativeLayout>
         </RelativeLayout>
 
         <ImageView
@@ -107,6 +86,29 @@
             android:visibility="visible" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/EI_check_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <CheckBox
+            android:id="@+id/EI_text_check"
+            android:layout_width="350dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/transparentColor"
+            android:button="@null"
+            android:gravity="center_vertical"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:textColor="@color/white"
+            android:textSize="10px"
+            android:visibility="visible"
+            tools:text="@string/working" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/EI_service_call_container"

@@ -18,6 +18,7 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
     private final String mPositiveBtnTxt;
     private final String mNetaiveBtnTxt;
     private final BasicTitleTextBtnDialogListener mListener;
+    private final String mSubTitle;
     private AlertDialog mAlarmAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mSelectedReasonId;
@@ -25,9 +26,10 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
 
 
     public BasicTitleTextBtnDialog(Activity activity, final BasicTitleTextBtnDialogListener listener,
-                                   String title, String msg, String positiveBtn, String negativeBtn) {
+                                   String title, String subTitle, String msg, String positiveBtn, String negativeBtn) {
         mContext = activity;
         mTitle = title;
+        mSubTitle = subTitle;
         mMsg = msg;
         mPositiveBtnTxt = positiveBtn;
         mNetaiveBtnTxt = negativeBtn;
@@ -43,11 +45,13 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
         builder.setView(view);
 
         TextView title = view.findViewById(R.id.DALJ_title_tv);
+        TextView subTitle = view.findViewById(R.id.DALJ_sub_text_tv);
         TextView msg = view.findViewById(R.id.DALJ_text_tv);
         TextView positiveBtn = view.findViewById(R.id.DALJ_positive_btn);
         TextView negativeBtn = view.findViewById(R.id.DALJ_negative_btn);
 
         title.setText(mTitle);
+        subTitle.setText(mSubTitle);
         msg.setText(mMsg);
         positiveBtn.setText(mPositiveBtnTxt);
         negativeBtn.setText(mNetaiveBtnTxt);

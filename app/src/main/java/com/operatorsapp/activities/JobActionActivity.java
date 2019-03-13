@@ -189,12 +189,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     private void initLastJobDialog() {
         if (mIsNoProduction && mLastJobId != null && mLastJobId.length() > 0 && !mLastJobId.equals("0")) {
             showLastJobDialog(getString(R.string.activate_last_job),
-                    String.format(Locale.getDefault(), "%s \n %s: %s \n %s: %s \n %s: %s",
-                            getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job),
-                            getString(R.string.job), mLastJobId,
-                            getString(R.string.erp_job_id), mLastJobErpId,
+                    getString(R.string.do_you_want_to_activate_the_last_job_you_work_on_job),
+                    String.format(Locale.getDefault(),
+                            "%s: %s | %s: %s | %s: %s", getString(R.string.job),
+                            mLastJobId, getString(R.string.erp_job_id), mLastJobErpId,
                             getString(R.string.product), mLastProductName),
-                    getString(R.string.yes), getString(R.string.no), true);
+                    getString(R.string.dont_activate), getString(R.string.activate_job), true);
         }
     }
 
@@ -223,15 +223,16 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         return string;
     }
 
-    private void showLastJobDialog(String title, String msg, String positiveBtn, String negativeBtn, final boolean firstSteps) {
+    private void showLastJobDialog(String title, String msg, String subMessage, String positiveBtn, String negativeBtn, final boolean firstSteps) {
         BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
                 new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
                     @Override
                     public void onClickPositiveBtn() {
                         if (firstSteps) {
-                            showLastJobDialog(null,
+                            showLastJobDialog(getString(R.string.activate_last_job),
                                     getString(R.string.required_setup),
-                                    getString(R.string.no), getString(R.string.yes), false);
+                                    null,
+                                    getString(R.string.no_setup), getString(R.string.go_to_setup), false);
                         } else {
                             postUpdateActions(mUpdatedActions);
                             if (mLastJobId != null) {
@@ -251,7 +252,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                             validateDialog(Integer.valueOf(mLastJobId), true);
                         }
                     }
-                }, title, msg, positiveBtn, negativeBtn
+                }, title, subMessage, msg, positiveBtn, negativeBtn
         );
 
         basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();

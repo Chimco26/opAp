@@ -28,7 +28,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +55,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -200,7 +200,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private RecyclerView mShiftLogRecycler;
     private LinearLayout mShiftLogLayout;
     private TextView mNoNotificationsText;
-    private TextView mLoadingDataText;
+    private ProgressBar mLoadingDataText;
     private LinearLayout mStatusLayout;
     private int mDownX;
     private ShiftLogSqlAdapter mShiftLogAdapter;
@@ -362,14 +362,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //            });
 //
 //        } else {
+        //TODO Lenox uncomment
+
+        //        }
         mSwipeParams = (RelativeLayout.LayoutParams) mShiftLogSwipeRefresh.getLayoutParams();
         mSwipeParams.width = mShiftLogParams.width;
         mShiftLogSwipeRefresh.setLayoutParams(mSwipeParams);
         mShiftLogSwipeRefresh.requestLayout();
         mListener.onResize(mCloseWidth, statusBarParams.height);
-        //TODO Lenox uncomment
-
-        //        }
 
         initFilterEvents(view);
     }
@@ -518,7 +518,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
         mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-
+        mLoadingDataText.setVisibility(View.VISIBLE);
         final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
 
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
@@ -2870,9 +2870,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
                         event.setEventSubTitleLname(workingEvent.getEventReason());
                         event.setEventSubTitleEname(workingEvent.getEventReason());
-                    } else {
+                    } else if (isAdded()){
                         event.setEventSubTitleEname(getWorkingSubTitle(workingEvent));
                         event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
+                    }else {
+                        event.setEventSubTitleEname("Working");
+                        event.setEventSubTitleLname("Working");
                     }
                     event.setColor(workingEvent.getColor());
                 }
@@ -3012,7 +3015,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (events.size() < 1) {
             return;
         }
-
+        if (mLoadingDataText != null) {
+            mLoadingDataText.setVisibility(View.GONE);
+        }
         if (!mIsSelectionMode && events.get(0).getEventEndTime() != null
                 && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                 mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {

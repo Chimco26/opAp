@@ -37,7 +37,7 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
             row = inflater.inflate(R.layout.spinner_production_item, parent, false);
             ImageView spinnerImage = row.findViewById(R.id.SPI_image);
             if (mSpinnerItems.get(mCurrentProductionId).getEName() == null || mSpinnerItems.get(mCurrentProductionId).getEName().equals("")) {
-                spinnerImage.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production));
+                spinnerImage.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production_blue_light));
             } else {
                 setIcon(mSpinnerItems.get(mCurrentProductionId).getId(), true, spinnerImage);
             }
@@ -74,9 +74,9 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
         switch (item) {
             case 1:
                 if (selected) {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production_blue_light));
                 } else {
-                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production_blue));
+                    imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_production));
                 }
                 break;
             default:

@@ -261,7 +261,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:visibility="gone"
                                 android:padding="3dp"
-                                android:src="@drawable/legend"/>
+                                android:src="@drawable/ic_legend"/>
 
                             </RelativeLayout>
 
@@ -414,13 +414,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="start"
-                                android:orientation="horizontal">
+                                android:orientation="vertical">
 
                                 <me.grantland.widget.AutofitTextView
                                     android:id="@+id/fragment_dashboard_no_notif"
                                     style="@style/FontStyle_T7"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="50dp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="20dp"
                                     android:layout_marginEnd="10dp"
@@ -431,11 +431,11 @@
                                     android:visibility="gone"
                                     app:minTextSize="15dp" />
 
-                                <me.grantland.widget.AutofitTextView
+                                <ProgressBar
                                     android:id="@+id/fragment_dashboard_loading_data_shiftlog"
                                     style="@style/FontStyle_T7"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="50dp"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="20dp"
                                     android:layout_marginEnd="10dp"
@@ -443,8 +443,9 @@
                                     android:text="@string/loading_data"
                                     android:textColor="@color/divider_gray"
                                     android:textSize="30sp"
-                                    android:visibility="gone"
-                                    app:minTextSize="15dp" />
+                                    android:visibility="visible"
+                                    android:indeterminateTint="@color/C16"
+                                    android:indeterminateTintMode="src_atop" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
