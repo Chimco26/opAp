@@ -329,6 +329,14 @@
     <string name="call_cancelled">קריאה בוטלה</string>
     <string name="waiting_for_replay">ממתין לתגובה</string>
     <string name="service_call_was_canceled">קריאה זו בוטלה</string>
+    <string name="filter_short">עצירות מסוננות</string>
+    <string name="min_duration_filter">(מתחת</string>
+    <string name="reported">מדווח</string>
+    <string name="unreported">לא מדווח</string>
+    <string name="min">דק</string>
+    <string name="dont_activate">לא להפעיל</string>
+    <string name="no_setup">Setup לא</string>
+    <string name="go_to_setup">Setupלך ל</string>
 
 
 </resources>

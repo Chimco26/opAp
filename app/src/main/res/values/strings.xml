@@ -361,6 +361,7 @@
     <string name="message">Message</string>
     <string name="production_report">Production Report</string>
     <string name="select_all">Select all</string>
+    <string name="new_call">New Call</string>
 
     <string name="working_setup">Working Setup</string>
     <string name="parameter_deviation">Parameter Deviation</string>
@@ -371,14 +372,19 @@
     <string name="no_communication_p">No Communication</string>
 
     <string name="_100">100%</string>
-    <string name="filter_short">Filter short</string>
+    <string name="filter_short">Filtered events</string>
+    <string name="min_duration_filter">(less than</string>
     <string name="reported">Reported</string>
     <string name="unreported">Unreported</string>
     <string name="setup">Setup</string>
     <string name="min">min</string>
     <string name="estimated_date">Estimated date</string>
-    <string name="required_setup">Required setup?</string>
+    <string name="required_setup">Does the job require setup before activation?</string>
     <string name="call_decline">Call was declined</string>
+    <string name="dont_activate">Don\'t Activate</string>
+    <string name="no_setup">No Setup</string>
+    <string name="go_to_setup">Go to Setup</string>
+    <string name="setup_mode">Setup mode</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

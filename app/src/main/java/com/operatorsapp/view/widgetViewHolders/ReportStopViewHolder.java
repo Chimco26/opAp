@@ -1,5 +1,6 @@
 package com.operatorsapp.view.widgetViewHolders;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
 import java.util.Locale;
@@ -129,6 +131,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     private void showTextValues(int reportedPercent, int filterShortPercent, int noReportedPercent, int filterValue, int reportedValue, int noReportedValue) {
+        setFilterLegendText();
         if (filterShortPercent > 14) {
             mFilterShortTv.setVisibility(View.VISIBLE);
             mFilterShortMinTv.setVisibility(View.VISIBLE);
@@ -156,6 +159,15 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
             mNotReportedTv.setVisibility(View.GONE);
             mNotReportedMinTv.setVisibility(View.GONE);
         }
+    }
+
+    private void setFilterLegendText() {
+        Context context = mLegFilterShortTv.getContext();
+        mLegFilterShortTv.setText(String.format(Locale.getDefault(),
+                "%s %s %d %s)",
+                context.getString(R.string.filter_short),
+                context.getString(R.string.min_duration_filter),
+                PersistenceManager.getInstance().getMinEventDuration(), context.getString(R.string.min)));
     }
 
 

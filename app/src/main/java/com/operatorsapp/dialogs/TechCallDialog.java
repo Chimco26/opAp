@@ -10,16 +10,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.operators.reportfieldsformachineinfra.Technician;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.DashboardActivity;
 import com.operatorsapp.adapters.NotificationHistoryAdapter;
 import com.operatorsapp.adapters.TechCallAdapter;
 import com.operatorsapp.adapters.TechnicianAdapter;
-import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TechCallInfo;
@@ -51,11 +50,12 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     private TextView mSubtitleTv;
     private TextView mTitleTv;
     private ImageView mCloseIv;
-    private TextView mNewCall;
+    private TextView mNewCallTab;
     private TextView mRightTab;
     private TextView mLeftTab;
     private View mRightTabUnderline;
     private View mLeftTabUnderline;
+    private View mNewCallUnderline;
     private TechDialogListener mListener;
     private FrameLayout mProgressBarFl;
     private List<Technician> mTechniciansList;
@@ -82,15 +82,16 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mSubtitleTv = (TextView) findViewById(R.id.tech_dialog_subtitle_tv);
         mTitleTv = (TextView) findViewById(R.id.tech_dialog_title_tv);
         mCloseIv = (ImageView) findViewById(R.id.tech_dialog_x_iv);
-        mNewCall = (TextView) findViewById(R.id.tech_dialog_new_call);
+        mNewCallTab = (TextView) findViewById(R.id.tech_dialog_tv_tech_call_tab);
         mRightTab = findViewById(R.id.tech_dialog_tv_right_tab);
         mLeftTab = findViewById(R.id.tech_dialog_tv_left_tab);
         mRightTabUnderline = findViewById(R.id.tech_dialog_right_tab_underline);
         mLeftTabUnderline = findViewById(R.id.tech_dialog_left_tab_underline);
+        mNewCallUnderline = findViewById(R.id.tech_dialog_tech_call_tab_underline);
         mProgressBarFl = (FrameLayout) findViewById(R.id.tech_dialog_progress_fl);
 
         mCloseIv.setOnClickListener(this);
-        mNewCall.setOnClickListener(this);
+        mNewCallTab.setOnClickListener(this);
         mRightTab.setOnClickListener(this);
         mLeftTab.setOnClickListener(this);
         setOpenCalls(0);
@@ -100,7 +101,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.tech_dialog_new_call:
+            case R.id.tech_dialog_tv_tech_call_tab:
                 openTechList();
                 //mListener.onNewCallPressed();
                 break;
@@ -112,7 +113,9 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 mLeftTabUnderline.setVisibility(View.VISIBLE);
                 mSubtitleTv.setVisibility(View.VISIBLE);
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mRightTabUnderline.setVisibility(View.INVISIBLE);
+                mNewCallUnderline.setVisibility(View.INVISIBLE);
                 setOpenCalls(0);
 
                 break;
@@ -122,6 +125,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mLeftTabUnderline.setVisibility(View.INVISIBLE);
                 mSubtitleTv.setVisibility(View.GONE);
+                mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mNewCallUnderline.setVisibility(View.INVISIBLE);
                 setLast24hrsCalls();
 
                 break;
@@ -134,6 +139,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
         mLeftTabUnderline.setVisibility(View.INVISIBLE);
         mSubtitleTv.setVisibility(View.GONE);
+        mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+        mNewCallUnderline.setVisibility(View.VISIBLE);
 
         if (mTechniciansList != null && mTechniciansList.size() > 0) {
             Collections.sort(mTechniciansList, new Comparator<Technician>() {
@@ -200,7 +207,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                                 }else if (mTechList.size() == 0){
                                     PersistenceManager.getInstance().setRecentTechCallId(0);
                                 }
-                                mListener.onCleanTech(techCallInfo);
+                                mListener.onCleanTech();
                                 setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
 
 
@@ -249,7 +256,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     public interface TechDialogListener{
         void onNewCallPressed();
         void onCancelPressed();
-        void onCleanTech(TechCallInfo techCallInfo);
+        void onCleanTech();
         void onTechnicianSelected(Technician technician);
     }
 

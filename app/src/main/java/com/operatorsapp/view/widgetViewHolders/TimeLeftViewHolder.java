@@ -77,7 +77,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             }
         });
 
-
+        mTitle.setText(R.string.time_left_to_current_job);
         setSizes(mParentLayout);
         int time = Integer.parseInt(widget.getCurrentValue());
         int endLimit = END_LIMIT;
@@ -92,7 +92,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
-            mSubTitle.setText(mSubTitle.getContext().getString(R.string.setup));
+            mSubTitle.setText("");
+            mTitle.setText(R.string.setup_mode);
         } else {
             if (time >= 60) {
                 m1Ly.setVisibility(View.VISIBLE);
