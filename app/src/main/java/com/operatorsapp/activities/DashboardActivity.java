@@ -217,7 +217,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private MachineStatus mCurrentMachineStatus;
     private int mSpinnerProductPosition;
-    private Tracker mTracker;
+    //private Tracker mTracker;
     private Handler pollingBackupHandler = new Handler();
     private ArrayList<Machine> mMachines;
     private AlertDialog mLoadingDialog;
@@ -244,9 +244,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setContentView(R.layout.activity_dashboard);
         updateAndroidSecurityProvider(this);
 
-        // Analytics
-        OperatorApplication application = (OperatorApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+//        // Analytics
+//        OperatorApplication application = (OperatorApplication) getApplication();
+//        mTracker = application.getDefaultTracker();
 
         mMachines = getIntent().getExtras().<Machine>getParcelableArrayList(MainActivity.MACHINE_LIST);
 
@@ -570,14 +570,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             super.onResume();
 
         }
-
-        mTracker.setScreenName(this.getLocalClassName());
-        PersistenceManager pm = PersistenceManager.getInstance();
-        mTracker.setScreenName(LOG_TAG);
-        mTracker.setClientId("machine id: " + pm.getMachineId());
-        mTracker.setAppVersion(pm.getVersion() + "");
-        mTracker.setHostname(pm.getSiteName());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+//
+//        mTracker.setScreenName(this.getLocalClassName());
+//        PersistenceManager pm = PersistenceManager.getInstance();
+//        mTracker.setScreenName(LOG_TAG);
+//        mTracker.setClientId("machine id: " + pm.getMachineId());
+//        mTracker.setAppVersion(pm.getVersion() + "");
+//        mTracker.setHostname(pm.getSiteName());
+//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
