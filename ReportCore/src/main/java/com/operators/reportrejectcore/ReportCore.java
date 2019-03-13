@@ -2,12 +2,11 @@ package com.operators.reportrejectcore;
 
 import com.example.oppapplog.OppAppLogger;
 import com.operators.errorobject.ErrorObjectInterface;
-import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.ReportPersistenceManagerInterface;
+import com.operators.reportrejectinfra.ReportRejectNetworkBridgeInterface;
 import com.operators.reportrejectinfra.SendReportCallback;
 import com.operators.reportrejectinfra.SendReportRejectCallback;
 import com.operators.reportrejectinfra.SendReportStopCallback;
-import com.zemingo.logrecorder.ZLogger;
 
 /**
  * Created by Sergey on 08/08/2016.

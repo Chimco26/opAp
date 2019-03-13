@@ -23,6 +23,7 @@ public class TimeUtils {
     public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     public static final String SIMPLE_HMS_FORMAT = "HH:mm:ss";
     public static final String COMMON_DATE_FORMAT = "HH:mm dd/MM/yyyy";
+    public static final String COMMON_WITH_2_CHARS_YEAR = "HH:mm dd/MM/yy";
     public static final String ONLY_DATE_FORMAT = "dd/MM/yyyy";
     private static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
@@ -438,7 +439,7 @@ public class TimeUtils {
 
         Date date = new Date(millis);
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SQL_NO_T_FORMAT);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(COMMON_WITH_2_CHARS_YEAR);
 
 
         return format.format(date);

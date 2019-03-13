@@ -261,6 +261,13 @@
     <string name="split">Dividir</string>
     <string name="version">Versión</string>
     <string name="username">Nombre de usuario</string>
+    <string name="call_decline">Llamada rechazada</string>
+    <string name="call_approved">Llamada aprobada</string>
+    <string name="started_service">Atendiendo llamada</string>
+    <string name="service_completed">Servicio completado</string>
+    <string name="call_cancelled">Llamada cancelada</string>
+    <string name="waiting_for_replay">A la espera de repetición</string>
+    <string name="service_call_was_canceled">Esta llamada se ha cancelado</string>
 
 
 </resources>

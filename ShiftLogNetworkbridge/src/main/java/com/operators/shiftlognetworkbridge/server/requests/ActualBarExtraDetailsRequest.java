@@ -12,6 +12,8 @@ public class ActualBarExtraDetailsRequest {
     private String EndTime;
     @SerializedName("MachineID")
     private String MachineID;
+    @SerializedName("IncludeWorkingEvents")
+    private boolean isIncludeWorking = true;
 
     public ActualBarExtraDetailsRequest(String mSessionID, String startTime, String endTime, String machineId) {
         this.mSessionID = mSessionID;

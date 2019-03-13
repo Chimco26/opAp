@@ -9,6 +9,7 @@
 .idea/modules.xml
 .idea/misc.xml
 .idea/gradle.xml
+oppapplog/build
 GetMachinesStatusNetworkBridge/build/generated/source/buildConfig/androidTest/debug/com/operators/getmachinesstatusnetworkbridge/test/BuildConfig.java
 GetMachinesStatusNetworkBridge/build/generated/source/buildConfig/debug/com/operators/getmachinesstatusnetworkbridge/BuildConfig.java
 GetMachinesStatusNetworkBridge/build/generated/source/r/androidTest/debug/android/support/v7/appcompat/R.java

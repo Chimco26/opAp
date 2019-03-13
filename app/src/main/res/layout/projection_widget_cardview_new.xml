@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_parent_layout"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
     android:background="@drawable/combined_shape"
-    android:padding="15dp">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,6 +25,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="Current quantity"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
@@ -34,6 +37,8 @@
                 android:id="@+id/projection_widget_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="2dp"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -75,7 +80,9 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="60dp"
+        android:layout_marginEnd="14dp"
         android:background="@color/divider_gray" />
 
     <RelativeLayout
@@ -89,8 +96,8 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
 
             <RelativeLayout
                 android:id="@+id/PWCN_target_rl"

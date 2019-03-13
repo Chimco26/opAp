@@ -10,4 +10,5 @@ public interface DashboardCentralContainerListener {
     void onOpenPendingJobs();
     void onEndSetup();
     void onReportStopEvent();
+    void onKeyboardEvent(boolean isOpen);
 }

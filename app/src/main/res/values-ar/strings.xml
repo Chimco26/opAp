@@ -212,6 +212,13 @@
     <string name="loading_file">يتم تحميل الملف</string>
     <string name="machine">ماكنه</string>
     <string name="materials">مواد</string>
+    <string name="call_decline">تم رفض الاتصال</string>
+    <string name="call_approved">تمت الموافقة على المكالمة</string>
+    <string name="started_service">حضور الخدمه</string>
+    <string name="service_completed">اكتملت الخدمة</string>
+    <string name="call_cancelled">الخدمه قد الغيت</string>
+    <string name="waiting_for_replay">انتظار الرد</string>
+    <string name="service_call_was_canceled">تم إلغاء هذه الخدمه</string>
 
 
 </resources>

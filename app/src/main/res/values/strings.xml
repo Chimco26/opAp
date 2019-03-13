@@ -354,13 +354,32 @@
     <string name="erp_job_id">ERP Job ID</string>
     <string name="rejects">rejects</string>
     <string name="good_units">Good units</string>
-    <string name="working_event">Working Event</string>
+    <string name="working_time">Working time</string>
     <string name="event_details">Event details</string>
     <string name="service_calls">Service Calls</string>
     <string name="messages">Messages</string>
+    <string name="message">Message</string>
     <string name="production_report">Production Report</string>
     <string name="select_all">Select all</string>
     <string name="new_call">New Call</string>
+
+    <string name="working_setup">Working Setup</string>
+    <string name="parameter_deviation">Parameter Deviation</string>
+    <string name="stop">Stop</string>
+    <string name="stop_setup">Stop Setup</string>
+    <string name="idle">Idle</string>
+    <string name="working_no_production">Working no production</string>
+    <string name="no_communication_p">No Communication</string>
+
+    <string name="_100">100%</string>
+    <string name="filter_short">Filter short</string>
+    <string name="reported">Reported</string>
+    <string name="unreported">Unreported</string>
+    <string name="setup">Setup</string>
+    <string name="min">min</string>
+    <string name="estimated_date">Estimated date</string>
+    <string name="required_setup">Required setup?</string>
+    <string name="call_decline">Call was declined</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

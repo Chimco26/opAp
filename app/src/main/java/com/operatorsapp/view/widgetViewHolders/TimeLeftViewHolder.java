@@ -11,6 +11,9 @@ import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
+import com.operatorsapp.utils.TimeUtils;
+
+import java.util.Date;
 
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final int END_LIMIT = 10;//in minute
@@ -84,17 +87,26 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 && mMachineStatus.getAllMachinesData().get(0) != null &&
 //                !mEndSetupDisable &&
                 mMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                        && mMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
+                && mMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
 
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
+            mSubTitle.setText(mSubTitle.getContext().getString(R.string.setup));
         } else {
             if (time >= 60) {
                 m1Ly.setVisibility(View.VISIBLE);
                 m2CountDownLy.setVisibility(View.GONE);
                 m3Ly.setVisibility(View.GONE);
-                m1TimeTv.setText(String.format("%s:%s", StringUtil.add0ToNumber(time / 60), StringUtil.add0ToNumber(time % 60)));
+                if (time > 24 * 60) {
+                    m1TimeTv.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
+                            TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
+                    m1TimeTv.setTextSize(2, 18);
+                } else {
+                    m1TimeTv.setText(String.format("%sh%smin", StringUtil.add0ToNumber(time / 60), StringUtil.add0ToNumber(time % 60)));
+                    m1TimeTv.setTextSize(2, 50);
+                }
+                mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
             } else {
                 m1Ly.setVisibility(View.GONE);
                 m2CountDownLy.setVisibility(View.VISIBLE);
@@ -110,12 +122,14 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
-            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
+            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
-            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
+            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
     }
 
@@ -127,7 +141,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 
     private void initCountDown(int time, int endLimit) {
         m3CountDownView.setEndModeTimeInMinute(endLimit);
-        m3CountDownView.update(time, "00:");
+        m3CountDownView.update(time, m3CountDownView.getContext().getString(R.string.min));
     }
 
     @Override

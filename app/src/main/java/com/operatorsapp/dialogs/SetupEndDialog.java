@@ -38,7 +38,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     private final ActiveJobsListForMachine mActiveJobListForMAchine;
     private AlertDialog mAlaramAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mSelectedReasonId;
+//    private int mSelectedReasonId;
     private int mSelectedTechnicianId;
     private boolean isRejects = true;
     private FocusableRecycleView mReportRv;
@@ -102,8 +102,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
             public void onClick(View v) {
                 mAlaramAlertDialog.dismiss();
                 ArrayList<RejectForMultipleRequest> rejectForMultipleRequests = createReportRejectList();
-                listener.onReportMultipleRejects(rejectForMultipleRequests);
-                listener.sendReport(mSelectedReasonId, mSelectedTechnicianId);
+                listener.sendReport(STATIC_REASON_ID, mSelectedTechnicianId, rejectForMultipleRequests);
             }
         });
         mAlaramAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -191,9 +190,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     public interface SetupEndDialogListener {
 
-        void onReportMultipleRejects(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests);
-
-        void sendReport(int selectedReasonId, int selectedTechnicianId);
+        void sendReport(int selectedReasonId, int selectedTechnicianId, ArrayList<RejectForMultipleRequest> rejectForMultipleRequests);
 
         void onDismissSetupEndDialog();
     }
