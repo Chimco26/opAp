@@ -45,7 +45,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private ArrayList<Event> mEvents = new ArrayList<>();
     private ArrayList<Float> mSelectedEvents;
     private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
-//    private EventsFilter mFilter;
+    //    private EventsFilter mFilter;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
@@ -151,9 +151,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
                     }
                     GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-                    if (isChecked){
+                    if (isChecked) {
                         textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
-                    }else {
+                    } else {
                         textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
                     }
                     textBackground.setColor(Color.parseColor(event.getColor()));
@@ -215,9 +215,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-            if (event.isChecked() && mIsSelectionMode){
+            if (event.isChecked() && mIsSelectionMode) {
                 textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
-            }else {
+            } else {
                 textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
             }
             textBackground.setColor(Color.parseColor(event.getColor()));
@@ -229,7 +229,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mCheckIc.setVisibility(View.GONE);
             }
 
-            if (!mIsSelectionMode && position == 0 && event.getEventEndTime().isEmpty()) {
+            if (!mIsSelectionMode && position == 0 && event.getEventEndTime().isEmpty()
+                    && event.getEventReasonID() != 100) {
                 mScissors.setVisibility(View.VISIBLE);
             } else {
                 mScissors.setVisibility(View.GONE);
@@ -290,7 +291,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
                         setNotification(event, 1, notification.getSentTime().substring(11, 16), startTimeMilli, text, 0);
                     } else if (notification.getNotificationType() == 2 && mIsServiceCallsChecked) {
-                         text = String.format("%s - %s", getCallTextById(notification.getResponseTypeID()), notification.getTargetUserName());
+                        text = String.format("%s - %s", getCallTextById(notification.getResponseTypeID()), notification.getTargetUserName());
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
                         setNotification(event, 2, notification.getSentTime().substring(11, 16), startTimeMilli, text, notification.getResponseTypeID());
                     }
@@ -429,6 +430,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 return mContext.getString(R.string.waiting_for_replay);
         }
     }
+
     private void setNotificationIcon(ImageView iconIV, int icon) {
         switch (icon) {
             case 0:

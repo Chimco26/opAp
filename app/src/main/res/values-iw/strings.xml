@@ -337,6 +337,7 @@
     <string name="dont_activate">לא להפעיל</string>
     <string name="no_setup">Setup לא</string>
     <string name="go_to_setup">Setupלך ל</string>
+    <string name="rejects_quantity">כמות פסולים</string>
 
 
 </resources>

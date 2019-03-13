@@ -295,7 +295,6 @@
     <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
     <string name="open_new_call">New Service Call</string>
     <string name="service_call_was_canceled"><b>This Call was canceled</b></string>
-    <string name="rejects_quantity">Rejects quantity</string>
     <string name="empty_job_list_msg">The Pending Job list is empty</string>
     <string name="call_approved">Call is approved</string>
     <string name="call_approved2">A call made by operator %1$s was approved</string>
@@ -385,6 +384,7 @@
     <string name="no_setup">No Setup</string>
     <string name="go_to_setup">Go to Setup</string>
     <string name="setup_mode">Setup mode</string>
+    <string name="rejects_quantity">Rejects quantity</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
