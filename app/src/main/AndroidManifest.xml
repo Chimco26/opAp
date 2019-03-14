@@ -84,13 +84,9 @@
             android:name="io.fabric.ApiKey"
             android:value="14901f99212291ad01bd6ae5fb3af77ed3114173" />
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="14901f99212291ad01bd6ae5fb3af77ed3114173" />
-
 
         <service
-            android:name=".firebase.MyFirebaseMessagingService">
+            android:name="com.operatorsapp.firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

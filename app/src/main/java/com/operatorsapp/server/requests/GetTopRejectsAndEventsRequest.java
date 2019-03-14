@@ -1,6 +1,7 @@
 package com.operatorsapp.server.requests;
 
 import com.google.gson.annotations.SerializedName;
+import com.operatorsapp.utils.TimeUtils;
 
 /**
  * Created by alex on 20/12/2018.
@@ -23,8 +24,12 @@ public class GetTopRejectsAndEventsRequest {
     public GetTopRejectsAndEventsRequest(String[] mMachineID, String mSessionId, String mStartDate, String mEndDate) {
         this.mMachineID = mMachineID;
         this.mSessionId = mSessionId;
-        this.mStartDate = mStartDate;
         this.mEndDate = mEndDate;
+        if (mStartDate != null && mStartDate.length() > 2){
+            this.mStartDate = mStartDate.substring(0, mStartDate.length() -2) + "00";
+        }else {
+            this.mStartDate = mStartDate;
+        }
     }
 
     public String[] getmMachineID() {

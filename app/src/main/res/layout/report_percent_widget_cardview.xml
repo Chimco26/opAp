@@ -163,7 +163,6 @@
             android:layout_height="40dp"
             android:layout_below="@+id/RPWC_graph_rl"
             android:layout_marginTop="10dp"
-            android:layoutDirection="ltr"
             android:weightSum="3">
 
             <RelativeLayout
@@ -185,7 +184,7 @@
                     android:layout_toEndOf="@+id/filter_square"
                     android:text="@string/filter_short"
                     android:textColor="@color/red_line"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout

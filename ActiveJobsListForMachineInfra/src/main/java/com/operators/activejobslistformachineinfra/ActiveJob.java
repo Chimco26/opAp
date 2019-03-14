@@ -41,6 +41,12 @@ public class ActiveJob implements Parcelable {
     private boolean isUnit = true;
     private float reportValue;
     private boolean isEdited;
+    private int editedValue;
+
+
+    public int getEditedValue() {
+        return editedValue;
+    }
 
     public Double getProductEffectiveAmount() {
         return productEffectiveAmount;
@@ -222,4 +228,8 @@ public class ActiveJob implements Parcelable {
             return new ActiveJob[size];
         }
     };
+
+    public void setEditedValue(int value) {
+        this.editedValue = value;
+    }
 }

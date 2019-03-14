@@ -6,9 +6,8 @@ import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,7 +24,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.adapters.ReportNumericAdapter;
 import com.operatorsapp.adapters.TechnicianSpinnerAdapter;
 import com.operatorsapp.managers.PersistenceManager;
-import com.operatorsapp.view.FocusableRecycleView;
 import com.operatorsapp.view.SingleLineKeyboard;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
@@ -38,10 +36,10 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     private final ActiveJobsListForMachine mActiveJobListForMAchine;
     private AlertDialog mAlaramAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
-//    private int mSelectedReasonId;
+    //    private int mSelectedReasonId;
     private int mSelectedTechnicianId;
     private boolean isRejects = true;
-    private FocusableRecycleView mReportRv;
+    private ViewPager mReportRv;
     private LinearLayout mKeyBoardLayout;
     private SingleLineKeyboard mKeyBoard;
 
@@ -65,6 +63,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         isRejects = PersistenceManager.getInstance().getAddRejectsOnSetupEnd();
 
         mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
+        mKeyBoardLayout.setVisibility(View.VISIBLE);
         TextView setupText = view.findViewById(R.id.FAFI_setup_end_text);
         if (isRejects) {
             setupText.setText(R.string.setup_rejects_dialog_text);
@@ -83,11 +82,51 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     private void initRv(View view) {
 
-        mReportRv = view.findViewById(R.id.FAFI_report_rv);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-        mReportRv.setLayoutManager(layoutManager);
-        ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobListForMAchine.getActiveJobs(), isRejects, this);
-        mReportRv.setAdapter(reportNumericAdapter);
+        if (mActiveJobListForMAchine.getActiveJobs() != null &&
+                mActiveJobListForMAchine.getActiveJobs().size() > 0) {
+            mReportRv = view.findViewById(R.id.FAFI_report_rv);
+            mReportRv.setOffscreenPageLimit(mActiveJobListForMAchine.getActiveJobs().size());
+            ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobListForMAchine.getActiveJobs(), isRejects, this);
+            mReportRv.setAdapter(reportNumericAdapter);
+            mReportRv.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    onCloseKeyboard();
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+            if (mActiveJobListForMAchine.getActiveJobs().size() > 1) {
+
+                view.findViewById(R.id.FAFI_back_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mReportRv.getCurrentItem() > 0) {
+                            mReportRv.setCurrentItem(mReportRv.getCurrentItem() - 1);
+                        }
+                    }
+                });
+                view.findViewById(R.id.FAFI_next_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mReportRv.getCurrentItem() < mActiveJobListForMAchine.getActiveJobs().size() - 1) {
+                            mReportRv.setCurrentItem(mReportRv.getCurrentItem() + 1);
+                        }
+                    }
+                });
+            }else {
+                view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
+                view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
+            }
+        }
     }
 
     public void setListeners(final SetupEndDialogListener listener, View view) {
@@ -124,7 +163,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                     rejectForMultipleRequests.add(new RejectForMultipleRequest(persistenceManager.getMachineId(),
                             persistenceManager.getOperatorId(), STATIC_REASON_ID, activeJob.getReportValue(),
                             0, 0f, activeJob.getJoshID()));
-                }else {
+                } else {
                     rejectForMultipleRequests.add(new RejectForMultipleRequest(persistenceManager.getMachineId(),
                             persistenceManager.getOperatorId(), STATIC_REASON_ID, 0f,
                             0, activeJob.getReportValue(), activeJob.getJoshID()));
@@ -134,12 +173,6 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         return rejectForMultipleRequests;
     }
 
-    //if (isUnit) {
-//        mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value),
-//                (double) 0, new MultipleRejectRequestModel(PersistenceManager.getInstance().getSessionId(), rejectRequests));
-//    } else {
-//        mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
-//    }
     private void setUpTechnicianSpinner(View view) {
         Spinner technicianSpinner = view.findViewById(R.id.technician_spinner);
         final TechnicianSpinnerAdapter technicianSpinnerAdapter = new TechnicianSpinnerAdapter(mContext, R.layout.base_spinner_item, mReportFieldsForMachine.getTechnicians());
@@ -168,7 +201,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     @Override
     public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
         if (mKeyBoardLayout != null) {
-            mKeyBoardLayout.setVisibility(View.VISIBLE);
+//            mKeyBoardLayout.setVisibility(View.VISIBLE);
             if (mKeyBoard == null)
                 mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, mContext);
 
@@ -180,9 +213,9 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     @Override
     public void onCloseKeyboard() {
-        if (mKeyBoardLayout != null) {
-            mKeyBoardLayout.setVisibility(View.GONE);
-        }
+//        if (mKeyBoardLayout != null) {
+//            mKeyBoardLayout.setVisibility(View.GONE);
+//        }
         if (mKeyBoard != null) {
             mKeyBoard.setListener(null);
         }

@@ -53,7 +53,7 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
-        int icon = R.drawable.technician_blue;
+        int icon = R.drawable.technician_blue_svg;
         switch (mTechList.get(position).getmResponseType()){
 
             case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
