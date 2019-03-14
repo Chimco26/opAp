@@ -104,22 +104,28 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
                 }
             });
-            view.findViewById(R.id.FAFI_back_btn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mReportRv.getCurrentItem() > 0) {
-                        mReportRv.setCurrentItem(mReportRv.getCurrentItem() - 1);
+            if (mActiveJobListForMAchine.getActiveJobs().size() > 1) {
+
+                view.findViewById(R.id.FAFI_back_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mReportRv.getCurrentItem() > 0) {
+                            mReportRv.setCurrentItem(mReportRv.getCurrentItem() - 1);
+                        }
                     }
-                }
-            });
-            view.findViewById(R.id.FAFI_next_btn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mReportRv.getCurrentItem() < mActiveJobListForMAchine.getActiveJobs().size() - 1) {
-                        mReportRv.setCurrentItem(mReportRv.getCurrentItem() + 1);
+                });
+                view.findViewById(R.id.FAFI_next_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mReportRv.getCurrentItem() < mActiveJobListForMAchine.getActiveJobs().size() - 1) {
+                            mReportRv.setCurrentItem(mReportRv.getCurrentItem() + 1);
+                        }
                     }
-                }
-            });
+                });
+            }else {
+                view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
+                view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
+            }
         }
     }
 
