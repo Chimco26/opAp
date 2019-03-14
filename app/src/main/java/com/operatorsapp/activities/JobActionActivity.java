@@ -180,7 +180,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
         mDownloadHelper = new DownloadHelper(this, this);
 
-
         getPendingJoblist();
 
         initLastJobDialog();
@@ -194,7 +193,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                             "%s: %s | %s: %s | %s: %s", getString(R.string.job),
                             mLastJobId, getString(R.string.erp_job_id), mLastJobErpId,
                             getString(R.string.product), mLastProductName),
-                    getString(R.string.dont_activate), getString(R.string.activate_job), true);
+                    getString(R.string.activate_job), getString(R.string.dont_activate), true);
         }
     }
 
@@ -223,7 +222,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
         return string;
     }
 
-    private void showLastJobDialog(String title, String msg, String subMessage, String positiveBtn, String negativeBtn, final boolean firstSteps) {
+    private void showLastJobDialog(String title, String subTitle, String msg, String positiveBtn, String negativeBtn, final boolean firstSteps) {
         BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
                 new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
                     @Override
@@ -232,12 +231,12 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                             showLastJobDialog(getString(R.string.activate_last_job),
                                     getString(R.string.required_setup),
                                     null,
-                                    getString(R.string.no_setup), getString(R.string.go_to_setup), false);
+                                    getString(R.string.go_to_setup), getString(R.string.no_setup), false);
                         } else {
                             postUpdateActions(mUpdatedActions);
                             if (mLastJobId != null) {
                                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                                postActivateJob(null, new ActivateJobRequest(persistenceManager.getSessionId(),
+                                postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
                                         String.valueOf(persistenceManager.getMachineId()),
                                         String.valueOf(mLastJobId),
                                         persistenceManager.getOperatorId(),
@@ -249,10 +248,18 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClickNegativeBtn() {
                         if (!firstSteps) {
-                            validateDialog(Integer.valueOf(mLastJobId), true);
+                            postUpdateActions(mUpdatedActions);
+                            if (mLastJobId != null) {
+                                PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                                postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                        String.valueOf(persistenceManager.getMachineId()),
+                                        String.valueOf(mLastJobId),
+                                        persistenceManager.getOperatorId(),
+                                        true));
+                            }
                         }
                     }
-                }, title, subMessage, msg, positiveBtn, negativeBtn
+                }, title, subTitle, msg, positiveBtn, negativeBtn
         );
 
         basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
@@ -423,7 +430,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void postActivateJob(final AlertDialog alertDialog, ActivateJobRequest activateJobRequest) {
+    private void postActivateJob(ActivateJobRequest activateJobRequest) {
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -437,9 +444,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobSuccess(Object response) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog != null && alertDialog.isShowing()) {
-                    alertDialog.dismiss();
-                }
 
                 if (response == null) {
 
@@ -462,9 +466,6 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
 
                 ProgressDialogManager.dismiss();
-                if (alertDialog != null && alertDialog.isShowing()) {
-                    alertDialog.dismiss();
-                }
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
                 ShowCrouton.jobsLoadingErrorCrouton(JobActionActivity.this, errorObject);
@@ -1063,50 +1064,30 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void validateDialog(final Integer jobId, final boolean isToSetupEnd) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
+                new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
+                    @Override
+                    public void onClickPositiveBtn() {
+                        postUpdateActions(mUpdatedActions);
+                        if (jobId != null) {
+                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                    String.valueOf(persistenceManager.getMachineId()),
+                                    String.valueOf(jobId),
+                                    persistenceManager.getOperatorId(),
+                                    isToSetupEnd));
+                        }
+                    }
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_notes, null);
-        builder.setView(dialogView);
+                    @Override
+                    public void onClickNegativeBtn() {
+                    }
+                }, getString(R.string.activate_job_dialog_title), null
+                , getString(R.string.activate_job_dialog_message), getString(R.string.activate), null
+        );
 
-        TextView bodyTv = dialogView.findViewById(R.id.DN_note_title);
-        TextView titleTv = dialogView.findViewById(R.id.DN_note_main_title);
-        Button submitBtn = dialogView.findViewById(R.id.DN_btn);
-        ImageButton closeButton = dialogView.findViewById(R.id.DN_close_btn);
-        dialogView.findViewById(R.id.DN_note).setVisibility(View.GONE);
+        basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
 
-
-        submitBtn.setText(R.string.activate);
-        bodyTv.setText(R.string.activate_job_dialog_message);
-        bodyTv.setTextSize(16);
-        titleTv.setText(R.string.activate_job_dialog_title);
-        titleTv.setTextSize(28);
-
-        builder.setCancelable(true);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postUpdateActions(mUpdatedActions);
-                if (jobId != null) {
-                    PersistenceManager persistenceManager = PersistenceManager.getInstance();
-                    postActivateJob(alertDialog, new ActivateJobRequest(persistenceManager.getSessionId(),
-                            String.valueOf(persistenceManager.getMachineId()),
-                            String.valueOf(jobId),
-                            persistenceManager.getOperatorId(),
-                            isToSetupEnd));
-                }
-            }
-        });
-
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
     }
 
     private void openNotesDialog() {

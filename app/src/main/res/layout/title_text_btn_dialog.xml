@@ -47,7 +47,7 @@
             android:textSize="35sp" />
 
         <TextView
-            android:id="@+id/DALJ_text_tv"
+            android:id="@+id/DALJ_sub_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -59,13 +59,13 @@
             android:gravity="start"/>
 
         <TextView
-            android:id="@+id/DALJ_sub_text_tv"
+            android:id="@+id/DALJ_text_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
-            android:layout_below="@+id/DALJ_text_tv"
+            android:layout_below="@+id/DALJ_sub_title_tv"
             android:textColor="@color/grey_lite"
             android:textSize="20sp"
             android:gravity="start"/>

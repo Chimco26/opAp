@@ -14,11 +14,11 @@ import com.operatorsapp.R;
 public class BasicTitleTextBtnDialog implements View.OnClickListener {
     private final Activity mContext;
     private final String mTitle;
-    private final String mMsg;
+    private final String mSubtitle;
     private final String mPositiveBtnTxt;
-    private final String mNetaiveBtnTxt;
+    private final String mNegativeBtnTxt;
     private final BasicTitleTextBtnDialogListener mListener;
-    private final String mSubTitle;
+    private final String mMessage;
     private AlertDialog mAlarmAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mSelectedReasonId;
@@ -29,10 +29,10 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
                                    String title, String subTitle, String msg, String positiveBtn, String negativeBtn) {
         mContext = activity;
         mTitle = title;
-        mSubTitle = subTitle;
-        mMsg = msg;
+        mSubtitle = subTitle;
+        mMessage = msg;
         mPositiveBtnTxt = positiveBtn;
-        mNetaiveBtnTxt = negativeBtn;
+        mNegativeBtnTxt = negativeBtn;
         mListener = listener;
     }
 
@@ -45,16 +45,24 @@ public class BasicTitleTextBtnDialog implements View.OnClickListener {
         builder.setView(view);
 
         TextView title = view.findViewById(R.id.DALJ_title_tv);
-        TextView subTitle = view.findViewById(R.id.DALJ_sub_text_tv);
-        TextView msg = view.findViewById(R.id.DALJ_text_tv);
+        TextView subTitle = view.findViewById(R.id.DALJ_sub_title_tv);
+        TextView message = view.findViewById(R.id.DALJ_text_tv);
         TextView positiveBtn = view.findViewById(R.id.DALJ_positive_btn);
         TextView negativeBtn = view.findViewById(R.id.DALJ_negative_btn);
 
         title.setText(mTitle);
-        subTitle.setText(mSubTitle);
-        msg.setText(mMsg);
-        positiveBtn.setText(mPositiveBtnTxt);
-        negativeBtn.setText(mNetaiveBtnTxt);
+        message.setText(mMessage);
+        subTitle.setText(mSubtitle);
+        if (mPositiveBtnTxt != null) {
+            positiveBtn.setText(mPositiveBtnTxt);
+        } else {
+            positiveBtn.setVisibility(View.GONE);
+        }
+        if (mNegativeBtnTxt != null) {
+            negativeBtn.setText(mNegativeBtnTxt);
+        } else {
+            negativeBtn.setVisibility(View.GONE);
+        }
 
         builder.setCancelable(true);
         mAlarmAlertDialog = builder.create();

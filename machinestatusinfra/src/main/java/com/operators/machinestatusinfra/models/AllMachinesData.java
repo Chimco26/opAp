@@ -270,6 +270,7 @@ public class AllMachinesData {
     }
 
     public int getMinEventDuration() {
+//        return 0;
         return minEventDuration;
     }
 
