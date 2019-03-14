@@ -188,13 +188,12 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
         );
 
 
-
-
         final int type = getItemViewType(event.getEventGroupID());
 
         if (type == STOPPED) {
 
-            if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()){
+            if (viewHolder.getAdapterPosition() <= mFirstStopEventPosition && event.getEventEndTime().isEmpty()
+                    && event.getEventReasonID() != 100) {
 
                 mFirstStopEventPosition = viewHolder.getAdapterPosition();
                 if (!BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
@@ -208,11 +207,10 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                     }
                 });
 
-            }else {
+            } else {
                 holder.mSplitEvent.setVisibility(View.GONE);
                 holder.mSplitEvent.setOnClickListener(null);
             }
-
 
 
             if (mIsSelectionMode) {
@@ -270,7 +268,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             holder.mStoppedTitleLayout.requestLayout();
 
 
-            if (event.getEventGroupID() != 6 ) {
+            if (event.getEventGroupID() != 6) {
 
                 event.setTreated(true);
             }
@@ -474,7 +472,7 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
                             break;
                         }
                     }
-                    if (eventToUpdate == null){
+                    if (eventToUpdate == null) {
 
                         mUpdatedAlarms.add(event);
 

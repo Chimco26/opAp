@@ -469,6 +469,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public int getMinEventDuration() {
+//        return 0;
         return SecurePreferences.getInstance().getInt(PREF_MIN_EVENT_DURATION, 0);
     }
 

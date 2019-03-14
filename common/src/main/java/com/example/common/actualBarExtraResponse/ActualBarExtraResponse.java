@@ -3,6 +3,7 @@ package com.example.common.actualBarExtraResponse;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.common.Event;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -26,13 +27,28 @@ public class ActualBarExtraResponse implements Parcelable {
     @SerializedName("WorkingEvents")
     @Expose
     private ArrayList<WorkingEvent> workingEvents = null;
+    private ArrayList<Event> alarmsEvents = null;
 
     public ArrayList<WorkingEvent> getWorkingEvents() {
+        if (workingEvents == null){
+            return new ArrayList<>();
+        }
         return workingEvents;
     }
 
     public void setWorkingEvents(ArrayList<WorkingEvent> workingEvents) {
         this.workingEvents = workingEvents;
+    }
+
+    public ArrayList<Event> getAlarmsEvents() {
+        if (alarmsEvents == null){
+            alarmsEvents = new ArrayList<>();
+        }
+        return alarmsEvents;
+    }
+
+    public void setAlarmsEvents(ArrayList<Event> alarmsEvents) {
+        this.alarmsEvents = alarmsEvents;
     }
 
     public Boolean getFunctionSucceed() {
@@ -81,6 +97,7 @@ public class ActualBarExtraResponse implements Parcelable {
         dest.writeTypedList(this.rejects);
         dest.writeTypedList(this.inventory);
         dest.writeTypedList(this.notification);
+        dest.writeTypedList(this.alarmsEvents);
     }
 
     public ActualBarExtraResponse() {
@@ -91,6 +108,7 @@ public class ActualBarExtraResponse implements Parcelable {
         this.rejects = in.createTypedArrayList(Reject.CREATOR);
         this.inventory = in.createTypedArrayList(Inventory.CREATOR);
         this.notification = in.createTypedArrayList(Notification.CREATOR);
+        this.alarmsEvents = in.createTypedArrayList(Event.CREATOR);
     }
 
     public static final Parcelable.Creator<ActualBarExtraResponse> CREATOR = new Parcelable.Creator<ActualBarExtraResponse>() {
