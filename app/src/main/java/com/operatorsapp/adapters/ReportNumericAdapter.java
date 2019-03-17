@@ -48,9 +48,10 @@ public class ReportNumericAdapter extends PagerAdapter {
 
         final Context context = itemView.getContext();
         TextView title = itemView.findViewById(R.id.IRN_title);
+        TextView boxTitle = itemView.findViewById(R.id.IRN_edit_number_title_tv);
         final EditText editNumericEt = itemView.findViewById(R.id.IRN_edit_number_et);
         RadioGroup radioGroup = itemView.findViewById(R.id.IRN_radio_group);
-        initTitle(title, position, context);
+        initTitle(title, boxTitle, position, context);
 //        setText(String.valueOf(mActiveJobs.get(position).getEditedValue()), position, editNumericEt, context);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -126,17 +127,19 @@ public class ReportNumericAdapter extends PagerAdapter {
         }
     }
 
-    private void initTitle(@NonNull TextView textView, int position, Context context) {
+    private void initTitle(@NonNull TextView textView, TextView boxTitle, int position, Context context) {
         if (isReject) {
             textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s %s - <b>%s</b> %s",
                     context.getString(R.string.product), mActiveJobs.get(position).getProductName(),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
                     context.getString(R.string.rejects))));
+            boxTitle.setText(context.getString(R.string.rejects));
         } else {
             textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s %s - <b>%s</b> %s",
                     context.getString(R.string.product), mActiveJobs.get(position).getProductName(),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
                     context.getString(R.string.good_units))));
+            boxTitle.setText(context.getString(R.string.good_units));
         }
     }
 
