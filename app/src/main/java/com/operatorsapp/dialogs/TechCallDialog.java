@@ -50,15 +50,15 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     private TextView mSubtitleTv;
     private TextView mTitleTv;
     private ImageView mCloseIv;
-    private TextView mNewCallTab;
+    private RelativeLayout mNewCallTab;
     private TextView mRightTab;
     private TextView mLeftTab;
     private View mRightTabUnderline;
     private View mLeftTabUnderline;
-    private View mNewCallUnderline;
     private TechDialogListener mListener;
     private FrameLayout mProgressBarFl;
     private List<Technician> mTechniciansList;
+    private TextView mNewCallTv;
 
     public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, List<Technician> techniciansList, TechDialogListener listener) {
         super(context);
@@ -82,16 +82,16 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mSubtitleTv = (TextView) findViewById(R.id.tech_dialog_subtitle_tv);
         mTitleTv = (TextView) findViewById(R.id.tech_dialog_title_tv);
         mCloseIv = (ImageView) findViewById(R.id.tech_dialog_x_iv);
-        mNewCallTab = (TextView) findViewById(R.id.tech_dialog_tv_tech_call_tab);
+        mNewCallTab = (RelativeLayout) findViewById(R.id.tech_dialog_rl_tech_call);
         mRightTab = findViewById(R.id.tech_dialog_tv_right_tab);
         mLeftTab = findViewById(R.id.tech_dialog_tv_left_tab);
         mRightTabUnderline = findViewById(R.id.tech_dialog_right_tab_underline);
         mLeftTabUnderline = findViewById(R.id.tech_dialog_left_tab_underline);
-        mNewCallUnderline = findViewById(R.id.tech_dialog_tech_call_tab_underline);
         mProgressBarFl = (FrameLayout) findViewById(R.id.tech_dialog_progress_fl);
+        mNewCallTv = (TextView) findViewById(R.id.tech_dialog_new_call_tv);
 
         mCloseIv.setOnClickListener(this);
-        mNewCallTab.setOnClickListener(this);
+        mNewCallTv.setOnClickListener(this);
         mRightTab.setOnClickListener(this);
         mLeftTab.setOnClickListener(this);
         setOpenCalls(0);
@@ -101,7 +101,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.tech_dialog_tv_tech_call_tab:
+            case R.id.tech_dialog_new_call_tv:
                 openTechList();
                 //mListener.onNewCallPressed();
                 break;
@@ -113,9 +113,9 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 mLeftTabUnderline.setVisibility(View.VISIBLE);
                 mSubtitleTv.setVisibility(View.VISIBLE);
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-                mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mRightTabUnderline.setVisibility(View.INVISIBLE);
-                mNewCallUnderline.setVisibility(View.INVISIBLE);
+                mNewCallTab.setVisibility(View.INVISIBLE);
+                mNewCallTv.setVisibility(View.VISIBLE);
                 setOpenCalls(0);
 
                 break;
@@ -125,8 +125,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mLeftTabUnderline.setVisibility(View.INVISIBLE);
                 mSubtitleTv.setVisibility(View.GONE);
-                mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-                mNewCallUnderline.setVisibility(View.INVISIBLE);
+                mNewCallTab.setVisibility(View.INVISIBLE);
+                mNewCallTv.setVisibility(View.VISIBLE);
                 setLast24hrsCalls();
 
                 break;
@@ -139,8 +139,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
         mLeftTabUnderline.setVisibility(View.INVISIBLE);
         mSubtitleTv.setVisibility(View.GONE);
-        mNewCallTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-        mNewCallUnderline.setVisibility(View.VISIBLE);
+        mNewCallTab.setVisibility(View.VISIBLE);
+        mNewCallTv.setVisibility(View.GONE);
 
         if (mTechniciansList != null && mTechniciansList.size() > 0) {
             Collections.sort(mTechniciansList, new Comparator<Technician>() {
