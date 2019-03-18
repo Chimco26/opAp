@@ -182,8 +182,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             params.height = getViewHeight(event);
 //            params.height = filterHeight(params.height, event);
             mView.setLayoutParams(params);
-            updateNotification(event);
-
+            if (mTechContainer.getChildCount() > 0) {
+                mTechContainer.removeAllViews();
+            }
+            if (params.height > 10 * PIXEL_FOR_MINUTE) {
+                updateNotification(event);
+            }
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
             circleBackground.setColor(Color.parseColor(event.getColor()));
@@ -280,10 +284,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
 
         private void updateNotification(Event event) {
-            if (mTechContainer.getChildCount() > 0) {
-                mTechContainer.removeAllViews();
-            }
-
 
             if (event.getNotifications() != null && event.getNotifications().size() > 0) {
                 for (Notification notification : event.getNotifications()) {
@@ -316,7 +316,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     setNotification(event, 4, reject.getTime().substring(11, 16), startTimeMilli, getTextByState(reject.getAmount() + " " + name, 6), 0);
                 }
             }
-            if (event.getAlarmsEvents() != null && event.getAlarmsEvents().size() > 0) {
+            if (event.getType() == 0 && event.getAlarmsEvents() != null && event.getAlarmsEvents().size() > 0) {
                 for (Event alarmEvent : event.getAlarmsEvents()) {
                     long startTimeMilli = convertDateToMillisecond(alarmEvent.getTime(), SIMPLE_FORMAT_FORMAT);
                     setNotification(event, 5, alarmEvent.getTime().substring(11, 16), startTimeMilli,
@@ -344,6 +344,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             int eventViewHeight = getViewHeight(event);
 //            eventViewHeight = filterHeight(eventViewHeight, event);
             int margin = getNotificationRelativePosition(event, time, eventViewHeight);
+            if (margin < 20) {
+                margin = 20;
+            }
             if (eventViewHeight - margin < 20) {
                 margin = eventViewHeight - 20;
             }

@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/IRN_title"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -87,13 +87,19 @@
                 android:textSize="24sp" />
         </RadioGroup>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/divider_gray" />
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/divider_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@+id/IRN_content_layout" />
 </LinearLayout>
 
 
