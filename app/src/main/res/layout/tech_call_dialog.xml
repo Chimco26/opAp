@@ -82,12 +82,12 @@
                 </FrameLayout>
 
 
-                <View
-                    android:id="@+id/tech_dialog_left_tab_underline"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/tabNotificationColor" />
+                <!--<View-->
+                    <!--android:id="@+id/tech_dialog_left_tab_underline"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="4dp"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/tabNotificationColor" />-->
 
             </RelativeLayout>
 
@@ -119,13 +119,13 @@
 
                 </FrameLayout>
 
-                <View
-                    android:id="@+id/tech_dialog_right_tab_underline"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:visibility="invisible"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/tabNotificationColor" />
+                <!--<View-->
+                    <!--android:id="@+id/tech_dialog_right_tab_underline"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="4dp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/tabNotificationColor" />-->
 
             </RelativeLayout>
 
@@ -157,12 +157,12 @@
 
                 </FrameLayout>
 
-                <View
-                    android:id="@+id/tech_dialog_tech_call_tab_underline"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/tabNotificationColor" />
+                <!--<View-->
+                    <!--android:id="@+id/tech_dialog_tech_call_tab_underline"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="4dp"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/tabNotificationColor" />-->
 
             </RelativeLayout>
 
