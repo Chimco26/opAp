@@ -53,8 +53,6 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     private RelativeLayout mNewCallTab;
     private TextView mRightTab;
     private TextView mLeftTab;
-    private View mRightTabUnderline;
-    private View mLeftTabUnderline;
     private TechDialogListener mListener;
     private FrameLayout mProgressBarFl;
     private List<Technician> mTechniciansList;
@@ -85,8 +83,6 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mNewCallTab = (RelativeLayout) findViewById(R.id.tech_dialog_rl_tech_call);
         mRightTab = findViewById(R.id.tech_dialog_tv_right_tab);
         mLeftTab = findViewById(R.id.tech_dialog_tv_left_tab);
-        mRightTabUnderline = findViewById(R.id.tech_dialog_right_tab_underline);
-        mLeftTabUnderline = findViewById(R.id.tech_dialog_left_tab_underline);
         mProgressBarFl = (FrameLayout) findViewById(R.id.tech_dialog_progress_fl);
         mNewCallTv = (TextView) findViewById(R.id.tech_dialog_new_call_tv);
 
@@ -110,10 +106,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 break;
             case R.id.tech_dialog_tv_left_tab:
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
-                mLeftTabUnderline.setVisibility(View.VISIBLE);
                 mSubtitleTv.setVisibility(View.VISIBLE);
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-                mRightTabUnderline.setVisibility(View.INVISIBLE);
                 mNewCallTab.setVisibility(View.INVISIBLE);
                 mNewCallTv.setVisibility(View.VISIBLE);
                 setOpenCalls(0);
@@ -121,9 +115,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 break;
             case R.id.tech_dialog_tv_right_tab:
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
-                mRightTabUnderline.setVisibility(View.VISIBLE);
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-                mLeftTabUnderline.setVisibility(View.INVISIBLE);
                 mSubtitleTv.setVisibility(View.GONE);
                 mNewCallTab.setVisibility(View.INVISIBLE);
                 mNewCallTv.setVisibility(View.VISIBLE);
@@ -135,9 +127,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
 
     private void openTechList() {
         mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-        mRightTabUnderline.setVisibility(View.INVISIBLE);
         mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
-        mLeftTabUnderline.setVisibility(View.INVISIBLE);
         mSubtitleTv.setVisibility(View.GONE);
         mNewCallTab.setVisibility(View.VISIBLE);
         mNewCallTv.setVisibility(View.GONE);

@@ -3764,7 +3764,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 setNotificationNeedResponse();
-
+                setTechnicianCallStatus();
             }
 
             @Override
