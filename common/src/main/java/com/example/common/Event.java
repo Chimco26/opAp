@@ -86,7 +86,7 @@ public class Event extends DataSupport implements Parcelable {
     public Event() {
     }
 
-    public Event(long mEventID) {
+    public Event(float mEventID) {
 
         this.mEventID = mEventID;
 
@@ -318,7 +318,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmValue = alarmValue;
     }
 
-    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, long mEventID) {
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, float mEventID) {
         this.mEventTitle = mEventTitle;
         this.mEventSubTitleEname = mEventSubTitleEname;
         this.mEventTime = mEventTime;
