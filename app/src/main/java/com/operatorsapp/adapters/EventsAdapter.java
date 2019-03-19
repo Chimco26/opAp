@@ -197,7 +197,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
             }
             textTime = event.getEventEndTime().substring(10, 16);
-            
+
             mTime.setText(textTime);
 
 //            if (mIsStopEventChecked) {

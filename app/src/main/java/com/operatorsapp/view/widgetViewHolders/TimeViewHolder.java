@@ -17,6 +17,7 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.view.LineChartTimeSmall;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import me.grantland.widget.AutofitTextView;
@@ -88,6 +89,7 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
         final ArrayList<ArrayList<Entry>> tenHoursList = new ArrayList<>();
         float midnightLimit = 0;
         if (widget.getMachineParamHistoricData() != null && widget.getMachineParamHistoricData().size() > 0) {
+            Collections.sort(widget.getMachineParamHistoricData());
             final String[] xValues = new String[widget.getMachineParamHistoricData().size() + 1];
             for (int i = 0; i < widget.getMachineParamHistoricData().size(); i++) {
                 try {
