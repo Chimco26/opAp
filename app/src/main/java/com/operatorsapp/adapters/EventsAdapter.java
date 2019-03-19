@@ -30,6 +30,7 @@ import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
@@ -182,23 +183,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             params.height = getViewHeight(event);
 //            params.height = filterHeight(params.height, event);
             mView.setLayoutParams(params);
-            if (mTechContainer.getChildCount() > 0) {
-                mTechContainer.removeAllViews();
-            }
-            if (params.height > 10 * PIXEL_FOR_MINUTE) {
-                updateNotification(event);
-            }
+            updateNotification(event, params.height);
+
             mLine.setBackgroundColor(Color.parseColor(event.getColor()));
             GradientDrawable circleBackground = (GradientDrawable) mCircle.getBackground();
             circleBackground.setColor(Color.parseColor(event.getColor()));
 
             String textTime = "";
-            if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
-                textTime = event.getEventTime().substring(10, 16);
-            } else if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0) {
-                textTime = event.getEventEndTime().substring(10, 16);
+//            if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
+//                textTime = event.getEventTime().substring(10, 16);
+//            } else
+            if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
+                event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
             }
-
+            textTime = event.getEventEndTime().substring(10, 16);
+            
             mTime.setText(textTime);
 
 //            if (mIsStopEventChecked) {
@@ -207,7 +206,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 //                mText.setVisibility(View.GONE);
 //            }
 
-            long duration = event.getDuration();
+            long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(event.getEventTime()));
             if (duration == 0) {
                 duration = 1;
             }
@@ -283,8 +282,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             });
         }
 
-        private void updateNotification(Event event) {
-
+        private void updateNotification(Event event, int height) {
+            if (mTechContainer.getChildCount() > 0) {
+                mTechContainer.removeAllViews();
+            }
             if (event.getNotifications() != null && event.getNotifications().size() > 0) {
                 for (Notification notification : event.getNotifications()) {
 
@@ -316,7 +317,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     setNotification(event, 4, reject.getTime().substring(11, 16), startTimeMilli, getTextByState(reject.getAmount() + " " + name, 6), 0);
                 }
             }
-            if (event.getType() == 0 && event.getAlarmsEvents() != null && event.getAlarmsEvents().size() > 0) {
+            if (height > 10 * PIXEL_FOR_MINUTE &&
+                    event.getType() == 0 && event.getAlarmsEvents() != null && event.getAlarmsEvents().size() > 0) {
                 for (Event alarmEvent : event.getAlarmsEvents()) {
                     long startTimeMilli = convertDateToMillisecond(alarmEvent.getTime(), SIMPLE_FORMAT_FORMAT);
                     setNotification(event, 5, alarmEvent.getTime().substring(11, 16), startTimeMilli,

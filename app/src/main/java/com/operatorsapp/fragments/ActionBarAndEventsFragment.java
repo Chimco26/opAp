@@ -2029,13 +2029,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null) {
             return;
         }
-        if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()) {
-            mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.INVISIBLE);
-            return;
-        }
+
         int selected = 0;
         mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.VISIBLE);
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
+        mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.GONE);
         final LinearLayout productionStatusSpinnerLil = mToolBarView.findViewById(R.id.toolbar_production_spinner_lil);
         productionStatusSpinnerLil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2089,6 +2087,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
+        if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()) {
+            mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupOperatorSpinner() {
@@ -2417,16 +2418,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                if (mShiftLogAdapter != null) {
-//                                    mShiftLogAdapter.notifyDataSetChanged();
-//                                }
+
                                 if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
                                         && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 } else if (finalLatestEvent != null) {
-                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+//                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
                         });
@@ -2600,6 +2599,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (event.getEventGroupID() != TYPE_ALERT) {
                         addDetailsToEvents(event, actualBarExtraResponse);
                         if (mOpenEvent != null) {
+                            mOpenEvent.setType(1);
                             mOpenEvent.save();
                             mOpenEvent = null;
                         }
@@ -3093,7 +3093,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         if (events.size() > 0) {
             Event event = addFirstEvent(events.get(events.size() - 1), mActualBarExtraResponse);
-            if (event != null){
+            if (event != null) {
                 events.add(event);
             }
         }
@@ -3180,8 +3180,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 event.setEventSubTitleLname("חריגה מפרמטר");
                 break;
             case 5:
-                event.setEventSubTitleEname("Working time on set up");
-                event.setEventSubTitleLname("זמן עבודה ב setup");
+                event.setEventSubTitleEname("Working Setup");
+                event.setEventSubTitleLname("עבודה ב setup");
                 break;
             default:
                 event.setEventSubTitleEname("Working");
