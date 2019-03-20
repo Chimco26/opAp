@@ -192,7 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM " + TABLE_EVENT;
 
-        Log.e(LOG, selectQuery);
+        Log.d(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
 

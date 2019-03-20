@@ -1609,7 +1609,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onRefreshPolling() {
 
-        Log.e(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
+        Log.d(DavidVardi.DAVID_TAG_SPRINT_1_5, "onRefreshPolling");
 
         dashboardDataStartPolling();
 

@@ -174,6 +174,8 @@ public class LineChartTimeSmall extends FrameLayout {
     }
 
     public void setData(final ArrayList<ArrayList<Entry>> values, String[] xValues, final Float lowLimit, final Float highLimit) {
+        cleanLimitData();
+
         mXValues = xValues;
         // create a dataset and give it a type
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
@@ -276,6 +278,12 @@ public class LineChartTimeSmall extends FrameLayout {
                 });
             }
         });
+    }
+
+    public void cleanLimitData() {
+        mChart.getXAxis().removeAllLimitLines();
+        mChart.getAxisLeft().removeAllLimitLines();
+        mChart.getAxisRight().removeAllLimitLines();
     }
 
     public void setLimitLines(Float lowLimit, Float highLimit, Float standardValue, float midnightLimit) {
