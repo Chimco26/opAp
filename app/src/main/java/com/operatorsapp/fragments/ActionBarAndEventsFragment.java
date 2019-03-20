@@ -2600,12 +2600,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     if (event.getEventGroupID() != TYPE_ALERT) {
                         addDetailsToEvents(event, actualBarExtraResponse);
-                        if (mOpenEvent != null) {
-                            mOpenEvent.setType(1);
-                            mOpenEvent.save();
-                            mOpenEvent = null;
-                        }
                     }
+                    if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
+                            || convertDateToMillisecond(event.getEventTime()) > convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
+                        mOpenEvent.setType(1);
+                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
+                        mOpenEvent.save();
+                    }
+                    mOpenEvent = null;
                     event.save();
 
                     if (mIsNewShiftLogs) {
