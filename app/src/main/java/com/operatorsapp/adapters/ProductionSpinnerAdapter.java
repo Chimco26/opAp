@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,14 +57,17 @@ public class ProductionSpinnerAdapter extends ArrayAdapter<PackageTypes> {
             TextView name = row.findViewById(R.id.SPID_texte);
             name.setText(OperatorApplication.isEnglishLang() ? mSpinnerItems.get(position).getEName() : mSpinnerItems.get(position).getLName());
             setIcon(mSpinnerItems.get(position).getId(), false, (ImageView) row.findViewById(R.id.SPID_image));
+            GradientDrawable textBackground = (GradientDrawable) (row.findViewById(R.id.SPID_image)).getBackground();
+
             if (mSpinnerItems.get(mCurrentProductionId).getId() == mSpinnerItems.get(position).getId()) {
                 name.setTextColor(mContext.getResources().getColor(R.color.blue1));
                 setIcon(mSpinnerItems.get(position).getId(), true, (ImageView) row.findViewById(R.id.SPID_image));
-                ((ImageView)(row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
+                textBackground.setColor(mContext.getResources().getColor(R.color.blue1));
+//                ((row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_blue));
             } else {
                 name.setTextColor(mContext.getResources().getColor(R.color.white));
                 setIcon(mSpinnerItems.get(position).getId(), false, (ImageView) row.findViewById(R.id.SPID_image));
-                (((ImageView)row.findViewById(R.id.SPID_image))).setBackground(getContext().getResources().getDrawable(R.drawable.circle_white));
+                textBackground.setColor(mContext.getResources().getColor(R.color.white));
             }
         }
         return row;

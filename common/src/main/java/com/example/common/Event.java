@@ -78,13 +78,15 @@ public class Event extends DataSupport implements Parcelable {
 
     private String inventories;
 
+    private String alarmEvents;
+
     private boolean extra;
 
 
     public Event() {
     }
 
-    public Event(long mEventID) {
+    public Event(float mEventID) {
 
         this.mEventID = mEventID;
 
@@ -316,7 +318,7 @@ public class Event extends DataSupport implements Parcelable {
         mAlarmValue = alarmValue;
     }
 
-    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, long mEventID) {
+    public Event(String mEventTitle, String mEventSubTitleEname, String mEventTime, String mEventEndTime, int mEventGroupID, float mEventID) {
         this.mEventTitle = mEventTitle;
         this.mEventSubTitleEname = mEventSubTitleEname;
         this.mEventTime = mEventTime;
@@ -449,6 +451,10 @@ public class Event extends DataSupport implements Parcelable {
         return new Gson().fromJson(inventories, new TypeToken<ArrayList<Inventory>>() {
         }.getType());
     }
+    public ArrayList<Event> getAlarmsEvents() {
+        return new Gson().fromJson(alarmEvents, new TypeToken<ArrayList<Event>>() {
+        }.getType());
+    }
 
     public String getNotificationsJson() {
         return notifications;
@@ -460,6 +466,10 @@ public class Event extends DataSupport implements Parcelable {
 
     public String getInventoriesJson() {
         return inventories;
+    }
+
+    public String getAlarmsEventsJson() {
+        return alarmEvents;
     }
 
     public void setNotifications(ArrayList<Notification> notifications) {
@@ -474,6 +484,10 @@ public class Event extends DataSupport implements Parcelable {
         this.inventories = new Gson().toJson(inventories);
     }
 
+    public void setAlarmsEvents(ArrayList<Event> alarmsEvents) {
+        this.alarmEvents = new Gson().toJson(alarmsEvents);
+    }
+
     public void setNotificationsJson(String notifications) {
         this.notifications = notifications;
     }
@@ -484,6 +498,9 @@ public class Event extends DataSupport implements Parcelable {
 
     public void setInventoriesJson(String inventories) {
         this.inventories = inventories;
+    }
+    public void setAlarmsEventsJson(String alarmEvents) {
+        this.alarmEvents = alarmEvents;
     }
 
     public void setHaveExtra(boolean haveInventoryToEvents) {

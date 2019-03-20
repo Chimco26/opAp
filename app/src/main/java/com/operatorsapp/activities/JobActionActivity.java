@@ -216,7 +216,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
     }
 
     private String getNotNullText(String string) {
-        if (string == null){
+        if (string == null) {
             return "";
         }
         return string;
@@ -1024,8 +1024,10 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_job_activate_btn:
 
-                validateDialog(mCurrentJobDetails.getJobs().get(0).getID(), false);
-
+                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
+                        && mCurrentJobDetails.getJobs().size() > 0) {
+                    validateDialog(mCurrentJobDetails.getJobs().get(0).getID(), false);
+                }
                 break;
 
             case R.id.AJA_item_material:

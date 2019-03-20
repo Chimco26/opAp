@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String KEY_INVENTORY = "inventories";
     private static final String KEY_REJECTS = "rejects";
+    private static final String KEY_ALARMS_EVENTS = "alarmEvents";
     private static final String KEY_HAVE_EXTRA = "extra";
 
 
@@ -107,6 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_COLOR + " TEXT," +
             KEY_NOTIFICATIONS + " TEXT," +
             KEY_REJECTS + " TEXT," +
+            KEY_ALARMS_EVENTS + " TEXT," +
             KEY_INVENTORY + " TEXT" +
             ")";
 
@@ -163,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * get single event
      */
-    public Event getEvent(long eventId) {
+    public Event getEvent(float eventId) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -190,7 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM " + TABLE_EVENT;
 
-        Log.e(LOG, selectQuery);
+        Log.d(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -259,7 +261,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCursorOrderByTimeFilterByDuration(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
-                " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " AND " +  KEY_GROUP_ID + " != 20 " +
+                " OR (" + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''" +
+                " AND " +  KEY_GROUP_ID + " != 20 ))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -281,8 +285,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_DURATION + " >= " + minEventDuration +
                 " AND " + KEY_EVENT_ID + " >= " + eventId +
-                " OR (" + KEY_EVENT_ID + " >= " + eventId + " AND " +
-                KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
+                " AND " + KEY_GROUP_ID + " != 20 " +
+                " OR (" + KEY_EVENT_ID + " >= " + eventId +
+                " AND " + KEY_GROUP_ID + " != 20 " +
+                " AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -294,6 +300,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_GROUP_ID + " = 20)" +
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
@@ -449,6 +456,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_NOTIFICATIONS, event.getNotificationsJson());
         values.put(KEY_REJECTS, event.getRejectsJson());
         values.put(KEY_INVENTORY, event.getInventoriesJson());
+        values.put(KEY_ALARMS_EVENTS, event.getAlarmsEventsJson());
         values.put(KEY_HAVE_EXTRA, event.haveExtra());
 
         return values;
@@ -504,6 +512,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             event.setNotificationsJson(c.getString(c.getColumnIndex(KEY_NOTIFICATIONS)));
             event.setRejectsJson(c.getString(c.getColumnIndex(KEY_REJECTS)));
             event.setInventoriesJson(c.getString(c.getColumnIndex(KEY_INVENTORY)));
+            event.setAlarmsEventsJson(c.getString(c.getColumnIndex(KEY_ALARMS_EVENTS)));
             event.setHaveExtra(c.getInt(c.getColumnIndex(KEY_HAVE_EXTRA)) > 0);
 
 

@@ -290,6 +290,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private AsyncTask<Void, Void, String> mAsyncTask;
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
+    private Event mOpenEvent;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -2028,13 +2029,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null) {
             return;
         }
-        if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()){
-            mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.INVISIBLE);
-            return;
-        }
+
         int selected = 0;
         mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.VISIBLE);
         final EmeraldSpinner productionStatusSpinner = mToolBarView.findViewById(R.id.toolbar_production_spinner);
+        mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.GONE);
         final LinearLayout productionStatusSpinnerLil = mToolBarView.findViewById(R.id.toolbar_production_spinner_lil);
         productionStatusSpinnerLil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2044,6 +2043,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         productionStatusSpinner.setVisibility(View.VISIBLE);
+        productionStatusSpinner.setBackground(getResources().getDrawable(R.drawable.spinner_bckgrnd));
         final TextView textview = mToolBarView.findViewById(R.id.toolbar_production_text);
         ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
         List<PackageTypes> statusList = new ArrayList<>();
@@ -2088,6 +2088,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             }
         });
+        if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()) {
+            mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.VISIBLE);
+            productionStatusSpinner.setBackground(null);
+        }
     }
 
     private void setupOperatorSpinner() {
@@ -2416,16 +2420,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                if (mShiftLogAdapter != null) {
-//                                    mShiftLogAdapter.notifyDataSetChanged();
-//                                }
+
                                 if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
                                         && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 } else if (finalLatestEvent != null) {
-                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+//                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
                         });
@@ -2583,6 +2585,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             boolean mustBeClosed = false;
             for (Event event : events) {
 
+                if (event.getEventGroupID() == TYPE_ALERT) {
+                    mActualBarExtraResponse.getAlarmsEvents().add(event);
+                }
+
                 if (mAutoSelectMode && event.getEventEndTime() != null && event.getEventEndTime().length() > 0 &&
                         mFirstSeletedEvent != null && mSelectedEvents != null
                         && mSelectedEvents.size() == 1) {
@@ -2592,7 +2598,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
-                    addDetailsToEvents(event, actualBarExtraResponse);
+                    if (event.getEventGroupID() != TYPE_ALERT) {
+                        addDetailsToEvents(event, actualBarExtraResponse);
+                    }
+                    if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
+                            || convertDateToMillisecond(event.getEventTime()) > convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
+                        mOpenEvent.setType(1);
+                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
+                        mOpenEvent.save();
+                    }
+                    mOpenEvent = null;
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2694,32 +2709,60 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         for (int i = 0; i < events.size() - 1; i++) {
 
-            Event event = events.get(i);
+            if (events.get(i).getEventGroupID() != TYPE_ALERT) {
+                Event event = events.get(i);
 
-            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
-            Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
+                Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
+                Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
 
-            if (eventStartMilli < eventEndMilli) {
+                if (eventStartMilli < eventEndMilli) {
 
-                String color = "#1aa917";
-                if (getActivity() != null) {
-                    color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-                }
-                Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
-                        event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
-                        -0.5f, color, 1);
+                    String color = "#1aa917";
+                    if (getActivity() != null) {
+                        color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+                    }
+                    Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
+                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
+                            -0.5f, color, 1);
 
-                if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
+                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
-                    addDetailsToEvents(workingEvent, actualBarExtraResponse);
+                        addDetailsToEvents(workingEvent, actualBarExtraResponse);
 
-                    workingEvent.save();
+                        workingEvent.save();
+                    }
                 }
             }
 
         }
 
         return events;
+    }
+
+    private Event addFirstEvent(Event event, ActualBarExtraResponse actualBarExtraResponse) {
+        Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
+        Long minusDayTime = new Date().getTime() - DAY_IN_MILLIS;
+
+        if (minusDayTime < eventEndMilli) {
+            String color = "#1aa917";
+            if (getActivity() != null) {
+                color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+            }
+            Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
+                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עובד", "Working",
+                    -0.5f, color, 1);
+
+            if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
+
+                addDetailsToEvents(workingEvent, actualBarExtraResponse);
+
+                workingEvent.save();
+
+                return workingEvent;
+            }
+
+        }
+        return null;
     }
 
     @NonNull
@@ -2739,7 +2782,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         long duration = eventEndMilli - eventStartMilli;
         if (duration > DAY_IN_MILLIS) {
-            duration = 1;
+            duration = DAY_IN_MILLIS;
         }
         long minute = TimeUnit.MILLISECONDS.toMinutes(duration);
 
@@ -2841,10 +2884,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (actualBarExtraResponse != null) {
             Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
-            Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
-
+            Long eventEnd = new Date().getTime();
+            if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0) {
+                eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
+            }
             addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
-            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+            if (addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    || addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
                 event.setHaveExtra(true);
@@ -2870,10 +2916,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
                         event.setEventSubTitleLname(workingEvent.getEventReason());
                         event.setEventSubTitleEname(workingEvent.getEventReason());
-                    } else if (isAdded()){
+                    } else if (isAdded()) {
                         event.setEventSubTitleEname(getWorkingSubTitle(workingEvent));
                         event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
-                    }else {
+                    } else {
                         event.setEventSubTitleEname("Working");
                         event.setEventSubTitleLname("Working");
                     }
@@ -2912,7 +2958,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
         if (notifications != null && notifications.size() > 0) {
 
-            ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = null;
+            ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = event.getNotifications();
 
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
                 Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
@@ -2939,13 +2985,47 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return false;
     }
 
+    private boolean addAlarmEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+
+        ArrayList<Event> alarmEvents = actualBarExtraResponse.getAlarmsEvents();
+        ArrayList<Event> toDelete = new ArrayList<>();
+        if (alarmEvents != null && alarmEvents.size() > 0
+                && event.getType() == 0) {
+
+            ArrayList<Event> EventAlarmArrayList = event.getAlarmsEvents();
+
+            for (Event event1 : alarmEvents) {
+                Long eventTime = convertDateToMillisecond(event1.getEventTime(), SIMPLE_FORMAT_FORMAT);
+
+                if (eventStart <= eventTime && eventTime <= eventEnd) {
+
+                    if (EventAlarmArrayList == null) {
+                        EventAlarmArrayList = new ArrayList<>();
+                    }
+
+                    EventAlarmArrayList.add(event1);
+                    toDelete.add(event1);
+                }
+            }
+            if (EventAlarmArrayList != null) {
+                event.setAlarmsEvents(EventAlarmArrayList);
+                alarmEvents.removeAll(toDelete);
+                if (alarmEvents.size() == 0) {
+                    alarmEvents = null;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
         ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
         ArrayList<Reject> toDelete = new ArrayList<>();
         if (rejects != null && rejects.size() > 0) {
 
-            ArrayList<Reject> rejectArrayList = null;
+            ArrayList<Reject> rejectArrayList = event.getRejects();
 
             for (Reject reject : rejects) {
                 Long rejectTime = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
@@ -2977,7 +3057,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (inventories != null && inventories.size() > 0) {
 
-            ArrayList<Inventory> inventoriesArrayList = null;
+            ArrayList<Inventory> inventoriesArrayList = event.getInventories();
 
             for (Inventory inventory : inventories) {
                 Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SIMPLE_FORMAT_FORMAT);
@@ -3012,25 +3092,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initEvents(ArrayList<Event> events) {
 
-        if (events.size() < 1) {
-            return;
-        }
         if (mLoadingDataText != null) {
             mLoadingDataText.setVisibility(View.GONE);
         }
-        if (!mIsSelectionMode && events.get(0).getEventEndTime() != null
-                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-
-            Event event = events.get(0);
-            Event intermediateEvent = new Event();
-            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
-            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
-                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
-                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
-            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
-            events.add(0, intermediateEvent);
+        if (events.size() > 0) {
+            Event event = addFirstEvent(events.get(events.size() - 1), mActualBarExtraResponse);
+            if (event != null) {
+                events.add(event);
+            }
+        }
+        Event event = addCurrentEvent(events);
+        if (event != null) {
+            events.add(0, event);
+        }
+        if (events.size() < 1) {
+            return;
         }
 //        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 //        mEventsRecycler.setAdapter(mEventsAdapter);
@@ -3043,6 +3119,40 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsAdapter.setSelectedEvents(mSelectedEvents);
         mEventsAdapter.notifyDataSetChanged();
 
+    }
+
+    private Event addCurrentEvent(ArrayList<Event> events) {
+        Event event = null;
+        if (!mIsSelectionMode && events.size() > 0 && events.get(0).getEventEndTime() != null
+                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+
+            event = events.get(0);
+        }
+        if (events.size() < 1 && mCurrentMachineStatus != null &&
+                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+            event = new Event();
+            event.setEventID(1);
+            event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
+        }
+        if (event != null) {
+            Event intermediateEvent = new Event();
+            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
+            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
+                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
+                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
+                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
+            if (mOpenEvent != null) {
+                intermediateEvent.setNotifications(mOpenEvent.getNotifications());
+                intermediateEvent.setRejects(mOpenEvent.getRejects());
+                intermediateEvent.setInventories(mOpenEvent.getInventories());
+            }
+            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
+            mOpenEvent = intermediateEvent;
+            return intermediateEvent;
+        }
+        mOpenEvent = null;
+        return null;
     }
 
     private String getColorByMachineStatus(int machineStatusID) {
@@ -3074,8 +3184,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 event.setEventSubTitleLname("חריגה מפרמטר");
                 break;
             case 5:
-                event.setEventSubTitleEname("Working time on set up");
-                event.setEventSubTitleLname("זמן עבודה ב setup");
+                event.setEventSubTitleEname("Working Setup");
+                event.setEventSubTitleLname("עבודה ב setup");
                 break;
             default:
                 event.setEventSubTitleEname("Working");
@@ -3720,7 +3830,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 
                 setNotificationNeedResponse();
-
+                setTechnicianCallStatus();
             }
 
             @Override

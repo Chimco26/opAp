@@ -69,9 +69,12 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mTargetRl.post(new Runnable() {
             @Override
             public void run() {
-                final float finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
-                final float finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
-
+                float finalCurrentWidth = 0;
+                float finalProjectionWidth = 0;
+                if (widget.getTarget() != 0) {
+                    finalCurrentWidth = mTargetRl.getWidth() * (mCurrentValue / widget.getTarget());
+                    finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
+                }
                 initValuesTv(widget);
                 initWidgetHeight();
 
@@ -93,8 +96,17 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                     mTheoricalTv.setVisibility(View.GONE);
                     mTheoricalView.setVisibility(View.GONE);
                 }
+                if (mCurrentValue == 0 && widget.getProjection() == 0) {
+                    setEmptyMode();
+                }
             }
         });
+
+    }
+
+    private void setEmptyMode() {
+        mTargetReachedTv.setVisibility(View.GONE);
+        updateViewsWidth(0, 0);
     }
 
     private void updateColors(Widget widget) {
@@ -120,7 +132,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
             mTheoricalView.setVisibility(View.VISIBLE);
             if (isNotNearestTextsNew(widget, mCurrentValue)) {
                 mTheoricalTv.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mTheoricalTv.setVisibility(View.GONE);
             }
         } else {

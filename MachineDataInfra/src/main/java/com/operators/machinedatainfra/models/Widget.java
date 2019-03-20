@@ -1,8 +1,13 @@
 package com.operators.machinedatainfra.models;
 
+import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Widget {
     @SerializedName("CurrentValue")
@@ -54,7 +59,7 @@ public class Widget {
         this.mEditStep = mEditStep;
     }
 
-    public class HistoricData {
+    public class HistoricData implements Comparable<HistoricData> {
         @SerializedName("CurrentValue")
         private Float mCurrentValue;
         @SerializedName("Time")
@@ -66,6 +71,39 @@ public class Widget {
 
         public String getTime() {
             return mTime;
+        }
+
+        @Override
+        public int compareTo(@NonNull HistoricData o) {
+            return getDateForNotification(getTime()).compareTo(getDateForNotification(o.getTime()));
+        }
+        public static final String SQL_T_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+        public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
+        @SuppressLint("SimpleDateFormat")
+        public Date getDateForNotification(String time) {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
+            SimpleDateFormat dateFormatSql = new SimpleDateFormat(SQL_NO_T_FORMAT);
+            SimpleDateFormat dateFormatSqlT = new SimpleDateFormat(SQL_T_FORMAT);
+
+            try {
+                return dateFormat.parse(time);
+            } catch (java.text.ParseException e) {
+            }
+
+            try {
+                return dateFormatSql.parse(time);
+            } catch (java.text.ParseException e) {
+            }
+
+            try {
+                return dateFormatSqlT.parse(time);
+
+            } catch (java.text.ParseException e) {
+            }
+
+            return null;
         }
     }
 
@@ -187,6 +225,10 @@ public class Widget {
 
     public ArrayList<HistoricData> getMachineParamHistoricData() {
         return mMachineParamHistoricData;
+    }
+
+    public void setMachineParamHistoricData(ArrayList<HistoricData> mMachineParamHistoricData) {
+        this.mMachineParamHistoricData = mMachineParamHistoricData;
     }
 
     public long getID() {

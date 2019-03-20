@@ -73,11 +73,11 @@
                 android:layout_height="39dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:layout_toStartOf="@+id/settings_button"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
                 android:src="@drawable/info" />
 
             <ImageView
@@ -86,24 +86,24 @@
                 android:layout_height="39dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:layout_toStartOf="@+id/toolbar_notification_button"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
                 android:src="@drawable/settings_new_small" />
 
             <ImageView
                 android:id="@+id/toolbar_notification_button"
                 android:layout_width="39dp"
                 android:layout_height="39dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="31dp"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
                 android:src="@drawable/notifications" />
 
             <FrameLayout
@@ -176,16 +176,16 @@
                             android:layout_height="40dp"
                             android:background="@drawable/ic_no_data" />
                     </LinearLayout>
-                    
+
                     <TextView
                         android:id="@+id/ATATV_status_time_min"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="16sp"
-                        android:gravity="center"
                         android:layout_marginTop="3dp"
-                        android:textColor="@color/white"/>
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -239,9 +239,9 @@
                 <RelativeLayout
                     android:id="@+id/toolbar_technician_button"
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:layout_height="match_parent">
+                    android:paddingEnd="15dp">
 
 
                     <ImageView
@@ -256,9 +256,9 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@+id/toolbar_technician_iv"
-                        android:layout_marginStart="10dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/toolbar_technician_iv"
                         android:src="@drawable/ic_drop_down_arrow_white" />
 
 
@@ -267,12 +267,12 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_toEndOf="@+id/toolbar_technician_iv"
-                        android:visibility="visible"
+                        android:background="@drawable/blue_circle"
                         android:text="0"
                         android:textAlignment="center"
-                        android:background="@drawable/blue_circle"
                         android:textColor="@color/white"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp"
+                        android:visibility="visible" />
 
                 </RelativeLayout>
 
@@ -282,33 +282,46 @@
                     android:layout_height="match_parent"
                     android:background="@color/dark_indigo" />
 
-                <LinearLayout
-                    android:id="@+id/toolbar_production_spinner_lil"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <com.operatorsapp.view.EmeraldSpinner
-                        android:id="@+id/toolbar_production_spinner"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        tools:ignore="MissingPrefix"
-                        android:layout_marginStart="15dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/spinner_bckgrnd"
-                        android:popupBackground="@android:color/transparent"
-                        android:dropDownVerticalOffset="51dp" />
+                    <LinearLayout
+                        android:id="@+id/toolbar_production_spinner_lil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/toolbar_production_text"
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:textColor="@color/white"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="16sp"
-                        android:layout_marginStart="15dp"
-                        android:gravity="center_vertical"/>
+                        <com.operatorsapp.view.EmeraldSpinner
+                            android:id="@+id/toolbar_production_spinner"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/spinner_bckgrnd"
+                            android:dropDownVerticalOffset="51dp"
+                            android:popupBackground="@android:color/transparent"
+                            tools:ignore="MissingPrefix" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/toolbar_production_text"
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="15dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/ATATV_spinner_disable_view"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:clickable="true"
+                        android:focusable="true"/>
+                </RelativeLayout>
 
             </LinearLayout>
 

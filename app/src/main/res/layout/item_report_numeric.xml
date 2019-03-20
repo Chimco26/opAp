@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="240dp"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -12,25 +12,17 @@
 
     <TextView
         android:id="@+id/IRN_title"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="30dp"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider_gray" />
 
     <LinearLayout
         android:id="@+id/IRN_content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/IRN_title"
-        android:layout_marginTop="25dp"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -40,11 +32,12 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/IRN_edit_number_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/rejects_quantity"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:text="@string/rejects_quantity"/>
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/IRN_edit_number_et"
@@ -91,7 +84,14 @@
                 android:textSize="24sp" />
         </RadioGroup>
 
+
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/divider_gray" />
 
     <View
         android:layout_width="match_parent"

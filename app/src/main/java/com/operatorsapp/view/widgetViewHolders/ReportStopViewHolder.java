@@ -32,6 +32,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final TextView mReportedMinTv;
     private final TextView mNotReportedTv;
     private final TextView mNotReportedMinTv;
+    private final View mDefault;
     private int mHeight;
     private int mWidth;
     private RelativeLayout mParentLayout;
@@ -61,6 +62,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mBtn = itemView.findViewById(R.id.RPWC_report_btn);
         mBtn.setOnClickListener(this);
 
+        mDefault = itemView.findViewById(R.id.RPWC_default);
         mFilterShort = itemView.findViewById(R.id.RPWC_filter_short);
         mReported = itemView.findViewById(R.id.RPWC_reported);
         mNotReported = itemView.findViewById(R.id.RPWC_not_reported);
@@ -99,6 +101,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 
         updateViews(reportedPercent, filterShortPercent, notReportedPercent, reportedValue, widget.getProjection().intValue(), noReportedValue);
         if (totalMinutes >= 1) {
+            mDefault.setVisibility(View.GONE);
             mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", (int) (reportedValue + widget.getProjection()), totalMinutes, reportedPercent + filterShortPercent));
             updateTextViews(reportedPercent);
         } else {
@@ -108,7 +111,10 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 
     private void setEmptyMode(Widget widget) {
         mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", 0, 0, 0));
-        updateTextViews(100);
+        mText.setText(mText.getContext().getString(R.string.there_are_no_stop_event));
+        mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
+        mBtn.setVisibility(View.GONE);
+        mDefault.setVisibility(View.VISIBLE);
         if (widget.getCurrentColor() != null && widget.getCurrentColor().length() > 0) {
             mNotReported.setBackgroundColor(Color.parseColor(widget.getCurrentColor()));
         } else {

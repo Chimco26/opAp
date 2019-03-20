@@ -91,6 +91,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_STOP_REASON_DESIGN = "pref.STOP_REASON_DESIGN";
     private static final String PREF_RECENT_MAX_UNIT_REPORT = "pref.PREF_RECENT_MAX_UNIT_REPORT";
     private static final String PREF_IS_NEW_SHIFTLOG_DISPLAY = "pref.PREF_IS_NEW_SHIFTLOG_DISPLAY";
+    private static final String PREF_ARRAY_ALARAM_CURRENT_EVENT = "pref.PREF_ARRAY_ALARAM_CURRENT_EVENT";
 
 
     private static PersistenceManager msInstance;
@@ -469,6 +470,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
 
     public int getMinEventDuration() {
+//        return 0;
         return SecurePreferences.getInstance().getInt(PREF_MIN_EVENT_DURATION, 0);
     }
 
