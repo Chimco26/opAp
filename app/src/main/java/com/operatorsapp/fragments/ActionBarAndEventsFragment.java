@@ -2043,6 +2043,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
         productionStatusSpinner.setVisibility(View.VISIBLE);
+        productionStatusSpinner.setBackground(getResources().getDrawable(R.drawable.spinner_bckgrnd));
         final TextView textview = mToolBarView.findViewById(R.id.toolbar_production_text);
         ReportFieldsForMachine reportForMachine = ((DashboardActivity) getActivity()).getReportForMachine();
         List<PackageTypes> statusList = new ArrayList<>();
@@ -2089,6 +2090,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
         if (!mCurrentMachineStatus.getAllMachinesData().get(0).isAllowProductionModeOnOpApp()) {
             mToolBarView.findViewById(R.id.ATATV_spinner_disable_view).setVisibility(View.VISIBLE);
+            productionStatusSpinner.setBackground(null);
         }
     }
 
