@@ -385,6 +385,7 @@
     <string name="go_to_setup">Go to Setup</string>
     <string name="setup_mode">Setup mode</string>
     <string name="rejects_quantity">Rejects quantity</string>
+    <string name="there_are_no_stop_event">There are no stop evens to report</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

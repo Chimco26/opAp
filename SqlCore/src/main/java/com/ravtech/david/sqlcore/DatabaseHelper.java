@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper mInstance = null;
 
     // Database Version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 16;
 
     // Database Name
     private static final String DATABASE_NAME = "events.db";
@@ -165,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * get single event
      */
-    public Event getEvent(long eventId) {
+    public Event getEvent(float eventId) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -192,7 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM " + TABLE_EVENT;
 
-        Log.e(LOG, selectQuery);
+        Log.d(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -300,6 +300,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCursorOrderByTimeFilterByDurationWithoutWork(int minEventDuration) {
         String countQuery = "SELECT  * FROM " + TABLE_EVENT +
                 " WHERE (" + KEY_TYPE + " = 0 AND " + KEY_DURATION + " >= " + minEventDuration +
+                " OR (" + KEY_GROUP_ID + " = 20)" +
                 " OR (" + KEY_TYPE + " = 0 AND " + KEY_END_TIME + " IS NULL OR " + KEY_END_TIME + "= ''))" +
                 " ORDER BY " + KEY_EVENT_ID + " DESC";
 
