@@ -106,10 +106,14 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                 break;
             case R.id.tech_dialog_tv_left_tab:
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
-                mSubtitleTv.setVisibility(View.VISIBLE);
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
                 mNewCallTab.setVisibility(View.INVISIBLE);
                 mNewCallTv.setVisibility(View.VISIBLE);
+                if (mTechList.size() > 0){
+                    mSubtitleTv.setVisibility(View.VISIBLE);
+                }else {
+                    mSubtitleTv.setVisibility(View.GONE);
+                }
                 setOpenCalls(0);
 
                 break;
@@ -170,6 +174,10 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                         responseType = Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE;
                     }
 
+                    String srcId = pm.getOperatorId();
+                    if (!(srcId != null && srcId.length() > 0)){
+                        srcId = pm.getUserId() + "";
+                    }
                     RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
                             notificationToRemove.getmTitle(),
                             notificationToRemove.getmBody(getContext()),
@@ -178,11 +186,11 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                             responseType,
                             notificationToRemove.getmNotificationType(),
                             Consts.NOTIFICATION_RESPONSE_TARGET_TECHNICIAN,
-                            techCallInfo.getmTechnicianId()+"",
+                            pm.getUserId() + "",
                             pm.getOperatorName(),
                             techCallInfo.getmName(),
-                            pm.getOperatorId(),
-                            notificationToRemove.getmTargetUserId() +"");
+                            srcId,
+                            techCallInfo.getmTechnicianId() +"");
 
                     NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
                         @Override
@@ -196,6 +204,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
                                     PersistenceManager.getInstance().setRecentTechCallId(mTechList.get(0).getmNotificationId());
                                 }else if (mTechList.size() == 0){
                                     PersistenceManager.getInstance().setRecentTechCallId(0);
+                                    mSubtitleTv.setVisibility(View.INVISIBLE);
                                 }
                                 mListener.onCleanTech();
                                 setOpenCalls(((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
