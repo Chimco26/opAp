@@ -1,13 +1,18 @@
 package com.operatorsapp.activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.provider.Settings;
@@ -15,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +30,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.common.Event;
 import com.example.common.MultipleRejectRequestModel;
@@ -131,8 +138,10 @@ import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
+import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
+import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
@@ -143,14 +152,23 @@ import com.operatorsapp.utils.broadcast.SendBroadcast;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import ravtech.co.il.publicutils.JobBase;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -175,7 +193,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         AdvancedSettingsFragment.AdvancedSettingsListener,
         ShowDashboardCroutonListener, AllDashboardDataCore.AllDashboardDataCoreListener,
         DashboardCentralContainerListener,
-        OnReportFieldsUpdatedCallbackListener {
+        OnReportFieldsUpdatedCallbackListener,
+        EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
@@ -186,7 +205,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private static final String INTERVAL_KEY = "OpAppPollingInterval";
     private static final String TIME_OUT_KEY = "OpAppRequestTimeout";
     private static final float MINIMUM_VERSION_FOR_INTERVAL_AND_TIME_OUT_FROM_API = 1.9f;
-
+    private static final int CHECK_APP_VERSION_INTERVAL = 1000 * 60 * 60 * 12; //check every 12 hours
+    private static final int REQUEST_WRITE_PERMISSION = 786;
     private boolean ignoreFromOnPause = false;
     public static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private CroutonCreator mCroutonCreator;
@@ -238,6 +258,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ActualBarExtraResponse mActualBarExtraResponse;
     private ArrayList<RejectForMultipleRequest> mRejectForMultipleRequests;
     private boolean mCustomKeyBoardIsOpen;
+    private Handler mVersionCheckHandler;
+    private Runnable mCheckAppVersionRunnable;
+    private File outputFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +302,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
+        setupVersionCheck();
     }
 
     private void initDataListeners() {
@@ -1640,6 +1664,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             SendBroadcast.SendEmail(this);
 
         }
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
@@ -2607,5 +2633,191 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onReportUpdateFailure() {
 
+    }
+
+    private void setupVersionCheck() {
+        if (mVersionCheckHandler != null){
+            mVersionCheckHandler.removeCallbacksAndMessages(null);
+        }
+        mVersionCheckHandler = new Handler();
+
+        mCheckAppVersionRunnable = new Runnable() {
+            @Override
+            public void run() {
+                NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
+                    @Override
+                    public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getmError() == null){
+
+                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE){
+                                    getFile(item.getmUrl());
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AppVersionResponse> call, Throwable t) {
+
+                    }
+                });
+                mVersionCheckHandler.postDelayed(mCheckAppVersionRunnable, CHECK_APP_VERSION_INTERVAL);
+            }
+        };
+
+        mVersionCheckHandler.post(mCheckAppVersionRunnable);
+    }
+
+    private void getFile(String url) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+            //check if app has permission to write to the external storage.
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //Get the URL entered
+                new DownloadFile().execute(url);
+
+            } else {
+                //If permission is not present request for the same.
+                EasyPermissions.requestPermissions(this, "aaaaaa", REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+
+
+        } else {
+            Toast.makeText(this, "SD Card not found", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        //Download the file once permission is granted
+
+        if (requestCode == REQUEST_WRITE_PERMISSION) {
+            String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
+            new DownloadFile().execute(url);
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(this, "Permission has been denied", Toast.LENGTH_LONG).show();
+
+    }
+
+    private class DownloadFile extends AsyncTask<String, String, String> {
+
+        private ProgressDialog progressDialog;
+        private String fileName;
+        private String folder;
+        private boolean isDownloaded;
+        private File directory;
+
+        /**
+         * Before starting background thread
+         * Show Progress Bar Dialog
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog = new ProgressDialog(DashboardActivity.this);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
+
+        /**
+         * Downloading file in background thread
+         */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // getting file length
+                int lengthOfFile = connection.getContentLength();
+
+
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+
+                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+
+                //Extract file name from URL
+                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
+
+                //Append timestamp to file name
+                fileName = "bbbbbb.apk";
+
+                //External directory path to save file
+                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
+
+                //Create androiddeft folder if it does not exist
+                directory = new File(folder);
+
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                outputFile = new File(directory, fileName);
+                // Output stream to write file
+                OutputStream output = new FileOutputStream(outputFile);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+                return "Downloaded at: " + folder + fileName;
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return "Something went wrong";
+        }
+
+        /**
+         * Updating progress bar
+         */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            progressDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+
+        @Override
+        protected void onPostExecute(String message) {
+            // dismiss the dialog after the file was downloaded
+            this.progressDialog.dismiss();
+
+            // Display File path after downloading
+            Toast.makeText(DashboardActivity.this, message, Toast.LENGTH_LONG).show();
+            Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
+
+            Intent install = new Intent(Intent.ACTION_VIEW);
+            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            install.normalizeMimeType("application/vnd.android.package-archive");
+            startActivity(install);
+        }
     }
 }

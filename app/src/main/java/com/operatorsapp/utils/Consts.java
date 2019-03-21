@@ -33,6 +33,7 @@ public class Consts {
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     public static final String NOTIFICATION_TECHNICIAN_NAME = "NOTIFICATION_TECHNICIAN_NAME";
     public static final int APPLICATION_CODE = 2;
+    public static final String APP_NAME = "operator";
 
     public enum NotificationType
     {

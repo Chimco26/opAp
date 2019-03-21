@@ -69,6 +69,7 @@ import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.GetMachineJoshData.MachineJoshDataResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -966,6 +967,13 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getNewVersionFile(final Callback<ResponseBody> callback) {
         mRetrofit = getRetrofit("http://www.ovh.net", PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ResponseBody> call = mRetrofit.create(OpAppServiceRequests.class).getNewVersionFile();
+        call.enqueue(callback);
+    }
+
+
+    public void GetApplicationVersion(final Callback<AppVersionResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<AppVersionResponse> call = mRetrofit.create(OpAppServiceRequests.class).GetApplicationVersion();
         call.enqueue(callback);
     }
 
