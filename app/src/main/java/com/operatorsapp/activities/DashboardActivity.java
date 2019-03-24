@@ -1097,26 +1097,27 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     };
 
     private void showSetUpEndDialog() {
-        mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
-        mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
-            @Override
-            public void sendReport(int selectedReasonId, int selectedTechnicianId, ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
-                mRejectForMultipleRequests = rejectForMultipleRequests;
-                sendSetupEndReport(selectedReasonId, selectedTechnicianId);
-            }
-
-            @Override
-            public void onDismissSetupEndDialog() {
-                mSetupEndDialog = null;
-                if (mActionBarAndEventsFragment != null) {
-                    mActionBarAndEventsFragment.SetupEndDialogShow(false);
+        if (mActiveJobsListForMachine != null) {
+            mSetupEndDialog = new SetupEndDialog(this, mReportFieldsForMachine, mActiveJobsListForMachine);
+            mSetupEndDialog.showNoProductionAlarm(new SetupEndDialog.SetupEndDialogListener() {
+                @Override
+                public void sendReport(int selectedReasonId, int selectedTechnicianId, ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
+                    mRejectForMultipleRequests = rejectForMultipleRequests;
+                    sendSetupEndReport(selectedReasonId, selectedTechnicianId);
                 }
-            }
-        }).show();
-        if (mActionBarAndEventsFragment != null) {
-            mActionBarAndEventsFragment.SetupEndDialogShow(true);
-        }
 
+                @Override
+                public void onDismissSetupEndDialog() {
+                    mSetupEndDialog = null;
+                    if (mActionBarAndEventsFragment != null) {
+                        mActionBarAndEventsFragment.SetupEndDialogShow(false);
+                    }
+                }
+            }).show();
+            if (mActionBarAndEventsFragment != null) {
+                mActionBarAndEventsFragment.SetupEndDialogShow(true);
+            }
+        }
     }
 
     @Override
