@@ -1,7 +1,7 @@
 package com.operators.shiftloginfra;
 
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 
 public interface ShiftForMachineCoreCallback<T> {

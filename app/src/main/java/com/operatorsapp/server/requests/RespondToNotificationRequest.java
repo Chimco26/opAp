@@ -1,6 +1,7 @@
 package com.operatorsapp.server.requests;
 
 import com.google.gson.annotations.SerializedName;
+import com.operatorsapp.managers.PersistenceManager;
 
 /**
  * Created by alex on 15/10/2018.

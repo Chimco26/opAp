@@ -7,6 +7,7 @@ import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobs
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.EmeraldGetMachinesServiceRequests;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
+import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachineJoshDataRequest;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachinesStatusServiceRequest;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldSetProductionModeForMachineRequest;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
@@ -62,14 +63,14 @@ import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInte
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
-import com.operatorsapp.server.requests.MachineJoshDataRequest;
+import com.example.common.request.MachineJoshDataRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
-import com.operatorsapp.server.responses.GetMachineJoshData.MachineJoshDataResponse;
+import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
@@ -286,6 +287,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         }
         return mRetrofit.create(EmeraldActualBarExtraDetailsServiceRequest.class);
     }
+
+    @Override
+    public EmeraldGetMachineJoshDataRequest getMachineJoshDataServiceRequest(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+        try {
+
+            return mRetrofit.create(EmeraldGetMachineJoshDataRequest.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "GetMachineJoshData");
+        }
+        return mRetrofit.create(EmeraldGetMachineJoshDataRequest.class);    }
 
    @Override
     public EmeraldReportMultipleRejects emeraldReportMultipleRejects(String siteUrl, int timeout, TimeUnit timeUnit) {
@@ -957,15 +971,22 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-    public void getMachineJoshData(MachineJoshDataRequest request, final Callback<MachineJoshDataResponse> callback) {
-        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<MachineJoshDataResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMachineJoshData(request);
-        call.enqueue(callback);
-    }
+//    public void getMachineJoshData(MachineJoshDataRequest request, final Callback<MachineJoshDataResponse> callback) {
+//        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+//        Call<MachineJoshDataResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMachineJoshData(request);
+//        call.enqueue(callback);
+//    }
 
     public void getNewVersionFile(final Callback<ResponseBody> callback) {
         mRetrofit = getRetrofit("http://www.ovh.net", PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ResponseBody> call = mRetrofit.create(OpAppServiceRequests.class).getNewVersionFile();
+        call.enqueue(callback);
+    }
+
+
+    public void GetApplicationVersion(final Callback<AppVersionResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<AppVersionResponse> call = mRetrofit.create(OpAppServiceRequests.class).GetApplicationVersion();
         call.enqueue(callback);
     }
 

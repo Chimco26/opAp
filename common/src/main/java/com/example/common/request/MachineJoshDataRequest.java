@@ -1,4 +1,4 @@
-package com.operatorsapp.server.requests;
+package com.example.common.request;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,7 +1,8 @@
 package com.operators.jobsnetworkbridge.server;
 
+import com.example.common.callback.ErrorObjectInterface;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import okhttp3.internal.http2.ErrorCode;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

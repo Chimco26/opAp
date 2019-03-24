@@ -1,10 +1,11 @@
 package com.operators.activejobslistformachinenetworkbridge.server;
 
+import com.example.common.callback.ErrorObjectInterface;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import okhttp3.internal.http2.ErrorCode;
 
 public class ErrorObject implements ErrorObjectInterface {
-    private ErrorCode mError;
+    private ErrorObjectInterface.ErrorCode mError;
     private String mDetailedDescription;
 
     public ErrorObject(ErrorCode errorCode, String detailedDescription) {

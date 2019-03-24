@@ -32,4 +32,5 @@ dependencies {
     implementation project(':ErrorObjectInterface')
     implementation project((':oppapplog'))
     implementation project((':common'))
+    implementation project(path: ':MachinesStatusNetworkBridge')
 }

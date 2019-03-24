@@ -1,4 +1,4 @@
-package com.operatorsapp.server.responses.GetMachineJoshData;
+package com.example.common.machineJoshDataResponse;
 
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
@@ -6,27 +6,43 @@ import com.google.gson.annotations.SerializedName;
 public class DepMachineItem{
 
 	@SerializedName("EName")
-	private Object eName;
+	private String eName;
 
 	@SerializedName("DepartmentMachines")
 	private List<DepartmentMachinesItem> departmentMachines;
 
 	@SerializedName("LName")
-	private Object lName;
+	private String lName;
 
 	@SerializedName("Id")
 	private int id;
 
-	public Object getEName(){
+	public void setEName(String eName){
+		this.eName = eName;
+	}
+
+	public String getEName(){
 		return eName;
+	}
+
+	public void setDepartmentMachines(List<DepartmentMachinesItem> departmentMachines){
+		this.departmentMachines = departmentMachines;
 	}
 
 	public List<DepartmentMachinesItem> getDepartmentMachines(){
 		return departmentMachines;
 	}
 
+	public void setLName(String lName){
+		this.lName = lName;
+	}
+
 	public Object getLName(){
 		return lName;
+	}
+
+	public void setId(int id){
+		this.id = id;
 	}
 
 	public int getId(){

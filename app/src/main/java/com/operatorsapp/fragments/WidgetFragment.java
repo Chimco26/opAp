@@ -20,7 +20,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
@@ -302,7 +302,7 @@ public class WidgetFragment extends Fragment implements
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null && response.body().getmRejectsList().size() > 0) {
+                if (response != null && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                 }
             }

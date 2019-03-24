@@ -29,4 +29,5 @@ dependencies {
     implementation project(':Infra')
     implementation project(':ErrorObjectInterface')
     implementation project((':oppapplog'))
+    compile project(path: ':common')
 }

@@ -3,8 +3,8 @@ package com.operators.loginnetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;

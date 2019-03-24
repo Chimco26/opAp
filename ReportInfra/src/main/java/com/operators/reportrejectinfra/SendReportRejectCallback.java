@@ -1,6 +1,6 @@
 package com.operators.reportrejectinfra;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 
 /**
  * Created by Sergey on 08/08/2016.

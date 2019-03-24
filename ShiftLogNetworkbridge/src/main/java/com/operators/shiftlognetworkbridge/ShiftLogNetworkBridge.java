@@ -1,6 +1,9 @@
 package com.operators.shiftlognetworkbridge;
 
 import com.example.common.Event;
+import com.example.common.callback.GetMachineJoshDataCallback;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.request.MachineJoshDataRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.shiftloginfra.ActualBarExtraDetailsCallback;
 import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
@@ -150,6 +153,51 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "General Error");
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsFailed(errorObject);
 
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void GetMachineJoshData(String siteUrl, String sessionId, String startTime, String endTime, String machineId, final GetMachineJoshDataCallback<MachineJoshDataResponse> callback, final int totalRetries, int specificRequestTimeout, MachineJoshDataRequest machineJoshDataRequest) {
+        Call<MachineJoshDataResponse> call = mShiftLogNetworkManagerInterface.getMachineJoshDataServiceRequest(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineJoshData(machineJoshDataRequest);
+
+        call.enqueue(new Callback<MachineJoshDataResponse>() {
+            @Override
+            public void onResponse(Call<MachineJoshDataResponse> call, Response<MachineJoshDataResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isFunctionSucceed()){
+                    if (callback != null){
+                        callback.onGetMachineJoshDataSuccess(response.body());
+                    }else {
+                        OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData(), onResponse() callback is null");
+                    }
+                }else {
+                    String msg = "getMachineJoshData Failed";
+                    if (response.body() != null && response.body().getError() != null){
+                        msg = response.body().getError().toString();
+                    }
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, msg);
+                    callback.onGetMachineJoshDataFailed(errorObject);
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MachineJoshDataResponse> call, Throwable t) {
+                if (callback != null) {
+                    if (retryCount < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getMachineJoshData Error");
+                        callback.onGetMachineJoshDataFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData(), onFailure() callback is null");
 
                 }
             }

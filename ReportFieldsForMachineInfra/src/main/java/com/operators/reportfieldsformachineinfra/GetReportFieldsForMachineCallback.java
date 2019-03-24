@@ -1,6 +1,6 @@
 package com.operators.reportfieldsformachineinfra;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 
 /**
  * Created by Sergey on 02/08/2016.

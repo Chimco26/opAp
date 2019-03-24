@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.BaseSplits;

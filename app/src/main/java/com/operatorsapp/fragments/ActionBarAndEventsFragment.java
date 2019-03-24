@@ -1,10 +1,8 @@
 package com.operatorsapp.fragments;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,17 +11,14 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -60,7 +55,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
@@ -75,7 +69,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
@@ -138,14 +132,6 @@ import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import org.litepal.crud.DataSupport;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -159,8 +145,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-
-import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -177,19 +161,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OnStopClickListener, CroutonRootProvider,
         SelectStopReasonBroadcast.SelectStopReasonListener,
         View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener,
-        EmeraldSpinner.OnSpinnerEventsListener,
-        EasyPermissions.PermissionCallbacks {
+        EmeraldSpinner.OnSpinnerEventsListener{
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
     public static final int TYPE_ALERT = 20;
     public static final double MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB = 1.8f;
-    private static final long TECHNICIAN_CALL_WAITING_RESPONSE = 1000 * 60 * 5;
-    private static final long TECHNICIAN_CALL_CLEAN_ALL = 1000 * 60 * 20;
-    private static final long ONE_HOUR = 1000 * 60 * 60;
-    private static final long HALF_HOUR = 1000 * 60 * 30;
     private static final int PRODUCTION_ID = 1;
-    private static final String SQL_NO_T_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
 
     private View mToolBarView;
@@ -278,7 +256,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public static final int PIXEL_FOR_MINUTE = 10;
     private RecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
-    private File outputFile;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
     private boolean mIsTimeLine;
@@ -1369,7 +1346,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
         String sourceUserId = PersistenceManager.getInstance().getOperatorId();
         if (sourceUserId == null || sourceUserId.equals("")) {
-            sourceUserId = "0";
+//            sourceUserId = "0";
+            sourceUserId = pm.getUserId() + "";
         }
 
 
@@ -1446,167 +1424,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
-    private void getFile() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-
-            //check if app has permission to write to the external storage.
-            if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //Get the URL entered
-                String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
-                new DownloadFile().execute(url);
-
-            } else {
-                //If permission is not present request for the same.
-                EasyPermissions.requestPermissions(getActivity(), "aaaaaa", REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-
-
-        } else {
-            Toast.makeText(getActivity(), "SD Card not found", Toast.LENGTH_LONG).show();
-
-        }
-    }
-
-
-    private static final int REQUEST_WRITE_PERMISSION = 786;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-
-    }
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-        //Download the file once permission is granted
-        String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
-        new DownloadFile().execute(url);
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Toast.makeText(getActivity(), "Permission has been denied", Toast.LENGTH_LONG).show();
-
-    }
-
-    private class DownloadFile extends AsyncTask<String, String, String> {
-
-        private ProgressDialog progressDialog;
-        private String fileName;
-        private String folder;
-        private boolean isDownloaded;
-        private File directory;
-
-        /**
-         * Before starting background thread
-         * Show Progress Bar Dialog
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            this.progressDialog = new ProgressDialog(getActivity());
-            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
-        }
-
-        /**
-         * Downloading file in background thread
-         */
-        @Override
-        protected String doInBackground(String... f_url) {
-            int count;
-            try {
-                URL url = new URL(f_url[0]);
-                URLConnection connection = url.openConnection();
-                connection.connect();
-                // getting file length
-                int lengthOfFile = connection.getContentLength();
-
-
-                // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-
-                String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-
-                //Extract file name from URL
-                fileName = f_url[0].substring(f_url[0].lastIndexOf('/') + 1, f_url[0].length());
-
-                //Append timestamp to file name
-                fileName = "bbbbbb.apk";
-
-                //External directory path to save file
-                folder = Environment.getExternalStorageDirectory() + File.separator + "androiddeft/";
-
-                //Create androiddeft folder if it does not exist
-                directory = new File(folder);
-
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                outputFile = new File(directory, fileName);
-                // Output stream to write file
-                OutputStream output = new FileOutputStream(outputFile);
-
-                byte data[] = new byte[1024];
-
-                long total = 0;
-
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
-
-                    // writing data to file
-                    output.write(data, 0, count);
-                }
-
-                // flushing output
-                output.flush();
-
-                // closing streams
-                output.close();
-                input.close();
-                return "Downloaded at: " + folder + fileName;
-
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
-            }
-
-            return "Something went wrong";
-        }
-
-        /**
-         * Updating progress bar
-         */
-        protected void onProgressUpdate(String... progress) {
-            // setting progress percentage
-            progressDialog.setProgress(Integer.parseInt(progress[0]));
-        }
-
-
-        @Override
-        protected void onPostExecute(String message) {
-            // dismiss the dialog after the file was downloaded
-            this.progressDialog.dismiss();
-
-            // Display File path after downloading
-            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-            Uri apkUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", outputFile);
-
-            Intent install = new Intent(Intent.ACTION_VIEW);
-            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            install.normalizeMimeType("application/vnd.android.package-archive");
-            startActivity(install);
-        }
-    }
-
     public void openActivateJobScreen() {
         OppAppLogger.getInstance().d(LOG_TAG, "New Job");
         if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
@@ -1668,7 +1485,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mTechOpenCallsIv.setText(techList.size() + "");
         } else {
             mTechOpenCallsIv.setVisibility(View.INVISIBLE);
-            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technicaian));
+            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_white));
             PersistenceManager.getInstance().setRecentTechCallId(0);
         }
 

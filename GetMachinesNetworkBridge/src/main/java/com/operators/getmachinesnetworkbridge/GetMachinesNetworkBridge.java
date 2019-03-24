@@ -2,7 +2,6 @@ package com.operators.getmachinesnetworkbridge;
 
 
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.interfaces.GetMachineNetworkManagerInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.getmachinesnetworkbridge.server.requests.GetMachinesRequest;
@@ -11,7 +10,6 @@ import com.operators.getmachinesnetworkbridge.server.responses.MachinesResponse;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.Machine;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
