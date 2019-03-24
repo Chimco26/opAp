@@ -482,7 +482,7 @@
 
                                     </LinearLayout>
                                     <!--todo kuti-->
-                                    <android.support.v7.widget.RecyclerView
+                                    <com.operatorsapp.view.PinchRecyclerView
                                         android:id="@+id/FAAE_events_recycler"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
