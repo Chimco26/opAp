@@ -50,6 +50,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
     //    private EventsFilter mFilter;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
+    private float mFactor = 1;
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
         mContext = context;
@@ -104,6 +105,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mEventsFiltered.size();
+    }
+
+    public void setFactor(float factor) {
+        if (mFactor - 0.05 > factor || mFactor + 0.05 < factor) {
+            mFactor = factor;
+            notifyDataSetChanged();
+        }
     }
 
 //    @Override
@@ -174,7 +182,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
             if (mIsSelectionMode && event.isChecked()) {
-
                 holder.mCheckBox.setChecked(true);
             } else {
                 holder.mCheckBox.setChecked(false);
@@ -428,7 +435,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 }
             });
 
-
         }
 
     }
@@ -479,16 +485,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
     }
 
-
-//    private int filterHeight(int height, Event event) {
-//        if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
-//                || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
-//            return 0;
-//        } else {
-//            return height;
-//        }
-//    }
-
     private String getNotificationTime(String time, int margin, int eventViewHeight) {
         if (margin > 10 && margin < eventViewHeight - 10) {
             return time;
@@ -499,11 +495,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     private int getViewHeight(Event event) {
         if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
-            return 300;
+            return (int)(300* mFactor);
         } else if (event.getDuration() > 4) {
-            return (int) event.getDuration() * PIXEL_FOR_MINUTE;
+            return (int) (event.getDuration() * PIXEL_FOR_MINUTE * mFactor);
         } else {
-            return 5 * PIXEL_FOR_MINUTE;
+            return (int) (5 * PIXEL_FOR_MINUTE * mFactor);
         }
     }
 
