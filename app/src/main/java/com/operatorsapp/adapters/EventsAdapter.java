@@ -116,6 +116,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private final View mView;
         private final View mCircle;
         private final ImageView mCheckIc;
+        private View mCircleSelector;
         private TextView mText;
         private TextView mTime;
         private View mLine;
@@ -132,6 +133,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTime = itemView.findViewById(R.id.EI_time);
             mLine = itemView.findViewById(R.id.EI_line);
             mCircle = itemView.findViewById(R.id.EI_circle);
+            mCircleSelector = itemView.findViewById(R.id.EI_circle_selector);
             mCheckIc = itemView.findViewById(R.id.EI_check_ic);
             mCheckContainer = itemView.findViewById(R.id.EI_check_container);
             mCheckBox = itemView.findViewById(R.id.EI_text_check);
@@ -153,13 +155,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     if (mOnStopClickListener != null && event.getType() < 1) {
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
                     }
-                    GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                    GradientDrawable selectorBackground = (GradientDrawable) mCircleSelector.getBackground();
                     if (isChecked) {
-                        textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
+                        selectorBackground.setColor(Color.parseColor(event.getColor()));
                     } else {
-                        textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
+                        selectorBackground.setColor(mCircleSelector.getContext().getResources().getColor(R.color.white));
                     }
-                    textBackground.setColor(Color.parseColor(event.getColor()));
 
                 }
             });
@@ -211,7 +212,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 duration = 1;
             }
 
-            String text = duration + "m " + (OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
+            String text = String.format("%dm %s", duration, OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
 
             if (!mIsOpenState && text.length() > 12) {
                 mText.setText(String.format("%s...", text.substring(0, 12)));
@@ -220,12 +221,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-            if (event.isChecked() && mIsSelectionMode) {
-                textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
-            } else {
-                textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
-            }
             textBackground.setColor(Color.parseColor(event.getColor()));
+
+            GradientDrawable selectorBackground = (GradientDrawable) mCircleSelector.getBackground();
+            if (event.isChecked() && mIsSelectionMode) {
+                selectorBackground.setColor(Color.parseColor(event.getColor()));
+            } else {
+                selectorBackground.setColor(mCircleSelector.getContext().getResources().getColor(R.color.white));
+            }
 
             if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
                 mCheckIc.setVisibility(View.VISIBLE);
