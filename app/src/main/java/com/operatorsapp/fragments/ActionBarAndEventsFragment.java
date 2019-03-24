@@ -127,6 +127,7 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.view.PinchRecyclerView;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
@@ -254,7 +255,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TimeLineView mTimeView;
     private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
-    private RecyclerView mEventsRecycler;
+    private PinchRecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
@@ -2902,9 +2903,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initEventRecycler(View view) {
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
         mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
+
+        mEventsRecycler.addListener(new PinchRecyclerView.PinchRecyclerViewListener() {
+            @Override
+            public void onScale(float factor) {
+                if (mEventsAdapter != null) {
+                    mEventsAdapter.setFactor(factor);
+                }
+            }
+        });
     }
 
     private void initEvents(ArrayList<Event> events) {

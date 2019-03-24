@@ -49,7 +49,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
         mActiveJobs = activeJobsListForMachine.getActiveJobs();
-        filter0Units();
+//        filter0Units();
 
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -96,6 +96,8 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
         if (mActiveJobs != null &&
                 mActiveJobs.size() > 0) {
+            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.VISIBLE);
             mReportRv = view.findViewById(R.id.FAFI_report_rv);
             mReportRv.setOffscreenPageLimit(mActiveJobs.size());
             ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobs, isRejects, this);
@@ -138,6 +140,9 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                 view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
                 view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
             }
+        }else {
+            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
+            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
         }
     }
 
