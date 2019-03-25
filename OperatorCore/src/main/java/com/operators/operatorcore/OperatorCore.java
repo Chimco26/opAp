@@ -1,16 +1,13 @@
 package com.operators.operatorcore;
 
-import android.util.Log;
-
 import com.app.operatorinfra.GetOperatorByIdCallback;
 import com.app.operatorinfra.OperatorNetworkBridgeInterface;
 import com.app.operatorinfra.Operator;
 import com.app.operatorinfra.OperatorPersistenceManagerInterface;
 import com.app.operatorinfra.SetOperatorForMachineCallback;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
-import com.zemingo.logrecorder.ZLogger;
 
 public class OperatorCore {
     private static final String LOG_TAG = OperatorCore.class.getSimpleName();

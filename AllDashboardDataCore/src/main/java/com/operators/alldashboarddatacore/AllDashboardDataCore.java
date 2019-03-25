@@ -3,6 +3,10 @@ package com.operators.alldashboarddatacore;
 import android.util.Log;
 
 import com.example.common.Event;
+import com.example.common.callback.GetMachineJoshDataCallback;
+import com.example.common.callback.MachineJoshDataCallback;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.request.MachineJoshDataRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
 import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
@@ -12,7 +16,7 @@ import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
 import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
 import com.operators.alldashboarddatacore.polling.EmeraldJobBase;
 import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
@@ -63,6 +67,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private boolean mGetShiftLogFinish;
 
     private TimeToEndCounter mTimeToEndCounter;
+    private MachineJoshDataCallback mMachineJoshDataCallback;
 
 
     public AllDashboardDataCore(AllDashboardDataCoreListener listener, GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge,
@@ -86,11 +91,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     }
 
     public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback,
-                                 ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback) {
+                                 ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback, MachineJoshDataCallback machineJoshDataCallback) {
         mMachineStatusUICallback = machineStatusUICallback;
         mMachineDataUICallback = machineDataUICallback;
         mShiftLogUICallback = shiftLogUICallback;
         mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
+        mMachineJoshDataCallback = machineJoshDataCallback;
     }
 
     public void unregisterListener() {
@@ -105,6 +111,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         }
         if (mActualBarExtraUICallback != null) {
             mActualBarExtraUICallback = null;
+        }
+        if (mMachineJoshDataCallback != null) {
+            mMachineJoshDataCallback = null;
         }
     }
 
@@ -145,6 +154,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
+        getMachineJoshData();
         getActualBarExtraDetails();
         getShiftLogs(onJobFinishedListener);
     }
@@ -330,23 +340,59 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         String endTime = getTimeForRequest(new Date(), dateFormat);
         mShiftLogNetworkBridgeInterface.GetActualBarExtraDetails(mShiftLogPersistenceManagerInterface.getSiteUrl(),
                 mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
-            @Override
-            public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
-                if (mActualBarExtraUICallback != null) {
-                    mActualBarExtraUICallback.onActualBarExtraDetailsSucceeded(actualBarExtraResponse);
-                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsSucceeded");
-                }
-            }
+                    @Override
+                    public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
+                        if (mActualBarExtraUICallback != null) {
+                            mActualBarExtraUICallback.onActualBarExtraDetailsSucceeded(actualBarExtraResponse);
+                            OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsSucceeded");
+                        }
+                    }
 
-            @Override
-            public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
-                if (mActualBarExtraUICallback != null) {
-                    mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
-                    OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
-                }
-            }
+                    @Override
+                    public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
+                        if (mActualBarExtraUICallback != null) {
+                            mActualBarExtraUICallback.onActualBarExtraDetailsFailed(reason);
+                            OppAppLogger.getInstance().w(LOG_TAG, "getActualBarExtraDetails() onActualBarExtraDetailsFailed" + reason.getDetailedDescription());
+                        }
+                    }
 
-        }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+                }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout());
+
+    }
+
+    public void getMachineJoshData() {
+        String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
+        try {
+            Date date = dateFormat.parse(startingFrom);
+            startingFrom = getTimeForRequest(date, dateFormat);
+//            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
+        } catch (java.text.ParseException e) {
+            if (e.getMessage() != null) {
+                Log.e(LOG_TAG, e.getMessage());
+            }
+        }
+        String endTime = getTimeForRequest(new Date(), dateFormat);
+        mShiftLogNetworkBridgeInterface.GetMachineJoshData(mShiftLogPersistenceManagerInterface.getSiteUrl(),
+                mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new GetMachineJoshDataCallback<MachineJoshDataResponse>() {
+                    @Override
+                    public void onGetMachineJoshDataSuccess(MachineJoshDataResponse machineJoshDataResponse) {
+                        if (mMachineJoshDataCallback != null) {
+                            mMachineJoshDataCallback.onMachineJoshDataCallbackSucceeded(machineJoshDataResponse);
+                            OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData() onGetMachineJoshDataSuccess");
+                        }
+                    }
+
+                    @Override
+                    public void onGetMachineJoshDataFailed(ErrorObjectInterface reason) {
+                        if (mMachineJoshDataCallback != null) {
+                            mMachineJoshDataCallback.onMachineJoshDataCallbackFailed(reason);
+                            OppAppLogger.getInstance().w(LOG_TAG, "getMachineJoshData() onGetMachineJoshDataFailed" + reason.getDetailedDescription());
+                        }
+                    }
+
+                }, mShiftLogPersistenceManagerInterface.getTotalRetries(), mShiftLogPersistenceManagerInterface.getRequestTimeout()
+                , new MachineJoshDataRequest(mShiftLogPersistenceManagerInterface.getMachineId(),startingFrom,mShiftLogPersistenceManagerInterface.getSessionId()));
 
     }
 

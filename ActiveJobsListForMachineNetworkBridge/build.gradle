@@ -29,4 +29,5 @@ dependencies {
     implementation project(':ErrorObjectInterface')
     implementation project(':ActiveJobsListForMachineInfra')
     implementation project((':oppapplog'))
+    implementation project(path: ':common')
 }

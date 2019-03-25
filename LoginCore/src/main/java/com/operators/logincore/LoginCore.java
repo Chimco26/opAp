@@ -2,14 +2,13 @@ package com.operators.logincore;
 
 import android.util.Base64;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.GetMachinesCallback;
 import com.operators.infra.GetMachinesNetworkBridgeInterface;
 import com.operators.infra.LoginCoreCallback;
 import com.operators.infra.LoginNetworkBridgeInterface;
 import com.operators.infra.Machine;
-import com.operators.infra.PersistenceManagerInterface;
 import com.operators.logincore.interfaces.LoginUICallback;
 import com.operators.logincore.interfaces.LoginPersistenceManagerInterface;
 

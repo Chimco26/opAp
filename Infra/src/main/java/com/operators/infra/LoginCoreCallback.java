@@ -1,7 +1,6 @@
 package com.operators.infra;
 
-
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 
 public interface LoginCoreCallback {
 

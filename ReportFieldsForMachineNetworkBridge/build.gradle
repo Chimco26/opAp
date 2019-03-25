@@ -29,4 +29,5 @@ dependencies {
     implementation project(':ErrorObjectInterface')
     implementation(name: 'logrecorder', ext: 'aar')
     implementation project((':oppapplog'))
+    compile project(path: ':common')
 }

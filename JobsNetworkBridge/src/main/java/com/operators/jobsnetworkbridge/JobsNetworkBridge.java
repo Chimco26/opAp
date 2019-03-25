@@ -1,9 +1,6 @@
 package com.operators.jobsnetworkbridge;
 
-import android.util.Log;
-
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobListForMachine;
@@ -16,7 +13,6 @@ import com.operators.jobsnetworkbridge.server.requests.StartJobForMachineRequest
 import com.operators.jobsnetworkbridge.server.responses.ErrorResponse;
 import com.operators.jobsnetworkbridge.server.responses.JobsListForMachineResponse;
 import com.operators.jobsnetworkbridge.server.responses.StartJobForMachineResponse;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 
