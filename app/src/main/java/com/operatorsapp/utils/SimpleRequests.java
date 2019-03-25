@@ -3,6 +3,8 @@ package com.operatorsapp.utils;
 import android.support.annotation.NonNull;
 
 import com.example.common.MultipleRejectRequestModel;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.request.MachineJoshDataRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
@@ -39,6 +41,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
+import com.example.common.callback.GetMachineJoshDataCallback;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 

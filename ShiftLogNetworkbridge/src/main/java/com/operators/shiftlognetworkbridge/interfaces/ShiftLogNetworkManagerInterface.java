@@ -1,5 +1,7 @@
 package com.operators.shiftlognetworkbridge.interfaces;
 
+import com.operators.getmachinesstatusnetworkbridge.interfaces.EmeraldGetMachineJoshDataRequest;
+
 import java.util.concurrent.TimeUnit;
 
 public interface ShiftLogNetworkManagerInterface {
@@ -12,4 +14,7 @@ public interface ShiftLogNetworkManagerInterface {
     EmeraldShiftForMachineServiceRequests getShiftForMachineServiceRequests(String siteUrl, int timeout, TimeUnit timeUnit);
 
     EmeraldActualBarExtraDetailsServiceRequest getActualBarExtraDetails(String siteUrl, int timeout, TimeUnit timeUnit);
+
+    EmeraldGetMachineJoshDataRequest getMachineJoshDataServiceRequest(String siteUrl, int timeout, TimeUnit timeUnit);
+
 }

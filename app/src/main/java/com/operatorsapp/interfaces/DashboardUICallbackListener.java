@@ -2,8 +2,9 @@ package com.operatorsapp.interfaces;
 
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 
@@ -20,7 +21,7 @@ public interface DashboardUICallbackListener {
 
     void onMachineDataReceived(ArrayList<Widget> widgetList);
 
-    void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse);
+    void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse mMachineJoshDataResponse);
 
     void onTimerChanged(String timeToEndInHours);
 

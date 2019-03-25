@@ -30,4 +30,5 @@ dependencies {
     implementation(name: 'logrecorder', ext: 'aar')
     implementation project(':ReportNetworkBridge')
     implementation project(':oppapplog')
+    implementation project(path: ':common')
 }

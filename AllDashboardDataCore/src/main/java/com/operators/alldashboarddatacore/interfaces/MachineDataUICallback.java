@@ -1,7 +1,7 @@
 package com.operators.alldashboarddatacore.interfaces;
 
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 
 import java.util.ArrayList;

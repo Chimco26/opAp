@@ -1,15 +1,15 @@
 package com.operators.reportfieldsformachinecore;
 
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.reportfieldsformachinecore.interfaces.ReportFieldsForMachineUICallback;
 import com.operators.reportfieldsformachinecore.polling.EmeraldJobBase;
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachinePersistenceManagerInterface;
-import com.zemingo.logrecorder.ZLogger;
+
 import ravtech.co.il.publicutils.JobBase;
 import java.util.concurrent.TimeUnit;
 

@@ -2,6 +2,7 @@ package com.operators.activejobslistformachinenetworkbridge;
 
 import android.support.annotation.NonNull;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;
@@ -11,9 +12,6 @@ import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.activejobslistformachinenetworkbridge.server.requests.GetActiveJobsListForMachineRequest;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ActiveJobsListForMachineResponse;
 import com.operators.activejobslistformachinenetworkbridge.server.responses.ErrorResponse;
-import com.operators.errorobject.ErrorObjectInterface;
-import com.zemingo.logrecorder.ZLogger;
-
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;

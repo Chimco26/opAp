@@ -1,4 +1,4 @@
-package com.operators.errorobject;
+package com.example.common.callback;
 
 public interface ErrorObjectInterface {
 

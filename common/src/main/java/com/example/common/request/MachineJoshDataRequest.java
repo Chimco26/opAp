@@ -1,17 +1,17 @@
-package com.operatorsapp.server.requests;
+package com.example.common.request;
 
 import com.google.gson.annotations.SerializedName;
 
 public class MachineJoshDataRequest {
 
-    @SerializedName("MachineID")
-    private int machineID;
+    @SerializedName("SessionID")
+    private String sessionID;
 
     @SerializedName("StartTime")
     private String startTime;
 
-    @SerializedName("SessionID")
-    private String sessionID;
+    @SerializedName("MachineID")
+    private int machineID;
 
     public MachineJoshDataRequest(int machineID, String startTime, String sessionID) {
         this.machineID = machineID;

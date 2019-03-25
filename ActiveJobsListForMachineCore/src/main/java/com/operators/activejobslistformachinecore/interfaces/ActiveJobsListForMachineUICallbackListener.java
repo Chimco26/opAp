@@ -1,7 +1,7 @@
 package com.operators.activejobslistformachinecore.interfaces;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.errorobject.ErrorObjectInterface;
 
 /**
  * Created by Sergey on 14/08/2016.

@@ -36,6 +36,8 @@ import com.example.common.Event;
 import com.example.common.MultipleRejectRequestModel;
 import com.example.common.RejectForMultipleRequest;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.callback.MachineJoshDataCallback;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -61,7 +63,7 @@ import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
 import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
 import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
 import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
@@ -261,6 +263,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Handler mVersionCheckHandler;
     private Runnable mCheckAppVersionRunnable;
     private File outputFile;
+    private MachineJoshDataResponse mMachineJoshDataResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -644,7 +647,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void dashboardDataStartPolling() {
 
-        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback(), getActualBarUICallback());
+        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback());
 
         mAllDashboardDataCore.stopPolling();
 
@@ -659,15 +662,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
                 Log.d(TAG, "onActualBarExtraDetailsSucceeded: ");
-//                if (mActualBarExtraResponse == null){mActualBarExtraResponse = new ActualBarExtraResponse();}
-//                mActualBarExtraResponse.getInventory().addAll(actualBarExtraResponse.getInventory());
-//                mActualBarExtraResponse.getNotification().addAll(actualBarExtraResponse.getNotification());
-//                mActualBarExtraResponse.getRejects().addAll(actualBarExtraResponse.getRejects());
                 mActualBarExtraResponse = actualBarExtraResponse;
             }
 
             @Override
             public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
+
+            }
+        };
+    }
+
+    private MachineJoshDataCallback getMachineJoshDataCallback() {
+        return new MachineJoshDataCallback() {
+            @Override
+            public void onMachineJoshDataCallbackSucceeded(MachineJoshDataResponse machineJoshDataResponse) {
+                mMachineJoshDataResponse = machineJoshDataResponse;
+            }
+
+            @Override
+            public void onMachineJoshDataCallbackFailed(ErrorObjectInterface reason) {
 
             }
         };
@@ -1013,7 +1026,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                    events = updateList(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse);
+                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse, mMachineJoshDataResponse);
                     }
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
@@ -2035,10 +2048,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-        if (mCustomKeyBoardIsOpen && mWidgetFragment != null){
+        if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
-        }else if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
+        } else if (mReportStopReasonFragment != null || mSelectStopReasonFragment != null) {
 
             if (mReportStopReasonFragment != null && mSelectStopReasonFragment == null) {
 
@@ -2498,14 +2511,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
                     }
                 });
             } else {
 
-                com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, reason.getDetailedDescription());
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject.getDetailedDescription(), CroutonCreator.CroutonType.CREDENTIALS_ERROR);
 
             }
@@ -2524,7 +2537,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (response.isFunctionSucceed()) {
                 if (mRejectForMultipleRequests != null && mRejectForMultipleRequests.size() > 0) {
                     sendMultipleRejectReport(mRejectForMultipleRequests);
-                }else {
+                } else {
                     ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
                     mRejectForMultipleRequests = null;
                 }
@@ -2553,14 +2566,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     @Override
                     public void onSilentLoginFailed(ErrorObjectInterface reason) {
                         OppAppLogger.getInstance().w(TAG, "Failed silent login");
-                        com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                        ErrorObject errorObject = new ErrorObject(ErrorObjectInterface.ErrorCode.Missing_reports, "missing reports");
                         ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
                         ProgressDialogManager.dismiss();
                     }
                 });
             } else {
 
-                com.operators.getmachinesnetworkbridge.server.ErrorObject errorObject = new com.operators.getmachinesnetworkbridge.server.ErrorObject(com.operators.getmachinesnetworkbridge.server.ErrorObject.ErrorCode.Missing_reports, "missing reports");
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, "missing reports");
                 ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
             }
             SendBroadcast.refreshPolling(DashboardActivity.this);
@@ -2637,7 +2650,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void setupVersionCheck() {
-        if (mVersionCheckHandler != null){
+        if (mVersionCheckHandler != null) {
             mVersionCheckHandler.removeCallbacksAndMessages(null);
         }
         mVersionCheckHandler = new Handler();
@@ -2648,10 +2661,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 NetworkManager.getInstance().GetApplicationVersion(new Callback<AppVersionResponse>() {
                     @Override
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getmError() == null){
+                        if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
-                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE){
+                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
                                     getFile(item.getmUrl());
                                 }
                             }
