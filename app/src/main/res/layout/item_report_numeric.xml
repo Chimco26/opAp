@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="320dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider_gray" />
 
     <TextView
         android:id="@+id/IRN_title"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_margin="30dp"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/IRN_setup_end_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/black"
+        android:layout_margin="30dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:visibility="visible"
+        android:text="@string/setup_rejects_dialog_text" />
+
 
     <LinearLayout
         android:id="@+id/IRN_content_layout"
