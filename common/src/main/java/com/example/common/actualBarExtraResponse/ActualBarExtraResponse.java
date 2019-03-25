@@ -4,10 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.common.Event;
+import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActualBarExtraResponse implements Parcelable {
 
@@ -28,6 +30,7 @@ public class ActualBarExtraResponse implements Parcelable {
     @Expose
     private ArrayList<WorkingEvent> workingEvents = null;
     private ArrayList<Event> alarmsEvents = null;
+    private List<JobDataItem> depMachineItems = null;
 
     public ArrayList<WorkingEvent> getWorkingEvents() {
         if (workingEvents == null){
@@ -122,4 +125,12 @@ public class ActualBarExtraResponse implements Parcelable {
             return new ActualBarExtraResponse[size];
         }
     };
+
+    public void setJobData(List<JobDataItem> depMachineItems) {
+        this.depMachineItems = depMachineItems;
+    }
+
+    public List<JobDataItem> getJobData() {
+        return depMachineItems;
+    }
 }
