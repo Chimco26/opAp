@@ -389,6 +389,7 @@
     <string name="rejects_quantity">Rejects quantity</string>
     <string name="there_are_no_stop_event">There are no stop evens to report</string>
     <string name="theoretical_units">Theoretical units</string>
+    <string name="average">Average:</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
