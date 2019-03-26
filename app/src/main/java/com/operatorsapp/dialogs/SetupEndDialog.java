@@ -48,7 +48,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
         mActiveJobs = activeJobsListForMachine.getActiveJobs();
-//        filter0Units();
+        filter0Units();
 
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 

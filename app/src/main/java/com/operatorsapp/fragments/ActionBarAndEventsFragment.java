@@ -2427,8 +2427,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         addDetailsToEvents(event, actualBarExtraResponse);
                     }
                     if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
-                            || convertDateToMillisecond(event.getEventTime()) > convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
+                            || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
                         mOpenEvent.setType(1);
+                        mOpenEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
                         addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
                         mOpenEvent.save();
                     }
