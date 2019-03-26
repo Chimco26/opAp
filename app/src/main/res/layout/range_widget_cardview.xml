@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:autofit="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/widget_parent_layout"
-                android:layout_width="@dimen/widget_width"
-                android:layout_height="@dimen/widget_height"
-                android:layout_centerInParent="true"
-                android:background="@drawable/combined_shape"
-                android:orientation="vertical">
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_parent_layout"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
+    android:layout_centerInParent="true"
+    android:background="@drawable/combined_shape"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,28 +24,28 @@
                 android:id="@+id/range_widget_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Cycle weight"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                autofit:minTextSize="12sp"/>
+                autofit:minTextSize="12sp" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/range_widget_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="2dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Standard 19"
                 android:textSize="14sp"
-                autofit:minTextSize="8sp"/>
+                autofit:minTextSize="8sp" />
         </LinearLayout>
 
         <TextView
@@ -58,41 +59,82 @@
             android:maxLines="1"
             android:text="17"
             android:textColor="@color/C16"
-            android:textSize="40sp"/>
+            android:textSize="40sp" />
     </LinearLayout>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="60dp"
-        android:background="@color/divider_gray"/>
+        android:layout_marginEnd="15dp"
+        android:background="@color/divider_gray" />
+
+    <com.operatorsapp.view.RangeView2
+        android:id="@+id/RWC_cycleTime"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_below="@id/divider"
+
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/RWC_cycleTime_ly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RWC_cycleTime"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_clear_black_18" />
+
+        <TextView
+            android:id="@+id/RWC_standard_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Standard: 10.2" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_drop_up_black_36" />
+
+        <TextView
+            android:id="@+id/RWC_average_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Average: 10.0" />
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/range_widget_capsule_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/divider"
         android:gravity="center_vertical"
-        android:layout_below="@id/divider">
+        android:visibility="gone">
 
         <View
             android:id="@+id/range_widget_scala_size"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="25dp" />
 
         <View
             android:id="@+id/range_widget_oval"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            android:layout_marginEnd="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="18dp"
-            android:background="@drawable/capsule_oval"/>
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/capsule_oval" />
 
         <View
             android:layout_width="2dp"
@@ -100,23 +142,23 @@
             android:layout_alignStart="@id/range_widget_oval"
             android:layout_marginStart="23dp"
             android:layout_marginTop="18dp"
-            android:background="@color/divider_gray"/>
+            android:background="@color/divider_gray" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="53dp"
             android:layout_alignEnd="@id/range_widget_oval"
-            android:layout_marginEnd="23dp"
             android:layout_marginTop="18dp"
-            android:background="@color/divider_gray"/>
+            android:layout_marginEnd="23dp"
+            android:background="@color/divider_gray" />
 
         <com.operatorsapp.view.RangeView
             android:id="@+id/range_widget_range_view_blue"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginEnd="38dp"
             android:layout_marginStart="35dp"
-            android:layout_marginTop="18dp"/>
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="38dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="1"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- <LinearLayout
@@ -151,33 +193,33 @@
             android:id="@+id/range_widget_range_view_red"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="18dp"/>
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="25dp" />
 
         <LinearLayout
             android:id="@+id/range_widget_red_mark_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_range_view_red"
-            android:layout_marginEnd="25dp"
             android:layout_marginStart="27dp"
-            android:layout_marginTop="3dp">
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="25dp">
 
             <ImageView
                 android:id="@+id/range_widget_red_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_exclamation_mark"/>
+                android:src="@drawable/ic_exclamation_mark" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/range_widget_red_mark_layout"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="23dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -186,7 +228,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="15"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/range_widget_standard"
@@ -195,7 +237,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="19"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/range_widget_max"
@@ -204,11 +246,10 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="22"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
         </LinearLayout>
     </RelativeLayout>
-
 
 
 </RelativeLayout>

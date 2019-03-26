@@ -136,4 +136,13 @@
         <attr name="cv_textColor" format="color"/>
     </declare-styleable>
 
+
+    <declare-styleable name="RangeView2">
+        <attr name="low_limit" />
+        <attr name="high_limit" />
+        <attr name="current_value" />
+        <attr name="avg_value" />
+        <attr name="standard_value" />
+    </declare-styleable>
+
 </resources>
