@@ -26,6 +26,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     private final View mProducedCompleteView;
     private final View mTargetRl;
     private final View mTargetReachedTv;
+    private final View mLegendGoodUnitsView;
     private View mDivider;
     private AutofitTextView mTitle;
     private AutofitTextView mSubtitle;
@@ -57,8 +58,9 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mTheoricalView = itemView.findViewById(R.id.PWCN_theorical_view);
         mProducedCompleteView = itemView.findViewById(R.id.PWCN_completion_view);
         mTargetRl = itemView.findViewById(R.id.PWCN_target_rl);
+        mLegendGoodUnitsView = itemView.findViewById(R.id.PWCN_legend_ic);
 
-        setSizes(mParentLayout);
+//        setSizes(mParentLayout);
     }
 
     public void setProjectionItem(final Widget widget) {
@@ -113,9 +115,11 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         if (isLowState(widget)) {
             mProducedTv.setTextColor(mProducedTv.getContext().getResources().getColor(R.color.C7));
             mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.C7));
+            mLegendGoodUnitsView.setBackgroundColor(mLegendGoodUnitsView.getContext().getResources().getColor(R.color.C7));
         } else {
             mProducedTv.setTextColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
             mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
+            mLegendGoodUnitsView.setBackgroundColor(mLegendGoodUnitsView.getContext().getResources().getColor(R.color.new_green));
         }
     }
 
