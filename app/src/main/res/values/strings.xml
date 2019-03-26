@@ -341,8 +341,10 @@
     <string name="report_events_reason">Report events reason</string>
     <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
     <string name="target_reached">Target  Reached!</string>
-    <string name="setup_rejects_dialog_text">On the setup you produced rejects. \nDo you want to report some of them as good units?</string>
-    <string name="setup_good_units_dialog_text">On the setup you produced good units. \nDo you want to report some of them as rejects?</string>
+    <string name="setup_rejects_dialog_text">Do you want to report some of them as rejects?</string>
+    <string name="setup_good_units_dialog_text">Do you want to report some of them as good units?</string>
+    <string name="on_the_setup_you_produced">On the setup you produced</string>
+    <string name="from_the">from the</string>
     <string name="activate_last_job">Activate last job</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Do you want to activate the last job you work on?</string>
     <string name="no">No</string>

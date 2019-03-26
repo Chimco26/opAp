@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -76,12 +75,6 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
         mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
         mKeyBoardLayout.setVisibility(View.VISIBLE);
-        TextView setupText = view.findViewById(R.id.FAFI_setup_end_text);
-        if (isRejects) {
-            setupText.setText(R.string.setup_rejects_dialog_text);
-        } else {
-            setupText.setText(R.string.setup_good_units_dialog_text);
-        }
         initRv(view);
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();

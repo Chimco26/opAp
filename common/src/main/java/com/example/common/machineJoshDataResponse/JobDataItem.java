@@ -1,8 +1,11 @@
 package com.example.common.machineJoshDataResponse;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class JobDataItem{
+public class JobDataItem implements Parcelable {
 
 	@SerializedName("EName")
 	private String eName;
@@ -91,4 +94,47 @@ public class JobDataItem{
 	public int getJobID(){
 		return jobID;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.eName);
+		dest.writeInt(this.machineID);
+		dest.writeString(this.lName);
+		dest.writeString(this.startTime);
+		dest.writeInt(this.productID);
+		dest.writeInt(this.departmentID);
+		dest.writeInt(this.joshID);
+		dest.writeInt(this.jobID);
+	}
+
+	public JobDataItem() {
+	}
+
+	protected JobDataItem(Parcel in) {
+		this.eName = in.readString();
+		this.machineID = in.readInt();
+		this.lName = in.readString();
+		this.startTime = in.readString();
+		this.productID = in.readInt();
+		this.departmentID = in.readInt();
+		this.joshID = in.readInt();
+		this.jobID = in.readInt();
+	}
+
+	public static final Parcelable.Creator<JobDataItem> CREATOR = new Parcelable.Creator<JobDataItem>() {
+		@Override
+		public JobDataItem createFromParcel(Parcel source) {
+			return new JobDataItem(source);
+		}
+
+		@Override
+		public JobDataItem[] newArray(int size) {
+			return new JobDataItem[size];
+		}
+	};
 }

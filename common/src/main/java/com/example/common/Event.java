@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
 import com.example.common.actualBarExtraResponse.Reject;
+import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -81,6 +82,8 @@ public class Event extends DataSupport implements Parcelable {
     private String alarmEvents;
 
     private boolean extra;
+
+    private String jobDataItems;
 
 
     public Event() {
@@ -373,6 +376,7 @@ public class Event extends DataSupport implements Parcelable {
         dest.writeString(this.notifications);
         dest.writeString(this.rejects);
         dest.writeString(this.inventories);
+        dest.writeString(this.jobDataItems);
         dest.writeByte(this.extra ? (byte) 1 : (byte) 0);
 
     }
@@ -405,6 +409,7 @@ public class Event extends DataSupport implements Parcelable {
         this.notifications = in.readString();
         this.rejects = in.readString();
         this.inventories = in.readString();
+        this.jobDataItems = in.readString();
         this.extra = in.readByte() != 0;
 
     }
@@ -456,6 +461,11 @@ public class Event extends DataSupport implements Parcelable {
         }.getType());
     }
 
+    public ArrayList<JobDataItem> getJobDataItems() {
+        return new Gson().fromJson(jobDataItems, new TypeToken<ArrayList<JobDataItem>>() {
+        }.getType());
+    }
+
     public String getNotificationsJson() {
         return notifications;
     }
@@ -470,6 +480,9 @@ public class Event extends DataSupport implements Parcelable {
 
     public String getAlarmsEventsJson() {
         return alarmEvents;
+    }
+    public String getJobDataItemsJson() {
+        return jobDataItems;
     }
 
     public void setNotifications(ArrayList<Notification> notifications) {
@@ -488,6 +501,10 @@ public class Event extends DataSupport implements Parcelable {
         this.alarmEvents = new Gson().toJson(alarmsEvents);
     }
 
+    public void setJobDataItems(ArrayList<JobDataItem> jobDataItems) {
+        this.jobDataItems = new Gson().toJson(jobDataItems);
+    }
+
     public void setNotificationsJson(String notifications) {
         this.notifications = notifications;
     }
@@ -501,6 +518,9 @@ public class Event extends DataSupport implements Parcelable {
     }
     public void setAlarmsEventsJson(String alarmEvents) {
         this.alarmEvents = alarmEvents;
+    }
+    public void setJobDataItemsJson(String jobDataItems) {
+        this.jobDataItems = jobDataItems;
     }
 
     public void setHaveExtra(boolean haveInventoryToEvents) {

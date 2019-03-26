@@ -263,6 +263,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Handler mVersionCheckHandler;
     private Runnable mCheckAppVersionRunnable;
     private File outputFile;
+    private MachineJoshDataResponse mMachineJoshDataResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -675,7 +676,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         return new MachineJoshDataCallback() {
             @Override
             public void onMachineJoshDataCallbackSucceeded(MachineJoshDataResponse machineJoshDataResponse) {
-
+                mMachineJoshDataResponse = machineJoshDataResponse;
             }
 
             @Override
@@ -1025,7 +1026,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //                    events = updateList(events);
 
                     for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
-                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse);
+                        dashboardUICallbackListener.onShiftLogDataReceived(events, mActualBarExtraResponse, mMachineJoshDataResponse);
                     }
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();

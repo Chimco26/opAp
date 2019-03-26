@@ -162,7 +162,6 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
     @Override
     public void GetMachineJoshData(String siteUrl, String sessionId, String startTime, String endTime, String machineId, final GetMachineJoshDataCallback<MachineJoshDataResponse> callback, final int totalRetries, int specificRequestTimeout, MachineJoshDataRequest machineJoshDataRequest) {
         Call<MachineJoshDataResponse> call = mShiftLogNetworkManagerInterface.getMachineJoshDataServiceRequest(siteUrl, specificRequestTimeout, TimeUnit.SECONDS).getMachineJoshData(machineJoshDataRequest);
-
         call.enqueue(new Callback<MachineJoshDataResponse>() {
             @Override
             public void onResponse(Call<MachineJoshDataResponse> call, Response<MachineJoshDataResponse> response) {
@@ -187,7 +186,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             @Override
             public void onFailure(Call<MachineJoshDataResponse> call, Throwable t) {
                 if (callback != null) {
-                    if (retryCount < totalRetries) {
+                    if (retryCount++ < totalRetries) {
                         OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount + " out of " + totalRetries + ")");
                         call.clone().enqueue(this);
                     } else {
