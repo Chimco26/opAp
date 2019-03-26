@@ -341,6 +341,7 @@
     <string name="go_to_setup">Setupלך ל</string>
     <string name="rejects_quantity">כמות פסולים</string>
     <string name="there_are_no_stop_event">אין ארועי עצירה לדיווח</string>
+    <string name="theoretical_units">יחידות תיאורטיות</string>
 
 
 </resources>

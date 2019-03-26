@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
-import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
 import java.util.Locale;
@@ -112,7 +111,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private void setEmptyMode(Widget widget) {
         mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", 0, 0, 0));
         mText.setText(mText.getContext().getString(R.string.there_are_no_stop_event));
-        mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
+//        mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
         mBtn.setVisibility(View.GONE);
         mDefault.setVisibility(View.VISIBLE);
         if (widget.getCurrentColor() != null && widget.getCurrentColor().length() > 0) {
@@ -170,10 +169,9 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private void setFilterLegendText() {
         Context context = mLegFilterShortTv.getContext();
         mLegFilterShortTv.setText(String.format(Locale.getDefault(),
-                "%s %s %d %s)",
+                "%s < %s %s",
                 context.getString(R.string.filter_short),
-                context.getString(R.string.min_duration_filter),
-                PersistenceManager.getInstance().getMinEventDuration(), context.getString(R.string.min)));
+                "10", context.getString(R.string.min)));
     }
 
 
@@ -210,11 +208,11 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private void updateTextViews(int percent) {
         if (percent != 100) {
             mText.setText(mText.getContext().getString(R.string.report_events_reason));
-            mText.setTextColor(mText.getContext().getResources().getColor(R.color.blue1));
+//            mText.setTextColor(mText.getContext().getResources().getColor(R.color.blue1));
             mBtn.setVisibility(View.VISIBLE);
         } else {
             mText.setText(mText.getContext().getString(R.string.target_reached));
-            mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
+//            mText.setTextColor(mText.getContext().getResources().getColor(R.color.new_green));
             mBtn.setVisibility(View.GONE);
         }
     }
