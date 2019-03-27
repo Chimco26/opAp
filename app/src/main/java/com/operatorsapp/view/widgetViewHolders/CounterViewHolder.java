@@ -40,7 +40,7 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
         mWidth = width;
         mDashboardCentralContainerListener = listener;
 
-        mParentLayout = itemView.findViewById(R.id.counter_parent_layout);
+//        mParentLayout = itemView.findViewById(R.id.counter_parent_layout);
         mDivider = itemView.findViewById(R.id.divider);
         mTitle = itemView.findViewById(R.id.counter_widget_title);
         mValue1 = itemView.findViewById(R.id.counter_widget_value_tv1);
@@ -54,18 +54,18 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setCounterItem(Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
-
-
-        setSizes(mParentLayout);
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams4;
+//                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//
+//
+//        setSizes(mParentLayout);
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang4);
 

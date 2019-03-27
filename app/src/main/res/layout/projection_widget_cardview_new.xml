@@ -56,14 +56,13 @@
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_below="@+id/top_rl"
-        android:layout_marginBottom="10dp"
         android:layoutDirection="ltr"
         android:paddingTop="15dp">
 
         <RelativeLayout
             android:id="@+id/PWCN_projection_rl"
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_height="50dp">
 
             <RelativeLayout
                 android:id="@+id/PWCN_target_rl"
@@ -177,15 +176,15 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:maxWidth="120dp"
-                android:textSize="14sp"
                 android:text="@string/good_units"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="9dp"
                 android:layout_height="9dp"
-                android:background="@color/grey_lite"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="16dp"
+                android:background="@color/grey_lite" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -193,30 +192,37 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:maxWidth="120dp"
-                android:textSize="14sp"
                 android:text="@string/theoretical_units"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
         </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
         <View
             android:id="@+id/divider_bottom"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
             android:background="@color/divider_gray" />
-    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/FWCN_target_reached_alert_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:text="@string/you_ve_reached_the_production_target"
-        android:textColor="@color/red_line"
-        android:textSize="16sp"
-        android:layout_marginBottom="5dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/FWCN_target_reached_alert_tv"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="@string/you_ve_reached_the_production_target"
+            android:textColor="@color/red_line"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </RelativeLayout>

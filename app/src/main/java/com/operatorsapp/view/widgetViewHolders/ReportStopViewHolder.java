@@ -32,9 +32,9 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     private final TextView mNotReportedTv;
     private final TextView mNotReportedMinTv;
     private final View mDefault;
-    private int mHeight;
-    private int mWidth;
-    private RelativeLayout mParentLayout;
+//    private int mHeight;
+//    private int mWidth;
+//    private RelativeLayout mParentLayout;
     private TextView mFilterShortTv;
     private TextView mReportedTv;
     //    private final View mNoDataFilterView;
@@ -50,11 +50,11 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         super(itemView);
 
         mListener = listener;
-        mHeight = height;
-        mWidth = width;
-        mParentLayout = itemView.findViewById(R.id.RPWC_parent_layout);
+//        mHeight = height;
+//        mWidth = width;
+//        mParentLayout = itemView.findViewById(R.id.RPWC_parent_layout);
         mCenterLayout = itemView.findViewById(R.id.RPWC_center_ly);
-        mDivider = itemView.findViewById(R.id.RPWC_divider);
+//        mDivider = itemView.findViewById(R.id.RPWC_divider);
         mTitle = itemView.findViewById(R.id.RPWC_title);
         mSubTitle = itemView.findViewById(R.id.RPWC_subtitle);
         mText = itemView.findViewById(R.id.RPWC_percentage_text_tv);
@@ -83,7 +83,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void setData(Widget widget) {
-        setView();
+//        setView();
 
         setColors(widget);
         int reportedValue = (int) (WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT));
@@ -251,26 +251,26 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
 
     }
 
-    private void setView() {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
-
-        setSizes(mParentLayout);
-    }
-
-    private void setSizes(final RelativeLayout parent) {
-        ViewGroup.LayoutParams layoutParams;
-        layoutParams = parent.getLayoutParams();
-        layoutParams.height = (int) (mHeight * 0.45);
-        layoutParams.width = (int) (mWidth * 0.325);
-        parent.requestLayout();
-
-    }
+//    private void setView() {
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams4;
+//                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//
+//        setSizes(mParentLayout);
+//    }
+//
+//    private void setSizes(final RelativeLayout parent) {
+//        ViewGroup.LayoutParams layoutParams;
+//        layoutParams = parent.getLayoutParams();
+//        layoutParams.height = (int) (mHeight * 0.45);
+//        layoutParams.width = (int) (mWidth * 0.325);
+//        parent.requestLayout();
+//
+//    }
 }

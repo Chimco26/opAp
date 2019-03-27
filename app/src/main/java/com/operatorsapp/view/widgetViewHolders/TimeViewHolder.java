@@ -57,18 +57,18 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
     }
     
     public void setTimeItem(final Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams2;
-                mItemViewParams2 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams2.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams2;
+//                mItemViewParams2 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams2.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//
 
-
-        setSizes(mParentLayout);
+//        setSizes(mParentLayout);
         String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang2);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));

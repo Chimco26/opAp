@@ -5,7 +5,7 @@
 
 
     <dimen name="widget_width">330dp</dimen>
-    <dimen name="widget_height">220dp</dimen>
+    <dimen name="widget_height">260dp</dimen>
     <!--<dimen name="widget_width">560dp</dimen>-->
     <!--<dimen name="widget_height">368dp</dimen>-->
 

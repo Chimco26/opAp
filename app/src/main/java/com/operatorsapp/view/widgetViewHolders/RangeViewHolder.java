@@ -80,17 +80,17 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setRangeItem(final Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams3;
-                mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams3;
+//                mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
 
-        setSizes(mParentLayout);
+//        setSizes(mParentLayout);
         String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang3);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));

@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.common.callback.ErrorObjectInterface;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
@@ -37,7 +38,6 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectinfra.GetJobDetailsCallback;
 import com.operators.reportrejectinfra.GetPendingJobListCallback;
 import com.operators.reportrejectinfra.PostActivateJobCallback;
@@ -66,6 +66,7 @@ import com.operatorsapp.adapters.PendingJobPropsAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
+import com.operatorsapp.dialogs.BasicTitleTextSingleBtnDialog;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -1066,8 +1067,8 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
     private void validateDialog(final Integer jobId, final boolean isToSetupEnd) {
 
-        BasicTitleTextBtnDialog basicTitleTextBtnDialog = new BasicTitleTextBtnDialog(this,
-                new BasicTitleTextBtnDialog.BasicTitleTextBtnDialogListener() {
+        BasicTitleTextSingleBtnDialog basicTitleTextBtnDialog = new BasicTitleTextSingleBtnDialog(this,
+                new BasicTitleTextSingleBtnDialog.BasicTitleTextBtnDialogListener() {
                     @Override
                     public void onClickPositiveBtn() {
                         postUpdateActions(mUpdatedActions);
@@ -1085,7 +1086,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
                     public void onClickNegativeBtn() {
                     }
                 }, getString(R.string.activate_job_dialog_title), null
-                , getString(R.string.activate_job_dialog_message), getString(R.string.activate), null
+                , getString(R.string.activate_job_dialog_message), getString(R.string.activate)
         );
 
         basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();

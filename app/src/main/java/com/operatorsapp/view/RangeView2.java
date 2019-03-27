@@ -35,8 +35,8 @@ public class RangeView2 extends View {
     private Bitmap avgImage;
     private Bitmap mStandardImage;
 
-    public void setAvgValue(float mAvgValue) {
-        this.mAvgValue = mAvgValue;
+    public void setAvgValue(float avgValue) {
+        this.mAvgValue = avgValue;
     }
 
     public float getmStandardValue() {
@@ -88,14 +88,15 @@ public class RangeView2 extends View {
         mAvgValue = a.getFloat(R.styleable.RangeView2_avg_value, 0);
         mStandardValue = a.getFloat(R.styleable.RangeView2_standard_value, 0);
         avgImage = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_arrow_drop_up_black_36);
-        mStandardImage = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_clear_black_18);
-
+        mStandardImage = BitmapFactory.decodeResource(getResources(), R.drawable.close_btn);
 
         a.recycle();
 
-        mHeight = dipToPixels(context, 6);
+        mHeight = dipToPixels(context, 15);
         border = dipToPixels(context, 12);
 
+        avgImage = Bitmap.createScaledBitmap(avgImage,(int)(mHeight*4.5), (int)(mHeight*4.5),true);
+        mStandardImage = Bitmap.createScaledBitmap(mStandardImage,(int) (mHeight *2.5),(int) (mHeight *2.5),true);
         mGrayPaint.setAntiAlias(true);
         mGrayPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mGrayPaint.setColor(Color.parseColor("#cecece"));
@@ -138,8 +139,6 @@ public class RangeView2 extends View {
         mTextPaint.setColor(valueColor);
         mGreenPaint.setColor(valueColor);
 
-
-        canvas.drawColor(Color.WHITE);
         float percent = getWidth() / 100;
 
         canvas.drawRect(0, getHeight() / 2f - mHeight / 2f, percent * 100, getHeight() / 2f + mHeight / 2f, mGrayPaint);
@@ -163,14 +162,11 @@ public class RangeView2 extends View {
         }
 
         if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
-
-            canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 3, emptyPaint);
-
+            canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
         } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
-
-            canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 3, emptyPaint);
+            canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
         } else if (mAvgValue != 0) {
-            canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 3, emptyPaint);
+            canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
 
         }
         if (mStandardValue >= mLowLimit && mStandardValue <= mHighLimit && mStandardValue != 0) {

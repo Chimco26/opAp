@@ -14,12 +14,13 @@ import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final int END_LIMIT = 10;//in minute
     private final int mHeight;
     private final int mWidth;
-    private final RelativeLayout mParentLayout;
+    private RelativeLayout mParentLayout;
     private boolean mEndSetupDisable;
     private TextView mTitle;
     private TextView mSubTitle;
@@ -44,8 +45,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mWidth = width;
         mMachineStatus = machineStatus;
         mEndSetupDisable = endSetupDisable;
-        mParentLayout = itemView.findViewById(R.id.TLWC_parent_layout);
-        mDivider = itemView.findViewById(R.id.TLWC_divider);
+//        mParentLayout = itemView.findViewById(R.id.TLWC_parent_layout);
+//        mDivider = itemView.findViewById(R.id.TLWC_divider);
         mTitle = itemView.findViewById(R.id.TLWC_title);
         mSubTitle = itemView.findViewById(R.id.TLWC_subtitle);
         m1Ly = itemView.findViewById(R.id.TLWC_time_ly);
@@ -67,18 +68,18 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     private void setView(Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
-
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams4;
+//                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//
+//        setSizes(mParentLayout);
         mTitle.setText(R.string.time_left_to_current_job);
-        setSizes(mParentLayout);
         long time = Long.parseLong(widget.getCurrentValue());
         int endLimit = END_LIMIT;
 //        time = 45;// test states
@@ -104,7 +105,10 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                             TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
                     m1TimeTv.setTextSize(2, 18);
                 } else {
-                    m1TimeTv.setText(String.format("%shr %smin", ((int) (time / 60)), StringUtil.add0ToNumber((int) (time % 60))));
+                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
+                            m1TimeTv.getContext().getString(R.string.hr),
+                            StringUtil.add0ToNumber((int) (time % 60)),
+                            m1TimeTv.getContext().getString(R.string.min)));
                     m1TimeTv.setTextSize(2, 45);
                 }
                 mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));

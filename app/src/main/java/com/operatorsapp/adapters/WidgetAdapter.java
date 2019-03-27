@@ -186,7 +186,7 @@ public class WidgetAdapter extends Adapter {
 
                 case IMAGE:
                     final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-                    setSizes(imageViewHolder.mParentLayout);
+//                    setSizes(imageViewHolder.mParentLayout);
                     ImageLoader.getInstance().displayImage(mWidgets.get(position).getCurrentValue(), imageViewHolder.mImageLayout);
                     break;
                 case COUNTER:
