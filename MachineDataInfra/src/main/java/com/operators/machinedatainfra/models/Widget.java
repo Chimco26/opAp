@@ -49,7 +49,7 @@ public class Widget {
     @SerializedName("MachineParamHistoricData")
     private ArrayList<HistoricData> mMachineParamHistoricData;
 
-    @SerializedName("CycleTimeAvg")
+    @SerializedName("AverageValue")
     private double mCycleTimeAvg;
 
     public double getCycleTimeAvg() {

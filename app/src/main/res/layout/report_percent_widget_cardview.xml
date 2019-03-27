@@ -1,66 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:autofit="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/RPWC_parent_layout"
-    android:layout_width="304dp"
-    android:layout_height="219dp"
+    android:id="@+id/widget_parent_layout"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
     android:layout_centerInParent="true"
-    android:background="@drawable/widget_background_selector"
-    android:orientation="vertical">
+    android:background="@drawable/combined_shape"
+    android:padding="15dp">
 
-    <me.grantland.widget.AutofitTextView
-        android:id="@+id/RPWC_title"
+    <RelativeLayout
+        android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:singleLine="false"
-        android:text="@string/reported_stop_event"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        autofit:minTextSize="12sp" />
+        android:layout_height="65dp">
 
-    <me.grantland.widget.AutofitTextView
-        android:id="@+id/RPWC_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/RPWC_title"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="16sp"
-        autofit:minTextSize="8sp" />
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/RPWC_title"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Current quantity"
+            android:textColor="@android:color/black"
+            android:textSize="23sp" />
 
-    <View
-        android:id="@+id/RPWC_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="14dp"
-        android:background="@color/divider_gray" />
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/RPWC_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/RPWC_title"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Total required 2k"
+            android:textSize="18sp" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divider_gray" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/RPWC_center_ly"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/RPWC_divider"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="110dp"
+        android:layout_below="@+id/top_rl"
+        android:layoutDirection="ltr"
+        android:paddingTop="15dp">
 
         <LinearLayout
             android:id="@+id/RPWC_graph_rl"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
             android:layoutDirection="ltr"
             android:orientation="horizontal">
 
@@ -170,8 +162,8 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_below="@+id/RPWC_graph_rl"
-            android:layout_marginTop="10dp"
             android:layoutDirection="ltr"
+            android:layout_alignParentBottom="true"
             android:gravity="center_vertical">
 
             <View
@@ -223,53 +215,52 @@
 
         </LinearLayout>
 
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/RPWC_divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/divider_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <View
-                android:id="@+id/RPWC_divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="4dp"
-                android:background="@color/divider_gray" />
+            <TextView
+                android:id="@+id/RPWC_percentage_text_tv"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/report_events_reason"
+                android:textColor="@color/blue1"
+                android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
+            <TextView
+                android:id="@+id/RPWC_report_btn"
+                android:layout_width="117dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="30dp"
+                android:background="@color/blue1"
                 android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/RPWC_percentage_text_tv"
-                    android:layout_width="124dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/report_events_reason"
-                    android:textColor="@color/blue1"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/RPWC_report_btn"
-                    android:layout_width="117dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_marginStart="30dp"
-                    android:background="@color/blue1"
-                    android:gravity="center"
-                    android:text="@string/report"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="visible" />
-            </LinearLayout>
+                android:text="@string/report"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/RPWC_no_data_filter"

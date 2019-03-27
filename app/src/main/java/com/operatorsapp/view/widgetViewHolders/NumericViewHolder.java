@@ -49,7 +49,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private View mEditStep1Ly;
     private EditText mEditNumberEt;
     private RadioButton mUnitRadioBtn;
-//    private RadioButton mWeightRadioBtn;
+    //    private RadioButton mWeightRadioBtn;
     private View mStep1CancelBtn;
     private TextView mStep1NextBtn;
     private RelativeLayout mParentLayout;
@@ -57,7 +57,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private AutofitTextView mTitle;
     private AutofitTextView mSubtitle;
     private TextView mValue;
-    private TextView mChangeMaterial;
+    private TextView mEditBtn;
     private Activity mContext;
     private DashboardCentralContainerListener mDashboardCentralContainerListener;
     private int mHeight;
@@ -84,7 +84,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mTitle = itemView.findViewById(R.id.numeric_widget_title);
         mSubtitle = itemView.findViewById(R.id.numeric_widget_subtitle);
         mValue = itemView.findViewById(R.id.numeric_widget_value);
-        mChangeMaterial = itemView.findViewById(R.id.numeric_widget_change_material);
+        mEditBtn = itemView.findViewById(R.id.NWC_edit_btn);
         mEditIc = itemView.findViewById(R.id.numeric_widget_edit_ic);
         mDisplayLy = itemView.findViewById(R.id.NWC_display_ly);
 
@@ -186,13 +186,13 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     public void enableNextBtn(String text, View nextBtn, EditText editText) {
         if (!text.isEmpty()) {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.blue1));
-        }else {
+        } else {
             nextBtn.setBackgroundColor(editText.getContext().getResources().getColor(R.color.grey_lite));
         }
     }
 
-    private void closeKeyboard(int editStop){
-        if (editStop != 1){
+    private void closeKeyboard(int editStop) {
+        if (editStop != 1) {
             if (mOnKeyboardManagerListener != null)
                 mOnKeyboardManagerListener.onCloseKeyboard();
         }
@@ -230,11 +230,11 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String getCycleReportValue(Double value) {
-        if (value <= 0){
+        if (value <= 0) {
             return String.valueOf(1);
         }
         int max = PersistenceManager.getInstance().getMaxUnitReport();
-        if (value > max){
+        if (value > max) {
             return String.valueOf(max);
         }
         return String.valueOf(value);
@@ -262,14 +262,14 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mStep2ReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    widget.setEditStep(0);
-                    mDashboardCentralContainerListener.onReportReject(
-                            mEditNumberEt.getText().toString(),
-                            mUnitRadioBtn.isChecked(),
-                            mSelectedCauseId,
-                            mSelectedReasonId);
-                    setupNumericRejectItem(widget);
-                    mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                widget.setEditStep(0);
+                mDashboardCentralContainerListener.onReportReject(
+                        mEditNumberEt.getText().toString(),
+                        mUnitRadioBtn.isChecked(),
+                        mSelectedCauseId,
+                        mSelectedReasonId);
+                setupNumericRejectItem(widget);
+                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
             }
         });
     }
@@ -361,54 +361,58 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleLy.setVisibility(View.GONE);
         mEditNumberEt.setText("");
         mEditCycleEt.setText("");
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams1;
-                mItemViewParams1 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams1.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
-
-        setSizes(mParentLayout);
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams1;
+//                mItemViewParams1 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams1.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//
+//        setSizes(mParentLayout);
         String nameByLang1 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang1);
         mSubtitle.setVisibility(View.INVISIBLE);
         mValue.setText(widget.getCurrentValue());
         mValue.setSelected(true);
 
-        mChangeMaterial.setVisibility(View.INVISIBLE);
-
         if (widget.getTargetScreen() != null && widget.getTargetScreen().length() > 0) {
 
             mEditIc.setVisibility(View.VISIBLE);
+            mEditBtn.setVisibility(View.VISIBLE);
+
+            switch (widget.getTargetScreen()) {
+                case REPORT_REJECT_TAG:
+                    mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
+                    break;
+                case REPORT_UNIT_CYCLE_TAG:
+                    mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
+                    break;
+            }
+
+
+            mEditBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    editAction(widget);
+                }
+            });
 
             mEditIc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    switch (widget.getTargetScreen()) {
-                        case REPORT_REJECT_TAG:
-                            widget.setEditStep(1);
-                            setupNumericRejectItem(widget);
-                            mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
-                            break;
-                        case REPORT_UNIT_CYCLE_TAG:
-                            widget.setEditStep(1);
-                            setupNumericCycleItem(widget);
-                            mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
-                            break;
-                        default:
-                            mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
-                            break;
-                    }
+                    editAction(widget);
                 }
             });
 
         } else {
 
             mEditIc.setVisibility(View.GONE);
+            mEditBtn.setVisibility(View.GONE);
         }
     }
 
@@ -421,9 +425,27 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public void editAction(Widget widget) {
+        switch (widget.getTargetScreen()) {
+            case REPORT_REJECT_TAG:
+                widget.setEditStep(1);
+                setupNumericRejectItem(widget);
+                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                break;
+            case REPORT_UNIT_CYCLE_TAG:
+                widget.setEditStep(1);
+                setupNumericCycleItem(widget);
+                mDashboardCentralContainerListener.onScrollToPosition(getAdapterPosition());
+                break;
+            default:
+                mDashboardCentralContainerListener.onOpenNewFragmentInCentralDashboardContainer(widget.getTargetScreen());
+                break;
+        }
+    }
 
-    public interface OnKeyboardManagerListener{
+    public interface OnKeyboardManagerListener {
         void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars);
+
         void onCloseKeyboard();
     }
 }

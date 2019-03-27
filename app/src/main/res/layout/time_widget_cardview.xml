@@ -1,86 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:autofit="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/widget_parent_layout"
-                android:layout_width="@dimen/widget_width"
-                android:layout_height="@dimen/widget_height"
-                android:layout_centerInParent="true"
-                android:background="@drawable/widget_background_selector"
-                android:orientation="vertical">
+    android:id="@+id/widget_parent_layout"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
+    android:layout_centerInParent="true"
+    android:background="@drawable/combined_shape"
+    android:padding="15dp">
 
-    <LinearLayout
-        android:id="@+id/top_layout"
+    <RelativeLayout
+        android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="65dp">
 
-        <LinearLayout
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/time_widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Current quantity"
+            android:textColor="@android:color/black"
+            android:textSize="23sp" />
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/time_widget_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/time_widget_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Cycle time"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                autofit:minTextSize="12sp"/>
-
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/time_widget_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Standard 20-60"
-                android:textSize="14sp"
-                autofit:minTextSize="8sp"/>
-        </LinearLayout>
+            android:layout_below="@+id/time_widget_title"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Total required 2k"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/time_widget_current_value"
             style="@style/FontStyle_T11"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="15dp"
-            android:ellipsize="end"
-            android:gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:maxLines="1"
-            android:text="24"
+            android:text="1.7k"
             android:textColor="@color/C16"
-            android:textSize="40dp"/>
-    </LinearLayout>
+            android:textSize="30sp" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="60dp"
-        android:background="@color/divider_gray"/>
-
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divider_gray" />
+    </RelativeLayout>
 
     <com.operatorsapp.view.LineChartTimeSmall
         android:id="@+id/lineChart_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/divider"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="3dp"/>
-    <!--android:layout_marginTop="80dp"-->
+        android:layout_below="@id/top_rl"
+        android:layout_marginTop="3dp"
+        />
 
 </RelativeLayout>
