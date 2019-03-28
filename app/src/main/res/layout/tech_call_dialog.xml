@@ -38,136 +38,10 @@
             android:textStyle="bold"
             style="@style/BreeSerifRegular"
             android:textSize="35sp"
-            android:paddingBottom="10dp"
             android:textColor="@color/blue1"
             android:text="@string/service_calls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:id="@+id/tech_dialog_ly_tabs"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layoutDirection="ltr"
-            android:layout_height="55dp"
-            android:gravity="start|center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp">
-
-            <RelativeLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/grey_lite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <TextView
-                        android:id="@+id/tech_dialog_tv_left_tab"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white_default"
-                        android:textAlignment="center"
-                        android:text="@string/open_calls"
-                        android:padding="3dp"
-                        android:textColor="@color/C16"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:textSize="24sp" />
-                </FrameLayout>
-
-
-                <!--<View-->
-                    <!--android:id="@+id/tech_dialog_left_tab_underline"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="4dp"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:background="@color/tabNotificationColor" />-->
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:layout_width="150dp"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/grey_lite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tech_dialog_tv_right_tab"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:padding="3dp"
-                        android:background="@color/white_default"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:text="@string/last_24h"
-                        android:textColor="@color/dark_indigo"
-                        android:textSize="24sp" />
-
-                </FrameLayout>
-
-                <!--<View-->
-                    <!--android:id="@+id/tech_dialog_right_tab_underline"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="4dp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:background="@color/tabNotificationColor" />-->
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/tech_dialog_rl_tech_call"
-                android:visibility="invisible"
-                android:layout_width="150dp"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/grey_lite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tech_dialog_tv_tech_call_tab"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:text="@string/new_call"
-                        android:padding="3dp"
-                        android:background="@color/white_default"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:textColor="@color/C16"
-                        android:textSize="24sp" />
-
-                </FrameLayout>
-
-                <!--<View-->
-                    <!--android:id="@+id/tech_dialog_tech_call_tab_underline"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="4dp"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:background="@color/tabNotificationColor" />-->
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/tech_dialog_subtitle_tv"
@@ -182,6 +56,151 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+
+        <LinearLayout
+            android:id="@+id/tech_dialog_ly_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_lite"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:gravity="start|center_vertical"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/tech_dialog_tv_left_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:padding="3dp"
+                        android:text="@string/open_calls"
+                        android:textAlignment="center"
+                        android:textColor="@color/C16"
+                        android:textSize="24sp" />
+
+                    <View
+                        android:id="@+id/tech_dialog_left_tab_underline"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/tabNotificationColor" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp">
+
+                    <TextView
+                        android:id="@+id/tech_dialog_tv_right_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:padding="3dp"
+                        android:text="@string/last_24h"
+                        android:textAlignment="center"
+                        android:textColor="@color/dark_indigo"
+                        android:textSize="24sp" />
+
+                    <View
+                        android:id="@+id/tech_dialog_right_tab_underline"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/tabNotificationColor"
+                        android:visibility="invisible" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tech_dialog_new_call_tv"
+                    style="@style/ProximaNovaSemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="@color/blue1"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/new_call"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!--<RelativeLayout-->
+                <!--android:id="@+id/tech_dialog_rl_tech_call"-->
+                <!--android:visibility="invisible"-->
+                <!--android:layout_width="150dp"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/tech_dialog_tv_tech_call_tab"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAlignment="center"-->
+                <!--android:text="@string/new_call"-->
+                <!--android:padding="3dp"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:background="@color/white_default"-->
+                <!--android:layout_marginBottom="2dp"-->
+                <!--android:layout_marginEnd="2dp"-->
+                <!--android:textColor="@color/C16"-->
+                <!--android:textSize="24sp" />-->
+
+                <!--<View-->
+                <!--android:id="@+id/tech_dialog_tech_call_tab_underline"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="4dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:background="@color/tabNotificationColor" />-->
+
+                <!--</RelativeLayout>-->
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_height="1dp"
+                android:background="@color/grey_lite"/>
+        </LinearLayout>
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tech_dialog_rv"
             android:layout_width="match_parent"
@@ -194,30 +213,30 @@
             android:scrollbarFadeDuration="10000"
             android:scrollbars="vertical" />
 
-        <FrameLayout
-            android:layout_gravity="center_horizontal"
-            android:background="@color/grey_lite"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_height="wrap_content">
+        <!--<FrameLayout-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="@color/grey_lite"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <TextView
-                android:id="@+id/tech_dialog_new_call_tv"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                style="@style/ProximaNovaSemiBold"
-                android:textSize="24sp"
-                android:padding="15dp"
-                android:layout_marginBottom="1dp"
-                android:layout_marginEnd="1dp"
-                android:background="@color/blue1"
-                android:textColor="@color/white"
-                android:text="@string/open_new_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:id="@+id/tech_dialog_new_call_tv"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textStyle="bold"-->
+                <!--style="@style/ProximaNovaSemiBold"-->
+                <!--android:textSize="24sp"-->
+                <!--android:padding="15dp"-->
+                <!--android:layout_marginBottom="1dp"-->
+                <!--android:layout_marginEnd="1dp"-->
+                <!--android:background="@color/blue1"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:text="@string/open_new_call"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
-        </FrameLayout>
+        <!--</FrameLayout>-->
     </LinearLayout>
 </FrameLayout>
