@@ -2209,6 +2209,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (mShiftLogSwipeRefresh.isRefreshing()) {
             mShiftLogSwipeRefresh.setRefreshing(false);
         }
+        getNotificationsFromServer(false);
     }
 
 
@@ -3622,6 +3623,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (response != null && response.body() != null && response.body().getmError() == null) {
 
+                    // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
