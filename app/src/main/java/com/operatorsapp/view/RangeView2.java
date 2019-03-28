@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -19,8 +21,8 @@ public class RangeView2 extends View {
     private Paint mGreenPaint = new Paint();
     private Paint mBorderPaint = new Paint();
     private Paint mCurrentPaint = new Paint();
-    private Paint mTextPaint = new Paint();
-    private Paint mBorderTextPaint = new Paint();
+    private Paint mTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+    private Paint mBorderTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
     private Paint emptyPaint = new Paint();
 
 
@@ -87,16 +89,16 @@ public class RangeView2 extends View {
         mCurrentValue = a.getFloat(R.styleable.RangeView2_current_value, 5);
         mAvgValue = a.getFloat(R.styleable.RangeView2_avg_value, 0);
         mStandardValue = a.getFloat(R.styleable.RangeView2_standard_value, 0);
-        avgImage = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_arrow_drop_up_black_36);
-        mStandardImage = BitmapFactory.decodeResource(getResources(), R.drawable.close_btn);
+        avgImage = BitmapFactory.decodeResource(getResources(), R.drawable.avga);
+        mStandardImage = BitmapFactory.decodeResource(getResources(), R.drawable.standarda);
 
         a.recycle();
 
         mHeight = dipToPixels(context, 15);
         border = dipToPixels(context, 12);
 
-        avgImage = Bitmap.createScaledBitmap(avgImage,(int)(mHeight*4.5), (int)(mHeight*4.5),true);
-        mStandardImage = Bitmap.createScaledBitmap(mStandardImage,(int) (mHeight *2.5),(int) (mHeight *2.5),true);
+        avgImage = Bitmap.createScaledBitmap(avgImage,(int)(mHeight), (int)(mHeight),true);
+        mStandardImage = Bitmap.createScaledBitmap(mStandardImage,(int) (mHeight *1.2),(int) (mHeight *1.2),true);
         mGrayPaint.setAntiAlias(true);
         mGrayPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mGrayPaint.setColor(Color.parseColor("#cecece"));
@@ -115,12 +117,16 @@ public class RangeView2 extends View {
         mCurrentPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mCurrentPaint.setStrokeWidth(dipToPixels(context, 6));
 
-        mTextPaint.setTextSize(dipToPixels(context, 14));
+        mTextPaint.setStyle(Paint.Style.FILL);
+        mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mTextPaint.setTextSize(dipToPixels(context, 15));
 
+        mBorderTextPaint.setStyle(Paint.Style.FILL);
+        mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mBorderTextPaint.setTextSize(dipToPixels(context, 15));
         mBorderTextPaint.setColor(Color.BLACK);
-        mBorderTextPaint.setTextSize(dipToPixels(context, 14));
 
-        textPadding = dipToPixels(context, 4);
+        textPadding = dipToPixels(context, 6);
 
 
     }

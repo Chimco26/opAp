@@ -181,7 +181,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         mCycleRange.setLowLimit(widget.getLowLimit());
         mCycleRange.setmStandardValue(widget.getStandardValue());
 
-        if (widget.getFieldName().equals(CYCLE_TIME)) {
+//        if (widget.getFieldName().equals(CYCLE_TIME)) {
 
             mCycleTimeLy.setVisibility(View.VISIBLE);
             mCycleRange.setAvgValue((float) widget.getCycleTimeAvg());
@@ -189,9 +189,9 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
             mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
             mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
 
-        }else {
-            mCycleTimeLy.setVisibility(View.GONE);
-        }
+//        }else {
+//            mCycleTimeLy.setVisibility(View.GONE);
+//        }
         mCycleRange.invalidate();
     }
 }

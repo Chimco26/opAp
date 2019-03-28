@@ -296,7 +296,7 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.addLimitLine(limitLine1);
 
 
-        addStandardLine(standardValue); // standard line, removed due to performance cost
+//        addStandardLine(standardValue); // standard line, removed due to performance cost
         addLimitLines(lowLimit, highLimit);
         addVerticalLimitLimitLine(midnightLimit);
     }

@@ -285,7 +285,7 @@
     <string name="change_factory">שנה מפעל</string>
     <string name="you_ve_reached_the_production_target">"הגעת ליעד היצור של פקודת העבודה!  "</string>
     <string name="end_setup">סיום setup</string>
-    <string name="you_are_in_setup_mode">המכונה במצב setup</string>
+    <string name="you_are_in_setup_mode">אתה במצב setup</string>
     <string name="reported_stop_event">עצירות מדווחות</string>
     <string name="time_min">זמן(דק)</string>
     <string name="report_events_reason">דווח סיבות עצירה</string>
