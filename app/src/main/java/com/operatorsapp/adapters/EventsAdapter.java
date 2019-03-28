@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -221,12 +222,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 duration = 1;
             }
 
-            String text = String.format(Locale.US, "%dm %s", duration, OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
+            String text;
 
-            if (!mIsOpenState && text.length() > 12) {
-                mText.setText(String.format("%s...", text.substring(0, 12)));
+            if (!mIsOpenState) {
+                text = String.format(Locale.US, "%dm", duration);
+                mText.setText(text);
 
             } else {
+                text = String.format(Locale.US, "%dm | %s", duration, OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
                 mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
@@ -351,6 +354,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             TextView timeTV = view.findViewById(R.id.SCI_time);
             TextView detailsTV = view.findViewById(R.id.SCI_details);
             ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
+            LinearLayout serviceImgAndTextLy = view.findViewById(R.id.SCI_text_ly);
 
             if (event.getDuration() <= 5) {
                 timeTV.setVisibility(View.INVISIBLE);
@@ -377,11 +381,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             timeTV.setText(getNotificationTime(time, margin, eventViewHeight));
 
             detailsTV.setText(details);
+            if (type == 6)
 
-            view.findViewById(R.id.SCI_circle).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.SCI_circle).setVisibility(View.VISIBLE);
             view.findViewById(R.id.product_line).setVisibility(View.GONE);
             iconIV.setVisibility(View.VISIBLE);
 //            detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            detailsTV.setVisibility(View.VISIBLE);
+            serviceImgAndTextLy.setVisibility(View.VISIBLE);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) serviceImgAndTextLy.getLayoutParams();
+            if (type == 6) {
+                params.addRule(RelativeLayout.ALIGN_PARENT_END);
+            } else {
+                params.addRule(RelativeLayout.ALIGN_PARENT_START);
+            }
+            serviceImgAndTextLy.setLayoutParams(params);
+
 
             switch (type) {
                 case 1:
@@ -406,6 +422,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     view.findViewById(R.id.SCI_circle).setVisibility(View.GONE);
                     view.findViewById(R.id.product_line).setVisibility(View.VISIBLE);
                     iconIV.setVisibility(View.GONE);
+
+
+                    if (!mIsOpenState) {
+                        detailsTV.setVisibility(View.GONE);
+                        serviceImgAndTextLy.setVisibility(View.GONE);
+                    }
+
 //                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
 //                    view.findViewById(R.id.SCI_text_ly).setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
                     break;

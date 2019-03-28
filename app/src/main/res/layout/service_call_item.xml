@@ -22,8 +22,8 @@
         android:id="@+id/SCI_text_ly"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginStart="70dp"
         android:background="@color/white"
+        android:layout_marginStart="70dp"
         android:paddingEnd="2dp">
         <!--android:background="@drawable/service_call_border"-->
 
