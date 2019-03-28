@@ -1126,7 +1126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         mActionBarAndEventsFragment.SetupEndDialogShow(false);
                     }
                 }
-            }).show();
+            });
             if (mActionBarAndEventsFragment != null) {
                 mActionBarAndEventsFragment.SetupEndDialogShow(true);
             }

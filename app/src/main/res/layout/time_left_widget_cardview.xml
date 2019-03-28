@@ -57,7 +57,7 @@
             <TextView
                 android:id="@+id/TLWC_time_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:gravity="center"
                 android:textColor="@color/blue1"
                 android:textSize="45sp" />
@@ -112,6 +112,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@color/blue1"
                 android:gravity="center"
+                android:layout_marginStart="16dp"
                 android:text="@string/end_setup"
                 android:textColor="@color/white"
                 android:textSize="20sp"
