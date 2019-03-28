@@ -40,7 +40,7 @@ public class BasicTitleTextSingleBtnDialog implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         LayoutInflater inflater = mContext.getLayoutInflater();
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.title_text_btn_dialog, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.title_txt_single_btn_dialog, null);
         builder.setView(view);
 
         TextView title = view.findViewById(R.id.DALJ_title_tv);

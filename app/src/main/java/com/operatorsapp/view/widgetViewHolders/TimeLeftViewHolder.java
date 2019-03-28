@@ -106,7 +106,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                     m1TimeTv.setTextSize(2, 18);
                 } else {
                     m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
-                            m1TimeTv.getContext().getString(R.string.hr),
+                            m1TimeTv.getContext().getString(R.string.hr2),
                             StringUtil.add0ToNumber((int) (time % 60)),
                             m1TimeTv.getContext().getString(R.string.min)));
                     m1TimeTv.setTextSize(2, 45);

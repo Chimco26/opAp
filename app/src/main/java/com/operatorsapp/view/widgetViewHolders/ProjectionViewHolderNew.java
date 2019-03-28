@@ -79,9 +79,9 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                 }
                 initValuesTv(widget);
 //                initWidgetHeight();
+                updateColors(widget);
 
                 if (mCurrentValue < widget.getTarget()) {
-                    updateColors(widget);
                     mProducedCompleteView.setVisibility(View.GONE);
                     mProducedCompleteTv.setVisibility(View.GONE);
                     mTargetReachedTv.setVisibility(View.INVISIBLE);

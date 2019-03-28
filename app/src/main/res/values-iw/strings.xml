@@ -285,7 +285,7 @@
     <string name="change_factory">שנה מפעל</string>
     <string name="you_ve_reached_the_production_target">"הגעת ליעד היצור של פקודת העבודה!  "</string>
     <string name="end_setup">סיום setup</string>
-    <string name="you_are_in_setup_mode">המכונה במצב setup</string>
+    <string name="you_are_in_setup_mode">אתה במצב setup</string>
     <string name="reported_stop_event">עצירות מדווחות</string>
     <string name="time_min">זמן(דק)</string>
     <string name="report_events_reason">דווח סיבות עצירה</string>
@@ -294,7 +294,7 @@
     <string name="setup_rejects_dialog_text">האם ברצונך לדווח חלק כיחידות פסולות?</string>
     <string name="setup_good_units_dialog_text">האם ברצונך לדווח חלק כיחידות ייצור טובות?</string>
     <string name="on_the_setup_you_produced">בזמן ה setup נוצרו</string>
-    <string name="from_the">מה מוצר</string>
+    <string name="from_the">מהמוצר</string>
     <string name="good_units">יחידות ייצור טובות</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">האם ברצונך להפעיל את הפק”ע האחרונה שעבדה על המכונה?</string>
     <string name="no">לא</string>

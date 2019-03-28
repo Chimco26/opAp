@@ -83,7 +83,7 @@ public class SingleLineKeyboard implements View.OnClickListener {
         button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
         button.setGravity(Gravity.CENTER);
         button.setId(id);
-        button.setTextSize(25);
+        button.setTextSize(23);
 
         button.setOnClickListener(this);
         parent.addView(button);
