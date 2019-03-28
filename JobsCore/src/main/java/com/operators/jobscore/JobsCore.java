@@ -1,16 +1,13 @@
 package com.operators.jobscore;
 
-import android.util.Log;
-
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.jobscore.interfaces.JobsForMachineUICallbackListener;
 import com.operators.jobsinfra.GetJobsListForMachineCallback;
 import com.operators.jobsinfra.JobListForMachine;
 import com.operators.jobsinfra.JobsListForMachineNetworkBridgeInterface;
 import com.operators.jobsinfra.JobsPersistenceManagerInterface;
 import com.operators.jobsinfra.StartJobForMachineCallback;
-import com.zemingo.logrecorder.ZLogger;
 
 public class JobsCore {
     public static final String LOG_TAG = JobsCore.class.getSimpleName();

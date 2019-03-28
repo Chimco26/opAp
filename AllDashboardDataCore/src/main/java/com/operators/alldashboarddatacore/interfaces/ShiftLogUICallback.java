@@ -2,7 +2,7 @@ package com.operators.alldashboarddatacore.interfaces;
 
 
 import com.example.common.Event;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 
 import java.util.ArrayList;
 

@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.getmachinesnetworkbridge.server.ErrorObject;
 import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
@@ -38,7 +38,6 @@ import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
-import com.zemingo.logrecorder.ZLogger;
 
 public class ReportRejectSelectParametersFragment extends BackStackAwareFragment implements View.OnClickListener, CroutonRootProvider
 {

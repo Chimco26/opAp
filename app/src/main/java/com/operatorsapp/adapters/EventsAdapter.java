@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Notification;
 import com.example.common.actualBarExtraResponse.Reject;
+import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
@@ -30,6 +32,7 @@ import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
@@ -50,6 +53,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     private boolean mIsServiceCallsChecked = true, mIsmMessagesChecked = true, mIsRejectsChecked = true, mIsProductionReportChecked = true;
     //    private EventsFilter mFilter;
     private ArrayList<Event> mEventsFiltered = new ArrayList<>();
+    private float mFactor = 1;
 
     public EventsAdapter(Context context, OnStopClickListener onStopClickListener, boolean selectMode, boolean closedState) {
         mContext = context;
@@ -106,6 +110,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mEventsFiltered.size();
     }
 
+    public void setFactor(float factor) {
+        if (mFactor - 0.05 > factor || mFactor + 0.05 < factor) {
+            mFactor = factor;
+            notifyDataSetChanged();
+        }
+    }
+
 //    @Override
 //    public Filter getFilter() {
 //        return mFilter;
@@ -116,6 +127,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private final View mView;
         private final View mCircle;
         private final ImageView mCheckIc;
+        private View mCircleSelector;
         private TextView mText;
         private TextView mTime;
         private View mLine;
@@ -132,6 +144,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mTime = itemView.findViewById(R.id.EI_time);
             mLine = itemView.findViewById(R.id.EI_line);
             mCircle = itemView.findViewById(R.id.EI_circle);
+            mCircleSelector = itemView.findViewById(R.id.EI_circle_selector);
             mCheckIc = itemView.findViewById(R.id.EI_check_ic);
             mCheckContainer = itemView.findViewById(R.id.EI_check_container);
             mCheckBox = itemView.findViewById(R.id.EI_text_check);
@@ -153,13 +166,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     if (mOnStopClickListener != null && event.getType() < 1) {
                         mOnStopClickListener.onStopEventSelected(event.getEventID(), isChecked);
                     }
-                    GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
+                    GradientDrawable selectorBackground = (GradientDrawable) mCircleSelector.getBackground();
                     if (isChecked) {
-                        textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
+                        selectorBackground.setColor(Color.parseColor(event.getColor()));
                     } else {
-                        textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
+                        selectorBackground.setColor(mCircleSelector.getContext().getResources().getColor(R.color.white));
                     }
-                    textBackground.setColor(Color.parseColor(event.getColor()));
 
                 }
             });
@@ -173,7 +185,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
 
             if (mIsSelectionMode && event.isChecked()) {
-
                 holder.mCheckBox.setChecked(true);
             } else {
                 holder.mCheckBox.setChecked(false);
@@ -211,21 +222,25 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 duration = 1;
             }
 
-            String text = duration + "m " + (OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
+            String text;
 
-            if (!mIsOpenState && text.length() > 12) {
-                mText.setText(String.format("%s...", text.substring(0, 12)));
+            if (!mIsOpenState) {
+                text = String.format(Locale.US, "%dm", duration);
+                mText.setText(text);
 
             } else {
+                text = String.format(Locale.US, "%dm | %s", duration, OperatorApplication.isEnglishLang() ? event.getSubtitleEname() : event.getSubtitleLname());
                 mText.setText(text);
             }
             GradientDrawable textBackground = (GradientDrawable) mText.getBackground();
-            if (event.isChecked() && mIsSelectionMode) {
-                textBackground.setStroke(3, mText.getContext().getResources().getColor(R.color.black));
-            } else {
-                textBackground.setStroke(1, mText.getContext().getResources().getColor(R.color.grey_lite));
-            }
             textBackground.setColor(Color.parseColor(event.getColor()));
+
+            GradientDrawable selectorBackground = (GradientDrawable) mCircleSelector.getBackground();
+            if (event.isChecked() && mIsSelectionMode) {
+                selectorBackground.setColor(Color.parseColor(event.getColor()));
+            } else {
+                selectorBackground.setColor(mCircleSelector.getContext().getResources().getColor(R.color.white));
+            }
 
             if (event.getEventReasonID() != 0 && event.getEventGroupID() != 20) {
                 mCheckIc.setVisibility(View.VISIBLE);
@@ -292,11 +307,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     String text = mTechContainer.getContext().getString(R.string.message);
                     if (notification.getNotificationType() == 1 && mIsmMessagesChecked) {
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
-                        setNotification(event, 1, notification.getSentTime().substring(11, 16), startTimeMilli, getTextByState(text, 6), 0);
+                        setNotification(event, 1, notification.getSentTime().substring(11, 16), getTextByState(text, 6), 0);
                     } else if (notification.getNotificationType() == 2 && mIsServiceCallsChecked) {
                         text = String.format("%s - %s", getCallTextById(notification.getResponseTypeID()), notification.getTargetUserName());
                         long startTimeMilli = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
-                        setNotification(event, 2, notification.getSentTime().substring(11, 16), startTimeMilli, getTextByState(text, 6), notification.getResponseTypeID());
+                        setNotification(event, 2, notification.getSentTime().substring(11, 16), getTextByState(text, 6), notification.getResponseTypeID());
                     }
                 }
             }
@@ -304,7 +319,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (mIsProductionReportChecked && event.getInventories() != null && event.getInventories().size() > 0) {
                 for (Inventory inventory : event.getInventories()) {
                     long startTimeMilli = convertDateToMillisecond(inventory.getTime(), SIMPLE_FORMAT_FORMAT);
-                    setNotification(event, 3, inventory.getTime(), startTimeMilli, getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0);
+                    setNotification(event, 3, inventory.getTime(), getTextByState(inventory.getAmount() + " " + inventory.getLName(), 6), 0);
                 }
             }
 
@@ -314,31 +329,35 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                     String name = OperatorApplication.isEnglishLang() ? reject.getEName() : reject.getLName();
                     long startTimeMilli = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
-                    setNotification(event, 4, reject.getTime().substring(11, 16), startTimeMilli, getTextByState(reject.getAmount() + " " + name, 6), 0);
+                    setNotification(event, 4, reject.getTime().substring(11, 16), getTextByState(reject.getAmount() + " " + name, 6), 0);
                 }
             }
             if (height > 10 * PIXEL_FOR_MINUTE &&
                     event.getType() == 0 && event.getAlarmsEvents() != null && event.getAlarmsEvents().size() > 0) {
                 for (Event alarmEvent : event.getAlarmsEvents()) {
                     long startTimeMilli = convertDateToMillisecond(alarmEvent.getTime(), SIMPLE_FORMAT_FORMAT);
-                    setNotification(event, 5, alarmEvent.getTime().substring(11, 16), startTimeMilli,
+                    setNotification(event, 5, alarmEvent.getTime().substring(11, 16),
                             getTextByState((OperatorApplication.isEnglishLang() ? alarmEvent.getSubtitleEname() : alarmEvent.getSubtitleLname()), 10), 0);
                 }
             }
-
+            if (event.getJobDataItems() != null && event.getJobDataItems().size() > 0) {
+                for (JobDataItem jobDataItem : event.getJobDataItems()) {
+                    setNotification(event, 6, jobDataItem.getStartTime().substring(11, 16),
+                            getTextByState((OperatorApplication.isEnglishLang() ? jobDataItem.getEName() : jobDataItem.getLName()), 10), 0);
+                }
+            }
 
         }
 
-        private void setNotification(Event event, int type, String time, long startTimeMilli, String details, int icon) {
+        private void setNotification(Event event, int type, String time, String details, int icon) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.service_call_item, mTechContainer, false);
             TextView timeTV = view.findViewById(R.id.SCI_time);
             TextView detailsTV = view.findViewById(R.id.SCI_details);
-//            TextView textTV = itemView.findViewById(R.id.SCI_text);
-
             ImageView iconIV = view.findViewById(R.id.SCI_service_call_icon);
+            LinearLayout serviceImgAndTextLy = view.findViewById(R.id.SCI_text_ly);
 
             if (event.getDuration() <= 5) {
-                timeTV.setVisibility(View.GONE);
+                timeTV.setVisibility(View.INVISIBLE);
             } else {
                 timeTV.setVisibility(View.VISIBLE);
             }
@@ -360,8 +379,25 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             view.setLayoutParams(params1);
             timeTV.setText(getNotificationTime(time, margin, eventViewHeight));
-//                    timeTV.setText(time);
+
             detailsTV.setText(details);
+            if (type == 6)
+
+                view.findViewById(R.id.SCI_circle).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.product_line).setVisibility(View.GONE);
+            iconIV.setVisibility(View.VISIBLE);
+//            detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            detailsTV.setVisibility(View.VISIBLE);
+            serviceImgAndTextLy.setVisibility(View.VISIBLE);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) serviceImgAndTextLy.getLayoutParams();
+            if (type == 6) {
+                params.addRule(RelativeLayout.ALIGN_PARENT_END);
+            } else {
+                params.addRule(RelativeLayout.ALIGN_PARENT_START);
+            }
+            serviceImgAndTextLy.setLayoutParams(params);
+
 
             switch (type) {
                 case 1:
@@ -381,6 +417,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     break;
                 case 5:
                     detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.alert));
+                    break;
+                case 6:
+                    view.findViewById(R.id.SCI_circle).setVisibility(View.GONE);
+                    view.findViewById(R.id.product_line).setVisibility(View.VISIBLE);
+                    iconIV.setVisibility(View.GONE);
+
+
+                    if (!mIsOpenState) {
+                        detailsTV.setVisibility(View.GONE);
+                        serviceImgAndTextLy.setVisibility(View.GONE);
+                    }
+
+//                    detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
+//                    view.findViewById(R.id.SCI_text_ly).setBackgroundColor(mContext.getResources().getColor(R.color.transparentColor));
                     break;
             }
             mTechContainer.addView(view);
@@ -424,7 +474,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     alertDialog.dismiss();
                 }
             });
-
 
         }
 
@@ -476,16 +525,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
     }
 
-
-//    private int filterHeight(int height, Event event) {
-//        if (((mIsSelectionMode || !mIsWorkingTimeChecked) && (event.getType() != 0 || event.getEventGroupID() == 20))
-//                || (!mIsStopEventChecked && (event.getType() == 0 && event.getEventGroupID() != 20))) {
-//            return 0;
-//        } else {
-//            return height;
-//        }
-//    }
-
     private String getNotificationTime(String time, int margin, int eventViewHeight) {
         if (margin > 10 && margin < eventViewHeight - 10) {
             return time;
@@ -496,11 +535,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     private int getViewHeight(Event event) {
         if ((int) event.getDuration() * PIXEL_FOR_MINUTE > 300) {
-            return 300;
+            return (int) (300 * mFactor);
         } else if (event.getDuration() > 4) {
-            return (int) event.getDuration() * PIXEL_FOR_MINUTE;
+            return (int) (event.getDuration() * PIXEL_FOR_MINUTE * mFactor);
         } else {
-            return 5 * PIXEL_FOR_MINUTE;
+            return (int) (5 * PIXEL_FOR_MINUTE * mFactor);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.operators.reportrejectnetworkbridge.server;
 
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 
 public class ErrorObject implements ErrorObjectInterface {
     private ErrorCode mError;

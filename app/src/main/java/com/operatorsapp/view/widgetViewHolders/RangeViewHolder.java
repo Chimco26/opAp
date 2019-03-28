@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,11 +15,19 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 import com.operatorsapp.view.RangeView;
+import com.operatorsapp.view.RangeView2;
 
 import me.grantland.widget.AutofitTextView;
 
 public class RangeViewHolder extends RecyclerView.ViewHolder {
 
+    private static final String CYCLE_TIME = "CycleTime";
+
+
+    private TextView mStandardTv;
+    private TextView mAverageTv;
+    private LinearLayout mCycleTimeLy;
+    private RangeView2 mCycleRange;
     private RelativeLayout mParentLayout;
     private View mDivider;
     private AutofitTextView mTitle;
@@ -52,6 +61,8 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         mTitle = itemView.findViewById(R.id.range_widget_title);
         mSubtitle = itemView.findViewById(R.id.range_widget_subtitle);
         mValue = itemView.findViewById(R.id.range_widget_current_value);
+        mCycleRange = itemView.findViewById(R.id.RWC_cycleTime);
+
         mCapsule = itemView.findViewById(R.id.range_widget_oval);
         mRangeViewBlue = itemView.findViewById(R.id.range_widget_range_view_blue);
         mCurrentValue = itemView.findViewById(R.id.range_widget_current_value_in_chart);
@@ -61,20 +72,25 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         mStandard = itemView.findViewById(R.id.range_widget_standard);
         mMax = itemView.findViewById(R.id.range_widget_max);
 
+        mStandardTv = itemView.findViewById(R.id.RWC_standard_tv);
+        mAverageTv = itemView.findViewById(R.id.RWC_average_tv);
+        mCycleTimeLy = itemView.findViewById(R.id.RWC_cycleTime_ly);
+
+
     }
 
     public void setRangeItem(final Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams3;
-                mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams3;
+//                mItemViewParams3 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams3.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
 
-        setSizes(mParentLayout);
+//        setSizes(mParentLayout);
         String nameByLang3 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang3);
         mSubtitle.setText(new StringBuilder(mContext.getString(R.string.standard)).append(widget.getStandardValue()));
@@ -103,6 +119,8 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         mMin.setText(String.valueOf(widget.getLowLimit()));
         mStandard.setText(String.valueOf(widget.getStandardValue()));
         mMax.setText(String.valueOf(widget.getHighLimit()));
+
+        setCycleTime(widget);
     }
 
     private void setRangeData(Widget widget) {
@@ -146,6 +164,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
+
     private void setSizes(final RelativeLayout parent) {
         ViewGroup.LayoutParams layoutParams;
         layoutParams = parent.getLayoutParams();
@@ -153,5 +172,26 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 
+    }
+
+
+    private void setCycleTime(Widget widget) {
+        mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+        mCycleRange.setHighLimit(widget.getHighLimit());
+        mCycleRange.setLowLimit(widget.getLowLimit());
+        mCycleRange.setmStandardValue(widget.getStandardValue());
+
+        if (widget.getFieldName().equals(CYCLE_TIME)) {
+
+            mCycleTimeLy.setVisibility(View.VISIBLE);
+            mCycleRange.setAvgValue((float) widget.getCycleTimeAvg());
+
+            mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+            mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
+
+        }else {
+            mCycleTimeLy.setVisibility(View.GONE);
+        }
+        mCycleRange.invalidate();
     }
 }

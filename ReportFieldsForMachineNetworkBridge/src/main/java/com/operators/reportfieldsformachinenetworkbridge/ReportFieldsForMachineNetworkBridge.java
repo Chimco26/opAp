@@ -1,9 +1,7 @@
 package com.operators.reportfieldsformachinenetworkbridge;
 
-import android.util.Log;
-
 import com.example.oppapplog.OppAppLogger;
-import com.operators.errorobject.ErrorObjectInterface;
+
 import com.operators.reportfieldsformachineinfra.GetReportFieldsForMachineCallback;
 import com.operators.reportfieldsformachineinfra.ReportFieldsForMachineNetworkBridgeInterface;
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
@@ -11,7 +9,6 @@ import com.operators.reportfieldsformachinenetworkbridge.server.ErrorObject;
 import com.operators.reportfieldsformachinenetworkbridge.server.requests.GetReportFieldsForMachineRequest;
 import com.operators.reportfieldsformachinenetworkbridge.server.responses.ErrorResponse;
 import com.operators.reportfieldsformachinenetworkbridge.server.responses.GetReportFieldsForMachineResponse;
-import com.zemingo.logrecorder.ZLogger;
 
 import java.util.concurrent.TimeUnit;
 

@@ -5,7 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.loginnetworkbridge.server.ErrorObject;
 import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;

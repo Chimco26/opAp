@@ -191,7 +191,7 @@ public class LineChartTimeSmall extends FrameLayout {
             set1.setFillColor(ColorTemplate.getHoloBlue());
             set1.setHighLightColor(Color.rgb(244, 117, 117));
 //        set1.setDrawCircleHole(false);
-            set1.setCircleRadius(3);
+            set1.setCircleRadius(1);
             set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
             set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
             set1.setColor(ContextCompat.getColor(mContext, R.color.C16));

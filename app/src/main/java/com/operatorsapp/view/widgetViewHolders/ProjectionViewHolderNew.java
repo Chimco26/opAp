@@ -26,6 +26,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     private final View mProducedCompleteView;
     private final View mTargetRl;
     private final View mTargetReachedTv;
+    private final View mLegendGoodUnitsView;
     private View mDivider;
     private AutofitTextView mTitle;
     private AutofitTextView mSubtitle;
@@ -57,8 +58,9 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         mTheoricalView = itemView.findViewById(R.id.PWCN_theorical_view);
         mProducedCompleteView = itemView.findViewById(R.id.PWCN_completion_view);
         mTargetRl = itemView.findViewById(R.id.PWCN_target_rl);
+        mLegendGoodUnitsView = itemView.findViewById(R.id.PWCN_legend_ic);
 
-        setSizes(mParentLayout);
+//        setSizes(mParentLayout);
     }
 
     public void setProjectionItem(final Widget widget) {
@@ -76,13 +78,13 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                     finalProjectionWidth = mTargetRl.getWidth() * (widget.getProjection() / widget.getTarget());
                 }
                 initValuesTv(widget);
-                initWidgetHeight();
+//                initWidgetHeight();
 
                 if (mCurrentValue < widget.getTarget()) {
                     updateColors(widget);
                     mProducedCompleteView.setVisibility(View.GONE);
                     mProducedCompleteTv.setVisibility(View.GONE);
-                    mTargetReachedTv.setVisibility(View.GONE);
+                    mTargetReachedTv.setVisibility(View.INVISIBLE);
                     showProducedValue();
                     showTheoricalValue(widget);
                     updateViewsWidth(finalCurrentWidth, finalProjectionWidth);
@@ -105,7 +107,7 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     }
 
     private void setEmptyMode() {
-        mTargetReachedTv.setVisibility(View.GONE);
+        mTargetReachedTv.setVisibility(View.INVISIBLE);
         updateViewsWidth(0, 0);
     }
 
@@ -113,9 +115,11 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         if (isLowState(widget)) {
             mProducedTv.setTextColor(mProducedTv.getContext().getResources().getColor(R.color.C7));
             mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.C7));
+            mLegendGoodUnitsView.setBackgroundColor(mLegendGoodUnitsView.getContext().getResources().getColor(R.color.C7));
         } else {
             mProducedTv.setTextColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
             mProducedView.setBackgroundColor(mProducedTv.getContext().getResources().getColor(R.color.new_green));
+            mLegendGoodUnitsView.setBackgroundColor(mLegendGoodUnitsView.getContext().getResources().getColor(R.color.new_green));
         }
     }
 
@@ -167,18 +171,6 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
                 && mCurrentValue * 100 / widget.getProjection() < 80;
     }
 
-    private void initWidgetHeight() {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
-    }
-
     private void initValuesTv(Widget widget) {
         String nameByLang4 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
         mTitle.setText(nameByLang4);
@@ -198,5 +190,17 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
         layoutParams.width = (int) (mWidth * 0.325);
         parent.requestLayout();
 
+    }
+
+    private void initWidgetHeight() {
+        mDivider.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup.MarginLayoutParams mItemViewParams4;
+                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+                mDivider.requestLayout();
+            }
+        });
     }
 }

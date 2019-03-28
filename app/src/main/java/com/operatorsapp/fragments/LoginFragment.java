@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;

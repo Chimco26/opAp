@@ -19,7 +19,7 @@ import android.widget.EditText;
 import com.app.operatorinfra.Operator;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;

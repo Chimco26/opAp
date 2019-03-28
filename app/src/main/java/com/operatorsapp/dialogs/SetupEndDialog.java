@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -28,12 +27,13 @@ import com.operatorsapp.view.SingleLineKeyboard;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListener {
 
     private static final int STATIC_REASON_ID = 100;
     private final Activity mContext;
-    private final ActiveJobsListForMachine mActiveJobListForMAchine;
+    private final List<ActiveJob> mActiveJobs;
     private AlertDialog mAlaramAlertDialog;
     private ReportFieldsForMachine mReportFieldsForMachine;
     //    private int mSelectedReasonId;
@@ -47,10 +47,21 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     public SetupEndDialog(Activity activity, ReportFieldsForMachine reportFieldsForMachine, ActiveJobsListForMachine activeJobsListForMachine) {
         mContext = activity;
         mReportFieldsForMachine = reportFieldsForMachine;
-        mActiveJobListForMAchine = activeJobsListForMachine;
+        mActiveJobs = activeJobsListForMachine.getActiveJobs();
+        filter0Units();
 
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+    }
+
+    private void filter0Units() {
+        ArrayList<ActiveJob> toDelete = new ArrayList<>();
+        for (ActiveJob activeJob: mActiveJobs){
+            if (activeJob.getJobUnitsProducedOK().equals("0") || activeJob.getJobUnitsProducedOK().isEmpty()){
+                toDelete.add(activeJob);
+            }
+        }
+        mActiveJobs.removeAll(toDelete);
     }
 
     public AlertDialog showNoProductionAlarm(final SetupEndDialogListener listener) {
@@ -64,12 +75,6 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
         mKeyBoardLayout = view.findViewById(R.id.FAFI_keyboard);
         mKeyBoardLayout.setVisibility(View.VISIBLE);
-        TextView setupText = view.findViewById(R.id.FAFI_setup_end_text);
-        if (isRejects) {
-            setupText.setText(R.string.setup_rejects_dialog_text);
-        } else {
-            setupText.setText(R.string.setup_good_units_dialog_text);
-        }
         initRv(view);
         builder.setCancelable(true);
         mAlaramAlertDialog = builder.create();
@@ -82,11 +87,13 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     private void initRv(View view) {
 
-        if (mActiveJobListForMAchine.getActiveJobs() != null &&
-                mActiveJobListForMAchine.getActiveJobs().size() > 0) {
+        if (mActiveJobs != null &&
+                mActiveJobs.size() > 0) {
+            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.VISIBLE);
             mReportRv = view.findViewById(R.id.FAFI_report_rv);
-            mReportRv.setOffscreenPageLimit(mActiveJobListForMAchine.getActiveJobs().size());
-            ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobListForMAchine.getActiveJobs(), isRejects, this);
+            mReportRv.setOffscreenPageLimit(mActiveJobs.size());
+            ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobs, isRejects, this);
             mReportRv.setAdapter(reportNumericAdapter);
             mReportRv.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -104,7 +111,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
                 }
             });
-            if (mActiveJobListForMAchine.getActiveJobs().size() > 1) {
+            if (mActiveJobs.size() > 1) {
 
                 view.findViewById(R.id.FAFI_back_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -117,7 +124,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                 view.findViewById(R.id.FAFI_next_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mReportRv.getCurrentItem() < mActiveJobListForMAchine.getActiveJobs().size() - 1) {
+                        if (mReportRv.getCurrentItem() < mActiveJobs.size() - 1) {
                             mReportRv.setCurrentItem(mReportRv.getCurrentItem() + 1);
                         }
                     }
@@ -126,6 +133,9 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                 view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
                 view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
             }
+        }else {
+            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
+            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
         }
     }
 
@@ -157,7 +167,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     public ArrayList<RejectForMultipleRequest> createReportRejectList() {
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         ArrayList<RejectForMultipleRequest> rejectForMultipleRequests = new ArrayList<>();
-        for (ActiveJob activeJob : mActiveJobListForMAchine.getActiveJobs()) {
+        for (ActiveJob activeJob : mActiveJobs) {
             if (activeJob.isEdited()) {
                 if (activeJob.isUnit()) {
                     rejectForMultipleRequests.add(new RejectForMultipleRequest(persistenceManager.getMachineId(),
@@ -184,7 +194,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         technicianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mReportFieldsForMachine.getRejectCauses().size() > 0) {
+                if (mReportFieldsForMachine != null && mReportFieldsForMachine.getRejectCauses().size() > 0) {
                     mSelectedTechnicianId = mReportFieldsForMachine.getTechnicians().get(position).getID();
                 }
 

@@ -62,6 +62,9 @@ import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.actualBarExtraResponse.Inventory;
 import com.example.common.actualBarExtraResponse.Reject;
 import com.example.common.actualBarExtraResponse.WorkingEvent;
+import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.machineJoshDataResponse.JobDataItem;
+import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -69,7 +72,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
-import com.operators.errorobject.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.AllMachinesData;
@@ -127,6 +129,7 @@ import com.operatorsapp.utils.TimeUtils;
 import com.operatorsapp.utils.broadcast.SelectStopReasonBroadcast;
 import com.operatorsapp.utils.broadcast.SendBroadcast;
 import com.operatorsapp.view.EmeraldSpinner;
+import com.operatorsapp.view.PinchRecyclerView;
 import com.operatorsapp.view.TimeLineView;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
@@ -145,6 +148,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -254,7 +258,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private TimeLineView mTimeView;
     private ArrayList<String> mTimes;
     public static final int PIXEL_FOR_MINUTE = 10;
-    private RecyclerView mEventsRecycler;
+    private PinchRecyclerView mEventsRecycler;
     private EventsAdapter mEventsAdapter;
     private TextView mTechOpenCallsIv;
     private Switch mTimeLineType;
@@ -2214,8 +2218,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
+        if (machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
+                && machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().size() > 0) {
+            actualBarExtraResponse.setJobData(machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().get(0).getJobData());
+        }
         mActualBarExtraResponse = actualBarExtraResponse;
 
         if (mShiftLogSwipeRefresh.isRefreshing()) {
@@ -2420,8 +2428,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         addDetailsToEvents(event, actualBarExtraResponse);
                     }
                     if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
-                            || convertDateToMillisecond(event.getEventTime()) > convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
+                            || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
                         mOpenEvent.setType(1);
+                        mOpenEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
                         addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
                         mOpenEvent.save();
                     }
@@ -2707,6 +2716,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
             }
             addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
+            addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
             if (addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
@@ -2767,6 +2777,37 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 return getString(R.string.working_no_production);
             default:
                 return getString(R.string.working);
+        }
+    }
+
+    private void addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+
+        ArrayList<JobDataItem> jobDataItems = (ArrayList<JobDataItem>) actualBarExtraResponse.getJobData();
+        ArrayList<JobDataItem> toDelete = new ArrayList<>();
+        if (jobDataItems != null && jobDataItems.size() > 0) {
+
+            ArrayList<JobDataItem> jobDataItemArrayList = event.getJobDataItems();
+
+            for (JobDataItem jobDataItem : jobDataItems) {
+                Long jobDataItemSentTime = convertDateToMillisecond(jobDataItem.getStartTime(), SIMPLE_FORMAT_FORMAT);
+
+                if (eventStart <= jobDataItemSentTime && jobDataItemSentTime <= eventEnd) {
+
+                    if (jobDataItemArrayList == null) {
+                        jobDataItemArrayList = new ArrayList<>();
+                    }
+
+                    jobDataItemArrayList.add(jobDataItem);
+                    toDelete.add(jobDataItem);
+                }
+            }
+            if (jobDataItemArrayList != null) {
+                event.setJobDataItems(jobDataItemArrayList);
+                jobDataItems.removeAll(toDelete);
+                if (jobDataItems.size() == 0) {
+                    jobDataItems = null;
+                }
+            }
         }
     }
 
@@ -2903,9 +2944,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private void initEventRecycler(View view) {
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
         mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
+
+        mEventsRecycler.addListener(new PinchRecyclerView.PinchRecyclerViewListener() {
+            @Override
+            public void onScale(float factor) {
+                if (mEventsAdapter != null) {
+                    mEventsAdapter.setFactor(factor);
+                }
+            }
+        });
     }
 
     private void initEvents(ArrayList<Event> events) {

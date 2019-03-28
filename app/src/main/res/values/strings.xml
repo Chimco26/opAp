@@ -311,6 +311,7 @@
     <string name="technician">Technician</string>
     <string name="time_left_to_current_job">Time left to current job</string>
     <string name="hr">(Hr)</string>
+    <string name="hr2">hr</string>
     <string name="see_pending_jobs">See pending jobs</string>
     <string name="end_setup">End Setup</string>
     <string name="you_are_in_setup_mode">"the machine ‌is in setup mode  "</string>
@@ -341,8 +342,10 @@
     <string name="report_events_reason">Report events reason</string>
     <string name="keep_reporting_events_reason">Keep Reporting events reason</string>
     <string name="target_reached">Target  Reached!</string>
-    <string name="setup_rejects_dialog_text">On the setup you produced rejects. \nDo you want to report some of them as good units?</string>
-    <string name="setup_good_units_dialog_text">On the setup you produced good units. \nDo you want to report some of them as rejects?</string>
+    <string name="setup_rejects_dialog_text">Do you want to report some of them as rejects?</string>
+    <string name="setup_good_units_dialog_text">Do you want to report some of them as good units?</string>
+    <string name="on_the_setup_you_produced">On the setup you produced</string>
+    <string name="from_the">from the</string>
     <string name="activate_last_job">Activate last job</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Do you want to activate the last job you work on?</string>
     <string name="no">No</string>
@@ -386,6 +389,9 @@
     <string name="setup_mode">Setup mode</string>
     <string name="rejects_quantity">Rejects quantity</string>
     <string name="there_are_no_stop_event">There are no stop evens to report</string>
+    <string name="theoretical_units">Theoretical units</string>
+    <string name="average">Average:</string>
+    <string name="add_rejects">Add Rejects</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

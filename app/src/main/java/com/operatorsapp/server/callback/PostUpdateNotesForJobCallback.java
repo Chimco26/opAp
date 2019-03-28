@@ -1,6 +1,6 @@
 package com.operatorsapp.server.callback;
 
-import com.operators.errorobject.ErrorObjectInterface;
+import com.example.common.callback.ErrorObjectInterface;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 
 /**

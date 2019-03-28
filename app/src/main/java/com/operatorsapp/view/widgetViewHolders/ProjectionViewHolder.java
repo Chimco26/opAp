@@ -77,22 +77,22 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setProjectionItem(final Widget widget) {
-        mDivider.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.MarginLayoutParams mItemViewParams4;
-                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
-                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
-                mDivider.requestLayout();
-            }
-        });
+//        mDivider.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ViewGroup.MarginLayoutParams mItemViewParams4;
+//                mItemViewParams4 = (ViewGroup.MarginLayoutParams) mDivider.getLayoutParams();
+//                mItemViewParams4.setMargins(0, (int) (mParentLayout.getHeight() * 0.3), 0, 0);
+//                mDivider.requestLayout();
+//            }
+//        });
+//        setSizes(mParentLayout);
         mCapsule.setBackground(mProjectionDrawableHelper.createCapsuleDrawable(widget.getTargetColor()));
         mRangeView.setBackground(mProjectionDrawableHelper.createRangeShape(widget.getCurrentColor()));
         mProjectionView.setBackground(mProjectionDrawableHelper.createProjectionShape(widget.getCurrentColor()));
         mProjectionViewProjection.setBackground(mProjectionDrawableHelper.createProjectionShape(widget.getProjectionColor()));
         mProjectionViewEnd.setBackground(mProjectionDrawableHelper.createEndProjectionShape(widget.getProjectionColor(), mContext));
         mProjectionViewStart.setBackground(mProjectionDrawableHelper.createStartProjectionShape(widget.getCurrentColor(), mContext));
-        setSizes(mParentLayout);
 //                    mRangeView.setCurrentLine(false);
 //                    mRangeView.setLineColor(mContext, "#000000");
         float currentFloat = WidgetAdapterUtils.tryParse(widget.getCurrentValue(), WidgetAdapterUtils.StringParse.FLOAT);

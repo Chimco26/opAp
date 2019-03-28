@@ -1,15 +1,12 @@
 package com.operators.activejobslistformachinecore;
 
-import android.util.Log;
-
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineCallback;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachineNetworkBridgeInterface;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachinePersistenceManagerInterface;
-import com.operators.errorobject.ErrorObjectInterface;
-import com.zemingo.logrecorder.ZLogger;
 
 /**
  * Created by Sergey on 14/08/2016.
