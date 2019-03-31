@@ -81,17 +81,6 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
         setListeners(listener, view);
         setUpTechnicianSpinner(view);
-//
-//        mAlaramAlertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        Window window = mAlaramAlertDialog.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-//        window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        wlp.gravity = Gravity.FILL_HORIZONTAL;
-//        window.setAttributes(wlp);
-//        mAlaramAlertDialog.setCancelable(true);
-//        mAlaramAlertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-////        mAlaramAlertDialog.setContentView(action_layout);
 
         mAlaramAlertDialog.show();
         return mAlaramAlertDialog;

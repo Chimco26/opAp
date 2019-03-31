@@ -1976,6 +1976,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         showSetUpEndDialog();
     }
 
+    @Override
+    public void onTechnicianCalled() {
+        dashboardDataStartPolling();
+    }
+
     public void setLenoxMachine(int machineId) {
 
         showLoadingDialog();

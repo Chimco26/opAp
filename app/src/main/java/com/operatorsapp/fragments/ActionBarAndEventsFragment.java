@@ -165,7 +165,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OnStopClickListener, CroutonRootProvider,
         SelectStopReasonBroadcast.SelectStopReasonListener,
         View.OnClickListener, LenoxMachineAdapter.LenoxMachineAdapterListener,
-        EmeraldSpinner.OnSpinnerEventsListener{
+        EmeraldSpinner.OnSpinnerEventsListener {
 
     private static final String LOG_TAG = ActionBarAndEventsFragment.class.getSimpleName();
     private static final int ANIM_DURATION_MILLIS = 200;
@@ -1371,7 +1371,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     setTechnicianCallStatus();
                     getNotificationsFromServer(false);
                     ProgressDialogManager.dismiss();
-
+                    mListener.onTechnicianCalled();
 
                     Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
                     tracker.setHostname(PersistenceManager.getInstance().getSiteName());
@@ -1483,17 +1483,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void setTechnicianCallStatus() {
 
-        ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
-        if (techList != null && techList.size() > 0) {
-            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue_svg));
-            mTechOpenCallsIv.setVisibility(View.VISIBLE);
-            mTechOpenCallsIv.setText(techList.size() + "");
-        } else {
-            mTechOpenCallsIv.setVisibility(View.INVISIBLE);
-            mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_white));
-            PersistenceManager.getInstance().setRecentTechCallId(0);
+        if (isAdded()) {
+            ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+            if (techList != null && techList.size() > 0) {
+                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue_svg));
+                mTechOpenCallsIv.setVisibility(View.VISIBLE);
+                mTechOpenCallsIv.setText(techList.size() + "");
+            } else {
+                mTechOpenCallsIv.setVisibility(View.INVISIBLE);
+                mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_white));
+                PersistenceManager.getInstance().setRecentTechCallId(0);
+            }
         }
-
     }
 
     private void setNotificationNeedResponse() {
@@ -2411,10 +2412,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             boolean mustBeClosed = false;
             for (Event event : events) {
-
-                if (event.getEventGroupID() == TYPE_ALERT) {
-                    mActualBarExtraResponse.getAlarmsEvents().add(event);
-                }
+//for alrms in shiftlog
+//                if (event.getEventGroupID() == TYPE_ALERT) {
+//                    mActualBarExtraResponse.getAlarmsEvents().add(event);
+//                }
 
                 if (mAutoSelectMode && event.getEventEndTime() != null && event.getEventEndTime().length() > 0 &&
                         mFirstSeletedEvent != null && mSelectedEvents != null
@@ -2431,7 +2432,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
                             || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
                         mOpenEvent.setType(1);
-                        mOpenEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
+                        mOpenEvent.setEventEndTime(event.getEventTime());//TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT)
                         addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
                         mOpenEvent.save();
                     }
@@ -2660,24 +2661,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
                 event.setRejects(eventRejects);
             }
-            ArrayList<com.example.common.actualBarExtraResponse.Notification> eventNotifications = event.getNotifications();
-            ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
-            if (eventNotifications != null && eventNotifications.size() > 0
-                    && notifications != null && notifications.size() > 0) {
-                ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
-                for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : eventNotifications) {
-                        if (notification.getID().equals(eventsNotification.getID())) {
-                            toDelete.add(eventsNotification);
-                        }
-                    }
-                }
-                eventNotifications.removeAll(toDelete);
-                if (eventNotifications.size() == 0) {
-                    eventNotifications = null;
-                }
-                event.setNotifications(eventNotifications);
-            }
+            //update old call
+//            ArrayList<com.example.common.actualBarExtraResponse.Notification> eventNotifications = event.getNotifications();
+//            ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
+//            if (eventNotifications != null && eventNotifications.size() > 0
+//                    && notifications != null && notifications.size() > 0) {
+//                ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
+//                for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
+//                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : eventNotifications) {
+//                        if (notification.getID().equals(eventsNotification.getID())) {
+//                            toDelete.add(eventsNotification);
+//                        }
+//                    }
+//                }
+//                eventNotifications.removeAll(toDelete);
+//                if (eventNotifications.size() == 0) {
+//                    eventNotifications = null;
+//                }
+//                event.setNotifications(eventNotifications);
+//            }
             event.setHaveExtra(event.getNotifications() != null || event.getInventories() != null || event.getRejects() != null);
 
             event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
@@ -2718,8 +2720,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
             addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
-            if (addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)
-                    || addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
                     || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
                     || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
                 event.setHaveExtra(true);
@@ -2750,7 +2751,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
                     } else {
                         event.setEventSubTitleEname("Working");
-                        event.setEventSubTitleLname("Working");
+                        event.setEventSubTitleLname("עבודה");
+                    }
+                    switch (workingEvent.getEventDistributionID()) {
+                        case 2:
+                        case 4:
+                        case 5:
+                            event.setEventReasonID(-2);
+                            break;
+                        default:
+                            event.setEventReasonID(0);
+                            break;
                     }
                     event.setColor(workingEvent.getColor());
                 }
@@ -2821,7 +2832,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = event.getNotifications();
 
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-                Long notificationSentTime = convertDateToMillisecond(notification.getSentTime(), SQL_T_FORMAT);
+                Long notificationSentTime = convertDateToMillisecond(notification.getResponseDate(), SQL_T_FORMAT);
 
                 if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
 
@@ -3679,7 +3690,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
-                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                             boolean isNew = true;
                             if (techList != null && techList.size() > 0) {
                                 for (TechCallInfo tech : techList) {
@@ -3690,7 +3701,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                     }
                                 }
 
-                                if (isNew){
+                                if (isNew) {
                                     techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
                                             TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
                                             not.getmNotificationID(), not.getmTargetUserId()));
@@ -3761,6 +3772,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void showWhiteFilter(boolean show);
 
         void onShowSetupEndDialog();
+
+        void onTechnicianCalled();
     }
 
 }
