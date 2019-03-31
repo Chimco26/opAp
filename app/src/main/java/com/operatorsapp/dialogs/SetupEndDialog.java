@@ -56,8 +56,8 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
     private void filter0Units() {
         ArrayList<ActiveJob> toDelete = new ArrayList<>();
-        for (ActiveJob activeJob: mActiveJobs){
-            if (activeJob.getJobUnitsProducedOK().equals("0") || activeJob.getJobUnitsProducedOK().isEmpty()){
+        for (ActiveJob activeJob : mActiveJobs) {
+            if (activeJob.getJobUnitsProducedOK().equals("0") || activeJob.getJobUnitsProducedOK().isEmpty()) {
                 toDelete.add(activeJob);
             }
         }
@@ -81,7 +81,19 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
 
         setListeners(listener, view);
         setUpTechnicianSpinner(view);
+//
+//        mAlaramAlertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        Window window = mAlaramAlertDialog.getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        window.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//        wlp.gravity = Gravity.FILL_HORIZONTAL;
+//        window.setAttributes(wlp);
+//        mAlaramAlertDialog.setCancelable(true);
+//        mAlaramAlertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+////        mAlaramAlertDialog.setContentView(action_layout);
 
+        mAlaramAlertDialog.show();
         return mAlaramAlertDialog;
     }
 
@@ -129,11 +141,11 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                         }
                     }
                 });
-            }else {
+            } else {
                 view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
                 view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
             }
-        }else {
+        } else {
             view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
             view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
         }

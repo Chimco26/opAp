@@ -1126,7 +1126,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         mActionBarAndEventsFragment.SetupEndDialogShow(false);
                     }
                 }
-            }).show();
+            });
             if (mActionBarAndEventsFragment != null) {
                 mActionBarAndEventsFragment.SetupEndDialogShow(true);
             }
@@ -1974,6 +1974,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowSetupEndDialog() {
         showSetUpEndDialog();
+    }
+
+    @Override
+    public void onTechnicianCalled() {
+        dashboardDataStartPolling();
     }
 
     public void setLenoxMachine(int machineId) {

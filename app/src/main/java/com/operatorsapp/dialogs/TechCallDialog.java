@@ -58,6 +58,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
     private List<Technician> mTechniciansList;
     private TextView mNewCallTv;
     private LinearLayout mTabsLil;
+    private View mRightTabUnderline;
+    private View mLeftTabUnderline;
 
     public TechCallDialog(@NonNull Context context, ArrayList<TechCallInfo> techList, List<Technician> techniciansList, TechDialogListener listener) {
         super(context);
@@ -83,6 +85,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mCloseIv = (ImageView) findViewById(R.id.tech_dialog_x_iv);
         mRightTab = findViewById(R.id.tech_dialog_tv_right_tab);
         mLeftTab = findViewById(R.id.tech_dialog_tv_left_tab);
+        mLeftTabUnderline = findViewById(R.id.tech_dialog_left_tab_underline);
+        mRightTabUnderline = findViewById(R.id.tech_dialog_right_tab_underline);
         mProgressBarFl = (FrameLayout) findViewById(R.id.tech_dialog_progress_fl);
         mNewCallTv = (TextView) findViewById(R.id.tech_dialog_new_call_tv);
         mTabsLil = (LinearLayout) findViewById(R.id.tech_dialog_ly_tabs);
@@ -108,6 +112,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
             case R.id.tech_dialog_tv_left_tab:
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mLeftTabUnderline.setVisibility(View.VISIBLE);
+                mRightTabUnderline.setVisibility(View.INVISIBLE);
                 if (mTechList.size() > 0){
                     mSubtitleTv.setVisibility(View.VISIBLE);
                 }else {
@@ -119,6 +125,8 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
             case R.id.tech_dialog_tv_right_tab:
                 mRightTab.setTextColor(getContext().getResources().getColor(R.color.tabNotificationColor));
                 mLeftTab.setTextColor(getContext().getResources().getColor(R.color.dark_indigo));
+                mLeftTabUnderline.setVisibility(View.INVISIBLE);
+                mRightTabUnderline.setVisibility(View.VISIBLE);
                 mSubtitleTv.setVisibility(View.GONE);
                 setLast24hrsCalls();
 

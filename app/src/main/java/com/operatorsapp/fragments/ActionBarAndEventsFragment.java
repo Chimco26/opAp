@@ -676,10 +676,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     setTechnicianCallStatus();
 
-                } else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
-
-                    setNotificationNeedResponse();
                 }
+//                else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
+//
+//                    //setNotificationNeedResponse();
+//                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
             }
         };
@@ -1370,7 +1371,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     setTechnicianCallStatus();
                     getNotificationsFromServer(false);
                     ProgressDialogManager.dismiss();
-
+                    mListener.onTechnicianCalled();
 
                     Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
                     tracker.setHostname(PersistenceManager.getInstance().getSiteName());
@@ -1829,7 +1830,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].setmResponseType(responseType);
                     nList.add(notification[0]);
                     pm.setNotificationHistory(nList);
-                    setNotificationNeedResponse();
+                    //setNotificationNeedResponse();
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
@@ -3677,14 +3678,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     for (Notification not : response.body().getmNotificationsList()) {
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
-                        if (techList != null && techList.size() > 0) {
-                            for (TechCallInfo tech : techList) {
-                                if (tech.getmNotificationId() == not.getmNotificationID()) {
-                                    tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
-                                    break;
+
+                        if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+                            boolean isNew = true;
+                            if (techList != null && techList.size() > 0) {
+                                for (TechCallInfo tech : techList) {
+                                    if (tech.getmNotificationId() == not.getmNotificationID()) {
+                                        isNew = false;
+                                        tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
+                                        break;
+                                    }
+                                }
+
+                                if (isNew){
+                                    techList.add(new TechCallInfo(not.getmResponseType(), not.getmTargetName(), not.getmResponseType() + "",
+                                            TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT),
+                                            not.getmNotificationID(), not.getmTargetUserId()));
                                 }
                             }
                         }
+
                     }
 
                     PersistenceManager.getInstance().setNotificationHistory(response.body().getmNotificationsList());
@@ -3697,7 +3710,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }
 
-                setNotificationNeedResponse();
+                //setNotificationNeedResponse();
                 setTechnicianCallStatus();
             }
 
@@ -3748,6 +3761,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void showWhiteFilter(boolean show);
 
         void onShowSetupEndDialog();
+
+        void onTechnicianCalled();
     }
 
 }

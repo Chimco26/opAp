@@ -49,10 +49,9 @@ public class ReportNumericAdapter extends PagerAdapter {
         final Context context = itemView.getContext();
         TextView title = itemView.findViewById(R.id.IRN_title);
         TextView boxTitle = itemView.findViewById(R.id.IRN_edit_number_title_tv);
-        TextView question = itemView.findViewById(R.id.IRN_setup_end_text);
         final EditText editNumericEt = itemView.findViewById(R.id.IRN_edit_number_et);
         RadioGroup radioGroup = itemView.findViewById(R.id.IRN_radio_group);
-        initTitle(title, boxTitle, question, position, context);
+        initTitle(title, boxTitle, position, context);
 //        setText(String.valueOf(mActiveJobs.get(position).getEditedValue()), position, editNumericEt, context);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -128,25 +127,25 @@ public class ReportNumericAdapter extends PagerAdapter {
         }
     }
 
-    private void initTitle(@NonNull TextView textView, TextView boxTitle, TextView question, int position, Context context) {
+    private void initTitle(@NonNull TextView textView, TextView boxTitle, int position, Context context) {
         if (isReject) {
-            textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.",
-                    context.getString(R.string.on_the_setup_you_produced),
-                    mActiveJobs.get(position).getJobUnitsProducedOK(),
-                    context.getString(R.string.good_units),
-                    context.getString(R.string.from_the),
-                    mActiveJobs.get(position).getProductName())));
-            question.setText(R.string.setup_rejects_dialog_text);
-            boxTitle.setText(context.getString(R.string.rejects));
-        } else {
-            textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.",
+            textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.<br /> %s",
                     context.getString(R.string.on_the_setup_you_produced),
                     mActiveJobs.get(position).getJobUnitsProducedOK(),
                     context.getString(R.string.rejects),
                     context.getString(R.string.from_the),
-                    mActiveJobs.get(position).getProductName())));
-            question.setText(R.string.setup_good_units_dialog_text);
+                    mActiveJobs.get(position).getProductName(),
+                    context.getString(R.string.setup_good_units_dialog_text))));
             boxTitle.setText(context.getString(R.string.good_units));
+        } else {
+            textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "%s <b>%s</b> %s %s <b>%s</b>.<br /> %s",
+                    context.getString(R.string.on_the_setup_you_produced),
+                    mActiveJobs.get(position).getJobUnitsProducedOK(),
+                    context.getString(R.string.good_units),
+                    context.getString(R.string.from_the),
+                    mActiveJobs.get(position).getProductName(),
+                    context.getString(R.string.setup_rejects_dialog_text))));
+            boxTitle.setText(context.getString(R.string.rejects));
         }
     }
 

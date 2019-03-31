@@ -27,4 +27,5 @@ dependencies {
     implementation(name: 'logrecorder', ext: 'aar')
     implementation project((':oppapplog'))
     implementation project(path: ':common')
+    compile project(path: ':common')
 }
