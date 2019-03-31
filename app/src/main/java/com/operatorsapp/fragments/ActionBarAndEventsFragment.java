@@ -1370,7 +1370,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     setTechnicianCallStatus();
                     getNotificationsFromServer(false);
                     ProgressDialogManager.dismiss();
-
+                    mListener.onTechnicianCalled();
 
                     Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
                     tracker.setHostname(PersistenceManager.getInstance().getSiteName());
@@ -3748,6 +3748,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void showWhiteFilter(boolean show);
 
         void onShowSetupEndDialog();
+
+        void onTechnicianCalled();
     }
 
 }
