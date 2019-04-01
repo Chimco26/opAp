@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LeaderMES Operator</string>
+    <string name="app_name">Matics Operator</string>
 
     <!-- General -->
     <string name="no_communication">No communication</string>
@@ -9,7 +9,7 @@
 
     <!-- Login screen -->
     <string name="link_machine">Select your machine</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">Fill in all fields</string>
     <string name="login">Log In</string>
     <string name="login_screen_save">Save</string>
@@ -270,7 +270,7 @@
     <string name="service_call_made">Service call has been sent to you from machine</string>
     <string name="service_call_made_new">Service call has been sent by operator %1$s from machine</string>
     <string name="call_for_technician_unresponsive">Your call for technician was unresponsive for 5 Minutes</string>
-    <string name="powered_by_leadermes">Powered by LeaderMES</string>
+    <string name="powered_by_leadermes">Powered by Matics</string>
     <string name="default_unanswered_technocian_call">Waiting for the technician to reply</string>
     <string name="default_unanswered_technician_call">Operator %1$s opened a service call. Waiting for the technician to reply</string>
     <string name="general">General</string>
