@@ -542,12 +542,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                     mIsOpen = false;
                                     toggleWoopList(mShiftLogParams, mCloseWidth, false);
                                     mListener.onWidgetChangeState(true);
-                                    mListener.onWidgetUpdateSpane(3);
+                                    mListener.onWidgetUpdateSpane(true);
                                 } else {
                                     mIsOpen = true;
                                     toggleWoopList(mShiftLogParams, mOpenWidth, true);
                                     mListener.onWidgetChangeState(false);
-                                    mListener.onWidgetUpdateSpane(2);
+                                    mListener.onWidgetUpdateSpane(false);
 
                                 }
 
@@ -832,7 +832,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             mShiftLogAdapter.notifyDataSetChanged();
                         }
                         mListener.onWidgetChangeState(false);
-                        mListener.onWidgetUpdateSpane(2);
+                        mListener.onWidgetUpdateSpane(false);
 
                     }
 
@@ -873,7 +873,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onAnimationEnd(Animation animation) {
                 toggleWoopList(leftLayoutParams, mCloseWidth, false);
                 mListener.onWidgetChangeState(true);
-                mListener.onWidgetUpdateSpane(3);
+                mListener.onWidgetUpdateSpane(true);
 
             }
 
@@ -3743,7 +3743,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public interface ActionBarAndEventsFragmentListener {
         void onWidgetChangeState(boolean state);
 
-        void onWidgetUpdateSpane(int span);
+        void onWidgetUpdateSpane(boolean open);
 
         void onResize(int width, int statusBarsHeight);
 
