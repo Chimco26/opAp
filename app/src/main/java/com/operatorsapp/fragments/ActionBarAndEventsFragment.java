@@ -679,7 +679,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 //                else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 //
-//                    //setNotificationNeedResponse();
+                    setNotificationNeedResponse();
 //                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
             }
@@ -1497,20 +1497,26 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void setNotificationNeedResponse() {
-        int counter = 0;
+//        int counter = 0;
         for (Notification item : PersistenceManager.getInstance().getNotificationHistory()) {
             if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
-                counter++;
+                mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
+                return;
             }
+//            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
+//                counter++;
+//            }
         }
 
-        if (counter > 0) {
-            mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
-            mNotificationIndicatorNumTv.setText(counter + "");
-        } else {
-            mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
-            mNotificationIndicatorNumTv.setText(counter + "");
-        }
+        mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
+
+//        if (counter > 0) {
+//            mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
+//            mNotificationIndicatorNumTv.setText(counter + "");
+//        } else {
+//            mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
+//            mNotificationIndicatorNumTv.setText(counter + "");
+//        }
     }
 
     private void openTechniciansList() {
@@ -1686,8 +1692,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         window.setAttributes(wlp);
 
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
+        boolean isEmpty = true;
+        for (Notification notification : notificationList) {
+            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+                isEmpty = false;
+                break;
+            }
+        }
 
-        if (notificationList.size() > 0) {
+        if (!isEmpty) {
 
             mPopUpDialog.setContentView(R.layout.notification_view_pager);
 
@@ -1830,7 +1843,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].setmResponseType(responseType);
                     nList.add(notification[0]);
                     pm.setNotificationHistory(nList);
-                    //setNotificationNeedResponse();
+                    setNotificationNeedResponse();
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
@@ -3710,7 +3723,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }
 
-                //setNotificationNeedResponse();
+                setNotificationNeedResponse();
                 setTechnicianCallStatus();
             }
 
