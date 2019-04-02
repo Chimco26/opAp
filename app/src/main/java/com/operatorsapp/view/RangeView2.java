@@ -190,8 +190,8 @@ public class RangeView2 extends View {
 
         }
 
-        canvas.drawLine(percent * 20, getHeight() / 2f - border / 2f, percent * 20, getHeight() / 2f + border / 2f, mBorderPaint);
-        canvas.drawLine(percent * 80, getHeight() / 2f - border / 2f, percent * 80, getHeight() / 2f + border / 2f, mBorderPaint);
+        canvas.drawLine(percent * 20, getHeight() / 2f - mHeight / 2f, percent * 20, getHeight() / 2f + mHeight / 2f, mBorderPaint);
+        canvas.drawLine(percent * 80, getHeight() / 2f - mHeight / 2f, percent * 80, getHeight() / 2f + mHeight / 2f, mBorderPaint);
         canvas.drawText(String.valueOf(mLowLimit), percent * 20 - mTextPaint.measureText(String.valueOf(mLowLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
         canvas.drawText(String.valueOf(mHighLimit), percent * 80 - mTextPaint.measureText(String.valueOf(mHighLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
     }
