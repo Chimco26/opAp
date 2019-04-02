@@ -36,6 +36,7 @@ public class RangeView2 extends View {
     float mHeight;
     private Bitmap avgImage;
     private Bitmap mStandardImage;
+    private int mWidth = 1;
 
     public void setAvgValue(float avgValue) {
         this.mAvgValue = avgValue;
@@ -62,7 +63,10 @@ public class RangeView2 extends View {
         this.mCurrentValue = mCurrentValue;
     }
 
-
+    public void setWidth(int width) {
+        mWidth = width;
+        postInvalidate();
+    }
     public RangeView2(Context context) {
         super(context);
         init(context, null, 0);
@@ -128,9 +132,14 @@ public class RangeView2 extends View {
 
         textPadding = dipToPixels(context, 6);
 
-
     }
-
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        mWidth = MeasureSpec.getSize(widthMeasureSpec);
+//        int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+//        this.setMeasuredDimension(mWidth, parentHeight);
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -145,7 +154,7 @@ public class RangeView2 extends View {
         mTextPaint.setColor(valueColor);
         mGreenPaint.setColor(valueColor);
 
-        float percent = getWidth() / 100;
+        float percent = mWidth / 100;
 
         canvas.drawRect(0, getHeight() / 2f - mHeight / 2f, percent * 100, getHeight() / 2f + mHeight / 2f, mGrayPaint);
 

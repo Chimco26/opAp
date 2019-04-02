@@ -132,42 +132,75 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), start ");
         super.onViewCreated(view, savedInstanceState);
 
         mIsOpen = false;
         // get screen parameters
         if (getActivity() != null) {
-            Display display = getActivity().getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int mWidth = size.x;
-            int mHeight = size.y;
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int mWidth = size.x;
+                    int mHeight = size.y;
 
-            mWidgetsLayoutWidth = (int) (mWidth * 0.8);
-            mRecyclersHeight = (int) (mHeight * 0.75);
+                    mWidgetsLayoutWidth = (int) (mWidth * 0.84);
+                    mRecyclersHeight = (int) (mHeight * 0.67);
 
-            mSpanCount = (int) ((mWidth - 50) / getActivity().getResources().getDimension(R.dimen.widget_width));
-            ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
-            ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
-            mWidgetsLayout.setLayoutParams(mWidgetsParams);
+                    mSpanCount = (int) ((view.getWidth()) / (getActivity().getResources().getDimension(R.dimen.widget_width)));
+                    mSpanCount = Math.max(mSpanCount, 1);
+                    ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
+                    ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
+                    mWidgetsLayout.setLayoutParams(mWidgetsParams);
 
-            mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
-            mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
-            mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-            GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
-            mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
-            mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
-                    true, mRecyclersHeight, mWidgetsLayoutWidth,
-                    mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus,this);
-            mWidgetRecycler.setAdapter(mWidgetAdapter);
+                    mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
+                    mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
+                    mWidgetRecycler.setLayoutManager(mGridLayoutManager);
+                    GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
+                    mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
+                    mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
+                            true, mRecyclersHeight, mWidgetsLayoutWidth,
+                            mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, new NumericViewHolder.OnKeyboardManagerListener() {
+                        @Override
+                        public void onOpenKeyboard(SingleLineKeyboard.OnKeyboardClickListener listener, String text, String[] complementChars) {
+                            if (mKeyBoardLayout != null) {
+                                mKeyBoardLayout.setVisibility(View.VISIBLE);
+                                if (mKeyBoard == null)
+                                    mKeyBoard = new SingleLineKeyboard(mKeyBoardLayout, getContext());
 
-            mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
-            mLoadingDataView.setVisibility(View.VISIBLE);
-            mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
+                                mKeyBoard.setChars(complementChars);
+                                mKeyBoard.openKeyBoard(text);
+                                mKeyBoard.setListener(listener);
+                                mDashboardCentralContainerListener.onKeyboardEvent(true);
+                            }
+                        }
 
-            initTopFive(view);
+                        @Override
+                        public void onCloseKeyboard() {
+                            if (mKeyBoardLayout != null) {
+                                mKeyBoardLayout.setVisibility(View.GONE);
+                            }
+                            if (mKeyBoard != null) {
+                                mKeyBoard.setListener(null);
+                            }
+                            mDashboardCentralContainerListener.onKeyboardEvent(false);
+                        }
+
+                    });
+                    mWidgetRecycler.setAdapter(mWidgetAdapter);
+
+                    mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
+                    mLoadingDataView.setVisibility(View.VISIBLE);
+                    mKeyBoardLayout = view.findViewById(R.id.FW_keyboard);
+
+                    initTopFive(view);
+                }
+            });
+
         }
 
     }
@@ -372,9 +405,9 @@ public class WidgetFragment extends Fragment implements
     public void setSpanCount(boolean open) {
         if (mGridLayoutManager != null) {
             if (open) {
-                mGridLayoutManager.setSpanCount(mSpanCount);
+                mGridLayoutManager.setSpanCount(Math.max(mSpanCount, 1));
             }else {
-                mGridLayoutManager.setSpanCount(mSpanCount - 1);
+                mGridLayoutManager.setSpanCount(Math.max(mSpanCount - 1, 1));
             }
         }
     }
