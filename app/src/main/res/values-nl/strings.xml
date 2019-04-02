@@ -230,7 +230,7 @@
     <string name="operator">Bediener</string>
     <string name="popup_timeout">Time-out in venster</string>
     <string name="popup_timeout_range_error">De time-out in het venster moet tussen de 5-30 seconden zijn</string>
-    <string name="powered_by_leadermes">Mogelijk gemaakt door LeaderMES</string>
+    <string name="powered_by_leadermes">Mogelijk gemaakt door Matics</string>
     <string name="production_parameters">Productieparameters</string>
     <string name="reject_reason_setup">Instellen</string>
     <string name="respond_notification_title">Reageren op meldingen</string>

@@ -225,7 +225,7 @@
     <string name="operator">Operario</string>
     <string name="popup_timeout">Tiempo agotado de emergente</string>
     <string name="popup_timeout_range_error">El tiempo agotado de emergente debe estar en el rango de 5-30 segundos</string>
-    <string name="powered_by_leadermes">Desarrollado por LeaderMES</string>
+    <string name="powered_by_leadermes">Desarrollado por Matics</string>
     <string name="production_parameters">Parámetros de la producción</string>
     <string name="reject_reason_setup">Configuración</string>
     <string name="respond_notification_title">Responder a la notificación</string>

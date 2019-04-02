@@ -1394,3 +1394,5 @@ app/.idea/libraries/io_reactivex_rxjava2_rxandroid_2_0_1.xml
 app/src/main/res/layout/actionbar_title_and_tools_view.xml.orig
 app/Lenox/release/output.json
 app/Lenox/release/app-Lenox-release.apk
+/oppapplog/build
+/.idea

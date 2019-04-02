@@ -101,6 +101,7 @@ public class WidgetFragment extends Fragment implements
 
     private LinearLayout mKeyBoardLayout;
     private SingleLineKeyboard mKeyBoard;
+    private int mSpanCount;
 
     public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine) {
         WidgetFragment widgetFragment = new WidgetFragment();
@@ -147,14 +148,15 @@ public class WidgetFragment extends Fragment implements
             mWidgetsLayoutWidth = (int) (mWidth * 0.8);
             mRecyclersHeight = (int) (mHeight * 0.75);
 
+            mSpanCount = (int) ((mWidth - 50) / getActivity().getResources().getDimension(R.dimen.widget_width));
             ViewGroup mWidgetsLayout = view.findViewById(R.id.fragment_dashboard_widgets_layout);
             ViewGroup.MarginLayoutParams mWidgetsParams = (ViewGroup.MarginLayoutParams) mWidgetsLayout.getLayoutParams();
             mWidgetsLayout.setLayoutParams(mWidgetsParams);
 
             mWidgetRecycler = view.findViewById(R.id.fragment_dashboard_widgets);
-            mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
+            mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
             mWidgetRecycler.setLayoutManager(mGridLayoutManager);
-            GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(3, 14, true, 0);
+            GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
             mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
             mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
                     true, mRecyclersHeight, mWidgetsLayoutWidth,
@@ -367,9 +369,13 @@ public class WidgetFragment extends Fragment implements
 
     }
 
-    public void setSpanCount(int span) {
+    public void setSpanCount(boolean open) {
         if (mGridLayoutManager != null) {
-            mGridLayoutManager.setSpanCount(span);
+            if (open) {
+                mGridLayoutManager.setSpanCount(mSpanCount);
+            }else {
+                mGridLayoutManager.setSpanCount(mSpanCount - 1);
+            }
         }
     }
 
