@@ -1697,15 +1697,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onWidgetUpdateSpane(int span) {
+    public void onWidgetUpdateSpane(boolean open) {
         if (mWidgetFragment != null) {
-            mWidgetFragment.setSpanCount(span);
+            mWidgetFragment.setSpanCount(open);
         }
         if (mSelectStopReasonFragment != null) {
-            mSelectStopReasonFragment.setSpanCount(span != 3);
+            mSelectStopReasonFragment.setSpanCount(!open);
         }
         if (mReportStopReasonFragment != null) {
-            mReportStopReasonFragment.setSpanCount(span != 3);
+            mReportStopReasonFragment.setSpanCount(!open);
         }
 
     }
@@ -1974,6 +1974,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onShowSetupEndDialog() {
         showSetUpEndDialog();
+    }
+
+    @Override
+    public void onTechnicianCalled() {
+        dashboardDataStartPolling();
     }
 
     public void setLenoxMachine(int machineId) {

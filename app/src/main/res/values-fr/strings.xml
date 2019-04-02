@@ -225,7 +225,7 @@
     <string name="operator">Opérateur</string>
     <string name="popup_timeout">"Délai d'attente du pop-up "</string>
     <string name="popup_timeout_range_error">Le délai d\'attente du pop-up doit être entre 5 et 30 secondes.</string>
-    <string name="powered_by_leadermes">Alimenté par LeaderMES</string>
+    <string name="powered_by_leadermes">Alimenté par Matics</string>
     <string name="production_parameters">Paramètres de production</string>
     <string name="reject_reason_setup">"Configuration "</string>
     <string name="respond_notification_title">Répondre à la notification</string>

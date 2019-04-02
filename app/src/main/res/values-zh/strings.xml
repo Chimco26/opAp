@@ -218,7 +218,7 @@
     <string name="operator">操作員</string>
     <string name="popup_timeout">超時彈出提示</string>
     <string name="popup_timeout_range_error">超時彈出提示必須在5-30秒範圍內</string>
-    <string name="powered_by_leadermes">由LeaderMES提供支援</string>
+    <string name="powered_by_leadermes">由Matics提供支援</string>
     <string name="production_parameters">生產參數</string>
     <string name="reject_reason_setup">安裝</string>
     <string name="respond_notification_title">回應通知</string>
