@@ -13,7 +13,7 @@ public class ActiveJob implements Parcelable {
     @SerializedName("CavitiesActual")
     private Double cavitiesActual;
     @SerializedName("CavitiesStandard")
-    private Integer cavitiesStandard;
+    private Float cavitiesStandard;
     @SerializedName("Department")
     private Integer department;
     @SerializedName("JobID")
@@ -100,7 +100,7 @@ public class ActiveJob implements Parcelable {
         this.cavitiesActual = cavitiesActual;
     }
 
-    public void setCavitiesStandard(Integer cavitiesStandard) {
+    public void setCavitiesStandard(Float cavitiesStandard) {
         this.cavitiesStandard = cavitiesStandard;
     }
 
@@ -144,7 +144,7 @@ public class ActiveJob implements Parcelable {
         this.productCatalogId = productCatalogId;
     }
 
-    public Integer getCavitiesStandard() {
+    public Float getCavitiesStandard() {
         return cavitiesStandard;
     }
 
@@ -203,7 +203,7 @@ public class ActiveJob implements Parcelable {
 
     protected ActiveJob(Parcel in) {
         this.cavitiesActual = (Double) in.readValue(Double.class.getClassLoader());
-        this.cavitiesStandard = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.cavitiesStandard = (Float) in.readValue(Integer.class.getClassLoader());
         this.department = (Integer) in.readValue(Integer.class.getClassLoader());
         this.jobID = (Integer) in.readValue(Integer.class.getClassLoader());
         this.machineID = (Integer) in.readValue(Integer.class.getClassLoader());
