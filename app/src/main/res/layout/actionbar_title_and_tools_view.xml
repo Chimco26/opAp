@@ -173,7 +173,7 @@
 
                         <ImageView
                             android:id="@+id/job_indicator"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_width="40dp"
                             android:background="@drawable/ic_no_data" />
                     </LinearLayout>

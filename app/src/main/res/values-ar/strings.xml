@@ -3,13 +3,11 @@
 
     <!-- General -->
     <string name="no_communication">لا يوجد اتصال</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
     <string name="unknown">غير معرف</string>
 
     <!-- Login screen -->
     <string name="link_machine">رابط الماكنه</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">املا جميع الفراغات</string>
     <string name="login">تسجيل الدخول</string>
     <string name="login_screen_save">حفظ</string>
@@ -79,7 +77,6 @@
     <string name="units">وحدات</string>
     <string name="weight">وزن</string>
     <string name="material_weight_alarm">انذار وزن المواد</string>
-    <string name="dashes">- -</string>
     <string name="no_reasons">ا تتوفر تقارير</string>
     <string name="report_stop_event_reason">الإبلاغ عن سبب حدث التوقف</string>
     <string name="report_stop_reason">تقرير ايقاف\nسبب</string>
@@ -110,7 +107,6 @@
     <string name="chart_min_">الحد الادنى: </string>
     <string name="chart_standard_">رئيسي:&#160;</string>
     <string name="chart_max_">الحد الاقصى: </string>
-    <string name="space">&#160;</string>
     <string name="switch_user">تغير المستخدم</string>
     <string name="standard">اساسي&#160;</string>
     <string name="total_required">مجموع&#160;</string>
@@ -184,7 +180,7 @@
     <string name="add_note">اضافه ملاحظه</string>
     <string name="alarms">اشعارات</string>
     <string name="amount">كميه</string>
-    <string name="app_name">مشغل</string>
+    <string name="app_name">Matics Operator</string>
     <string name="at_work">في العلاج</string>
     <string name="attention_cycles_detected_in_a_non_production_status">\"انتباه!     تم اكتشاف الدورات في حالة عدم الإنتاج.     من فضلك لا تنسى لتفعيل العمل في الوقت المناسب!\"</string>
     <string name="call_for_technician_unresponsive">كان ندائك للفني غير مستجيب وبالتالي تم إلغاؤه</string>
@@ -218,7 +214,34 @@
     <string name="service_completed">اكتملت الخدمة</string>
     <string name="call_cancelled">الخدمه قد الغيت</string>
     <string name="waiting_for_replay">انتظار الرد</string>
-    <string name="service_call_was_canceled">تم إلغاء هذه الخدمه</string>
+    <string name="service_call_was_canceled"><b>تم إلغاء هذه الخدمه</b></string>
+    <string name="machine_status">وضع الماكنه</string>
+    <string name="version">نسخة التطبيق</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="hr">(ساعة زمنية)</string>
+    <string name="hr2">ساعة زمنية</string>
+    <string name="NoProgressMinFromStartShift">عبور %1$s دقائق من بدء الورديه والإنتاج لم يبدا بعد.</string>
+    <string name="SetupDurationMinActual">مدة الإعداد هي أكثر من %1$s دقيقة.</string>
+    <string name="SetupInjectionsCount">أكثر من %1$s دورات تمت في الإعداد.</string>
+    <string name="UnReportedStopsPC">أكثر من٪ %1$s من وقت التوقف هذا التحول غير مصنف.</string>
+    <string name="RejectsPC">الرفض يزيد عن %1$s ٪.</string>
+    <string name="OpenEventDuration">التوقف الحالي هو أكثر من %1$s دقيقة.</string>
+    <string name="ProductionModeInjectionsCount">تم اكتشاف %1$s دورات في حالة عدم الإنتاج.</string>
+    <string name="CycleTimeDeviation">لوحظ انحراف %1$s ٪ نسبة إلى المعيار في وقت الدورة.</string>
+    <string name="ShortEventsFromProductionPC">إجمالي الوقفات القصيرة من إجمالي وقت الإنتاج يتجاوز %1$s ٪.</string>
+    <string name="WorkerNotSigned">لا يوجد تسجيل دخول المشغل إلى الجهاز بعد مرور الدقائق %1$s من بداية الورديه.</string>
+    <string name="working_setup">يعمل في ظروف اعداد</string>
+    <string name="parameter_deviation">انحراف عامل متغير</string>
+    <string name="stop">توقف</string>
+    <string name="stop_setup">وقوف في ظروف اعداد</string>
+    <string name="idle">بطاله</string>
+    <string name="working_no_production">عمل بدون انتاج</string>
+    <string name="no_communication_p">لا يوجد اتصال</string>
+    <string name="_100">100%</string>
+    <string name="setup">تنصيب</string>
+    <string name="min">دقيقة</string>
+    <string name="average">معدل</string>
+    <string name="minutes_long">دقيقة</string>
 
 
 </resources>

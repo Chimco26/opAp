@@ -696,12 +696,12 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public void setisNewStopReasonDesign(boolean selected) {
         SecurePreferences.getInstance().setBoolean(PREF_STOP_REASON_DESIGN, selected);
     }
-    public void setMaxUnitReport(int maxUnitReport) {
-        SecurePreferences.getInstance().setInt(PREF_RECENT_MAX_UNIT_REPORT, maxUnitReport);
+    public void setMaxUnitReport(float maxUnitReport) {
+        SecurePreferences.getInstance().setFloat(PREF_RECENT_MAX_UNIT_REPORT, maxUnitReport);
     }
 
-    public int getMaxUnitReport() {
-        return SecurePreferences.getInstance().getInt(PREF_RECENT_MAX_UNIT_REPORT, 1000);
+    public float getMaxUnitReport() {
+        return SecurePreferences.getInstance().getFloat(PREF_RECENT_MAX_UNIT_REPORT);
     }
 
     public void setIsNewShiftLog(boolean isNewShiftLog) {

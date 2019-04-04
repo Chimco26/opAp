@@ -84,7 +84,8 @@
                 android:id="@+id/RWC_standard_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Standard: 10.2" />
+                tools:text="Standard: 10.2"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -95,7 +96,8 @@
                 android:id="@+id/RWC_average_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Average: 10.0" />
+                tools:text="Average: 10.0"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
 
