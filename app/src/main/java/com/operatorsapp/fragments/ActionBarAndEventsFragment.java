@@ -2564,7 +2564,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
                     }
                     Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
-                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
+                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
                             -0.5f, color, 1);
 
                     if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
@@ -2764,7 +2764,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
                     } else {
                         event.setEventSubTitleEname("Working");
-                        event.setEventSubTitleLname("עבודה");
+                        event.setEventSubTitleLname(getString(R.string.working));
                     }
                     switch (workingEvent.getEventDistributionID()) {
                         case 2:
@@ -3069,19 +3069,19 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         switch (machineStatusID) {
             case 1:
                 event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname("עבודה");
+                event.setEventSubTitleLname(getString(R.string.working));
                 break;
             case 2:
                 event.setEventSubTitleEname("Parameter Deviation");
-                event.setEventSubTitleLname("חריגה מפרמטר");
+                event.setEventSubTitleLname(getString(R.string.parameter_deviation));
                 break;
             case 5:
                 event.setEventSubTitleEname("Working Setup");
-                event.setEventSubTitleLname("עבודה ב setup");
+                event.setEventSubTitleLname(getActivity().getResources().getString(R.string.working_setup));
                 break;
             default:
                 event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname("עבודה");
+                event.setEventSubTitleLname(getString(R.string.working));
         }
     }
 

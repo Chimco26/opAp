@@ -231,7 +231,6 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
             mFilterShort.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
             mFilterShortTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
             mFilterShortMinTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
-            mLegFilterShortTv.setTextColor(Color.parseColor(widget.getProjectionColor()));
             mLegFilterShort.setBackgroundColor(Color.parseColor(widget.getProjectionColor()));
         }
         if (widget.getCurrentColor() != null && widget.getCurrentColor().length() > 0) {
@@ -239,12 +238,10 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
             mLegReported.setBackgroundColor(Color.parseColor(widget.getCurrentColor()));
             mReportedTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
             mReportedMinTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
-            mLegReportedTv.setTextColor(Color.parseColor(widget.getCurrentColor()));
         }
         if (widget.getTargetColor() != null && widget.getTargetColor().length() > 0) {
             mNotReported.setBackgroundColor(Color.parseColor(widget.getTargetColor()));
             mLegNotReported.setBackgroundColor(Color.parseColor(widget.getTargetColor()));
-            mLegNotReportedTv.setTextColor(Color.parseColor(widget.getTargetColor()));
             mNotReportedTv.setTextColor(Color.parseColor(widget.getTargetColor()));
             mNotReportedMinTv.setTextColor(Color.parseColor(widget.getTargetColor()));
         }

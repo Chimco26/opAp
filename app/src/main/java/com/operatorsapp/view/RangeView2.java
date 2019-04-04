@@ -122,11 +122,11 @@ public class RangeView2 extends View {
         mCurrentPaint.setStrokeWidth(dipToPixels(context, 6));
 
         mTextPaint.setStyle(Paint.Style.FILL);
-        mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         mTextPaint.setTextSize(dipToPixels(context, 15));
 
         mBorderTextPaint.setStyle(Paint.Style.FILL);
-        mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         mBorderTextPaint.setTextSize(dipToPixels(context, 15));
         mBorderTextPaint.setColor(Color.BLACK);
 
