@@ -183,7 +183,11 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+                if (!widget.getCurrentValue().equals("--")) {
+                    mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+                }else {
+                    mCycleRange.setCurrentValue(0);
+                }
                 mCycleRange.setHighLimit(widget.getHighLimit());
                 mCycleRange.setLowLimit(widget.getLowLimit());
                 mCycleRange.setmStandardValue(widget.getStandardValue());

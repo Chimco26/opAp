@@ -119,13 +119,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
             ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            if (mActiveJobsListForMachine != null) {
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                    && mActiveJobsListForMachine.getActiveJobs().size() > mSelectedPosition) {
                 mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
             }
         }
 
         // Analytics
-        if( getActivity() != null && getActivity().getApplication() != null) {
+        if (getActivity() != null && getActivity().getApplication() != null) {
             OperatorApplication application = (OperatorApplication) getActivity().getApplication();
             Tracker mTracker = application.getDefaultTracker();
             PersistenceManager pm = PersistenceManager.getInstance();
@@ -155,10 +156,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
         mSwitch = view.findViewById(R.id.stop_switch);
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
             mFlavorSpanDif = -2;
-            mRecyclerView.setPadding(200,0,0,0);
+            mRecyclerView.setPadding(200, 0, 0, 0);
         }
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
@@ -183,9 +184,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     PersistenceManager.getInstance().setisNewStopReasonDesign(isChecked);
-                    if (isChecked){
+                    if (isChecked) {
                         initNewStopReasons();
-                    }else {
+                    } else {
                         initStopReasons();
                     }
                 }
@@ -224,9 +225,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
 
-    private void initNewStopReasons(){
+    private void initNewStopReasons() {
 
-        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(),this );
+        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(newStopReasonsAdapter);
     }
@@ -260,7 +261,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mSelectedSubreason = mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().get(0);
                 sendReport();
 
-            }else {
+            } else {
 
                 mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
                         mReportFieldsForMachine.getStopReasons().get(position).getId(),
@@ -421,7 +422,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 });
             } else {
                 String msg = "missing reports";
-                if (reason != null && reason.getDetailedDescription() != null){
+                if (reason != null && reason.getDetailedDescription() != null) {
                     msg = reason.getDetailedDescription();
                 }
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, msg);
