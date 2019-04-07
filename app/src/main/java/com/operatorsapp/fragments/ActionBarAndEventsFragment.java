@@ -679,7 +679,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 //                else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 //
-                    setNotificationNeedResponse();
+                setNotificationNeedResponse();
 //                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
             }
@@ -1695,7 +1695,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
         boolean isEmpty = true;
         for (Notification notification : notificationList) {
-            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
                 isEmpty = false;
                 break;
             }
@@ -2634,6 +2634,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void removeOldUpdatedExtras(ActualBarExtraResponse actualBarExtraResponse) {
 
+        if (actualBarExtraResponse == null) {
+            return;
+        }
         ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
 
         for (Event event : events) {
@@ -2701,6 +2704,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void addNotificationsToPasteEvents(ActualBarExtraResponse actualBarExtraResponse) {
 
+        if (actualBarExtraResponse == null) {
+            return;
+        }
         if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
                 actualBarExtraResponse.getRejects() != null) {
             ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTime());
@@ -2745,7 +2751,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        if (event.getType() != 1) {
+        if (event.getType() != 1 || actualBarExtraResponse == null) {
             return;
         }
         ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
@@ -2807,6 +2813,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
+        if (actualBarExtraResponse == null){return;}
         ArrayList<JobDataItem> jobDataItems = (ArrayList<JobDataItem>) actualBarExtraResponse.getJobData();
         ArrayList<JobDataItem> toDelete = new ArrayList<>();
         if (jobDataItems != null && jobDataItems.size() > 0) {
@@ -2837,7 +2844,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
+        if (actualBarExtraResponse == null){return false;}
         ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
         ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
         if (notifications != null && notifications.size() > 0) {
@@ -2870,7 +2877,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addAlarmEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
+        if (actualBarExtraResponse == null){return false;}
         ArrayList<Event> alarmEvents = actualBarExtraResponse.getAlarmsEvents();
         ArrayList<Event> toDelete = new ArrayList<>();
         if (alarmEvents != null && alarmEvents.size() > 0
@@ -2904,7 +2911,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
+        if (actualBarExtraResponse == null){return false;}
         ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
         ArrayList<Reject> toDelete = new ArrayList<>();
         if (rejects != null && rejects.size() > 0) {
@@ -2935,7 +2942,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
+        if (actualBarExtraResponse == null){return false;}
         ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
         ArrayList<Inventory> toDelete = new ArrayList<>();
 
@@ -3066,22 +3073,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void setEventTextByMachineStatus(int machineStatusID, Event event) {
-        switch (machineStatusID) {
-            case 1:
-                event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname(getString(R.string.working));
-                break;
-            case 2:
-                event.setEventSubTitleEname("Parameter Deviation");
-                event.setEventSubTitleLname(getString(R.string.parameter_deviation));
-                break;
-            case 5:
-                event.setEventSubTitleEname("Working Setup");
-                event.setEventSubTitleLname(getActivity().getResources().getString(R.string.working_setup));
-                break;
-            default:
-                event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname(getString(R.string.working));
+        if (isAdded()) {
+            switch (machineStatusID) {
+                case 1:
+                    event.setEventSubTitleEname("Working");
+                    event.setEventSubTitleLname(getString(R.string.working));
+                    break;
+                case 2:
+                    event.setEventSubTitleEname("Parameter Deviation");
+                    event.setEventSubTitleLname(getString(R.string.parameter_deviation));
+                    break;
+                case 5:
+                    event.setEventSubTitleEname("Working Setup");
+                    event.setEventSubTitleLname(getActivity().getResources().getString(R.string.working_setup));
+                    break;
+                default:
+                    event.setEventSubTitleEname("Working");
+                    event.setEventSubTitleLname(getString(R.string.working));
+            }
         }
     }
 
