@@ -239,6 +239,7 @@
                     android:id="@+id/toolbar_technician_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layoutDirection="ltr"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp">
 
@@ -247,7 +248,6 @@
                         android:id="@+id/toolbar_technician_iv"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/technician_blue_svg" />
