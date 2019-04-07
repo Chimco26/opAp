@@ -2591,7 +2591,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
             }
             Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
-                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עובד", "Working",
+                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
                     -0.5f, color, 1);
 
             if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
@@ -2737,22 +2737,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0) {
                 eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
             }
-            addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
-            addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
+
             if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
-                    || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
-                    || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
-                event.setHaveExtra(true);
+                    | addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    | addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
+                    | addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse)
+                    | addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
+//                event.setHaveExtra(true);
                 return true;
             }
         }
         return false;
     }
 
-    private void addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private boolean addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
         if (event.getType() != 1 || actualBarExtraResponse == null) {
-            return;
+            return false;
         }
         ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
         if (workingEvents != null && workingEvents.size() > 0) {
@@ -2783,9 +2784,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             break;
                     }
                     event.setColor(workingEvent.getColor());
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private String getWorkingSubTitle(WorkingEvent workingEvent) {
@@ -2811,9 +2814,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
+    private boolean addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        if (actualBarExtraResponse == null){return;}
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
         ArrayList<JobDataItem> jobDataItems = (ArrayList<JobDataItem>) actualBarExtraResponse.getJobData();
         ArrayList<JobDataItem> toDelete = new ArrayList<>();
         if (jobDataItems != null && jobDataItems.size() > 0) {
@@ -2839,12 +2844,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (jobDataItems.size() == 0) {
                     jobDataItems = null;
                 }
+                return true;
             }
         }
+        return false;
     }
 
     private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        if (actualBarExtraResponse == null){return false;}
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
         ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
         ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
         if (notifications != null && notifications.size() > 0) {
@@ -2877,7 +2886,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addAlarmEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        if (actualBarExtraResponse == null){return false;}
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
         ArrayList<Event> alarmEvents = actualBarExtraResponse.getAlarmsEvents();
         ArrayList<Event> toDelete = new ArrayList<>();
         if (alarmEvents != null && alarmEvents.size() > 0
@@ -2911,7 +2922,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        if (actualBarExtraResponse == null){return false;}
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
         ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
         ArrayList<Reject> toDelete = new ArrayList<>();
         if (rejects != null && rejects.size() > 0) {
@@ -2942,7 +2955,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        if (actualBarExtraResponse == null){return false;}
+        if (actualBarExtraResponse == null) {
+            return false;
+        }
         ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
         ArrayList<Inventory> toDelete = new ArrayList<>();
 
@@ -3007,6 +3022,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (events.size() < 1) {
             return;
         }
+        mNoData = false;
 //        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 //        mEventsRecycler.setAdapter(mEventsAdapter);
 
