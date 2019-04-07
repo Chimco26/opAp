@@ -3022,6 +3022,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (events.size() < 1) {
             return;
         }
+        mNoData = false;
 //        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
 //        mEventsRecycler.setAdapter(mEventsAdapter);
 
