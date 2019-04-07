@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="@string/filter_short"
-                android:textColor="@color/red_line"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <View
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="@string/reported"
-                android:textColor="@color/red_dark"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <View

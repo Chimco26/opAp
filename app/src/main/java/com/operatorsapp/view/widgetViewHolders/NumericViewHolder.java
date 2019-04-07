@@ -116,7 +116,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mEditCycleLy = itemView.findViewById(R.id.NWC_edit_quantity_ly);
         mEditCycleEt = itemView.findViewById(R.id.NWC_edit_quantity_value_et);
         mEditCycleReportBtn = itemView.findViewById(R.id.NWC_edit_quantity_next_btn);
-        mEditCycleEt.setHint(String.format(Locale.getDefault(), "%s%d", mEditCycleEt.getContext().getString(R.string.max_value_is), PersistenceManager.getInstance().getMaxUnitReport()));
+        mEditCycleEt.setHint(String.format(Locale.getDefault(), "%s%e", mEditCycleEt.getContext().getString(R.string.max_value_is), PersistenceManager.getInstance().getMaxUnitReport()));
         mEditCycleEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -233,7 +233,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         if (value <= 0) {
             return String.valueOf(1);
         }
-        int max = PersistenceManager.getInstance().getMaxUnitReport();
+        float max = PersistenceManager.getInstance().getMaxUnitReport();
         if (value > max) {
             return String.valueOf(max);
         }
