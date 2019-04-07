@@ -123,11 +123,11 @@ public class RangeView2 extends View {
 
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        mTextPaint.setTextSize(dipToPixels(context, 15));
+        mTextPaint.setTextSize(dipToPixels(context, 13));
 
         mBorderTextPaint.setStyle(Paint.Style.FILL);
         mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        mBorderTextPaint.setTextSize(dipToPixels(context, 15));
+        mBorderTextPaint.setTextSize(dipToPixels(context, 13));
         mBorderTextPaint.setColor(Color.BLACK);
 
         textPadding = dipToPixels(context, 6);
