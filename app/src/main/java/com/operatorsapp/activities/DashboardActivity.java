@@ -181,6 +181,7 @@ import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTI
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
+import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -1554,6 +1555,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void refreshApp() {
+        cleanEvents();
         Intent myIntent = new Intent(this, MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);

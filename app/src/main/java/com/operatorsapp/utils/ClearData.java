@@ -44,9 +44,7 @@ public class ClearData {
     }
 
     public static void clearMachineData(){
-        PersistenceManager.getInstance().setShiftLogStartingFrom(com.operatorsapp.utils.TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
-        PersistenceManager.getInstance().setMachineDataStartingFrom(TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
-        DataSupport.deleteAll(Event.class);
+        cleanEvents();
         PersistenceManager.getInstance().setOperatorId(null);
         PersistenceManager.getInstance().setOperatorName(null);
         PersistenceManager.getInstance().clearCalledTechnician();
@@ -56,5 +54,11 @@ public class ClearData {
         PersistenceManager.getInstance().setRecentTechCallId(0);
         PersistenceManager.getInstance().setNeedUpdateToken(true);
 
+    }
+
+    public static void cleanEvents() {
+        PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+        PersistenceManager.getInstance().setMachineDataStartingFrom(TimeUtils.getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
+        DataSupport.deleteAll(Event.class);
     }
 }
