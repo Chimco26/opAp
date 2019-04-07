@@ -2235,7 +2235,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
-        if (machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
+        if (actualBarExtraResponse != null && machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
                 && machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().size() > 0) {
             actualBarExtraResponse.setJobData(machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().get(0).getJobData());
         }
