@@ -162,34 +162,30 @@ public class RangeView2 extends View {
         String currentValueTxt = new DecimalFormat("##.#").format(mCurrentValue);
         if (mCurrentValue >= mLowLimit && mCurrentValue <= mHighLimit) {
             canvas.drawLine(percent * 20, getHeight() / 2f, percent * 80, getHeight() / 2f, mGreenPaint);
-
             canvas.drawLine(((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20, getHeight() / 2 - border, percent * 20 + ((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent, getHeight() / 2 + mHeight / 2, mCurrentPaint);
             canvas.drawText(currentValueTxt, (((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
         } else if (mCurrentValue < mLowLimit) {
             canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
-
             canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
             canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
         } else {
-
             canvas.drawLine(percent * 80, getHeight() / 2f, percent * 100, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(percent * 90, getHeight() / 2 - border, percent * 90, getHeight() / 2 + mHeight / 2, mCurrentPaint);
             canvas.drawText(currentValueTxt, percent * 90 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
 
         }
 
-        if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
-            canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-        } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
-            canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-        } else if (mAvgValue != 0) {
-            canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-
+        if (mAvgValue != 0) {
+            if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
+                canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
+                canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            } else if (mAvgValue != 0) {
+                canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            }
         }
         if (mStandardValue >= mLowLimit && mStandardValue <= mHighLimit && mStandardValue != 0) {
-
             canvas.drawBitmap(mStandardImage, (((mStandardValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mStandardImage.getWidth() / 2, getHeight() / 2 - mStandardImage.getHeight() / 2, emptyPaint);
-
         }
 
         canvas.drawLine(percent * 20, getHeight() / 2f - mHeight / 2f, percent * 20, getHeight() / 2f + mHeight / 2f, mBorderPaint);

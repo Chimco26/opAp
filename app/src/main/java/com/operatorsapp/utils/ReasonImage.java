@@ -134,6 +134,68 @@ public class ReasonImage {
         return imageId;
     }
 
+    public static int getImageForNewStopReason(int stopReasonId) {
+
+        int imageId;
+
+        switch (stopReasonId) {
+            case 1: {
+                imageId = R.drawable.btnoparations;
+                break;
+            }
+            case 2: {
+                imageId = R.drawable.btnmaitenance;
+                break;
+            }
+            case 3: {
+                imageId = R.drawable.other;
+                break;
+            }
+            case 4: {
+                imageId = R.drawable.btnmalfunction;
+                break;
+            }
+            case 5: {
+                imageId = R.drawable.btnplanning;
+                break;
+            }
+            case 6: {
+                imageId = R.drawable.btnmachine_stop;
+                break;
+            }
+            case 7: {
+                imageId = R.drawable.btn_material;
+                break;
+            }
+            case 8: {
+                imageId = R.drawable.btn_labor;
+                // labor
+                break;
+            }
+            case 9: {
+                imageId = R.drawable.btn_mold;
+                // mold
+                break;
+            }
+            case 10: {
+                imageId = R.drawable.btnsetup;
+
+                break;
+            }
+            case 12: {
+                // expected stops
+                imageId = R.drawable.btnplanning;
+
+                break;
+            }
+            default:{
+                imageId = R.drawable.btngeneral;
+
+            }
+        }
+        return imageId;
+    }
+
     public static int getImageForStopReasonShiftLog(int stopReasonId) {
 
         int imageId;

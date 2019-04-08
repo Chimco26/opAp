@@ -194,7 +194,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
                 mCycleRange.setWidth((int) (mParentLayout.getWidth()));
 
                 mCycleTimeLy.setVisibility(View.VISIBLE);
-                mCycleRange.setAvgValue((float) widget.getCycleTimeAvg());
+                mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
                 mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
                 mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
                 mCycleRange.postInvalidate();

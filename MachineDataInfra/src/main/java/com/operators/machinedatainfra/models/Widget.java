@@ -50,13 +50,16 @@ public class Widget {
     private ArrayList<HistoricData> mMachineParamHistoricData;
 
     @SerializedName("AverageValue")
-    private double mCycleTimeAvg;
+    private String mCycleTimeAvg;
 
-    public double getCycleTimeAvg() {
+    public String getCycleTimeAvg() {
+        if (mCycleTimeAvg == null){
+            return "0";
+        }
         return mCycleTimeAvg;
     }
 
-    public void setCycleTimeAvg(double mCycleTimeAvg) {
+    public void setCycleTimeAvg(String mCycleTimeAvg) {
         this.mCycleTimeAvg = mCycleTimeAvg;
     }
 
@@ -228,6 +231,10 @@ public class Widget {
             mStandardValue = 0f;
         }
         return mStandardValue;
+    }
+
+    public void setStandardValue(Float mStandardValue) {
+        this.mStandardValue = mStandardValue;
     }
 
     public boolean isOutOfRange() {
