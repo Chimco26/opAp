@@ -58,7 +58,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
             imgId = ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         } else {
-            imgId = ReasonImage.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+            imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
         holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
