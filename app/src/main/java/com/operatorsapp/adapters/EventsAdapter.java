@@ -383,9 +383,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             timeTV.setText(getNotificationTime(time, margin, eventViewHeight));
 
             detailsTV.setText(details);
-            if (type == 6)
-
+            if (type == 6) {
                 view.findViewById(R.id.SCI_circle).setVisibility(View.VISIBLE);
+            }
             view.findViewById(R.id.product_line).setVisibility(View.GONE);
             iconIV.setVisibility(View.VISIBLE);
 //            detailsTV.setBackgroundColor(mContext.getResources().getColor(R.color.white));
