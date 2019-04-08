@@ -95,6 +95,11 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         mNewCallTv.setOnClickListener(this);
         mRightTab.setOnClickListener(this);
         mLeftTab.setOnClickListener(this);
+        if (mTechList.size() > 0){
+            mSubtitleTv.setVisibility(View.VISIBLE);
+        }else {
+            mSubtitleTv.setVisibility(View.GONE);
+        }
         setOpenCalls(0);
     }
 
