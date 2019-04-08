@@ -2269,9 +2269,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
                                     PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else if (finalLatestEvent1 != null) {
-//                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                }
+                                } 
                             }
                         });
                     }
