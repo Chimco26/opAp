@@ -2247,13 +2247,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
-        final Event finalLatestEvent;
-        if (events.size() > 0) {
-            finalLatestEvent = events.get(0);
-        } else {
-            finalLatestEvent = null;
+        Event finalLatestEvent = null;
+        for (Event event: events){
+            if (event.getEventGroupID() != TYPE_ALERT){
+                finalLatestEvent = event;
+                break;
+            }
         }
         if (isAdded()) {
+            final Event finalLatestEvent1 = finalLatestEvent;
             mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
                 @Override
                 public void onComplete() {
@@ -2262,12 +2264,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void run() {
 
-                                if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
-                                        && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
+                                        && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else if (finalLatestEvent != null) {
+                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                } else if (finalLatestEvent1 != null) {
 //                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
