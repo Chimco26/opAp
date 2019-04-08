@@ -3308,6 +3308,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
+        if (nameByLang.length() > 31) {
+            nameByLang = nameByLang.substring(0, 31);
+        }
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobName())));
         mShiftIdTextView.setText(String.valueOf(machinesData.getShiftIDString()));
