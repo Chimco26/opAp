@@ -16,6 +16,8 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
+import java.text.DecimalFormat;
+
 public class RangeView2 extends View {
     private Paint mGrayPaint = new Paint();
     private Paint mGreenPaint = new Paint();
@@ -115,7 +117,7 @@ public class RangeView2 extends View {
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mBorderPaint.setColor(Color.BLACK);
-        mBorderPaint.setStrokeWidth(dipToPixels(context, 3));
+        mBorderPaint.setStrokeWidth(dipToPixels(context, 2));
 
         mCurrentPaint.setAntiAlias(true);
         mCurrentPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -192,8 +194,10 @@ public class RangeView2 extends View {
 
         canvas.drawLine(percent * 20, getHeight() / 2f - mHeight / 2f, percent * 20, getHeight() / 2f + mHeight / 2f, mBorderPaint);
         canvas.drawLine(percent * 80, getHeight() / 2f - mHeight / 2f, percent * 80, getHeight() / 2f + mHeight / 2f, mBorderPaint);
-        canvas.drawText(String.valueOf(mLowLimit), percent * 20 - mTextPaint.measureText(String.valueOf(mLowLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
-        canvas.drawText(String.valueOf(mHighLimit), percent * 80 - mTextPaint.measureText(String.valueOf(mHighLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
+        String lowLimitTxt = new DecimalFormat("##.#").format(mLowLimit);
+        String highLimitTxt = new DecimalFormat("##.#").format(mHighLimit);
+        canvas.drawText(lowLimitTxt, percent * 20 - mTextPaint.measureText(lowLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
+        canvas.drawText(highLimitTxt, percent * 80 - mTextPaint.measureText(highLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
     }
 
     public static float dipToPixels(Context context, float dipValue) {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
 import java.util.Locale;
@@ -171,7 +172,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         mLegFilterShortTv.setText(String.format(Locale.getDefault(),
                 "%s < %s %s",
                 context.getString(R.string.filter_short),
-                "10", context.getString(R.string.min)));
+                PersistenceManager.getInstance().getMinEventDuration(), context.getString(R.string.min)));
     }
 
 
