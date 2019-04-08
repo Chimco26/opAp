@@ -1695,7 +1695,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
         boolean isEmpty = true;
         for (Notification notification : notificationList) {
-            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
+            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                 isEmpty = false;
                 break;
             }
