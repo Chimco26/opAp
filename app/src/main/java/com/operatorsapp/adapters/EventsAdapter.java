@@ -29,12 +29,14 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
+import com.ravtech.david.sqlcore.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
@@ -158,9 +160,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 return;
             }
             final Event event = mEventsFiltered.get(position);
+
             if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
                 event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
             }
+
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -203,9 +207,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             circleBackground.setColor(Color.parseColor(event.getColor()));
 
             String textTime = "";
-//            if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
-//                textTime = event.getEventTime().substring(10, 16);
-//            } else
 
             textTime = event.getEventEndTime().substring(10, 16);
 
@@ -218,7 +219,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 //            }
 
             long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(event.getEventTime()));
-            if (duration == 0) {
+            if (duration <= 0) {
                 duration = 1;
             }
 
