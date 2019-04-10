@@ -405,6 +405,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
+        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
+        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SendBroadcast.refreshPolling(getActivity());
+            }
+        });
+
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
@@ -488,14 +496,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         initLenoxMachineRv(view);
-
-        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
-        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
-            }
-        });
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
@@ -2550,7 +2550,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         addNotificationsToPasteEvents(actualBarExtraResponse);
 
         for (int i = 0; i < events.size() - 1; i++) {
-
+            if (events.get(i) != null && events.get(i).getEventEndTime() != null && events.get(i).getEventTime() != null) {
+                long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(events.get(i).getEventEndTime()) - convertDateToMillisecond(events.get(i).getEventTime()));
+                if (duration <= 0 || duration > DAY_IN_MILLIS) {
+                    mDatabaseHelper.deleteEvent(events.get(i).getEventID());
+                }
+            }
             if (events.get(i).getEventGroupID() != TYPE_ALERT) {
                 Event event = events.get(i);
 
@@ -2561,7 +2566,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     String color = "#1aa917";
                     if (getActivity() != null) {
-                        color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+                        color = "#" + Integer.toHexString(getActivity().getResources().getColor(R.color.new_green));
                     }
                     Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
                             event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
@@ -2994,12 +2999,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
 
+        final boolean[] isZooming = {false};
         mEventsRecycler.addListener(new PinchRecyclerView.PinchRecyclerViewListener() {
             @Override
             public void onScale(float factor) {
                 if (mEventsAdapter != null) {
                     mEventsAdapter.setFactor(factor);
                 }
+            }
+
+            @Override
+            public void onScaleBegin() {
+            }
+
+            @Override
+            public void onScaleEnd() {
             }
         });
     }

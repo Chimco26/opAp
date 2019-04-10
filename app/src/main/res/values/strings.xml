@@ -355,7 +355,7 @@
     <string name="shiftlog">Shift log</string>
     <string name="working">Working</string>
     <string name="erp_job_id">ERP Job ID</string>
-    <string name="rejects">rejects</string>
+    <string name="rejects">Rejects</string>
     <string name="good_units">Good units</string>
     <string name="working_time">Working time</string>
     <string name="event_details">Event details</string>

@@ -3,6 +3,7 @@ package com.operatorsapp.view;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -30,17 +31,22 @@ public class PinchRecyclerView extends RecyclerView {
                 if (mListener != null) {
                     mListener.onScale(scaleFactor);
                 }
+                Log.d(TAG, "onScale: ");
                 return true;
             }
 
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
                 scalling = false;
+                Log.d(TAG, "onScaleBegin: ");
+                mListener.onScaleBegin();
                 return true;
             }
 
             @Override
             public void onScaleEnd(ScaleGestureDetector detector) {
+                Log.d(TAG, "onScaleEnd: ");
+                mListener.onScaleEnd();
                 scalling = true;
             }
         });
@@ -81,5 +87,9 @@ public class PinchRecyclerView extends RecyclerView {
     public interface PinchRecyclerViewListener {
 
         void onScale(float factor);
+
+        void onScaleEnd();
+
+        void onScaleBegin();
     }
 }

@@ -333,7 +333,7 @@
     <string name="shiftlog">Registro de turnos</string>
     <string name="working">Trabajando</string>
     <string name="erp_job_id">ID de trabajo ERP</string>
-    <string name="rejects">rechazos</string>
+    <string name="rejects">Rechazos</string>
     <string name="good_units">Unidades buenas</string>
     <string name="working_time">Horario de trabajo</string>
     <string name="event_details">Detalles del evento</string>
