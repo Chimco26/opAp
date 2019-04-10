@@ -429,7 +429,13 @@ public class TimeUtils {
             Date date = format.parse(dateToConvert);
             return date.getTime();
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatT = new SimpleDateFormat(SQL_T_FORMAT);
+            try {
+                Date date = formatT.parse(dateToConvert);
+                return date.getTime();
+            } catch (java.text.ParseException e1) {
+                e1.printStackTrace();
+            }
         }
         return 0L;
     }

@@ -552,7 +552,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         if (duration == 0) {
             duration = 1;
         }
-
         long difference = convertDateToMillisecond(event.getEventEndTime()) - convertDateToMillisecond(eventTime);
         long marging = difference * eventViewHeight / duration;
         return (int) marging;
