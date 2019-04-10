@@ -141,7 +141,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     }
 
-    public void sendRequestForPolling(JobBase.OnJobFinishedListener onJobFinishedListener, Integer jobId, Integer selectProductJobId) {
+    public void sendRequestForPolling(JobBase.OnJobFinishedListener onJobFinishedListener, Integer jobId, Integer selectProductJobId, String shiftLogStartingFrom) {
 
         if (selectProductJobId != null) {
 
@@ -155,7 +155,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
         getMachineJoshData();
-        getActualBarExtraDetails();
+        getActualBarExtraDetails(shiftLogStartingFrom);
         getShiftLogs(onJobFinishedListener);
     }
 
@@ -326,21 +326,21 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     }
 
-    public void getActualBarExtraDetails() {
-        String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
+    public void getActualBarExtraDetails(String shiftLogStartingFrom) {
+//        String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
-        try {
-            Date date = dateFormat.parse(startingFrom);
-            startingFrom = getTimeForRequest(date, dateFormat);
-//            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
-        } catch (java.text.ParseException e) {
-            if (e.getMessage() != null) {
-                Log.e(LOG_TAG, e.getMessage());
-            }
-        }
+//        try {
+//            Date date = dateFormat.parse(startingFrom);
+//            startingFrom = getTimeForRequest(date, dateFormat);
+////            startingFrom = getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS");
+//        } catch (java.text.ParseException e) {
+//            if (e.getMessage() != null) {
+//                Log.e(LOG_TAG, e.getMessage());
+//            }
+//        }
         String endTime = getTimeForRequest(new Date(), dateFormat);
         mShiftLogNetworkBridgeInterface.GetActualBarExtraDetails(mShiftLogPersistenceManagerInterface.getSiteUrl(),
-                mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
+                mShiftLogPersistenceManagerInterface.getSessionId(), shiftLogStartingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
                     @Override
                     public void onActualBarExtraDetailsSucceeded(ActualBarExtraResponse actualBarExtraResponse) {
                         if (mActualBarExtraUICallback != null) {

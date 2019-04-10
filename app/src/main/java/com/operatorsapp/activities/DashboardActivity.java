@@ -703,7 +703,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActiveJobsListForMachine = activeJobsListForMachine;
             if (activeJobsListForMachine != null) {
 
-                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
                 PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
 
                 mReportFieldsForMachineCore.stopPolling();
@@ -749,7 +749,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 OppAppLogger.getInstance().w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId);
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
             }
 
         }
