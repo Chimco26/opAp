@@ -158,7 +158,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 return;
             }
             final Event event = mEventsFiltered.get(position);
-
+            if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
+                event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
+            }
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -204,9 +206,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 //            if (event.getType() != 2 && event.getEventTime() != null && event.getEventTime().length() > 0) {
 //                textTime = event.getEventTime().substring(10, 16);
 //            } else
-            if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
-                event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
-            }
+
             textTime = event.getEventEndTime().substring(10, 16);
 
             mTime.setText(textTime);

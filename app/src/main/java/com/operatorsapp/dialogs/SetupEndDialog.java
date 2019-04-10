@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -87,11 +88,11 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     }
 
     private void initRv(View view) {
-
         if (mActiveJobs != null &&
                 mActiveJobs.size() > 0) {
             view.findViewById(R.id.FAFI_back_btn).setVisibility(View.VISIBLE);
             view.findViewById(R.id.FAFI_next_btn).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.FAFI_no_data_tv).setVisibility(View.GONE);
             mReportRv = view.findViewById(R.id.FAFI_report_rv);
             mReportRv.setOffscreenPageLimit(mActiveJobs.size());
             ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobs, isRejects, this);
@@ -137,6 +138,9 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
         } else {
             view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
             view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
+            view.findViewById(R.id.FAFI_no_data_tv).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.FAFI_no_data_tv)).setText(String.format("%s %s / %s",
+                    mContext.getString(R.string.no), mContext.getString(R.string.rejects), mContext.getString(R.string.good_units)));
         }
     }
 

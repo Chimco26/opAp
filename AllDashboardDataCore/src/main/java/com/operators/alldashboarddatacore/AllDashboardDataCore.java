@@ -180,6 +180,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                                 startTimer(timeToEndInSeconds);
                             }
                         }
+                        OppAppLogger.getInstance().w(LOG_TAG, ""+mMachineDataUICallback);
                         if (mMachineStatusUICallback != null) {
                             if (machineStatus.getAllMachinesData().size() > 0) {
                                 mMachineStatusUICallback.onStatusReceivedSuccessfully(machineStatus);

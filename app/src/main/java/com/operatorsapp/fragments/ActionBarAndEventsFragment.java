@@ -405,6 +405,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
+        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
+        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SendBroadcast.refreshPolling(getActivity());
+            }
+        });
+
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
@@ -488,14 +496,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         initLenoxMachineRv(view);
-
-        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
-        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
-            }
-        });
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
@@ -2994,12 +2994,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
 
+        final boolean[] isZooming = {false};
         mEventsRecycler.addListener(new PinchRecyclerView.PinchRecyclerViewListener() {
             @Override
             public void onScale(float factor) {
                 if (mEventsAdapter != null) {
                     mEventsAdapter.setFactor(factor);
                 }
+            }
+
+            @Override
+            public void onScaleBegin() {
+            }
+
+            @Override
+            public void onScaleEnd() {
             }
         });
     }
