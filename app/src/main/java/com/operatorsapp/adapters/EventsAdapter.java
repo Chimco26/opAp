@@ -164,7 +164,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             if (event.getEventEndTime() == null || event.getEventEndTime().length() == 0) {
                 event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT));
             }
-
+            if (event.getEventTime() == null || event.getEventTime().length() == 0){
+                event.setEventTime(event.getEventEndTime());
+            }
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
