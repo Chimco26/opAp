@@ -2555,17 +2555,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
             Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
 
-            if (events.get(i) != null && events.get(i).getEventEndTime() != null && events.get(i).getEventTime() != null) {
-                long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(events.get(i).getEventEndTime()) - convertDateToMillisecond(events.get(i).getEventTime()));
-                if (duration <= 0 || duration > DAY_IN_MILLIS
-                        || (events.get(i).getEventTime() == null || events.get(i).getEventTime().length() == 0)
-                        || eventStartMilli > eventEndMilli) {
-                    mDatabaseHelper.deleteEvent(events.get(i).getEventID());
-                }
-            }
+//            if (events.get(i) != null && events.get(i).getEventEndTime() != null && events.get(i).getEventTime() != null) {
+//                long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(events.get(i).getEventEndTime()) - convertDateToMillisecond(events.get(i).getEventTime()));
+//                if (duration <= 0 || duration > DAY_IN_MILLIS
+//                        || (events.get(i).getEventTime() == null || events.get(i).getEventTime().length() == 0)
+//                        || eventStartMilli > eventEndMilli) {
+//                    mDatabaseHelper.deleteEvent(events.get(i).getEventID());
+//                }
+//            }
             if (events.get(i).getEventGroupID() != TYPE_ALERT) {
 
-                if (eventStartMilli < eventEndMilli) {
+                if (eventStartMilli != 0 && eventEndMilli != 0 && eventStartMilli < eventEndMilli) {
 
                     String color = "#1aa917";
                     if (getActivity() != null) {
@@ -2573,7 +2573,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
                             event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
-                            -0.5f, color, 1);
+                            -5f, color, 1);
 
                     if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2600,7 +2600,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
                     event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
-                    -0.5f, color, 1);
+                    -5f, color, 1);
 
             if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -3054,7 +3054,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
                     getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
                     intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
+                    +3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
             if (mOpenEvent != null) {
                 intermediateEvent.setNotifications(mOpenEvent.getNotifications());
                 intermediateEvent.setRejects(mOpenEvent.getRejects());
