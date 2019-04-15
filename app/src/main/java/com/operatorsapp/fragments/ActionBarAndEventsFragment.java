@@ -626,7 +626,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
 //         if (isShowAlarms) {
-        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+//        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(0);
 //        } else {
 //            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        }
@@ -2446,7 +2447,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
                         mOpenEvent.setType(1);
                         mOpenEvent.setEventEndTime(event.getEventTime());//TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT)
-                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
+//                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
                         mOpenEvent.save();
                     }
                     mOpenEvent = null;
@@ -2573,7 +2574,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     }
                     Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
                             event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
-                            -5f, color, 1);
+                            -0.5f, color, 1);
 
                     if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2600,7 +2601,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
                     event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
-                    -5f, color, 1);
+                    -0.5f, color, 1);
 
             if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -2720,8 +2721,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTime());
 
             for (Event event : events) {
-                if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
-                        actualBarExtraResponse.getRejects() != null) {
+                if (event.getEventGroupID() != TYPE_ALERT && (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
+                        actualBarExtraResponse.getRejects() != null)) {
                     if (addDetailsToEvents(event, actualBarExtraResponse)) {
                         event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
                     }
@@ -3054,7 +3055,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
                     getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
                     intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
+                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
             if (mOpenEvent != null) {
                 intermediateEvent.setNotifications(mOpenEvent.getNotifications());
                 intermediateEvent.setRejects(mOpenEvent.getRejects());
