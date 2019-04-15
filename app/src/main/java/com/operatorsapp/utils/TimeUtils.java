@@ -427,17 +427,21 @@ public class TimeUtils {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
         try {
             Date date = format.parse(dateToConvert);
-            return date.getTime();
+            return castToMin(date.getTime());
         } catch (java.text.ParseException e) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat formatT = new SimpleDateFormat(SQL_T_FORMAT);
             try {
                 Date date = formatT.parse(dateToConvert);
-                return date.getTime();
+                return castToMin(date.getTime());
             } catch (java.text.ParseException e1) {
                 e1.printStackTrace();
             }
         }
         return 0L;
+    }
+
+    private static Long castToMin(long time) {
+        return (time/60000)*60000;
     }
 
 
