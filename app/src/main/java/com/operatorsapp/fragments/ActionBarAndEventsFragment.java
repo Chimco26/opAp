@@ -2765,7 +2765,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private boolean addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
-        if (event.getType() != 1 || actualBarExtraResponse == null) {
+        if (event.getType() == 0 || actualBarExtraResponse == null) {
             return false;
         }
         ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
