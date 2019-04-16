@@ -2601,7 +2601,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
                     event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
-                    -0.5f, color, 1);
+                    -1f, color, 1);
 
             if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -3201,9 +3201,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         ArrayList<Event> toDelete = new ArrayList<>();
 
-        for (Event event : mDatabaseHelper.getAlEvents()) {
+        ArrayList<Event> events = mDatabaseHelper.getAlEvents();
+        for (Event event : events) {
 
-            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+            if (TimeUtils.getLongFromDateString(event.getEventEndTime(), "dd/MM/yyyy HH:mm:ss")
                     < System.currentTimeMillis() - DAY_IN_MILLIS) {
 
                 toDelete.add(event);
