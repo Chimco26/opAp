@@ -182,6 +182,12 @@ public class TimeUtils {
             Date date;
 
             try {
+                date = dateFormatSqlT.parse(time);
+                return dateFormat.format(date);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            try {
                 date = dateFormat.parse(time);
                 return time;
             } catch (java.text.ParseException e) {
@@ -195,12 +201,6 @@ public class TimeUtils {
                 e.printStackTrace();
             }
 
-            try {
-                date = dateFormatSqlT.parse(time);
-                return dateFormat.format(date);
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            }
         }
 
 
@@ -427,11 +427,21 @@ public class TimeUtils {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(SIMPLE_FORMAT_FORMAT);
         try {
             Date date = format.parse(dateToConvert);
-            return date.getTime();
+            return castToMin(date.getTime());
         } catch (java.text.ParseException e) {
-            e.printStackTrace();
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatT = new SimpleDateFormat(SQL_T_FORMAT);
+            try {
+                Date date = formatT.parse(dateToConvert);
+                return castToMin(date.getTime());
+            } catch (java.text.ParseException e1) {
+                e1.printStackTrace();
+            }
         }
         return 0L;
+    }
+
+    private static Long castToMin(long time) {
+        return (time/60000)*60000;
     }
 
 

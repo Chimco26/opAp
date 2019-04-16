@@ -279,7 +279,7 @@
 
     <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
     <string name="change_factory">שנה מפעל</string>
-    <string name="you_ve_reached_the_production_target">\"הגעת ליעד היצור של פקודת העבודה!\"</string>
+    <string name="you_ve_reached_the_production_target">הגעת ליעד היצור של פקודת העבודה!</string>
     <string name="end_setup">סיום סט-אפ</string>
     <string name="you_are_in_setup_mode">אתה במצב סט-אפ</string>
     <string name="reported_stop_event">עצירות מדווחות</string>
@@ -347,7 +347,7 @@
     <string name="incremented_failure">הגדלה נכשלה</string>
     <string name="top_five_stop_events">5 אירועי העצירה העיקריים</string>
     <string name="top_five_reject_reasons">5 סיבות הפסילה העיקריות</string>
-    <string name="total_amount">סה\\\"כ כמות</string>
+    <string name="total_amount">סה\"כ כמות</string>
     <string name="call_canceled">קריאה בוטלה</string>
     <string name="service_call_exists">פתח קריאת שירות</string>
     <string name="service_call_exists_subtitle">נמצאו קריאות שירות פתוחות, אתה יכול לבטל חלק מהן או לפתוח קריאה חדשה.</string>

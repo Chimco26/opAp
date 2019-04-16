@@ -529,4 +529,5 @@ public class Event extends DataSupport implements Parcelable {
     public boolean haveExtra() {
         return extra;
     }
+
 }

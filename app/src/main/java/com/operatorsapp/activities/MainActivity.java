@@ -172,8 +172,6 @@ public class MainActivity extends AppCompatActivity implements GoToScreenListene
         bundle.putParcelableArrayList(MACHINE_LIST, machines);
         intent.putExtras(bundle);
         startActivity(intent);
-
-
     }
 
     private void getNotifications() {

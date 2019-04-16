@@ -326,7 +326,7 @@
     <string name="change_factory">استبدال المصنع</string>
     <string name="open_calls">نداء خدمة المفتوحه</string>
     <string name="last_24h">آخر 24 ساعة</string>
-    <string name="you_ve_reached_the_production_target">\"لقد وصلت إلى هدف الإنتاج للمهمه!\"</string>
+    <string name="you_ve_reached_the_production_target">لقد وصلت إلى هدف الإنتاج للمهمه!</string>
     <string name="reported_stop_event">التوقيفات التي ذكرت</string>
     <string name="time_min">وقت(دقائق)</string>
     <string name="report_events_reason">بلغ عن سبب الوقوف</string>
