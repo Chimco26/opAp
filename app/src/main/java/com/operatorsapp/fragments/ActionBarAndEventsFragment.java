@@ -737,29 +737,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
 
                     tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
-
+                    String str;
                     switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_approved2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_declined2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_declined2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.started_service2), notification.getmSender()));
+                            str = getResources().getString(R.string.started_service2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.service_completed2), notification.getmSender()));
+                            str = getResources().getString(R.string.service_completed2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_cancelled2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_cancelled2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         default:
@@ -2601,7 +2606,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
                     event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
-                    -0.5f, color, 1);
+                    -1f, color, 1);
 
             if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
 
@@ -3201,9 +3206,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         ArrayList<Event> toDelete = new ArrayList<>();
 
-        for (Event event : mDatabaseHelper.getAlEvents()) {
+        ArrayList<Event> events = mDatabaseHelper.getAlEvents();
+        for (Event event : events) {
 
-            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+            if (TimeUtils.getLongFromDateString(event.getEventEndTime(), "dd/MM/yyyy HH:mm:ss")
                     < System.currentTimeMillis() - DAY_IN_MILLIS) {
 
                 toDelete.add(event);
