@@ -42,6 +42,8 @@ import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
 
+import static android.text.format.DateUtils.DAY_IN_MILLIS;
+
 public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private static final String LOG_TAG = AllDashboardDataCore.class.getSimpleName();
 
@@ -339,6 +341,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 //            }
 //        }
         String endTime = getTimeForRequest(new Date(), dateFormat);
+        shiftLogStartingFrom = getTimeForRequest(new Date(new Date().getTime() - DAY_IN_MILLIS), dateFormat);
         mShiftLogNetworkBridgeInterface.GetActualBarExtraDetails(mShiftLogPersistenceManagerInterface.getSiteUrl(),
                 mShiftLogPersistenceManagerInterface.getSessionId(), shiftLogStartingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new ActualBarExtraDetailsCallback<ActualBarExtraResponse>() {
                     @Override
@@ -374,6 +377,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             }
         }
         String endTime = getTimeForRequest(new Date(), dateFormat);
+        startingFrom = getTimeForRequest(new Date(new Date().getTime() - DAY_IN_MILLIS), dateFormat);
         mShiftLogNetworkBridgeInterface.GetMachineJoshData(mShiftLogPersistenceManagerInterface.getSiteUrl(),
                 mShiftLogPersistenceManagerInterface.getSessionId(), startingFrom, endTime, String.valueOf(mShiftLogPersistenceManagerInterface.getMachineId()), new GetMachineJoshDataCallback<MachineJoshDataResponse>() {
                     @Override
