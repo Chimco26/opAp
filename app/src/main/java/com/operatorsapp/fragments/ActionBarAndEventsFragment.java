@@ -739,29 +739,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
 
                     tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
-
+                    String str;
                     switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_approved2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_declined2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_declined2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.started_service2), notification.getmSender()));
+                            str = getResources().getString(R.string.started_service2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.service_completed2), notification.getmSender()));
+                            str = getResources().getString(R.string.service_completed2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_cancelled2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_cancelled2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         default:
