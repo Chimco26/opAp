@@ -178,11 +178,13 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
     private void setCycleTime(final Widget widget) {
 
-        ViewTreeObserver vto = mParentLayout.getViewTreeObserver();
 
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mParentLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+
+                mParentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
                 if (!widget.getCurrentValue().equals("--")) {
                     mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
                 }else {
@@ -196,6 +198,16 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
                 mCycleTimeLy.setVisibility(View.VISIBLE);
                 mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
                 mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+                mAverageTv.setVisibility(View.GONE);
+                if (widget.getCycleTimeAvg() != null){
+                    try {
+                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0){
+                            mAverageTv.setVisibility(View.VISIBLE);
+                        }
+                    }catch (Exception ignored){
+
+                    }
+                }
                 mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
                 mCycleRange.postInvalidate();
             }
