@@ -87,9 +87,9 @@ public class SaveHelperNew {
 
                         String eName = "working";
                         String lName = "working";
-                        if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
-                            lName = workingEvent.getEventReason();
-                            eName = workingEvent.getEventReason();
+                        if (workingEvent.getName() != null && workingEvent.getName().length() > 0) {
+                            lName = workingEvent.getName();
+                            eName = workingEvent.getName();
                         }
 
                         Event workingEvent1 = createIntermediateEvent(getDateFromFormat(new Date(workingEventSentTime) ,SIMPLE_FORMAT_FORMAT),
