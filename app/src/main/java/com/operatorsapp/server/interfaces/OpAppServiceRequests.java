@@ -56,6 +56,6 @@ public interface OpAppServiceRequests {
     @GET("/files/1Mb.dat")
     Call<ResponseBody> getNewVersionFile();
 
-    @POST("/LeaderMESApi/GetApplicationVersion")
+    @GET("/LeaderMESApi/GetApplicationVersion")
     Call<AppVersionResponse> GetApplicationVersion();
 }

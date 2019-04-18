@@ -2673,6 +2673,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
                                 if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
                                     getFile(item.getmUrl());
                                 }
                             }
@@ -2692,6 +2694,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void getFile(String url) {
+        Log.d(TAG, "getFile- " + url);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
             //check if app has permission to write to the external storage.
@@ -2701,7 +2704,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             } else {
                 //If permission is not present request for the same.
-                EasyPermissions.requestPermissions(this, "aaaaaa", REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
+                EasyPermissions.requestPermissions(this, getString(R.string.storage_permission), REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE, url);
             }
 
 
@@ -2714,10 +2717,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         //Download the file once permission is granted
-
+        Log.d(TAG, "onPermissionsGranted- " + requestCode);
         if (requestCode == REQUEST_WRITE_PERMISSION) {
-            String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
-            new DownloadFile().execute(url);
+            //String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk";
+            new DownloadFile().execute(perms.get(0));
         }
     }
 
@@ -2741,6 +2744,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected void onPreExecute() {
+            Log.d(TAG, "DownloadFile- onPreExecute" );
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -2753,6 +2757,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected String doInBackground(String... f_url) {
+            Log.d(TAG, "DownloadFile- doInBackground - " + f_url[0]);
             int count;
             try {
                 URL url = new URL(f_url[0]);
@@ -2827,19 +2832,24 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         protected void onPostExecute(String message) {
+            Log.d(TAG, "DownloadFile- onPostExecute - " + message);
             // dismiss the dialog after the file was downloaded
             this.progressDialog.dismiss();
 
             // Display File path after downloading
             Toast.makeText(DashboardActivity.this, message, Toast.LENGTH_LONG).show();
-            Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
+            try {
+                Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
 
-            Intent install = new Intent(Intent.ACTION_VIEW);
-            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            install.normalizeMimeType("application/vnd.android.package-archive");
-            startActivity(install);
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                install.normalizeMimeType("application/vnd.android.package-archive");
+                startActivity(install);
+            }catch (NullPointerException e){
+
+            }
         }
     }
 }

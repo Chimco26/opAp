@@ -294,7 +294,7 @@
     <string name="service_call_exists">Open Service Calls</string>
     <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
     <string name="open_new_call">New Service Call</string>
-    <string name="service_call_was_canceled"><b>Service call was canceled</b></string>
+    <string name="service_call_was_canceled"><b>La chiamata di Servizio è stata cancellata</b></string>
     <string name="empty_job_list_msg">The Pending Job list is empty</string>
     <string name="call_approved">Call is approved</string>
     <string name="call_approved2">A call made by operator %1$s was approved</string>
@@ -393,6 +393,7 @@
     <string name="theoretical_units">Theoretical units</string>
     <string name="average">Average:</string>
     <string name="add_rejects">Add Rejects</string>
+    <string name="storage_permission">Please allow storage access for application updates</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
