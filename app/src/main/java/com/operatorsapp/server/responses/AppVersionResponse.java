@@ -23,7 +23,7 @@ public class AppVersionResponse extends PojoResponse{
         String mAppName;
 
         @SerializedName("Version")
-        int mVersionNumber;
+        float mVersionNumber;
 
         @SerializedName("Url")
         String mUrl;
@@ -44,7 +44,7 @@ public class AppVersionResponse extends PojoResponse{
             this.mAppName = mAppName;
         }
 
-        public int getmAppVersion() {
+        public float getmAppVersion() {
             return mVersionNumber;
         }
 
