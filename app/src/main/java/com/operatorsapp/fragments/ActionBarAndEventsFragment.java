@@ -123,6 +123,7 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.SaveAlarmsHelper;
+import com.operatorsapp.utils.SaveHelperNew;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -456,7 +457,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     } else {
-                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+//                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
                     }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
@@ -958,7 +960,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         //todo kuti
 
-        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
 
 
         if (DataSupport.count(Event.class) > 0) {
@@ -2239,8 +2242,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
+        if (events == null){
+            events = new ArrayList<>();
+        }
         if (actualBarExtraResponse != null && machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
                 && machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().size() > 0) {
             actualBarExtraResponse.setJobData(machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().get(0).getJobData());
@@ -2407,7 +2413,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null || !isAdded()) {
             return;
         }
-        removeOldUpdatedExtras(actualBarExtraResponse);
 
         int deletedEvents = clearOver24HShift();
 
@@ -2445,17 +2450,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
-                    if (event.getEventGroupID() != TYPE_ALERT) {
-                        addDetailsToEvents(event, actualBarExtraResponse);
-                    }
-                    if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
-                            || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
-                        mOpenEvent.setType(1);
-                        mOpenEvent.setEventEndTime(event.getEventTime());//TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT)
-//                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
-                        mOpenEvent.save();
-                    }
-                    mOpenEvent = null;
+//                    if (event.getEventGroupID() != TYPE_ALERT) {
+//                        addDetailsToEvents(event, actualBarExtraResponse);
+//                    }
+
                     event.save();
 
                     if (mIsNewShiftLogs) {
@@ -2474,24 +2472,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
-            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())), actualBarExtraResponse);
+//            updateList(mDatabaseHelper.getAlEvents(), actualBarExtraResponse);
 
             myTaskListener.onShowNotificationText(false);
 
             Cursor cursor;
             if (mIsSelectionMode) {
-
                 cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-//                initEvents(mDatabaseHelper.getListFromCursor(cursor));
                 myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
-
             } else {
-
-//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                 cursor = getCursorByType();
-                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse));
             }
-//            setShiftLogAdapter(cursor);
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2534,9 +2526,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     cursor = getCursorByType();
                 }
-//                setShiftLogAdapter(cursor);
-//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse));
             }
         }
 
@@ -2551,75 +2541,67 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null);
     }
 
-    private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
-
-        addNotificationsToPasteEvents(actualBarExtraResponse);
-
-        for (int i = 0; i < events.size() - 1; i++) {
-            Event event = events.get(i);
-
-            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
-            Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
-
-//            if (events.get(i) != null && events.get(i).getEventEndTime() != null && events.get(i).getEventTime() != null) {
-//                long duration = TimeUnit.MILLISECONDS.toMinutes(convertDateToMillisecond(events.get(i).getEventEndTime()) - convertDateToMillisecond(events.get(i).getEventTime()));
-//                if (duration <= 0 || duration > DAY_IN_MILLIS
-//                        || (events.get(i).getEventTime() == null || events.get(i).getEventTime().length() == 0)
-//                        || eventStartMilli > eventEndMilli) {
-//                    mDatabaseHelper.deleteEvent(events.get(i).getEventID());
+//    private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+//
+//        addNotificationsToPasteEvents(actualBarExtraResponse);
+//
+//        for (int i = 0; i < events.size() - 1; i++) {
+//            Event event = events.get(i);
+//
+//            Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
+//            Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
+//
+//            if (events.get(i).getEventGroupID() != TYPE_ALERT) {
+//
+//                if (eventStartMilli != 0 && eventEndMilli != 0 && eventStartMilli < eventEndMilli) {
+//
+//                    String color = "#1aa917";
+//                    if (getActivity() != null) {
+//                        color = "#" + Integer.toHexString(getActivity().getResources().getColor(R.color.new_green));
+//                    }
+//                    Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
+//                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
+//                            -0.5f, color, 1);
+//
+//                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
+//
+//                        addDetailsToEvents(workingEvent, actualBarExtraResponse);
+//
+//                        workingEvent.save();
+//                    }
 //                }
 //            }
-            if (events.get(i).getEventGroupID() != TYPE_ALERT) {
-
-                if (eventStartMilli != 0 && eventEndMilli != 0 && eventStartMilli < eventEndMilli) {
-
-                    String color = "#1aa917";
-                    if (getActivity() != null) {
-                        color = "#" + Integer.toHexString(getActivity().getResources().getColor(R.color.new_green));
-                    }
-                    Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
-                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, getString(R.string.working), "Working",
-                            -0.5f, color, 1);
-
-                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
-
-                        addDetailsToEvents(workingEvent, actualBarExtraResponse);
-
-                        workingEvent.save();
-                    }
-                }
-            }
-
-        }
-
-        return events;
-    }
-
-    private Event addFirstEvent(Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
-        Long minusDayTime = new Date().getTime() - DAY_IN_MILLIS;
-
-        if (minusDayTime < eventEndMilli) {
-            String color = "#1aa917";
-            if (getActivity() != null) {
-                color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-            }
-            Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
-                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
-                    -1f, color, 1);
-
-            if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
-
-                addDetailsToEvents(workingEvent, actualBarExtraResponse);
-
-                workingEvent.save();
-
-                return workingEvent;
-            }
-
-        }
-        return null;
-    }
+//
+//        }
+//
+//        return events;
+//    }
+//
+//    private Event addFirstEvent(Event event, ActualBarExtraResponse actualBarExtraResponse) {
+//        Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
+//        Long minusDayTime = new Date().getTime() - DAY_IN_MILLIS;
+//
+//        if (minusDayTime < eventEndMilli) {
+//            String color = "#1aa917";
+//            if (getActivity() != null) {
+//                color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
+//            }
+//            Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
+//                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עבודה", "Working",
+//                    -1f, color, 1);
+//
+//            if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
+//
+//                addDetailsToEvents(workingEvent, actualBarExtraResponse);
+//
+//                workingEvent.save();
+//
+//                return workingEvent;
+//            }
+//
+//        }
+//        return null;
+//    }
 
     @NonNull
     private Event createIntermediateEvent(String eventTime, String eventEndTime, float id, Long eventStartMilli,
@@ -2646,75 +2628,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         return workingEvent;
     }
 
-    private void removeOldUpdatedExtras(ActualBarExtraResponse actualBarExtraResponse) {
-
-        if (actualBarExtraResponse == null) {
-            return;
-        }
-        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
-
-        for (Event event : events) {
-
-            ArrayList<Inventory> eventInventories = event.getInventories();
-            ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
-            if (eventInventories != null && eventInventories.size() > 0
-                    && inventories != null && inventories.size() > 0) {
-                ArrayList<Inventory> toDelete = new ArrayList<>();
-                for (Inventory inventory : inventories) {
-                    for (Inventory eventInventory : eventInventories) {
-                        if (inventory.getID().equals(eventInventory.getID())) {
-                            toDelete.add(eventInventory);
-                        }
-                    }
-                }
-                eventInventories.removeAll(toDelete);
-                if (eventInventories.size() == 0) {
-                    eventInventories = null;
-                }
-                event.setInventories(eventInventories);
-            }
-            ArrayList<Reject> eventRejects = event.getRejects();
-            ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
-            if (eventRejects != null && eventRejects.size() > 0
-                    && rejects != null && rejects.size() > 0) {
-                ArrayList<Reject> toDelete = new ArrayList<>();
-                for (Reject reject : rejects) {
-                    for (Reject eventReject : eventRejects) {
-                        if (reject.getID().equals(eventReject.getID())) {
-                            toDelete.add(eventReject);
-                        }
-                    }
-                }
-                eventRejects.removeAll(toDelete);
-                if (eventRejects.size() == 0) {
-                    eventRejects = null;
-                }
-                event.setRejects(eventRejects);
-            }
-            //update old call
-//            ArrayList<com.example.common.actualBarExtraResponse.Notification> eventNotifications = event.getNotifications();
-//            ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
-//            if (eventNotifications != null && eventNotifications.size() > 0
-//                    && notifications != null && notifications.size() > 0) {
-//                ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
-//                for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-//                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : eventNotifications) {
-//                        if (notification.getID().equals(eventsNotification.getID())) {
-//                            toDelete.add(eventsNotification);
-//                        }
-//                    }
-//                }
-//                eventNotifications.removeAll(toDelete);
-//                if (eventNotifications.size() == 0) {
-//                    eventNotifications = null;
-//                }
-//                event.setNotifications(eventNotifications);
-//            }
-            event.setHaveExtra(event.getNotifications() != null || event.getInventories() != null || event.getRejects() != null);
-
-            event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
-        }
-    }
 
     private void addNotificationsToPasteEvents(ActualBarExtraResponse actualBarExtraResponse) {
 
@@ -2759,8 +2672,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
                     | haveRejects
-                    | haveInventory
-                    | addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse)
+                    | haveInventory//| addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse)
                     | addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
                 return true;
             }
@@ -3008,20 +2920,107 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
+    private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+
+//        addNotificationsToPasteEvents(actualBarExtraResponse);
+
+        Collections.reverse(events);
+
+        Event firstEvent = new Event();
+        firstEvent.setEventTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
+        firstEvent.setEventEndTime(events.get(0).getEventEndTime());
+        firstEvent.setEventID(1);
+        events.add(0, firstEvent);
+
+        if (events.get(events.size() - 1).getEventEndTime() == null || events.get(events.size() - 1).getEventEndTime().length() == 0){
+            events.get(events.size() - 1).setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime()), SIMPLE_FORMAT_FORMAT));
+        }else {
+            Event lastEvent = new Event();
+            lastEvent.setEventTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - 1), SIMPLE_FORMAT_FORMAT));
+            lastEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime()), SIMPLE_FORMAT_FORMAT));
+            lastEvent.setEventID(1000000000);
+            events.add(0, lastEvent);
+        }
+
+        for (int i = 0; i < events.size() - 1; i++) {
+            Event event = events.get(i);
+            Long eventStartMilli = convertDateToMillisecond(event.getEventEndTime());
+            Long eventEndMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
+            int counter = 0;
+
+            for (WorkingEvent workingEvent : actualBarExtraResponse.getWorkingEvents()) {
+                counter += 0.01;
+                Long workingEventSentTime = convertDateToMillisecond(workingEvent.getStartTime(), SQL_T_FORMAT);
+                Long workingEventEndTime = convertDateToMillisecond(workingEvent.getEndTime(), SQL_T_FORMAT);
+
+                if (events.get(i).getEventGroupID() != TYPE_ALERT) {
+
+                    if (eventStartMilli != 0 && eventEndMilli != 0 && workingEventSentTime != 0 && workingEventEndTime != 0
+                            && workingEventEndTime <= eventEndMilli
+                            && workingEventSentTime >= eventStartMilli) {
+
+                        String eName;
+                        String lName;
+                        if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
+                            lName = workingEvent.getEventReason();
+                            eName = workingEvent.getEventReason();
+                        } else if (isAdded()) {
+                            lName = getWorkingSubTitle(workingEvent);
+                            eName = getWorkingSubTitle(workingEvent);
+                        } else {
+                            lName = getString(R.string.working);
+                            eName = "Working";
+                        }
+                        switch (workingEvent.getEventDistributionID()) {
+                            case 2:
+                            case 4:
+                            case 5:
+                                event.setEventReasonID(-2);
+                                break;
+                            default:
+                                event.setEventReasonID(0);
+                                break;
+                        }
+                        event.setColor(workingEvent.getColor());
+
+                        Event workingEvent1 = createIntermediateEvent(workingEvent.getStartTime(),
+                                workingEvent.getEndTime(), event.getEventID(), workingEventSentTime, workingEventEndTime, lName, eName,
+                                counter, workingEvent.getColor(), 1);
+
+                        if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent1.getEventID()))) {
+
+                            addDetailsToEvents(workingEvent1, actualBarExtraResponse);
+
+                            workingEvent1.save();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return events;
+    }
+
     private void initEvents(ArrayList<Event> events) {
 
         if (mLoadingDataText != null) {
             mLoadingDataText.setVisibility(View.GONE);
         }
-        if (events.size() > 0) {
-            Event event = addFirstEvent(events.get(events.size() - 1), mActualBarExtraResponse);
-            if (event != null) {
-                events.add(event);
-            }
-        }
-        Event event = addCurrentEvent(events);
-        if (event != null) {
-            events.add(0, event);
+//        if (events.size() > 0) {
+//            Event event = addFirstEvent(events.get(events.size() - 1), mActualBarExtraResponse);
+//            if (event != null) {
+//                events.add(event);
+//            }
+//        }
+//        Event event = addCurrentEvent(events);
+//        if (event != null) {
+//            events.add(0, event);
+//        }
+        if (events.size() < 1) {
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+        } else {
+            mNoNotificationsText.setVisibility(View.GONE);
         }
         if (events.size() < 1) {
             return;
@@ -3040,39 +3039,39 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    private Event addCurrentEvent(ArrayList<Event> events) {
-        Event event = null;
-        if (!mIsSelectionMode && events.size() > 0 && events.get(0).getEventEndTime() != null
-                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-
-            event = events.get(0);
-        }
-        if (events.size() < 1 && mCurrentMachineStatus != null &&
-                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-            event = new Event();
-            event.setEventID(1);
-            event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
-        }
-        if (event != null) {
-            Event intermediateEvent = new Event();
-            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
-            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
-                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
-                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
-            if (mOpenEvent != null) {
-                intermediateEvent.setNotifications(mOpenEvent.getNotifications());
-                intermediateEvent.setRejects(mOpenEvent.getRejects());
-                intermediateEvent.setInventories(mOpenEvent.getInventories());
-            }
-            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
-            mOpenEvent = intermediateEvent;
-            return intermediateEvent;
-        }
-        mOpenEvent = null;
-        return null;
-    }
+//    private Event addCurrentEvent(ArrayList<Event> events) {
+//        Event event = null;
+//        if (!mIsSelectionMode && events.size() > 0 && events.get(0).getEventEndTime() != null
+//                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+//                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+//
+//            event = events.get(0);
+//        }
+//        if (events.size() < 1 && mCurrentMachineStatus != null &&
+//                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
+//            event = new Event();
+//            event.setEventID(1);
+//            event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
+//        }
+//        if (event != null) {
+//            Event intermediateEvent = new Event();
+//            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
+//            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
+//                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
+//                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
+//                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
+//            if (mOpenEvent != null) {
+//                intermediateEvent.setNotifications(mOpenEvent.getNotifications());
+//                intermediateEvent.setRejects(mOpenEvent.getRejects());
+//                intermediateEvent.setInventories(mOpenEvent.getInventories());
+//            }
+//            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
+//            mOpenEvent = intermediateEvent;
+//            return intermediateEvent;
+//        }
+//        mOpenEvent = null;
+//        return null;
+//    }
 
     private String getColorByMachineStatus(int machineStatusID) {
         if (getActivity() != null) {
@@ -3113,6 +3112,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
     }
+
     private String getWorkingSubTitle(WorkingEvent workingEvent) {
         switch (workingEvent.getEventDistributionID()) {
             case 1:
@@ -3524,7 +3524,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = getCursorByType();
         setShiftLogAdapter(cursor);
-        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
+//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
