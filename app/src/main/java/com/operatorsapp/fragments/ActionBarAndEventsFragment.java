@@ -2167,7 +2167,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+        if (mListener != null) {
+            mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+        }
 
         mIsSelectionMode = true;
         mFirstSeletedEvent = event;
