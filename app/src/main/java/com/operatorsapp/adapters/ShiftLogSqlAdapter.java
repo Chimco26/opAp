@@ -316,6 +316,9 @@ public class ShiftLogSqlAdapter extends CursorRecyclerViewAdapter<RecyclerView.V
             holder.mStoppedEnd.setText(TimeUtils.getTimeFromString(event.getEventEndTime()));
             holder.mStoppedEndDate.setText(TimeUtils.getDateFromString(event.getEventEndTime()));
             long durationInMillis = event.getDuration() * 1000 * 60; // duration is sent in minutes.
+            if (durationInMillis == 0){
+                durationInMillis = 1;
+            }
             holder.mStoppedDuration.setText(TimeUtils.getDurationTime(mContext, durationInMillis));
             if (mClosedState) {
                 holder.mStoppedDivider.setVisibility(View.GONE);

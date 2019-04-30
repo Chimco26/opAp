@@ -1,6 +1,7 @@
 package com.operatorsapp.utils;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
@@ -25,6 +26,7 @@ import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 public class SaveHelperNew {
 
+    private  static final String TAG = SaveHelperNew.class.getSimpleName();
     private static final int MAX_ID = 1000000000;
 
     public ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
@@ -74,6 +76,8 @@ public class SaveHelperNew {
             if (event.getEventID() != 1 && event.getEventID() != MAX_ID) {
                 addDetailsToEvents(event, actualBarExtraResponse);
                 toReturn.add(event);
+            }else {
+                Log.d(TAG, "updateList: " + event.getEventID());
             }
             for (WorkingEvent workingEvent : workingEvents) {
                 counter += 1;
@@ -114,6 +118,7 @@ public class SaveHelperNew {
 
         }
         if (events.get(events.size() - 1).getEventID() != MAX_ID) {
+            addDetailsToEvents(events.get(events.size() - 1), actualBarExtraResponse);
             toReturn.add(events.get(events.size() - 1));
         }
         Collections.reverse(toReturn);
@@ -263,7 +268,7 @@ public class SaveHelperNew {
             for (Reject reject : rejects) {
                 Long rejectTime = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
 
-                if (eventStart <= rejectTime && rejectTime <= eventEnd) {
+                if (eventStart < rejectTime && rejectTime <= eventEnd) {
                     if (rejectArrayList == null) {
                         rejectArrayList = new ArrayList<>();
                     }
@@ -273,7 +278,7 @@ public class SaveHelperNew {
             }
             if (rejectArrayList != null) {
                 event.setRejects(rejectArrayList);
-                rejects.removeAll(toDelete);
+//                rejects.removeAll(toDelete);
                 if (rejects.size() == 0) {
                     rejects = null;
                 }
@@ -297,7 +302,7 @@ public class SaveHelperNew {
             for (JobDataItem jobDataItem : jobDataItems) {
                 Long jobDataItemSentTime = convertDateToMillisecond(jobDataItem.getStartTime(), SIMPLE_FORMAT_FORMAT);
 
-                if (eventStart <= jobDataItemSentTime && jobDataItemSentTime <= eventEnd) {
+                if (eventStart <= jobDataItemSentTime && jobDataItemSentTime < eventEnd) {
 
                     if (jobDataItemArrayList == null) {
                         jobDataItemArrayList = new ArrayList<>();
@@ -309,7 +314,7 @@ public class SaveHelperNew {
             }
             if (jobDataItemArrayList != null) {
                 event.setJobDataItems(jobDataItemArrayList);
-                jobDataItems.removeAll(toDelete);
+//                jobDataItems.removeAll(toDelete);
                 if (jobDataItems.size() == 0) {
                     jobDataItems = null;
                 }
@@ -332,7 +337,7 @@ public class SaveHelperNew {
             for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
                 Long notificationSentTime = convertDateToMillisecond(notification.getResponseDate(), SQL_T_FORMAT);
 
-                if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
+                if (eventStart < notificationSentTime && notificationSentTime <= eventEnd) {
 
                     if (notificationArrayList == null) {
                         notificationArrayList = new ArrayList<>();
@@ -344,7 +349,7 @@ public class SaveHelperNew {
             }
             if (notificationArrayList != null) {
                 event.setNotifications(notificationArrayList);
-                notifications.removeAll(toDelete);
+//                notifications.removeAll(toDelete);
                 if (notifications.size() == 0) {
                     notifications = null;
                 }
@@ -368,7 +373,7 @@ public class SaveHelperNew {
             for (Inventory inventory : inventories) {
                 Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SIMPLE_FORMAT_FORMAT);
 
-                if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
+                if (eventStart < inventoryTime && inventoryTime <= eventEnd) {
                     if (inventoriesArrayList == null) {
                         inventoriesArrayList = new ArrayList<>();
                     }
@@ -378,7 +383,7 @@ public class SaveHelperNew {
             }
             if (inventoriesArrayList != null) {
                 event.setInventories(inventoriesArrayList);
-                inventories.removeAll(toDelete);
+//                inventories.removeAll(toDelete);
                 if (inventories.size() == 0) {
                     inventories = null;
                 }
