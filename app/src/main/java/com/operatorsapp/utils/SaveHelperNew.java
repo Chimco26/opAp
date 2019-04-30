@@ -26,9 +26,10 @@ import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 public class SaveHelperNew {
 
     private static final int MAX_ID = 1000000000;
+
     public ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
-        if (actualBarExtraResponse == null){
+        if (actualBarExtraResponse == null) {
             return events;
         }
         if (events == null) {
@@ -47,11 +48,11 @@ public class SaveHelperNew {
         Event lastEvent = new Event();
 
         firstEvent.setEventTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
-        if (events.size() > 0) {
-            firstEvent.setEventEndTime(events.get(0).getEventEndTime());
-        }else {
-            firstEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS  + 100), SIMPLE_FORMAT_FORMAT));
-        }
+//        if (events.size() > 0) {
+//            firstEvent.setEventEndTime(events.get(0).getEventEndTime());
+//        }else {
+        firstEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS + 100), SIMPLE_FORMAT_FORMAT));
+//        }
         firstEvent.setEventID(1);
         events.add(0, firstEvent);
 
@@ -70,7 +71,7 @@ public class SaveHelperNew {
             Long eventEndMilli = convertDateToMillisecond(events.get(i + 1).getEventTime());
             int counter = 0;
 
-            if (event.getEventID() != 1 && event.getEventID() != MAX_ID){
+            if (event.getEventID() != 1 && event.getEventID() != MAX_ID) {
                 addDetailsToEvents(event, actualBarExtraResponse);
                 toReturn.add(event);
             }
@@ -85,15 +86,9 @@ public class SaveHelperNew {
                             && workingEventEndTime <= eventEndMilli
                             && workingEventSentTime >= eventStartMilli) {
 
-                        String eName = "working";
-                        String lName = "working";
-                        if (workingEvent.getName() != null && workingEvent.getName().length() > 0) {
-                            lName = workingEvent.getName();
-                            eName = workingEvent.getName();
-                        }
-
-                        Event workingEvent1 = createIntermediateEvent(getDateFromFormat(new Date(workingEventSentTime) ,SIMPLE_FORMAT_FORMAT),
-                                getDateFromFormat(new Date(workingEventEndTime) ,SIMPLE_FORMAT_FORMAT), event.getEventID(), workingEventSentTime, workingEventEndTime, lName, eName,
+                        Event workingEvent1 = createIntermediateEvent(getDateFromFormat(new Date(workingEventSentTime), SIMPLE_FORMAT_FORMAT),
+                                getDateFromFormat(new Date(workingEventEndTime), SIMPLE_FORMAT_FORMAT), event.getEventID(), workingEventSentTime, workingEventEndTime,
+                                getWorkingEventName(workingEvent), getWorkingEventName(workingEvent),
                                 counter, workingEvent.getColor(), 1);
                         workingEvent1.setDuration(workingEvent.getDuration());
 
@@ -118,7 +113,7 @@ public class SaveHelperNew {
             }
 
         }
-        if (events.get(events.size() - 1).getEventID() != MAX_ID){
+        if (events.get(events.size() - 1).getEventID() != MAX_ID) {
             toReturn.add(events.get(events.size() - 1));
         }
         Collections.reverse(toReturn);
@@ -126,6 +121,16 @@ public class SaveHelperNew {
         return toReturn;
     }
 
+    private String getWorkingEventName(WorkingEvent workingEvent){
+        if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
+            return workingEvent.getEventReason();
+        }else if (workingEvent.getName() != null && workingEvent.getName().length() > 0){
+            return workingEvent.getName();
+        }else {
+            return "working";
+        }
+
+    }
     private void removeOldUpdatedExtras(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
 
         if (actualBarExtraResponse == null) {
@@ -277,6 +282,7 @@ public class SaveHelperNew {
         }
         return false;
     }
+
     private boolean addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
 
         if (actualBarExtraResponse == null) {
@@ -347,6 +353,7 @@ public class SaveHelperNew {
         }
         return false;
     }
+
     private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
         if (actualBarExtraResponse == null) {
             return false;
