@@ -74,7 +74,7 @@ public class CountDownView extends View {
             textSize = typedArray.getInteger(R.styleable.CountDownView_textSize, 28) * density;
             text = typedArray.getString(R.styleable.CountDownView_text);
             totalTimeInMinute = typedArray.getInteger(R.styleable.CountDownView_totalTimeInMinute, 60);
-            strokeWidth = typedArray.getInteger(R.styleable.CountDownView_strokeWidth, 5);
+            strokeWidth = typedArray.getInteger(R.styleable.CountDownView_strokeWidth_2, 5);
             backgroundColor = typedArray.getColor(R.styleable.CountDownView_backgroundColor, ContextCompat.getColor(getContext(), R.color.divider_gray));
             centerColor = typedArray.getColor(R.styleable.CountDownView_centerColor, ContextCompat.getColor(getContext(), R.color.white));
             initPercentAndPercentBackgroundColors();

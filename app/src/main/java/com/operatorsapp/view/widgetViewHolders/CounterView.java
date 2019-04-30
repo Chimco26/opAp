@@ -67,7 +67,7 @@ public class CounterView extends View {
             indicatorRadius = typedArray.getInteger(R.styleable.CounterView_cv_indicatorRadius, 6) * density;
             textSize = typedArray.getInteger(R.styleable.CounterView_cv_textSize, 28) * density;
             text = typedArray.getString(R.styleable.CounterView_cv_text);
-            strokeWidth = typedArray.getInteger(R.styleable.CounterView_cv_strokeWidth, 5);
+            strokeWidth = typedArray.getInteger(R.styleable.CounterView_cv_strokeWidth_2, 5);
             backgroundColor = typedArray.getColor(R.styleable.CounterView_cv_backgroundColor, ContextCompat.getColor(getContext(), R.color.divider_gray));
             centerColor = typedArray.getColor(R.styleable.CounterView_cv_centerColor, ContextCompat.getColor(getContext(), R.color.white));
             initPercentAndPercentBackgroundColors();
