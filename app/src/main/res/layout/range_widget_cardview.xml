@@ -88,6 +88,7 @@
                 android:textColor="@color/black"/>
 
             <ImageView
+                android:id="@+id/RWC_average_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_arrow_drop_up_black_36" />
