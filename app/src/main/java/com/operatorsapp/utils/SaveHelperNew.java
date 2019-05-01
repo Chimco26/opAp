@@ -122,6 +122,7 @@ public class SaveHelperNew {
             toReturn.add(events.get(events.size() - 1));
         }
         Collections.reverse(toReturn);
+        Collections.reverse(workingEvents);
 
         return toReturn;
     }
