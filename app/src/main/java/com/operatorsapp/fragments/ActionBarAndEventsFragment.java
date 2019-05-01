@@ -2246,7 +2246,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
-        if (events == null){
+        if (events == null) {
             events = new ArrayList<>();
         }
         if (actualBarExtraResponse != null && machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
@@ -2458,9 +2458,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     event.save();
 
-                    if (mIsNewShiftLogs) {
-                        mEventsQueue.add(event);
-                    }
+//                    if (mIsNewShiftLogs) {
+                    mEventsQueue.add(event);
+//                    }
                     if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                         addCheckedAlarms(checkedAlarms, event);
                     }
@@ -2934,9 +2934,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         firstEvent.setEventID(1);
         events.add(0, firstEvent);
 
-        if (events.get(events.size() - 1).getEventEndTime() == null || events.get(events.size() - 1).getEventEndTime().length() == 0){
+        if (events.get(events.size() - 1).getEventEndTime() == null || events.get(events.size() - 1).getEventEndTime().length() == 0) {
             events.get(events.size() - 1).setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime()), SIMPLE_FORMAT_FORMAT));
-        }else {
+        } else {
             Event lastEvent = new Event();
             lastEvent.setEventTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - 1), SIMPLE_FORMAT_FORMAT));
             lastEvent.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime()), SIMPLE_FORMAT_FORMAT));
@@ -3211,7 +3211,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         ArrayList<Event> events = mDatabaseHelper.getAlEvents();
         for (Event event : events) {
 
-            if (TimeUtils.getLongFromDateString(event.getEventEndTime(), "dd/MM/yyyy HH:mm:ss")
+            if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0 && TimeUtils.getLongFromDateString(event.getEventEndTime(), "dd/MM/yyyy HH:mm:ss")
                     < System.currentTimeMillis() - DAY_IN_MILLIS) {
 
                 toDelete.add(event);
@@ -3757,18 +3757,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+                    ArrayList<TechCallInfo> techListCopy = new ArrayList<>();
+                    techListCopy = techList;
                     for (Notification not : response.body().getmNotificationsList()) {
+
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
                         if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                             boolean isNew = true;
-                            if (techList != null && techList.size() > 0) {
-                                for (TechCallInfo tech : techList) {
+                            if (techList != null && techListCopy.size() > 0) {
+                                for (int i = 0; i < techListCopy.size(); i++) {
+                                    TechCallInfo tech = techListCopy.get(i);
                                     if (tech.getmNotificationId() == not.getmNotificationID()) {
                                         isNew = false;
                                         tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
-                                        break;
+                                        tech.setmResponseType(not.getmResponseType());
+                                    } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
+                                        techList.remove(i);
                                     }
                                 }
 
