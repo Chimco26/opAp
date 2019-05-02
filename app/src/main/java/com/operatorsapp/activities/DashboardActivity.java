@@ -2671,13 +2671,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
-                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
-                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
-                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
-                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
-                                    getFile(item.getmUrl());
-                                }
-                            }
+//                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+//                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+//                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+//                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
+//                                    getFile(item.getmUrl());
+//                                }
+//                            }
                         }
                     }
 
@@ -2847,6 +2847,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
                 startActivity(install);
+                finish();
             }catch (NullPointerException e){
 
             }

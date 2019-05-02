@@ -81,7 +81,8 @@ public class TimeUtils {
 
     public static String getDurationTime(Context context, long millis) {
         if (millis < 0) {
-            throw new IllegalArgumentException("Duration must be greater than zero!");
+//            throw new IllegalArgumentException("Duration must be greater than zero!");
+            return " ";
         }
 
         long days = TimeUnit.MILLISECONDS.toDays(millis);
