@@ -2847,6 +2847,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive");
                 install.normalizeMimeType("application/vnd.android.package-archive");
                 startActivity(install);
+                finish();
             }catch (NullPointerException e){
 
             }

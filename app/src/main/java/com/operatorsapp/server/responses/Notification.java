@@ -93,7 +93,8 @@ public class Notification {
 
     public String getmBody(Context context) {
 
-        if (getmResponseType() == Consts.NOTIFICATION_TYPE_REAL_TIME){
+        //if (getmResponseType() == Consts.NOTIFICATION_TYPE_REAL_TIME && getmInsightBody() != null){
+        if (getmNotificationType() == Consts.NOTIFICATION_TYPE_REAL_TIME && getmInsightBody() != null){
             return getmInsightBody().getFullText(context);
         }else {
             return mBody;
