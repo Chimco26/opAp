@@ -1838,11 +1838,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     responseType,
                     Consts.NOTIFICATION_TYPE_FROM_WEB,
                     Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
-                    pm.getUserId() + "",
-                    pm.getOperatorName(),
+                    notification[0].getmSourceUserID() + "",
                     notification[0].getmSender(),
-                    opId,
-                    notification[0].getmTargetUserId() + "");
+                    pm.getOperatorName(),
+                    "",
+                    notification[0].getmSourceUserID() + "");
+
+//            RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
+//                    getResources().getString(R.string.respond_notification_title),
+//                    notification[0].getmBody(getActivity()),
+//                    pm.getMachineId() + "",
+//                    notification[0].getmNotificationID() + "",
+//                    responseType,
+//                    Consts.NOTIFICATION_TYPE_FROM_WEB,
+//                    Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
+//                    pm.getUserId() + "",
+//                    pm.getOperatorName(),
+//                    notification[0].getmSender(),
+//                    opId,
+//                    notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
