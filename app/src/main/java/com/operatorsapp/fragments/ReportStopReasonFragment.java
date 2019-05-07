@@ -62,7 +62,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
-    private Integer mJobId = 0;
+    private Integer mJoshId = 0;
 
     private RecyclerView mRecyclerView;
 
@@ -121,7 +121,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
             if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
                     && mActiveJobsListForMachine.getActiveJobs().size() > mSelectedPosition) {
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
             }
         }
 
@@ -263,7 +263,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
             } else {
 
-                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
+                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJoshId,
                         mReportFieldsForMachine.getStopReasons().get(position).getId(),
                         mReportFieldsForMachine.getStopReasons().get(position).getEName(),
                         mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
@@ -343,14 +343,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             for (int i = 0; i < mSelectedEvents.size(); i++) {
 
                 mReportCore.sendStopReport(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId()
-                        , mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJobId);
+                        , mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJoshId);
 
             }
 
         } else {
 
             mReportCore.sendMultipleStopReport(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
-                    mSelectedSubreason.getId(), eventsId, mJobId);
+                    mSelectedSubreason.getId(), eventsId, mJoshId);
 
         }
 

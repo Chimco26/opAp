@@ -57,14 +57,14 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
     public static final String LOG_TAG = SelectStopReasonFragment.class.getSimpleName();
     private static final String SELECTED_STOP_REASON_POSITION = "selected_stop_reason_position";
-    private static final String CURRENT_JOB_ID = "current_job_id";
+    private static final String CURRENT_JOSH_ID = "current_job_id";
     private static final String IS_OPEN = "IS_OPEN";
 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
     private ReportFieldsForMachine mReportFieldsForMachine;
-    private Integer mJobId = 0;
+    private Integer mJoshId = 0;
 
     private SubReasons mSelectedSubreason;
     private int mSelectedReason;
@@ -85,11 +85,11 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
     private int mFlavorSpanDif;
 
 
-    public static SelectStopReasonFragment newInstance(int position, int jobId, int reasonId, String eName, String lName, boolean isOpen) {
+    public static SelectStopReasonFragment newInstance(int position, int joshId, int reasonId, String eName, String lName, boolean isOpen) {
         SelectStopReasonFragment selectedStopReasonFragment = new SelectStopReasonFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SELECTED_STOP_REASON_POSITION, position);
-        bundle.putInt(CURRENT_JOB_ID, jobId);
+        bundle.putInt(CURRENT_JOSH_ID, joshId);
         bundle.putString(EN_NAME, eName);
         bundle.putString(IL_NAME, lName);
         bundle.putInt(REASON_ID, reasonId);
@@ -103,7 +103,7 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSelectedPosition = getArguments().getInt(SELECTED_STOP_REASON_POSITION);
-            mJobId = getArguments().getInt(CURRENT_JOB_ID);
+            mJoshId = getArguments().getInt(CURRENT_JOSH_ID);
             mReasonId = getArguments().getInt(REASON_ID);
             mEnName = getArguments().getString(EN_NAME);
             mILName = getArguments().getString(IL_NAME);
@@ -281,13 +281,13 @@ public class SelectStopReasonFragment extends BackStackAwareFragment implements 
 
             for (int i = 0; i < mSelectedEvents.size(); i++) {
 
-                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJobId);
+                mReportCore.sendStopReport(mSelectedReason, mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJoshId);
 
             }
 
         } else {
 
-            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJobId);
+            mReportCore.sendMultipleStopReport(mSelectedReason, mSelectedSubreason.getId(), eventsId, mJoshId);
 
         }
 
