@@ -423,7 +423,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             initViewPagerFragment();
 
-//            initTopFiveFragment();
+            initTopFiveFragment();
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
@@ -2074,6 +2074,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
+
+        Fragment visible = getVisibleFragment();
+
         if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
@@ -2089,7 +2092,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 removeSelectStopReasonFragment();
 
             }
-            Fragment visible = getVisibleFragment();
 
             if (!(visible instanceof ActionBarAndEventsFragment
                     || visible instanceof WidgetFragment
@@ -2104,10 +2106,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else {
+        } else if (mTopFiveFragment != null){
+            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
+            mTopFiveFragment = null;
 
+        }else {
             super.onBackPressed();
-
         }
 
     }
