@@ -56,6 +56,7 @@ public interface OpAppServiceRequests {
     @GET("/files/1Mb.dat")
     Call<ResponseBody> getNewVersionFile();
 
-    @GET("/LeaderMESApi/GetApplicationVersion")
+//    @GET("/LeaderMESApi/GetApplicationVersion")
+    @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
     Call<AppVersionResponse> GetApplicationVersion();
 }
