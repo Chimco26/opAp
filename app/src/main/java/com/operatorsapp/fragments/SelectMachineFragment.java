@@ -231,7 +231,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             canGoNext = true;
             mGoButton.setEnabled(true);
-            mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
+            mGoButtonBackground.setBackground(getResources().getDrawable(R.drawable.login_button_selector));
+//            mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
             mSearchField.dismissDropDown();
         }
     }
@@ -249,7 +250,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         {
             canGoNext = false;
             mGoButton.setEnabled(false);
-            mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
+            mGoButtonBackground.setBackground(getResources().getDrawable(R.drawable.button_bg_disabled));
+            //mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
 
         }
 

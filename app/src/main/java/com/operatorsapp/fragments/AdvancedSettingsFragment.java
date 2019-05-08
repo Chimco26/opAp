@@ -320,7 +320,7 @@ public class AdvancedSettingsFragment extends Fragment implements View.OnClickLi
 
         ProgressDialogManager.show(getActivity());
         OppAppLogger.getInstance().d(LOG_TAG, "start sendLogToEmail(), ");
-        LogRecorder.getInstance().setEmailInfo("support@leadermes.com", "Operator app logs", null);
+        LogRecorder.getInstance().setEmailInfo("support@matics.live", "Operator app logs", null);
         try {
             LogRecorder.getInstance().requestSendLogsIntent(false, new LogRecorder.SendLogsListener() {
                 @Override
