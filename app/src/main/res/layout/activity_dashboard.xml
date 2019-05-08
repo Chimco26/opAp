@@ -39,7 +39,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <Button
+                android:id="@+id/AD_report_btn"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@color/blue1"
+                android:text="@string/report"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="20dp"/>
+
         </RelativeLayout>
     </LinearLayout>
-
 </FrameLayout>

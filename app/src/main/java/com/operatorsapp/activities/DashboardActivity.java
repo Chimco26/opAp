@@ -311,6 +311,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
         setupVersionCheck();
+
+        setReportBtnListener();
+    }
+
+    private void setReportBtnListener() {
+
+        findViewById(R.id.AD_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTopFiveFragment();
+            }
+        });
     }
 
     private void initDataListeners() {
@@ -423,8 +435,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             openWidgetFragment();
 
             initViewPagerFragment();
-
-            initTopFiveFragment();
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 

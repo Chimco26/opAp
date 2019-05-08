@@ -58,6 +58,7 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
     private LinearLayout row1_lil;
     private LinearLayout row2_lil;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private View mProgressBar;
 
     public static TopFiveFragment newInstance() {
         TopFiveFragment topFiveFragment = new TopFiveFragment();
@@ -97,7 +98,7 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initTopFive(view);
-
+        getTopRejectsAndStops();
     }
 
 
@@ -137,6 +138,8 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
     }
 
     private void initTopFive(View view) {
+
+        mProgressBar = view.findViewById(R.id.FTF_progress);
 
         View includeTopFive_1 = view.findViewById(R.id.fragment_dashboard_top_five_1);
         View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
@@ -190,11 +193,13 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
                 if (response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<TopRejectResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
 
             }
         });
@@ -216,10 +221,13 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
                         row2_lil.setVisibility(View.GONE);
                     }
                 }
+                mProgressBar.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onFailure(Call<StopAndCriticalEventsResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
 
             }
         });
