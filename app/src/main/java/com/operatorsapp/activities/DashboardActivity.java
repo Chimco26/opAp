@@ -145,6 +145,7 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
+import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
