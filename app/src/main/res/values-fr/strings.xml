@@ -181,7 +181,7 @@
     <string name="amount">Montant</string>
     <string name="app_name">Matics Operator</string>
     <string name="at_work">Au travail</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">\"Cycles detected in non production status.\nPlease do not forget to activate a job at time!</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Cycles detected in non production status.\nPlease do not forget to activate a job at time!</string>
     <string name="call_for_technician_unresponsive">Votre appel pour un technicien n\'a pas abouti et a donc été annulé.</string>
     <string name="call_technician_text">J\'ai besoin que tu répares quelque chose</string>
     <string name="call_technician_title">Appel d\'un technicien</string>

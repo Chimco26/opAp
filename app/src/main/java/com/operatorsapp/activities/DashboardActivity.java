@@ -2671,6 +2671,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
+                            // TODO: 07/05/2019 unmark before release
 //                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
 //                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
 //                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
@@ -2749,6 +2750,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.progressDialog.setCancelable(false);
+            this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
+            this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
+            this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
             this.progressDialog.show();
         }
 

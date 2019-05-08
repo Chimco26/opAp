@@ -182,7 +182,7 @@
     <string name="amount">كميه</string>
     <string name="app_name">Matics Operator</string>
     <string name="at_work">في العلاج</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">\"انتباه!     تم اكتشاف الدورات في حالة عدم الإنتاج.     من فضلك لا تنسى لتفعيل العمل في الوقت المناسب!\"</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">انتباه!     تم اكتشاف الدورات في حالة عدم الإنتاج.     من فضلك لا تنسى لتفعيل العمل في الوقت المناسب!</string>
     <string name="call_for_technician_unresponsive">كان ندائك للفني غير مستجيب وبالتالي تم إلغاؤه</string>
     <string name="call_technician_text">بحاجة لإصلاح شيء ما</string>
     <string name="call_technician_title">نداء للتقني</string>
