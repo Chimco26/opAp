@@ -74,7 +74,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
     private OnCroutonRequestListener mOnCroutonRequestListener;
     private ReportFieldsForMachine mReportFieldsForMachine;
     private int mUnitsCounter = 1;
-    private Integer mJobId = null;
+    private Integer mJoshId = null;
     private int mSelectedPackageTypeId;
     private String mSelectedPackageTypeName;
     private ActiveJobsListForMachine mActiveJobsListForMachine;
@@ -118,7 +118,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
             mCurrentProductId = getArguments().getInt(CURRENT_PRODUCT_ID);
             mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
         }
 
         // Analytics
@@ -326,9 +326,9 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
         reportNetworkBridge.injectInventory(NetworkManager.getInstance());
         ReportCore mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
-        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJobId);
+        OppAppLogger.getInstance().i(LOG_TAG, "sendReport units value is: " + String.valueOf(mUnitsCounter) + " type value: " + mSelectedPackageTypeId + " type name: " + mSelectedPackageTypeName + " JobId: " + mJoshId);
 
-        mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJobId);
+        mReportCore.sendInventoryReport(mSelectedPackageTypeId, mUnitsCounter, mJoshId);
 
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -439,7 +439,7 @@ public class ReportInventoryFragment extends BackStackAwareFragment implements V
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
                         activeJobsSpinnerAdapter.setTitle(position);
-                        mJobId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
+                        mJoshId = mActiveJobsListForMachine.getActiveJobs().get(position).getJoshID();
                     }
 
                     @Override

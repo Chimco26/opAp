@@ -59,11 +59,7 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
-import com.example.common.actualBarExtraResponse.Inventory;
-import com.example.common.actualBarExtraResponse.Reject;
-import com.example.common.actualBarExtraResponse.WorkingEvent;
 import com.example.common.callback.ErrorObjectInterface;
-import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -148,17 +144,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
-import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
-import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
@@ -1108,7 +1100,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mSelectedPosition = position;
 
-                    mListener.onJoshProductSelected(position, mActiveJobs.get(position).getJobID(),
+                    mListener.onJoshProductSelected(position, mActiveJobs.get(position),
                             mActiveJobs.get(position).getJobName());
 
                 }
@@ -3290,7 +3282,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onSplitEventPressed(Float eventID);
 
-        void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
+        void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob jobID, String jobName);
 
         void onProductionStatusChanged(int id, String newStatus);
 

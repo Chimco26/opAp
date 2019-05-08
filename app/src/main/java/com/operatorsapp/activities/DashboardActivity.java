@@ -53,6 +53,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
@@ -115,6 +116,7 @@ import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
+import com.operatorsapp.fragments.TopFiveFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -143,7 +145,6 @@ import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.utils.ChangeLang;
 import com.operatorsapp.utils.ClearData;
-import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.SaveAlarmsHelper;
 import com.operatorsapp.utils.ShowCrouton;
@@ -231,6 +232,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
     private ViewPagerFragment mViewPagerFragment;
+    private TopFiveFragment mTopFiveFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
@@ -265,6 +267,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Runnable mCheckAppVersionRunnable;
     private File outputFile;
     private MachineJoshDataResponse mMachineJoshDataResponse;
+    private Integer mSelectProductJoshId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -420,6 +423,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             initViewPagerFragment();
 
+            initTopFiveFragment();
+
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
             changeActionBarColor(R.color.lenox_action_bar_color);
@@ -461,6 +466,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         try {
 
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mViewPagerFragment).commit();
+        } catch (IllegalStateException ignored) {
+        }
+    }
+
+    private void initTopFiveFragment() {
+
+        mTopFiveFragment = TopFiveFragment.newInstance();
+
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mTopFiveFragment).commit();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -512,7 +528,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             fragment instanceof RecipeFragment ||
                             fragment instanceof WidgetFragment ||
                             fragment instanceof ReportStopReasonFragment ||
-                            fragment instanceof SelectStopReasonFragment) {
+                            fragment instanceof SelectStopReasonFragment ||
+                            fragment instanceof TopFiveFragment) {
                         if (mActionBarAndEventsFragment != null) {
                             mActionBarAndEventsFragment.setActionBar();
                         }
@@ -1879,11 +1896,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName) {
+    public void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob selectedJob, String jobName) {
 
         mSpinnerProductPosition = spinnerProductPosition;
 
-        mSelectProductJobId = jobID;
+        mSelectProductJobId = selectedJob.getJobID();
+        mSelectProductJoshId = selectedJob.getJoshID();
 
         dashboardDataStartPolling();
 
@@ -2056,6 +2074,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
+
+        Fragment visible = getVisibleFragment();
+
         if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
@@ -2071,7 +2092,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 removeSelectStopReasonFragment();
 
             }
-            Fragment visible = getVisibleFragment();
 
             if (!(visible instanceof ActionBarAndEventsFragment
                     || visible instanceof WidgetFragment
@@ -2086,10 +2106,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else {
+        } else if (mTopFiveFragment != null){
+            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
+            mTopFiveFragment = null;
 
+        }else {
             super.onBackPressed();
-
         }
 
     }
@@ -2440,9 +2462,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         if (isUnit) {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectProductJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
         } else {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -2745,7 +2767,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "DownloadFile- onPreExecute" );
+            Log.d(TAG, "DownloadFile- onPreExecute");
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -2852,7 +2874,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 install.normalizeMimeType("application/vnd.android.package-archive");
                 startActivity(install);
                 finish();
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
 
             }
         }
