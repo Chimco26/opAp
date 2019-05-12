@@ -567,7 +567,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         initProductsSpinner();
 
-        initCycleAlarmView(view);
+//        initCycleAlarmView(view);
 
         return statusBarParams;
     }
@@ -593,16 +593,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mLegendBtn.setVisibility(View.GONE);
             }
         }
-    }
-
-    private void initCycleAlarmView(View view) {
-        mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
-        view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivateJobScreen();
-            }
-        });
     }
 
     @Nullable
@@ -3077,7 +3067,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSpinnerOpened(Spinner spinner) {
         showBlackFilters();
-        setCycleWarningView(false);
+        mListener.setCycleWarningView(false);
     }
 
     public void showBlackFilters() {
@@ -3090,7 +3080,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSpinnerClosed(Spinner spinner) {
         hideBlackFilters();
-        setCycleWarningView(mCycleWarningViewShow);
+        mListener.setCycleWarningView(mCycleWarningViewShow);
     }
 
     public void hideBlackFilters() {
@@ -3135,14 +3125,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
-    private void setCycleWarningView(boolean show) {
-        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            mCycleWarningView.setVisibility(View.VISIBLE);
-        } else {
-            mCycleWarningView.setVisibility(View.GONE);
-        }
-    }
-
     public void setCycleWarningViewShow(boolean show) {
         boolean wasShow = mCycleWarningViewShow;
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
@@ -3150,11 +3132,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             mCycleWarningViewShow = false;
         }
-        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
-            setCycleWarningView(false);
-        } else {
-            setCycleWarningView(show);
-        }
+//        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
+//            mListener.resetCycleWarningView(false);
+//        } else {
+            mListener.resetCycleWarningView(wasShow, show);
+//        }
     }
 
     private void sendTokenWithSessionIdToServer() {
@@ -3299,6 +3281,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onShowSetupEndDialog();
 
         void onTechnicianCalled();
+
+        void setCycleWarningView(boolean cycleWarningViewShow);
+
+        void resetCycleWarningView(boolean wasShow, boolean show);
     }
 
 }

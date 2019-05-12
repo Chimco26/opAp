@@ -863,7 +863,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (s.length() < 1) {
+                if (s.length() < 1 && mHashMapHeaders != null) {
                     for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
                         mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
                     }

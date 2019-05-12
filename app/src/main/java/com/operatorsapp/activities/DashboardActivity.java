@@ -2025,6 +2025,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         dashboardDataStartPolling();
     }
 
+    @Override
+    public void setCycleWarningView(boolean cycleWarningViewShow) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.setCycleWarningView(cycleWarningViewShow);
+        }
+    }
+
+    @Override
+    public void resetCycleWarningView(boolean wasShow, boolean show) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.resetCycleWarningView(wasShow, show);
+        }
+    }
+
     public void setLenoxMachine(int machineId) {
 
         showLoadingDialog();
