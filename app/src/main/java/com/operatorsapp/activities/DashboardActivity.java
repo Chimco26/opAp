@@ -873,9 +873,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setBlackFilter(boolean show) {
         if (show) {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
+//            setWidgetItemInPager();
         } else {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
             onClearAllSelectedEvents();
+        }
+    }
+
+    private void setWidgetItemInPager() {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mViewPagerFragment.getPager().setCurrentItem(1);
+            } else {
+                mViewPagerFragment.getPager().setCurrentItem(0);
+            }
         }
     }
 
@@ -898,6 +909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (findViewById(R.id.FAAE_white_filter) != null) {
             if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+                setWidgetItemInPager();
             } else {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
             }

@@ -123,6 +123,10 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         return view;
     }
 
+    public ViewPager getPager() {
+        return mPager;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
