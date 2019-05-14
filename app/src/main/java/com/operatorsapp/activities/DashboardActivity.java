@@ -2731,13 +2731,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
                             // TODO: 07/05/2019 unmark before release
-//                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
-//                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
-//                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
-//                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
-//                                    getFile(item.getmUrl());
-//                                }
-//                            }
+                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
+                                    getFile(item.getmUrl());
+                                }
+                            }
                         }
                     }
 

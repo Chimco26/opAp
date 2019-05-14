@@ -1479,7 +1479,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (techList != null && techList.size() > 0) {
                 mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue_svg));
                 mTechOpenCallsIv.setVisibility(View.VISIBLE);
-                mTechOpenCallsIv.setText(techList.size() + "");
+                int counter = 0;
+                for ( TechCallInfo call : techList) {
+                    if (call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET
+                            || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE){
+                        counter++;
+                    }
+                }
+                mTechOpenCallsIv.setText(counter + "");
             } else {
                 mTechOpenCallsIv.setVisibility(View.INVISIBLE);
                 mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_white));
