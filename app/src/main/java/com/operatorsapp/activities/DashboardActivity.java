@@ -424,7 +424,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             initViewPagerFragment();
 
-            initTopFiveFragment();
+//            initTopFiveFragment();
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
@@ -2075,9 +2075,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
-
-        Fragment visible = getVisibleFragment();
-
         if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
@@ -2094,6 +2091,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }
 
+            Fragment visible = getVisibleFragment();
+
             if (!(visible instanceof ActionBarAndEventsFragment
                     || visible instanceof WidgetFragment
                     || visible instanceof RecipeFragment
@@ -2107,9 +2106,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else if (mTopFiveFragment != null){
-            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
-            mTopFiveFragment = null;
+//        } else if (mTopFiveFragment != null){
+//            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
+//            mTopFiveFragment = null;
 
         }else {
             super.onBackPressed();
@@ -2695,13 +2694,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
                             // TODO: 07/05/2019 unmark before release
-//                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
-//                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
-//                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
-//                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
-//                                    getFile(item.getmUrl());
-//                                }
-//                            }
+                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
+                                    getFile(item.getmUrl());
+                                }
+                            }
                         }
                     }
 
