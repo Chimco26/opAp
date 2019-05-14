@@ -28,4 +28,11 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/FTF_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue1"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

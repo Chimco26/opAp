@@ -311,6 +311,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
         setupVersionCheck();
+
+        setReportBtnListener();
+    }
+
+    private void setReportBtnListener() {
+
+        findViewById(R.id.AD_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTopFiveFragment();
+            }
+        });
     }
 
     private void initDataListeners() {
@@ -423,8 +435,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             openWidgetFragment();
 
             initViewPagerFragment();
-
-//            initTopFiveFragment();
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
@@ -863,9 +873,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setBlackFilter(boolean show) {
         if (show) {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
+//            setWidgetItemInPager();
         } else {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
             onClearAllSelectedEvents();
+        }
+    }
+
+    private void setWidgetItemInPager() {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mViewPagerFragment.getPager().setCurrentItem(1);
+            } else {
+                mViewPagerFragment.getPager().setCurrentItem(0);
+            }
         }
     }
 
@@ -888,6 +909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (findViewById(R.id.FAAE_white_filter) != null) {
             if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+                setWidgetItemInPager();
             } else {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
             }
@@ -2003,6 +2025,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         dashboardDataStartPolling();
     }
 
+    @Override
+    public void setCycleWarningView(boolean cycleWarningViewShow) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.setCycleWarningView(cycleWarningViewShow);
+        }
+    }
+
+    @Override
+    public void resetCycleWarningView(boolean wasShow, boolean show) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.resetCycleWarningView(wasShow, show);
+        }
+    }
+
     public void setLenoxMachine(int machineId) {
 
         showLoadingDialog();
@@ -2075,6 +2111,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
+
+        Fragment visible = getVisibleFragment();
+
         if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
@@ -2091,8 +2130,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }
 
-            Fragment visible = getVisibleFragment();
-
             if (!(visible instanceof ActionBarAndEventsFragment
                     || visible instanceof WidgetFragment
                     || visible instanceof RecipeFragment
@@ -2106,9 +2143,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-//        } else if (mTopFiveFragment != null){
-//            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
-//            mTopFiveFragment = null;
+        } else if (mTopFiveFragment != null){
+            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
+            mTopFiveFragment = null;
 
         }else {
             super.onBackPressed();
