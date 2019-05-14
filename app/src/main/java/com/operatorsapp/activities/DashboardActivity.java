@@ -311,6 +311,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
         setupVersionCheck();
+
+        setReportBtnListener();
+    }
+
+    private void setReportBtnListener() {
+
+        findViewById(R.id.AD_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTopFiveFragment();
+            }
+        });
     }
 
     private void initDataListeners() {
@@ -423,8 +435,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             openWidgetFragment();
 
             initViewPagerFragment();
-
-            initTopFiveFragment();
 
         } else if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
 
@@ -863,9 +873,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setBlackFilter(boolean show) {
         if (show) {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
+//            setWidgetItemInPager();
         } else {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
             onClearAllSelectedEvents();
+        }
+    }
+
+    private void setWidgetItemInPager() {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mViewPagerFragment.getPager().setCurrentItem(1);
+            } else {
+                mViewPagerFragment.getPager().setCurrentItem(0);
+            }
         }
     }
 
@@ -888,6 +909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (findViewById(R.id.FAAE_white_filter) != null) {
             if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+                setWidgetItemInPager();
             } else {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
             }
@@ -2003,6 +2025,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         dashboardDataStartPolling();
     }
 
+    @Override
+    public void setCycleWarningView(boolean cycleWarningViewShow) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.setCycleWarningView(cycleWarningViewShow);
+        }
+    }
+
+    @Override
+    public void resetCycleWarningView(boolean wasShow, boolean show) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.resetCycleWarningView(wasShow, show);
+        }
+    }
+
     public void setLenoxMachine(int machineId) {
 
         showLoadingDialog();
@@ -2695,13 +2731,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
                             // TODO: 07/05/2019 unmark before release
-//                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
-//                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
-//                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
-//                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
-//                                    getFile(item.getmUrl());
-//                                }
-//                            }
+                            for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
+                                if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
+                                    getFile(item.getmUrl());
+                                }
+                            }
                         }
                     }
 
