@@ -17,6 +17,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.view.widgetViewHolders.CounterViewHolder;
+import com.operatorsapp.view.widgetViewHolders.GenericTimeViewHolder;
 import com.operatorsapp.view.widgetViewHolders.NumericViewHolder;
 import com.operatorsapp.view.widgetViewHolders.ProjectionViewHolderNew;
 import com.operatorsapp.view.widgetViewHolders.RangeViewHolder;
@@ -44,6 +45,7 @@ public class WidgetAdapter extends Adapter {
     private final int IMAGE = 5;
     private final int TIME_LEFT = 6; // current value is the time left in minutes
     private static final int REPORT_PERCENT = 7;
+    private static final int GENERIC_TIME = 8;
     private GoToScreenListener mGoToScreenListener;
     private int mRangeCapsuleWidth = 0;
     private int mProjectionCapsuleWidth = 0;
@@ -170,6 +172,9 @@ public class WidgetAdapter extends Adapter {
                 return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
                         mDashboardCentralContainerListener, mHeight, mWidth);
             }
+            case GENERIC_TIME: {
+                return new GenericTimeViewHolder(inflater.inflate(R.layout.holder_generic_time, parent, false));
+            }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
                 mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
@@ -216,6 +221,9 @@ public class WidgetAdapter extends Adapter {
                 case REPORT_PERCENT:
                     final ReportStopViewHolder reportStopViewHolder = (ReportStopViewHolder) holder;
                     reportStopViewHolder.setData(widget);
+                case GENERIC_TIME:
+                    final GenericTimeViewHolder genericTimeViewHolder = (GenericTimeViewHolder) holder;
+                    genericTimeViewHolder.setData(widget);
             }
             //        final View itemview= holder.itemView;
             //        Log.clearPollingRequest("moo", "onDraw: " + itemview.getWidth() + " " + itemview.getHeight());
@@ -284,6 +292,9 @@ public class WidgetAdapter extends Adapter {
                 break;
             case 7:
                 type = REPORT_PERCENT;
+                break;
+            case 8:
+                type = GENERIC_TIME;
                 break;
             default:
                 type = NUMERIC;

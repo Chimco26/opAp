@@ -13,7 +13,7 @@
         android:layout_height="65dp">
 
         <me.grantland.widget.AutofitTextView
-            android:id="@+id/time_widget_title"
+            android:id="@+id/HGT_title"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:ellipsize="end"
@@ -23,26 +23,15 @@
             android:textSize="23sp" />
 
         <me.grantland.widget.AutofitTextView
-            android:id="@+id/time_widget_subtitle"
+            android:id="@+id/HGT_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/time_widget_title"
+            android:layout_below="@+id/HGT_title"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Total required 2k"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/time_widget_current_value"
-            style="@style/FontStyle_T11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:maxLines="1"
-            android:text="1.7k"
-            android:textColor="@color/C16"
-            android:textSize="30sp" />
 
         <View
             android:id="@+id/divider"
@@ -52,12 +41,43 @@
             android:background="@color/divider_gray" />
     </RelativeLayout>
 
-    <com.operatorsapp.view.LineChartTimeSmall
-        android:id="@+id/lineChart_time"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top_rl"
-        android:layout_marginTop="3dp"
-        />
+        android:layout_below="@+id/top_rl">
 
+        <LinearLayout
+            android:id="@+id/HGT_time_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/HGT_time_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="45sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/HGT_countdown_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.operatorsapp.view.widgetViewHolders.CountDownView
+                android:id="@+id/HGT_countdown"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:layout_marginTop="10dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
