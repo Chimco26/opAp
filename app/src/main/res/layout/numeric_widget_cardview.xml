@@ -301,7 +301,7 @@
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:textColor="@color/blue1"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout
