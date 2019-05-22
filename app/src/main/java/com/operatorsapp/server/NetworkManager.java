@@ -27,6 +27,7 @@ import com.operators.reportfieldsformachinenetworkbridge.interfaces.EmeraldGetRe
 import com.operators.reportfieldsformachinenetworkbridge.interfaces.GetReportFieldsForMachineNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.ApproveFirstItemNetworkManagerInterface;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetAllRecipe;
+import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetDepartment;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetIntervalAndTimeOut;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetJobDetails;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldGetPendingJobList;
@@ -42,6 +43,7 @@ import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportInven
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendReportReject;
 import com.operators.reportrejectnetworkbridge.interfaces.EmeraldSendStopReport;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
@@ -63,7 +65,6 @@ import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInte
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
-import com.example.common.request.MachineJoshDataRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
@@ -115,7 +116,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         PostUpdateNotesForJobNetworkManager,
         PostSplitEventNetworkManager,
         GetIntervalAndTimeOutNetworkManager,
-        GetReportMultipleRequestNetworkManager {
+        GetReportMultipleRequestNetworkManager,
+        GetDepartmentNetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getSimpleName();
     private static NetworkManager msInstance;
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
@@ -900,6 +902,19 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     }
 
     @Override
+    public EmeraldGetDepartment emeraldGetDepartment(String siteUrl, int timeout, TimeUnit timeUnit) {
+        mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
+
+        try {
+            return mRetrofit.create(EmeraldGetDepartment.class);
+
+        } catch (RuntimeException e) {
+
+            SendReportUtil.sendAcraExeption(e, "approveEmeraldGetDepartment");
+        }
+        return mRetrofit.create(EmeraldGetDepartment.class);    }
+
+    @Override
     public EmeraldPostUpdateNotesForJob emeraldPostUpdateNotesForJob(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
 
@@ -989,5 +1004,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         Call<AppVersionResponse> call = mRetrofit.create(OpAppServiceRequests.class).GetApplicationVersion();
         call.enqueue(callback);
     }
+
 
 }
