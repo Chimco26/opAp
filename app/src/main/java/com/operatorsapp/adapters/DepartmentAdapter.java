@@ -117,7 +117,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
                 for (DepartmentMachine department: mDepartments){
                     DepartmentMachine departmentMachine = new DepartmentMachine(department.getDepartmentsMachinesKey(), new ArrayList<DepartmentMachineValue>());
                     for (DepartmentMachineValue machine: department.getDepartmentMachineValue()){
-                        if (machine.getMachineName().toLowerCase().contains(constraint.toString().toLowerCase())){
+                        if (isContainLetters(machine.getMachineName().toLowerCase(), constraint.toString().toLowerCase())){
                             if (!allDepartments.contains(departmentMachine)){
                                 allDepartments.add(departmentMachine);
                             }
@@ -143,6 +143,16 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
             }
             return results;
 
+        }
+
+        private boolean isContainLetters(String toCheck, String searchLetters) {
+            int counter = 0;
+            for (Character character: searchLetters.toCharArray()){
+                if (toCheck.contains(character.toString())){
+                    counter++;
+                }
+            }
+            return counter == searchLetters.length();
         }
 
 
