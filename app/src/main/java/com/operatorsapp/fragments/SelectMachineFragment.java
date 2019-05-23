@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.common.department.DepartmentMachineValue;
 import com.example.common.department.DepartmentsMachinesResponse;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -32,11 +33,12 @@ import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ClearData;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
 
-public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
@@ -160,20 +162,17 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 //        });
 
         mGoButton = rootView.findViewById(R.id.goBtn);
-        mGoButton.setEnabled(false);
+//        mGoButton.setEnabled(false);
         mGoButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(mGoButton.isEnabled())
-                {
-                    PersistenceManager.getInstance().setMachineId(mMachineId);
-                    PersistenceManager.getInstance().setMachineName(mMachineName);
-                    PersistenceManager.getInstance().setSelectedMachine(true);
-                    PersistenceManager.getInstance().setNeedUpdateToken(true);
-                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
-                }
+//                if(mGoButton.isEnabled())
+//                {
+//                    setMachineData();
+//                }
+                KeyboardUtils.closeKeyboard(getActivity());
             }
         });
 
@@ -185,9 +184,17 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         return rootView;
     }
 
+    public void setMachineData() {
+        PersistenceManager.getInstance().setMachineId(mMachineId);
+        PersistenceManager.getInstance().setMachineName(mMachineName);
+        PersistenceManager.getInstance().setSelectedMachine(true);
+        PersistenceManager.getInstance().setNeedUpdateToken(true);
+        mNavigationCallback.goToDashboardActivity(mMachineId, null);
+    }
+
     private void initDepartmentRv(View rootView) {
 
-        mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine());
+        mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine(), this);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.FSM_department_rv);
 
@@ -241,6 +248,8 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             canGoNext = true;
             mGoButton.setEnabled(true);
+
+//            mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
             mSearchField.dismissDropDown();
         }
     }
@@ -257,9 +266,11 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         public void onTextChanged(CharSequence s, int start, int before, int count)
         {
             canGoNext = false;
-            mGoButton.setEnabled(false);
+//            mGoButton.setEnabled(false);
             mDepartmentAdapter.setSearchFilter(s.toString());
             mDepartmentAdapter.getFilter().filter(s);
+            //mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
+
         }
 
         @Override
@@ -285,4 +296,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     }
 
+    @Override
+    public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
+        mMachineId = departmentMachineValue.getId();
+        mMachineName = departmentMachineValue.getMachineName();
+        setMachineData();
+    }
 }

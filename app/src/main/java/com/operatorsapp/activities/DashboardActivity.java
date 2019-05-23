@@ -53,6 +53,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.operators.activejobslistformachinecore.ActiveJobsListForMachineCore;
 import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMachineUICallbackListener;
+import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
 import com.operators.alldashboarddatacore.AllDashboardDataCore;
@@ -115,6 +116,7 @@ import com.operatorsapp.fragments.ReportRejectsFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
+import com.operatorsapp.fragments.TopFiveFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -181,6 +183,7 @@ import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTI
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
+import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
         OnActivityCallbackRegistered, GoToScreenListener, JobsFragmentToDashboardActivityCallback,
@@ -230,6 +233,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
     private ViewPagerFragment mViewPagerFragment;
+    private TopFiveFragment mTopFiveFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
@@ -264,6 +268,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Runnable mCheckAppVersionRunnable;
     private File outputFile;
     private MachineJoshDataResponse mMachineJoshDataResponse;
+    private Integer mSelectProductJoshId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,6 +311,18 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         OppAppLogger.getInstance().d(TAG, "onCreate(), end ");
 
         setupVersionCheck();
+
+        setReportBtnListener();
+    }
+
+    private void setReportBtnListener() {
+
+        findViewById(R.id.AD_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTopFiveFragment();
+            }
+        });
     }
 
     private void initDataListeners() {
@@ -464,6 +481,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
+    private void initTopFiveFragment() {
+
+        mTopFiveFragment = TopFiveFragment.newInstance();
+
+        try {
+
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mTopFiveFragment).commit();
+        } catch (IllegalStateException ignored) {
+        }
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
@@ -511,7 +539,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             fragment instanceof RecipeFragment ||
                             fragment instanceof WidgetFragment ||
                             fragment instanceof ReportStopReasonFragment ||
-                            fragment instanceof SelectStopReasonFragment) {
+                            fragment instanceof SelectStopReasonFragment ||
+                            fragment instanceof TopFiveFragment) {
                         if (mActionBarAndEventsFragment != null) {
                             mActionBarAndEventsFragment.setActionBar();
                         }
@@ -702,7 +731,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mActiveJobsListForMachine = activeJobsListForMachine;
             if (activeJobsListForMachine != null) {
 
-                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(), mSelectProductJobId);
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, activeJobsListForMachine.getActiveJobs().get(0).getJobID(),
+                        mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
                 PersistenceManager.getInstance().setMaxUnitReport(mActiveJobsListForMachine.getActiveJobs().get(0).getCavitiesStandard());
 
                 mReportFieldsForMachineCore.stopPolling();
@@ -748,7 +778,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
                 OppAppLogger.getInstance().w(TAG, "onActiveJobsListForMachineReceiveFailed() " + reason.getDetailedDescription());
 //            ShowCrouton.jobsLoadingErrorCrouton(mOnCroutonRequestListener);
-                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId);
+                mAllDashboardDataCore.sendRequestForPolling(mOnJobFinishedListener, null, mSelectProductJobId, PersistenceManager.getInstance().getShiftStart());
             }
 
         }
@@ -843,9 +873,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setBlackFilter(boolean show) {
         if (show) {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.VISIBLE);
+//            setWidgetItemInPager();
         } else {
             findViewById(R.id.FAAE_black_filter).setVisibility(View.GONE);
             onClearAllSelectedEvents();
+        }
+    }
+
+    private void setWidgetItemInPager() {
+        if (mViewPagerFragment != null) {
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                mViewPagerFragment.getPager().setCurrentItem(1);
+            } else {
+                mViewPagerFragment.getPager().setCurrentItem(0);
+            }
         }
     }
 
@@ -868,6 +909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (findViewById(R.id.FAAE_white_filter) != null) {
             if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.VISIBLE);
+                setWidgetItemInPager();
             } else {
                 findViewById(R.id.FAAE_white_filter).setVisibility(View.GONE);
             }
@@ -1554,6 +1596,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void refreshApp() {
+        cleanEvents();
         Intent myIntent = new Intent(this, MainActivity.class);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(myIntent);
@@ -1876,11 +1919,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName) {
+    public void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob selectedJob, String jobName) {
 
         mSpinnerProductPosition = spinnerProductPosition;
 
-        mSelectProductJobId = jobID;
+        mSelectProductJobId = selectedJob.getJobID();
+        mSelectProductJoshId = selectedJob.getJoshID();
 
         dashboardDataStartPolling();
 
@@ -1981,6 +2025,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         dashboardDataStartPolling();
     }
 
+    @Override
+    public void setCycleWarningView(boolean cycleWarningViewShow) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.setCycleWarningView(cycleWarningViewShow);
+        }
+    }
+
+    @Override
+    public void resetCycleWarningView(boolean wasShow, boolean show) {
+        if (mViewPagerFragment != null){
+            mViewPagerFragment.resetCycleWarningView(wasShow, show);
+        }
+    }
+
     public void setLenoxMachine(int machineId) {
 
         showLoadingDialog();
@@ -2053,6 +2111,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onBackPressed() {
+
+        Fragment visible = getVisibleFragment();
+
         if (mCustomKeyBoardIsOpen && mWidgetFragment != null) {
             mWidgetFragment.onCloseKeyboard();
 
@@ -2068,7 +2129,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 removeSelectStopReasonFragment();
 
             }
-            Fragment visible = getVisibleFragment();
 
             if (!(visible instanceof ActionBarAndEventsFragment
                     || visible instanceof WidgetFragment
@@ -2083,10 +2143,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else {
+        } else if (mTopFiveFragment != null){
+            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
+            mTopFiveFragment = null;
 
+        }else {
             super.onBackPressed();
-
         }
 
     }
@@ -2437,9 +2499,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         mReportCore = new ReportCore(reportNetworkBridge, PersistenceManager.getInstance());
         mReportCore.registerListener(mReportCallbackListener);
         if (isUnit) {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mSelectProductJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, Double.parseDouble(value), (double) 0, mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
         } else {
-            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mSelectProductJobId);
+            mReportCore.sendReportReject(selectedReasonId, selectedCauseId, (double) 0, Double.parseDouble(value), mActiveJobsListForMachine.getActiveJobs().get(mSpinnerProductPosition).getJoshID());
         }
 //        SendBroadcast.refreshPolling(getContext());
     }
@@ -2668,8 +2730,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     public void onResponse(Call<AppVersionResponse> call, retrofit2.Response<AppVersionResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getmError() == null) {
 
+                            // TODO: 07/05/2019 unmark before release
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
                                 if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
+                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
                                     getFile(item.getmUrl());
                                 }
                             }
@@ -2689,6 +2754,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void getFile(String url) {
+        Log.d(TAG, "getFile- " + url);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
             //check if app has permission to write to the external storage.
@@ -2698,7 +2764,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             } else {
                 //If permission is not present request for the same.
-                EasyPermissions.requestPermissions(this, "aaaaaa", REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE);
+                EasyPermissions.requestPermissions(this, getString(R.string.storage_permission), REQUEST_WRITE_PERMISSION, Manifest.permission.READ_EXTERNAL_STORAGE, url);
             }
 
 
@@ -2711,10 +2777,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         //Download the file once permission is granted
-
+        Log.d(TAG, "onPermissionsGranted- " + requestCode);
         if (requestCode == REQUEST_WRITE_PERMISSION) {
-            String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opApp_update_apk/opapp.apk";
-            new DownloadFile().execute(url);
+            //String url = "https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk";
+            new DownloadFile().execute(perms.get(0));
         }
     }
 
@@ -2738,10 +2804,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected void onPreExecute() {
+            Log.d(TAG, "DownloadFile- onPreExecute");
             super.onPreExecute();
             this.progressDialog = new ProgressDialog(DashboardActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.progressDialog.setCancelable(false);
+            this.progressDialog.setTitle(getResources().getString(R.string.update_version_title));
+            this.progressDialog.setMessage(getResources().getString(R.string.update_version_messege));
+            this.progressDialog.setIcon(getResources().getDrawable(R.drawable.logo));
             this.progressDialog.show();
         }
 
@@ -2750,6 +2820,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
          */
         @Override
         protected String doInBackground(String... f_url) {
+            Log.d(TAG, "DownloadFile- doInBackground - " + f_url[0]);
             int count;
             try {
                 URL url = new URL(f_url[0]);
@@ -2824,19 +2895,25 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         @Override
         protected void onPostExecute(String message) {
+            Log.d(TAG, "DownloadFile- onPostExecute - " + message);
             // dismiss the dialog after the file was downloaded
             this.progressDialog.dismiss();
 
             // Display File path after downloading
             Toast.makeText(DashboardActivity.this, message, Toast.LENGTH_LONG).show();
-            Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
+            try {
+                Uri apkUri = FileProvider.getUriForFile(DashboardActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputFile);
 
-            Intent install = new Intent(Intent.ACTION_VIEW);
-            install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            install.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            install.normalizeMimeType("application/vnd.android.package-archive");
-            startActivity(install);
+                Intent install = new Intent(Intent.ACTION_VIEW);
+                install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                install.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                install.normalizeMimeType("application/vnd.android.package-archive");
+                startActivity(install);
+                finish();
+            } catch (NullPointerException e) {
+
+            }
         }
     }
 }

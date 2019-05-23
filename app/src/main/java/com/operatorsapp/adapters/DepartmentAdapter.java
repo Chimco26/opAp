@@ -11,25 +11,29 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.common.department.DepartmentMachine;
+import com.example.common.department.DepartmentMachineValue;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.ViewHolder>
-        implements Filterable {
+        implements Filterable, MachineAdapter.MachineAdapterListener {
 
 
     private final List<DepartmentMachine> mDepartments;
     private List<DepartmentMachine> mDepartmentFil;
     private DepartmentFilter mFilter = new DepartmentFilter();
     private String mSearchFilter;
+    private DepartmentAdapterListener mListener;
 
-    public DepartmentAdapter(List<DepartmentMachine> departmentResponse) {
+    public DepartmentAdapter(List<DepartmentMachine> departmentResponse, DepartmentAdapterListener departmentAdapterListener) {
 
         mDepartments = departmentResponse;
         mDepartmentFil = new ArrayList<>();
         mDepartmentFil.addAll(departmentResponse);
+        mListener = departmentAdapterListener;
     }
 
     @NonNull
@@ -43,14 +47,16 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final DepartmentAdapter.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mTitle.setText(mDepartmentFil.get(position).getDepartmentsMachinesKey().getLName());
+        DepartmentMachine item = mDepartmentFil.get(position);
+        String title = OperatorApplication.isEnglishLang() ? item.getDepartmentsMachinesKey().getEName() : item.getDepartmentsMachinesKey().getLName();
+        viewHolder.mTitle.setText(title);
 
         initRv(position, viewHolder);
     }
 
     private void initRv(int position, ViewHolder viewHolder) {
 
-        MachineAdapter machineAdapter = new MachineAdapter(mDepartmentFil.get(position).getDepartmentMachineValue());
+        MachineAdapter machineAdapter = new MachineAdapter(mDepartmentFil.get(position).getDepartmentMachineValue(), this);
 
         RecyclerView recyclerView = viewHolder.mRv;
 
@@ -60,7 +66,6 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
         recyclerView.setAdapter(machineAdapter);
 
-        machineAdapter.getFilter().filter(mSearchFilter);
     }
 
     public void setSearchFilter(String searchFilter){
@@ -78,6 +83,11 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
     @Override
     public Filter getFilter() {
         return mFilter;
+    }
+
+    @Override
+    public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
+        mListener.onMachineSelected(departmentMachineValue);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -104,9 +114,15 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
                 mDepartmentFil.clear();
                 ArrayList<DepartmentMachine> allDepartments = new ArrayList<>();
-                for (DepartmentMachine allDepartment: mDepartments){
-                    if (allDepartment.getDepartmentsMachinesKey().getLName().contains(constraint)) {
-                        allDepartments.add(allDepartment);
+                for (DepartmentMachine department: mDepartments){
+                    DepartmentMachine departmentMachine = new DepartmentMachine(department.getDepartmentsMachinesKey(), new ArrayList<DepartmentMachineValue>());
+                    for (DepartmentMachineValue machine: department.getDepartmentMachineValue()){
+                        if (machine.getMachineName().toLowerCase().contains(constraint.toString().toLowerCase())){
+                            if (!allDepartments.contains(departmentMachine)){
+                                allDepartments.add(departmentMachine);
+                            }
+                            departmentMachine.getDepartmentMachineValue().add(machine);
+                        }
                     }
                 }
 
@@ -119,6 +135,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
             {
 
+                mDepartmentFil.clear();
                 mDepartmentFil.addAll(mDepartments);
                 results.values = mDepartmentFil;
 
@@ -140,4 +157,8 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
 
     }
 
+    public interface DepartmentAdapterListener{
+
+        void onMachineSelected(DepartmentMachineValue departmentMachineValue);
+    }
 }

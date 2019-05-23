@@ -13,13 +13,16 @@ import android.view.ViewGroup;
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.example.common.callback.ErrorObjectInterface;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
+import com.operatorsapp.BuildConfig;
 import com.operatorsapp.R;
+import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.ScreenSlidePagerAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
@@ -28,14 +31,19 @@ import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.ArrayList;
 
+import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
+
 public class ViewPagerFragment extends Fragment implements DashboardUICallbackListener {
 
+    public static final String TAG = ViewPagerFragment.class.getSimpleName();
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private OnViewPagerListener mListener;
     private ArrayList<Fragment> mFragmentList = new ArrayList<>();
 //    private SwipeRefreshLayout mSwipeRefresh;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
+    private View mCycleWarningView;
+    private GoToScreenListener mOnGoToScreenListener;
 //    private ImageView mNoteIv;
 //    private TextView mNoteTv;
 //    private LinearLayout mNoteLy;
@@ -65,6 +73,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         try {
             mOnActivityCallbackRegistered = (OnActivityCallbackRegistered) context;
             mOnActivityCallbackRegistered.onFragmentAttached(this);
+            mOnGoToScreenListener = (GoToScreenListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Calling fragment must implement interface");
         }
@@ -77,6 +86,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
         super.onDetach();
         mOnActivityCallbackRegistered.onFragmentDetached(this);
         mOnActivityCallbackRegistered = null;
+        mOnGoToScreenListener = null;
 
     }
 
@@ -88,6 +98,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
         if (getActivity() != null) {
 
+            initCycleAlarmView(view);
             mPager = view.findViewById(R.id.FVP_view_pager);
             mPagerAdapter = new ScreenSlidePagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
             mPager.setAdapter(mPagerAdapter);
@@ -121,6 +132,37 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
         }
         return view;
+    }
+
+    private void initCycleAlarmView(View view) {
+        mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
+        view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivateJobScreen();
+            }
+        });
+    }
+
+    public void setCycleWarningView(boolean show) {
+        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
+            mCycleWarningView.setVisibility(View.VISIBLE);
+        } else {
+            mCycleWarningView.setVisibility(View.GONE);
+        }
+    }
+
+    public void openActivateJobScreen() {
+        OppAppLogger.getInstance().d(TAG, "New Job");
+        if (PersistenceManager.getInstance().getVersion() >= MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB) {
+            mListener.onJobActionItemClick();
+        } else {
+            mOnGoToScreenListener.goToFragment(new JobsFragment(), true, true);
+        }
+    }
+
+    public ViewPager getPager() {
+        return mPager;
     }
 
     @Override
@@ -227,11 +269,20 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 //        }
     }
 
+    public void resetCycleWarningView(boolean wasShow, boolean show) {
+        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
+            setCycleWarningView(false);
+        } else {
+            setCycleWarningView(show);
+        }
+    }
+
     public interface OnViewPagerListener {
 
 
         void onViewPagerCreated();
 
+        void onJobActionItemClick();
     }
 
     @Override

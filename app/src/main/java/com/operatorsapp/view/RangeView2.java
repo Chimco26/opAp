@@ -16,6 +16,8 @@ import android.view.View;
 
 import com.operatorsapp.R;
 
+import java.text.DecimalFormat;
+
 public class RangeView2 extends View {
     private Paint mGrayPaint = new Paint();
     private Paint mGreenPaint = new Paint();
@@ -115,19 +117,19 @@ public class RangeView2 extends View {
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mBorderPaint.setColor(Color.BLACK);
-        mBorderPaint.setStrokeWidth(dipToPixels(context, 3));
+        mBorderPaint.setStrokeWidth(dipToPixels(context, 2));
 
         mCurrentPaint.setAntiAlias(true);
         mCurrentPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mCurrentPaint.setStrokeWidth(dipToPixels(context, 6));
 
         mTextPaint.setStyle(Paint.Style.FILL);
-        mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mTextPaint.setTextSize(dipToPixels(context, 15));
+        mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        mTextPaint.setTextSize(dipToPixels(context, 13));
 
         mBorderTextPaint.setStyle(Paint.Style.FILL);
-        mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mBorderTextPaint.setTextSize(dipToPixels(context, 15));
+        mBorderTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        mBorderTextPaint.setTextSize(dipToPixels(context, 13));
         mBorderTextPaint.setColor(Color.BLACK);
 
         textPadding = dipToPixels(context, 6);
@@ -157,43 +159,41 @@ public class RangeView2 extends View {
         float percent = mWidth / 100;
 
         canvas.drawRect(0, getHeight() / 2f - mHeight / 2f, percent * 100, getHeight() / 2f + mHeight / 2f, mGrayPaint);
-
+        String currentValueTxt = new DecimalFormat("##.#").format(mCurrentValue);
         if (mCurrentValue >= mLowLimit && mCurrentValue <= mHighLimit) {
             canvas.drawLine(percent * 20, getHeight() / 2f, percent * 80, getHeight() / 2f, mGreenPaint);
-
             canvas.drawLine(((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20, getHeight() / 2 - border, percent * 20 + ((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent, getHeight() / 2 + mHeight / 2, mCurrentPaint);
-            canvas.drawText(String.valueOf(mCurrentValue), (((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mTextPaint.measureText(String.valueOf(mCurrentValue)) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            canvas.drawText(currentValueTxt, (((mCurrentValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
         } else if (mCurrentValue < mLowLimit) {
             canvas.drawLine(0, getHeight() / 2f, percent * 20, getHeight() / 2f, mGreenPaint);
-
             canvas.drawLine(percent * 10, getHeight() / 2 - border, percent * 10, getHeight() / 2 + mHeight / 2, mCurrentPaint);
-            canvas.drawText(String.valueOf(mCurrentValue), percent * 10 - mTextPaint.measureText(String.valueOf(mCurrentValue)) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            canvas.drawText(currentValueTxt, percent * 10 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
         } else {
-
             canvas.drawLine(percent * 80, getHeight() / 2f, percent * 100, getHeight() / 2f, mGreenPaint);
             canvas.drawLine(percent * 90, getHeight() / 2 - border, percent * 90, getHeight() / 2 + mHeight / 2, mCurrentPaint);
-            canvas.drawText(String.valueOf(mCurrentValue), percent * 90 - mTextPaint.measureText(String.valueOf(mCurrentValue)) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
+            canvas.drawText(currentValueTxt, percent * 90 - mTextPaint.measureText(currentValueTxt) / 2, getHeight() / 2 - border - textPadding, mTextPaint);
 
         }
 
-        if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
-            canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-        } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
-            canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-        } else if (mAvgValue != 0) {
-            canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
-
+        if (mAvgValue != 0) {
+            if (mAvgValue >= mLowLimit && mAvgValue <= mHighLimit) {
+                canvas.drawBitmap(avgImage, (((mAvgValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            } else if (mAvgValue < mLowLimit && mAvgValue != 0) {
+                canvas.drawBitmap(avgImage, percent * 10 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            } else if (mAvgValue != 0) {
+                canvas.drawBitmap(avgImage, percent * 90 - avgImage.getWidth() / 2, getHeight() / 2 - avgImage.getHeight() / 2, emptyPaint);
+            }
         }
         if (mStandardValue >= mLowLimit && mStandardValue <= mHighLimit && mStandardValue != 0) {
-
             canvas.drawBitmap(mStandardImage, (((mStandardValue - mLowLimit) / (mHighLimit - mLowLimit)) * 60 * percent + percent * 20) - mStandardImage.getWidth() / 2, getHeight() / 2 - mStandardImage.getHeight() / 2, emptyPaint);
-
         }
 
         canvas.drawLine(percent * 20, getHeight() / 2f - mHeight / 2f, percent * 20, getHeight() / 2f + mHeight / 2f, mBorderPaint);
         canvas.drawLine(percent * 80, getHeight() / 2f - mHeight / 2f, percent * 80, getHeight() / 2f + mHeight / 2f, mBorderPaint);
-        canvas.drawText(String.valueOf(mLowLimit), percent * 20 - mTextPaint.measureText(String.valueOf(mLowLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
-        canvas.drawText(String.valueOf(mHighLimit), percent * 80 - mTextPaint.measureText(String.valueOf(mHighLimit)) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
+        String lowLimitTxt = new DecimalFormat("##.#").format(mLowLimit);
+        String highLimitTxt = new DecimalFormat("##.#").format(mHighLimit);
+        canvas.drawText(lowLimitTxt, percent * 20 - mTextPaint.measureText(lowLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
+        canvas.drawText(highLimitTxt, percent * 80 - mTextPaint.measureText(highLimitTxt) / 2, getHeight() / 2 + border + textPadding * 2, mBorderTextPaint);
     }
 
     public static float dipToPixels(Context context, float dipValue) {

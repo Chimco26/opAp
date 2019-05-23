@@ -2,13 +2,11 @@
 <resources>
     <!-- General -->
     <string name="no_communication">Geen communicatie</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
     <string name="unknown">Onbekend</string>
 
     <!-- Login screen -->
     <string name="link_machine">Selecteer de machine</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">Vul in alle velden</string>
     <string name="login">Inloggen</string>
     <string name="login_screen_save">Opslaan</string>
@@ -77,7 +75,6 @@
     <string name="next">Volgende</string>
     <string name="units">Stuks</string>
     <string name="weight">Gewicht</string>
-    <string name="dashes">- -</string>
     <string name="no_reasons">Er zijn geen rapporten beschikbaar</string>
     <string name="report_stop_event_reason">Rapporteer een reden voor de stop van de machine</string>
     <string name="report_stop_reason">Rapporteer een reden\nstop van de machine</string>
@@ -113,7 +110,6 @@
     <string name="chart_min_">Minimaal: </string>
     <string name="chart_standard_">Standaard: </string>
     <string name="chart_max_">Maximaal: </string>
-    <string name="space">&#160;</string>
     <string name="standard">Standaard&#160;</string>
     <string name="shift_log_min">Minimaal</string>
     <string name="shift_log_max">Maximaal</string>
@@ -123,31 +119,31 @@
     <string name="setup_end">Einde Ombouw</string>
     <string name="first_item_approval">Einde Ombouw</string>
 
-    <array name="languages_spinner_array">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Chinese</item>
-        <item>German</item>
-        <item>Russian</item>
-        <item>Ukrainian</item>
-        <item>Spanish</item>
-        <item>French</item>
-        <item>Dutch</item>
-        <item>Arabic</item>
-    </array>
+    <!--<array name="languages_spinner_array">-->
+        <!--<item>English</item>-->
+        <!--<item>Hebrew</item>-->
+        <!--<item>Chinese</item>-->
+        <!--<item>German</item>-->
+        <!--<item>Russian</item>-->
+        <!--<item>Ukrainian</item>-->
+        <!--<item>Spanish</item>-->
+        <!--<item>French</item>-->
+        <!--<item>Dutch</item>-->
+        <!--<item>Arabic</item>-->
+    <!--</array>-->
 
-    <array name="language_codes_array">
-        <item>en</item>
-        <item>iw</item>
-        <item>zh</item>
-        <item>de</item>
-        <item>ru</item>
-        <item>uk</item>
-        <item>es</item>
-        <item>fr</item>
-        <item>nl</item>
-        <item>ar</item>
-    </array>
+    <!--<array name="language_codes_array">-->
+        <!--<item>en</item>-->
+        <!--<item>iw</item>-->
+        <!--<item>zh</item>-->
+        <!--<item>de</item>-->
+        <!--<item>ru</item>-->
+        <!--<item>uk</item>-->
+        <!--<item>es</item>-->
+        <!--<item>fr</item>-->
+        <!--<item>nl</item>-->
+        <!--<item>ar</item>-->
+    <!--</array>-->
 
     <array name="jobs_spinner_array">
         <item>Nieuwe order</item>
@@ -188,9 +184,9 @@
     <string name="add_note">Opmerking toevoegen</string>
     <string name="alarms">Alarm</string>
     <string name="amount">Bedrag</string>
-    <string name="app_name">LeaderMES-bediener</string>
+    <string name="app_name">Matics Operator</string>
     <string name="at_work">Aan het werk</string>
-    <string name="attention_cycles_detected_in_a_non_production_status">"\"Er zijn cyclussen gedetecteerd met een inactieve status. Vergeet niet om tijdig een taak te activeren! \" "</string>
+    <string name="attention_cycles_detected_in_a_non_production_status">Er zijn cyclussen gedetecteerd met een inactieve status. Vergeet niet om tijdig een taak te activeren!</string>
     <string name="call_technician_text">Repareer iets voor mij</string>
     <string name="call_for_technician_unresponsive">"Er werd niet gereageerd op uw oproep voor een technicus en deze werd daarom geannuleerd "</string>
     <string name="call_technician_title">Bel technicus</string>
@@ -266,6 +262,118 @@
     <string name="service_completed">Dienstverlening afgerond</string>
     <string name="call_cancelled">Oproep geannuleerd</string>
     <string name="waiting_for_replay">Op herhaling wachten</string>
-    <string name="service_call_was_canceled">Deze oproep was geannuleerd</string>
+    <string name="service_call_was_canceled"><b>Deze oproep was geannuleerd</b></string>
+    <string name="machine_status">Status apparaten</string>
+    <string name="pConfig">configuratie</string>
+    <string name="events">evenementen</string>
+    <string name="kg">kg</string>
+    <string name="gram">g</string>
+    <string name="service_call_made_new">Dienstoproep werd verzonden door operator %1$s van machine</string>
+    <string name="default_unanswered_technician_call">Operator %1$s opende een dienstoproep. Wachten op antwoord van de technicus</string>
+    <string name="midnight">middernacht</string>
+    <string name="split_event_validation_text">U gaat een evenement splitsen, \\n Weet u zeker dat u verder wilt gaan?</string>
+    <string name="split_event_validation_title">Splits evenement</string>
+    <string name="split">Splitsen</string>
+    <string name="gr">g</string>
+    <string name="version">Versie van de app</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="incremented_successfully">Succesvol verhoogd</string>
+    <string name="incremented_failure">Verhogen niet gelukt</string>
+    <string name="top_five_stop_events">Top-5 stopevenementen</string>
+    <string name="top_five_reject_reasons">Top-5 redenen voor afwijzing</string>
+    <string name="attention">Opgelet!</string>
+    <string name="activate_job">Job activeren</string>
+    <string name="total_amount">Totaalbedrag:</string>
+    <string name="call_canceled">Oproep geannuleerd</string>
+    <string name="service_call_exists">Open dienstoproepen</string>
+    <string name="service_call_exists_subtitle">Open dienstoproepen werden gevonden, \\n u kunt de open oproepen verwijderen of een nieuwe openen</string>
+    <string name="open_new_call">Nieuwe dienstoproep</string>
+    <string name="empty_job_list_msg">De lijst van jobs in afwachting is leeg</string>
+    <string name="call_approved2">Een oproep gedaan door operator %1$s werd goedgekeurd</string>
+    <string name="call_declined">De oproep werd afgewezen</string>
+    <string name="call_declined2">Een oproep gedaan door operator %1$s werd afgewezen</string>
+    <string name="started_service2">Oproep gedaan door operator %1$S beantwoorden</string>
+    <string name="service_completed2">Dienstoproep gedaan door operator %1$s werd afgewerkt</string>
+    <string name="call_cancelled2">Oproep gedaan door operator %1$s werd geannuleerd</string>
+    <string name="more_details">Wachten op meer details</string>
+    <string name="technician">Technicus</string>
+    <string name="time_left_to_current_job">Resterende tijd tot huidige job</string>
+    <string name="hr">(uur)</string>
+    <string name="hr2">uur</string>
+    <string name="see_pending_jobs">Bekijk jobs in afwachting</string>
+    <string name="pending_jobs">Jobs in afwachting</string>
+    <string name="end_setup">Einde setup</string>
+    <string name="you_are_in_setup_mode">U bent in setup-modus</string>
+    <string name="get_ready_for_your_next_job">Maak u klaar voor uw volgende job</string>
+    <string name="see_job">Job bekijken</string>
+    <string name="dont_forget_to_activate_job">Vergeet de job niet te activeren!</string>
+    <string name="change_material">Materiaal wijzigen</string>
+    <string name="more_info">Meer informatie</string>
+    <string name="max_value_is">maximumwaarde is:</string>
+    <string name="change_factory">Fabriek wijzigen</string>
+    <string name="NoProgressMinFromStartShift">Het is %1$s minuten in de dienst en de productie is nog niet gestart.</string>
+    <string name="SetupDurationMinActual">Instelduur is meer dan %1$s minuten.</string>
+    <string name="SetupInjectionsCount">Meer dan %1$s programma\\\'s afgerond tijdens implementatie.</string>
+    <string name="UnReportedStopsPC">Meer dan %1$s % van de stoptijd is niet gecategoriseerd in deze dienst.</string>
+    <string name="RejectsPC">Meer dan %1$s % afgewezen.</string>
+    <string name="OpenEventDuration">Huidige stopzetting duurt meer dan %1$s minuten.</string>
+    <string name="ProductionModeInjectionsCount">%1$s programma\\\'s ontdekt die niet in productie zijn.</string>
+    <string name="CycleTimeDeviation">Een afwijking van %1$s % ten opzichte van de standaard programmatijd is waargenomen.</string>
+    <string name="ShortEventsFromProductionPC">Totale korte stopzettingen van de gehele productietijd overstijgt %1$s %.</string>
+    <string name="WorkerNotSigned">Er is %1$s minuten na de start van de dienst nog geen operator aangemeld.</string>
+    <string name="open_calls">Open oproepen</string>
+    <string name="last_24h">Laatste 24 uur</string>
+    <string name="you_ve_reached_the_production_target">U hebt het productiedoel gehaald!</string>
+    <string name="reported_stop_event">Gerapporteerd stopevenement</string>
+    <string name="time_min">Tijd (min)</string>
+    <string name="report_events_reason">Rapporteer reden evenementen</string>
+    <string name="keep_reporting_events_reason">Blijf reden evenementen rapporteren</string>
+    <string name="target_reached">Doel gehaald!</string>
+    <string name="setup_rejects_dialog_text">Wilt u sommigen rapporteren als afgewezen?</string>
+    <string name="setup_good_units_dialog_text">Wilt u sommigen rapporteren als goede eenheden?</string>
+    <string name="on_the_setup_you_produced">Op de setup die u geproduceerd hebt</string>
+    <string name="from_the">van de</string>
+    <string name="activate_last_job">Activeer laatste job</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Wilt u de laatste job waarop u werkt activeren?</string>
+    <string name="no">Nee</string>
+    <string name="yes">Ja</string>
+    <string name="do_you_need_to_end_setup_before">Moet u een setup doen alvorens opnieuw te beginnen produceren op deze job?</string>
+    <string name="shiftlog">Logboek shifts</string>
+    <string name="working">Aan het werk</string>
+    <string name="erp_job_id">ERP Job-ID</string>
+    <string name="rejects">afgewezen</string>
+    <string name="good_units">Goede eenheden</string>
+    <string name="working_time">Werktijd</string>
+    <string name="event_details">Details evenement</string>
+    <string name="messages">Boodschappen</string>
+    <string name="message">Boodschap</string>
+    <string name="production_report">Productierapport</string>
+    <string name="select_all">Alles selecteren</string>
+    <string name="new_call">Nieuwe oproep</string>
+    <string name="working_setup">Instelling werk</string>
+    <string name="parameter_deviation">Parameterafwijking</string>
+    <string name="stop">Stop</string>
+    <string name="stop_setup">Instelling stoppen</string>
+    <string name="idle">Inactief</string>
+    <string name="working_no_production">Geen productie in werk</string>
+    <string name="no_communication_p">Geen communicatie</string>
+    <string name="_100">100%</string>
+    <string name="filter_short">Gefilterde evenementen</string>
+    <string name="reported">Gerapporteerd</string>
+    <string name="unreported">Niet gerapporteerd</string>
+    <string name="setup">Opzetten</string>
+    <string name="min">min</string>
+    <string name="estimated_date">預計日期</string>
+    <string name="required_setup">Heeft de job setup nodig vóór activering?</string>
+    <string name="dont_activate">Niet activeren</string>
+    <string name="no_setup">Geen setup</string>
+    <string name="go_to_setup">Ga naar setup</string>
+    <string name="setup_mode">Setup-modus</string>
+    <string name="rejects_quantity">Hoeveelheid afgewezen</string>
+    <string name="there_are_no_stop_event">Er zijn geen stopevenementen te rapporteren</string>
+    <string name="theoretical_units">Theoretische eenheden</string>
+    <string name="average">gem</string>
+    <string name="add_rejects">Afgewezen toevoegen</string>
+    <string name="minutes_long">min.</string>
 
 </resources>

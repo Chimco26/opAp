@@ -59,11 +59,7 @@ import android.widget.TextView;
 import com.app.operatorinfra.Operator;
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
-import com.example.common.actualBarExtraResponse.Inventory;
-import com.example.common.actualBarExtraResponse.Reject;
-import com.example.common.actualBarExtraResponse.WorkingEvent;
 import com.example.common.callback.ErrorObjectInterface;
-import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -123,6 +119,7 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.DavidVardi;
 import com.operatorsapp.utils.ResizeWidthAnimation;
 import com.operatorsapp.utils.SaveAlarmsHelper;
+import com.operatorsapp.utils.SaveHelperNew;
 import com.operatorsapp.utils.ShowCrouton;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -147,17 +144,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.operatorsapp.utils.TimeUtils.SIMPLE_FORMAT_FORMAT;
-import static com.operatorsapp.utils.TimeUtils.SQL_T_FORMAT;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
-import static com.operatorsapp.utils.TimeUtils.getDateFromFormat;
 
 
 public class ActionBarAndEventsFragment extends Fragment implements DialogFragment.OnDialogButtonsListener,
@@ -405,6 +398,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mShiftLogParams.width = mCloseWidth;
         mShiftLogLayout.requestLayout();
 
+        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
+        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                SendBroadcast.refreshPolling(getActivity());
+            }
+        });
+
         mShiftLogRecycler = view.findViewById(R.id.fragment_dashboard_shift_log);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mShiftLogRecycler.setLayoutManager(linearLayoutManager);
@@ -448,7 +449,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mEventsAdapter != null) {
                         mEventsAdapter.notifyDataSetChanged();
                     } else {
-                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+//                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
                     }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
@@ -488,14 +490,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
         initLenoxMachineRv(view);
-
-        mShiftLogSwipeRefresh = view.findViewById(R.id.shift_log_swipe_refresh);
-        mShiftLogSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendBroadcast.refreshPolling(getActivity());
-            }
-        });
 
         mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
 
@@ -573,7 +567,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         initProductsSpinner();
 
-        initCycleAlarmView(view);
+//        initCycleAlarmView(view);
 
         return statusBarParams;
     }
@@ -601,16 +595,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void initCycleAlarmView(View view) {
-        mCycleWarningView = view.findViewById(R.id.FAAE_cycle_alarm_view);
-        view.findViewById(R.id.FAAE_cycle_alarm_view).findViewById(R.id.NPAD_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivateJobScreen();
-            }
-        });
-    }
-
     @Nullable
     public Cursor getCursorByType() {
         Cursor cursor;
@@ -626,7 +610,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public Cursor getCursorByTypeTimeLine() {
         Cursor cursor;
 //         if (isShowAlarms) {
-        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+//        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
+        cursor = mDatabaseHelper.getCursorOrderByTimeFilterByDuration(0);
 //        } else {
 //            cursor = mDatabaseHelper.getStopTypeShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration());
 //        }
@@ -679,7 +664,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 //                else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 //
-                    setNotificationNeedResponse();
+                setNotificationNeedResponse();
 //                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
             }
@@ -736,29 +721,34 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
 
                     tvSender.setText(getResources().getString(R.string.technician) + " " + notification.getmTargetName());
-
+                    String str;
                     switch (notification.getmResponseType()) {
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_approved2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_approved2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_declined2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_declined2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.started_service2), notification.getmSender()));
+                            str = getResources().getString(R.string.started_service2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
-                            tvBody.setText(String.format(getResources().getString(R.string.service_completed2), notification.getmSender()));
+                            str = getResources().getString(R.string.service_completed2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
-                            tvBody.setText(String.format(getResources().getString(R.string.call_cancelled2), notification.getmSender()));
+                            str = getResources().getString(R.string.call_cancelled2);
+                            tvBody.setText(String.format(str, notification.getmSender()));
                             break;
 
                         default:
@@ -952,7 +942,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         //todo kuti
 
-        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+//        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
 
 
         if (DataSupport.count(Event.class) > 0) {
@@ -1099,7 +1090,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     mSelectedPosition = position;
 
-                    mListener.onJoshProductSelected(position, mActiveJobs.get(position).getJobID(),
+                    mListener.onJoshProductSelected(position, mActiveJobs.get(position),
                             mActiveJobs.get(position).getJobName());
 
                 }
@@ -1488,7 +1479,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             if (techList != null && techList.size() > 0) {
                 mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue_svg));
                 mTechOpenCallsIv.setVisibility(View.VISIBLE);
-                mTechOpenCallsIv.setText(techList.size() + "");
+                int counter = 0;
+                for ( TechCallInfo call : techList) {
+                    if (call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET
+                            || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE){
+                        counter++;
+                    }
+                }
+                mTechOpenCallsIv.setText(counter + "");
             } else {
                 mTechOpenCallsIv.setVisibility(View.INVISIBLE);
                 mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_white));
@@ -1695,7 +1693,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
         boolean isEmpty = true;
         for (Notification notification : notificationList) {
-            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_UNSET){
+            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                 isEmpty = false;
                 break;
             }
@@ -1829,11 +1827,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     responseType,
                     Consts.NOTIFICATION_TYPE_FROM_WEB,
                     Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
-                    pm.getUserId() + "",
-                    pm.getOperatorName(),
+                    notification[0].getmSourceUserID() + "",
                     notification[0].getmSender(),
-                    opId,
-                    notification[0].getmTargetUserId() + "");
+                    pm.getOperatorName(),
+                    "",
+                    notification[0].getmSourceUserID() + "");
+
+//            RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
+//                    getResources().getString(R.string.respond_notification_title),
+//                    notification[0].getmBody(getActivity()),
+//                    pm.getMachineId() + "",
+//                    notification[0].getmNotificationID() + "",
+//                    responseType,
+//                    Consts.NOTIFICATION_TYPE_FROM_WEB,
+//                    Consts.NOTIFICATION_RESPONSE_TARGET_WEB,
+//                    pm.getUserId() + "",
+//                    pm.getOperatorName(),
+//                    notification[0].getmSender(),
+//                    opId,
+//                    notification[0].getmTargetUserId() + "");
 
             ProgressDialogManager.show(getActivity());
             NetworkManager.getInstance().postResponseToNotification(request, new Callback<ResponseStatus>() {
@@ -2158,12 +2170,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
-        mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+        if (mListener != null) {
+            mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+        }
 
         mIsSelectionMode = true;
         mFirstSeletedEvent = event;
 
         if (myTaskListener == null) {
+            if (mAsyncTask != null) {
+                mAsyncTask.cancel(true);
+            }
             setShiftLogAdapter(cursor);
 
             initEvents(events);
@@ -2233,9 +2250,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 
     @Override
-    public void onShiftLogDataReceived(final ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
+    public void onShiftLogDataReceived(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, MachineJoshDataResponse machineJoshDataResponse) {
 
-        if (machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
+        if (events == null) {
+            events = new ArrayList<>();
+        }
+        if (actualBarExtraResponse != null && machineJoshDataResponse != null && machineJoshDataResponse.getDepMachine().size() > 0
                 && machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().size() > 0) {
             actualBarExtraResponse.setJobData(machineJoshDataResponse.getDepMachine().get(0).getDepartmentMachines().get(0).getJobData());
         }
@@ -2247,13 +2267,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
 //        if (!mIsSelectionMode) {
         mLoadingDataText.setVisibility(View.GONE);
-        final Event finalLatestEvent;
-        if (events.size() > 0) {
-            finalLatestEvent = events.get(0);
-        } else {
-            finalLatestEvent = null;
+        Event finalLatestEvent = null;
+        for (Event event : events) {
+            if (event.getEventGroupID() != TYPE_ALERT) {
+                finalLatestEvent = event;
+                break;
+            }
         }
         if (isAdded()) {
+            final Event finalLatestEvent1 = finalLatestEvent;
+            if (mAsyncTask != null) {
+                mAsyncTask.cancel(true);
+            }
             mAsyncTask = new MyTask(events, actualBarExtraResponse, new MyTaskListener() {
                 @Override
                 public void onComplete() {
@@ -2262,13 +2287,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void run() {
 
-                                if (finalLatestEvent != null && finalLatestEvent.getEventEndTime() != null
-                                        && finalLatestEvent.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
+                                        && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
                                         mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
-                                } else if (finalLatestEvent != null) {
-//                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
                                 }
                             }
                         });
@@ -2360,7 +2383,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         @Override
         protected String doInBackground(Void... params) {
-            if (isAdded()) {
+            if (isAdded() && !isCancelled()) {
                 updateEvents(events, actualBarExtraResponse, myTaskListener);
             }
             return "";
@@ -2401,7 +2424,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (getActivity() == null || !isAdded()) {
             return;
         }
-        removeOldUpdatedExtras(actualBarExtraResponse);
 
         int deletedEvents = clearOver24HShift();
 
@@ -2425,10 +2447,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
             boolean mustBeClosed = false;
             for (Event event : events) {
-//for alrms in shiftlog
-//                if (event.getEventGroupID() == TYPE_ALERT) {
-//                    mActualBarExtraResponse.getAlarmsEvents().add(event);
-//                }
 
                 if (mAutoSelectMode && event.getEventEndTime() != null && event.getEventEndTime().length() > 0 &&
                         mFirstSeletedEvent != null && mSelectedEvents != null
@@ -2439,22 +2457,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()))) {
 
-                    if (event.getEventGroupID() != TYPE_ALERT) {
-                        addDetailsToEvents(event, actualBarExtraResponse);
-                    }
-                    if (mOpenEvent != null && (event.getEventGroupID() != TYPE_ALERT
-                            || convertDateToMillisecond(event.getEventTime()) >= convertDateToMillisecond(mOpenEvent.getEventEndTime()))) {
-                        mOpenEvent.setType(1);
-                        mOpenEvent.setEventEndTime(event.getEventTime());//TimeUtils.getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT)
-                        addDetailsToEvents(mOpenEvent, actualBarExtraResponse);//test
-                        mOpenEvent.save();
-                    }
-                    mOpenEvent = null;
                     event.save();
 
-                    if (mIsNewShiftLogs) {
-                        mEventsQueue.add(event);
-                    }
+                    mEventsQueue.add(event);
+
                     if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
                         addCheckedAlarms(checkedAlarms, event);
                     }
@@ -2468,24 +2474,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             PersistenceManager.getInstance().setCheckedAlarms(checkedAlarmsHashMap);
 
-            updateList(mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTimeFilterByDurationStartFromOneEvent(0, events.get(events.size() - 1).getEventID())), actualBarExtraResponse);
-
             myTaskListener.onShowNotificationText(false);
 
             Cursor cursor;
             if (mIsSelectionMode) {
-
                 cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-//                initEvents(mDatabaseHelper.getListFromCursor(cursor));
                 myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
-
             } else {
-
-//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
                 cursor = getCursorByType();
-                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse));
             }
-//            setShiftLogAdapter(cursor);
 
             if (mEventsQueue.size() > 0) {
                 Event event = mEventsQueue.peek();
@@ -2518,19 +2516,20 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 myTaskListener.onShowNotificationText(true);
             }
             if (deletedEvents > 0 || isActualBarExtraResponse(actualBarExtraResponse)) {
+//                Cursor cursorSelec = null;
+//                ArrayList<Event> eventSelectArrayList = new ArrayList<>();
+//                if (mIsSelectionMode) {
+//                    cursorSelec = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
+//                    eventSelectArrayList = mDatabaseHelper.getListFromCursor(cursorSelec);
+//                }
+                Cursor cursorNoSelect = getCursorByType();
+                ArrayList<Event> eventNoSelectArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
 
-                Cursor cursor;
                 if (mIsSelectionMode) {
-
-                    cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), mFirstSeletedEvent.getEventReasonID());
-
+//                    myTaskListener.onUpdateEventsRecyclerViews(cursorSelec, eventSelectArrayList);
                 } else {
-
-                    cursor = getCursorByType();
+                    myTaskListener.onUpdateEventsRecyclerViews(cursorNoSelect, eventNoSelectArrayList);
                 }
-//                setShiftLogAdapter(cursor);
-//                initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-                myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
             }
         }
 
@@ -2545,433 +2544,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 actualBarExtraResponse.getRejects() != null || actualBarExtraResponse.getInventory() != null);
     }
 
-    private ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
-
-        addNotificationsToPasteEvents(actualBarExtraResponse);
-
-        for (int i = 0; i < events.size() - 1; i++) {
-
-            if (events.get(i).getEventGroupID() != TYPE_ALERT) {
-                Event event = events.get(i);
-
-                Long eventStartMilli = convertDateToMillisecond(events.get(i + 1).getEventEndTime());
-                Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
-
-                if (eventStartMilli < eventEndMilli) {
-
-                    String color = "#1aa917";
-                    if (getActivity() != null) {
-                        color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-                    }
-                    Event workingEvent = createIntermediateEvent(events.get(i + 1).getEventEndTime(),
-                            event.getEventTime(), event.getEventID(), eventStartMilli, eventEndMilli, "עובד", "Working",
-                            -0.5f, color, 1);
-
-                    if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
-
-                        addDetailsToEvents(workingEvent, actualBarExtraResponse);
-
-                        workingEvent.save();
-                    }
-                }
-            }
-
-        }
-
-        return events;
-    }
-
-    private Event addFirstEvent(Event event, ActualBarExtraResponse actualBarExtraResponse) {
-        Long eventEndMilli = convertDateToMillisecond(event.getEventTime());
-        Long minusDayTime = new Date().getTime() - DAY_IN_MILLIS;
-
-        if (minusDayTime < eventEndMilli) {
-            String color = "#1aa917";
-            if (getActivity() != null) {
-                color = "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-            }
-            Event workingEvent = createIntermediateEvent(TimeUtils.getDateFromFormat(new Date(minusDayTime), SIMPLE_FORMAT_FORMAT),
-                    event.getEventTime(), event.getEventID(), minusDayTime, eventEndMilli, "עובד", "Working",
-                    -0.5f, color, 1);
-
-            if (DataSupport.count(Event.class) == 0 || !DataSupport.isExist(Event.class, DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(workingEvent.getEventID()))) {
-
-                addDetailsToEvents(workingEvent, actualBarExtraResponse);
-
-                workingEvent.save();
-
-                return workingEvent;
-            }
-
-        }
-        return null;
-    }
-
-    @NonNull
-    private Event createIntermediateEvent(String eventTime, String eventEndTime, float id, Long eventStartMilli,
-                                          Long eventEndMilli, String lName, String eName,
-                                          float differenceForNewId, String color, int type) {
-        Event workingEvent = new Event();
-        workingEvent.setEventTime(eventTime);
-        workingEvent.setEventEndTime(eventEndTime);
-
-        workingEvent.setEventSubTitleLname(lName);
-        workingEvent.setEventSubTitleEname(eName);
-        workingEvent.setColor(color);
-
-        workingEvent.setEventID(id + differenceForNewId);
-        workingEvent.setType(type);
-
-        long duration = eventEndMilli - eventStartMilli;
-        if (duration > DAY_IN_MILLIS) {
-            duration = DAY_IN_MILLIS;
-        }
-        long minute = TimeUnit.MILLISECONDS.toMinutes(duration);
-
-        workingEvent.setDuration(minute);
-        return workingEvent;
-    }
-
-    private void removeOldUpdatedExtras(ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorIfHaveExtra());
-
-        for (Event event : events) {
-
-            ArrayList<Inventory> eventInventories = event.getInventories();
-            ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
-            if (eventInventories != null && eventInventories.size() > 0
-                    && inventories != null && inventories.size() > 0) {
-                ArrayList<Inventory> toDelete = new ArrayList<>();
-                for (Inventory inventory : inventories) {
-                    for (Inventory eventInventory : eventInventories) {
-                        if (inventory.getID().equals(eventInventory.getID())) {
-                            toDelete.add(eventInventory);
-                        }
-                    }
-                }
-                eventInventories.removeAll(toDelete);
-                if (eventInventories.size() == 0) {
-                    eventInventories = null;
-                }
-                event.setInventories(eventInventories);
-            }
-            ArrayList<Reject> eventRejects = event.getRejects();
-            ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
-            if (eventRejects != null && eventRejects.size() > 0
-                    && rejects != null && rejects.size() > 0) {
-                ArrayList<Reject> toDelete = new ArrayList<>();
-                for (Reject reject : rejects) {
-                    for (Reject eventReject : eventRejects) {
-                        if (reject.getID().equals(eventReject.getID())) {
-                            toDelete.add(eventReject);
-                        }
-                    }
-                }
-                eventRejects.removeAll(toDelete);
-                if (eventRejects.size() == 0) {
-                    eventRejects = null;
-                }
-                event.setRejects(eventRejects);
-            }
-            //update old call
-//            ArrayList<com.example.common.actualBarExtraResponse.Notification> eventNotifications = event.getNotifications();
-//            ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
-//            if (eventNotifications != null && eventNotifications.size() > 0
-//                    && notifications != null && notifications.size() > 0) {
-//                ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
-//                for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-//                    for (com.example.common.actualBarExtraResponse.Notification eventsNotification : eventNotifications) {
-//                        if (notification.getID().equals(eventsNotification.getID())) {
-//                            toDelete.add(eventsNotification);
-//                        }
-//                    }
-//                }
-//                eventNotifications.removeAll(toDelete);
-//                if (eventNotifications.size() == 0) {
-//                    eventNotifications = null;
-//                }
-//                event.setNotifications(eventNotifications);
-//            }
-            event.setHaveExtra(event.getNotifications() != null || event.getInventories() != null || event.getRejects() != null);
-
-            event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
-        }
-    }
-
-    private void addNotificationsToPasteEvents(ActualBarExtraResponse actualBarExtraResponse) {
-
-        if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
-                actualBarExtraResponse.getRejects() != null) {
-            ArrayList<Event> events = mDatabaseHelper.getListFromCursor(mDatabaseHelper.getCursorOrderByTime());
-
-            for (Event event : events) {
-                if (actualBarExtraResponse.getInventory() != null || actualBarExtraResponse.getNotification() != null ||
-                        actualBarExtraResponse.getRejects() != null) {
-                    if (addDetailsToEvents(event, actualBarExtraResponse)) {
-                        event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(event.getEventID()));
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean isDuringAnEvent(Event event, String notifTime) {
-        Long notificationSentTime = convertDateToMillisecond(notifTime, SIMPLE_FORMAT_FORMAT);
-        Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
-        Long eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
-        return eventStart <= notificationSentTime && notificationSentTime <= eventEnd;
-    }
-
-    private boolean addDetailsToEvents(Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        if (actualBarExtraResponse != null) {
-            Long eventStart = convertDateToMillisecond(event.getEventTime(), SIMPLE_FORMAT_FORMAT);
-            Long eventEnd = new Date().getTime();
-            if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0) {
-                eventEnd = convertDateToMillisecond(event.getEventEndTime(), SIMPLE_FORMAT_FORMAT);
-            }
-            addDetailsToWorking(eventStart, eventEnd, event, actualBarExtraResponse);
-            addStartProductToEvents(eventStart, eventEnd, event, actualBarExtraResponse);
-            if (addNotificationsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)//addAlarmEvents(eventStart, eventEnd, event, actualBarExtraResponse)|| for add alarms in shiftlog
-                    || addRejectsToEvents(eventStart, eventEnd, event, actualBarExtraResponse)
-                    || addInventoryToEvents(eventStart, eventEnd, event, actualBarExtraResponse)) {
-                event.setHaveExtra(true);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void addDetailsToWorking(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        if (event.getType() != 1) {
-            return;
-        }
-        ArrayList<WorkingEvent> workingEvents = actualBarExtraResponse.getWorkingEvents();
-        if (workingEvents != null && workingEvents.size() > 0) {
-
-            for (WorkingEvent workingEvent : workingEvents) {
-                Long workingEventSentTime = convertDateToMillisecond(workingEvent.getStartTime(), SQL_T_FORMAT);
-
-                if (eventStart <= workingEventSentTime && workingEventSentTime <= eventEnd) {
-
-                    if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
-                        event.setEventSubTitleLname(workingEvent.getEventReason());
-                        event.setEventSubTitleEname(workingEvent.getEventReason());
-                    } else if (isAdded()) {
-                        event.setEventSubTitleEname(getWorkingSubTitle(workingEvent));
-                        event.setEventSubTitleLname(getWorkingSubTitle(workingEvent));
-                    } else {
-                        event.setEventSubTitleEname("Working");
-                        event.setEventSubTitleLname("עבודה");
-                    }
-                    switch (workingEvent.getEventDistributionID()) {
-                        case 2:
-                        case 4:
-                        case 5:
-                            event.setEventReasonID(-2);
-                            break;
-                        default:
-                            event.setEventReasonID(0);
-                            break;
-                    }
-                    event.setColor(workingEvent.getColor());
-                }
-            }
-        }
-    }
-
-    private String getWorkingSubTitle(WorkingEvent workingEvent) {
-        switch (workingEvent.getEventDistributionID()) {
-            case 1:
-                return getString(R.string.working);
-            case 2:
-                return getString(R.string.stop);
-            case 3:
-                return getString(R.string.working_setup);
-            case 4:
-                return getString(R.string.stop_setup);
-            case 5:
-                return getString(R.string.idle);
-            case 6:
-                return getString(R.string.no_communication_p);
-            case 7:
-                return getString(R.string.parameter_deviation);
-            case 8:
-                return getString(R.string.working_no_production);
-            default:
-                return getString(R.string.working);
-        }
-    }
-
-    private void addStartProductToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<JobDataItem> jobDataItems = (ArrayList<JobDataItem>) actualBarExtraResponse.getJobData();
-        ArrayList<JobDataItem> toDelete = new ArrayList<>();
-        if (jobDataItems != null && jobDataItems.size() > 0) {
-
-            ArrayList<JobDataItem> jobDataItemArrayList = event.getJobDataItems();
-
-            for (JobDataItem jobDataItem : jobDataItems) {
-                Long jobDataItemSentTime = convertDateToMillisecond(jobDataItem.getStartTime(), SIMPLE_FORMAT_FORMAT);
-
-                if (eventStart <= jobDataItemSentTime && jobDataItemSentTime <= eventEnd) {
-
-                    if (jobDataItemArrayList == null) {
-                        jobDataItemArrayList = new ArrayList<>();
-                    }
-
-                    jobDataItemArrayList.add(jobDataItem);
-                    toDelete.add(jobDataItem);
-                }
-            }
-            if (jobDataItemArrayList != null) {
-                event.setJobDataItems(jobDataItemArrayList);
-                jobDataItems.removeAll(toDelete);
-                if (jobDataItems.size() == 0) {
-                    jobDataItems = null;
-                }
-            }
-        }
-    }
-
-    private boolean addNotificationsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<com.example.common.actualBarExtraResponse.Notification> notifications = actualBarExtraResponse.getNotification();
-        ArrayList<com.example.common.actualBarExtraResponse.Notification> toDelete = new ArrayList<>();
-        if (notifications != null && notifications.size() > 0) {
-
-            ArrayList<com.example.common.actualBarExtraResponse.Notification> notificationArrayList = event.getNotifications();
-
-            for (com.example.common.actualBarExtraResponse.Notification notification : notifications) {
-                Long notificationSentTime = convertDateToMillisecond(notification.getResponseDate(), SQL_T_FORMAT);
-
-                if (eventStart <= notificationSentTime && notificationSentTime <= eventEnd) {
-
-                    if (notificationArrayList == null) {
-                        notificationArrayList = new ArrayList<>();
-                    }
-
-                    notificationArrayList.add(notification);
-                    toDelete.add(notification);
-                }
-            }
-            if (notificationArrayList != null) {
-                event.setNotifications(notificationArrayList);
-                notifications.removeAll(toDelete);
-                if (notifications.size() == 0) {
-                    notifications = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean addAlarmEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<Event> alarmEvents = actualBarExtraResponse.getAlarmsEvents();
-        ArrayList<Event> toDelete = new ArrayList<>();
-        if (alarmEvents != null && alarmEvents.size() > 0
-                && event.getType() == 0) {
-
-            ArrayList<Event> EventAlarmArrayList = event.getAlarmsEvents();
-
-            for (Event event1 : alarmEvents) {
-                Long eventTime = convertDateToMillisecond(event1.getEventTime(), SIMPLE_FORMAT_FORMAT);
-
-                if (eventStart <= eventTime && eventTime <= eventEnd) {
-
-                    if (EventAlarmArrayList == null) {
-                        EventAlarmArrayList = new ArrayList<>();
-                    }
-
-                    EventAlarmArrayList.add(event1);
-                    toDelete.add(event1);
-                }
-            }
-            if (EventAlarmArrayList != null) {
-                event.setAlarmsEvents(EventAlarmArrayList);
-                alarmEvents.removeAll(toDelete);
-                if (alarmEvents.size() == 0) {
-                    alarmEvents = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean addRejectsToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<Reject> rejects = actualBarExtraResponse.getRejects();
-        ArrayList<Reject> toDelete = new ArrayList<>();
-        if (rejects != null && rejects.size() > 0) {
-
-            ArrayList<Reject> rejectArrayList = event.getRejects();
-
-            for (Reject reject : rejects) {
-                Long rejectTime = convertDateToMillisecond(reject.getTime(), SIMPLE_FORMAT_FORMAT);
-
-                if (eventStart <= rejectTime && rejectTime <= eventEnd) {
-                    if (rejectArrayList == null) {
-                        rejectArrayList = new ArrayList<>();
-                    }
-                    rejectArrayList.add(reject);
-                    toDelete.add(reject);
-                }
-            }
-            if (rejectArrayList != null) {
-                event.setRejects(rejectArrayList);
-                rejects.removeAll(toDelete);
-                if (rejects.size() == 0) {
-                    rejects = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean addInventoryToEvents(Long eventStart, Long eventEnd, Event event, ActualBarExtraResponse actualBarExtraResponse) {
-
-        ArrayList<Inventory> inventories = actualBarExtraResponse.getInventory();
-        ArrayList<Inventory> toDelete = new ArrayList<>();
-
-        if (inventories != null && inventories.size() > 0) {
-
-            ArrayList<Inventory> inventoriesArrayList = event.getInventories();
-
-            for (Inventory inventory : inventories) {
-                Long inventoryTime = convertDateToMillisecond(inventory.getTime(), SIMPLE_FORMAT_FORMAT);
-
-                if (eventStart <= inventoryTime && inventoryTime <= eventEnd) {
-                    if (inventoriesArrayList == null) {
-                        inventoriesArrayList = new ArrayList<>();
-                    }
-                    inventoriesArrayList.add(inventory);
-                    toDelete.add(inventory);
-                }
-            }
-            if (inventoriesArrayList != null) {
-                event.setInventories(inventoriesArrayList);
-                inventories.removeAll(toDelete);
-                if (inventories.size() == 0) {
-                    inventories = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void initEventRecycler(View view) {
         mEventsRecycler = view.findViewById(R.id.FAAE_events_recycler);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen);
         mEventsRecycler.setAdapter(mEventsAdapter);
 
+        final boolean[] isZooming = {false};
         mEventsRecycler.addListener(new PinchRecyclerView.PinchRecyclerViewListener() {
             @Override
             public void onScale(float factor) {
@@ -2979,29 +2558,33 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     mEventsAdapter.setFactor(factor);
                 }
             }
+
+            @Override
+            public void onScaleBegin() {
+            }
+
+            @Override
+            public void onScaleEnd() {
+            }
         });
     }
+
 
     private void initEvents(ArrayList<Event> events) {
 
         if (mLoadingDataText != null) {
             mLoadingDataText.setVisibility(View.GONE);
         }
-        if (events.size() > 0) {
-            Event event = addFirstEvent(events.get(events.size() - 1), mActualBarExtraResponse);
-            if (event != null) {
-                events.add(event);
-            }
-        }
-        Event event = addCurrentEvent(events);
-        if (event != null) {
-            events.add(0, event);
+
+        if (events.size() < 1) {
+            mNoNotificationsText.setVisibility(View.VISIBLE);
+        } else {
+            mNoNotificationsText.setVisibility(View.GONE);
         }
         if (events.size() < 1) {
             return;
         }
-//        mEventsAdapter = new EventsAdapter(getContext(), this, mIsSelectionMode, mIsOpen, events, mSelectedEvents);
-//        mEventsRecycler.setAdapter(mEventsAdapter);
+        mNoData = false;
 
         if (mEventsAdapter == null && getView() != null) {
             initEventRecycler(getView());
@@ -3013,77 +2596,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-    private Event addCurrentEvent(ArrayList<Event> events) {
-        Event event = null;
-        if (!mIsSelectionMode && events.size() > 0 && events.get(0).getEventEndTime() != null
-                && events.get(0).getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-
-            event = events.get(0);
-        }
-        if (events.size() < 1 && mCurrentMachineStatus != null &&
-                mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-            event = new Event();
-            event.setEventID(1);
-            event.setEventEndTime(TimeUtils.getDateFromFormat(new Date(new Date().getTime() - DAY_IN_MILLIS), SIMPLE_FORMAT_FORMAT));
-        }
-        if (event != null) {
-            Event intermediateEvent = new Event();
-            setEventTextByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID(), intermediateEvent);
-            intermediateEvent = createIntermediateEvent(event.getEventEndTime(),
-                    getDateFromFormat(new Date(), SIMPLE_FORMAT_FORMAT), event.getEventID(), convertDateToMillisecond(event.getEventEndTime()), new Date().getTime(),
-                    intermediateEvent.getSubtitleLname(), intermediateEvent.getSubtitleEname(),
-                    +0.3f, getColorByMachineStatus(mCurrentMachineStatus.getAllMachinesData().get(0).getMachineStatusID()), 2);
-            if (mOpenEvent != null) {
-                intermediateEvent.setNotifications(mOpenEvent.getNotifications());
-                intermediateEvent.setRejects(mOpenEvent.getRejects());
-                intermediateEvent.setInventories(mOpenEvent.getInventories());
-            }
-            addDetailsToEvents(intermediateEvent, mActualBarExtraResponse);
-            mOpenEvent = intermediateEvent;
-            return intermediateEvent;
-        }
-        mOpenEvent = null;
-        return null;
-    }
-
-    private String getColorByMachineStatus(int machineStatusID) {
-        if (getActivity() != null) {
-            switch (machineStatusID) {
-                case 1:
-                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-                case 2:
-                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.C7));
-                case 5:
-                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.green_dark_2));
-                default:
-                    return "#" + Integer.toHexString(ContextCompat.getColor(getActivity(), R.color.new_green));
-
-            }
-        } else {
-            return "#1aa917";
-        }
-    }
-
-    private void setEventTextByMachineStatus(int machineStatusID, Event event) {
-        switch (machineStatusID) {
-            case 1:
-                event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname("עבודה");
-                break;
-            case 2:
-                event.setEventSubTitleEname("Parameter Deviation");
-                event.setEventSubTitleLname("חריגה מפרמטר");
-                break;
-            case 5:
-                event.setEventSubTitleEname("Working Setup");
-                event.setEventSubTitleLname("עבודה ב setup");
-                break;
-            default:
-                event.setEventSubTitleEname("Working");
-                event.setEventSubTitleLname("עבודה");
-        }
-    }
 
     public void initFilterEvents(View view) {
 
@@ -3131,7 +2643,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     }
 
-
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {
         if (checkedAlarms != null) {
 
@@ -3155,9 +2666,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         ArrayList<Event> toDelete = new ArrayList<>();
 
-        for (Event event : mDatabaseHelper.getAlEvents()) {
+        ArrayList<Event> events = mDatabaseHelper.getAlEvents();
+        for (Event event : events) {
 
-            if (TimeUtils.getLongFromDateString(event.getEventTime(), "dd/MM/yyyy HH:mm:ss")
+            if (event.getEventEndTime() != null && event.getEventEndTime().length() > 0 && TimeUtils.getLongFromDateString(event.getEventEndTime(), "dd/MM/yyyy HH:mm:ss")
                     < System.currentTimeMillis() - DAY_IN_MILLIS) {
 
                 toDelete.add(event);
@@ -3283,6 +2795,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
         AllMachinesData machinesData = machineStatus.getAllMachinesData().get(0);
         String nameByLang = OperatorApplication.isEnglishLang() ? machinesData.getCurrentProductEname() : machinesData.getCurrentProductName();
+        if (nameByLang.length() > 31) {
+            nameByLang = nameByLang.substring(0, 31);
+        }
         mProductNameTextView.setText(new StringBuilder(nameByLang).append(",").append(" ID - ").append(String.valueOf(machinesData.getCurrentProductID())));
         mJobIdTextView.setText((String.valueOf(machinesData.getCurrentJobName())));
         mShiftIdTextView.setText(String.valueOf(machinesData.getShiftIDString()));
@@ -3444,13 +2959,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     event.updateAll(DatabaseHelper.KEY_EVENT_ID + " = ?", String.valueOf(eventId));
                 }
 
-
-//                if (mShiftLogAdapter != null) {
-//
-//                    mShiftLogAdapter.notifyDataSetChanged();
-//
-//
-//                }
             }
 
         }
@@ -3469,7 +2977,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         Cursor cursor;
         cursor = getCursorByType();
         setShiftLogAdapter(cursor);
-        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
+        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
 
         mSelectedNumberLy.setVisibility(View.GONE);
 
@@ -3566,7 +3074,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSpinnerOpened(Spinner spinner) {
         showBlackFilters();
-        setCycleWarningView(false);
+        mListener.setCycleWarningView(false);
     }
 
     public void showBlackFilters() {
@@ -3579,7 +3087,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onSpinnerClosed(Spinner spinner) {
         hideBlackFilters();
-        setCycleWarningView(mCycleWarningViewShow);
+        mListener.setCycleWarningView(mCycleWarningViewShow);
     }
 
     public void hideBlackFilters() {
@@ -3588,12 +3096,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     private void setLanguageSpinner(View view) {
-//        String currentLanguage = null;
-//        for (int i = 0; i < getResources().getStringArray(R.array.language_codes_array).length; i++) {
-//            if (getResources().getStringArray(R.array.language_codes_array)[i].equals(PersistenceManager.getInstance().getCurrentLang())) {
-//                currentLanguage = getResources().getStringArray(R.array.language_codes_array)[i];
-//            }
-//        }
+
         final String[] languagesNames = getResources().getStringArray(R.array.languages_spinner_array);
         mLanguagesSpinner = view.findViewById(R.id.ATATV_language_spinner);
         LanguagesSpinnerAdapterActionBar spinnerArrayAdapter = new LanguagesSpinnerAdapterActionBar(getActivity(), R.layout.spinner_language_item, languagesNames);
@@ -3629,14 +3132,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
     }
 
-    private void setCycleWarningView(boolean show) {
-        if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            mCycleWarningView.setVisibility(View.VISIBLE);
-        } else {
-            mCycleWarningView.setVisibility(View.GONE);
-        }
-    }
-
     public void setCycleWarningViewShow(boolean show) {
         boolean wasShow = mCycleWarningViewShow;
         if (show && !BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
@@ -3644,11 +3139,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         } else {
             mCycleWarningViewShow = false;
         }
-        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
-            setCycleWarningView(false);
-        } else {
-            setCycleWarningView(show);
-        }
+//        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
+//            mListener.resetCycleWarningView(false);
+//        } else {
+            mListener.resetCycleWarningView(wasShow, show);
+//        }
     }
 
     private void sendTokenWithSessionIdToServer() {
@@ -3699,18 +3194,24 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                     // TODO: 28/03/2019 update tech list for new calls
                     ArrayList<TechCallInfo> techList = PersistenceManager.getInstance().getCalledTechnician();
+                    ArrayList<TechCallInfo> techListCopy = new ArrayList<>();
+                    techListCopy = techList;
                     for (Notification not : response.body().getmNotificationsList()) {
+
                         not.setmSentTime(TimeUtils.getStringNoTFormatForNotification(not.getmSentTime()));
                         not.setmResponseDate(TimeUtils.getStringNoTFormatForNotification(not.getmResponseDate()));
 
                         if (not.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN) {
                             boolean isNew = true;
-                            if (techList != null && techList.size() > 0) {
-                                for (TechCallInfo tech : techList) {
+                            if (techList != null && techListCopy.size() > 0) {
+                                for (int i = 0; i < techListCopy.size(); i++) {
+                                    TechCallInfo tech = techListCopy.get(i);
                                     if (tech.getmNotificationId() == not.getmNotificationID()) {
                                         isNew = false;
                                         tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
-                                        break;
+                                        tech.setmResponseType(not.getmResponseType());
+                                    } else if (tech.getmTechnicianId() == not.getmTargetUserId() && not.getmNotificationID() > tech.getmNotificationId()) {
+                                        techList.remove(i);
                                     }
                                 }
 
@@ -3770,7 +3271,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         void onSplitEventPressed(Float eventID);
 
-        void onJoshProductSelected(Integer spinnerProductPosition, Integer jobID, String jobName);
+        void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob jobID, String jobName);
 
         void onProductionStatusChanged(int id, String newStatus);
 
@@ -3787,6 +3288,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void onShowSetupEndDialog();
 
         void onTechnicianCalled();
+
+        void setCycleWarningView(boolean cycleWarningViewShow);
+
+        void resetCycleWarningView(boolean wasShow, boolean show);
     }
 
 }

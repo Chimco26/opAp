@@ -2,12 +2,10 @@
 <resources>
     <!-- General -->
     <string name="no_communication">無通訊</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
     <string name="unknown">未知</string>
     <!-- Login screen -->
     <string name="link_machine">選擇您的機器</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">填寫所有欄位</string>
     <string name="login">登錄</string>
     <string name="login_screen_save">保存</string>
@@ -71,7 +69,6 @@
     <string name="units">單位</string>
     <string name="weight">重量</string>
     <string name="material_weight_alarm">材料重量警報</string>
-    <string name="dashes">- -</string>
     <string name="no_reasons">沒有可用的報告</string>
     <string name="report_stop_event_reason">報告停止事件原因</string>
     <string name="report_stop_reason">報告停止原因</string>
@@ -102,7 +99,6 @@
     <string name="chart_min_">最小值：</string>
     <string name="chart_standard_">標準值：</string>
     <string name="chart_max_">最大值：</string>
-    <string name="space">&#160;</string>
     <string name="switch_user">切換用戶</string>
     <string name="standard">標準值</string>
     <string name="total_required">所需數量</string>
@@ -118,31 +114,31 @@
     <string name="loading_data">正在載入資料…</string>
     <string name="no_data_chart">您需要為圖表提供資料</string>
 
-    <array name="languages_spinner_array">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Chinese</item>
-        <item>German</item>
-        <item>Russian</item>
-        <item>Ukrainian</item>
-        <item>Spanish</item>
-        <item>French</item>
-        <item>Dutch</item>
-        <item>Arabic</item>
-    </array>
+    <!--<array name="languages_spinner_array">-->
+        <!--<item>English</item>-->
+        <!--<item>Hebrew</item>-->
+        <!--<item>Chinese</item>-->
+        <!--<item>German</item>-->
+        <!--<item>Russian</item>-->
+        <!--<item>Ukrainian</item>-->
+        <!--<item>Spanish</item>-->
+        <!--<item>French</item>-->
+        <!--<item>Dutch</item>-->
+        <!--<item>Arabic</item>-->
+    <!--</array>-->
 
-    <array name="language_codes_array">
-        <item>en</item>
-        <item>iw</item>
-        <item>zh</item>
-        <item>de</item>
-        <item>ru</item>
-        <item>uk</item>
-        <item>es</item>
-        <item>fr</item>
-        <item>nl</item>
-        <item>ar</item>
-    </array>
+    <!--<array name="language_codes_array">-->
+        <!--<item>en</item>-->
+        <!--<item>iw</item>-->
+        <!--<item>zh</item>-->
+        <!--<item>de</item>-->
+        <!--<item>ru</item>-->
+        <!--<item>uk</item>-->
+        <!--<item>es</item>-->
+        <!--<item>fr</item>-->
+        <!--<item>nl</item>-->
+        <!--<item>ar</item>-->
+    <!--</array>-->
 
     <array name="jobs_spinner_array">
         <item>新工单</item>
@@ -165,7 +161,7 @@
     <string name="activate_job_dialog_title">啟動新作業</string>
     <string name="add">添加</string>
     <string name="add_note">添加備註</string>
-    <string name="app_name">LeaderMES操作員</string>
+    <string name="app_name">Matics Operator</string>
     <string name="called_technician">已呼叫的技術人員</string>
     <string name="catalog">目錄</string>
     <string name="action_details">操作詳情</string>
@@ -248,19 +244,124 @@
     <string name="work_comlpeted">工作完成了</string>
     <string name="yesterday">昨天</string>
     <string name="you_can_add_a_note">您可以添加備註</string>
-    <string name="split_event_validation_text">您即將拆分事件，您確定要繼續進行嗎？</string>
+    <string name="split_event_validation_text">您即將拆分事件，\\n您確定您想要繼續嗎？</string>
     <string name="split_event_validation_title">拆分事件</string>
     <string name="midnight">午夜</string>
     <string name="split">拆分</string>
-    <string name="version">"版本 "</string>
-    <string name="username">"使用者名稱 "</string>
+    <string name="version">應用版本</string>
+    <string name="username">使用者名稱</string>
     <string name="call_decline">通話已被拒絕</string>
     <string name="call_approved">通話已獲批准</string>
     <string name="started_service">參加電話會議</string>
     <string name="service_completed">服務已完成</string>
     <string name="call_cancelled">通話已取消</string>
     <string name="waiting_for_replay">等待重放</string>
-    <string name="service_call_was_canceled">此通話已被取消</string>
+    <string name="service_call_was_canceled"><b>此通話已被取消</b></string>
+    <string name="machine_status">機器狀態</string>
+    <string name="pConfig">組態</string>
+    <string name="events">事件</string>
+    <string name="gram">公克</string>
+    <string name="service_call_made_new">服務呼叫已由營運商%1$s從機器送出</string>
+    <string name="default_unanswered_technician_call">營運商%1$s開啟一個服務呼叫。等待技術人員回覆</string>
+    <string name="gr">公克</string>
+    <string name="incremented_successfully">成功地擴增</string>
+    <string name="incremented_failure">無法擴增</string>
+    <string name="top_five_stop_events">前5名停止事件</string>
+    <string name="top_five_reject_reasons">前5名拒絕原因</string>
+    <string name="attention">注意！</string>
+    <string name="activate_job">啟動工作</string>
+    <string name="total_amount">總金額：</string>
+    <string name="call_canceled">呼叫已取消</string>
+    <string name="service_call_exists">開啓服務呼叫</string>
+    <string name="service_call_exists_subtitle">找到了開啓服務呼叫，\\n您可以移除開啟呼叫或者開啓新的呼叫</string>
+    <string name="open_new_call">新的服務呼叫</string>
+    <string name="empty_job_list_msg">待處理工作列表為空</string>
+    <string name="call_approved2">由營運商%1$s所作出的呼叫獲得核准</string>
+    <string name="call_declined">呼叫被拒絕</string>
+    <string name="call_declined2">由營運商%1$s所作出的呼叫遭到拒絕</string>
+    <string name="started_service2">參加由營運商%1$s所作出的呼叫</string>
+    <string name="service_completed2">由營運商%1$s所作出的服務呼叫已完成</string>
+    <string name="call_cancelled2">由營運商%1$s所作出的呼叫被取消</string>
+    <string name="more_details">等待更多細節</string>
+    <string name="technician">技術人員</string>
+    <string name="time_left_to_current_job">留給目前工作的時間</string>
+    <string name="hr">(時)</string>
+    <string name="hr2">時</string>
+    <string name="see_pending_jobs">查看待處理工作</string>
+    <string name="pending_jobs">待處理工作</string>
+    <string name="end_setup">結束設定</string>
+    <string name="you_are_in_setup_mode">您是在設定模式下</string>
+    <string name="get_ready_for_your_next_job">為您的下一份工作準備好</string>
+    <string name="see_job">參見工作</string>
+    <string name="dont_forget_to_activate_job">不要忘記啟動工作！</string>
+    <string name="change_material">改變材料</string>
+    <string name="more_info">更多資訊</string>
+    <string name="max_value_is">最大值是：</string>
+    <string name="change_factory">改變工廠</string>
+    <string name="NoProgressMinFromStartShift">還有 %1$s 分鐘進行切換，生產尚未開始。</string>
+    <string name="SetupDurationMinActual">設定持續時間超過 %1$s 分鐘。</string>
+    <string name="SetupInjectionsCount">在設定中完成了超過 %1$s 次循環。</string>
+    <string name="UnReportedStopsPC">本次切換中有超過 %1$s ％ 的停止時間未被歸類。</string>
+    <string name="RejectsPC">拒絕超過 %1$s ％。</string>
+    <string name="OpenEventDuration">當前停止時間超過 %1$s 分鐘。</string>
+    <string name="ProductionModeInjectionsCount">在非生產狀態下檢測到 %1$s 次循環。</string>
+    <string name="CycleTimeDeviation">相對標準，觀察到 %1$s % 的循環時間偏差。</string>
+    <string name="ShortEventsFromProductionPC">總生產時間中的短暫停止總時間超過 %1$s ％。</string>
+    <string name="WorkerNotSigned">在切換開始後，有 %1$s 分鐘沒有操作員登入機器。</string>
+    <string name="open_calls">開啟呼叫</string>
+    <string name="last_24h">過去24小時</string>
+    <string name="you_ve_reached_the_production_target">您已經達到了生產目標！</string>
+    <string name="reported_stop_event">報告停止事件</string>
+    <string name="time_min">時間（分鐘）</string>
+    <string name="report_events_reason">報告事件原因</string>
+    <string name="keep_reporting_events_reason">保持報告事件原因</string>
+    <string name="target_reached">達成目標！</string>
+    <string name="setup_rejects_dialog_text">您想要報告它們的其中一部分為拒絕嗎？</string>
+    <string name="setup_good_units_dialog_text">您想要報告它們的其中一部分為良好單位嗎？</string>
+    <string name="on_the_setup_you_produced">在您所製作的設定上</string>
+    <string name="from_the">來自於</string>
+    <string name="activate_last_job">啟動前一項工作</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">您想要啟動您所進行的前一項工作嗎？</string>
+    <string name="no">否</string>
+    <string name="yes">是</string>
+    <string name="do_you_need_to_end_setup_before">在開始再度製作這項工作之前，您需要先進行設定嗎？</string>
+    <string name="shiftlog">轉移日誌</string>
+    <string name="working">工作</string>
+    <string name="erp_job_id">ERP工作ID</string>
+    <string name="rejects">拒絕</string>
+    <string name="good_units">良好單位</string>
+    <string name="working_time">工作時間</string>
+    <string name="event_details">事件細節</string>
+    <string name="messages">訊息</string>
+    <string name="message">訊息</string>
+    <string name="production_report">生產報告</string>
+    <string name="select_all">選擇全部</string>
+    <string name="new_call">新的呼叫</string>
+    <string name="working_setup">工作設定</string>
+    <string name="parameter_deviation">變數偏差</string>
+    <string name="stop">停止</string>
+    <string name="stop_setup">停止安裝</string>
+    <string name="idle">空閑</string>
+    <string name="working_no_production">工作無生產</string>
+    <string name="no_communication_p">沒有通訊</string>
+    <string name="_100">100%</string>
+    <string name="filter_short">過濾的事件</string>
+    <string name="reported">已報告</string>
+    <string name="unreported">未報告</string>
+    <string name="setup">建立</string>
+    <string name="min">分</string>
+    <string name="estimated_date">預計日期</string>
+    <string name="required_setup">在啟動之前，這項工作需要設定嗎？</string>
+    <string name="dont_activate">不要啟動</string>
+    <string name="no_setup">沒有設定</string>
+    <string name="go_to_setup">前往設定</string>
+    <string name="setup_mode">設定模式</string>
+    <string name="rejects_quantity">拒絕數量</string>
+    <string name="there_are_no_stop_event">沒有要報告的停止事件</string>
+    <string name="theoretical_units">理論單位</string>
+    <string name="average">平均</string>
+    <string name="add_rejects">添加拒絕</string>
+    <string name="minutes_long">分</string>
 
 
 </resources>

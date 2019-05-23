@@ -2,13 +2,11 @@
 
     <!-- General -->
     <string name="no_communication">אין תקשורת</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
     <string name="unknown">לא ידוע</string>
 
     <!-- Login screen -->
     <string name="link_machine">בחר מכונה</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">מלא את כל השדות</string>
     <string name="login">התחבר</string>
     <string name="login_screen_save">שמירה</string>
@@ -71,13 +69,12 @@
     <string name="report">דווח</string>
     <string name="stop_event">אירוע עצירה</string>
     <string name="enter_with_your_id">התחבר באמצעות\nהמזהה שלך</string>
-    <string name="report_rejects">הוספת פסולים</string>
+    <string name="report_rejects">דיווח פסולים</string>
     <string name="reject_reason">סיבת פסילה</string>
     <string name="cause">גורם פסילה</string>
     <string name="next">דווח</string>
     <string name="units">יחידות</string>
     <string name="weight">משקל</string>
-    <string name="dashes">- -</string>
     <string name="no_reasons">אין דיווח</string>
     <string name="report_stop_event_reason">דווח סיבת אירוע עצירה</string>
     <string name="report_stop_reason">דווח סיבת\nעצירה</string>
@@ -110,43 +107,42 @@
     <string name="end_">סיום: </string>
     <string name="start_">התחלה: </string>
     <string name="chart_min_">מינימום: </string>
-    <string name="chart_standard_">סטנדרט: </string>
+    <string name="chart_standard_">תקן:</string>
     <string name="chart_max_">מקסימום: </string>
-    <string name="space">&#160;</string>
-    <string name="standard">סטנדרט&#160;</string>
+    <string name="standard">תקן </string>
     <string name="shift_log_min">מינימום</string>
     <string name="shift_log_max">מקסימום</string>
-    <string name="shift_log_standard">סטנדרט</string>
+    <string name="shift_log_standard">תקן</string>
     <string name="approving_technician">טכנאי מאשר</string>
     <string name="approve">אישור</string>
-    <string name="setup_end">אישור פריט ראשון</string>
+    <string name="setup_end">סיום סט-אפ</string>
     <string name="first_item_approval">סיום סט-אפ</string>
 
-    <array name="languages_spinner_array">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Chinese</item>
-        <item>German</item>
-        <item>Russian</item>
-        <item>Ukrainian</item>
-        <item>Spanish</item>
-        <item>French</item>
-        <item>Dutch</item>
-        <item>Arabic</item>
-    </array>
+    <!--<array name="languages_spinner_array">-->
+        <!--<item>English</item>-->
+        <!--<item>Hebrew</item>-->
+        <!--<item>Chinese</item>-->
+        <!--<item>German</item>-->
+        <!--<item>Russian</item>-->
+        <!--<item>Ukrainian</item>-->
+        <!--<item>Spanish</item>-->
+        <!--<item>French</item>-->
+        <!--<item>Dutch</item>-->
+        <!--<item>Arabic</item>-->
+    <!--</array>-->
 
-    <array name="language_codes_array">
-        <item>en</item>
-        <item>iw</item>
-        <item>zh</item>
-        <item>de</item>
-        <item>ru</item>
-        <item>uk</item>
-        <item>es</item>
-        <item>fr</item>
-        <item>nl</item>
-        <item>ar</item>
-    </array>
+    <!--<array name="language_codes_array">-->
+        <!--<item>en</item>-->
+        <!--<item>iw</item>-->
+        <!--<item>zh</item>-->
+        <!--<item>de</item>-->
+        <!--<item>ru</item>-->
+        <!--<item>uk</item>-->
+        <!--<item>es</item>-->
+        <!--<item>fr</item>-->
+        <!--<item>nl</item>-->
+        <!--<item>ar</item>-->
+    <!--</array>-->
     <array name="jobs_spinner_array">
         <item>פק"ע חדשה</item>
         <item>הוספת פסולים</item>
@@ -164,7 +160,7 @@
 
     </array>
 
-    <string name="approve_first_item">אישור פריט ראשון</string>
+    <string name="approve_first_item">סיום סט-אפ</string>
 
     <plurals name="days">
         <item quantity="one">%d יום</item>
@@ -216,7 +212,7 @@
     <string name="you_can_add_a_note">ניתן להוסיף הערה</string>
     <string name="close">סגור</string>
     <string name="add">הוסף</string>
-    <string name="start_job_success">הפעולה בוצעה בהצלחה</string>
+    <string name="start_job_success">הפק\"ע הופעלה בהצלחה</string>
     <string name="get_panding_jobs_failed_error">כשל ביבוא רשימת פקודות עבודה ממתינות</string>
     <string name="get_jobs_details_failed_error">כשל ביבוא פרטי פקודת העבודה</string>
     <string name="no_available_pdf">אין Pdf זמין</string>
@@ -229,18 +225,18 @@
     <string name="edit_note">עריכת הערה</string>
     <string name="submit">שמור</string>
     <string name="sign_out">התנתקות</string>
-    <string name="add_note">הוספת הערה</string>
+    <string name="add_note">הוסף הערה</string>
     <string name="fill_units_or_weight">* נא להזין יחידות או משקל</string>
     <string name="loading_file">טוען קובץ...</string>
     <string name="loading_error">תקלת טעינה</string>
     <string name="tutorial_swipe">החלק ימינה את לוח המכוונים כדי לראות את המתכון של פקודת העבודה הנוכחית</string>
     <string name="tutorial_job_actions">פעולת פקע- פקע חדשה</string>
     <string name="tutorial_job_actions_desc">הכן את עצמך להפעלת פקודת העבודה הבאה בזמן</string>
-    <string name="tutorial_event_log_desc">דווח אירוע או מספר אירועי עצירה יחד, כאשר הן משתייכים לאותה סיבת עצירה.</string>
+    <string name="tutorial_event_log_desc">דווח אירוע או מספר אירועי עצירה יחד, כאשר הם משתייכים לאותה סיבת עצירה.</string>
     <string name="tutorial_event_log_title">יומן אירועים</string>
     <string name="tutorial_split_event_title">פיצול אירוע</string>
     <string name="tutorial_split_event_Desc">השתמש באיקון \'מספריים\' לפיצול אירוע. בדרך זו ניתן לדווח סיבה שונה עבור כל חלק.</string>
-    <string name="activate_job_dialog_message">נבחרה פק"ע חדשה, האם להמשיך בהפעלה?</string>
+    <string name="activate_job_dialog_message">אתה עומד להפעיל פק\"ע,האם להמשיך בפעולה?</string>
     <string name="activate_job_dialog_title">הפעלת פק"ע חדשה</string>
     <string name="technician_list">רשימת טכנאים</string>
     <string name="today">היום</string>
@@ -253,12 +249,12 @@
     <string name="message_declined">קריאה נדחתה</string>
     <string name="no_notification_to_show">אין הודעות ב-24 שעות האחרונות</string>
     <string name="alarms">התראות</string>
-    <string name="under_maintenance">תחת תחזוקה</string>
+    <string name="under_maintenance">בתחזוקה</string>
     <string name="at_work">בטיפול</string>
     <string name="work_comlpeted">טיפול הסתיים</string>
     <string name="technician_time_out">שים לב, עברו 20 דקות מרגע שליחת הקריאה לטכנאי XXX  ולא התקבל מענה, באפשרותך לפתוח קריאה נוספת או לפנות לאחראי המשמרת.</string>
     <string name="message_from">הודעה מ</string>
-    <string name="app_name">מפעיל</string>
+    <string name="app_name">Matics Operator</string>
     <string name="attention_cycles_detected_in_a_non_production_status">המערכת זיהתה התקדמות מחזורים במצב שאינו ייצורי.  בבקשה אל תשכח להפעיל פק\"ע בזמן.</string>
     <string name="call_for_technician_unresponsive">קריאתך לטכנאי לא נענתה במשך 5 דקות ולכן בוטלה.</string>
     <string name="default_unanswered_technocian_call">ממתין לתגובת טכנאי</string>
@@ -283,25 +279,25 @@
 
     <string name="dont_forget_to_activate_job">אל תשכח להפעיל פקודות עבודה</string>
     <string name="change_factory">שנה מפעל</string>
-    <string name="you_ve_reached_the_production_target">"הגעת ליעד היצור של פקודת העבודה!  "</string>
-    <string name="end_setup">סיום setup</string>
-    <string name="you_are_in_setup_mode">אתה במצב setup</string>
+    <string name="you_ve_reached_the_production_target">הגעת ליעד היצור של פקודת העבודה!</string>
+    <string name="end_setup">סיום סט-אפ</string>
+    <string name="you_are_in_setup_mode">אתה במצב סט-אפ</string>
     <string name="reported_stop_event">עצירות מדווחות</string>
-    <string name="time_min">זמן(דק)</string>
+    <string name="time_min">זמן (דק)</string>
     <string name="report_events_reason">דווח סיבות עצירה</string>
     <string name="keep_reporting_events_reason">המשך דיווח סיבות עצירה</string>
     <string name="target_reached">היעד הגיע!</string>
     <string name="setup_rejects_dialog_text">האם ברצונך לדווח חלק כיחידות פסולות?</string>
     <string name="setup_good_units_dialog_text">האם ברצונך לדווח חלק כיחידות ייצור טובות?</string>
-    <string name="on_the_setup_you_produced">בזמן ה setup נוצרו</string>
+    <string name="on_the_setup_you_produced">בזמן הסט-אפ נוצרו</string>
     <string name="from_the">מהמוצר</string>
     <string name="good_units">יחידות ייצור טובות</string>
     <string name="do_you_want_to_activate_the_last_job_you_work_on_job">האם ברצונך להפעיל את הפק”ע האחרונה שעבדה על המכונה?</string>
     <string name="no">לא</string>
     <string name="yes">כן</string>
     <string name="activate_last_job">הפעלת פק”ע אחרונה</string>
-    <string name="do_you_need_to_end_setup_before">האם דרוש תהליך setup לפני התחלת ייצור על פק”ע זו?</string>
-    <string name="working">עובד</string>
+    <string name="do_you_need_to_end_setup_before">האם דרוש תהליך סט-אפ לפני התחלת ייצור על פק”ע זו?</string>
+    <string name="working">עבודה</string>
     <string name="working_setup">סטאפ - עבודה</string>
     <string name="parameter_deviation">חריגה מפרמטר</string>
     <string name="stop">עצירה</string>
@@ -309,7 +305,7 @@
     <string name="idle">בטלה</string>
     <string name="working_no_production">עבודה בחוסר יצור</string>
     <string name="no_communication_p">חוסר תקשורת</string>
-    <string name="see_pending_jobs">רשימת פק”עות ממתינות</string>
+    <string name="see_pending_jobs">בדוק פק”עות ממתינות</string>
     <string name="time_left_to_current_job">זמן נותר לפק”ע</string>
     <string name="get_ready_for_your_next_job">התכונן לעבודה הבאה שלך</string>
     <string name="shiftlog">יומן אירועים</string>
@@ -323,27 +319,71 @@
     <string name="estimated_date">תאריך משוער</string>
     <string name="select_all">בחר הכל</string>
     <string name="see_job">רשימת פק”עות</string>
-    <string name="required_setup">האם דרוש תהליך setup?</string>
+    <string name="required_setup">האם דרוש תהליך סט-אפ?</string>
     <string name="call_decline">קריאה נדחתה</string>
     <string name="call_approved">קריאה אושרה</string>
     <string name="started_service">קריאה בטיפול</string>
     <string name="service_completed">טיפול הושלם</string>
     <string name="call_cancelled">קריאה בוטלה</string>
     <string name="waiting_for_replay">ממתין לתגובה</string>
-    <string name="service_call_was_canceled">קריאה זו בוטלה</string>
+    <string name="service_call_was_canceled"><b>קריאה זו בוטלה</b></string>
     <string name="filter_short">עצירות מסוננות</string>
-    <string name="min_duration_filter">(מתחת</string>
     <string name="reported">מדווח</string>
     <string name="unreported">לא מדווח</string>
     <string name="min">דק</string>
-    <string name="hr2">שע</string>
+    <string name="hr2">שע\'</string>
     <string name="dont_activate">לא להפעיל</string>
-    <string name="no_setup">Setup לא</string>
-    <string name="go_to_setup">Setupלך ל</string>
+    <string name="no_setup">לא סט-אפ</string>
+    <string name="go_to_setup">לך לסט-אפ</string>
     <string name="rejects_quantity">כמות פסולים</string>
     <string name="there_are_no_stop_event">אין ארועי עצירה לדיווח</string>
     <string name="theoretical_units">יחידות תיאורטיות</string>
     <string name="add_rejects">הוסף פסולים</string>
+    <string name="machine_status">סטטוס מכונה</string>
+    <string name="events">אירועים</string>
+    <string name="gram">גר</string>
+    <string name="midnight">חצות</string>
+    <string name="incremented_successfully">הוגדל בהצלחה</string>
+    <string name="incremented_failure">הגדלה נכשלה</string>
+    <string name="top_five_stop_events">5 אירועי העצירה העיקריים</string>
+    <string name="top_five_reject_reasons">5 סיבות הפסילה העיקריות</string>
+    <string name="total_amount">סה\"כ כמות</string>
+    <string name="call_canceled">קריאה בוטלה</string>
+    <string name="service_call_exists">פתח קריאת שירות</string>
+    <string name="service_call_exists_subtitle">נמצאו קריאות שירות פתוחות, אתה יכול לבטל חלק מהן או לפתוח קריאה חדשה.</string>
+    <string name="open_new_call">קריאת שירות חדשה</string>
+    <string name="call_approved2">קריאת השירות שבוצעה ע\"י מפעיל %1$s אושרה.</string>
+    <string name="call_declined">הקריאה נדחתה</string>
+    <string name="call_declined2">קריאת השירות שבוצעה ע\"י מפעיל %1$s נדחתה.</string>
+    <string name="started_service2">קריאת השירות שבוצעה ע\"י מפעיל %1$s בטיפול.</string>
+    <string name="service_completed2">קריאת השירות שבוצעה ע\"י מפעיל %1$s הושלמה.</string>
+    <string name="call_cancelled2">קריאת השירות שבוצעה ע\"י מפעיל %1$s בוטלה.</string>
+    <string name="more_details">ממתין לפרטים נוספים.</string>
+    <string name="technician">טכנאי</string>
+    <string name="hr">(שע\')</string>
+    <string name="pending_jobs">פק\"עות ממתינות</string>
+    <string name="change_material">החלף חומר</string>
+    <string name="more_info">מידע נוסף</string>
+    <string name="max_value_is">ערך מקסימלי:</string>
+    <string name="NoProgressMinFromStartShift">%1$s דקות מתחילת המשמרת הייצור עוד לא החל</string>
+    <string name="SetupDurationMinActual">משך הסט- אפ מעל %1$s דקות</string>
+    <string name="SetupInjectionsCount">מעל %1$s מחזורים בוצעו במהלך הסט-אפ</string>
+    <string name="UnReportedStopsPC">מעל %1$s % מהעצירות מתחילת המשמרת אינן מדווחות</string>
+    <string name="RejectsPC">מעל %1$s % פסולים</string>
+    <string name="OpenEventDuration">עצירה נוכחית מעל %1$s דקות.</string>
+    <string name="ProductionModeInjectionsCount">%1$s מחזורים זוהו במצב של חוסר ייצור</string>
+    <string name="CycleTimeDeviation">%1$s % חריגה בזמן מחזור ביחס לתקן</string>
+    <string name="ShortEventsFromProductionPC">סה\"כ עצירות קצרות מתוך סה\"כ זמן ייצור מעל %1$s %</string>
+    <string name="WorkerNotSigned">%1$sדקות מתחילת המשמרת ולא בוצעה כניסת מפעיל</string>
+    <string name="open_calls">קריאות פתוחות</string>
+    <string name="last_24h">24 שעות אחרונות</string>
+    <string name="erp_job_id">פק\"ע ERP</string>
+    <string name="new_call">קריאה חדשה</string>
+    <string name="_100">100%</string>
+    <string name="setup">סט- אפ</string>
+    <string name="setup_mode">מצב סט-אפ</string>
+    <string name="average">ממוצע</string>
+    <string name="minutes_long">דקות</string>
 
 
 </resources>

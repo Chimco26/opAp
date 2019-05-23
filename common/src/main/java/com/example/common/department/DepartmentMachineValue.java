@@ -3,7 +3,7 @@ package com.example.common.department;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DepartmentMachineValue {
+public class DepartmentMachineValue implements Cloneable{
 
     @SerializedName("DisplayOrder")
     @Expose

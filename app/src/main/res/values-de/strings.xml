@@ -3,13 +3,11 @@
 
     <!-- General -->
     <string name="no_communication">Keine Kommunikation</string>
-    <string name="pee_value_null">--</string>
-    <string name="default_empty_field">--</string>
     <string name="unknown">Unbekannt</string>
 
     <!-- Login screen -->
     <string name="link_machine">Maschine verbinden</string>
-    <string name="screen_title">LeaderMES</string>
+    <string name="screen_title">Matics</string>
     <string name="login_fields_error">Alle Felder muessen ausgefuellt werden</string>
     <string name="login">Einloggen</string>
     <string name="login_screen_save">Speichern</string>
@@ -79,7 +77,6 @@
     <string name="units">Einheiten</string>
     <string name="weight">Gewicht</string>
     <string name="material_weight_alarm">Alarm: Materialgewicht </string>
-    <string name="dashes">- -</string>
     <string name="no_reasons">Keine Berichte verfuegbar</string>
     <string name="report_stop_event_reason">Bericht Stop Event Reason</string>
     <string name="report_stop_reason">Report Stop\nReason</string>
@@ -110,7 +107,6 @@
     <string name="chart_min_">Min: </string>
     <string name="chart_standard_">Standard:&#160;</string>
     <string name="chart_max_">Max: </string>
-    <string name="space">&#160;</string>
     <string name="switch_user">Benutzer wechseln</string>
     <string name="standard">Standard&#160;</string>
     <string name="total_required">Benötigte Gesamtstückzahl&#160;</string>
@@ -126,31 +122,31 @@
     <string name="loading_data">Die Datei wird geladen.</string>
     <string name="no_data_chart">Sie müssen Daten für die Tabelle auswählen.</string>
 
-    <array name="languages_spinner_array">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Chinese</item>
-        <item>German</item>
-        <item>Russian</item>
-        <item>Ukrainian</item>
-        <item>Spanish</item>
-        <item>French</item>
-        <item>Dutch</item>
-        <item>Arabic</item>
-    </array>
+    <!--<array name="languages_spinner_array">-->
+        <!--<item>English</item>-->
+        <!--<item>Hebrew</item>-->
+        <!--<item>Chinese</item>-->
+        <!--<item>German</item>-->
+        <!--<item>Russian</item>-->
+        <!--<item>Ukrainian</item>-->
+        <!--<item>Spanish</item>-->
+        <!--<item>French</item>-->
+        <!--<item>Dutch</item>-->
+        <!--<item>Arabic</item>-->
+    <!--</array>-->
 
-    <array name="language_codes_array">
-        <item>en</item>
-        <item>iw</item>
-        <item>zh</item>
-        <item>de</item>
-        <item>ru</item>
-        <item>uk</item>
-        <item>es</item>
-        <item>fr</item>
-        <item>nl</item>
-        <item>ar</item>
-    </array>
+    <!--<array name="language_codes_array">-->
+        <!--<item>en</item>-->
+        <!--<item>iw</item>-->
+        <!--<item>zh</item>-->
+        <!--<item>de</item>-->
+        <!--<item>ru</item>-->
+        <!--<item>uk</item>-->
+        <!--<item>es</item>-->
+        <!--<item>fr</item>-->
+        <!--<item>nl</item>-->
+        <!--<item>ar</item>-->
+    <!--</array>-->
     <array name="jobs_spinner_array">
         <item>Neuer Job</item>
         <item>Ausschussteile hinzufügen</item>
@@ -183,7 +179,7 @@
     <string name="add_note">Notiz hinzufügen</string>
     <string name="alarms">Alarme</string>
     <string name="amount">Menge</string>
-    <string name="app_name">LeaderMES Bediener</string>
+    <string name="app_name">Matics Operator</string>
     <string name="at_work">in Bearbeitung</string>
     <string name="attention_cycles_detected_in_a_non_production_status">Achtung, es wurden Maschinenzyklen im Status \"keine Produktion\" erkannt. Bitte vergessen Sie nicht, den aktuellen Auftrag zu aktivieren!</string>
     <string name="call_for_technician_unresponsive">Ihr Ruf nach einem Einrichter wurde nicht beantwortet und infolgedessen gecancelled.</string>
@@ -206,7 +202,7 @@
     <string name="general">Allgemeines</string>
     <string name="get_jobs_details_failed_error">Fehler beim Öffnen der Auftrags-Details.</string>
     <string name="get_panding_jobs_failed_error">Fehler beim Importieren der Liste mit ausstehenden Arbeitsaufträgen.</string>
-    <string name="gr">gr</string>
+    <string name="gr">g</string>
     <string name="kg">kg</string>
     <string name="loading_error">Es ist ein Fehler beim Laden aufgetreten.</string>
     <string name="loading_file">Die Datei wird geladen…</string>
@@ -225,7 +221,7 @@
     <string name="no_notification_to_show">Keine Mitteilungen in den letzten 24h verfügbar.</string>
     <string name="notes">Notizen</string>
     <string name="operator">Werker</string>
-    <string name="pConfig">PConfig</string>
+    <string name="pConfig">Konfiguration</string>
     <string name="popup_timeout">Pop-up Timeout</string>
     <string name="popup_timeout_range_error">Pop-up Timeout muss 5-30 Sekunden betragen.</string>
     <string name="production_parameters">Produktions-Parameter</string>
@@ -241,7 +237,7 @@
     <string name="signed_out_successfully">Erfolgreich ausgeloggt</string>
     <string name="split_event_success">Das Teilen des Auftrages war erfolgreich.</string>
     <string name="split_event_failed">Das Teilen des Auftrages ist fehlgeschlagen.</string>
-    <string name="split">Auftrag splitten</string>
+    <string name="split">Aufteilen</string>
     <string name="submit">übertragen</string>
     <string name="start_job_success">Auftrag erfolgreich gestartet</string>
     <string name="technician_list">Liste: Einrichter</string>
@@ -258,13 +254,119 @@
     <string name="tutorial_job_actions">Auftragsaktionen - Neuer Auftrag</string>
     <string name="tutorial_event_log_title">Ereignisdaten</string>
     <string name="tutorial_event_log_desc">Füge mehrere Reports zusammen, wenn diese den gleichen Stillstandsgrund haben.</string>
-    <string name="split_event_validation_title">Aufspalten Ereignis</string>
+    <string name="split_event_validation_title">Ereignis teilen</string>
     <string name="call_decline">Anruf wurde abgelehnt</string>
-    <string name="_100">call_decline</string>
+    <string name="_100">100%</string>
     <string name="call_approved">Anruf ist genehmigt</string>
     <string name="started_service">Anruf wird bearbeitet</string>
     <string name="service_completed">Service abgeschlossen</string>
     <string name="call_cancelled">Anruf abgebrochen</string>
     <string name="waiting_for_replay">Warten auf Wiedergabe</string>
-    <string name="service_call_was_canceled">Dieser Anruf wurde abgebrochen</string>
+    <string name="service_call_was_canceled"><b>Dieser Anruf wurde abgebrochen</b></string>
+    <string name="machine_status">Maschinenstatus</string>
+    <string name="events">Ereignisse</string>
+    <string name="gram">g</string>
+    <string name="service_call_made_new">Der Serviceaufruf wurde vom Bediener %1$s von der Maschine gesendet</string>
+    <string name="default_unanswered_technician_call">Der Bediener %1$s hat einen Serviceanruf geöffnet. Warten auf die Antwort des Technikers</string>
+    <string name="midnight">Mitternacht</string>
+    <string name="split_event_validation_text">Sie sind dabei, ein Ereignis zu teilen. \\nSind Sie sicher, dass sie fortfahren möchten?</string>
+    <string name="version">App-Version</string>
+    <string name="username">Nutzername</string>
+    <string name="incremented_successfully">Erfolgreich erhöht</string>
+    <string name="incremented_failure">Erhöhung fehlgeschlagen</string>
+    <string name="top_five_stop_events">Top 5 der Stoppereignisse</string>
+    <string name="top_five_reject_reasons">Top 5 der Ablehnungsgründe</string>
+    <string name="attention">Achtung!</string>
+    <string name="activate_job">Job aktivieren</string>
+    <string name="total_amount">Gesamtbetrag:</string>
+    <string name="call_canceled">Anruf abgebrochen</string>
+    <string name="service_call_exists">Offene Serviceabrufe</string>
+    <string name="service_call_exists_subtitle">Es wurden offene Serviceanrufe gefunden. \\nSie können die offenen Anrufe entfernen oder einen neuen öffnen.</string>
+    <string name="open_new_call">Neuer Serviceanruf</string>
+    <string name="empty_job_list_msg">Die Liste der ausstehenden Aufträge ist leer</string>
+    <string name="call_approved2">Ein Anruf des Bedieners %1$s wurde genehmigt</string>
+    <string name="call_declined">Anruf wurde abgelehnt</string>
+    <string name="call_declined2">Ein Anruf des Bedieners %1$s wurde abgelehnt</string>
+    <string name="started_service2">Teilnehmender Anruf des Bedieners %1$s getätigt</string>
+    <string name="service_completed2">Der Serviceanruf des Bedieners %1$s wurde abgeschlossen</string>
+    <string name="call_cancelled2">Der Anruf des Bedieners %1$s wurde abgebrochen</string>
+    <string name="more_details">Warten auf weitere Details</string>
+    <string name="technician">Techniker</string>
+    <string name="time_left_to_current_job">Verbleibende Zeit bis zum aktuellen Auftrag</string>
+    <string name="hr">(Std.)</string>
+    <string name="hr2">Std.</string>
+    <string name="see_pending_jobs">Wartende Aufträge ansehen</string>
+    <string name="pending_jobs">Wartende Aufträge</string>
+    <string name="end_setup">Setup beenden</string>
+    <string name="you_are_in_setup_mode">Sie befinden sich im Setup-Modus</string>
+    <string name="get_ready_for_your_next_job">Machen Sie sich für Ihren nächsten Einsatz bereit</string>
+    <string name="see_job">Siehe Auftrag</string>
+    <string name="dont_forget_to_activate_job">Vergessen Sie nicht, den Auftrag zu aktivieren!</string>
+    <string name="change_material">Material ändern</string>
+    <string name="more_info">Mehr Informationen</string>
+    <string name="max_value_is">Maximalwert ist:</string>
+    <string name="change_factory">Werk ändern</string>
+    <string name="NoProgressMinFromStartShift">Die Schicht läuft seit %1$s Minuten und die Produktion hat noch nicht begonnen.</string>
+    <string name="SetupDurationMinActual">Die Einrichtungsdauer beträgt über %1$s Minuten.</string>
+    <string name="SetupInjectionsCount">Mehr als %1$s Zyklen wurden im Setup durchgeführt.</string>
+    <string name="UnReportedStopsPC">Über %1$s % der Stoppzeit sind für diese Schicht nicht kategorisiert.</string>
+    <string name="RejectsPC">Der Ausschuss liegt bei über %1$s %.</string>
+    <string name="OpenEventDuration">Der aktuelle Stopp beträgt über %1$s Minuten.</string>
+    <string name="ProductionModeInjectionsCount">%1$s Zyklen im Nicht-Produktionsstatus erkannt.</string>
+    <string name="CycleTimeDeviation">Eine %1$s %ige Abweichung gegenüber dem Standard in der Zykluszeit beobachtet.</string>
+    <string name="ShortEventsFromProductionPC">Die gesamten Kurzstopps der gesamten Produktionszeit überschreiten %1$s %.</string>
+    <string name="WorkerNotSigned">Keine Bedieneranmeldung an der Maschine %1$s Minuten nach Schichtbeginn.</string>
+    <string name="open_calls">Offene Anrufe</string>
+    <string name="last_24h">Letzte 24 Stunden</string>
+    <string name="you_ve_reached_the_production_target">Sie haben das Produktionsziel erreicht!</string>
+    <string name="reported_stop_event">Berichtetes Stoppereignis</string>
+    <string name="time_min">Zeit (Min.)</string>
+    <string name="report_events_reason">Grund für die Meldung von Ereignissen</string>
+    <string name="keep_reporting_events_reason">Grund für die Meldung von Ereignissen aufbewahren</string>
+    <string name="target_reached">Ziel erreicht!</string>
+    <string name="setup_rejects_dialog_text">Möchten Sie einige von ihnen als Ausschuss melden?</string>
+    <string name="setup_good_units_dialog_text">Möchten Sie einige von ihnen als gute Einheiten melden?</string>
+    <string name="on_the_setup_you_produced">Auf dem Setup, das Sie produziert haben</string>
+    <string name="from_the">von der/dem</string>
+    <string name="activate_last_job">Letzten Auftrag aktivieren</string>
+    <string name="do_you_want_to_activate_the_last_job_you_work_on_job">Möchten Sie den Auftrag, den Sie bearbeitet haben, aktivieren?</string>
+    <string name="no">Nein</string>
+    <string name="yes">Ja</string>
+    <string name="do_you_need_to_end_setup_before">Müssen Sie ein Setup vornehmen, bevor Sie wieder mit der Produktion in diesem Auftrag beginnen?</string>
+    <string name="shiftlog">Schichtprotokoll</string>
+    <string name="working">Funktionierend</string>
+    <string name="erp_job_id">ERP-Job-ID</string>
+    <string name="rejects">Ausschuss</string>
+    <string name="good_units">Gute Einheiten</string>
+    <string name="working_time">Arbeitszeit</string>
+    <string name="event_details">Ereignisdetails</string>
+    <string name="messages">Nachrichten</string>
+    <string name="message">Nachricht</string>
+    <string name="production_report">Produktionsbericht</string>
+    <string name="select_all">Alle auswählen</string>
+    <string name="new_call">Neuer Anruf</string>
+    <string name="working_setup">Arbeitseinrichtung</string>
+    <string name="parameter_deviation">Parameterabweichung</string>
+    <string name="stop">Stopp</string>
+    <string name="stop_setup">Einrichtung stoppen</string>
+    <string name="idle">Inaktiv</string>
+    <string name="working_no_production">Keine Produktion tätigend</string>
+    <string name="no_communication_p">Keine Kommunikation</string>
+    <string name="filter_short">Gefilterte Ereignisse</string>
+    <string name="reported">Gemeldet</string>
+    <string name="unreported">Nicht gemeldet</string>
+    <string name="setup">Einrichten</string>
+    <string name="min">Min</string>
+    <string name="estimated_date">Voraussichtlicher Zeitpunkt</string>
+    <string name="required_setup">Muss der Auftrag vor der Aktivierung eingerichtet werden?</string>
+    <string name="dont_activate">Nicht aktivieren</string>
+    <string name="no_setup">Kein Setup</string>
+    <string name="go_to_setup">Gehen Sie zu Setup</string>
+    <string name="setup_mode">Setup-Modus</string>
+    <string name="rejects_quantity">Ausschussmenge</string>
+    <string name="there_are_no_stop_event">Es gibt keine Stopp-Events, über die berichtet werden kann</string>
+    <string name="theoretical_units">Theoretische Einheiten</string>
+    <string name="average">Durchschn</string>
+    <string name="add_rejects">Ausschuss hinzufügen</string>
+    <string name="minutes_long">Min</string>
 </resources>

@@ -31,7 +31,7 @@ public class ReportCore {
         mReportCallbackListener = null;
     }
 
-    public void sendReportReject(int rejectReasonId, int rejectReasonCause, Double units, Double weight, Integer jobId) {
+    public void sendReportReject(int rejectReasonId, int rejectReasonCause, Double units, Double weight, Integer joshId) {
         if (mReportPersistenceManagerInterface != null) {
             String workerID = mReportPersistenceManagerInterface.getOperatorId();
             if (workerID != null && workerID.equals("0")){
@@ -39,7 +39,7 @@ public class ReportCore {
             }
             mReportRejectNetworkBridgeInterface.sendReportReject(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , workerID, rejectReasonId, rejectReasonCause, units, weight, jobId, new SendReportRejectCallback() {
+                    , workerID, rejectReasonId, rejectReasonCause, units, weight, joshId, new SendReportRejectCallback() {
                         @Override
                         public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
@@ -87,11 +87,11 @@ public class ReportCore {
         }
     }
 
-    public void sendStopReport(int stopReasonId, int stopSubReasonId, long eventId, int jobId) {
+    public void sendStopReport(int stopReasonId, int stopSubReasonId, long eventId, int joshId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
                         @Override
                         public void onSendStopReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
@@ -114,11 +114,11 @@ public class ReportCore {
 
     }
 
-    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int jobId) {
+    public void sendMultipleStopReport(int stopReasonId, int stopSubReasonId, long[] eventId, int joshId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendMultipleReportStop(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, jobId, new SendReportStopCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), stopReasonId, stopSubReasonId, eventId, joshId, new SendReportStopCallback() {
                         @Override
                         public void onSendStopReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {
@@ -167,11 +167,11 @@ public class ReportCore {
         }
     }
 
-    public void sendInventoryReport(int packageTypeId, int units, Integer jobId) {
+    public void sendInventoryReport(int packageTypeId, int units, Integer joshId) {
         if (mReportPersistenceManagerInterface != null) {
             mReportRejectNetworkBridgeInterface.sendReportInventory(mReportPersistenceManagerInterface.getSiteUrl(), mReportPersistenceManagerInterface.getSessionId(),
                     String.valueOf(mReportPersistenceManagerInterface.getMachineId())
-                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, jobId, new SendReportCallback() {
+                    , mReportPersistenceManagerInterface.getOperatorId(), packageTypeId, units, joshId, new SendReportCallback() {
                         @Override
                         public void onSendReportSuccess(Object o) {
                             if (mReportCallbackListener != null) {

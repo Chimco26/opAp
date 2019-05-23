@@ -25,7 +25,7 @@ public class Reject implements Parcelable {
     private String time;
     @SerializedName("Amount")
     @Expose
-    private Integer amount;
+    private Float amount;
 
     public Integer getID() {
         return iD;
@@ -67,11 +67,11 @@ public class Reject implements Parcelable {
         this.time = time;
     }
 
-    public Integer getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -99,7 +99,7 @@ public class Reject implements Parcelable {
         this.eName = in.readString();
         this.lName = in.readString();
         this.time = in.readString();
-        this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.amount = (Float) in.readValue(Float.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Reject> CREATOR = new Parcelable.Creator<Reject>() {

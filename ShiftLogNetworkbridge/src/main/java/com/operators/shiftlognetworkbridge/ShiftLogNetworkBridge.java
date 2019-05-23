@@ -128,10 +128,8 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
             @Override
             public void onResponse(Call<ActualBarExtraResponse> call, Response<ActualBarExtraResponse> response) {
 
-
                 if (response.body() != null && response.body().getFunctionSucceed()) {
                     OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails , onResponse ");
-
                     actualBarExtraResponseActualBarExtraDetailsCallback.onActualBarExtraDetailsSucceeded(response.body());
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "GetActualBarExtraDetails , onResponse - GetActualBarExtraDetails failed Error");

@@ -863,7 +863,7 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (s.length() < 1) {
+                if (s.length() < 1 && mHashMapHeaders != null) {
                     for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
                         mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
                     }
@@ -1039,23 +1039,29 @@ public class JobActionActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.AJA_img1:
 
-                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
-                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
-
+                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
+                        && mCurrentJobDetails.getJobs().size() > 0) {
+                    startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
+                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+                }
                 break;
 
             case R.id.AJA_img2:
 
-                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
-                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
-
+                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
+                        && mCurrentJobDetails.getJobs().size() > 0) {
+                    startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getProductFiles(),
+                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
+                }
                 break;
 
             case R.id.IJAM_img:
 
-                startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getMold().getFiles(),
-                        String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getName()));
-
+                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
+                        && mCurrentJobDetails.getJobs().size() > 0) {
+                    startGalleryActivity(mCurrentJobDetails.getJobs().get(0).getMold().getFiles(),
+                            String.valueOf(mCurrentJobDetails.getJobs().get(0).getMold().getName()));
+                }
                 break;
 
             case R.id.AJA_open_edit_text_btn:

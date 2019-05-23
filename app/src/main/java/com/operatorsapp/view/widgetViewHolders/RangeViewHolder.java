@@ -24,9 +24,9 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
     private static final String CYCLE_TIME = "CycleTime";
 
-
     private TextView mStandardTv;
     private TextView mAverageTv;
+    private final ImageView mAverageImg;
     private LinearLayout mCycleTimeLy;
     private RangeView2 mCycleRange;
     private RelativeLayout mParentLayout;
@@ -75,6 +75,7 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
         mStandardTv = itemView.findViewById(R.id.RWC_standard_tv);
         mAverageTv = itemView.findViewById(R.id.RWC_average_tv);
+        mAverageImg = itemView.findViewById(R.id.RWC_average_img);
         mCycleTimeLy = itemView.findViewById(R.id.RWC_cycleTime_ly);
 
 
@@ -178,20 +179,38 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
 
     private void setCycleTime(final Widget widget) {
 
-        ViewTreeObserver vto = mParentLayout.getViewTreeObserver();
 
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mParentLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+
+                mParentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                if (!widget.getCurrentValue().equals("--")) {
+                    mCycleRange.setCurrentValue(Float.valueOf(widget.getCurrentValue()));
+                }else {
+                    mCycleRange.setCurrentValue(0);
+                }
                 mCycleRange.setHighLimit(widget.getHighLimit());
                 mCycleRange.setLowLimit(widget.getLowLimit());
                 mCycleRange.setmStandardValue(widget.getStandardValue());
                 mCycleRange.setWidth((int) (mParentLayout.getWidth()));
 
                 mCycleTimeLy.setVisibility(View.VISIBLE);
-                mCycleRange.setAvgValue((float) widget.getCycleTimeAvg());
+                mCycleRange.setAvgValue(Float.parseFloat(widget.getCycleTimeAvg()));
                 mStandardTv.setText(String.format("%s%s", mContext.getString(R.string.standard), widget.getStandardValue()));
+                mAverageTv.setVisibility(View.GONE);
+                mAverageImg.setVisibility(View.GONE);
+                if (widget.getCycleTimeAvg() != null){
+                    try {
+                        if (Float.parseFloat(widget.getCycleTimeAvg()) > 0){
+                            mAverageTv.setVisibility(View.VISIBLE);
+                            mAverageImg.setVisibility(View.VISIBLE);
+                        }
+                    }catch (Exception ignored){
+
+                    }
+                }
                 mAverageTv.setText(String.format("%s%s", mContext.getString(R.string.average), widget.getCycleTimeAvg()));
                 mCycleRange.postInvalidate();
             }

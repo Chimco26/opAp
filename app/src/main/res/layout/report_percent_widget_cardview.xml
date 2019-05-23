@@ -14,7 +14,7 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/RPWC_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -24,7 +24,7 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/RPWC_subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/RPWC_title"
             android:layout_marginTop="4dp"
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="@string/filter_short"
-                android:textColor="@color/red_line"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <View
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="@string/reported"
-                android:textColor="@color/red_dark"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <View

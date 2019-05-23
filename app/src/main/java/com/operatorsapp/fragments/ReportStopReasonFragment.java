@@ -62,7 +62,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
     private static final String CURRENT_SELECTED_POSITION = "CURRENT_SELECTED_POSITION";
     private static final float MINIMUM_VERSION_TO_NEW_API = 1.7f;
 
-    private Integer mJobId = 0;
+    private Integer mJoshId = 0;
 
     private RecyclerView mRecyclerView;
 
@@ -119,13 +119,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             mIsOpen = getArguments().getBoolean(IS_OPEN, false);
             ActiveJobsListForMachine mActiveJobsListForMachine = getArguments().getParcelable(CURRENT_JOB_LIST_FOR_MACHINE);
             int mSelectedPosition = getArguments().getInt(CURRENT_SELECTED_POSITION);
-            if (mActiveJobsListForMachine != null) {
-                mJobId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
+            if (mActiveJobsListForMachine != null && mActiveJobsListForMachine.getActiveJobs() != null
+                    && mActiveJobsListForMachine.getActiveJobs().size() > mSelectedPosition) {
+                mJoshId = mActiveJobsListForMachine.getActiveJobs().get(mSelectedPosition).getJoshID();
             }
         }
 
         // Analytics
-        if( getActivity() != null && getActivity().getApplication() != null) {
+        if (getActivity() != null && getActivity().getApplication() != null) {
             OperatorApplication application = (OperatorApplication) getActivity().getApplication();
             Tracker mTracker = application.getDefaultTracker();
             PersistenceManager pm = PersistenceManager.getInstance();
@@ -155,10 +156,10 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mRecyclerView = view.findViewById(R.id.stop_recycler_view);
         mSwitch = view.findViewById(R.id.stop_switch);
 
-        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))){
+        if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
             view.findViewById(R.id.powered_by_leadermess_txt).setVisibility(View.VISIBLE);
             mFlavorSpanDif = -2;
-            mRecyclerView.setPadding(200,0,0,0);
+            mRecyclerView.setPadding(200, 0, 0, 0);
         }
 
         if (mReportFieldsForMachine == null || mReportFieldsForMachine.getStopReasons() == null || mReportFieldsForMachine.getStopReasons().size() == 0) {
@@ -183,9 +184,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     PersistenceManager.getInstance().setisNewStopReasonDesign(isChecked);
-                    if (isChecked){
+                    if (isChecked) {
                         initNewStopReasons();
-                    }else {
+                    } else {
                         initStopReasons();
                     }
                 }
@@ -224,9 +225,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
         mRecyclerView.setAdapter(mStopReasonsAdapter);
     }
 
-    private void initNewStopReasons(){
+    private void initNewStopReasons() {
 
-        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(),this );
+        NewStopReasonsAdapter newStopReasonsAdapter = new NewStopReasonsAdapter(getActivity(), mReportFieldsForMachine.getStopReasons(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(newStopReasonsAdapter);
     }
@@ -260,9 +261,9 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 mSelectedSubreason = mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().get(0);
                 sendReport();
 
-            }else {
+            } else {
 
-                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJobId,
+                mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJoshId,
                         mReportFieldsForMachine.getStopReasons().get(position).getId(),
                         mReportFieldsForMachine.getStopReasons().get(position).getEName(),
                         mReportFieldsForMachine.getStopReasons().get(position).getLName(), mIsOpen));
@@ -342,14 +343,14 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
             for (int i = 0; i < mSelectedEvents.size(); i++) {
 
                 mReportCore.sendStopReport(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId()
-                        , mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJobId);
+                        , mSelectedSubreason.getId(), mSelectedEvents.get(i).intValue(), mJoshId);
 
             }
 
         } else {
 
             mReportCore.sendMultipleStopReport(mReportFieldsForMachine.getStopReasons().get(mSelectedPosition).getId(),
-                    mSelectedSubreason.getId(), eventsId, mJobId);
+                    mSelectedSubreason.getId(), eventsId, mJoshId);
 
         }
 
@@ -421,7 +422,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 });
             } else {
                 String msg = "missing reports";
-                if (reason != null && reason.getDetailedDescription() != null){
+                if (reason != null && reason.getDetailedDescription() != null) {
                     msg = reason.getDetailedDescription();
                 }
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Missing_reports, msg);

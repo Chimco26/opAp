@@ -88,7 +88,7 @@
         <attr name="textSize" format="integer"/>
         <attr name="text" format="string"/>
         <attr name="totalTimeInMinute" format="integer"/>
-        <attr name="strokeWidth" format="integer"/>
+        <attr name="strokeWidth_2" format="integer"/>
         <attr name="backgroundColor" format="color"/>
         <attr name="centerColor" format="color"/>
         <attr name="percentBackgroundColor" format="color"/>
@@ -126,7 +126,7 @@
         <attr name="cv_indicatorRadius" format="integer"/>
         <attr name="cv_textSize" format="integer"/>
         <attr name="cv_text" format="string"/>
-        <attr name="cv_strokeWidth" format="integer"/>
+        <attr name="cv_strokeWidth_2" format="integer"/>
         <attr name="cv_backgroundColor" format="color"/>
         <attr name="cv_centerColor" format="color"/>
         <attr name="cv_percentBackgroundColor" format="color"/>

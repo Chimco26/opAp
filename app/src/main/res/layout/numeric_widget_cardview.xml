@@ -14,7 +14,7 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/numeric_widget_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -24,7 +24,7 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/numeric_widget_subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/numeric_widget_title"
             android:layout_marginTop="4dp"
@@ -301,7 +301,7 @@
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:textColor="@color/blue1"
-            android:textSize="35sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <RelativeLayout

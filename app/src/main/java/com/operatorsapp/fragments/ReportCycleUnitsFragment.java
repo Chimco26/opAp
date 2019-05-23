@@ -72,7 +72,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     private double mUnitsCounter = 1;
     private ReportCore mReportCore;
     private Integer mJobId = null;
-    private int mMaxUnits = 0;
+    private float mMaxUnits = 0f;
 
     private ActiveJobsListForMachine mActiveJobsListForMachine;
     private Spinner mJobsSpinner;

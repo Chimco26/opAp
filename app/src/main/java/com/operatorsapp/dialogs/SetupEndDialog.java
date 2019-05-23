@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -87,7 +88,6 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     }
 
     private void initRv(View view) {
-
         if (mActiveJobs != null &&
                 mActiveJobs.size() > 0) {
             view.findViewById(R.id.FAFI_back_btn).setVisibility(View.VISIBLE);
