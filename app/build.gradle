@@ -136,6 +136,8 @@ dependencies {
     }
     implementation 'com.github.halilozercan:BetterVideoPlayer:1.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

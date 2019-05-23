@@ -395,6 +395,8 @@
     <string name="theoretical_units">Theoretical units</string>
     <string name="average">Average:</string>
     <string name="add_rejects">Add Rejects</string>
+    <string name="select_your_machine">Select your Machine</string>
+    <string name="search_department_or_machine_name">Search Department or Machine name</string>
     <string name="storage_permission">Please allow storage access for application updates</string>
     <string name="update_version_messege">Newer version is available, please allow installation when finish downloading file.</string>
     <string name="update_version_title">Update In Progress</string>

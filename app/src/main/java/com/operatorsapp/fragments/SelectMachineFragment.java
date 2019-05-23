@@ -9,51 +9,50 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.common.department.DepartmentMachineValue;
+import com.example.common.department.DepartmentsMachinesResponse;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.operators.infra.Machine;
 import com.operatorsapp.R;
-import com.operatorsapp.activities.MainActivity;
 import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.adapters.AutoCompleteAdapter;
+import com.operatorsapp.adapters.DepartmentAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ClearData;
+import com.operatorsapp.utils.KeyboardUtils;
 import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class SelectMachineFragment extends BackStackAwareFragment implements AdapterView.OnItemClickListener, View.OnClickListener, DepartmentAdapter.DepartmentAdapterListener {
     public static final String LOG_TAG = SelectMachineFragment.class.getSimpleName();
     private static final String MACHINES_LIST = "machines_list";
     private GoToScreenListener mNavigationCallback;
     private AppCompatAutoCompleteTextView mSearchField;
-    private RelativeLayout mGoButton;
-    private ImageView mGoButtonBackground;
-    private ArrayList<Machine> mMachinesList = new ArrayList<>();
+    private ImageView mGoButton;
+    private DepartmentsMachinesResponse mDepartmentMachine;
     private int mMachineId;
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private boolean canGoNext = false;
     private String mMachineName;
+    private DepartmentAdapter mDepartmentAdapter;
 
 
-    public static SelectMachineFragment newInstance(ArrayList machinesList)
+    public static SelectMachineFragment newInstance(DepartmentsMachinesResponse machinesList)
     {
         Gson gson = new Gson();
         String machinesListString = gson.toJson(machinesList);
@@ -93,9 +92,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         if(getArguments() != null)
         {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Machine>>()
+            Type listType = new TypeToken<DepartmentsMachinesResponse>()
             {}.getType();
-            mMachinesList = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
+            mDepartmentMachine = gson.fromJson(getArguments().getString(MACHINES_LIST), listType);
         }
 
         // Analytics
@@ -117,69 +116,65 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
     {
         final View rootView = inflater.inflate(R.layout.fragment_select_machine, container, false);
 
-        Collections.sort(mMachinesList, new Comparator<Machine>() {
-            @Override
-            public int compare(Machine o1, Machine o2) {
-                if (OperatorApplication.isEnglishLang()){
-                    return o1.getMachineEName().compareTo(o2.getMachineEName());
-                }else {
-                    return o1.getMachineLName().compareTo(o2.getMachineLName());
-                }
-            }
-        });
+//        Collections.sort(mDepartmentMachine, new Comparator<Machine>() {
+//            @Override
+//            public int compare(Machine o1, Machine o2) {
+//                if (OperatorApplication.isEnglishLang()){
+//                    return o1.getMachineEName().compareTo(o2.getMachineEName());
+//                }else {
+//                    return o1.getMachineLName().compareTo(o2.getMachineLName());
+//                }
+//            }
+//        });
 
         rootView.findViewById(R.id.FSM_change_factory_btn).setOnClickListener(this);
-
-
+        initDepartmentRv(rootView);
 
         mSearchField = rootView.findViewById(R.id.machine_id_name);
-        mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mMachinesList);
-        mSearchField.setAdapter(mAutoCompleteAdapter);
-        mSearchField.setOnItemClickListener(this);
         mSearchField.addTextChangedListener(mTextWatcher);
-        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-            {
-                if(canGoNext)
-                {
-
-                    PersistenceManager.getInstance().setMachineId(mMachineId);
-                    PersistenceManager.getInstance().setMachineName(mMachineName);
-                    PersistenceManager.getInstance().setSelectedMachine(true);
-                    PersistenceManager.getInstance().setNeedUpdateToken(true);
-                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
-                }
-                return true;
-            }
-
-        });
-        mSearchField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSearchField.showDropDown();
-            }
-        });
+//        mAutoCompleteAdapter = new AutoCompleteAdapter(getActivity(), mDepartmentMachine);
+//        mSearchField.setAdapter(mAutoCompleteAdapter);
+//        mSearchField.setOnItemClickListener(this);
+//        mSearchField.addTextChangedListener(mTextWatcher);
+//        mSearchField.setOnEditorActionListener(new TextView.OnEditorActionListener()
+//        {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+//            {
+//                if(canGoNext)
+//                {
+//
+//                    PersistenceManager.getInstance().setMachineId(mMachineId);
+//                    PersistenceManager.getInstance().setMachineName(mMachineName);
+//                    PersistenceManager.getInstance().setSelectedMachine(true);
+//                    PersistenceManager.getInstance().setNeedUpdateToken(true);
+//                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
+//                }
+//                return true;
+//            }
+//
+//        });
+//        mSearchField.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mSearchField.showDropDown();
+//            }
+//        });
 
         mGoButton = rootView.findViewById(R.id.goBtn);
-        mGoButton.setEnabled(false);
+//        mGoButton.setEnabled(false);
         mGoButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(mGoButton.isEnabled())
-                {
-                    PersistenceManager.getInstance().setMachineId(mMachineId);
-                    PersistenceManager.getInstance().setMachineName(mMachineName);
-                    PersistenceManager.getInstance().setSelectedMachine(true);
-                    PersistenceManager.getInstance().setNeedUpdateToken(true);
-                    mNavigationCallback.goToDashboardActivity(mMachineId, null);
-                }
+//                if(mGoButton.isEnabled())
+//                {
+//                    setMachineData();
+//                }
+                KeyboardUtils.closeKeyboard(getActivity());
             }
         });
-        mGoButtonBackground = rootView.findViewById(R.id.goBtn_background);
 
         setActionBar();
         if (getActivity() != null) {
@@ -187,6 +182,28 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         }
 
         return rootView;
+    }
+
+    public void setMachineData() {
+        PersistenceManager.getInstance().setMachineId(mMachineId);
+        PersistenceManager.getInstance().setMachineName(mMachineName);
+        PersistenceManager.getInstance().setSelectedMachine(true);
+        PersistenceManager.getInstance().setNeedUpdateToken(true);
+        mNavigationCallback.goToDashboardActivity(mMachineId, null);
+    }
+
+    private void initDepartmentRv(View rootView) {
+
+        mDepartmentAdapter = new DepartmentAdapter(mDepartmentMachine.getDepartmentMachine(), this);
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.FSM_department_rv);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setAdapter(mDepartmentAdapter);
+
     }
 
     protected void setActionBar()
@@ -231,7 +248,7 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
             canGoNext = true;
             mGoButton.setEnabled(true);
-            mGoButtonBackground.setBackground(getResources().getDrawable(R.drawable.login_button_selector));
+
 //            mGoButtonBackground.setImageResource(R.drawable.login_button_selector);
             mSearchField.dismissDropDown();
         }
@@ -249,8 +266,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         public void onTextChanged(CharSequence s, int start, int before, int count)
         {
             canGoNext = false;
-            mGoButton.setEnabled(false);
-            mGoButtonBackground.setBackground(getResources().getDrawable(R.drawable.button_bg_disabled));
+//            mGoButton.setEnabled(false);
+            mDepartmentAdapter.setSearchFilter(s.toString());
+            mDepartmentAdapter.getFilter().filter(s);
             //mGoButtonBackground.setImageResource(R.drawable.button_bg_disabled);
 
         }
@@ -278,4 +296,10 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
 
     }
 
+    @Override
+    public void onMachineSelected(DepartmentMachineValue departmentMachineValue) {
+        mMachineId = departmentMachineValue.getId();
+        mMachineName = departmentMachineValue.getMachineName();
+        setMachineData();
+    }
 }

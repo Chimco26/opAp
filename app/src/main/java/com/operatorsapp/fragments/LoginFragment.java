@@ -21,10 +21,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.common.callback.ErrorObjectInterface;
+import com.example.common.callback.GetDepartmentCallback;
+import com.example.common.department.DepartmentsMachinesResponse;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.infra.Machine;
 import com.operators.logincore.LoginCore;
 import com.operators.logincore.interfaces.LoginUICallback;
@@ -281,14 +283,16 @@ public class LoginFragment extends Fragment {
             siteUrl = String.format("https://api%1$s.my.leadermes.com", siteUrl);
         }
 
+        final String finalSiteUrl = siteUrl;
         LoginCore.getInstance().login(siteUrl, userName, password, new LoginUICallback<Machine>() {
             @Override
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
-                getVersion(machines, true);
                 //getNotifications();
                 PersistenceManager.getInstance().setSiteName(siteName);
+
+                getDepartmentsMachines(machines, finalSiteUrl, true);
 
             }
 
@@ -302,7 +306,23 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void tryToLoginSuccess(ArrayList<Machine> machines) {
+    private void getDepartmentsMachines(final ArrayList<Machine> machines, String finalSiteUrl, final boolean isTryToLogin) {
+
+        SimpleRequests.getDepartmentsMachines(finalSiteUrl, new GetDepartmentCallback() {
+            @Override
+            public void onGetDepartmentSuccess(DepartmentsMachinesResponse response) {
+                getVersion(machines, isTryToLogin, response);
+            }
+
+            @Override
+            public void onGetDepartmentFailed(ErrorObjectInterface reason) {
+
+            }
+        }, NetworkManager.getInstance(), PersistenceManager.getInstance().getTotalRetries(), PersistenceManager.getInstance().getRequestTimeout());
+
+    }
+
+    private void tryToLoginSuccess(DepartmentsMachinesResponse machines) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
 
@@ -338,7 +358,7 @@ public class LoginFragment extends Fragment {
 //                } else {
 //
 //                }
-                    getVersion(machines, false);
+                getDepartmentsMachines(machines, PersistenceManager.getInstance().getSiteUrl(), false);
                 PersistenceManager.getInstance().setSiteName(siteName);
             }
 
@@ -356,11 +376,11 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void loginSuccess(ArrayList<Machine> machines) {
+    private void loginSuccess(ArrayList<Machine> machines, DepartmentsMachinesResponse departmentsMachinesResponse) {
         dismissProgressDialog();
         if (mNavigationCallback != null) {
             if (mGoToSelectMachine) {
-                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(machines), false, false);
+                mNavigationCallback.goToFragment(SelectMachineFragment.newInstance(departmentsMachinesResponse), false, false);
             } else {
 
                 mNavigationCallback.goToDashboardActivity(PersistenceManager.getInstance().getMachineId(), machines);
@@ -399,7 +419,7 @@ public class LoginFragment extends Fragment {
 //
 //    }
 
-    private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin) {
+    private void getVersion(final ArrayList<Machine> machines, final boolean isTryTologin, final DepartmentsMachinesResponse departmentsMachinesResponse) {
 
         SimpleRequests simpleRequests = new SimpleRequests();
 
@@ -418,11 +438,11 @@ public class LoginFragment extends Fragment {
 
                 if (isTryTologin) {
 
-                    tryToLoginSuccess(machines);
+                    tryToLoginSuccess(departmentsMachinesResponse);
 
                 } else {
 
-                    loginSuccess(machines);
+                    loginSuccess(machines, departmentsMachinesResponse);
 
                 }
 
@@ -433,11 +453,11 @@ public class LoginFragment extends Fragment {
 
                 if (isTryTologin) {
 
-                    tryToLoginSuccess(machines);
+                    tryToLoginSuccess(departmentsMachinesResponse);
 
                 } else {
 
-                    loginSuccess(machines);
+                    loginSuccess(machines, departmentsMachinesResponse);
 
                 }
 

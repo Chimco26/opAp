@@ -190,7 +190,7 @@ public class Widget {
     }
 
     public String getCurrentValue() {
-        if(mCurrentValue == null){
+        if(mCurrentValue == null || mCurrentValue.isEmpty()){
             mCurrentValue = "--";
         }
         return mCurrentValue;

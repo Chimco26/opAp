@@ -3,8 +3,9 @@ package com.operatorsapp.utils;
 import android.support.annotation.NonNull;
 
 import com.example.common.MultipleRejectRequestModel;
-import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
-import com.example.common.request.MachineJoshDataRequest;
+import com.example.common.callback.GetDepartmentCallback;
+import com.example.common.department.DepartmentsMachinesResponse;
+import com.example.common.request.BaseRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.getmachinesstatusnetworkbridge.interfaces.GetMachineStatusNetworkManagerInterface;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
@@ -17,6 +18,7 @@ import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectinfra.PostUpdtaeActionsCallback;
 import com.operators.reportrejectinfra.SimpleCallback;
 import com.operators.reportrejectnetworkbridge.interfaces.GetAllRecipeNetworkManagerInterface;
+import com.operators.reportrejectnetworkbridge.interfaces.GetDepartmentNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetIntervalAndTimeOutNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetJobDetailsNetworkManager;
 import com.operators.reportrejectnetworkbridge.interfaces.GetPendingJobListNetworkManager;
@@ -31,17 +33,17 @@ import com.operators.reportrejectnetworkbridge.server.request.GetAllRecipesReque
 import com.operators.reportrejectnetworkbridge.server.request.PostUpdateNotesForJobRequest;
 import com.operators.reportrejectnetworkbridge.server.request.SessionIdModel;
 import com.operators.reportrejectnetworkbridge.server.request.SplitEventRequest;
-import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.VersionResponse;
+import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActionsUpdateRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPendingJobListRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
-import com.example.common.callback.GetMachineJoshDataCallback;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
 import com.operatorsapp.server.callback.PostUpdateNotesForJobCallback;
 
@@ -146,6 +148,51 @@ public class SimpleRequests {
                     }
                 } else {
                     OppAppLogger.getInstance().w(LOG_TAG, "getAllRecipesRequest(), onFailure() callback is null");
+
+                }
+            }
+        });
+    }
+
+    public static void getDepartmentsMachines(String siteUrl, final GetDepartmentCallback callback, GetDepartmentNetworkManager getDepartmentNetworkManager, final int totalRetries, int requestTimeout) {
+
+        final int[] retryCount = {0};
+
+        Call<DepartmentsMachinesResponse> call = getDepartmentNetworkManager.emeraldGetDepartment(siteUrl, requestTimeout, TimeUnit.SECONDS).getAllDepartmentsRequest(new BaseRequest(PersistenceManager.getInstance().getSessionId()));
+
+        call.enqueue(new Callback<DepartmentsMachinesResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DepartmentsMachinesResponse> call, @NonNull Response<DepartmentsMachinesResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (callback != null) {
+
+                        callback.onGetDepartmentSuccess((DepartmentsMachinesResponse)response.body());
+                    } else {
+
+                        OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onResponse() callback is null");
+                    }
+                } else {
+
+                    onFailure(call, new Exception("response not successful"));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DepartmentsMachinesResponse> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    if (retryCount[0]++ < totalRetries) {
+                        OppAppLogger.getInstance().d(LOG_TAG, "Retrying... (" + retryCount[0] + " out of " + totalRetries + ")");
+                        call.clone().enqueue(this);
+                    } else {
+                        retryCount[0] = 0;
+                        OppAppLogger.getInstance().d(LOG_TAG, "onRequestFailed(), " + t.getMessage());
+                        ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "getDepartmentsMachines_Failed Error");
+                        callback.onGetDepartmentFailed(errorObject);
+                    }
+                } else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getDepartmentsMachines(), onFailure() callback is null");
 
                 }
             }

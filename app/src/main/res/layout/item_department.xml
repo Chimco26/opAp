@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="236dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:orientation="vertical">
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:corner_radius="5dp">
+
+        <TextView
+            android:id="@+id/ID_title"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@color/blue1"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ID_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/reports_background" />
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+</LinearLayout>
