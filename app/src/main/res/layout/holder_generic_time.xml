@@ -62,6 +62,16 @@
                 android:textColor="@color/blue1"
                 android:textSize="45sp" />
 
+            <TextView
+                android:id="@+id/HGT_estimated_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/blue1"
+                android:gravity="center"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <LinearLayout

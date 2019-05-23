@@ -2,14 +2,10 @@ package com.operatorsapp.view.widgetViewHolders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
-import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
-import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -18,6 +14,7 @@ import java.util.Locale;
 
 public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
     private static final int END_LIMIT = 10;//in minute
+    private final TextView m1EstimatedDate;
     private TextView mTitle;
     private TextView mSubTitle;
     private View m1Ly;
@@ -32,6 +29,7 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
         mSubTitle = itemView.findViewById(R.id.HGT_subtitle);
         m1Ly = itemView.findViewById(R.id.HGT_time_ly);
         m1TimeTv = itemView.findViewById(R.id.HGT_time_tv);
+        m1EstimatedDate = itemView.findViewById(R.id.HGT_estimated_tv);
         m2CountDownLy = itemView.findViewById(R.id.HGT_countdown_ly);
         m3CountDownView = itemView.findViewById(R.id.HGT_countdown);
     }
@@ -49,17 +47,21 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
             m1Ly.setVisibility(View.VISIBLE);
             m2CountDownLy.setVisibility(View.GONE);
             if (time > 24 * 60) {
-                m1TimeTv.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
+                m1EstimatedDate.setVisibility(View.VISIBLE);
+                m1EstimatedDate.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
                         TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
-                m1TimeTv.setTextSize(2, 18);
+                m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s", ((int) (time / 60)),
+                        m1TimeTv.getContext().getString(R.string.hr2)));
+//                m1TimeTv.setTextSize(2, 18);
             } else {
+                m1EstimatedDate.setVisibility(View.GONE);
                 m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
                         m1TimeTv.getContext().getString(R.string.hr2),
                         StringUtil.add0ToNumber((int) (time % 60)),
                         m1TimeTv.getContext().getString(R.string.min)));
-                m1TimeTv.setTextSize(2, 45);
+//                m1TimeTv.setTextSize(2, 45);
             }
-            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
         } else {
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.VISIBLE);

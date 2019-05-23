@@ -63,6 +63,15 @@
                 android:textSize="45sp" />
 
             <TextView
+                android:id="@+id/TLWC_estimated_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/blue1"
+                android:gravity="center"
+                android:visibility="gone"/>
+
+            <TextView
                 android:id="@+id/TLWC_see_jobs_btn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
