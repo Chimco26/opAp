@@ -34,7 +34,6 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.utils.ClearData;
 import com.operatorsapp.utils.KeyboardUtils;
-import com.operatorsapp.utils.SoftKeyboardUtil;
 
 import java.lang.reflect.Type;
 
@@ -177,9 +176,9 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         });
 
         setActionBar();
-        if (getActivity() != null) {
-            SoftKeyboardUtil.showKeyboard(getActivity());
-        }
+//        if (getActivity() != null) {
+//            SoftKeyboardUtil.showKeyboard(getActivity());
+//        }
 
         return rootView;
     }
