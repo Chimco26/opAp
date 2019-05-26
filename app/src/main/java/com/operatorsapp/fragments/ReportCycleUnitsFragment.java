@@ -327,7 +327,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     }
 
     private void increase() {
-        if (mUnitsCounter <= mMaxUnits) {
+        if (mUnitsCounter < mMaxUnits) {
 //            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
 //            value = value + 1;
 //            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
