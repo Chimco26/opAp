@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.operators.machinedatainfra.models.Widget;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -39,7 +40,8 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setView(Widget widget) {
-        mTitle.setText(R.string.time_left_to_current_job);
+        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        mTitle.setText(nameByLang2);
         long time = Long.parseLong(widget.getCurrentValue());
         int endLimit = END_LIMIT;
 //        time = 250;// test states
@@ -50,12 +52,12 @@ public class GenericTimeViewHolder extends RecyclerView.ViewHolder {
                 m1EstimatedDate.setVisibility(View.VISIBLE);
                 m1EstimatedDate.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
                         TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
-                m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s", ((int) (time / 60)),
+                m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s", ((int) (time / 60)),
                         m1TimeTv.getContext().getString(R.string.hr2)));
 //                m1TimeTv.setTextSize(2, 18);
             } else {
                 m1EstimatedDate.setVisibility(View.GONE);
-                m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
+                m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s %s %s", ((int) (time / 60)),
                         m1TimeTv.getContext().getString(R.string.hr2),
                         StringUtil.add0ToNumber((int) (time % 60)),
                         m1TimeTv.getContext().getString(R.string.min)));
