@@ -327,7 +327,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
     }
 
     private void increase() {
-        if (mUnitsCounter < mMaxUnits) {
+        if (mUnitsCounter <= mMaxUnits) {
 //            double value = Double.valueOf(mUnitsCounterTextView.getText().toString());
 //            value = value + 1;
 //            value = Double.valueOf(String.format(Locale.getDefault(), "%.3f", value));
@@ -337,7 +337,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
             mPlusButton.setEnabled(true);
         } else {
-            mUnitsCounterTextView.setText(new StringBuilder(String.valueOf(mMaxUnits)).append(".0"));
+            mUnitsCounterTextView.setText(new StringBuilder(String.valueOf(mMaxUnits)));
             mPlusButton.setEnabled(false);
         }
         mMinusButton.setEnabled(true);

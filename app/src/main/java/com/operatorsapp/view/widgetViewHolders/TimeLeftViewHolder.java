@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -81,7 +82,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 //        });
 //
 //        setSizes(mParentLayout);
-        mTitle.setText(R.string.time_left_to_current_job);
+        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        mTitle.setText(nameByLang2);
         long time = Long.parseLong(widget.getCurrentValue());
         int endLimit = END_LIMIT;
 //        time = 45;// test states
@@ -106,12 +108,12 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                     m1EstimatedTv.setVisibility(View.VISIBLE);
                     m1EstimatedTv.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
                             TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
-                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s", ((int) (time / 60)),
+                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s", ((int) (time / 60)),
                             m1TimeTv.getContext().getString(R.string.hr2)));
 //                    m1TimeTv.setTextSize(2, 18);
                 } else {
                     m1EstimatedTv.setVisibility(View.GONE);
-                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
+                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s %s %s", ((int) (time / 60)),
                             m1TimeTv.getContext().getString(R.string.hr2),
                             StringUtil.add0ToNumber((int) (time % 60)),
                             m1TimeTv.getContext().getString(R.string.min)));
