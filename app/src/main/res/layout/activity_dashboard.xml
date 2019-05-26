@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:keepScreenOn="true"
     tools:context=".activities.DashboardActivity">
@@ -39,17 +40,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <Button
+            <ImageView
                 android:id="@+id/AD_report_btn"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:background="@color/blue1"
-                android:text="@string/report"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:layout_alignParentBottom="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="20dp"/>
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:background="@drawable/blue_circle"
+                android:src="@drawable/ic_trending_up_white_24dp" />
 
         </RelativeLayout>
     </LinearLayout>
