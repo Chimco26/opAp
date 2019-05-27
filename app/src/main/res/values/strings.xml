@@ -400,6 +400,14 @@
     <string name="storage_permission">Please allow storage access for application updates</string>
     <string name="update_version_messege">Newer version is available, please allow installation when finish downloading file.</string>
     <string name="update_version_title">Update In Progress</string>
+    <string name="filter_by">Filter By</string>
+    <string name="active_jobs">Active Jobs</string>
+    <string name="index">INDEX</string>
+    <string name="catalog_maj">CATALOG</string>
+    <string name="units_target">UNITS TARGET</string>
+    <string name="units_produced">UNITS PRODUCED</string>
+    <string name="end_time_actual">END TIME (ACTUAL)</string>
+    <string name="job_left_time">JOB LEFT TIME</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>
