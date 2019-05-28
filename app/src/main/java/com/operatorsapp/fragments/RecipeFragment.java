@@ -44,6 +44,7 @@ import java.util.List;
 
 public class RecipeFragment extends Fragment implements View.OnClickListener, No0ChanneAdapter.Channel100AdapterListener {
 
+    public static final String TAG = RecipeFragment.class.getSimpleName();
     private static final String RECIPE_RESPONS_KEY = "RECIPE_RESPONS_KEY";
     private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 

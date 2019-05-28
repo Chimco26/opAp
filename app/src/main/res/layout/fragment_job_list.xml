@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/AJA_left_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,53 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="72dp"
+        android:background="@drawable/rectangle_11_copy_2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:background="@color/dark_blue_two"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/AJA_back_btn"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:paddingBottom="15dp"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:src="@drawable/arrow_back" />
+
+            <!--<ImageView-->
+            <!--android:id="@+id/AJA_back_btn"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_marginStart="25dp"-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/arrow_back" />-->
+
+            <TextView
+                android:id="@+id/AJA_title"
+                style="@style/Roboto_Action_Bar_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:gravity="center"
+                android:text="@string/actionnable_jobs"
+                android:textColor="@color/white"
+                android:textSize="35sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -172,6 +219,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="13dp"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_job_details"/>
 
 </LinearLayout>

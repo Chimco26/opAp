@@ -1,16 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="112dp"
-    android:background="@color/grey_transparent"
-    android:paddingStart="22dp"
-    android:paddingEnd="22dp">
+    android:layout_width="wrap_content"
+    android:layout_height="132dp"
+    android:orientation="vertical">
 
-    <include
-        android:id="@+id/include"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/active_job_texts"
-        android:layout_gravity="center_vertical"/>
+        android:layout_height="112dp"
+        android:background="@color/grey_transparent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="22dp"
+        android:paddingEnd="22dp"
+        android:weightSum="100">
 
+        <TextView
+            android:id="@+id/FJL_index"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/index"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/FJL_catalog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/catalog_maj"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/FJL_target"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/units_target"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/FJL_produced"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/units_produced"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/FJL_end_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/end_time_actual"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/FJL_job_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/job_left_time"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <ImageView
+            android:id="@+id/FJL_image"
+            android:layout_width="68dp"
+            android:layout_height="68dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5" />
+
+        <ImageView
+            android:id="@+id/FJL_arrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:rotation="180"
+            android:src="@drawable/ic_arrow" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
 </LinearLayout>
