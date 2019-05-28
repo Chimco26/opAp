@@ -108,9 +108,12 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     private JobDetailsFragmentListener mListener;
     private ArrayList<Action> mUpdatedActions;
 
-    public static JobDetailsFragment newInstance() {
+    public static JobDetailsFragment newInstance(JobDetailsResponse jobDetailsResponse, HashMap<String, Header> hashMapHeaders) {
 
         JobDetailsFragment jobListFragment = new JobDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(JobDetailsResponse.TAG, jobDetailsResponse);
+        bundle.putSerializable(Header.TAG, hashMapHeaders);
         return jobListFragment;
     }
 
@@ -141,7 +144,10 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         super.onViewCreated(view, savedInstanceState);
 
         initVars(view);
+
         initListener(view);
+
+        initRightView();
     }
 
     private void initListener(View view) {
@@ -161,6 +167,8 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     }
 
     private void initVars(View view) {
+
+        mDownloadHelper = new DownloadHelper(getActivity(), this);
 
         mTitleTv = view.findViewById(R.id.AJA_job_id_tv);
 

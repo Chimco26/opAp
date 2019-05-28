@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Header implements Parcelable {
 
+    public static String TAG = Header.class.getSimpleName();
 
     @SerializedName("DisplayName")
     @Expose
