@@ -247,6 +247,9 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     private void getShiftLogs(final JobBase.OnJobFinishedListener onJobFinishedListener) {
         // remove seconds and milliseconds from shift log starting from.
         String startingFrom = mShiftLogPersistenceManagerInterface.getShiftLogStartingFrom();
+        //setShiftLogStartingFrom to last polling time (know!)
+        //in ationbarAndEventsFragment in oncomplete of MyTask if is New shiftlog (mIsTimeLine = true) => change this value to end of last event if last event his closed event
+        mShiftLogPersistenceManagerInterface.setShiftLogStartingFrom(getDate(System.currentTimeMillis() - DAY_IN_MILLIS, "yyyy-MM-dd HH:mm:ss.SSS"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
 
         try {

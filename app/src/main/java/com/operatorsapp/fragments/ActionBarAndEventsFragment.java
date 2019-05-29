@@ -2286,7 +2286,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
+// in all polling befor the request i update the getshiftlogstartingfrom to current time (for the request i used the previous value of getshiftlogstartingfrom , make the update after that)
+                                // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
                                 if (mIsTimeLine) {
                                     if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
                                             && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
