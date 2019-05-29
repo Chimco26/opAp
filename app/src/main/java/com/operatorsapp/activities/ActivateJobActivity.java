@@ -651,9 +651,9 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
     }
 
-    private void showJobDetailsFragment() {
+    private void showJobDetailsFragment(JobDetailsResponse jobDetailsResponse) {
 
-        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance();
+        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, mHashMapHeaders);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
     }

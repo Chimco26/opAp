@@ -130,6 +130,14 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         mTracker.setScreenName(TAG);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
+        if (getArguments() != null) {
+            if (getArguments().containsKey(JobDetailsResponse.TAG)) {
+                mCurrentJobDetails = getArguments().getParcelable(JobDetailsResponse.TAG);
+            }
+            if (getArguments().containsKey(Header.TAG)) {
+                mHashMapHeaders = (HashMap<String, Header>) getArguments().getSerializable(Header.TAG);
+            }
+        }
     }
 
     @Nullable
