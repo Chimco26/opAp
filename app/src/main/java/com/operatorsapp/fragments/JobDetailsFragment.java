@@ -43,7 +43,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Activ
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Job;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobActionsAdapter;
@@ -72,9 +72,10 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         DownloadHelper.DownloadFileListener,
         RecipeFragment.OnRecipeFragmentListener{
 
+    private static final String TAG = JobDetailsFragment.class.getSimpleName();
+
     private static final int NUMBER_OF_COLUMNS = 2;
     private static final int PROPOS_RV_HEIGHT = 87;
-
 
     private TextView mMaterialItemTitleTv;
     private RecyclerView mMaterialItemRv;
@@ -99,9 +100,8 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     private RecyclerView mPropsRv;
     private View mPropsRvOpenButton;
 
-    private static final String TAG = JobDetailsFragment.class.getSimpleName();
     private JobDetailsResponse mCurrentJobDetails;
-    private PandingJob mCurrentPendingJob;
+    private PendingJob mCurrentPendingJob;
     private String mFirstPdf;
     private DownloadHelper mDownloadHelper;
     private HashMap<String, Header> mHashMapHeaders;
@@ -172,6 +172,9 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof JobDetailsFragmentListener){
+            mListener = (JobDetailsFragmentListener) context;
+        }
     }
 
     private void initVars(View view) {

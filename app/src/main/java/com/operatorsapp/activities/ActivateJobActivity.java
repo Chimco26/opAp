@@ -1,16 +1,9 @@
 package com.operatorsapp.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.EditText;
 
 import com.example.common.callback.ErrorObjectInterface;
 import com.google.android.gms.analytics.HitBuilders;
@@ -28,12 +21,11 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.GetPe
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.JobDetailsResponse;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJobResponse;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operatorsapp.R;
-import com.operatorsapp.adapters.JobHeadersAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.BasicTitleTextBtnDialog;
@@ -53,19 +45,17 @@ import com.operatorsapp.utils.SimpleRequests;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-public class ActivateJobActivity extends AppCompatActivity implements View.OnClickListener,
-        JobHeadersAdapter.JobHeadersAdaperListener,
+public class ActivateJobActivity extends AppCompatActivity implements
         PendingJobsAdapter.PendingJobsAdapterListener,
         OnCroutonRequestListener,
         CroutonCreator.CroutonListener,
-        JobDetailsFragment.JobDetailsFragmentListener {
+        JobDetailsFragment.JobDetailsFragmentListener,
+        JobListFragment.JobListFragmentListener {
 
     private static final String TAG = ActivateJobActivity.class.getSimpleName();
     private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
@@ -76,19 +66,14 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
     public static final String EXTRA_LAST_ERP_JOB_ID = "EXTRA_LAST_ERP_JOB_ID";
     public static final String EXTRA_LAST_PRODUCT_NAME = "EXTRA_LAST_PRODUCT_NAME";
 
-    private EditText mSearchViewEt;
-    private RecyclerView mHeadersRv;
-    private RecyclerView mPendingJobsRv;
 
     private PendingJobResponse mPendingJobsResponse;
-    private JobHeadersAdapter mHeadersAdapter;
-    private PendingJobsAdapter mPendingJobsAdapter;
     private HashMap<String, Header> mHashMapHeaders;
     private ArrayList<Header> mHeaders = new ArrayList<>();
-    private ArrayList<PandingJob> mPendingJobs = new ArrayList<>();
-    private ArrayList<PandingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
+    private ArrayList<PendingJob> mPendingJobs = new ArrayList<>();
+    private ArrayList<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
     private JobDetailsResponse mCurrentJobDetails;
-    private PandingJob mCurrentPendingJob;
+    private PendingJob mCurrentPendingJob;
 
     private ArrayList<PdfObject> mPdfList = new ArrayList<>();
     private CroutonCreator mCroutonCreator;
@@ -116,8 +101,6 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
         mCroutonCreator = new CroutonCreator();
 
         getExtras();
-        initVars();
-        initListener();
 
         getPendingJoblist();
 
@@ -219,14 +202,14 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
 
                 mPendingJobsResponse = ((PendingJobResponse) response);
 
-                if (mPendingJobsResponse != null && mPendingJobsResponse.getPandingJobs() != null && mPendingJobsResponse.getPandingJobs().size() > 0) {
+                if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
 
                     SimpleDateFormat actualFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
 
-                    for (PandingJob pandingJob : mPendingJobsResponse.getPandingJobs()) {
-                        for (Property property : pandingJob.getProperties()) {
+                    for (PendingJob pendingJob : mPendingJobsResponse.getPendingJobs()) {
+                        for (Property property : pendingJob.getProperties()) {
 
                             property.setValue(updateDateForRtl(property, actualFormat, dateFormat));
 
@@ -235,22 +218,18 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
 
                     mHeaders.addAll(mPendingJobsResponse.getHeaders());
 
-                    mPendingJobs.addAll(mPendingJobsResponse.getPandingJobs());
-
-                    headerListToHashMap(mPendingJobsResponse.getHeaders());
+                    mPendingJobs.addAll(mPendingJobsResponse.getPendingJobs());
 
                     mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
 
-                    sortHeaders();
-
 //                    initLeftView();
 
-                    mCurrentPendingJob = mPendingJobsResponse.getPandingJobs().get(0);
+                    mCurrentPendingJob = mPendingJobsResponse.getPendingJobs().get(0);
 
                     ArrayList<Integer> jobIds = new ArrayList<>();
-                    jobIds.add(mPendingJobsResponse.getPandingJobs().get(0).getID());
+                    jobIds.add(mPendingJobsResponse.getPendingJobs().get(0).getID());
 //                    getJobDetails(jobIds);
-
+                    showJobListFragment(mPendingJobsResponse, mPendingJobs, mHeaders);
                     //todo new open list
                     ProgressDialogManager.dismiss();
 
@@ -321,6 +300,7 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
 
                     mCurrentJobDetails = (JobDetailsResponse) response;
                     //todo new open details
+                    showJobDetailsFragment(mCurrentJobDetails);
                 }
             }
 
@@ -443,200 +423,6 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    private void headerListToHashMap(List<Header> headers) {
-
-        mHashMapHeaders = new HashMap<>();
-
-        for (Header header : headers) {
-
-            mHashMapHeaders.put(header.getName(), header);
-        }
-
-    }
-
-    private void initVars() {
-
-
-        initVarsSearch();
-
-
-    }
-
-    private void initVarsSearch() {
-        mSearchViewEt = findViewById(R.id.AJA_search_et);
-        mHeadersRv = findViewById(R.id.AJA_search_rv);
-        mPendingJobsRv = findViewById(R.id.AJA_product_rv);
-
-    }
-
-
-    private void initLeftView() {
-
-        initRecyclerViews();
-
-        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-
-            findViewById(R.id.AJA_back_btn).setRotationY(180);
-        }
-
-    }
-
-    private void initRecyclerViews() {
-
-        if (mPendingJobs != null && mPendingJobs.size() > 0) {
-            sortHeaders();
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            mHeadersAdapter = new JobHeadersAdapter(mHeaders, mHashMapHeaders, this, this);
-            mHeadersRv.setLayoutManager(layoutManager);
-            mHeadersRv.setAdapter(mHeadersAdapter);
-
-            mPendingJobs.get(0).setSelected(true);
-            RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsAdapter(mPendingJobs, mHashMapHeaders, this, this);
-            mPendingJobsRv.setLayoutManager(layoutManager2);
-            mPendingJobsRv.setAdapter(mPendingJobsAdapter);
-        }
-    }
-
-    private void initListener() {
-
-        findViewById(R.id.AJA_search_btn).setOnClickListener(this);
-
-
-        mSearchViewEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (s.length() < 1 && mHashMapHeaders != null) {
-                    for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
-                        mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
-                    }
-                }
-
-                updateRvBySearchResult();
-
-            }
-        });
-    }
-
-    public void updateRvBySearchResult() {
-
-        mPendingJobs.clear();
-
-        mHeaders.clear();
-
-        if (mPendingJobsResponse != null) {
-            for (PandingJob pandingJob : mPendingJobsResponse.getPandingJobs()) {
-
-                for (Property property : pandingJob.getProperties()) {
-
-                    if (property.getValue() != null && property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
-
-                        if (!mPendingJobs.contains(pandingJob)) {
-                            mPendingJobs.add(pandingJob);
-                        }
-
-                        if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())))
-                            mHeaders.add(mHashMapHeaders.get(property.getKey()));
-                    }
-                }
-            }
-        }
-
-        mPendingJobsNoHeadersFiltered.clear();
-        mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
-        sortHeaders();
-        if (mHeadersAdapter != null) {
-            mHeadersAdapter.notifyDataSetChanged();
-        }
-        if (mPendingJobsAdapter != null) {
-            mPendingJobsAdapter.notifyDataSetChanged();
-            filterPendingJobsByHeaders();
-        }
-    }
-
-    public void filterPendingJobsByHeaders() {
-
-        boolean isSelectedByUser = false;
-
-        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
-
-            if (headerEntry.getValue().isSelected()) {
-
-                isSelectedByUser = true;
-            }
-        }
-
-        if (!isSelectedByUser) {
-
-            mPendingJobs.clear();
-            mPendingJobs.addAll(mPendingJobsNoHeadersFiltered);
-            mPendingJobsAdapter.notifyDataSetChanged();
-
-            return;
-        }
-
-        mPendingJobs.clear();
-
-        for (PandingJob pandingJob : mPendingJobsNoHeadersFiltered) {
-
-            for (Property property : pandingJob.getProperties()) {
-
-                if (property.getKey() != null && mHashMapHeaders.get(property.getKey()).isSelected()
-                        && property.getValue() != null && mSearchViewEt.getText() != null &&
-                        property.getValue().toLowerCase().contains(mSearchViewEt.getText().toString().toLowerCase())) {
-
-                    if (!mPendingJobs.contains(pandingJob)) {
-                        mPendingJobs.add(pandingJob);
-                    }
-                }
-            }
-        }
-
-        mPendingJobsAdapter.notifyDataSetChanged();
-    }
-
-
-    private void sortHeaders() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mHeaders.sort(new Comparator<Header>() {
-                @Override
-                public int compare(Header o1, Header o2) {
-                    if (o1.getOrder().equals(o2.getOrder())) {
-                        return 0;
-                    } else if (o1.getOrder() <
-                            o2.getOrder()) {
-                        return -1;
-                    }
-                    return 1;
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.id.AJA_search_btn:
-
-                break;
-
-        }
-    }
-
     private void showRecipeFragment() {
 
         RecipeFragment mRecipefragment = RecipeFragment.newInstance(mCurrentJobDetails.getJobs().get(0).getRecipe());
@@ -644,9 +430,9 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, mRecipefragment).addToBackStack(RecipeFragment.TAG).commit();
     }
 
-    private void showJobListFragment() {
+    private void showJobListFragment(PendingJobResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
-        JobListFragment jobListFragment = JobListFragment.newInstance();
+        JobListFragment jobListFragment = JobListFragment.newInstance(mPendingJobsResponse, mPendingJobs, headers);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobListFragment).addToBackStack(JobListFragment.class.getSimpleName()).commit();
     }
@@ -663,32 +449,25 @@ public class ActivateJobActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    @Override
-    public void onHeaderSelected(HashMap<String, Header> hashMapHeader) {
-
-        mHashMapHeaders = hashMapHeader;
-
-        filterPendingJobsByHeaders();
-    }
 
     @Override
-    public void onPandingJobSelected(PandingJob pandingJob) {
+    public void onPendingJobSelected(PendingJob pendingJob) {
 
-        for (PandingJob pandingJob1 : mPendingJobsResponse.getPandingJobs()) {
+        for (PendingJob pendingJob1 : mPendingJobsResponse.getPendingJobs()) {
 
-            if (pandingJob.equals(pandingJob1)) {
+            if (pendingJob.equals(pendingJob1)) {
 
-                pandingJob1.setSelected(pandingJob.isSelected());
+                pendingJob1.setSelected(pendingJob.isSelected());
 
             } else {
 
-                pandingJob1.setSelected(false);
+                pendingJob1.setSelected(false);
             }
         }
 
-        mCurrentPendingJob = pandingJob;
+        mCurrentPendingJob = pendingJob;
         ArrayList<Integer> jobIds = new ArrayList<>();
-        jobIds.add(pandingJob.getID());
+        jobIds.add(pendingJob.getID());
         getJobDetails(jobIds);
     }
 

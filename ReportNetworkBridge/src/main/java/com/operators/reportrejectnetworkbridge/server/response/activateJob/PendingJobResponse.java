@@ -2,30 +2,29 @@ package com.operators.reportrejectnetworkbridge.server.response.activateJob;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.service.autofill.Dataset;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class PendingJobResponse extends Response implements Parcelable{
 
+    public static final String TAG = PendingJobResponse.class.getSimpleName();
     @SerializedName("PandingJobs")
     @Expose
-    private List<PandingJob> pandingJobs = null;
+    private List<PendingJob> pendingJobs = null;
     @SerializedName("Headers")
     @Expose
     private List<Header> headers = null;
 
-    public List<PandingJob> getPandingJobs() {
-        return pandingJobs;
+    public List<PendingJob> getPendingJobs() {
+        return pendingJobs;
     }
 
-    public void setPandingJobs(List<PandingJob> pandingJobs) {
-        this.pandingJobs = pandingJobs;
+    public void setPendingJobs(List<PendingJob> pendingJobs) {
+        this.pendingJobs = pendingJobs;
     }
 
     public List<Header> getHeaders() {
@@ -43,7 +42,7 @@ public class PendingJobResponse extends Response implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.pandingJobs);
+        dest.writeList(this.pendingJobs);
         dest.writeList(this.headers);
     }
 
@@ -52,8 +51,8 @@ public class PendingJobResponse extends Response implements Parcelable{
     }
 
     protected PendingJobResponse(Parcel in) {
-        this.pandingJobs = new ArrayList<PandingJob>();
-        in.readList(this.pandingJobs, PandingJob.class.getClassLoader());
+        this.pendingJobs = new ArrayList<PendingJob>();
+        in.readList(this.pendingJobs, PendingJob.class.getClassLoader());
         this.headers = new ArrayList<Header>();
         in.readList(this.headers, Header.class.getClassLoader());
     }
