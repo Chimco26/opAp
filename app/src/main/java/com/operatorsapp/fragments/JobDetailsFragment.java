@@ -70,12 +70,12 @@ import java.util.List;
 public class JobDetailsFragment extends Fragment implements JobActionsAdapter.JobActionsAdapterListener,
         View.OnClickListener,
         DownloadHelper.DownloadFileListener,
-        RecipeFragment.OnRecipeFragmentListener{
+        RecipeFragment.OnRecipeFragmentListener {
 
     private static final String TAG = JobDetailsFragment.class.getSimpleName();
 
-    private static final int NUMBER_OF_COLUMNS = 2;
-    private static final int PROPOS_RV_HEIGHT = 87;
+    private static final int NUMBER_OF_COLUMNS = 3;
+    private static final int PROPS_RV_HEIGHT = 87;
 
     private TextView mMaterialItemTitleTv;
     private RecyclerView mMaterialItemRv;
@@ -107,14 +107,17 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     private HashMap<String, Header> mHashMapHeaders;
     private JobDetailsFragmentListener mListener;
     private ArrayList<Action> mUpdatedActions;
+    private ArrayList<Header> mHeaders;
 
-    public static JobDetailsFragment newInstance(JobDetailsResponse jobDetailsResponse, HashMap<String, Header> hashMapHeaders) {
+    public static JobDetailsFragment newInstance(JobDetailsResponse jobDetailsResponse, ArrayList<Header> headers, PendingJob pendingJob) {
 
-        JobDetailsFragment jobListFragment = new JobDetailsFragment();
+        JobDetailsFragment jobDetailsFragment = new JobDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(JobDetailsResponse.TAG, jobDetailsResponse);
-        bundle.putSerializable(Header.TAG, hashMapHeaders);
-        return jobListFragment;
+        bundle.putParcelable(PendingJob.TAG, pendingJob);
+        bundle.putParcelableArrayList(Header.TAG, headers);
+        jobDetailsFragment.setArguments(bundle);
+        return jobDetailsFragment;
     }
 
     @Override
@@ -133,9 +136,16 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         if (getArguments() != null) {
             if (getArguments().containsKey(JobDetailsResponse.TAG)) {
                 mCurrentJobDetails = getArguments().getParcelable(JobDetailsResponse.TAG);
+
+            }
+            if (getArguments().containsKey(PendingJob.TAG)) {
+                mCurrentPendingJob = getArguments().getParcelable(PendingJob.TAG);
+
             }
             if (getArguments().containsKey(Header.TAG)) {
-                mHashMapHeaders = (HashMap<String, Header>) getArguments().getSerializable(Header.TAG);
+                mHeaders = getArguments().getParcelableArrayList(Header.TAG);
+                sortHeaders();
+                mHashMapHeaders = headerListToHashMap(mHeaders);
             }
         }
     }
@@ -172,7 +182,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof JobDetailsFragmentListener){
+        if (context instanceof JobDetailsFragmentListener) {
             mListener = (JobDetailsFragmentListener) context;
         }
     }
@@ -257,6 +267,36 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         initActionsItemView();
 
         initNotesView();
+    }
+
+    private void sortHeaders() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mHeaders.sort(new Comparator<Header>() {
+                @Override
+                public int compare(Header o1, Header o2) {
+                    if (o1.getOrder().equals(o2.getOrder())) {
+                        return 0;
+                    } else if (o1.getOrder() <
+                            o2.getOrder()) {
+                        return -1;
+                    }
+                    return 1;
+                }
+            });
+        }
+    }
+
+    private HashMap<String, Header> headerListToHashMap(List<Header> headers) {
+
+        HashMap<String, Header> hashMapHeaders = new HashMap<>();
+
+        for (Header header : headers) {
+
+            hashMapHeaders.put(header.getName(), header);
+        }
+
+        return hashMapHeaders;
     }
 
     private void initNotesView() {
@@ -532,11 +572,11 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
             @Override
             public void onClick(View v) {
                 ViewGroup.LayoutParams params = mPropsRv.getLayoutParams();
-                if (params.height == (int) (PROPOS_RV_HEIGHT * getResources().getDisplayMetrics().density)) {
+                if (params.height == (int) (PROPS_RV_HEIGHT * getResources().getDisplayMetrics().density)) {
                     params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                     mPropsRv.setLayoutParams(params);
                 } else {
-                    params.height = (int) (PROPOS_RV_HEIGHT * getResources().getDisplayMetrics().density);
+                    params.height = (int) (PROPS_RV_HEIGHT * getResources().getDisplayMetrics().density);
                     mPropsRv.setLayoutParams(params);
                 }
             }
@@ -559,6 +599,14 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
                 getActivity().onBackPressed();
 
+                break;
+
+            case R.id.AJA_job_activate_btn:
+
+                if (mCurrentJobDetails != null && mCurrentJobDetails.getJobs() != null
+                        && mCurrentJobDetails.getJobs().size() > 0) {
+                    validateDialog(mCurrentJobDetails.getJobs().get(0).getID(), false);
+                }
                 break;
 
             case R.id.AJA_item_material:
@@ -668,6 +716,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
 
     }
+
     private void loadPdfView(Uri uri) {
 
         mProductPdfView.fromUri(uri)

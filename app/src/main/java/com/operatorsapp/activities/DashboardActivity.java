@@ -179,10 +179,11 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -1898,7 +1899,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void startPendingJobsActivity() {
-        Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, ActivateJobActivity.class);
 
         intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
         intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
@@ -1908,7 +1909,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
         }
 
-        startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
+        startActivityForResult(intent, ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE);
 
         ignoreFromOnPause = true;
 
@@ -2365,13 +2366,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-        if (resultCode == RESULT_OK && requestCode == JobActionActivity.EXTRA_ACTIVATE_JOB_CODE) {
+        if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
             ignoreFromOnPause = true;
-            Object response = data.getParcelableExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
+            Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
             if (((Response) response).getError() == null) {
 
-                mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
+                mSelectJobId = data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
 
                 startJob();
 

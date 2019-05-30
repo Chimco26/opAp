@@ -58,7 +58,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         JobListFragment.JobListFragmentListener {
 
     private static final String TAG = ActivateJobActivity.class.getSimpleName();
-    private static final String JOB_ACTION_FRAGMENT = "JOB_ACTION_FRAGMENT";
+    public static final int EXTRA_ACTIVATE_JOB_CODE = 111;
     public static final String EXTRA_ACTIVATE_JOB_RESPONSE = "EXTRA_ACTIVATE_JOB_RESPONSE";
     public static final String EXTRA_ACTIVATE_JOB_ID = "EXTRA_ACTIVATE_JOB_ID";
     public static final String EXTRA_LAST_JOB_ID = "EXTRA_LAST_JOB_ID";
@@ -86,7 +86,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job_action);
+        setContentView(R.layout.activate_job_activity);
 
         // Analytics
         OperatorApplication application = (OperatorApplication) getApplication();
@@ -102,7 +102,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
         getExtras();
 
-        getPendingJoblist();
+        getPendingJobList();
 
         initLastJobDialog();
     }
@@ -187,7 +187,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
         basicTitleTextBtnDialog.showBasicTitleTextBtnDialog().show();
     }
 
-    private void getPendingJoblist() {
+    private void getPendingJobList() {
 
         SimpleRequests simpleRequests = new SimpleRequests();
 
@@ -439,14 +439,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     private void showJobDetailsFragment(JobDetailsResponse jobDetailsResponse) {
 
-        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, mHashMapHeaders);
+        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, mHeaders, mCurrentPendingJob);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
 

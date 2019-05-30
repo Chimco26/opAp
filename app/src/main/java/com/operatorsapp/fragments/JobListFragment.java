@@ -13,7 +13,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -23,7 +25,9 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Pendi
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.JobHeadersAdapter;
+import com.operatorsapp.adapters.JobHeadersSpinnerAdapter;
 import com.operatorsapp.adapters.PendingJobsAdapter;
+import com.operatorsapp.adapters.PendingJobsAdapterNew;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.managers.PersistenceManager;
 
@@ -40,10 +44,10 @@ public class JobListFragment extends Fragment implements
 
     private static final String TAG = JobListFragment.class.getSimpleName();
     private EditText mSearchViewEt;
-    private RecyclerView mHeadersRv;
+    private Spinner mHeadersRv;
     private RecyclerView mPendingJobsRv;
-    private JobHeadersAdapter mHeadersAdapter;
-    private PendingJobsAdapter mPendingJobsAdapter;
+    private JobHeadersSpinnerAdapter mHeadersAdapter;
+    private PendingJobsAdapterNew mPendingJobsAdapter;
     private PendingJobResponse mPendingJobsResponse;
     private ArrayList<PendingJob> mPendingJobs;
     private List<PendingJob> mPendingJobsNoHeadersFiltered = new ArrayList<>();
@@ -58,6 +62,7 @@ public class JobListFragment extends Fragment implements
         bundle.putParcelable(PendingJobResponse.TAG, mPendingJobsResponse);
         bundle.putParcelableArrayList(PendingJob.TAG, mPendingJobs);
         bundle.putParcelableArrayList(Header.TAG, headers);
+        jobListFragment.setArguments(bundle);
         return jobListFragment;
     }
 
@@ -136,14 +141,38 @@ public class JobListFragment extends Fragment implements
 
         if (mPendingJobs != null && mPendingJobs.size() > 0) {
             sortHeaders();
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            mHeadersAdapter = new JobHeadersAdapter(mHeaders, mHashMapHeaders, this, getActivity());
-            mHeadersRv.setLayoutManager(layoutManager);
+            mHeadersAdapter = new JobHeadersSpinnerAdapter(getActivity(), R.layout.spinner_language_item, mHeaders);
+            mHeadersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mHeadersRv.setAdapter(mHeadersAdapter);
+            mHeadersRv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    if (mHashMapHeaders.get(mHeaders.get(position).getName()).isSelected()){
+
+                        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                            mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                        }
+                    }else {
+
+                        for (Map.Entry<String, Header> headerEntry : mHashMapHeaders.entrySet()) {
+                            mHashMapHeaders.get(headerEntry.getValue().getName()).setSelected(false);
+                        }
+                        mHashMapHeaders.get(mHeaders.get(position).getName()).setSelected(true);
+
+                    }
+                    filterPendingJobsByHeaders();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+
+            });
 
             mPendingJobs.get(0).setSelected(true);
             RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mPendingJobsAdapter = new PendingJobsAdapter(mPendingJobs, mHashMapHeaders, this, getActivity());
+            mPendingJobsAdapter = new PendingJobsAdapterNew(mPendingJobs, mHashMapHeaders, this, getActivity());
             mPendingJobsRv.setLayoutManager(layoutManager2);
             mPendingJobsRv.setAdapter(mPendingJobsAdapter);
         }
@@ -208,6 +237,7 @@ public class JobListFragment extends Fragment implements
 
         return hashMapHeaders;
     }
+
     public void filterPendingJobsByHeaders() {
 
         boolean isSelectedByUser = false;
@@ -299,7 +329,10 @@ public class JobListFragment extends Fragment implements
 
         switch (v.getId()) {
 
-            case R.id.AJA_search_btn:
+            case R.id.AJA_back_btn:
+            case R.id.AJA_title:
+
+                getActivity().onBackPressed();
 
                 break;
 

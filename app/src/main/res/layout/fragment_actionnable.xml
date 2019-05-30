@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="25dp">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,10 +21,10 @@
                 android:id="@+id/AJA_back_btn"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:paddingBottom="15dp"
-                android:paddingEnd="20dp"
                 android:paddingStart="20dp"
                 android:paddingTop="15dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="15dp"
                 android:src="@drawable/arrow_back" />
 
             <!--<ImageView-->
@@ -50,65 +50,64 @@
 
     </RelativeLayout>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="25dp">
 
-            <TextView
-                android:id="@+id/AJA_job_id_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/blue1"
-                android:textSize="35sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
 
-            <Button
-                android:id="@+id/AJA-job_activate_btn"
-                android:layout_width="220dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@color/blue1"
-                android:text="@string/activate"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/AJA_job_id_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/blue1"
+                    android:textSize="35sp" />
 
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/AJA-job_activate_btn"
+                    android:layout_width="220dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/blue1"
+                    android:text="@string/activate"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="15dp" />
+            </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/AJA_top_prop_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="15dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="12dp" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/AJA_top_prop_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/AJA_props_top_rv_button"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="-8dp"
-            android:rotation="90" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="12dp" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/AJA_props_top_rv_button"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="-8dp"
+                android:rotation="90" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -297,9 +296,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
-
-    </LinearLayout>
-
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
 
