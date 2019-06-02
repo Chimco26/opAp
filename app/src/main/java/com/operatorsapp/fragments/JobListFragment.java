@@ -181,6 +181,7 @@ public class JobListFragment extends Fragment implements
     private void initListener(View view) {
 
         view.findViewById(R.id.AJA_search_btn).setOnClickListener(this);
+        view.findViewById(R.id.AJA_back_btn).setOnClickListener(this);
 
         mSearchViewEt.addTextChangedListener(new TextWatcher() {
             @Override

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/AJA_left_layout"
     android:layout_width="match_parent"
@@ -71,46 +72,64 @@
                 android:textSize="35sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/AJA_search_et"
-                android:layout_width="283dp"
-                android:layout_height="37dp"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/AJA_search_btn"
-                android:background="@drawable/box_strok_grey"
-                android:gravity="center_vertical"
-                android:hint="@string/search"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/grey1"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/AJA_search_btn"
-                android:layout_width="37dp"
+            <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+                android:id="@+id/AJA_search_et_ll"
+                android:layout_width="wrap_content"
                 android:layout_height="37dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="@color/blue1"
-                android:src="@drawable/ic_search_white_24dp" />
+                android:orientation="horizontal"
+                app:corner_radius="3dp">
 
-            <Spinner
-                android:id="@+id/AJA_search_rv"
-                android:layout_width="184dp"
-                android:layout_height="37dp"
+                <EditText
+                    android:id="@+id/AJA_search_et"
+                    android:layout_width="283dp"
+                    android:layout_height="37dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/AJA_search_btn"
+                    android:background="@drawable/box_grey_stroke_except_right"
+                    android:gravity="center_vertical"
+                    android:hint="@string/search"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/grey1"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/AJA_search_btn"
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/blue1"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_search_white_24dp"
+                    tools:ignore="ContentDescription" />
+
+            </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/AJA_search_rv_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="12dp"
-                android:layout_toStartOf="@+id/AJA_search_et" />
+                android:layout_toStartOf="@+id/AJA_search_et_ll"
+                android:background="@drawable/box_grey_stroke">
+
+                <Spinner
+                    android:id="@+id/AJA_search_rv"
+                    android:layout_width="184dp"
+                    android:layout_height="37dp" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="12dp"
-                android:layout_toStartOf="@+id/AJA_search_rv"
+                android:layout_toStartOf="@+id/AJA_search_rv_rl"
                 android:text="@string/filter_by"
                 android:textColor="@color/black"
                 android:textSize="18sp" />

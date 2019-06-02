@@ -155,7 +155,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                                     null,
                                     getString(R.string.go_to_setup), getString(R.string.no_setup), false);
                         } else {
-                            postUpdateActions(mUpdatedActions);
+                            postUpdateActions(mUpdatedActions, mLastJobId);
                             if (mLastJobId != null) {
                                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
                                 postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
@@ -170,7 +170,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     @Override
                     public void onClickNegativeBtn() {
                         if (!firstSteps) {
-                            postUpdateActions(mUpdatedActions);
+                            postUpdateActions(mUpdatedActions, mLastJobId);
                             if (mLastJobId != null) {
                                 PersistenceManager persistenceManager = PersistenceManager.getInstance();
                                 postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
@@ -317,9 +317,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     }
 
-    private void postUpdateActions(ArrayList<Action> actions) {
+    private void postUpdateActions(ArrayList<Action> actions, String currentJobId) {
 
-        if (mCurrentJobDetails == null) {
+        if (currentJobId == null) {
 
             return;
         }
@@ -328,7 +328,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
         ActionsUpdateRequest actionsUpdateRequest = new ActionsUpdateRequest(persistanceManager.getSessionId(), null);
 
-        actionsUpdateRequest.setActions(new ActionsByJob(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()), persistanceManager.getOperatorId(), null));
+        actionsUpdateRequest.setActions(new ActionsByJob(currentJobId, persistanceManager.getOperatorId(), null));
 
         actionsUpdateRequest.getActions().setActions(actions);
 
@@ -350,7 +350,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     }
 
-    private void postActivateJob(ActivateJobRequest activateJobRequest) {
+    private void postActivateJob(final ActivateJobRequest activateJobRequest) {
 
         final PersistenceManager persistanceManager = PersistenceManager.getInstance();
 
@@ -378,7 +378,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
                 } else {
 
-                    finishActivity((Response) response);
+                    finishActivity((Response) response, activateJobRequest.getJobID());
                 }
             }
 
@@ -395,10 +395,10 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     }
 
-    public void finishActivity(Response response) {
+    public void finishActivity(Response response, String jobID) {
         Intent intent = getIntent();
         intent.putExtra(EXTRA_ACTIVATE_JOB_RESPONSE, response);
-        intent.putExtra(EXTRA_ACTIVATE_JOB_ID, mCurrentJobDetails.getJobs().get(0).getID());
+        intent.putExtra(EXTRA_ACTIVATE_JOB_ID, jobID);
 
         setResult(RESULT_OK, intent);
 
@@ -488,8 +488,8 @@ public class ActivateJobActivity extends AppCompatActivity implements
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count == 0) {
-            super.onBackPressed();
+        if (count <= 1) {
+            finish();
             //additional code
         } else {
             getSupportFragmentManager().popBackStack();
@@ -542,6 +542,6 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     @Override
     public void onPostUpdateActions(ArrayList<Action> updatedActions) {
-        postUpdateActions(updatedActions);
+        postUpdateActions(updatedActions, String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
     }
 }
