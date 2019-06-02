@@ -92,6 +92,8 @@ public class AllMachinesData {
     private String lastProductName;
     @SerializedName("AllowProductionModeOnOpApp")
     private boolean AllowProductionModeOnOpApp = true;
+    @SerializedName("AsUnReportedEvents")
+    private boolean asUnReportedEvents;
 
     public boolean isAllowProductionModeOnOpApp() {
         return AllowProductionModeOnOpApp;
@@ -103,6 +105,14 @@ public class AllMachinesData {
 
     // TODO: 29/07/2018 worker sign in name + number
 
+
+    public boolean isAsUnReportedEvents() {
+        return asUnReportedEvents;
+    }
+
+    public void setAsUnReportedEvents(boolean asUnReportedEvents) {
+        this.asUnReportedEvents = asUnReportedEvents;
+    }
 
     public String getLastErpJobId() {
         return LastErpJobId;

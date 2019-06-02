@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -41,8 +42,13 @@ public class JobListFragment extends Fragment implements
         JobHeadersAdapter.JobHeadersAdaperListener,
         View.OnClickListener, PendingJobsAdapter.PendingJobsAdapterListener {
 
-
     private static final String TAG = JobListFragment.class.getSimpleName();
+    public static final String ID = "ID";
+    public static final String PRODUCT_CATALOG_ID = "ProductCatalogID";
+    public static final String UNITS_TARGET = "UnitsTarget";
+    public static final String UNITS_PRODUCED = "UnitsProduced";
+    public static final String END_TIME = "EndTime";
+    public static final String TIME_LEFT_HR_HOUR = "TimeLeftHrHour";
     private EditText mSearchViewEt;
     private Spinner mHeadersRv;
     private RecyclerView mPendingJobsRv;
@@ -120,7 +126,7 @@ public class JobListFragment extends Fragment implements
 
     private void initVars(View view) {
 
-
+        initTitleViews(view);
         initVarsSearch(view);
         initRecyclerViews(view);
         initListener(view);
@@ -128,6 +134,15 @@ public class JobListFragment extends Fragment implements
         if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             view.findViewById(R.id.AJA_back_btn).setRotationY(180);
         }
+    }
+
+    private void initTitleViews(View view) {
+        ((TextView)view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(ID).getDisplayName());
+        ((TextView)view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(PRODUCT_CATALOG_ID).getDisplayName());
+        ((TextView)view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(UNITS_TARGET).getDisplayName());
+        ((TextView)view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(UNITS_PRODUCED).getDisplayName());
+        ((TextView)view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(END_TIME).getDisplayName());
+        ((TextView)view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(TIME_LEFT_HR_HOUR).getDisplayName());
     }
 
     private void initVarsSearch(View view) {

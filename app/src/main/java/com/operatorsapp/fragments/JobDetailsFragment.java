@@ -165,7 +165,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
 
         initListener(view);
 
-        initRightView();
+        initView(view);
     }
 
     private void initListener(View view) {
@@ -252,9 +252,9 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         mMaterialItemRv = mMaterialItem.findViewById(R.id.JAMI_rv);
     }
 
-    public void initRightView() {
+    public void initView(View view) {
 
-        initTitleView();
+        initTitleView(view);
 
         initImagesViews();
 
@@ -309,7 +309,7 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
         }
     }
 
-    public void initTitleView() {
+    public void initTitleView(View view) {
 
         mTitleTv.setText(String.valueOf(mCurrentJobDetails.getJobs().get(0).getID()));
 
@@ -320,6 +320,10 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
                 mTitleTv.setText(String.format("%s (%s)", property.getValue(), String.valueOf(mCurrentJobDetails.getJobs().get(0).getID())));
 
             }
+        }
+
+        if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            view.findViewById(R.id.AJA_back_btn).setRotationY(180);
         }
     }
 

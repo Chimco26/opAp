@@ -18,14 +18,15 @@ import com.operatorsapp.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.operatorsapp.fragments.JobListFragment.END_TIME;
+import static com.operatorsapp.fragments.JobListFragment.ID;
+import static com.operatorsapp.fragments.JobListFragment.PRODUCT_CATALOG_ID;
+import static com.operatorsapp.fragments.JobListFragment.TIME_LEFT_HR_HOUR;
+import static com.operatorsapp.fragments.JobListFragment.UNITS_PRODUCED;
+import static com.operatorsapp.fragments.JobListFragment.UNITS_TARGET;
+
 public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapterNew.ViewHolder> {
 
-    private static final String ID = "ID";
-    private static final String PRODUCT_CATALOG_ID = "ProductCatalogID";
-    private static final String UNITS_TARGET = "UnitsTarget";
-    private static final String UNITS_PRODUCED = "UnitsProduced";
-    private static final String END_TIME = "EndTime";
-    private static final String TIME_LEFT_HR_HOUR = "TimeLeftHrHour";
     private final Context mContext;
     private final ArrayList<PendingJob> mPandingjobs;
     private final HashMap<String, Header> mHashMapHeaders;
@@ -77,6 +78,9 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
             }
         });
 
+        if (viewHolder.itemView.getContext().getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            viewHolder.mArrow.setRotationY(180);
+        }
     }
 
     private int getHeaderValue(HashMap<String, String> propertiesHashMap) {
@@ -112,6 +116,7 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
         private final TextView mEndTimeTv;
         private final TextView mJobLeftTv;
         private final ImageView mImage;
+        private final View mArrow;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -123,6 +128,7 @@ public class PendingJobsAdapterNew extends RecyclerView.Adapter<PendingJobsAdapt
             mEndTimeTv = itemView.findViewById(R.id.FJL_end_time);
             mJobLeftTv = itemView.findViewById(R.id.FJL_job_left);
             mImage = itemView.findViewById(R.id.FJL_image);
+            mArrow = itemView.findViewById(R.id.FJL_arrow);
         }
 
     }
