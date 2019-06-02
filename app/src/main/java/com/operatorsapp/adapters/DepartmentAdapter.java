@@ -117,7 +117,7 @@ public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.Vi
                 for (DepartmentMachine department: mDepartments){
                     DepartmentMachine departmentMachine = new DepartmentMachine(department.getDepartmentsMachinesKey(), new ArrayList<DepartmentMachineValue>());
                     for (DepartmentMachineValue machine: department.getDepartmentMachineValue()){
-                        if (isContainLetters(machine.getMachineName().toLowerCase(), constraint.toString().toLowerCase())){
+                        if (machine.getMachineName().toLowerCase().contains(constraint.toString().toLowerCase())){
                             if (!allDepartments.contains(departmentMachine)){
                                 allDepartments.add(departmentMachine);
                             }

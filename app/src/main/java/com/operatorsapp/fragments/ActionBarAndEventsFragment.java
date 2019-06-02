@@ -2286,12 +2286,15 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+// in all polling befor the request i update the getshiftlogstartingfrom to current time (for the request i used the previous value of getshiftlogstartingfrom , make the update after that)
+                                // if the conditions bellow is completed the endtime of last event is seted to shiftlogstartingfrom in place of time of last polling request
+                                if (mIsTimeLine) {
+                                    if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
+                                            && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
+                                            mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
 
-                                if (finalLatestEvent1 != null && finalLatestEvent1.getEventEndTime() != null
-                                        && finalLatestEvent1.getEventEndTime().length() > 0 && mCurrentMachineStatus != null &&
-                                        mCurrentMachineStatus.getAllMachinesData() != null && mCurrentMachineStatus.getAllMachinesData().size() > 0) {
-
-                                    PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                        PersistenceManager.getInstance().setShiftLogStartingFrom(TimeUtils.getDate(convertDateToMillisecond(finalLatestEvent1.getEventEndTime()), "yyyy-MM-dd HH:mm:ss.SSS"));
+                                    }
                                 }
                             }
                         });
@@ -2305,7 +2308,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             @Override
                             public void run() {
                                 setShiftLogAdapter(oldCursor);
-                                initEvents(newEvents);
+                                if (newEvents != null) {
+                                    initEvents(newEvents);
+                                }
                             }
                         });
                     }
@@ -2482,7 +2487,11 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
             } else {
                 cursor = getCursorByType();
-                myTaskListener.onUpdateEventsRecyclerViews(cursor, new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse));
+                ArrayList<Event> eventArrayList = null;
+                if (mIsTimeLine) {
+                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
+                }
+                myTaskListener.onUpdateEventsRecyclerViews(cursor, eventArrayList);
             }
 
             if (mEventsQueue.size() > 0) {
@@ -2523,12 +2532,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    eventSelectArrayList = mDatabaseHelper.getListFromCursor(cursorSelec);
 //                }
                 Cursor cursorNoSelect = getCursorByType();
-                ArrayList<Event> eventNoSelectArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
-
+                ArrayList<Event> eventArrayList = null;
+                if (mIsTimeLine) {
+                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
+                }
                 if (mIsSelectionMode) {
 //                    myTaskListener.onUpdateEventsRecyclerViews(cursorSelec, eventSelectArrayList);
                 } else {
-                    myTaskListener.onUpdateEventsRecyclerViews(cursorNoSelect, eventNoSelectArrayList);
+                    myTaskListener.onUpdateEventsRecyclerViews(cursorNoSelect, eventArrayList);
                 }
             }
         }
@@ -2962,6 +2973,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
         }
+        //todo
+        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
     }
 
     public void disableSelectMode() {

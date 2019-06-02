@@ -53,7 +53,6 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
 
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse " + events.size() + " events");
 
-
                     shiftLogCoreCallback.onShiftLogSucceeded(events);
                 } else {
 

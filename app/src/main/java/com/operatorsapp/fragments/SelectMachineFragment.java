@@ -57,7 +57,6 @@ public class SelectMachineFragment extends BackStackAwareFragment implements Ada
         String machinesListString = gson.toJson(machinesList);
         Bundle args = new Bundle();
         args.putString(MACHINES_LIST, machinesListString);
-
         SelectMachineFragment fragment = new SelectMachineFragment();
         fragment.setArguments(args);
         return fragment;

@@ -37,7 +37,7 @@ public class SelectStopReasonBroadcast extends BroadcastReceiver {
 
             if (intent.getAction() != null && intent.getAction().equals(ACTION_SELECT_REASON)) {
 
-                mListener.onSelectStopReason(intent.getExtras().getInt(EVENT_ID),
+                mListener.onSelectStopReason((int) intent.getExtras().getLong(EVENT_ID),
                         intent.getExtras().getInt(REASON_ID),
                         intent.getExtras().getString(EN_NAME),
                         intent.getExtras().getString(IL_NAME),

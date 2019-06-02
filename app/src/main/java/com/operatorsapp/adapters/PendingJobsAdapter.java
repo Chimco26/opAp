@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Header;
-import com.operators.reportrejectnetworkbridge.server.response.activateJob.PandingJob;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.PendingJob;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Property;
 import com.operatorsapp.R;
 
@@ -20,13 +20,13 @@ import java.util.HashMap;
 public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final ArrayList<PandingJob> mPandingjobs;
+    private final ArrayList<PendingJob> mPandingjobs;
     private final HashMap<String, Header> mHashMapHeaders;
 
     private PendingJobsAdapterListener mListener;
 
 
-    public PendingJobsAdapter(ArrayList<PandingJob> list, HashMap<String, Header> hashMapHeaders, PendingJobsAdapterListener listener, Context context) {
+    public PendingJobsAdapter(ArrayList<PendingJob> list, HashMap<String, Header> hashMapHeaders, PendingJobsAdapterListener listener, Context context) {
 
         mListener = listener;
 
@@ -87,7 +87,7 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
                     updateView(viewHolder, mPandingjobs.get(position).isSelected());
 
                     notifyDataSetChanged();
-                    mListener.onPandingJobSelected(mPandingjobs.get(position));
+                    mListener.onPendingJobSelected(mPandingjobs.get(position));
                 }
 
             }
@@ -111,9 +111,9 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
 
     private void resetSelectedItem() {
 
-        for (PandingJob pandingJob : mPandingjobs) {
+        for (PendingJob pendingJob : mPandingjobs) {
 
-            pandingJob.setSelected(false);
+            pendingJob.setSelected(false);
         }
     }
 
@@ -177,6 +177,6 @@ public class PendingJobsAdapter extends RecyclerView.Adapter<PendingJobsAdapter.
 
     public interface PendingJobsAdapterListener {
 
-        void onPandingJobSelected(PandingJob pandingJob);
+        void onPendingJobSelected(PendingJob pendingJob);
     }
 }
