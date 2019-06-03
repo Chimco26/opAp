@@ -573,12 +573,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         if (fragment instanceof ActionBarAndEventsFragment ||
                 fragment instanceof RecipeFragment ||
                 fragment instanceof WidgetFragment) {
-            showReportBtn(true, mCurrentMachineStatus.getAllMachinesData().get(0).isAsUnReportedEvents());
+            showReportBtn(true);
         } else {
-//            if (mReportShiftFragment != null) {
-//                getSupportFragmentManager().beginTransaction().remove(mReportShiftFragment).commit();
-            showReportBtn(false, mCurrentMachineStatus.getAllMachinesData().get(0).isAsUnReportedEvents());
-//                mReportShiftFragment = null;
+            showReportBtn(false);
         }
     }
 
@@ -895,8 +892,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
-    private void showReportBtn(boolean isNotVisible, boolean asUnReportedEvents) {
-        if (asUnReportedEvents && isNotVisible) {
+    private void showReportBtn(boolean show) {
+        if (show) {
             mReportBtn.setVisibility(View.VISIBLE);
         } else {
             mReportBtn.setVisibility(View.GONE);

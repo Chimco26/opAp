@@ -72,6 +72,8 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 rejectViewHolder.topTv.setText(mTopList.get(position).getmAmount());
                 rejectViewHolder.topText.setText(mTopList.get(position).getmText());
                 rejectViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
+                rejectViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
+                rejectViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
 
                 break;
 
@@ -85,6 +87,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 stopEventViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
                 try{
                     stopEventViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
+                    stopEventViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
                 }catch (IllegalArgumentException e){
                     stopEventViewHolder.topView.setBackgroundColor(mContext.getResources().getColor(R.color.dialog_text_gray));
                 }

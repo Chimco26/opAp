@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
+import android.view.View;
 
 import com.example.common.callback.ErrorObjectInterface;
 import com.google.android.gms.analytics.HitBuilders;
@@ -268,7 +269,8 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 ProgressDialogManager.dismiss();
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
-
+//                finish();
+                findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
             }
         }, NetworkManager.getInstance(), new GetPendingJobListRequest(persistanceManager.getSessionId(), persistanceManager.getMachineId()), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
