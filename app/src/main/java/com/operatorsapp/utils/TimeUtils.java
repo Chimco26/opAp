@@ -9,6 +9,7 @@ import com.operators.reportrejectnetworkbridge.server.response.activateJob.Prope
 import com.operatorsapp.R;
 import com.operatorsapp.managers.PersistenceManager;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -397,15 +398,28 @@ public class TimeUtils {
     }
 
     @SuppressLint("DefaultLocale")
-    public static String getHMSFromMillis(double millis){
+    public static String getHMSFromMillis(double millis) {
         long ms = (long) millis;
         String output = "";
 
-        if (millis >= 1000){
+        if (millis >= 1000) {
             output = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(ms),
                     TimeUnit.MILLISECONDS.toMinutes(ms) % TimeUnit.HOURS.toMinutes(1),
                     TimeUnit.MILLISECONDS.toSeconds(ms) % TimeUnit.MINUTES.toSeconds(1));
 
+        }
+
+        return output;
+    }
+
+    public static String getDecimalHourFromMillis(double millis, String hr, String min) {
+        String output = "";
+
+        if (millis >= ONE_HOUR_IN_SECONDS * 1000){
+            DecimalFormat df = new DecimalFormat("#.#");
+            output = df.format(millis / (ONE_HOUR_IN_SECONDS * 1000f)) + hr;
+        }else {
+            output = (int)(millis / (ONE_MINUTE_IN_SECONDS * 1000f)) + min;
         }
 
         return output;
@@ -442,7 +456,7 @@ public class TimeUtils {
     }
 
     private static Long castToMin(long time) {
-        return (time/60000)*60000;
+        return (time / 60000) * 60000;
     }
 
 

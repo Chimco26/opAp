@@ -113,10 +113,10 @@ import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
 import com.operatorsapp.fragments.ReportInventoryFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
+import com.operatorsapp.fragments.ReportShiftFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
-import com.operatorsapp.fragments.TopFiveFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -227,13 +227,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
-    private View mContainer2;
+    //    private View mContainer2;
     private ArrayList<Float> mSelectedEvents;
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
     private ViewPagerFragment mViewPagerFragment;
-    private TopFiveFragment mTopFiveFragment;
+    private ReportShiftFragment mReportShiftFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
@@ -296,7 +296,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
 
-        mContainer2 = findViewById(R.id.fragments_container_widget);
+//        mContainer2 = findViewById(R.id.fragments_container_widget);
 
         mContainer3 = findViewById(R.id.fragments_container_reason);
 
@@ -485,11 +485,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initTopFiveFragment() {
 
-        mTopFiveFragment = TopFiveFragment.newInstance();
+        mReportShiftFragment = ReportShiftFragment.newInstance();
 
         try {
-
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mTopFiveFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mReportShiftFragment).addToBackStack(ReportShiftFragment.TAG).commit();
+//            mReportBtn.setVisibility(View.GONE);
         } catch (IllegalStateException ignored) {
         }
     }
@@ -537,27 +537,49 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
 
                 if (fragment != null) {
-                    if (fragment instanceof ActionBarAndEventsFragment ||
-                            fragment instanceof RecipeFragment ||
-                            fragment instanceof WidgetFragment ||
-                            fragment instanceof ReportStopReasonFragment ||
-                            fragment instanceof SelectStopReasonFragment ||
-                            fragment instanceof TopFiveFragment) {
-                        if (mActionBarAndEventsFragment != null) {
-                            mActionBarAndEventsFragment.setActionBar();
-                        }
-                        first = !first;
-                    }
-                    if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
-                            && mCurrentMachineStatus.getAllMachinesData().size() > 0
-                            && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
-                        setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                        setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
-//                        setFilterWarningText(true);
-                    }
+                    setActionBarByFragment(fragment);
+                    setFiltersByFragment();
+                    checkShowReportBtn(fragment);
                 }
             }
         };
+    }
+
+    public void setFiltersByFragment() {
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().size() > 0
+                && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
+            setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+            setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                        setFilterWarningText(true);
+        }
+    }
+
+    public void setActionBarByFragment(Fragment fragment) {
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment ||
+                fragment instanceof ReportStopReasonFragment ||
+                fragment instanceof SelectStopReasonFragment ||
+                fragment instanceof ReportShiftFragment) {
+            if (mActionBarAndEventsFragment != null) {
+                mActionBarAndEventsFragment.setActionBar();
+            }
+            first = !first;
+        }
+    }
+
+    public void checkShowReportBtn(Fragment fragment) {
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment) {
+            showReportBtn(true, mCurrentMachineStatus.getAllMachinesData().get(0).isAsUnReportedEvents());
+        } else {
+//            if (mReportShiftFragment != null) {
+//                getSupportFragmentManager().beginTransaction().remove(mReportShiftFragment).commit();
+            showReportBtn(false, mCurrentMachineStatus.getAllMachinesData().get(0).isAsUnReportedEvents());
+//                mReportShiftFragment = null;
+        }
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -833,7 +855,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
-                    showReportBtn(mCurrentMachineStatus.getAllMachinesData().get(0).isAsUnReportedEvents());
+                    checkShowReportBtn(getVisibleFragment());
 //                    setFilterWarningText(true);
                 }
 
@@ -873,8 +895,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         };
     }
 
-    private void showReportBtn(boolean asUnReportedEvents) {
-        if (asUnReportedEvents) {
+    private void showReportBtn(boolean isNotVisible, boolean asUnReportedEvents) {
+        if (asUnReportedEvents && isNotVisible) {
             mReportBtn.setVisibility(View.VISIBLE);
         } else {
             mReportBtn.setVisibility(View.GONE);
@@ -1767,13 +1789,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onResize(int width, int statusBarsHeight) {
 
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
-
-        layoutParams.setMarginStart(width);
-
-        layoutParams.topMargin = statusBarsHeight;
-
-        mContainer2.setLayoutParams(layoutParams);
+//        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
+//
+//        layoutParams.setMarginStart(width);
+//
+//        layoutParams.topMargin = statusBarsHeight;
+//
+//        mContainer2.setLayoutParams(layoutParams);
 
         ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
 
@@ -2153,10 +2175,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 } catch (IllegalStateException ignored) {
                 }
             }
-
-        } else if (mTopFiveFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
-            mTopFiveFragment = null;
 
         } else {
             super.onBackPressed();

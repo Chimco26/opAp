@@ -38,8 +38,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TopFiveFragment extends Fragment implements DashboardUICallbackListener {
+public class ReportShiftFragment extends Fragment implements DashboardUICallbackListener {
 
+    public static final String TAG = ReportShiftFragment.class.getSimpleName();
     private RecyclerView mTopStops_rv;
     private RecyclerView mTopRejects_rv;
     TextView include1_title;
@@ -52,19 +53,16 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
     TextView include1_row2_stat1_num;
     TextView include1_row2_stat2_num;
     TextView include1_row2_stat3_num;
-    TextView include2_stat1_num;
-    TextView include2_stat2_num;
-    TextView include2_stat3_num;
     private LinearLayout row1_lil;
     private LinearLayout row2_lil;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private View mProgressBar;
 
-    public static TopFiveFragment newInstance() {
-        TopFiveFragment topFiveFragment = new TopFiveFragment();
+    public static ReportShiftFragment newInstance() {
+        ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
         Bundle bundle = new Bundle();
-        topFiveFragment.setArguments(bundle);
-        return topFiveFragment;
+        reportShiftFragment.setArguments(bundle);
+        return reportShiftFragment;
     }
 
     @Override

@@ -78,7 +78,9 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_STOP:
 
                 final StopEventViewHolder stopEventViewHolder = (StopEventViewHolder) holder;
-                stopEventViewHolder.topTv.setText(TimeUtils.getHMSFromMillis(Double.parseDouble(mTopList.get(position).getmAmount())));
+                stopEventViewHolder.topTv.setText(TimeUtils.getDecimalHourFromMillis(Double.parseDouble(mTopList.get(position).getmAmount())
+                        , stopEventViewHolder.topTv.getContext().getString(R.string.hr2)
+                        , stopEventViewHolder.topTv.getContext().getString(R.string.min)));
                 stopEventViewHolder.topText.setText(mTopList.get(position).getmText());
                 stopEventViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
                 try{

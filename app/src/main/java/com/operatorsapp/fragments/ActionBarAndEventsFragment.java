@@ -361,6 +361,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public ViewGroup.LayoutParams initView(@NonNull View view) {
         mIsOpen = false;
         mIsNewShiftLogs = PersistenceManager.getInstance().isNewShiftLogs();
+        mDatabaseHelper = DatabaseHelper.getInstance(getContext());
         // get screen parameters
         Point size = new Point();
 
@@ -432,6 +433,23 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         });
 
 
+
+        //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
+        mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
+        mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
+        mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
+        mJobIdTextView = view.findViewById(R.id.text_view_job_id);
+        mShiftIdTextView = view.findViewById(R.id.text_view_shift_id);
+        mTimerTextView = view.findViewById(R.id.text_view_timer);
+        mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
+        mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
+        mTimeView = view.findViewById(R.id.FAAE_time_container);
+        initLenoxMachineRv(view);
+        mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
+        mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
+        mLoadingDataText.setVisibility(View.VISIBLE);
+        final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
+
         mTimeLineType = view.findViewById(R.id.FAAE_shift_type_checkbox);
         mTimeLineType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -446,12 +464,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     if (mIsOpen) {
                         showLegendBtnVisibility(true);
                     }
-                    if (mEventsAdapter != null) {
-                        mEventsAdapter.notifyDataSetChanged();
-                    } else {
+//                    if (mEventsAdapter != null) {
+//                        mEventsAdapter.notifyDataSetChanged();
+//                    } else {
 //                        initEvents(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()));
-                        onShiftLogDataReceived(null, mActualBarExtraResponse, null);
-                    }
+                    onShiftLogDataReceived(null, mActualBarExtraResponse, null);
+//                    }
                     PersistenceManager.getInstance().setIsNewShiftLog(true);
                 } else {
                     mEventsRecycler.setVisibility(View.GONE);
@@ -475,28 +493,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (PersistenceManager.getInstance().getIsNewShiftLog()) {
             mTimeLineType.setChecked(true);
         }
-        //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
-        mProductNameTextView = view.findViewById(R.id.text_view_product_name_and_id);
-        mMultipleProductImg = view.findViewById(R.id.FAAE_multiple_product_img);
-        mProductSpinner = view.findViewById(R.id.FAAE_product_spinner);
-        mJobIdTextView = view.findViewById(R.id.text_view_job_id);
-        mShiftIdTextView = view.findViewById(R.id.text_view_shift_id);
-        mTimerTextView = view.findViewById(R.id.text_view_timer);
-        mSelectedNumberTv = view.findViewById(R.id.FAAE_selected_nmbr);
-
-        mSelectedNumberLy = view.findViewById(R.id.FAAE_event_selected_ly);
-
-        mTimeView = view.findViewById(R.id.FAAE_time_container);
-
-
-        initLenoxMachineRv(view);
-
-        mNoNotificationsText = view.findViewById(R.id.fragment_dashboard_no_notif);
-
-        mLoadingDataText = view.findViewById(R.id.fragment_dashboard_loading_data_shiftlog);
-        mLoadingDataText.setVisibility(View.VISIBLE);
-        final ImageView shiftLogHandle = view.findViewById(R.id.fragment_dashboard_left_btn);
-
         View mDividerView = view.findViewById(R.id.fragment_dashboard_divider);
         mDividerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -1480,9 +1476,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mTechnicianIconIv.setImageDrawable(getResources().getDrawable(R.drawable.technician_blue_svg));
                 mTechOpenCallsIv.setVisibility(View.VISIBLE);
                 int counter = 0;
-                for ( TechCallInfo call : techList) {
+                for (TechCallInfo call : techList) {
                     if (call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET
-                            || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE){
+                            || call.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE) {
                         counter++;
                     }
                 }
@@ -3155,7 +3151,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        if ((wasShow && mCycleWarningView.getVisibility() == View.GONE)) {
 //            mListener.resetCycleWarningView(false);
 //        } else {
-            mListener.resetCycleWarningView(wasShow, show);
+        mListener.resetCycleWarningView(wasShow, show);
 //        }
     }
 
