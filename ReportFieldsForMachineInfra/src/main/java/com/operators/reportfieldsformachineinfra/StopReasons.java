@@ -19,6 +19,16 @@ public class StopReasons implements Parcelable {
     private String EName;
     @SerializedName("LName")
     private String LName;
+
+    @SerializedName("EventGroupColorID")
+    private String EventGroupColorID;
+
+    @SerializedName("EventGroupIconID")
+    private String EventGroupIconID;
+
+    @SerializedName("EventGroupOpAppDisplayOrder")
+    private int EventGroupOpAppDisplayOrder;
+
     @SerializedName("SubReason")
     private List<SubReasons> subReasons = new ArrayList<SubReasons>();
 
@@ -39,6 +49,21 @@ public class StopReasons implements Parcelable {
         return LName;
     }
 
+    public String getEventGroupColorID() {
+        return EventGroupColorID;
+    }
+
+    public String getEventGroupIconID() {
+        return EventGroupIconID;
+    }
+
+    public int getEventGroupOpAppDisplayOrder() {
+        return EventGroupOpAppDisplayOrder;
+    }
+
+    public StopReasons() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -49,21 +74,23 @@ public class StopReasons implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.EName);
         dest.writeString(this.LName);
-        dest.writeList(this.subReasons);
-    }
-
-    public StopReasons() {
+        dest.writeString(this.EventGroupColorID);
+        dest.writeString(this.EventGroupIconID);
+        dest.writeInt(this.EventGroupOpAppDisplayOrder);
+        dest.writeTypedList(this.subReasons);
     }
 
     protected StopReasons(Parcel in) {
         this.id = in.readInt();
         this.EName = in.readString();
         this.LName = in.readString();
-        this.subReasons = new ArrayList<SubReasons>();
-        in.readList(this.subReasons, SubReasons.class.getClassLoader());
+        this.EventGroupColorID = in.readString();
+        this.EventGroupIconID = in.readString();
+        this.EventGroupOpAppDisplayOrder = in.readInt();
+        this.subReasons = in.createTypedArrayList(SubReasons.CREATOR);
     }
 
-    public static final Parcelable.Creator<StopReasons> CREATOR = new Parcelable.Creator<StopReasons>() {
+    public static final Creator<StopReasons> CREATOR = new Creator<StopReasons>() {
         @Override
         public StopReasons createFromParcel(Parcel source) {
             return new StopReasons(source);

@@ -408,6 +408,8 @@
     <string name="units_produced">UNITS PRODUCED</string>
     <string name="end_time_actual">END TIME (ACTUAL)</string>
     <string name="job_left_time">JOB LEFT TIME</string>
+    <string name="number_of_jobs">number of Jobs</string>
+    <string name="type_something">Type something</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

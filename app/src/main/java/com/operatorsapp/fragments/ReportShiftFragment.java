@@ -38,33 +38,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TopFiveFragment extends Fragment implements DashboardUICallbackListener {
+public class ReportShiftFragment extends Fragment implements DashboardUICallbackListener {
 
+    public static final String TAG = ReportShiftFragment.class.getSimpleName();
     private RecyclerView mTopStops_rv;
     private RecyclerView mTopRejects_rv;
     TextView include1_title;
     TextView include2_title;
-    TextView row1_title;
-    TextView row2_title;
+//    TextView row1_title;
     TextView include1_row1_stat1_num;
-    TextView include1_row1_stat2_num;
+//    TextView include1_row1_stat2_num;
     TextView include1_row1_stat3_num;
-    TextView include1_row2_stat1_num;
-    TextView include1_row2_stat2_num;
-    TextView include1_row2_stat3_num;
-    TextView include2_stat1_num;
-    TextView include2_stat2_num;
-    TextView include2_stat3_num;
     private LinearLayout row1_lil;
-    private LinearLayout row2_lil;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private View mProgressBar;
 
-    public static TopFiveFragment newInstance() {
-        TopFiveFragment topFiveFragment = new TopFiveFragment();
+    public static ReportShiftFragment newInstance() {
+        ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
         Bundle bundle = new Bundle();
-        topFiveFragment.setArguments(bundle);
-        return topFiveFragment;
+        reportShiftFragment.setArguments(bundle);
+        return reportShiftFragment;
     }
 
     @Override
@@ -91,7 +84,7 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.frament_top_five, container, false);
+        return inflater.inflate(R.layout.frament_report_shift, container, false);
     }
 
     @Override
@@ -145,20 +138,12 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
         View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
 
         row1_lil = view.findViewById(R.id.row1_top_five_lil);
-        row2_lil = view.findViewById(R.id.row2_top_five_lil);
         include1_title = includeTopFive_1.findViewById(R.id.title_top_five_tv);
         include2_title = includeTopFive_2.findViewById(R.id.title_top_five_tv);
 
-        row1_title = includeTopFive_1.findViewById(R.id.title_row1_top_five_tv);
         include1_row1_stat1_num = includeTopFive_1.findViewById(R.id.row1_title_stat1_top_five_number_tv);
-        include1_row1_stat2_num = includeTopFive_1.findViewById(R.id.row1_title_stat2_top_five_number_tv);
+//        include1_row1_stat2_num = includeTopFive_1.findViewById(R.id.row1_title_stat2_top_five_number_tv);
         include1_row1_stat3_num = includeTopFive_1.findViewById(R.id.row1_title_stat3_top_five_number_tv);
-
-        row2_title = includeTopFive_1.findViewById(R.id.title_row2_top_five_tv);
-        include1_row2_stat1_num = includeTopFive_1.findViewById(R.id.row2_title_stat1_top_five_number_tv);
-        include1_row2_stat2_num = includeTopFive_1.findViewById(R.id.row2_title_stat2_top_five_number_tv);
-        include1_row2_stat3_num = includeTopFive_1.findViewById(R.id.row2_title_stat3_top_five_number_tv);
-
 
         mTopStops_rv = includeTopFive_1.findViewById(R.id.top_five_recyclerView);
         mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
@@ -218,7 +203,6 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
                         initCritical(response.body());
                     } else {
                         row1_lil.setVisibility(View.GONE);
-                        row2_lil.setVisibility(View.GONE);
                     }
                 }
                 mProgressBar.setVisibility(View.GONE);
@@ -239,23 +223,10 @@ public class TopFiveFragment extends Fragment implements DashboardUICallbackList
         if (critList != null && critList.size() >= 1) {
             CriticalEvent crit1 = critList.get(0);
             row1_lil.setVisibility(View.VISIBLE);
-            row1_title.setText(crit1.getmName());
+//            row1_title.setText(crit1.getmName());
             include1_row1_stat1_num.setText(crit1.getmDuration());
-            include1_row1_stat2_num.setText(crit1.getmPercentageDuration() + "%");
+//            include1_row1_stat2_num.setText(String.format("%s%%", crit1.getmPercentageDuration()));
             include1_row1_stat3_num.setText(crit1.getmEventsCount());
-        } else {
-            row1_lil.setVisibility(View.GONE);
-        }
-
-        if (critList != null && critList.size() >= 2) {
-            CriticalEvent crit2 = critList.get(1);
-            row2_lil.setVisibility(View.VISIBLE);
-            row2_title.setText(crit2.getmName());
-            include1_row2_stat1_num.setText(crit2.getmDuration());
-            include1_row2_stat2_num.setText(crit2.getmPercentageDuration() + "%");
-            include1_row2_stat3_num.setText(crit2.getmEventsCount());
-        } else {
-            row2_lil.setVisibility(View.GONE);
         }
 
     }

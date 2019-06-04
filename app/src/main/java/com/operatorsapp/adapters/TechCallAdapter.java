@@ -15,6 +15,8 @@ import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by alex on 07/01/2019.
@@ -30,6 +32,25 @@ public class TechCallAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mContext = context;
         this.mTechList = mTechList;
         mListener = listener;
+        sortTechList();
+    }
+
+    private void sortTechList() {
+        if (mTechList != null && mTechList.size() > 0) {
+            Collections.sort(mTechList, new Comparator<TechCallInfo>() {
+                @Override
+                public int compare(TechCallInfo o1, TechCallInfo o2) {
+
+                    if (o1.getmCallTime() > o2.getmCallTime()) {
+                        return -1;
+                    } else if (o1.getmCallTime() < o2.getmCallTime()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+        }
     }
 
     @NonNull

@@ -93,6 +93,11 @@ public class Header implements Parcelable {
     public Header() {
     }
 
+    public Header(String displayName, int order) {
+        this.displayName = displayName;
+        this.order = order;
+    }
+
     protected Header(Parcel in) {
         this.displayName = in.readString();
         this.name = in.readString();

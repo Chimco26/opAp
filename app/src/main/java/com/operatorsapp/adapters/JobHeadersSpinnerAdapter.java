@@ -20,6 +20,7 @@ public class JobHeadersSpinnerAdapter extends ArrayAdapter<Header> {
     private Activity mContext;
     private TextView mRowName;
     private boolean mIsFirst = true;
+    private String mTitle;
 
     public JobHeadersSpinnerAdapter(Activity context, int resource, ArrayList<Header> list) {
         super(context, resource, list);
@@ -37,11 +38,11 @@ public class JobHeadersSpinnerAdapter extends ArrayAdapter<Header> {
             mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
             if (mIsFirst) {
-                setTitle(0);
+                setTitle(mHeaders.get(0).getDisplayName());
                 mIsFirst = false;
             }
             else {
-                setTitle(position);
+                setTitle(mTitle);
             }
 
 
@@ -68,9 +69,10 @@ public class JobHeadersSpinnerAdapter extends ArrayAdapter<Header> {
         return row;
     }
 
-    public void setTitle(int position) {
+    public void setTitle(String name) {
+        mTitle = name;
         mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(mHeaders.get(position).getDisplayName());
+        mRowName.setText(name);
         mRowName.setTextSize(20);
     }
 }

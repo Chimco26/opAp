@@ -16,6 +16,10 @@ public class SubReasons implements Parcelable {
     private String EName;
     @SerializedName("LName")
     private String LName;
+    @SerializedName("EventIconID")
+    private String EventIconID;
+    @SerializedName("EventOpAppDisplayOrder")
+    private int EventOpAppDisplayOrder;
     @SerializedName("SubReason")
     private SubReasons[] subReasons;
 
@@ -37,6 +41,17 @@ public class SubReasons implements Parcelable {
         return subReasons;
     }
 
+    public String getEventIconID() {
+        return EventIconID;
+    }
+
+    public int getEventOpAppDisplayOrder() {
+        return EventOpAppDisplayOrder;
+    }
+
+    public SubReasons() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -47,20 +62,21 @@ public class SubReasons implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.EName);
         dest.writeString(this.LName);
+        dest.writeString(this.EventIconID);
+        dest.writeInt(this.EventOpAppDisplayOrder);
         dest.writeTypedArray(this.subReasons, flags);
-    }
-
-    public SubReasons() {
     }
 
     protected SubReasons(Parcel in) {
         this.id = in.readInt();
         this.EName = in.readString();
         this.LName = in.readString();
+        this.EventIconID = in.readString();
+        this.EventOpAppDisplayOrder = in.readInt();
         this.subReasons = in.createTypedArray(SubReasons.CREATOR);
     }
 
-    public static final Parcelable.Creator<SubReasons> CREATOR = new Parcelable.Creator<SubReasons>() {
+    public static final Creator<SubReasons> CREATOR = new Creator<SubReasons>() {
         @Override
         public SubReasons createFromParcel(Parcel source) {
             return new SubReasons(source);

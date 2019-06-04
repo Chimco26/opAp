@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
+import android.view.View;
 
 import com.example.common.callback.ErrorObjectInterface;
 import com.google.android.gms.analytics.HitBuilders;
@@ -82,6 +83,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     private String mLastJobId = "";
     private String mLastJobErpId = "";
     private String mLastProductName = "";
+    private boolean isActive = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +201,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetPendingJobListSuccess(Object response) {
-
+                if (!isActive){
+                    return;
+                }
                 mPendingJobsResponse = ((PendingJobResponse) response);
 
                 if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null && mPendingJobsResponse.getPendingJobs().size() > 0) {
@@ -259,11 +263,14 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetPendingJobListFailed(ErrorObjectInterface reason) {
-
+                if (!isActive){
+                    return;
+                }
                 ProgressDialogManager.dismiss();
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_panding_jobs_failed_error));
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
-
+//                finish();
+                findViewById(R.id.AJA_no_data_tv).setVisibility(View.VISIBLE);
             }
         }, NetworkManager.getInstance(), new GetPendingJobListRequest(persistanceManager.getSessionId(), persistanceManager.getMachineId()), persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
 
@@ -282,7 +289,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetJobDetailsSuccess(Object response) {
-
+                if (!isActive){
+                    return;
+                }
                 ProgressDialogManager.dismiss();
 
                 if (response == null) {
@@ -306,7 +315,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onGetJobDetailsFailed(ErrorObjectInterface reason) {
-
+                if (!isActive){
+                    return;
+                }
                 ProgressDialogManager.dismiss();
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, getString(R.string.get_jobs_details_failed_error));
@@ -362,7 +373,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onPostActivateJobSuccess(Object response) {
-
+                if (!isActive){
+                    return;
+                }
                 ProgressDialogManager.dismiss();
 
                 if (response == null) {
@@ -384,7 +397,9 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
             @Override
             public void onPostActivateJobFailed(ErrorObjectInterface reason) {
-
+                if (!isActive){
+                    return;
+                }
                 ProgressDialogManager.dismiss();
 
                 ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
@@ -396,6 +411,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
     }
 
     public void finishActivity(Response response, String jobID) {
+        isActive = false;
         Intent intent = getIntent();
         intent.putExtra(EXTRA_ACTIVATE_JOB_RESPONSE, response);
         intent.putExtra(EXTRA_ACTIVATE_JOB_ID, jobID);

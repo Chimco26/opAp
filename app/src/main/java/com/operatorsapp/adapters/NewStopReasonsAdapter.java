@@ -61,6 +61,7 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
         holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
+//        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupColorID()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
