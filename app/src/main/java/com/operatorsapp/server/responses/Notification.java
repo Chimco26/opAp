@@ -1,8 +1,10 @@
 package com.operatorsapp.server.responses;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.gson.annotations.SerializedName;
+import com.operatorsapp.R;
 import com.operatorsapp.utils.Consts;
 
 /**
@@ -126,6 +128,9 @@ public class Notification {
     }
 
     public String getmResponseDate() {
+        if (mResponseDate == null || mResponseDate == ""){
+            return getmSentTime();
+        }
         return mResponseDate;
     }
 
@@ -180,5 +185,50 @@ public class Notification {
                 return false;
             default:return false;
         }
+    }
+
+    public int getResponseIcon(Context context) {
+
+        int icon = 0;
+        if (getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN){
+
+            switch (getmResponseType()){
+
+                case Consts.NOTIFICATION_RESPONSE_TYPE_UNSET:
+                    icon = R.drawable.call_recieved;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                    icon = R.drawable.call_sent_blue;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                    icon = R.drawable.call_declined;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_START_SERVICE:
+                    icon = R.drawable.at_work_blue;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_END_SERVICE:
+                    icon = R.drawable.service_done;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED:
+                    icon = R.drawable.cancel_blue;
+                    break;
+            }
+        }else {
+
+            switch (getmResponseType()){
+
+                case Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS:
+                    icon = R.drawable.question_circle_outline;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE:
+                    icon = R.drawable.baseline_check_circle;
+                    break;
+                case Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE:
+                    icon = R.drawable.close_circle_outline;
+                    break;
+
+            }
+        }
+        return icon;
     }
 }

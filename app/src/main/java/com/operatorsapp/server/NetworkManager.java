@@ -70,6 +70,8 @@ import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
+import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -976,12 +978,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 //        Call<MachineJoshDataResponse> call = mRetrofit.create(OpAppServiceRequests.class).getMachineJoshData(request);
 //        call.enqueue(callback);
 //    }
-
-    public void getNewVersionFile(final Callback<ResponseBody> callback) {
-        mRetrofit = getRetrofit("http://www.ovh.net", PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-        Call<ResponseBody> call = mRetrofit.create(OpAppServiceRequests.class).getNewVersionFile();
-        call.enqueue(callback);
-    }
+//
+//    public void getNewVersionFile(final Callback<ResponseBody> callback) {
+//        mRetrofit = getRetrofit("http://www.ovh.net", PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+//        Call<ResponseBody> call = mRetrofit.create(OpAppServiceRequests.class).getNewVersionFile();
+//        call.enqueue(callback);
+//    }
 
 
     public void GetApplicationVersion(final Callback<AppVersionResponse> callback) {
@@ -990,4 +992,15 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
+//    public void postSendNotification(SendNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
+//        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+//        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).sendNotification(request);
+//        call.enqueue(callback);
+//    }
+
+    public void getTopNotification(TopNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTopNotifications(request);
+        call.enqueue(callback);
+    }
 }

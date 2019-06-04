@@ -1,8 +1,8 @@
 package com.operatorsapp.server.interfaces;
 
-import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
-import com.example.common.request.MachineJoshDataRequest;
+import com.operatorsapp.server.requests.TopNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
@@ -59,4 +59,10 @@ public interface OpAppServiceRequests {
 //    @GET("/LeaderMESApi/GetApplicationVersion")
     @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
     Call<AppVersionResponse> GetApplicationVersion();
+
+    @POST("/LeaderMESApi/SendNotificationToOpApp")
+    Call<NotificationHistoryResponse> sendNotification(@Body SendNotificationRequest notification);
+
+    @POST("/LeaderMESApi/GetTopNotifications")
+    Call<NotificationHistoryResponse> getTopNotifications(@Body TopNotificationRequest notificationRequest);
 }
