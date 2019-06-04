@@ -23,132 +23,101 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:background="@color/divider_gray" />
 
     <LinearLayout
-        android:id="@+id/row1_top_five_lil"
+        android:id="@+id/TP_title_ly"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/row1_top_five_lil"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="64dp"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/row1_title_stat1_top_five"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/row1_title_stat1_top_five_number_tv"
-                    style="@style/ProximaNovaSemiBold"
+                <LinearLayout
+                    android:id="@+id/row1_title_stat1_top_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/row1_title_stat1_top_five_text_tv"
-                    style="@style/ProximaNovaSemiBold"
+                    <TextView
+                        android:id="@+id/row1_title_stat1_top_five_number_tv"
+                        style="@style/ProximaNovaSemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/row1_title_stat1_top_five_text_tv"
+                        style="@style/ProximaNovaSemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/minutes_long"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/row1_title_stat3_top_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/minutes_long"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/row1_title_stat3_top_five_number_tv"
+                        style="@style/ProximaNovaSemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/row1_title_stat3_top_five_text_tv"
+                        style="@style/ProximaNovaSemiBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/events"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
             <View
-                android:layout_width="100dp"
-                android:layout_height="match_parent"/>
-            <!--<LinearLayout-->
-            <!--android:id="@+id/row1_title_stat2_top_five"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="vertical"-->
-            <!--android:padding="10dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/row1_title_stat2_top_five_number_tv"-->
-            <!--style="@style/ProximaNovaSemiBold"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:maxLines="1"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/title_stat2_top_five_text_tv"-->
-            <!--style="@style/ProximaNovaSemiBold"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:maxLines="1"-->
-            <!--android:padding="15dp"-->
-            <!--android:text="@string/number_of_jobs"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="bold" />-->
-            <!--</LinearLayout>-->
-
-            <LinearLayout
-                android:id="@+id/row1_title_stat3_top_five"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:id="@+id/row1_title_stat3_top_five_number_tv"
-                    style="@style/ProximaNovaSemiBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/row1_title_stat3_top_five_text_tv"
-                    style="@style/ProximaNovaSemiBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/events"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/divider_gray" />
         </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/divider_gray" />
-
-    <!--top 5 list-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/top_five_recyclerView"

@@ -270,6 +270,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private MachineJoshDataResponse mMachineJoshDataResponse;
     private Integer mSelectProductJoshId;
     private View mReportBtn;
+    private boolean mIsTimeLineOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -485,7 +486,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initTopFiveFragment() {
 
-        mReportShiftFragment = ReportShiftFragment.newInstance();
+        mReportShiftFragment = ReportShiftFragment.newInstance(mIsTimeLineOpen);
 
         try {
             getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mReportShiftFragment).addToBackStack(ReportShiftFragment.TAG).commit();
@@ -821,6 +822,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         PersistenceManager.getInstance().setDisplayRejectFactor(machineStatus.getAllMachinesData().get(0).isDisplayRejectFactor());
                         PersistenceManager.getInstance().setAddRejectsOnSetupEnd(machineStatus.getAllMachinesData().get(0).isAddRejectsOnSetupEnd());
                         PersistenceManager.getInstance().setMinEventDuration(machineStatus.getAllMachinesData().get(0).getMinEventDuration());
+                        PersistenceManager.getInstance().setDepartmentId(machineStatus.getAllMachinesData().get(0).getDepartmentID());
 
                         String opName = machineStatus.getAllMachinesData().get(0).getOperatorName();
                         String opId = machineStatus.getAllMachinesData().get(0).getOperatorId();
@@ -1771,6 +1773,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void onWidgetUpdateSpane(boolean open) {
+        mIsTimeLineOpen = open;
         if (mWidgetFragment != null) {
             mWidgetFragment.setSpanCount(open);
         }
@@ -1779,6 +1782,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
         if (mReportStopReasonFragment != null) {
             mReportStopReasonFragment.setSpanCount(!open);
+        }
+        if (mReportShiftFragment != null) {
+            mReportShiftFragment.setIsOpenState(!open);
         }
 
     }
