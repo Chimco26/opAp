@@ -36,6 +36,7 @@ import com.example.common.Event;
 import com.example.common.MultipleRejectRequestModel;
 import com.example.common.RejectForMultipleRequest;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.oppapplog.OppAppLogger;
@@ -64,7 +65,6 @@ import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
 import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
 import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
 import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
@@ -113,10 +113,10 @@ import com.operatorsapp.fragments.RecipeFragment;
 import com.operatorsapp.fragments.ReportCycleUnitsFragment;
 import com.operatorsapp.fragments.ReportInventoryFragment;
 import com.operatorsapp.fragments.ReportRejectsFragment;
+import com.operatorsapp.fragments.ReportShiftFragment;
 import com.operatorsapp.fragments.ReportStopReasonFragment;
 import com.operatorsapp.fragments.SelectStopReasonFragment;
 import com.operatorsapp.fragments.SignInOperatorFragment;
-import com.operatorsapp.fragments.TopFiveFragment;
 import com.operatorsapp.fragments.ViewPagerFragment;
 import com.operatorsapp.fragments.WidgetFragment;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
@@ -179,10 +179,10 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
+import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.activities.JobActionActivity.EXTRA_IS_NO_PRODUCTION;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_ERP_JOB_ID;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_JOB_ID;
-import static com.operatorsapp.activities.JobActionActivity.EXTRA_LAST_PRODUCT_NAME;
 import static com.operatorsapp.utils.ClearData.cleanEvents;
 
 public class DashboardActivity extends AppCompatActivity implements OnCroutonRequestListener,
@@ -227,13 +227,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private ArrayList<DashboardUICallbackListener> mDashboardUICallbackListenerList = new ArrayList<>();
     private WidgetFragment mWidgetFragment;
     private ActionBarAndEventsFragment mActionBarAndEventsFragment;
-    private View mContainer2;
+    //    private View mContainer2;
     private ArrayList<Float> mSelectedEvents;
     private ReportStopReasonFragment mReportStopReasonFragment;
     private SelectStopReasonFragment mSelectStopReasonFragment;
     private View mContainer3;
     private ViewPagerFragment mViewPagerFragment;
-    private TopFiveFragment mTopFiveFragment;
+    private ReportShiftFragment mReportShiftFragment;
     private RecipeFragment mRecipeFragment;
     private Intent mGalleryIntent;
     private Integer mSelectJobId;
@@ -269,6 +269,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private File outputFile;
     private MachineJoshDataResponse mMachineJoshDataResponse;
     private Integer mSelectProductJoshId;
+    private View mReportBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +296,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mActionBarAndEventsFragment = ActionBarAndEventsFragment.newInstance();
 
-        mContainer2 = findViewById(R.id.fragments_container_widget);
+//        mContainer2 = findViewById(R.id.fragments_container_widget);
 
         mContainer3 = findViewById(R.id.fragments_container_reason);
 
@@ -317,7 +318,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void setReportBtnListener() {
 
-        findViewById(R.id.AD_report_btn).setOnClickListener(new View.OnClickListener() {
+        mReportBtn = findViewById(R.id.AD_report_btn);
+        mReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initTopFiveFragment();
@@ -483,11 +485,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     private void initTopFiveFragment() {
 
-        mTopFiveFragment = TopFiveFragment.newInstance();
+        mReportShiftFragment = ReportShiftFragment.newInstance();
 
         try {
-
-            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mTopFiveFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(mContainer3.getId(), mReportShiftFragment).addToBackStack(ReportShiftFragment.TAG).commit();
+//            mReportBtn.setVisibility(View.GONE);
         } catch (IllegalStateException ignored) {
         }
     }
@@ -535,27 +537,46 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
 
                 if (fragment != null) {
-                    if (fragment instanceof ActionBarAndEventsFragment ||
-                            fragment instanceof RecipeFragment ||
-                            fragment instanceof WidgetFragment ||
-                            fragment instanceof ReportStopReasonFragment ||
-                            fragment instanceof SelectStopReasonFragment ||
-                            fragment instanceof TopFiveFragment) {
-                        if (mActionBarAndEventsFragment != null) {
-                            mActionBarAndEventsFragment.setActionBar();
-                        }
-                        first = !first;
-                    }
-                    if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
-                            && mCurrentMachineStatus.getAllMachinesData().size() > 0
-                            && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
-                        setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
-                        setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
-//                        setFilterWarningText(true);
-                    }
+                    setActionBarByFragment(fragment);
+                    setFiltersByFragment();
+                    checkShowReportBtn(fragment);
                 }
             }
         };
+    }
+
+    public void setFiltersByFragment() {
+        if (mCurrentMachineStatus != null && mCurrentMachineStatus.getAllMachinesData() != null
+                && mCurrentMachineStatus.getAllMachinesData().size() > 0
+                && mCurrentMachineStatus.getAllMachinesData().get(0) != null) {
+            setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
+            setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+//                        setFilterWarningText(true);
+        }
+    }
+
+    public void setActionBarByFragment(Fragment fragment) {
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment ||
+                fragment instanceof ReportStopReasonFragment ||
+                fragment instanceof SelectStopReasonFragment ||
+                fragment instanceof ReportShiftFragment) {
+            if (mActionBarAndEventsFragment != null) {
+                mActionBarAndEventsFragment.setActionBar();
+            }
+            first = !first;
+        }
+    }
+
+    public void checkShowReportBtn(Fragment fragment) {
+        if (fragment instanceof ActionBarAndEventsFragment ||
+                fragment instanceof RecipeFragment ||
+                fragment instanceof WidgetFragment) {
+            showReportBtn(true);
+        } else {
+            showReportBtn(false);
+        }
     }
 
     private void updateAndroidSecurityProvider(Activity callingActivity) {
@@ -831,6 +852,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 if (machineStatus != null) {
                     setWhiteFilter(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
+                    checkShowReportBtn(getVisibleFragment());
 //                    setFilterWarningText(true);
                 }
 
@@ -868,6 +890,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
         };
+    }
+
+    private void showReportBtn(boolean show) {
+        if (show) {
+            mReportBtn.setVisibility(View.VISIBLE);
+        } else {
+            mReportBtn.setVisibility(View.GONE);
+        }
     }
 
     private void setBlackFilter(boolean show) {
@@ -1756,13 +1786,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onResize(int width, int statusBarsHeight) {
 
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
-
-        layoutParams.setMarginStart(width);
-
-        layoutParams.topMargin = statusBarsHeight;
-
-        mContainer2.setLayoutParams(layoutParams);
+//        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
+//
+//        layoutParams.setMarginStart(width);
+//
+//        layoutParams.topMargin = statusBarsHeight;
+//
+//        mContainer2.setLayoutParams(layoutParams);
 
         ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
 
@@ -1898,7 +1928,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     public void startPendingJobsActivity() {
-        Intent intent = new Intent(DashboardActivity.this, JobActionActivity.class);
+        Intent intent = new Intent(DashboardActivity.this, ActivateJobActivity.class);
 
         intent.putExtra(EXTRA_LAST_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastJobId());
         intent.putExtra(EXTRA_LAST_ERP_JOB_ID, mCurrentMachineStatus.getAllMachinesData().get(0).getLastErpJobId());
@@ -1908,7 +1938,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             intent.putExtra(EXTRA_IS_NO_PRODUCTION, mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() > 1);
         }
 
-        startActivityForResult(intent, JobActionActivity.EXTRA_ACTIVATE_JOB_CODE);
+        startActivityForResult(intent, ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE);
 
         ignoreFromOnPause = true;
 
@@ -2027,14 +2057,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     @Override
     public void setCycleWarningView(boolean cycleWarningViewShow) {
-        if (mViewPagerFragment != null){
+        if (mViewPagerFragment != null) {
             mViewPagerFragment.setCycleWarningView(cycleWarningViewShow);
         }
     }
 
     @Override
     public void resetCycleWarningView(boolean wasShow, boolean show) {
-        if (mViewPagerFragment != null){
+        if (mViewPagerFragment != null) {
             mViewPagerFragment.resetCycleWarningView(wasShow, show);
         }
     }
@@ -2143,11 +2173,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 }
             }
 
-        } else if (mTopFiveFragment != null){
-            getSupportFragmentManager().beginTransaction().remove(mTopFiveFragment).commit();
-            mTopFiveFragment = null;
-
-        }else {
+        } else {
             super.onBackPressed();
         }
 
@@ -2365,13 +2391,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         }
 
-        if (resultCode == RESULT_OK && requestCode == JobActionActivity.EXTRA_ACTIVATE_JOB_CODE) {
+        if (resultCode == RESULT_OK && requestCode == ActivateJobActivity.EXTRA_ACTIVATE_JOB_CODE) {
             ignoreFromOnPause = true;
-            Object response = data.getParcelableExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
+            Object response = data.getParcelableExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_RESPONSE);
 
             if (((Response) response).getError() == null) {
 
-                mSelectJobId = data.getIntExtra(JobActionActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
+                mSelectJobId = data.getIntExtra(ActivateJobActivity.EXTRA_ACTIVATE_JOB_ID, PersistenceManager.getInstance().getJobId());
 
                 startJob();
 
@@ -2733,7 +2759,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                             // TODO: 07/05/2019 unmark before release
                             for (AppVersionResponse.ApplicationVersion item : response.body().getmAppVersion()) {
                                 if (item.getmAppName().equals(Consts.APP_NAME) && item.getmAppVersion() > BuildConfig.VERSION_CODE) {
-                                //if (item.getmAppName().equals(Consts.APP_NAME)) {
+                                    //if (item.getmAppName().equals(Consts.APP_NAME)) {
                                     //getFile("https://s3-eu-west-1.amazonaws.com/leadermes/opapp_35_update_test.apk");
                                     getFile(item.getmUrl());
                                 }

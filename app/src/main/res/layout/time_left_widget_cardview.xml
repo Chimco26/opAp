@@ -14,7 +14,7 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/TLWC_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -30,7 +30,6 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Total required 2k"
             android:textSize="18sp" />
 
         <View
@@ -61,6 +60,15 @@
                 android:gravity="center"
                 android:textColor="@color/blue1"
                 android:textSize="45sp" />
+
+            <TextView
+                android:id="@+id/TLWC_estimated_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/blue1"
+                android:gravity="center"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/TLWC_see_jobs_btn"

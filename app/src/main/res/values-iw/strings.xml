@@ -384,6 +384,7 @@
     <string name="setup_mode">מצב סט-אפ</string>
     <string name="average">ממוצע</string>
     <string name="minutes_long">דקות</string>
+    <string name="select_your_machine">בחר את המכונה שלך</string>
 
 
 </resources>

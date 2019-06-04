@@ -47,11 +47,13 @@ public class PendingJobPropsAdapter extends RecyclerView.Adapter<PendingJobProps
         SimpleDateFormat actualFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
 
-        viewHolder.mTitleTv.setText(getResizedString(mHashMapHeaders.get(mProps.get(position).getKey()).getDisplayName(), 20));
+        if (mProps.get(position) != null && mHashMapHeaders.get(mProps.get(position).getKey()) != null) {
+            viewHolder.mTitleTv.setText(getResizedString(mHashMapHeaders.get(mProps.get(position).getKey()).getDisplayName(), 20));
+        }
         if (mContext.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            viewHolder.mValueTv.setText(updateDateForRtl(mProps.get(position), actualFormat, dateFormat));
+            viewHolder.mValueTv.setText(getResizedString(updateDateForRtl(mProps.get(position), actualFormat, dateFormat), 22));
         } else {
-            viewHolder.mValueTv.setText(mProps.get(position).getValue());
+            viewHolder.mValueTv.setText(getResizedString(mProps.get(position).getValue(), 22));
         }
         if (mProps.get(position).getValue() != null) {
             if (mProps.get(position).getValue().length() > 18) {

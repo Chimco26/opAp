@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_parent_layout"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
+    android:layout_centerInParent="true"
+    android:background="@drawable/combined_shape"
+    android:padding="15dp">
+
+    <RelativeLayout
+        android:id="@+id/top_rl"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/HGT_title"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Current quantity"
+            android:textColor="@android:color/black"
+            android:textSize="23sp" />
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/HGT_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/HGT_title"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divider_gray" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_rl">
+
+        <LinearLayout
+            android:id="@+id/HGT_time_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/HGT_time_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/blue1"
+                android:textSize="45sp" />
+
+            <TextView
+                android:id="@+id/HGT_estimated_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/blue1"
+                android:gravity="center"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/HGT_countdown_ly"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.operatorsapp.view.widgetViewHolders.CountDownView
+                android:id="@+id/HGT_countdown"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:layout_marginTop="10dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

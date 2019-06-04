@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Header implements Parcelable {
 
+    public static String TAG = Header.class.getSimpleName();
 
     @SerializedName("DisplayName")
     @Expose
@@ -90,6 +91,11 @@ public class Header implements Parcelable {
     }
 
     public Header() {
+    }
+
+    public Header(String displayName, int order) {
+        this.displayName = displayName;
+        this.order = order;
     }
 
     protected Header(Parcel in) {

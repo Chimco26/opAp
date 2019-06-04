@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardCentralContainerListener;
 import com.operatorsapp.utils.StringUtil;
 import com.operatorsapp.utils.TimeUtils;
@@ -20,6 +21,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private static final int END_LIMIT = 10;//in minute
     private final int mHeight;
     private final int mWidth;
+    private final TextView m1EstimatedTv;
     private RelativeLayout mParentLayout;
     private boolean mEndSetupDisable;
     private TextView mTitle;
@@ -51,6 +53,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mSubTitle = itemView.findViewById(R.id.TLWC_subtitle);
         m1Ly = itemView.findViewById(R.id.TLWC_time_ly);
         m1TimeTv = itemView.findViewById(R.id.TLWC_time_tv);
+        m1EstimatedTv = itemView.findViewById(R.id.TLWC_estimated_tv);
         m1Btn = itemView.findViewById(R.id.TLWC_see_jobs_btn);
         m3Ly = itemView.findViewById(R.id.TLWC_end_setup_ly);
         m2Btn = itemView.findViewById(R.id.TLWC_end_setup_btn);
@@ -79,7 +82,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
 //        });
 //
 //        setSizes(mParentLayout);
-        mTitle.setText(R.string.time_left_to_current_job);
+        String nameByLang2 = OperatorApplication.isEnglishLang() ? widget.getFieldEName() : widget.getFieldLName();
+        mTitle.setText(nameByLang2);
         long time = Long.parseLong(widget.getCurrentValue());
         int endLimit = END_LIMIT;
 //        time = 45;// test states
@@ -101,17 +105,21 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
                 m2CountDownLy.setVisibility(View.GONE);
                 m3Ly.setVisibility(View.GONE);
                 if (time > 24 * 60) {
-                    m1TimeTv.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
+                    m1EstimatedTv.setVisibility(View.VISIBLE);
+                    m1EstimatedTv.setText(String.format("%s: %s", m1TimeTv.getContext().getString(R.string.estimated_date),
                             TimeUtils.convertMillisecondDateTo(new Date().getTime() + time * 60 * 1000)));
-                    m1TimeTv.setTextSize(2, 18);
+                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s", ((int) (time / 60)),
+                            m1TimeTv.getContext().getString(R.string.hr2)));
+//                    m1TimeTv.setTextSize(2, 18);
                 } else {
-                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s%s %s%s", ((int) (time / 60)),
+                    m1EstimatedTv.setVisibility(View.GONE);
+                    m1TimeTv.setText(String.format(Locale.getDefault(), "%s %s %s %s", ((int) (time / 60)),
                             m1TimeTv.getContext().getString(R.string.hr2),
                             StringUtil.add0ToNumber((int) (time % 60)),
                             m1TimeTv.getContext().getString(R.string.min)));
-                    m1TimeTv.setTextSize(2, 45);
+//                    m1TimeTv.setTextSize(2, 45);
                 }
-                mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//                mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
             } else {
                 m1Ly.setVisibility(View.GONE);
                 m2CountDownLy.setVisibility(View.VISIBLE);
@@ -127,7 +135,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
-            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
 //            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));

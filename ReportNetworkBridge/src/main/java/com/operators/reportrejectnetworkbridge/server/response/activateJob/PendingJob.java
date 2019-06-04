@@ -8,9 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PandingJob implements Parcelable{
+public class PendingJob implements Parcelable{
 
 
+    public static final String TAG = PendingJob.class.getSimpleName();
     @SerializedName("ID")
     @Expose
     private Integer iD;
@@ -55,23 +56,23 @@ public class PandingJob implements Parcelable{
         dest.writeTypedList(this.properties);
     }
 
-    public PandingJob() {
+    public PendingJob() {
     }
 
-    protected PandingJob(Parcel in) {
+    protected PendingJob(Parcel in) {
         this.iD = (Integer) in.readValue(Integer.class.getClassLoader());
         this.properties = in.createTypedArrayList(Property.CREATOR);
     }
 
-    public static final Creator<PandingJob> CREATOR = new Creator<PandingJob>() {
+    public static final Creator<PendingJob> CREATOR = new Creator<PendingJob>() {
         @Override
-        public PandingJob createFromParcel(Parcel source) {
-            return new PandingJob(source);
+        public PendingJob createFromParcel(Parcel source) {
+            return new PendingJob(source);
         }
 
         @Override
-        public PandingJob[] newArray(int size) {
-            return new PandingJob[size];
+        public PendingJob[] newArray(int size) {
+            return new PendingJob[size];
         }
     };
 

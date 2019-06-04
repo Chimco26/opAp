@@ -11,6 +11,7 @@ import java.util.List;
 
 public class JobDetailsResponse extends Response implements Parcelable{
 
+    public static final String TAG = JobDetailsResponse.class.getSimpleName();
     @SerializedName("Jobs")
     @Expose
     private List<Job> jobs = null;

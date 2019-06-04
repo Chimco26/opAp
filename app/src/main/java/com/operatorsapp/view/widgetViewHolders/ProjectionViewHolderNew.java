@@ -11,8 +11,6 @@ import com.operatorsapp.R;
 import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.utils.WidgetAdapterUtils;
 
-import me.grantland.widget.AutofitTextView;
-
 import static com.operatorsapp.utils.WidgetAdapterUtils.isNotNearestTextsNew;
 import static com.operatorsapp.utils.WidgetAdapterUtils.valueInK;
 
@@ -28,8 +26,8 @@ public class ProjectionViewHolderNew extends RecyclerView.ViewHolder {
     private final View mTargetReachedTv;
     private final View mLegendGoodUnitsView;
     private View mDivider;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private TextView mValue;
     private final TextView mProducedTv;
     private final TextView mTheoricalTv;

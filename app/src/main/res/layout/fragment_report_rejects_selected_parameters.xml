@@ -38,7 +38,7 @@
             android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/id_title"
+            android:id="@+id/ID_title"
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,9 +53,9 @@
             style="@style/Roboto_Regular_Status_Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/id_title"
+            android:layout_alignTop="@+id/ID_title"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/id_title"
+            android:layout_toEndOf="@+id/ID_title"
             android:text="@string/product_id"
             android:textSize="16sp"/>
 

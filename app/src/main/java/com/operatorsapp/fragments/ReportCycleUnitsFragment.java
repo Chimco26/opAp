@@ -337,7 +337,7 @@ public class ReportCycleUnitsFragment extends BackStackAwareFragment implements 
 
             mPlusButton.setEnabled(true);
         } else {
-            mUnitsCounterTextView.setText(new StringBuilder(String.valueOf(mMaxUnits)).append(".0"));
+            mUnitsCounterTextView.setText(new StringBuilder(String.valueOf(mMaxUnits)));
             mPlusButton.setEnabled(false);
         }
         mMinusButton.setEnabled(true);
