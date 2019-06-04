@@ -20,7 +20,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -88,8 +87,6 @@ import com.operatorsapp.adapters.JobsSpinnerAdapter;
 import com.operatorsapp.adapters.JoshProductNameSpinnerAdapter;
 import com.operatorsapp.adapters.LanguagesSpinnerAdapterActionBar;
 import com.operatorsapp.adapters.LenoxMachineAdapter;
-import com.operatorsapp.adapters.NotificationHistoryAdapter;
-import com.operatorsapp.adapters.NotificationsPagerAdapter;
 import com.operatorsapp.adapters.OperatorSpinnerAdapter;
 import com.operatorsapp.adapters.ProductionSpinnerAdapter;
 import com.operatorsapp.adapters.ShiftLogSqlAdapter;
@@ -98,6 +95,7 @@ import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.dialogs.DialogFragment;
 import com.operatorsapp.dialogs.GenericDialog;
 import com.operatorsapp.dialogs.LegendDialog;
+import com.operatorsapp.dialogs.NotificationsDialog;
 import com.operatorsapp.dialogs.TechCallDialog;
 import com.operatorsapp.fragments.interfaces.OnCroutonRequestListener;
 import com.operatorsapp.interfaces.CroutonRootProvider;
@@ -105,6 +103,7 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
+import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -113,6 +112,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
@@ -562,10 +562,41 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         OppAppLogger.getInstance().d(LOG_TAG, "onViewCreated(), end ");
 
         initProductsSpinner();
+        initBottomNotificationLayout(view);
 
 //        initCycleAlarmView(view);
 
         return statusBarParams;
+    }
+
+    private void initBottomNotificationLayout(View view) {
+
+        LinearLayout bottomNotifLil = view.findViewById(R.id.bottom_notification_lil);
+        ImageView bottomNotifIv = view.findViewById(R.id.bottom_notification_iv);
+        TextView bottomNotifTv = view.findViewById(R.id.bottom_notification_tv);
+        TextView bottomNotifTimeTv = view.findViewById(R.id.bottom_notification_time_tv);
+
+        bottomNotifLil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openNotificationsList();
+            }
+        });
+
+        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistory();
+        if (notList == null || notList.size() == 0){
+            bottomNotifIv.setVisibility(View.INVISIBLE);
+            bottomNotifTv.setText("");
+            bottomNotifTimeTv.setText("");
+        }else {
+            Notification notification = notList.get(0);
+            bottomNotifIv.setVisibility(View.VISIBLE);
+            bottomNotifIv.setImageResource(notification.getResponseIcon(getActivity()));
+            bottomNotifTv.setText(notification.getmBody(getActivity()));
+            bottomNotifTimeTv.setText(notification.getmResponseDate());
+
+        }
+
     }
 
     private void initLegendDialog(View view) {
@@ -1672,122 +1703,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mPopUpDialog.dismiss();
         }
 
-        mPopUpDialog = new Dialog(getActivity());
-        mPopUpDialog.setCanceledOnTouchOutside(true);
-
-        Window window = mPopUpDialog.getWindow();
-        assert window != null;
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.END | Gravity.TOP;
-        if (!OperatorApplication.isEnglishLang()) {
-            wlp.x = Gravity.END | Gravity.TOP;
-        }
-        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
-        boolean isEmpty = true;
-        for (Notification notification : notificationList) {
-            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN) {
-                isEmpty = false;
-                break;
+        mPopUpDialog = new NotificationsDialog(getActivity(), new NotificationsDialog.NotificationsDialogListener() {
+            @Override
+            public void onSendNewNotification(String text) {
+//                sendNewNotification(text);
             }
-        }
 
-        if (!isEmpty) {
+            @Override
+            public void onNotificationResponse(int notificationId, int responseType) {
+                sendNotificationResponse(notificationId, responseType);
+            }
 
-            mPopUpDialog.setContentView(R.layout.notification_view_pager);
+            @Override
+            public void getNotificationsFromServer(boolean openNotificationDialog) {
+                getNotificationsFromServer(openNotificationDialog);
+            }
+        });
 
-            final ViewPager vpDialog = mPopUpDialog.findViewById(R.id.NVP_view_pager);
-            //final TextView rightTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_right_tab);
-            final TextView leftTab = mPopUpDialog.findViewById(R.id.NVP_view_pager_tv_left_tab);
-            //final View rightTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_right_tab_underline);
-            final View leftTabUnderline = mPopUpDialog.findViewById(R.id.NVP_view_pager_left_tab_underline);
-            final SwipeRefreshLayout swipeRefresh = mPopUpDialog.findViewById(R.id.NVP_swipe);
-
-
-            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    getNotificationsFromServer(true);
-                }
-            });
-            vpDialog.setAdapter(new NotificationsPagerAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
-                @Override
-                public void onNotificationResponse(int notificationId, int responseType) {
-                    sendNotificationResponse(notificationId, responseType);
-                    mPopUpDialog.dismiss();
-                }
-            }));
-
-            vpDialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    switch (position) {
-                        case 0:
-                            leftTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
-                            leftTabUnderline.setVisibility(View.VISIBLE);
-//                            rightTab.setTextColor(getResources().getColor(R.color.dark_indigo));
-//                            rightTabUnderline.setVisibility(View.INVISIBLE);
-                            break;
-                        case 1:
-//                            rightTab.setTextColor(getResources().getColor(R.color.tabNotificationColor));
-//                            rightTabUnderline.setVisibility(View.VISIBLE);
-                            leftTab.setTextColor(getResources().getColor(R.color.dark_indigo));
-                            leftTabUnderline.setVisibility(View.INVISIBLE);
-                            break;
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    if (swipeRefresh != null) {
-                        swipeRefresh.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
-                    }
-                }
-            });
-
-            leftTab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    vpDialog.setCurrentItem(0);
-                }
-            });
-
-//            rightTab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    vpDialog.setCurrentItem(1);
-//                }
-//            });
-
-            Point point = new Point(1, 1);
-            ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
-            mPopUpDialog.getWindow().setLayout((int) (point.x / 3), point.y - 50);
-
-            vpDialog.setCurrentItem(0);
-
-
-        } else {
-            TextView tv = new TextView(getActivity());
-            tv.setPadding(20, 50, 20, 50);
-            tv.setText(getString(R.string.no_notification_to_show));
-            tv.setTextSize(16);
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-            mPopUpDialog.setContentView(tv);
-
-            mPopUpDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        }
-
+        mPopUpDialog.setCanceledOnTouchOutside(true);
         mPopUpDialog.show();
-
 
         Tracker tracker = ((OperatorApplication) getActivity().getApplication()).getDefaultTracker();
         tracker.setHostname(PersistenceManager.getInstance().getSiteName());
@@ -1796,7 +1730,111 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 .setAction("Notifications dialog was opened")
                 .setLabel("Notifications dialog was opened")
                 .build());
+
+//        mPopUpDialog = new Dialog(getActivity());
+//        mPopUpDialog.setCanceledOnTouchOutside(true);
+//
+//        Window window = mPopUpDialog.getWindow();
+//        assert window != null;
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//        wlp.x = Gravity.END;
+//        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        window.setAttributes(wlp);
+//
+//        final ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
+//
+//        mPopUpDialog.setContentView(R.layout.notification_view_pager);
+//
+//        final ViewPager vpDialog = mPopUpDialog.findViewById(R.id.NVP_view_pager);
+//        final SwipeRefreshLayout swipeRefresh = mPopUpDialog.findViewById(R.id.NVP_swipe);
+//        final EditText newNotBodyEt = mPopUpDialog.findViewById(R.id.NVP_create_notification_tv);
+//        final ImageView newNotSendIv = mPopUpDialog.findViewById(R.id.NVP_create_notification_iv);
+//        final ImageView newNotTemplateIv = mPopUpDialog.findViewById(R.id.NVP_template_notification_iv);
+//
+//        newNotSendIv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!newNotBodyEt.getText().toString().isEmpty()){
+//
+//                    onSendNewNotification(newNotBodyEt.getText().toString());
+//                }
+//            }
+//        });
+//
+//        newNotTemplateIv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+//
+//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                getNotificationsFromServer(true);
+//            }
+//        });
+//        vpDialog.setAdapter(new NotificationsPagerAdapter(getActivity(), notificationList, new NotificationHistoryAdapter.OnNotificationResponseSelected() {
+//            @Override
+//            public void onNotificationResponse(int notificationId, int responseType) {
+//                sendNotificationResponse(notificationId, responseType);
+//                mPopUpDialog.dismiss();
+//            }
+//        }));
+//
+//        vpDialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//                if (swipeRefresh != null) {
+//                    swipeRefresh.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+//                }
+//            }
+//        });
+//
+//
+////        Point point = new Point(1, 1);
+////        ((WindowManager) getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+////        mPopUpDialog.getWindow().setLayout((int) (point.x / 3), point.y - 50);
+//        mPopUpDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//
+//        vpDialog.setCurrentItem(0);
+//
+//        mPopUpDialog.show();
+//
+//
     }
+
+//    private void sendNewNotification(String text) {
+//        // TODO: 15/05/2019 create new notification
+//        int machineId = PersistenceManager.getInstance().getMachineId();
+//        String sessionId = PersistenceManager.getInstance().getSessionId();
+//        String title = "notification from opapp";
+//        SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
+//        ProgressDialogManager.show(getActivity());
+//        NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
+//            @Override
+//            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+//                ProgressDialogManager.dismiss();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+//                ProgressDialogManager.dismiss();
+//
+//            }
+//        });
+//    }
 
     private void sendNotificationResponse(final int notificationId, final int responseType) {
 

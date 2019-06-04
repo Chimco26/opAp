@@ -11,6 +11,17 @@ import com.operatorsapp.R;
 
 public class ReasonImage {
 
+//    public static int getColorForStopReason(String stopReasonId){
+//        int reason;
+//        int color;
+//
+//        try {
+//            reason = Integer.parseInt(stopReasonId);
+//        }catch (NumberFormatException e){
+//            reason = 0;
+//        }
+//
+//        switch (reason) {
     public static int getColorForStopReason(int stopReasonId){
         int color;
 
@@ -72,6 +83,17 @@ public class ReasonImage {
         return color;
     }
 
+//    public static int getImageForStopReason(String stopReasonId) {
+//        int icon;
+//        int imageId;
+//
+//        try {
+//            icon = Integer.parseInt(stopReasonId);
+//        }catch (NumberFormatException e){
+//            icon = 0;
+//        }
+//
+//        switch (icon) {
     public static int getImageForStopReason(int stopReasonId) {
 
         int imageId;

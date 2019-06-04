@@ -12,6 +12,8 @@ import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
+import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
@@ -67,4 +69,10 @@ public interface OpAppServiceRequests {
     //    @GET("/LeaderMESApi/GetApplicationVersion")
     @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
     Call<AppVersionResponse> GetApplicationVersion();
+
+    @POST("/LeaderMESApi/SendNotificationToOpApp")
+    Call<NotificationHistoryResponse> sendNotification(@Body SendNotificationRequest notification);
+
+    @POST("/LeaderMESApi/GetTopNotifications")
+    Call<NotificationHistoryResponse> getTopNotifications(@Body TopNotificationRequest notificationRequest);
 }
