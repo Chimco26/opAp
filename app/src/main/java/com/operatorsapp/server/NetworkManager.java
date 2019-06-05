@@ -965,7 +965,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationResponse(request);
         call.enqueue(callback);
-
     }
 
     public void postIncrementCounter(PostIncrementCounterRequest request, final Callback<ResponseStatus> callback) {

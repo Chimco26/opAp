@@ -3,7 +3,7 @@ package com.example.common.reportShift;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GraphColor {
+public class GraphColor implements Comparable<GraphColor>{
     @SerializedName("ColorName")
     @Expose
     private String colorName;
@@ -16,6 +16,13 @@ public class GraphColor {
     @SerializedName("DisplayOrder")
     @Expose
     private Integer displayOrder;
+
+    public GraphColor(String colorName, String hexCode, String rGB, Integer displayOrder) {
+        this.colorName = colorName;
+        this.hexCode = hexCode;
+        this.rGB = rGB;
+        this.displayOrder = displayOrder;
+    }
 
     public String getColorName() {
         return colorName;
@@ -47,5 +54,10 @@ public class GraphColor {
 
     public void setDisplayOrder(Integer displayOrder) {
         this.displayOrder = displayOrder;
+    }
+
+    @Override
+    public int compareTo(GraphColor graphColor) {
+        return displayOrder.compareTo(graphColor.displayOrder);
     }
 }

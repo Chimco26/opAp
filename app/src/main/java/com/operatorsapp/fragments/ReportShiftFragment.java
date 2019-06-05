@@ -1,6 +1,7 @@
 package com.operatorsapp.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,19 +11,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.reportShift.Department;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
+import com.example.common.reportShift.GraphColor;
+import com.example.common.reportShift.NotificationByType;
 import com.example.common.reportShift.ReqDepartment;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.reportShift.ShiftByTime;
 import com.example.common.request.BaseTimeRequest;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -34,9 +42,9 @@ import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.model.TopFiveItem;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
-import com.operatorsapp.server.responses.CriticalEvent;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
+import com.operatorsapp.view.LineChartTimeSmall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,20 +59,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private static final String IS_TIME_LINE_OPEN = "IS_TIME_LINE_OPEN";
     private RecyclerView mTopStops_rv;
     private RecyclerView mTopRejects_rv;
-    TextView include1_title;
-    TextView include2_title;
-//    TextView row1_title;
-    TextView include1_row1_stat1_num;
-//    TextView include1_row1_stat2_num;
-    TextView include1_row1_stat3_num;
-    private LinearLayout row1_lil;
     private OnActivityCallbackRegistered mOnActivityCallbackRegistered;
     private View mProgressBar;
     private RecyclerView.Adapter mStopsAdapter;
     private TopFiveAdapter mRejectsAdapter;
     private boolean isOpen;
-    private View include1_title_ly;
-    private View include2_title_ly;
+    private ServiceCallsResponse mServiceCallsResponse;
+    private DepartmentShiftGraphResponse mDepartmentShiftGraphResponse;
+    private View mTopFiveStopsView;
+    private View mTopFiveRejectsView;
+    private PieChart mPieChart;
+    private LineChartTimeSmall mCycleTime;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -77,7 +82,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null && getArguments().containsKey(IS_TIME_LINE_OPEN)){
+        if (getArguments() != null && getArguments().containsKey(IS_TIME_LINE_OPEN)) {
             isOpen = getArguments().getBoolean(IS_TIME_LINE_OPEN);
         }
     }
@@ -107,10 +112,152 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initTopFive(view);
+        mProgressBar = view.findViewById(R.id.FTF_progress);
+        mPieChart = view.findViewById(R.id.FRS_service_calls_view).findViewById(R.id.SCV_pie_chart);
+        mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
+        initTopFiveStopsVars(view);
+        initTopFiveRejects(view);
         getTopRejectsAndStops();
     }
 
+    private void initTopFiveStopsVars(View view) {
+        mTopFiveStopsView = view.findViewById(R.id.fragment_dashboard_top_five_1);
+        ((TextView) mTopFiveStopsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_stop_events));
+        mTopStops_rv = mTopFiveStopsView.findViewById(R.id.top_five_recyclerView);
+        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        mStopsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP);
+        mTopStops_rv.setAdapter(mStopsAdapter);
+    }
+
+    private void initTopFiveRejects(View view) {
+        mTopFiveRejectsView = view.findViewById(R.id.fragment_dashboard_top_five_2);
+        ((TextView) mTopFiveRejectsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_reject_reasons));
+        mTopRejects_rv = mTopFiveRejectsView.findViewById(R.id.top_five_recyclerView);
+        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        mRejectsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT);
+        mTopRejects_rv.setAdapter(mRejectsAdapter);
+    }
+
+    private void initCritical(View viewItem, String value, String events, String valueTitle, String eventsTile) {
+
+        if ((value != null && !value.isEmpty())
+                || events != null && !events.isEmpty()) {
+            viewItem.findViewById(R.id.TF_values_ly).setVisibility(View.VISIBLE);
+            if (value != null && !value.isEmpty()) {
+                viewItem.findViewById(R.id.TF_values).setVisibility(View.VISIBLE);
+                TextView textView = viewItem.findViewById(R.id.TF_values_value);
+                textView.setText(value);
+                ((TextView) viewItem.findViewById(R.id.TF_values_title)).setText(valueTitle);
+            } else {
+                viewItem.findViewById(R.id.TF_values).setVisibility(View.INVISIBLE);
+            }
+            if (events != null && !events.isEmpty()) {
+                viewItem.findViewById(R.id.TF_events).setVisibility(View.VISIBLE);
+                TextView textView = viewItem.findViewById(R.id.TF_events_value);
+                textView.setText(value);
+                ((TextView) viewItem.findViewById(R.id.TF_events_title)).setText(eventsTile);
+            } else {
+                viewItem.findViewById(R.id.TF_events).setVisibility(View.INVISIBLE);
+            }
+        } else {
+            viewItem.findViewById(R.id.TF_values_ly).setVisibility(View.GONE);
+        }
+
+    }
+
+    private void initServiceCallsView(ServiceCallsResponse serviceCallsResponse) {
+        mPieChart.setDrawHoleEnabled(false);
+
+        List<NotificationByType> values = serviceCallsResponse.getNotificationByType();
+        if (values.size() > 0) {
+            ArrayList<PieEntry> mPieValues = new ArrayList<>();
+            for (int i = 0; i < values.size(); i++) {
+                NotificationByType notificationByType = values.get(i);
+                mPieValues.add(new PieEntry(notificationByType.getNumOfResponse(), notificationByType.getEName()));
+            }
+
+            mPieChart.setEntryLabelColor(Color.BLACK);
+
+            PieDataSet pieDataSet = new PieDataSet(mPieValues, "");
+
+            ArrayList<Integer> colors = new ArrayList<>();
+            for (int c : ColorTemplate.JOYFUL_COLORS)
+                colors.add(c);
+            pieDataSet.setColors(colors);
+            pieDataSet.setSliceSpace(4f);
+
+            PieData data = new PieData(pieDataSet);
+
+//            data.setValueFormatter(new PercentFormatter(mPieChart));
+            data.setValueTextSize(11f);
+            data.setValueTextColor(Color.BLACK);
+
+            mPieChart.setData(data);
+            mPieChart.setUsePercentValues(true);
+//            mPieChart.getDescription().setEnabled(false);
+            mPieChart.getLegend().setWordWrapEnabled(true);
+            mPieChart.setDrawEntryLabels(false);
+            mPieChart.setExtraOffsets(0, 20, 0, 20);
+
+            mPieChart.invalidate();
+
+            pieDataSet.setValueLinePart1OffsetPercentage(80.f);
+            pieDataSet.setValueLinePart1Length(0.2f);
+            pieDataSet.setValueLinePart2Length(0.4f);
+            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        }
+    }
+
+
+    private void initCycleTime(DepartmentShiftGraphResponse departmentShiftGraphResponse) {
+//        int xValuesIncreaseIndex = 0;
+//        ArrayList<Entry> tenHoursValues = new ArrayList<>();
+//        ArrayList<Entry> fourHoursValues = new ArrayList<>();
+//        ArrayList<ArrayList<Entry>> fourHoursList = new ArrayList<>();
+//        final ArrayList<ArrayList<Entry>> tenHoursList = new ArrayList<>();
+//        float midnightLimit = 0;
+//        if (departmentShiftGraphResponse.getDepartments() != null && departmentShiftGraphResponse.getGraphColors().size() > 0) {
+//            Collections.sort(departmentShiftGraphResponse.getGraphColors());
+//            final String[] xValues = new String[departmentShiftGraphResponse.getGraphColors().size() + 1];
+//            for (int i = 0; i < departmentShiftGraphResponse.getDepartments().size(); i++) {
+//                Department department = departmentShiftGraphResponse.getDepartments().get(i);
+//
+//                xValues[i + xValuesIncreaseIndex] = TimeUtils.getDateForChart(department.getTime());
+//                Entry entry;
+//                try {
+//                    entry = new Entry(i, department.getValue());
+//                } catch (Exception e) {
+//                    entry = null;
+//                }
+//                if (entry == null) {
+//                    if (fourHoursValues.size() > 0) {
+//                        fourHoursList.add(fourHoursValues);
+//                    }
+//                    fourHoursValues = new ArrayList<>();
+//                } else {
+//                    if (TimeUtils.getLongFromDateString(department.getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - FOUR_HOURS)) {
+//                        fourHoursValues.add(entry);
+//                    }
+//                }
+//            }
+//            if (fourHoursValues.size() > 0) {
+//                fourHoursList.add(fourHoursValues);
+//                tenHoursList.add(tenHoursValues);
+//            }
+//            mPieChart.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
+//            mPieChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
+//        }
+    }
 
     @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
@@ -147,46 +294,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     }
 
-    private void initTopFive(View view) {
-
-        mProgressBar = view.findViewById(R.id.FTF_progress);
-
-        View includeTopFive_1 = view.findViewById(R.id.fragment_dashboard_top_five_1);
-        View includeTopFive_2 = view.findViewById(R.id.fragment_dashboard_top_five_2);
-
-        row1_lil = view.findViewById(R.id.row1_top_five_lil);
-        include1_title = includeTopFive_1.findViewById(R.id.title_top_five_tv);
-        include1_title_ly = includeTopFive_1.findViewById(R.id.TP_title_ly);
-        include2_title_ly = includeTopFive_2.findViewById(R.id.TP_title_ly);
-        include2_title = includeTopFive_2.findViewById(R.id.title_top_five_tv);
-
-        include1_row1_stat1_num = includeTopFive_1.findViewById(R.id.row1_title_stat1_top_five_number_tv);
-        include1_row1_stat3_num = includeTopFive_1.findViewById(R.id.row1_title_stat3_top_five_number_tv);
-
-        mTopStops_rv = includeTopFive_1.findViewById(R.id.top_five_recyclerView);
-        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
-        mStopsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP);
-        mTopStops_rv.setAdapter(mStopsAdapter);
-
-        mTopRejects_rv = includeTopFive_2.findViewById(R.id.top_five_recyclerView);
-        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
-        mRejectsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT);
-        mTopRejects_rv.setAdapter(mRejectsAdapter);
-
-        include1_title.setText(getString(R.string.top_five_stop_events));
-        include2_title.setText(getString(R.string.top_five_reject_reasons));
-    }
-
     private void getTopRejectsAndStops() {
 
         PersistenceManager pm = PersistenceManager.getInstance();
@@ -220,9 +327,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                     }
 
                     if (response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
-                        initCritical(response.body());
-                    } else {
-                        row1_lil.setVisibility(View.GONE);
+                        initCritical(mTopFiveStopsView, response.body().getmCriticalEvents().get(0).getmDuration(),
+                                response.body().getmCriticalEvents().get(0).getmEventsCount(),
+                                getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
+                        if (response.body().getmCriticalEvents().size() > 1) {
+                            initCritical(mTopFiveRejectsView, response.body().getmCriticalEvents().get(1).getmDuration(),
+                                    response.body().getmCriticalEvents().get(1).getmEventsCount(),
+                                    getContext().getString(R.string.rejects).toLowerCase(), getContext().getString(R.string.events));
+                        }
                     }
                 }
                 mProgressBar.setVisibility(View.GONE);
@@ -243,16 +355,17 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
                 if (response.body() != null && response.body().getError() == null) {
 
-//                    if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
-//                        ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
-//                    }
-//
-//                    if (response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
-//                        initCritical(response.body());
-//                    } else {
-//                        row1_lil.setVisibility(View.GONE);
-//                    }
+                    if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
+                        initServiceCallsView(response.body());
+                    }
+
                 }
+                mServiceCallsResponse = new ServiceCallsResponse();
+                ArrayList<NotificationByType> notificationByTypes = new ArrayList<>();
+                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
+                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
+                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
+                mServiceCallsResponse.setNotificationByType(notificationByTypes);
                 mProgressBar.setVisibility(View.GONE);
 
             }
@@ -276,16 +389,21 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
                 if (response.body() != null && response.body().getError() == null) {
 
-//                    if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
-//                        ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
-//                    }
-//
-//                    if (response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
-//                        initCritical(response.body());
-//                    } else {
-//                        row1_lil.setVisibility(View.GONE);
-//                    }
+                    if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0) {
+                        initCycleTime(response.body());
+                    }
+
                 }
+                mDepartmentShiftGraphResponse = new DepartmentShiftGraphResponse();
+                ArrayList<GraphColor> graphColors = new ArrayList<>();
+                GraphColor graphColor = new GraphColor("blue", "a", "#007cff", 0);
+                GraphColor graphColor2 = new GraphColor("red", "a", "#d0021b", 0);
+                graphColors.add(graphColor);
+                graphColors.add(graphColor2);
+                mDepartmentShiftGraphResponse.setGraphColors(graphColors);
+                ArrayList<Department> departments = new ArrayList<>();
+//                Department department = new Department();
+//                departmentShiftGraphResponse.setDepartments();
                 mProgressBar.setVisibility(View.GONE);
 
             }
@@ -298,22 +416,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         });
     }
 
-    private void initCritical(StopAndCriticalEventsResponse response) {
-        ArrayList<CriticalEvent> critList = response.getmCriticalEvents();
-
-        if (critList != null && critList.size() >= 1) {
-            CriticalEvent crit1 = critList.get(0);
-            row1_lil.setVisibility(View.VISIBLE);
-//            row1_title.setText(crit1.getmName());
-            include1_row1_stat1_num.setText(crit1.getmDuration());
-//            include1_row1_stat2_num.setText(String.format("%s%%", crit1.getmPercentageDuration()));
-            include1_row1_stat3_num.setText(crit1.getmEventsCount());
-        }else {
-            include1_title_ly.setVisibility(View.GONE);
-            include2_title_ly.setVisibility(View.GONE);
-        }
-
-    }
 
     public void setIsOpenState(boolean open) {
         isOpen = open;

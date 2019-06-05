@@ -24,6 +24,15 @@ public class NotificationByType {
     @Expose
     private Integer totalRespones;
 
+    public NotificationByType(String eName, String lName, Integer numOfResponse, Integer pC, Integer responseType, Integer totalRespones) {
+        this.eName = eName;
+        this.lName = lName;
+        this.numOfResponse = numOfResponse;
+        this.pC = pC;
+        this.responseType = responseType;
+        this.totalRespones = totalRespones;
+    }
+
     public String getEName() {
         return eName;
     }

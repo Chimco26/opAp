@@ -26,6 +26,15 @@ public class Department {
     @Expose
     private Integer displayOrder;
 
+    public Department(List<String> departmentGraphParameters, List<CurrentShift> currentShift, List<Object> referanceShift, Integer iD, String name, Integer displayOrder) {
+        this.departmentGraphParameters = departmentGraphParameters;
+        this.currentShift = currentShift;
+        this.referanceShift = referanceShift;
+        this.iD = iD;
+        this.name = name;
+        this.displayOrder = displayOrder;
+    }
+
     public List<String> getDepartmentGraphParameters() {
         return departmentGraphParameters;
     }
