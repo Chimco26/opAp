@@ -254,8 +254,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 //                fourHoursList.add(fourHoursValues);
 //                tenHoursList.add(tenHoursValues);
 //            }
-//            mPieChart.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
-//            mPieChart.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
+//            mCycleTime.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
+//            mCycleTime.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
 //        }
     }
 
@@ -303,7 +303,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
-                if (response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
+                if (isAdded() && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
                     mProgressBar.setVisibility(View.GONE);
                 }
@@ -326,7 +326,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                         ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
                     }
 
-                    if (response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
+                    if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
                         initCritical(mTopFiveStopsView, response.body().getmCriticalEvents().get(0).getmDuration(),
                                 response.body().getmCriticalEvents().get(0).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
@@ -353,7 +353,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
             @Override
             public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
-                if (response.body() != null && response.body().getError() == null) {
+                if (isAdded() && response.body() != null && response.body().getError() == null) {
 
                     if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
                         initServiceCallsView(response.body());

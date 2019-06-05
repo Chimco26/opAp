@@ -93,6 +93,8 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_IS_NEW_SHIFTLOG_DISPLAY = "pref.PREF_IS_NEW_SHIFTLOG_DISPLAY";
     private static final String PREF_ARRAY_ALARAM_CURRENT_EVENT = "pref.PREF_ARRAY_ALARAM_CURRENT_EVENT";
     private static final String PREF_DEPARTMENT_ID = "PREF_DEPARTMENT_ID";
+    private static final String PREF_REPORT_SHIFT_BTN_X = "PREF_REPORT_SHIFT_BTN_X";
+    private static final String PREF_REPORT_SHIFT_BTN_Y = "PREF_REPORT_SHIFT_BTN_Y";
 
 
     private static PersistenceManager msInstance;
@@ -717,6 +719,20 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     }
     public int getDepartmentId() {
         return SecurePreferences.getInstance().getInt(PREF_DEPARTMENT_ID);
+    }
+
+    public void setReportShiftBtnPositionX(float moveToX) {
+        SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_X, moveToX);
+    }
+    public float getReportShiftBtnPositionX() {
+        return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_X);
+    }
+
+    public void setReportShiftBtnPositionY(float moveToY) {
+        SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_Y, moveToY);
+    }
+    public float getReportShiftBtnPositionY() {
+        return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_Y);
     }
 
 }

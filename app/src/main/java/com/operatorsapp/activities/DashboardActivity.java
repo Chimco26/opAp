@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -299,7 +300,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
 //        mContainer2 = findViewById(R.id.fragments_container_widget);
 
-        mContainer3 = findViewById(R.id.fragments_container_reason);
+        mContainer3 = findViewById(R.id.fragments_container_central);
 
         initDashboardFragment();
 
@@ -320,10 +321,51 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void setReportBtnListener() {
 
         mReportBtn = findViewById(R.id.AD_report_btn);
+        mReportBtn.post(new Runnable() {
+            @Override
+            public void run() {
+                mReportBtn.setX(PersistenceManager.getInstance().getReportShiftBtnPositionX());
+                mReportBtn.setY(PersistenceManager.getInstance().getReportShiftBtnPositionY());
+            }
+        });
         mReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initTopFiveFragment();
+            }
+        });
+        final float[] dX = new float[1];
+        final float[] dY = new float[1];
+        final float[] moveToX = new float[1];
+        final float[] moveToY = new float[1];
+        mReportBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        dX[0] = view.getX() - motionEvent.getRawX();
+                        dY[0] = view.getY() - motionEvent.getRawY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) > 0) {
+                            moveToX[0] = motionEvent.getRawX() + dX[0] - (view.getWidth() / 2);
+                        }
+                        if (motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) > 0
+                        && view.getY() + dY[0] + view.getHeight()/2 < mContainer3.getHeight()) {
+                            moveToY[0] = motionEvent.getRawY() + dY[0] - (view.getHeight() / 2);
+                        }
+                        view.animate()
+                                .x(moveToX[0])
+                                .y(moveToY[0])
+                                .setDuration(0)
+                                .start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        PersistenceManager.getInstance().setReportShiftBtnPositionX(moveToX[0]);
+                        PersistenceManager.getInstance().setReportShiftBtnPositionY(moveToY[0]);
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -1208,12 +1250,14 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+    public void onShowCroutonRequest(String croutonMessage, int croutonDurationInMilliseconds,
+                                     int viewGroup, CroutonCreator.CroutonType croutonType) {
 
     }
 
     @Override
-    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage, int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
+    public void onShowCroutonRequest(SpannableStringBuilder croutonMessage,
+                                     int croutonDurationInMilliseconds, int viewGroup, CroutonCreator.CroutonType croutonType) {
         if (croutonType == CroutonCreator.CroutonType.ALERT_DIALOG) {
             {
                 if (!((getVisibleFragment() instanceof ActionBarAndEventsFragment) || (getVisibleFragment() instanceof WidgetFragment)
@@ -1254,7 +1298,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void goToFragment(Fragment fragment, boolean isCentralContainer, boolean addToBackStack) {
+    public void goToFragment(Fragment fragment, boolean isCentralContainer,
+                             boolean addToBackStack) {
 
         try {
             if (isCentralContainer) {
@@ -1384,7 +1429,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJobFragmentAttached(DashboardActivityToJobsFragmentCallback dashboardActivityToJobsFragmentCallback) {
+    public void onJobFragmentAttached(DashboardActivityToJobsFragmentCallback
+                                              dashboardActivityToJobsFragmentCallback) {
         mDashboardActivityToJobsFragmentCallback = dashboardActivityToJobsFragmentCallback;
     }
 
@@ -1406,7 +1452,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onSelectedJobFragmentAttached(DashBoardActivityToSelectedJobFragmentCallback dashboardActivityToSelectedJobFragmentCallback) {
+    public void onSelectedJobFragmentAttached(DashBoardActivityToSelectedJobFragmentCallback
+                                                      dashboardActivityToSelectedJobFragmentCallback) {
         mDashboardActivityToSelectedJobFragmentCallback = dashboardActivityToSelectedJobFragmentCallback;
     }
 
@@ -1441,7 +1488,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    public void silentLoginFromDashBoard(final OnCroutonRequestListener onCroutonRequestListener, final SilentLoginCallback silentLoginCallback) {
+    public void silentLoginFromDashBoard(
+            final OnCroutonRequestListener onCroutonRequestListener,
+            final SilentLoginCallback silentLoginCallback) {
 
         LoginCore.getInstance().silentLoginFromDashBoard(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getUserName(), PersistenceManager.getInstance().getPassword(), new LoginUICallback<Machine>() {
             @Override
@@ -1611,7 +1660,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener onReportFieldsUpdatedCallbackListener) {
+    public void onRefreshReportFieldsRequest(OnReportFieldsUpdatedCallbackListener
+                                                     onReportFieldsUpdatedCallbackListener) {
 //        mOnReportFieldsUpdatedCallbackListener = onReportFieldsUpdatedCallbackListener;
 //        mReportFieldsForMachineCore.stopPolling();
 //        mReportFieldsForMachineCore.startPolling();
@@ -1743,7 +1793,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         ignoreFromOnPause = false;
@@ -1792,14 +1843,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     @Override
     public void onResize(int width, int statusBarsHeight) {
 
-//        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mContainer2.getLayoutParams();
-//
-//        layoutParams.setMarginStart(width);
-//
-//        layoutParams.topMargin = statusBarsHeight;
-//
-//        mContainer2.setLayoutParams(layoutParams);
-
         ViewGroup.MarginLayoutParams layoutParams3 = (ViewGroup.MarginLayoutParams) mContainer3.getLayoutParams();
 
         layoutParams3.setMarginStart(width);
@@ -1811,7 +1854,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenReportStopReasonFragment(ReportStopReasonFragment reportStopReasonFragment) {
+    public void onOpenReportStopReasonFragment(ReportStopReasonFragment
+                                                       reportStopReasonFragment) {
 
         startReportModeTimer();
 
@@ -1955,7 +1999,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob selectedJob, String jobName) {
+    public void onJoshProductSelected(Integer spinnerProductPosition, ActiveJob
+            selectedJob, String jobName) {
 
         mSpinnerProductPosition = spinnerProductPosition;
 
@@ -2127,7 +2172,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment selectStopReasonFragment) {
+    public void onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment
+                                                          selectStopReasonFragment) {
 
         mSelectStopReasonFragment = selectStopReasonFragment;
 
@@ -2464,7 +2510,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReportReject(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+    public void onReportReject(String value, boolean isUnit, int selectedCauseId,
+                               int selectedReasonId) {
 
         sendRejectReport(value, isUnit, selectedCauseId, selectedReasonId);
     }
@@ -2523,7 +2570,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        SendBroadcast.refreshPolling(getContext());
     }
 
-    private void sendRejectReport(String value, boolean isUnit, int selectedCauseId, int selectedReasonId) {
+    private void sendRejectReport(String value, boolean isUnit, int selectedCauseId,
+                                  int selectedReasonId) {
         mSendRejectObject = new SendRejectObject(value, isUnit, selectedCauseId, selectedReasonId);
         ProgressDialogManager.show(this);
         ReportNetworkBridge reportNetworkBridge = new ReportNetworkBridge();
@@ -2538,7 +2586,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 //        SendBroadcast.refreshPolling(getContext());
     }
 
-    private void sendMultipleRejectReport(ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
+    private void sendMultipleRejectReport
+            (ArrayList<RejectForMultipleRequest> rejectForMultipleRequests) {
         SimpleRequests simpleRequests = new SimpleRequests();
         PersistenceManager persistenceManager = PersistenceManager.getInstance();
         simpleRequests.reportMultipleRejects(persistenceManager.getSiteUrl(), new SimpleCallback() {

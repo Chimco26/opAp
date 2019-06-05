@@ -103,7 +103,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -112,7 +111,6 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
-import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
@@ -388,7 +386,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mStatusWhiteFilter = view.findViewById(R.id.FAAE_status_white_filter);
         ViewGroup.LayoutParams statusBarParams;
         statusBarParams = mStatusLayout.getLayoutParams();
-        statusBarParams.height = (int) (mTollBarsHeight * 0.35);
+        statusBarParams.height = (int) (mTollBarsHeight * 0.28);
         mStatusLayout.requestLayout();
 
         mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);

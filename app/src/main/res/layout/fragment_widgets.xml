@@ -91,7 +91,6 @@
                         android:scrollbarFadeDuration="0"
                         android:scrollbars="vertical" />
 
-
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
 
