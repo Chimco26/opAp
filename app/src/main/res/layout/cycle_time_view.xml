@@ -15,7 +15,7 @@
         android:gravity="center_vertical"
         android:maxLines="2"
         android:paddingBottom="5dp"
-        android:text="title top five"
+        android:text="@string/cycle_time"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -25,10 +25,9 @@
         android:layout_height="2px"
         android:background="@color/divider_gray" />
 
-    <com.operatorsapp.view.LineChartTimeSmall
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/CTV_cycle_time_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="30dp"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

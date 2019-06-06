@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/projection_widget_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,10 +29,9 @@
                 android:maxLines="1"
                 android:text="Current quantity"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
-                autofit:minTextSize="12sp" />
+                android:textSize="18sp" />
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/projection_widget_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,8 +41,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Total required 2k"
-                android:textSize="14sp"
-                autofit:minTextSize="8sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout

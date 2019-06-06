@@ -6,19 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:keepScreenOn="true"
-    tools:context=".activities.DashboardActivity">
+    tools:context=".activities.DashboardActivity"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <include layout="@layout/toolbar" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/AD_fragments_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <!--<FrameLayout-->
                 <!--android:id="@+id/fragments_container_widget"-->

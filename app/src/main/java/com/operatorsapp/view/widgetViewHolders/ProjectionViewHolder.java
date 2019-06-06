@@ -26,8 +26,8 @@ public class ProjectionViewHolder extends RecyclerView.ViewHolder {
     private final ProjectionDrawablesHelper mProjectionDrawableHelper;
     private RelativeLayout mParentLayout;
     private View mDivider;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private TextView mValue;
     private View mCapsule;
     private View mEndDivider;

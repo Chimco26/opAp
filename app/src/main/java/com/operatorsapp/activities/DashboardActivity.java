@@ -347,11 +347,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         dY[0] = view.getY() - motionEvent.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) > 0) {
+                        if (motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) > 0
+                        && motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) < mContainer3.getWidth() + mContainer3.getX()-20) {
                             moveToX[0] = motionEvent.getRawX() + dX[0] - (view.getWidth() / 2);
                         }
                         if (motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) > 0
-                        && view.getY() + dY[0] + view.getHeight()/2 < mContainer3.getHeight()) {
+                                && motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) < mContainer3.getHeight() - 40) {
                             moveToY[0] = motionEvent.getRawY() + dY[0] - (view.getHeight() / 2);
                         }
                         view.animate()
@@ -1064,8 +1065,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onGetShiftForMachineSucceeded(ShiftForMachineResponse shiftForMachineResponse) {
                 final long durationOfShift = shiftForMachineResponse.getDuration();
                 PersistenceManager.getInstance().setShiftStart(TimeUtils.getNoTFromDateString(shiftForMachineResponse.getStartTime(), shiftForMachineResponse.getTimeFormat()));
-                if (shiftForMachineResponse.getEndTime() != null && shiftForMachineResponse.getEndTime().length() > 0) {
-                    PersistenceManager.getInstance().setShiftEnd(TimeUtils.getNoTFromDateString(shiftForMachineResponse.getEndTime(), shiftForMachineResponse.getTimeFormat()));
+                if (shiftForMachineResponse.getStartTime() != null && shiftForMachineResponse.getStartTime().length() > 0
+                        && shiftForMachineResponse.getDuration() > 0) {
+                    PersistenceManager.getInstance().setShiftEnd(TimeUtils.getDate(shiftForMachineResponse.getDuration() + new Date().getTime(),
+                            TimeUtils.SQL_NO_T_FORMAT));
                 }
                 if (durationOfShift > 0) {
                     startShiftTimer(durationOfShift);

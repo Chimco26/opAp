@@ -16,7 +16,7 @@ public class NotificationByType {
     private Integer numOfResponse;
     @SerializedName("PC")
     @Expose
-    private Integer pC;
+    private Float pC;
     @SerializedName("ResponseType")
     @Expose
     private Integer responseType;
@@ -24,7 +24,7 @@ public class NotificationByType {
     @Expose
     private Integer totalRespones;
 
-    public NotificationByType(String eName, String lName, Integer numOfResponse, Integer pC, Integer responseType, Integer totalRespones) {
+    public NotificationByType(String eName, String lName, Integer numOfResponse, Float pC, Integer responseType, Integer totalRespones) {
         this.eName = eName;
         this.lName = lName;
         this.numOfResponse = numOfResponse;
@@ -57,11 +57,11 @@ public class NotificationByType {
         this.numOfResponse = numOfResponse;
     }
 
-    public Integer getPC() {
+    public Float getPC() {
         return pC;
     }
 
-    public void setPC(Integer pC) {
+    public void setPC(Float pC) {
         this.pC = pC;
     }
 

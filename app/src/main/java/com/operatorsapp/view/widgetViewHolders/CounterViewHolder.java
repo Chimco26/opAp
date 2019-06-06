@@ -22,8 +22,8 @@ public class CounterViewHolder extends RecyclerView.ViewHolder {
     private final int mWidth;
     private RelativeLayout mParentLayout;
     private View mDivider;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private ImageView mAdd;
     private TextView mValue1;
     private TextView mValue10;

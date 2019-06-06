@@ -17,19 +17,24 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
-import com.example.common.reportShift.Department;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
-import com.example.common.reportShift.GraphColor;
+import com.example.common.reportShift.GraphSeries;
+import com.example.common.reportShift.Item;
 import com.example.common.reportShift.NotificationByType;
 import com.example.common.reportShift.ReqDepartment;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.reportShift.ShiftByTime;
 import com.example.common.request.BaseTimeRequest;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
@@ -44,14 +49,20 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
-import com.operatorsapp.view.LineChartTimeSmall;
+import com.operatorsapp.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.operatorsapp.utils.LineChartHelper.setLimitLine;
+import static com.operatorsapp.utils.LineChartHelper.setXAxisStyle;
+import static com.operatorsapp.utils.LineChartHelper.setYAxisStyle;
+import static com.operatorsapp.utils.LineChartHelper.splitItemsByNull;
 
 public class ReportShiftFragment extends Fragment implements DashboardUICallbackListener {
 
@@ -69,7 +80,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private View mTopFiveStopsView;
     private View mTopFiveRejectsView;
     private PieChart mPieChart;
-    private LineChartTimeSmall mCycleTime;
+    private LineChart mCycleTime;
+    private TextView mCycleTimeTitle;
+    private TextView mServiceCallsTitle;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -113,23 +126,30 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mProgressBar = view.findViewById(R.id.FTF_progress);
-        mPieChart = view.findViewById(R.id.FRS_service_calls_view).findViewById(R.id.SCV_pie_chart);
-        mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
+        ((TextView)view.findViewById(R.id.FRS_title_tv)).setText(getResources().getString(R.string.shift_report));
+        ((TextView)view.findViewById(R.id.FRS_machine_name_tv)).setText(PersistenceManager.getInstance().getMachineName());
+        initServiceCallsVars(view);
+        initCycleTimeVars(view);
         initTopFiveStopsVars(view);
         initTopFiveRejects(view);
         getTopRejectsAndStops();
+    }
+
+    private void initCycleTimeVars(View view) {
+        mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
+        mCycleTimeTitle = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_tv);
+    }
+
+    private void initServiceCallsVars(View view) {
+        mPieChart = view.findViewById(R.id.FRS_service_calls_view).findViewById(R.id.SCV_pie_chart);
+        mServiceCallsTitle = view.findViewById(R.id.FRS_service_calls_view).findViewById(R.id.SCV_tv);
     }
 
     private void initTopFiveStopsVars(View view) {
         mTopFiveStopsView = view.findViewById(R.id.fragment_dashboard_top_five_1);
         ((TextView) mTopFiveStopsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_stop_events));
         mTopStops_rv = mTopFiveStopsView.findViewById(R.id.top_five_recyclerView);
-        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        mTopStops_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mStopsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_STOP);
         mTopStops_rv.setAdapter(mStopsAdapter);
     }
@@ -138,12 +158,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         mTopFiveRejectsView = view.findViewById(R.id.fragment_dashboard_top_five_2);
         ((TextView) mTopFiveRejectsView.findViewById(R.id.TF_tv)).setText(getString(R.string.top_five_reject_reasons));
         mTopRejects_rv = mTopFiveRejectsView.findViewById(R.id.top_five_recyclerView);
-        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        mTopRejects_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRejectsAdapter = new TopFiveAdapter(getActivity(), new ArrayList<TopFiveItem>(), TopFiveAdapter.TYPE_REJECT);
         mTopRejects_rv.setAdapter(mRejectsAdapter);
     }
@@ -183,7 +198,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             ArrayList<PieEntry> mPieValues = new ArrayList<>();
             for (int i = 0; i < values.size(); i++) {
                 NotificationByType notificationByType = values.get(i);
-                mPieValues.add(new PieEntry(notificationByType.getNumOfResponse(), notificationByType.getEName()));
+                mPieValues.add(new PieEntry(notificationByType.getPC(), notificationByType.getEName()));//todo lname
             }
 
             mPieChart.setEntryLabelColor(Color.BLACK);
@@ -198,65 +213,86 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
             PieData data = new PieData(pieDataSet);
 
-//            data.setValueFormatter(new PercentFormatter(mPieChart));
-            data.setValueTextSize(11f);
+            data.setValueTextSize(20f);
             data.setValueTextColor(Color.BLACK);
 
             mPieChart.setData(data);
+            mPieChart.setDescription(null);
+            mPieChart.getLegend().setEnabled(false);
             mPieChart.setUsePercentValues(true);
-//            mPieChart.getDescription().setEnabled(false);
             mPieChart.getLegend().setWordWrapEnabled(true);
             mPieChart.setDrawEntryLabels(false);
-            mPieChart.setExtraOffsets(0, 20, 0, 20);
-
-            mPieChart.invalidate();
+            mPieChart.setExtraOffsets(0, 5, 0, 5);
 
             pieDataSet.setValueLinePart1OffsetPercentage(80.f);
-            pieDataSet.setValueLinePart1Length(0.2f);
-            pieDataSet.setValueLinePart2Length(0.4f);
+            pieDataSet.setValueLinePart1Length(0.5f);
+            pieDataSet.setValueLinePart2Length(0.5f);
             pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+            mPieChart.invalidate();
         }
     }
 
+    private void setGraphData(String displayName, GraphSeries graphSeries, View graphView) {
 
-    private void initCycleTime(DepartmentShiftGraphResponse departmentShiftGraphResponse) {
-//        int xValuesIncreaseIndex = 0;
-//        ArrayList<Entry> tenHoursValues = new ArrayList<>();
-//        ArrayList<Entry> fourHoursValues = new ArrayList<>();
-//        ArrayList<ArrayList<Entry>> fourHoursList = new ArrayList<>();
-//        final ArrayList<ArrayList<Entry>> tenHoursList = new ArrayList<>();
-//        float midnightLimit = 0;
-//        if (departmentShiftGraphResponse.getDepartments() != null && departmentShiftGraphResponse.getGraphColors().size() > 0) {
-//            Collections.sort(departmentShiftGraphResponse.getGraphColors());
-//            final String[] xValues = new String[departmentShiftGraphResponse.getGraphColors().size() + 1];
-//            for (int i = 0; i < departmentShiftGraphResponse.getDepartments().size(); i++) {
-//                Department department = departmentShiftGraphResponse.getDepartments().get(i);
-//
-//                xValues[i + xValuesIncreaseIndex] = TimeUtils.getDateForChart(department.getTime());
-//                Entry entry;
-//                try {
-//                    entry = new Entry(i, department.getValue());
-//                } catch (Exception e) {
-//                    entry = null;
-//                }
-//                if (entry == null) {
-//                    if (fourHoursValues.size() > 0) {
-//                        fourHoursList.add(fourHoursValues);
-//                    }
-//                    fourHoursValues = new ArrayList<>();
-//                } else {
-//                    if (TimeUtils.getLongFromDateString(department.getTime(), "dd/MM/yyyy HH:mm:ss") > (TimeUtils.getLongFromDateString(widget.getMachineParamHistoricData().get(widget.getMachineParamHistoricData().size() - 1).getTime(), "dd/MM/yyyy HH:mm:ss") - FOUR_HOURS)) {
-//                        fourHoursValues.add(entry);
-//                    }
-//                }
-//            }
-//            if (fourHoursValues.size() > 0) {
-//                fourHoursList.add(fourHoursValues);
-//                tenHoursList.add(tenHoursValues);
-//            }
-//            mCycleTime.setData(fourHoursList, xValues, widget.getLowLimit(), widget.getHighLimit());
-//            mCycleTime.setLimitLines(widget.getLowLimit(), widget.getHighLimit(), widget.getStandardValue(), midnightLimit);
-//        }
+        LineChart graph = mCycleTime;
+
+        graph.setBackgroundColor(Color.TRANSPARENT);
+        graph.setTouchEnabled(false);
+        graph.setDrawGridBackground(false);
+
+        ArrayList<ILineDataSet> allDataSets = new ArrayList<>();
+
+        ArrayList<List<Item>> listArrayList = splitItemsByNull(graphSeries.getItems());
+
+        if (listArrayList.size() > 0) {
+
+            for (List<Item> items : listArrayList) {
+
+                if (items.size() > 0) {
+
+                    ArrayList<Entry> values = new ArrayList<>();
+
+                    for (int i = 0; i < items.size(); i++) {
+
+                        Date date = TimeUtils.getDateForNotification(items.get(i).getX());
+
+                        if (date != null) {
+
+                            values.add(new Entry((float) date.getTime(), Float.valueOf(String.valueOf(items.get(i).getY()))));
+                        }
+
+                    }
+
+                    LineDataSet set = new LineDataSet(values, "");
+
+                    set.setDrawCircles(false);
+
+                    set.setDrawValues(false);
+
+                    set.setMode(LineDataSet.Mode.LINEAR);
+
+                    set.setColor(getContext().getResources().getColor(R.color.blue1));
+
+                    allDataSets.add(set);
+
+                }
+            }
+
+
+        }
+        LineData data = new LineData(allDataSets);
+
+        graph.setDescription(null);
+        graph.setExtraOffsets(5, 5, 5, 5);
+        graph.setData(data);
+        graph.getLegend().setEnabled(false);
+        setXAxisStyle(graph);
+        setYAxisStyle(graph);
+        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
+
+        graph.invalidate();
     }
 
     @Override
@@ -298,7 +334,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
         PersistenceManager pm = PersistenceManager.getInstance();
         String[] machineId = {String.valueOf(pm.getMachineId())};
-        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), pm.getShiftEnd());
+        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT));
+//        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(),"2019-05-06 07:00:46", "2019-06-06 15:47:59");
 
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
             @Override
@@ -348,7 +385,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             }
         });
 
-        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), pm.getShiftEnd());
+        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), pm.getShiftEnd(), pm.getMachineId());
+//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
 
         NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
             @Override
@@ -356,16 +394,11 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 if (isAdded() && response.body() != null && response.body().getError() == null) {
 
                     if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
+                        mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));
                         initServiceCallsView(response.body());
                     }
 
                 }
-                mServiceCallsResponse = new ServiceCallsResponse();
-                ArrayList<NotificationByType> notificationByTypes = new ArrayList<>();
-                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
-                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
-                notificationByTypes.add(new NotificationByType("a", "b", 2, 3, 3, 4));
-                mServiceCallsResponse.setNotificationByType(notificationByTypes);
                 mProgressBar.setVisibility(View.GONE);
 
             }
@@ -380,6 +413,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         List<Integer> machineIds = new ArrayList<>();
         machineIds.add(pm.getMachineId());
         ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime(pm.getShiftStart(), pm.getShiftEnd()));
+//        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime("2018-05-06 07:00:46", "2019-06-06 15:47:59"));
         ArrayList<ReqDepartment> reqDepartments = new ArrayList<>();
         reqDepartments.add(reqDepartment);
         DepartmentShiftGraphRequest departmentShiftGraphRequest = new DepartmentShiftGraphRequest(pm.getSessionId(), reqDepartments, 0);
@@ -387,24 +421,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         NetworkManager.getInstance().getDepartmentShiftGraph(departmentShiftGraphRequest, new Callback<DepartmentShiftGraphResponse>() {
             @Override
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
-                if (response.body() != null && response.body().getError() == null) {
+                if (isAdded() && response.body() != null && response.body().getError() == null) {
 
                     if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0) {
-                        initCycleTime(response.body());
+                        setGraphData(null, response.body().getDepartments().get(0).getCurrentShift().
+                                get(0).getMachines().get(0).getGraphs().get(0).getGraphSeries().get(0), null);
+                        mCycleTimeTitle.setText(getContext().getResources().getString(R.string.cycle_time));
                     }
 
                 }
-                mDepartmentShiftGraphResponse = new DepartmentShiftGraphResponse();
-                ArrayList<GraphColor> graphColors = new ArrayList<>();
-                GraphColor graphColor = new GraphColor("blue", "a", "#007cff", 0);
-                GraphColor graphColor2 = new GraphColor("red", "a", "#d0021b", 0);
-                graphColors.add(graphColor);
-                graphColors.add(graphColor2);
-                mDepartmentShiftGraphResponse.setGraphColors(graphColors);
-                ArrayList<Department> departments = new ArrayList<>();
-//                Department department = new Department();
-//                departmentShiftGraphResponse.setDepartments();
-                mProgressBar.setVisibility(View.GONE);
 
             }
 

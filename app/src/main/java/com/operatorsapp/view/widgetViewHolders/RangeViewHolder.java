@@ -31,8 +31,8 @@ public class RangeViewHolder extends RecyclerView.ViewHolder {
     private RangeView2 mCycleRange;
     private RelativeLayout mParentLayout;
     private View mDivider;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private TextView mValue;
     private View mCapsule;
     private RangeView mRangeViewBlue;
