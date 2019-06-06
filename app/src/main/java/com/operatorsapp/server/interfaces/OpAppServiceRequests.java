@@ -1,9 +1,10 @@
 package com.operatorsapp.server.interfaces;
 
+import com.example.common.reportShift.DepartmentShiftGraphRequest;
+import com.example.common.reportShift.DepartmentShiftGraphResponse;
+import com.example.common.reportShift.ServiceCallsResponse;
+import com.example.common.request.BaseTimeRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
-import com.operatorsapp.server.requests.TopNotificationRequest;
-import com.operatorsapp.server.requests.SendNotificationRequest;
-import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
@@ -11,6 +12,9 @@ import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
+import com.operatorsapp.server.requests.TopNotificationRequest;
+import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
@@ -52,11 +56,17 @@ public interface OpAppServiceRequests {
     @POST("/LeaderMESApi/DeleteToken")
     Call<ResponseStatus> postDeleteToken(@Body PostDeleteTokenRequest request);
 
+    @POST("/LeaderMESApi/GetServiceCalls")
+    Call<ServiceCallsResponse> getServiceCalls(@Body BaseTimeRequest request);
+
+    @POST("/LeaderMESApi/GetDepartmentShiftGraph")
+    Call<DepartmentShiftGraphResponse> getDepartmentShiftGraph(@Body DepartmentShiftGraphRequest request);
+
     @Streaming
     @GET("/files/1Mb.dat")
     Call<ResponseBody> getNewVersionFile();
 
-//    @GET("/LeaderMESApi/GetApplicationVersion")
+    //    @GET("/LeaderMESApi/GetApplicationVersion")
     @GET("https://s3-eu-west-1.amazonaws.com/release.leadermes.com/OpApp/versions.json")
     Call<AppVersionResponse> GetApplicationVersion();
 

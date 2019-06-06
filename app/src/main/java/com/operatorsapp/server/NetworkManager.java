@@ -2,6 +2,10 @@ package com.operatorsapp.server;
 
 import android.util.Log;
 
+import com.example.common.reportShift.DepartmentShiftGraphRequest;
+import com.example.common.reportShift.DepartmentShiftGraphResponse;
+import com.example.common.reportShift.ServiceCallsResponse;
+import com.example.common.request.BaseTimeRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
@@ -65,14 +69,12 @@ import com.operators.shiftlognetworkbridge.interfaces.ShiftLogNetworkManagerInte
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.interfaces.OpAppServiceRequests;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
-import com.example.common.request.MachineJoshDataRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
-import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
@@ -86,7 +88,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -304,9 +305,10 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
             SendReportUtil.sendAcraExeption(e, "GetMachineJoshData");
         }
-        return mRetrofit.create(EmeraldGetMachineJoshDataRequest.class);    }
+        return mRetrofit.create(EmeraldGetMachineJoshDataRequest.class);
+    }
 
-   @Override
+    @Override
     public EmeraldReportMultipleRejects emeraldReportMultipleRejects(String siteUrl, int timeout, TimeUnit timeUnit) {
         mRetrofit = getRetrofit(siteUrl, timeout, timeUnit);
         try {
@@ -915,7 +917,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
             SendReportUtil.sendAcraExeption(e, "approveEmeraldGetDepartment");
         }
-        return mRetrofit.create(EmeraldGetDepartment.class);    }
+        return mRetrofit.create(EmeraldGetDepartment.class);
+    }
 
     @Override
     public EmeraldPostUpdateNotesForJob emeraldPostUpdateNotesForJob(String siteUrl, int timeout, TimeUnit timeUnit) {
@@ -962,7 +965,6 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<ResponseStatus> call = mRetrofit.create(OpAppServiceRequests.class).postNotificationResponse(request);
         call.enqueue(callback);
-
     }
 
     public void postIncrementCounter(PostIncrementCounterRequest request, final Callback<ResponseStatus> callback) {
@@ -980,6 +982,18 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getTopRejects(GetTopRejectsAndEventsRequest request, final Callback<TopRejectResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<TopRejectResponse> call = mRetrofit.create(OpAppServiceRequests.class).getRejects(request);
+        call.enqueue(callback);
+    }
+
+    public void getServiceCalls(BaseTimeRequest request, final Callback<ServiceCallsResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<ServiceCallsResponse> call = mRetrofit.create(OpAppServiceRequests.class).getServiceCalls(request);
+        call.enqueue(callback);
+    }
+
+    public void getDepartmentShiftGraph(DepartmentShiftGraphRequest request, final Callback<DepartmentShiftGraphResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<DepartmentShiftGraphResponse> call = mRetrofit.create(OpAppServiceRequests.class).getDepartmentShiftGraph(request);
         call.enqueue(callback);
     }
 

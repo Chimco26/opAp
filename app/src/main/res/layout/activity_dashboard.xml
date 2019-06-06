@@ -26,9 +26,10 @@
                 <!--android:layout_height="match_parent" />-->
 
             <FrameLayout
-                android:id="@+id/fragments_container_reason"
+                android:id="@+id/fragments_container_central"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="40dp"/>
 
             <FrameLayout
                 android:id="@+id/fragments_container"

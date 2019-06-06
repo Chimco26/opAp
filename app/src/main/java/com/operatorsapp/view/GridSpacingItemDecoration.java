@@ -15,14 +15,24 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
     private int spanCount;
     private int spacing;
+    private int spacingTop;
     private boolean includeEdge;
     private int headerNum;
 
     public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge, int headerNum) {
         this.spanCount = spanCount;
         this.spacing = spacing;
+        this.spacingTop = spacing;
         this.includeEdge = includeEdge;
         this.headerNum = headerNum;
+    }
+
+    public int getSpacingTop() {
+        return spacingTop;
+    }
+
+    public void setSpacingTop(int spacingTop) {
+        this.spacingTop = spacingTop;
     }
 
     @Override
@@ -42,14 +52,14 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
                 outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
 
                 if (position < spanCount) { // top edge
-                    outRect.top = spacing;
+                    outRect.top = spacingTop;
                 }
                 outRect.bottom = spacing; // item bottom
             } else {
                 outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
                 outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
                 if (position >= spanCount) {
-                    outRect.top = spacing; // item top
+                    outRect.top = spacingTop; // item top
                 }
             }
         } else {

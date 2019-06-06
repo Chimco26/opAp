@@ -7,7 +7,7 @@
     android:padding="15dp">
 
     <TextView
-        android:id="@+id/title_top_five_tv"
+        android:id="@+id/TF_tv"
         style="@style/ProximaNovaSemiBold"
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -23,16 +23,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:background="@color/divider_gray" />
 
     <LinearLayout
-        android:id="@+id/row1_top_five_lil"
+        android:id="@+id/TF_values_ly"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,13 +39,14 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/row1_title_stat1_top_five"
+                android:id="@+id/TF_values"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/row1_title_stat1_top_five_number_tv"
+                    android:id="@+id/TF_values_value"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,7 +57,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/row1_title_stat1_top_five_text_tv"
+                    android:id="@+id/TF_values_title"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,48 +71,17 @@
 
             <View
                 android:layout_width="100dp"
-                android:layout_height="match_parent"/>
-            <!--<LinearLayout-->
-            <!--android:id="@+id/row1_title_stat2_top_five"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="vertical"-->
-            <!--android:padding="10dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/row1_title_stat2_top_five_number_tv"-->
-            <!--style="@style/ProximaNovaSemiBold"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:maxLines="1"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/title_stat2_top_five_text_tv"-->
-            <!--style="@style/ProximaNovaSemiBold"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:maxLines="1"-->
-            <!--android:padding="15dp"-->
-            <!--android:text="@string/number_of_jobs"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="bold" />-->
-            <!--</LinearLayout>-->
+                android:layout_height="match_parent" />
 
             <LinearLayout
-                android:id="@+id/row1_title_stat3_top_five"
+                android:id="@+id/TF_events"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:visibility="invisible"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/row1_title_stat3_top_five_number_tv"
+                    android:id="@+id/TF_events_value"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,7 +92,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/row1_title_stat3_top_five_text_tv"
+                    android:id="@+id/TF_events_title"
                     style="@style/ProximaNovaSemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -139,16 +107,11 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/divider_gray" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/divider_gray" />
-
-    <!--top 5 list-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/top_five_recyclerView"
