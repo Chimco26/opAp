@@ -13,6 +13,7 @@ import android.view.View;
  */
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
+    private final int spacingBottom;
     private int spanCount;
     private int spacing;
     private int spacingTop;
@@ -23,6 +24,7 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         this.spanCount = spanCount;
         this.spacing = spacing;
         this.spacingTop = spacing;
+        this.spacingBottom = spacing;
         this.includeEdge = includeEdge;
         this.headerNum = headerNum;
     }
@@ -33,6 +35,10 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
     public void setSpacingTop(int spacingTop) {
         this.spacingTop = spacingTop;
+    }
+
+    public int getSpacingBottom() {
+        return spacingBottom;
     }
 
     @Override
@@ -54,7 +60,7 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
                 if (position < spanCount) { // top edge
                     outRect.top = spacingTop;
                 }
-                outRect.bottom = spacing; // item bottom
+                outRect.bottom = spacingBottom; // item bottom
             } else {
                 outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
                 outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
