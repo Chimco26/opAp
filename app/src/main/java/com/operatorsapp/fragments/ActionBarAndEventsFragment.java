@@ -692,6 +692,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 setNotificationNeedResponse();
 //                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
+
+                initBottomNotificationLayout(getView());
             }
         };
     }
@@ -3291,6 +3293,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
                 setNotificationNeedResponse();
                 setTechnicianCallStatus();
+                initBottomNotificationLayout(getView());
             }
 
             @Override
