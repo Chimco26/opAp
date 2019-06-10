@@ -545,6 +545,28 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
     }
 
+    public ArrayList<Notification> getNotificationHistoryNoTech() {
+        String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
+        Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+        ArrayList<Notification> notificationsList = mGson.fromJson(str, listType);
+        ArrayList<Notification> filteredList = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date date;
+        if (notificationsList != null) {
+            for (int i = 0; i < notificationsList.size(); i++) {
+                Notification not = notificationsList.get(i);
+                date = TimeUtils.getDateForNotification(not.getmSentTime());
+                if (not.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && date != null && date.after(cal.getTime())) {
+                    filteredList.add(not);
+                }
+            }
+        }
+
+        return filteredList;
+
+    }
+
     public ArrayList<Notification> getNotificationHistory() {
         String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
         Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();

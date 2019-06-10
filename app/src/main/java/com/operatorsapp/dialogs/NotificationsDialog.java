@@ -148,17 +148,18 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     }
 
     private ArrayList<Notification> getNotificationList() {
-
-        ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
-        ArrayList<Notification> tempList = new ArrayList<>();
-
-        for (Notification notification : notificationList) {
-            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN) {
-                tempList.add(notification);
-            }
-
-        }
-        return tempList;
+//
+//        ArrayList<Notification> notificationList = PersistenceManager.getInstance().getNotificationHistory();
+//        ArrayList<Notification> tempList = new ArrayList<>();
+//
+//        for (Notification notification : notificationList) {
+//            if (notification.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN) {
+//                tempList.add(notification);
+//            }
+//
+//        }
+//        return tempList;
+        return PersistenceManager.getInstance().getNotificationHistoryNoTech();
     }
 
     @Override

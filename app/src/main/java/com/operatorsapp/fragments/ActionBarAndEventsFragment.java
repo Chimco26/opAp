@@ -581,7 +581,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
-        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistory();
+        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistoryNoTech();
         if (notList == null || notList.size() == 0){
             bottomNotifIv.setVisibility(View.INVISIBLE);
             bottomNotifTv.setText("");
