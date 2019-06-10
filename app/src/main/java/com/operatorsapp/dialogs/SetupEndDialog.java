@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.common.RejectForMultipleRequest;
 import com.operators.activejobslistformachineinfra.ActiveJob;
@@ -90,8 +89,7 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
     private void initRv(View view) {
         if (mActiveJobs != null &&
                 mActiveJobs.size() > 0) {
-            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.VISIBLE);
+            showArrows(view, View.VISIBLE);
             mReportRv = view.findViewById(R.id.FAFI_report_rv);
             mReportRv.setOffscreenPageLimit(mActiveJobs.size());
             ReportNumericAdapter reportNumericAdapter = new ReportNumericAdapter(mActiveJobs, isRejects, this);
@@ -131,13 +129,16 @@ public class SetupEndDialog implements NumericViewHolder.OnKeyboardManagerListen
                     }
                 });
             } else {
-                view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
-                view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
+                showArrows(view, View.GONE);
             }
         } else {
-            view.findViewById(R.id.FAFI_back_btn).setVisibility(View.GONE);
-            view.findViewById(R.id.FAFI_next_btn).setVisibility(View.GONE);
+            showArrows(view, View.GONE);
         }
+    }
+
+    private void showArrows(View view, int gone) {
+        view.findViewById(R.id.FAFI_back_btn).setVisibility(gone);
+        view.findViewById(R.id.FAFI_next_btn).setVisibility(gone);
     }
 
     public void setListeners(final SetupEndDialogListener listener, View view) {

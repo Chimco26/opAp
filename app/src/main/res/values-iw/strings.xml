@@ -385,6 +385,7 @@
     <string name="average">ממוצע</string>
     <string name="minutes_long">דקות</string>
     <string name="select_your_machine">בחר את המכונה שלך</string>
-
+    <string name="shift_report">דוח משמרת</string>
+    <string name="filter_by">סנן לפי</string>
 
 </resources>

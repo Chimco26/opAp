@@ -14,9 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:orientation="vertical">
 
         <include layout="@layout/toolbar" />
 
@@ -24,8 +22,7 @@
             android:id="@+id/AD_fragments_rl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+           >
 
             <!--<FrameLayout-->
                 <!--android:id="@+id/fragments_container_widget"-->
@@ -36,7 +33,7 @@
                 android:id="@+id/fragments_container_central"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="40dp"/>
+                android:layout_marginBottom="30dp"/>
 
             <FrameLayout
                 android:id="@+id/fragments_container"
@@ -53,8 +50,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
+                android:layout_alignBottom="@+id/fragments_container_central"
                 android:padding="10dp"
                 android:background="@drawable/blue_circle"
                 android:src="@drawable/ic_trending_up_white_24dp" />
