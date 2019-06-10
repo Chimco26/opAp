@@ -179,7 +179,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             if (events != null && !events.isEmpty()) {
                 viewItem.findViewById(R.id.TF_events).setVisibility(View.VISIBLE);
                 TextView textView = viewItem.findViewById(R.id.TF_events_value);
-                textView.setText(value);
+                textView.setText(events);
                 ((TextView) viewItem.findViewById(R.id.TF_events_title)).setText(eventsTile);
             } else {
                 viewItem.findViewById(R.id.TF_events).setVisibility(View.INVISIBLE);
