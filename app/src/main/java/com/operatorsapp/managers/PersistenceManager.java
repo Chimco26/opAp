@@ -92,6 +92,9 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     private static final String PREF_RECENT_MAX_UNIT_REPORT = "pref.PREF_RECENT_MAX_UNIT_REPORT";
     private static final String PREF_IS_NEW_SHIFTLOG_DISPLAY = "pref.PREF_IS_NEW_SHIFTLOG_DISPLAY";
     private static final String PREF_ARRAY_ALARAM_CURRENT_EVENT = "pref.PREF_ARRAY_ALARAM_CURRENT_EVENT";
+    private static final String PREF_DEPARTMENT_ID = "PREF_DEPARTMENT_ID";
+    private static final String PREF_REPORT_SHIFT_BTN_X = "PREF_REPORT_SHIFT_BTN_X";
+    private static final String PREF_REPORT_SHIFT_BTN_Y = "PREF_REPORT_SHIFT_BTN_Y";
 
 
     private static PersistenceManager msInstance;
@@ -408,7 +411,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public String getShiftEnd() {
         String shiftEnd = SecurePreferences.getInstance().getString(PREF_SHIFT_END);
         if (shiftEnd != null && !shiftEnd.isEmpty() && shiftEnd.length() > 0) {
-            return shiftEnd = TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
+            return shiftEnd;
         }else {
             return TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
         }
@@ -540,6 +543,28 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         }
 
         SecurePreferences.getInstance().setString(PREF_NOTIFICATION_HISTORY, mGson.toJson(notificationList));
+    }
+
+    public ArrayList<Notification> getNotificationHistoryNoTech() {
+        String str = SecurePreferences.getInstance().getString(PREF_NOTIFICATION_HISTORY, "");
+        Type listType = new TypeToken<ArrayList<Notification>>(){}.getType();
+        ArrayList<Notification> notificationsList = mGson.fromJson(str, listType);
+        ArrayList<Notification> filteredList = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date date;
+        if (notificationsList != null) {
+            for (int i = 0; i < notificationsList.size(); i++) {
+                Notification not = notificationsList.get(i);
+                date = TimeUtils.getDateForNotification(not.getmSentTime());
+                if (not.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && date != null && date.after(cal.getTime())) {
+                    filteredList.add(not);
+                }
+            }
+        }
+
+        return filteredList;
+
     }
 
     public ArrayList<Notification> getNotificationHistory() {
@@ -710,4 +735,26 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public boolean getIsNewShiftLog() {
         return SecurePreferences.getInstance().getBoolean(PREF_IS_NEW_SHIFTLOG_DISPLAY, false);
     }
+
+    public void setDepartmentId(int departmentID) {
+        SecurePreferences.getInstance().setInt(PREF_DEPARTMENT_ID, departmentID);
+    }
+    public int getDepartmentId() {
+        return SecurePreferences.getInstance().getInt(PREF_DEPARTMENT_ID);
+    }
+
+    public void setReportShiftBtnPositionX(float moveToX) {
+        SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_X, moveToX);
+    }
+    public float getReportShiftBtnPositionX() {
+        return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_X);
+    }
+
+    public void setReportShiftBtnPositionY(float moveToY) {
+        SecurePreferences.getInstance().setFloat(PREF_REPORT_SHIFT_BTN_Y, moveToY);
+    }
+    public float getReportShiftBtnPositionY() {
+        return SecurePreferences.getInstance().getFloat(PREF_REPORT_SHIFT_BTN_Y);
+    }
+
 }

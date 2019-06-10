@@ -26,12 +26,12 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final int TYPE_REJECT = 1;
     private final int mListType;
 
-    private int mParentWidth;
     private double mTotalSum;
     private ArrayList<TopFiveItem> mTopList;
     private final Context mContext;
+    private ViewGroup mParent;
 
-    public TopFiveAdapter(Context context, ArrayList<TopFiveItem> topFiveList, int type){
+    public TopFiveAdapter(Context context, ArrayList<TopFiveItem> topFiveList, int type) {
         mContext = context;
         mListType = type;
         setmTopList(topFiveList);
@@ -42,39 +42,37 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.top_five_recycler_item, parent, false);
-        mParentWidth = parent.getWidth() - 100;
-
-        switch (mListType){
+        mParent = parent;
+        switch (mListType) {
             case TYPE_REJECT:
                 return new RejectViewHolder(v);
             case TYPE_STOP:
                 return new StopEventViewHolder(v);
-            default: return null;
+            default:
+                return null;
 
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+    }
 
-        double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
-        int width;
-        if (amount < 1 || mTotalSum == 0){
-            width = 150;
-        }else {
-            width = (int) ((mParentWidth ) * (Math.abs(amount) / mTotalSum)) + 100;
-        }
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
-        switch (mListType){
+        switch (mListType) {
             case TYPE_REJECT:
 
                 final RejectViewHolder rejectViewHolder = (RejectViewHolder) holder;
                 rejectViewHolder.topTv.setText(mTopList.get(position).getmAmount());
                 rejectViewHolder.topText.setText(mTopList.get(position).getmText());
-                rejectViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
-                rejectViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
-                rejectViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
-
+                setBarSize(position, rejectViewHolder.topView);
+                if (mTopList.get(position).getmColor() != null && !mTopList.get(position).getmColor().isEmpty()) {
+                    rejectViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
+                    rejectViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
+                }
                 break;
 
             case TYPE_STOP:
@@ -84,17 +82,41 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         , stopEventViewHolder.topTv.getContext().getString(R.string.hr2)
                         , stopEventViewHolder.topTv.getContext().getString(R.string.min)));
                 stopEventViewHolder.topText.setText(mTopList.get(position).getmText());
-                stopEventViewHolder.topLil.setLayoutParams(new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT));
-                try{
+                setBarSize(position, stopEventViewHolder.topView);
+                try {
                     stopEventViewHolder.topView.setBackgroundColor(Color.parseColor(mTopList.get(position).getmColor()));
                     stopEventViewHolder.topTv.setTextColor(Color.parseColor(mTopList.get(position).getmColor()));
-                }catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     stopEventViewHolder.topView.setBackgroundColor(mContext.getResources().getColor(R.color.dialog_text_gray));
                 }
 
                 break;
         }
 
+    }
+
+    public void setBarSize(final int position, final View view) {
+        mParent.post(new Runnable() {
+            @Override
+            public void run() {
+                int parentWidth = mParent.getWidth() - 100;
+                double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
+                int width;
+                if (amount < 1 || mTotalSum == 0) {
+                    width = 150;
+                } else {
+                    width = (int) ((parentWidth) * (Math.abs(amount) / mTotalSum));
+                    if (width > (parentWidth * 80 / 100)) {
+                        width = (parentWidth * 80 / 100);
+                    }
+                }
+                ViewGroup.MarginLayoutParams mItemViewParams4;
+                mItemViewParams4 = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                mItemViewParams4.width = (int) width;
+                view.requestLayout();
+            }
+
+        });
     }
 
     @Override
@@ -114,7 +136,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             topLil = itemView.findViewById(R.id.item_top_five_lil);
             topTv = itemView.findViewById(R.id.item_top_five_tv);
             topText = itemView.findViewById(R.id.item_top_five_text_tv);
-            topView= itemView.findViewById(R.id.item_top_five_view);
+            topView = itemView.findViewById(R.id.item_top_five_view);
         }
     }
 
@@ -130,7 +152,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             topLil = itemView.findViewById(R.id.item_top_five_lil);
             topTv = itemView.findViewById(R.id.item_top_five_tv);
             topText = itemView.findViewById(R.id.item_top_five_text_tv);
-            topView= itemView.findViewById(R.id.item_top_five_view);
+            topView = itemView.findViewById(R.id.item_top_five_view);
 
         }
     }

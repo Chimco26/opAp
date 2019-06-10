@@ -129,6 +129,7 @@ public class WidgetFragment extends Fragment implements
                     mGridLayoutManager = new GridLayoutManager(getActivity(), mSpanCount);
                     mWidgetRecycler.setLayoutManager(mGridLayoutManager);
                     GridSpacingItemDecoration mGridSpacingItemDecoration = new GridSpacingItemDecoration(mSpanCount, 14, true, 0);
+                    mGridSpacingItemDecoration.setSpacingTop(0);
                     mWidgetRecycler.addItemDecoration(mGridSpacingItemDecoration);
                     mWidgetAdapter = new WidgetAdapter(getActivity(), mWidgets, mOnGoToScreenListener,
                             true, mRecyclersHeight, mWidgetsLayoutWidth,

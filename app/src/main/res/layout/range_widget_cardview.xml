@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp">
 
-        <me.grantland.widget.AutofitTextView
+        <TextView
             android:id="@+id/range_widget_title"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
@@ -23,7 +23,7 @@
             android:textColor="@android:color/black"
             android:textSize="23sp" />
 
-        <me.grantland.widget.AutofitTextView
+        <TextView
             android:id="@+id/range_widget_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

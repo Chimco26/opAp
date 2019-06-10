@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="414dp"
+    android:background="@drawable/combined_shape"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/CTV_tv"
+        style="@style/ProximaNovaSemiBold"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:paddingBottom="5dp"
+        android:text="@string/cycle_time"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/divider_gray" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/CTV_cycle_time_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

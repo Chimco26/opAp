@@ -103,7 +103,6 @@ import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.interfaces.OnStopClickListener;
 import com.operatorsapp.interfaces.OperatorCoreToDashboardActivityCallback;
-import com.operatorsapp.managers.CroutonCreator;
 import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.managers.ProgressDialogManager;
 import com.operatorsapp.model.JobActionsSpinnerItem;
@@ -112,7 +111,6 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
-import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
@@ -388,7 +386,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mStatusWhiteFilter = view.findViewById(R.id.FAAE_status_white_filter);
         ViewGroup.LayoutParams statusBarParams;
         statusBarParams = mStatusLayout.getLayoutParams();
-        statusBarParams.height = (int) (mTollBarsHeight * 0.35);
+        statusBarParams.height = (int) (mTollBarsHeight * 0.28);
         mStatusLayout.requestLayout();
 
         mMinDurationText = view.findViewById(R.id.fragment_dashboard_min_duration_tv);
@@ -583,7 +581,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         });
 
-        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistory();
+        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistoryNoTech();
         if (notList == null || notList.size() == 0){
             bottomNotifIv.setVisibility(View.INVISIBLE);
             bottomNotifTv.setText("");
@@ -1160,6 +1158,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
             mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
             mStatusTimeMinTv = mToolBarView.findViewById(R.id.ATATV_status_time_min);
+            mToolBarView.findViewById(R.id.ATATV_machine_ly).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onChangeMachineRequest();
+                }
+            });
 
             getNotificationsFromServer(false);
             setTechnicianCallStatus();
@@ -2193,7 +2197,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             eventReasonId = event.getEventReasonID();
         }
 
-        Cursor cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), eventReasonId);
+//        Cursor cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(PersistenceManager.getInstance().getMinEventDuration(), eventReasonId);
+        Cursor cursor = mDatabaseHelper.getStopByReasonIdShiftOrderByTimeFilterByDuration(0, eventReasonId);
         ArrayList<Event> events = mDatabaseHelper.getListFromCursor(cursor);
 
         if (event == null) {
@@ -2204,8 +2209,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
         }
 
-        if (mListener != null) {
+        if (mListener != null && events != null && events.size() > 0) {
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
+        }else {
+            return;
         }
 
         mIsSelectionMode = true;
@@ -2521,7 +2528,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 myTaskListener.onUpdateEventsRecyclerViews(cursor, mDatabaseHelper.getListFromCursor(cursor));
             } else {
                 cursor = getCursorByType();
-                ArrayList<Event> eventArrayList = null;
+                ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursor);
                 if (mIsTimeLine) {
                     eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
                 }
@@ -2554,10 +2561,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 myTaskListener.onClearAllSelectedEvents();
             }
         } else {
-            if (DataSupport.count(Event.class) == 0) {
-                mNoData = true;
-                myTaskListener.onShowNotificationText(true);
-            }
             if (deletedEvents > 0 || isActualBarExtraResponse(actualBarExtraResponse)) {
 //                Cursor cursorSelec = null;
 //                ArrayList<Event> eventSelectArrayList = new ArrayList<>();
@@ -2566,7 +2569,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    eventSelectArrayList = mDatabaseHelper.getListFromCursor(cursorSelec);
 //                }
                 Cursor cursorNoSelect = getCursorByType();
-                ArrayList<Event> eventArrayList = null;
+                ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursorNoSelect);;
                 if (mIsTimeLine) {
                     eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
                 }
@@ -2574,6 +2577,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    myTaskListener.onUpdateEventsRecyclerViews(cursorSelec, eventSelectArrayList);
                 } else {
                     myTaskListener.onUpdateEventsRecyclerViews(cursorNoSelect, eventArrayList);
+                }
+                if (eventArrayList.size() == 0) {
+                    mNoData = true;
+                    myTaskListener.onShowNotificationText(true);
                 }
             }
         }
@@ -3339,6 +3346,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         void setCycleWarningView(boolean cycleWarningViewShow);
 
         void resetCycleWarningView(boolean wasShow, boolean show);
+
+        void onChangeMachineRequest();
     }
 
 }
