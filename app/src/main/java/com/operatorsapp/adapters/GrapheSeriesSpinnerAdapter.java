@@ -22,10 +22,11 @@ public class GrapheSeriesSpinnerAdapter extends ArrayAdapter<Graph> {
     private boolean mIsFirst = true;
     private String mTitle;
 
-    public GrapheSeriesSpinnerAdapter(Activity context, int resource, ArrayList<Graph> list) {
+    public GrapheSeriesSpinnerAdapter(Activity context, int resource, ArrayList<Graph> list, String title) {
         super(context, resource, list);
         mContext = context;
         mGraphs = list;
+        mTitle = title;
     }
 
     @NonNull
@@ -37,15 +38,7 @@ public class GrapheSeriesSpinnerAdapter extends ArrayAdapter<Graph> {
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
             mRowName = row.findViewById(R.id.spinner_language_item_name);
             mRowName.setTextSize(20);
-            if (mIsFirst) {
-                setTitle(mGraphs.get(0).getDisplayName());
-                mIsFirst = false;
-            }
-            else {
-                setTitle(mTitle);
-            }
-
-
+            setTitle(mTitle);
         }
         return row;
     }

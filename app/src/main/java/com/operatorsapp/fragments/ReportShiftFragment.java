@@ -89,6 +89,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private TextView mServiceCallsTitle;
     private Spinner mCycleTimeSpinner;
     private int mGraphPosition;
+    private GrapheSeriesSpinnerAdapter mCycleTimeSpinnerAdapter;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -138,7 +139,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         initCycleTimeVars(view);
         initTopFiveStopsVars(view);
         initTopFiveRejects(view);
-        getTopRejectsAndStops();
+        getData();
     }
 
     private void initCycleTimeVars(View view) {
@@ -148,25 +149,27 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     }
 
     private void initCycleTimeSpinner(final ArrayList<Graph> graphs) {
-        final GrapheSeriesSpinnerAdapter adapter = new GrapheSeriesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, graphs);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCycleTimeSpinner.setAdapter(adapter);
-        mCycleTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        if (mCycleTimeSpinnerAdapter == null) {
+            mCycleTimeSpinnerAdapter = new GrapheSeriesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, graphs, graphs.get(mGraphPosition).getDisplayName());
+            mCycleTimeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCycleTimeSpinner.setAdapter(mCycleTimeSpinnerAdapter);
+            mCycleTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-                mGraphPosition = position;
-                setGraphData(null, graphs.get(mGraphPosition).getGraphSeries().get(0));
-                adapter.setTitle(graphs.get(mGraphPosition).getDisplayName());
-            }
+                    mGraphPosition = position;
+                    setGraphData(null, graphs.get(mGraphPosition).getGraphSeries().get(0));
+                    mCycleTimeSpinnerAdapter.setTitle(graphs.get(mGraphPosition).getDisplayName());
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
+                }
 
-        });
+            });
+        }
     }
 
     private void initServiceCallsVars(View view) {
@@ -336,7 +339,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        getTopRejectsAndStops();
+        getData();
     }
 
     @Override
@@ -364,7 +367,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     }
 
-    private void getTopRejectsAndStops() {
+    private void getData() {
 
         PersistenceManager pm = PersistenceManager.getInstance();
         String[] machineId = {String.valueOf(pm.getMachineId())};
@@ -451,7 +454,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         ArrayList<ReqDepartment> reqDepartments = new ArrayList<>();
         reqDepartments.add(reqDepartment);
         DepartmentShiftGraphRequest departmentShiftGraphRequest = new DepartmentShiftGraphRequest(pm.getSessionId(), reqDepartments, 0);
-//        Log.d(TAG, "getTopRejectsAndStops: " + GsonHelper.toJson(departmentShiftGraphRequest));
+//        Log.d(TAG, "getData: " + GsonHelper.toJson(departmentShiftGraphRequest));
         NetworkManager.getInstance().getDepartmentShiftGraph(departmentShiftGraphRequest, new Callback<DepartmentShiftGraphResponse>() {
             @Override
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
