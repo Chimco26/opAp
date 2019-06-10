@@ -27,8 +27,6 @@ import com.operatorsapp.view.SingleLineKeyboard;
 
 import java.util.Locale;
 
-import me.grantland.widget.AutofitTextView;
-
 import static com.operatorsapp.activities.DashboardActivity.REPORT_REJECT_TAG;
 import static com.operatorsapp.activities.DashboardActivity.REPORT_UNIT_CYCLE_TAG;
 
@@ -54,8 +52,8 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private TextView mStep1NextBtn;
     private RelativeLayout mParentLayout;
     private View mDivider;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private TextView mValue;
     private TextView mEditBtn;
     private Activity mContext;

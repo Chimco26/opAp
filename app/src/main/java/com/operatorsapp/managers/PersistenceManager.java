@@ -411,7 +411,7 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
     public String getShiftEnd() {
         String shiftEnd = SecurePreferences.getInstance().getString(PREF_SHIFT_END);
         if (shiftEnd != null && !shiftEnd.isEmpty() && shiftEnd.length() > 0) {
-            return shiftEnd = TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
+            return shiftEnd;
         }else {
             return TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT);
         }

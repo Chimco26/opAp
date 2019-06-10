@@ -14,11 +14,15 @@ public class BaseTimeRequest {
     @SerializedName("EndTime")
     @Expose
     private String endTime;
+    @SerializedName("MachineID")
+    @Expose
+    private int machineId;
 
-    public BaseTimeRequest(String sessionId, String startTime, String endTime) {
+    public BaseTimeRequest(String sessionId, String startTime, String endTime, int machineId) {
         this.sessionID = sessionId;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.machineId = machineId;
     }
 
     public String getSessionID() {

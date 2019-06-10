@@ -17,10 +17,10 @@ public class GraphSeries {
     private String color;
     @SerializedName("MaxValue")
     @Expose
-    private Integer maxValue;
+    private Float maxValue;
     @SerializedName("MinValue")
     @Expose
-    private Integer minValue;
+    private Float minValue;
 
     public List<Item> getItems() {
         return items;
@@ -46,18 +46,18 @@ public class GraphSeries {
         this.color = color;
     }
 
-    public Integer getMaxValue() {
+    public Float getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(Integer maxValue) {
+    public void setMaxValue(Float maxValue) {
         this.maxValue = maxValue;
     }
 
-    public Integer getMinValue() {
+    public Float getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(Integer minValue) {
+    public void setMinValue(Float minValue) {
         this.minValue = minValue;
     }}

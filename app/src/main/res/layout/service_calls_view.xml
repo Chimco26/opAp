@@ -15,7 +15,7 @@
         android:gravity="center_vertical"
         android:maxLines="2"
         android:paddingBottom="5dp"
-        android:text="title top five"
+        android:text="@string/service_calls_distribution"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -28,7 +28,6 @@
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/SCV_pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="30dp"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

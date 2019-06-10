@@ -97,7 +97,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
-            mSubTitle.setText("");
+//            mSubTitle.setText("");
             mTitle.setText(R.string.setup_mode);
         } else {
             if (time >= 60) {
@@ -141,7 +141,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
-            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
+//            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
 //            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));
         }
     }

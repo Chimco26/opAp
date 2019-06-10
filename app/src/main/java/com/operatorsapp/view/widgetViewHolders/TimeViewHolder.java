@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-import me.grantland.widget.AutofitTextView;
-
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
 public class TimeViewHolder extends RecyclerView.ViewHolder {
@@ -34,8 +32,8 @@ public class TimeViewHolder extends RecyclerView.ViewHolder {
     private RelativeLayout mParentLayout;
     private View mDivider;
     private LineChartTimeSmall mChart;
-    private AutofitTextView mTitle;
-    private AutofitTextView mSubtitle;
+    private TextView mTitle;
+    private TextView mSubtitle;
     private TextView mValue;
     private GoToScreenListener mGoToScreenListener;
 
