@@ -12,6 +12,11 @@ public class Item {
     @Expose
     private Double y;
 
+    public Item(String x, Double y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public String getX() {
         return x;
     }

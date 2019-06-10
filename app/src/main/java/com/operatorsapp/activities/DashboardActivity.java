@@ -1783,17 +1783,17 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         dashboardDataStartPolling();
 
-        if (getSupportFragmentManager() != null) {
-
-            try {
-
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            } catch (IllegalStateException ignored) {
-
-            }
-
-        }
+//        if (getSupportFragmentManager() != null) {
+//
+//            try {
+//
+//                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//            } catch (IllegalStateException ignored) {
+//
+//            }
+//
+//        }
 
         ProgressDialogManager.dismiss();
 
