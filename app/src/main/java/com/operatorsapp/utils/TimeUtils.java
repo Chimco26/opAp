@@ -417,7 +417,8 @@ public class TimeUtils {
 
         if (millis >= ONE_HOUR_IN_SECONDS * 1000){
             DecimalFormat df = new DecimalFormat("#.#");
-            output = df.format(millis / (ONE_HOUR_IN_SECONDS * 1000f)) + hr;
+            int hours = (int) (millis / (ONE_HOUR_IN_SECONDS * 1000f));
+            output = df.format(hours + ((millis / (ONE_HOUR_IN_SECONDS * 1000f) - hours) * 60 /100)) + hr;
         }else {
             output = (int)(millis / (ONE_MINUTE_IN_SECONDS * 1000f)) + min;
         }

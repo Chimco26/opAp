@@ -71,15 +71,15 @@
             </LinearLayout>
 
 
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<android.support.v4.widget.NestedScrollView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical">-->
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/fragment_dashboard_widgets"
@@ -89,10 +89,13 @@
                         android:layout_marginTop="0dp"
                         android:layout_marginEnd="7dp"
                         android:scrollbarFadeDuration="0"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical"
+                        android:paddingBottom="80dp"
+                        android:clipToPadding="false"/>
 
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+                <!--</LinearLayout>-->
+                <!---->
+            <!--</android.support.v4.widget.NestedScrollView>-->
 
         </FrameLayout>
     </LinearLayout>
