@@ -86,7 +86,6 @@ public class LineChartHelper {
 
             if (item.getY() != null) {
 
-
                 items1.add(item);
 
             } else {
@@ -101,5 +100,18 @@ public class LineChartHelper {
 
         return listArrayList;
     }
-
+    static float lerp(float point1, float point2, float dist) {
+        return point1 + dist * (point2 - point1);
+    }
 }
+//    ArrayList<List<Item>> listArrayList1 = new ArrayList<>();
+//    List<Item> items2 = new ArrayList<>();
+//        for (int i = 0; i< listArrayList.size(); i++){
+//        for (int j = 0; j < listArrayList.get(i).size(); j++) {
+//        items2.add(listArrayList.get(i).get(j));
+//        if (j < listArrayList.get(i).size() - 1) {
+//        items2.add(new Item(String.valueOf(lerp(Float.valueOf(listArrayList.get(i).get(j).getX()), Float.valueOf(listArrayList.get(i).get(j + 1).getX()), 0.5f)),
+//        Double.valueOf(lerp(listArrayList.get(i).get(j).getY().floatValue(), listArrayList.get(i).get(j + 1).getY().floatValue(), 0.5f))));
+//        }
+//        }
+//        }

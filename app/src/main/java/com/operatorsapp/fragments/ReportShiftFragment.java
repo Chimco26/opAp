@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.common.Event;
@@ -19,6 +21,7 @@ import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
+import com.example.common.reportShift.Graph;
 import com.example.common.reportShift.GraphSeries;
 import com.example.common.reportShift.Item;
 import com.example.common.reportShift.NotificationByType;
@@ -40,6 +43,7 @@ import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
+import com.operatorsapp.adapters.GrapheSeriesSpinnerAdapter;
 import com.operatorsapp.adapters.TopFiveAdapter;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
@@ -83,6 +87,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private LineChart mCycleTime;
     private TextView mCycleTimeTitle;
     private TextView mServiceCallsTitle;
+    private Spinner mCycleTimeSpinner;
+    private int mGraphPosition;
+    private GrapheSeriesSpinnerAdapter mCycleTimeSpinnerAdapter;
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -126,18 +133,43 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mProgressBar = view.findViewById(R.id.FTF_progress);
-        ((TextView)view.findViewById(R.id.FRS_title_tv)).setText(getResources().getString(R.string.shift_report));
-        ((TextView)view.findViewById(R.id.FRS_machine_name_tv)).setText(PersistenceManager.getInstance().getMachineName());
+        ((TextView) view.findViewById(R.id.FRS_title_tv)).setText(getResources().getString(R.string.shift_report));
+        ((TextView) view.findViewById(R.id.FRS_machine_name_tv)).setText(PersistenceManager.getInstance().getMachineName());
         initServiceCallsVars(view);
         initCycleTimeVars(view);
         initTopFiveStopsVars(view);
         initTopFiveRejects(view);
-        getTopRejectsAndStops();
+        getData();
     }
 
     private void initCycleTimeVars(View view) {
         mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
         mCycleTimeTitle = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_tv);
+        mCycleTimeSpinner = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_spinner);
+    }
+
+    private void initCycleTimeSpinner(final ArrayList<Graph> graphs) {
+        if (mCycleTimeSpinnerAdapter == null) {
+            mCycleTimeSpinnerAdapter = new GrapheSeriesSpinnerAdapter(getActivity(), R.layout.spinner_language_item, graphs, graphs.get(mGraphPosition).getDisplayName());
+            mCycleTimeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCycleTimeSpinner.setAdapter(mCycleTimeSpinnerAdapter);
+            mCycleTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+                    mGraphPosition = position;
+                    setGraphData(null, graphs.get(mGraphPosition).getGraphSeries().get(0));
+                    mCycleTimeSpinnerAdapter.setTitle(graphs.get(mGraphPosition).getDisplayName());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+
+            });
+        }
     }
 
     private void initServiceCallsVars(View view) {
@@ -234,7 +266,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         }
     }
 
-    private void setGraphData(String displayName, GraphSeries graphSeries, View graphView) {
+    private void setGraphData(String displayName, GraphSeries graphSeries) {
 
         LineChart graph = mCycleTime;
 
@@ -260,23 +292,28 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                         if (date != null) {
 
-                            values.add(new Entry((float) date.getTime(), Float.valueOf(String.valueOf(items.get(i).getY()))));
+                            values.add(new Entry((float) date.getTime(), items.get(i).getY().floatValue()));
                         }
 
+
+                        LineDataSet set = new LineDataSet(values, "");
+
+                        set.setDrawCircles(false);
+
+                        set.setDrawValues(false);
+
+                        set.setMode(LineDataSet.Mode.LINEAR);
+//                        graphSeries.setMinValue(1039700f);
+//                        graphSeries.setMaxValue(1039900f);
+                        if ((graphSeries.getMinValue() > 0 && items.get(i).getY().floatValue() < graphSeries.getMinValue()) ||
+                                (graphSeries.getMaxValue() > 0 && items.get(i).getY().floatValue() > graphSeries.getMaxValue())) {
+                            set.setColor(getContext().getResources().getColor(R.color.red_line));
+                        } else {
+                            set.setColor(getContext().getResources().getColor(R.color.blue1));
+                        }
+
+                        allDataSets.add(set);
                     }
-
-                    LineDataSet set = new LineDataSet(values, "");
-
-                    set.setDrawCircles(false);
-
-                    set.setDrawValues(false);
-
-                    set.setMode(LineDataSet.Mode.LINEAR);
-
-                    set.setColor(getContext().getResources().getColor(R.color.blue1));
-
-                    allDataSets.add(set);
-
                 }
             }
 
@@ -291,7 +328,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         setXAxisStyle(graph);
         setYAxisStyle(graph);
         setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
-
+        graph.notifyDataSetChanged();
         graph.invalidate();
     }
 
@@ -302,7 +339,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     @Override
     public void onMachineDataReceived(ArrayList<Widget> widgetList) {
-        getTopRejectsAndStops();
+        getData();
     }
 
     @Override
@@ -330,7 +367,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     }
 
-    private void getTopRejectsAndStops() {
+    private void getData() {
 
         PersistenceManager pm = PersistenceManager.getInstance();
         String[] machineId = {String.valueOf(pm.getMachineId())};
@@ -413,11 +450,11 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         List<Integer> machineIds = new ArrayList<>();
         machineIds.add(pm.getMachineId());
         ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime(pm.getShiftStart(), pm.getShiftEnd()));
-//        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime("2018-05-06 07:00:46", "2019-06-06 15:47:59"));
+//        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime("2018-05-10 07:00:46", "2019-06-10 15:47:59"));
         ArrayList<ReqDepartment> reqDepartments = new ArrayList<>();
         reqDepartments.add(reqDepartment);
         DepartmentShiftGraphRequest departmentShiftGraphRequest = new DepartmentShiftGraphRequest(pm.getSessionId(), reqDepartments, 0);
-//        Log.d(TAG, "getTopRejectsAndStops: " + GsonHelper.toJson(departmentShiftGraphRequest));
+//        Log.d(TAG, "getData: " + GsonHelper.toJson(departmentShiftGraphRequest));
         NetworkManager.getInstance().getDepartmentShiftGraph(departmentShiftGraphRequest, new Callback<DepartmentShiftGraphResponse>() {
             @Override
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
@@ -425,7 +462,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                     if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0) {
                         setGraphData(null, response.body().getDepartments().get(0).getCurrentShift().
-                                get(0).getMachines().get(0).getGraphs().get(0).getGraphSeries().get(0), null);
+                                get(0).getMachines().get(0).getGraphs().get(mGraphPosition).getGraphSeries().get(0));
+                        initCycleTimeSpinner((ArrayList<Graph>) response.body().getDepartments().get(0).getCurrentShift().
+                                get(0).getMachines().get(0).getGraphs());
                         mCycleTimeTitle.setText(getContext().getResources().getString(R.string.cycle_time));
                     }
 
