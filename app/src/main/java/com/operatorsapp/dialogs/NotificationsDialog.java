@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.operatorsapp.R;
 import com.operatorsapp.activities.DashboardActivity;
@@ -159,7 +160,14 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
 //
 //        }
 //        return tempList;
-        return PersistenceManager.getInstance().getNotificationHistoryNoTech();
+        TextView noNotificationsTitleTv = findViewById(R.id.NVP_no_notifications_tv);
+        ArrayList<Notification> list = PersistenceManager.getInstance().getNotificationHistoryNoTech();
+        if (list == null || list.size() == 0){
+            noNotificationsTitleTv.setVisibility(View.VISIBLE);
+        }else {
+            noNotificationsTitleTv.setVisibility(View.GONE);
+        }
+        return list;
     }
 
     @Override

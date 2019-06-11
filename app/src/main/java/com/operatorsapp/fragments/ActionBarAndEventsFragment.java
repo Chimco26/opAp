@@ -1177,12 +1177,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
             });
 
-            notificationIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openNotificationsList();
-                }
-            });
+//            notificationIv.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    openNotificationsList();
+//                }
+//            });
 
             technicianRl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1477,7 +1477,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     public void initLenoxView(ImageView notificationIv, View technicianIv, ImageView
             tutorialIv, EmeraldSpinner jobsSpinner) {
         if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) {
-            notificationIv.setVisibility(View.INVISIBLE);
+//            notificationIv.setVisibility(View.INVISIBLE);
             technicianIv.setVisibility(View.INVISIBLE);
             tutorialIv.setVisibility(View.INVISIBLE);
             jobsSpinner.setVisibility(View.GONE);

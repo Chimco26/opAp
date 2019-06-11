@@ -53,6 +53,18 @@
 
     </RelativeLayout>-->
 
+    <TextView
+        android:id="@+id/NVP_no_notifications_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="@string/no_notification_to_show"
+        />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
