@@ -1,6 +1,7 @@
 package com.operatorsapp.adapters;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -37,8 +38,10 @@ public class GrapheSeriesSpinnerAdapter extends ArrayAdapter<Graph> {
             LayoutInflater inflater = mContext.getLayoutInflater();
             row = inflater.inflate(R.layout.spinner_language_item, parent, false);
             mRowName = row.findViewById(R.id.spinner_language_item_name);
-            mRowName.setTextSize(20);
-            setTitle(mTitle);
+            mRowName.setTextSize(25);
+            mRowName.setTypeface(mRowName.getTypeface(), Typeface.BOLD);
+            mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            mRowName.setText(mGraphs.get(position).getDisplayName());
         }
         return row;
     }
@@ -62,10 +65,4 @@ public class GrapheSeriesSpinnerAdapter extends ArrayAdapter<Graph> {
         return row;
     }
 
-    public void setTitle(String name) {
-        mTitle = name;
-        mRowName.setTextColor(ContextCompat.getColor(mContext, R.color.status_bar));
-        mRowName.setText(name);
-        mRowName.setTextSize(20);
-    }
 }

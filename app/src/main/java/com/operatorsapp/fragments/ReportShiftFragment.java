@@ -37,14 +37,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 import com.operatorsapp.R;
 import com.operatorsapp.adapters.GrapheSeriesSpinnerAdapter;
 import com.operatorsapp.adapters.TopFiveAdapter;
+import com.operatorsapp.application.OperatorApplication;
 import com.operatorsapp.interfaces.DashboardUICallbackListener;
 import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
@@ -58,12 +59,12 @@ import com.operatorsapp.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.operatorsapp.utils.LineChartHelper.setLimitLine;
 import static com.operatorsapp.utils.LineChartHelper.setXAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.setYAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.splitItemsByNull;
@@ -85,11 +86,13 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private View mTopFiveRejectsView;
     private PieChart mPieChart;
     private LineChart mCycleTime;
-    private TextView mCycleTimeTitle;
     private TextView mServiceCallsTitle;
     private Spinner mCycleTimeSpinner;
     private int mGraphPosition;
     private GrapheSeriesSpinnerAdapter mCycleTimeSpinnerAdapter;
+    public static final int[] BLUE_COLORS = {
+            Color.rgb(0, 0, 153), Color.rgb(0, 0, 204), Color.rgb(0, 0, 255),
+            Color.rgb(51, 51, 255), Color.rgb(0, 102, 255), Color.rgb(51, 102, 255)};
 
     public static ReportShiftFragment newInstance(boolean isTimeLineOpen) {
         ReportShiftFragment reportShiftFragment = new ReportShiftFragment();
@@ -144,7 +147,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
     private void initCycleTimeVars(View view) {
         mCycleTime = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_cycle_time_chart);
-        mCycleTimeTitle = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_tv);
         mCycleTimeSpinner = view.findViewById(R.id.FRS_cycle_time_view).findViewById(R.id.CTV_spinner);
     }
 
@@ -160,7 +162,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                     mGraphPosition = position;
                     setGraphData(null, graphs.get(mGraphPosition).getGraphSeries().get(0));
-                    mCycleTimeSpinnerAdapter.setTitle(graphs.get(mGraphPosition).getDisplayName());
                 }
 
                 @Override
@@ -206,7 +207,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 textView.setText(value);
                 ((TextView) viewItem.findViewById(R.id.TF_values_title)).setText(valueTitle);
             } else {
-                viewItem.findViewById(R.id.TF_values).setVisibility(View.INVISIBLE);
+                viewItem.findViewById(R.id.TF_values).setVisibility(View.GONE);
             }
             if (events != null && !events.isEmpty()) {
                 viewItem.findViewById(R.id.TF_events).setVisibility(View.VISIBLE);
@@ -214,7 +215,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 textView.setText(events);
                 ((TextView) viewItem.findViewById(R.id.TF_events_title)).setText(eventsTile);
             } else {
-                viewItem.findViewById(R.id.TF_events).setVisibility(View.INVISIBLE);
+                viewItem.findViewById(R.id.TF_events).setVisibility(View.GONE);
             }
         } else {
             viewItem.findViewById(R.id.TF_values_ly).setVisibility(View.GONE);
@@ -223,37 +224,39 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     }
 
     private void initServiceCallsView(ServiceCallsResponse serviceCallsResponse) {
-        mPieChart.setDrawHoleEnabled(false);
 
         List<NotificationByType> values = serviceCallsResponse.getNotificationByType();
         if (values.size() > 0) {
             ArrayList<PieEntry> mPieValues = new ArrayList<>();
             for (int i = 0; i < values.size(); i++) {
                 NotificationByType notificationByType = values.get(i);
-                mPieValues.add(new PieEntry(notificationByType.getPC(), notificationByType.getEName()));//todo lname
+                String titleByLang = OperatorApplication.isEnglishLang() ? notificationByType.getEName() : notificationByType.getLName();
+                mPieValues.add(new PieEntry(notificationByType.getPC(), String.format(Locale.getDefault(), "%s (%d)", titleByLang, notificationByType.getNumOfResponse())));
             }
 
             mPieChart.setEntryLabelColor(Color.BLACK);
-
             PieDataSet pieDataSet = new PieDataSet(mPieValues, "");
 
             ArrayList<Integer> colors = new ArrayList<>();
-            for (int c : ColorTemplate.JOYFUL_COLORS)
+            for (int c : BLUE_COLORS)
                 colors.add(c);
             pieDataSet.setColors(colors);
             pieDataSet.setSliceSpace(4f);
 
             PieData data = new PieData(pieDataSet);
-
+            data.setValueFormatter(new PercentFormatter());
             data.setValueTextSize(20f);
             data.setValueTextColor(Color.BLACK);
 
+            mPieChart.setDrawHoleEnabled(false);
             mPieChart.setData(data);
+            mPieChart.setTouchEnabled(false);
             mPieChart.setDescription(null);
-            mPieChart.getLegend().setEnabled(false);
             mPieChart.setUsePercentValues(true);
             mPieChart.getLegend().setWordWrapEnabled(true);
+            mPieChart.getLegend().setTextSize(14f);
             mPieChart.setDrawEntryLabels(false);
+            mPieChart.getLegend().setEnabled(true);
             mPieChart.setExtraOffsets(0, 5, 0, 5);
 
             pieDataSet.setValueLinePart1OffsetPercentage(80.f);
@@ -292,42 +295,34 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                         if (date != null) {
 
-                            values.add(new Entry((float) date.getTime(), items.get(i).getY().floatValue()));
+                            values.add(new Entry((float) date.getTime(), (float) (Math.round( items.get(i).getY().floatValue()))));
                         }
 
 
-                        LineDataSet set = new LineDataSet(values, "");
-
-                        set.setDrawCircles(false);
-
-                        set.setDrawValues(false);
-
-                        set.setMode(LineDataSet.Mode.LINEAR);
-//                        graphSeries.setMinValue(1039700f);
-//                        graphSeries.setMaxValue(1039900f);
-                        if ((graphSeries.getMinValue() > 0 && items.get(i).getY().floatValue() < graphSeries.getMinValue()) ||
-                                (graphSeries.getMaxValue() > 0 && items.get(i).getY().floatValue() > graphSeries.getMaxValue())) {
-                            set.setColor(getContext().getResources().getColor(R.color.red_line));
-                        } else {
-                            set.setColor(getContext().getResources().getColor(R.color.blue1));
-                        }
-
-                        allDataSets.add(set);
                     }
+                    LineDataSet set = new LineDataSet(values, "");
+
+                    set.setDrawCircles(false);
+
+                    set.setDrawValues(false);
+
+                    set.setMode(LineDataSet.Mode.LINEAR);
+
+                    set.setColor(getContext().getResources().getColor(R.color.blue1));
+
+                    allDataSets.add(set);
                 }
             }
 
-
         }
         LineData data = new LineData(allDataSets);
-
         graph.setDescription(null);
         graph.setExtraOffsets(5, 5, 5, 5);
         graph.setData(data);
         graph.getLegend().setEnabled(false);
         setXAxisStyle(graph);
         setYAxisStyle(graph);
-        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
+//        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
         graph.notifyDataSetChanged();
         graph.invalidate();
     }
@@ -371,7 +366,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
         PersistenceManager pm = PersistenceManager.getInstance();
         String[] machineId = {String.valueOf(pm.getMachineId())};
-        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT));
+        final GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT));
 //        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(),"2019-05-06 07:00:46", "2019-06-06 15:47:59");
 
         NetworkManager.getInstance().getTopRejects(request, new Callback<TopRejectResponse>() {
@@ -379,6 +374,11 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
                 if (isAdded() && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
+                    if (getTotalAmount(response.body().getRejectsAsTopFive()) > 0) {
+                        initCritical(mTopFiveRejectsView, null,
+                                String.valueOf(getTotalAmount(response.body().getRejectsAsTopFive())),
+                                null, getContext().getString(R.string.rejects).toLowerCase());
+                    }
                     mProgressBar.setVisibility(View.GONE);
                 }
             }
@@ -404,11 +404,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                         initCritical(mTopFiveStopsView, response.body().getmCriticalEvents().get(0).getmDuration(),
                                 response.body().getmCriticalEvents().get(0).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
-                        if (response.body().getmCriticalEvents().size() > 1) {
-                            initCritical(mTopFiveRejectsView, response.body().getmCriticalEvents().get(1).getmDuration(),
-                                    response.body().getmCriticalEvents().get(1).getmEventsCount(),
-                                    getContext().getString(R.string.rejects).toLowerCase(), getContext().getString(R.string.events));
-                        }
                     }
                 }
                 mProgressBar.setVisibility(View.GONE);
@@ -460,12 +455,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             public void onResponse(Call<DepartmentShiftGraphResponse> call, Response<DepartmentShiftGraphResponse> response) {
                 if (isAdded() && response.body() != null && response.body().getError() == null) {
 
-                    if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0) {
+                    if (response.body().getDepartments() != null && response.body().getDepartments().size() > 0
+                            && response.body().getDepartments().get(0).getCurrentShift().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().
+                            get(0).getMachines().size() > 0 && response.body().getDepartments().get(0).getCurrentShift().
+                            get(0).getMachines().get(0).getGraphs().size() > mGraphPosition) {
                         setGraphData(null, response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs().get(mGraphPosition).getGraphSeries().get(0));
                         initCycleTimeSpinner((ArrayList<Graph>) response.body().getDepartments().get(0).getCurrentShift().
                                 get(0).getMachines().get(0).getGraphs());
-                        mCycleTimeTitle.setText(getContext().getResources().getString(R.string.cycle_time));
                     }
 
                 }
@@ -480,10 +477,51 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         });
     }
 
+    private Float getTotalAmount(ArrayList<TopFiveItem> rejectsAsTopFive) {
+        Float amount = 0f;
+        for (TopFiveItem topFiveItem : rejectsAsTopFive) {
+            amount += Float.valueOf(topFiveItem.getmAmount());
+        }
+        return amount;
+    }
+
 
     public void setIsOpenState(boolean open) {
         isOpen = open;
         mStopsAdapter.notifyDataSetChanged();
         mRejectsAdapter.notifyDataSetChanged();
     }
+//
+//    public class Main {
+//
+//        public static void main(String[] args) {
+//
+//            int nombresarah ; int nombrekeren;
+//
+//            Scanner clavier=new Scanner(System.in) ;
+//
+//            do {
+//
+//                    System.out.println ("sarah :Choisi un nombre entre 1 et 10 ");
+//                do{
+//                    nombrekeren =clavier.nextInt();
+//
+//                    if (nombrekeren==nombresarah){
+//                        System.out.println("felicitation");
+//
+//                    } else if (nombrekeren < nombresarah){
+//                        System.out.println("ton nombre est trop petit");
+//                    } else if (nombrekeren > nombresarah){
+//                        System.out.println("ton nombre est trop grand");
+//                    }
+//                }while (nombrekeren != nombresarah);
+//
+//                System.out.println ("Presse 1 si tu veux rejouer");
+//                String choice = clavier.nextInt();
+//            }while (choice == "1");
+//
+//            System.out.println ("By");
+//
+//        }
+//    }
 }
