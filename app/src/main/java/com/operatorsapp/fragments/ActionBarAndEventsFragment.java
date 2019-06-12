@@ -1284,7 +1284,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mMachineStatusStatusBarTextView = mToolBarView.findViewById(R.id.text_view_machine_status);
             mMachineStatusStatusBarTextView.setSelected(true);
             mStatusIndicatorImageView = mToolBarView.findViewById(R.id.job_indicator);
-            mToolBarView.findViewById(R.id.ATATV_job_indicator_ly).setOnClickListener(this);
+//            mToolBarView.findViewById(R.id.ATATV_job_indicator_ly).setOnClickListener(this);
 
             if (mMachineStatusLayout == null) {
                 mMachineStatusLayout = mToolBarView.findViewById(R.id.linearLayout2);
@@ -3082,14 +3082,14 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         switch (v.getId()) {
 
-            case R.id.ATATV_job_indicator_ly:
-
-                if (!mEndSetupDisable &&
-                        mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                        && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
-                    openSetupEndFragment();
-                }
-                break;
+//            case R.id.ATATV_job_indicator_ly:
+//
+//                if (!mEndSetupDisable &&
+//                        mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+//                        && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()) {
+//                    openSetupEndFragment();
+//                }
+//                break;
         }
     }
 

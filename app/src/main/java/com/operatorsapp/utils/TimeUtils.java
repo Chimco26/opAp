@@ -416,7 +416,7 @@ public class TimeUtils {
         String output = "";
 
         if (millis >= ONE_HOUR_IN_SECONDS * 1000){
-            DecimalFormat df = new DecimalFormat("#.#");
+            DecimalFormat df = new DecimalFormat("#.##");
             int hours = (int) (millis / (ONE_HOUR_IN_SECONDS * 1000f));
             output = df.format(hours + ((millis / (ONE_HOUR_IN_SECONDS * 1000f) - hours) * 60 /100)) + hr;
         }else {

@@ -387,6 +387,6 @@
     <string name="select_your_machine">בחר את המכונה שלך</string>
     <string name="shift_report">דוח משמרת</string>
     <string name="filter_by">סנן לפי</string>
-    <string name="service_calls_distribution">הפצת שיחות שירות</string>
+    <string name="service_calls_distribution">התפלגות קריאות שירות</string>
 
 </resources>
