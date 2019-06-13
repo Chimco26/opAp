@@ -171,7 +171,7 @@
     <string name="log_in_to_nyour_factory">ادخل الى \nمصنعك</string>
     <string name="common_signin_button_text">تسجيل الدخول</string>
     <string name="action_details">تفاصيل الاجراء</string>
-    <string name="actionnable_jobs">اعمال قابلة للتنفيذ</string>
+    <string name="actionnable_jobs">الأعمال الممكن القيام بها</string>
     <string name="actions">اجرائات</string>
     <string name="activate">تشغيل</string>
     <string name="activate_job_dialog_message">أنت على وشك تفعيل عمل جديد ، هل أنت متأكد أنك تريد المتابعة؟</string>
@@ -366,6 +366,24 @@
     <string name="there_are_no_stop_event">لايوجد ابلاغ عن أحداث توقف</string>
     <string name="theoretical_units">الوحدات النظرية</string>
     <string name="add_rejects">اضف مرفوضات</string>
+    <string name="active_jobs">الأعمال النشطة</string>
+    <string name="select_your_machine">قم باختيار آلتك</string>
+    <string name="search_department_or_machine_name">ابحث عن القسم أو اسم الآلة</string>
+    <string name="storage_permission">من فضل اسمح بإمكانية الوصول لتحديثات التطبيق</string>
+    <string name="update_version_messege">نسخة أحدث متوافرة، يرجى السماح بالتثبيت عندما تنتهي من تنزيل الملف.</string>
+    <string name="update_version_title">جاري التحديث</string>
+    <string name="filter_by">التصفية حسب</string>
+    <string name="index">فهرس</string>
+    <string name="catalog_maj">كتالوج</string>
+    <string name="units_target">الوحدات الهدف</string>
+    <string name="units_produced">الوحدات التي تم إنتاجها</string>
+    <string name="end_time_actual">وقت الانتهاء (الفعلي)</string>
+    <string name="job_left_time">الوقت المنتهي للعمل</string>
+    <string name="number_of_jobs">عدد الأعمال</string>
+    <string name="type_something">اكتب شيئا ما</string>
+    <string name="cycle_time">وقت الدورة</string>
+    <string name="service_calls_distribution">توزيع اتصالات الخدمة</string>
+    <string name="shift_report">تقرير المناوبة</string>
 
 
 </resources>

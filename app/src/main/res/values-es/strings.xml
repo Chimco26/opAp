@@ -168,7 +168,7 @@
         <item quantity="other">Horas</item>
     </plurals>
     <string name="common_signin_button_text">Conectarse</string>
-    <string name="actionnable_jobs">Lista de trabajos pendientes</string>
+    <string name="actionnable_jobs">Trabajos accionables</string>
     <string name="actions">acciones</string>
     <string name="activate">Activar</string>
     <string name="add">Agregar</string>
@@ -367,6 +367,24 @@
     <string name="average">media</string>
     <string name="add_rejects">Añadir rechazos</string>
     <string name="minutes_long">min.</string>
+    <string name="active_jobs">Trabajos activos</string>
+    <string name="select_your_machine">Selecciona tu máquina</string>
+    <string name="search_department_or_machine_name">Buscar por nombre de departamento o máquina</string>
+    <string name="storage_permission">Permite acceso de almacenamiento para las actualizaciones de aplicaciones</string>
+    <string name="update_version_messege">Una versión más reciente está disponible. Por favor, permite la instalación cuando termine de descargarse el archivo.</string>
+    <string name="update_version_title">Actualización en progreso</string>
+    <string name="filter_by">Filtrar por</string>
+    <string name="index">ÍNDICE</string>
+    <string name="catalog_maj">CATÁLOGO</string>
+    <string name="units_target">OBJETIVO DE UNIDADES</string>
+    <string name="units_produced">UNIDADES PRODUCIDAS</string>
+    <string name="end_time_actual">HORA DE FINALIZACIÓN (REAL)</string>
+    <string name="job_left_time">TIEMPO RESTANTE DEL TRABAJO</string>
+    <string name="number_of_jobs">número de trabajos</string>
+    <string name="type_something">Escribe algo</string>
+    <string name="cycle_time">Tiempo de ciclo</string>
+    <string name="service_calls_distribution">Distribución de llamadas de servicio</string>
+    <string name="shift_report">Informe de turnos</string>
 
 
 </resources>

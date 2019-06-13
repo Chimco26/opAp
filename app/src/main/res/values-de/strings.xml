@@ -171,7 +171,7 @@
     <string name="common_signin_button_text">Einloggen</string>
     <string name="activate">Aktivieren</string>
     <string name="actions">Aktionen</string>
-    <string name="actionnable_jobs">Auswählbare Aufträge</string>
+    <string name="actionnable_jobs">Umsetzbare Jobs</string>
     <string name="action_details">Aktionsdetails</string>
     <string name="activate_job_dialog_message">Sind Sie sicher, dass ein neuer Auftrag gestartet werden soll?</string>
     <string name="activate_job_dialog_title">Neuen Auftrag aktivieren</string>
@@ -369,4 +369,22 @@
     <string name="average">Durchschn</string>
     <string name="add_rejects">Ausschuss hinzufügen</string>
     <string name="minutes_long">Min</string>
+    <string name="active_jobs">Aktive Jobs</string>
+    <string name="select_your_machine">Wählen Sie Ihre Maschine</string>
+    <string name="search_department_or_machine_name">Nach Abteilung oder Maschinenname suchen</string>
+    <string name="storage_permission">Bitte erlauben Sie Speicherzugriff für Anwendungsaktualisierungen</string>
+    <string name="update_version_messege">Eine neuere Version ist verfügbar. Bitte erlauben Sie die Installation, wenn der Download der Datei abgeschlossen ist.</string>
+    <string name="update_version_title">Aktualisierung läuft</string>
+    <string name="filter_by">Filtern nach</string>
+    <string name="index">INDEX</string>
+    <string name="catalog_maj">KATALOG</string>
+    <string name="units_target">EINHEITEN-ZIEL</string>
+    <string name="units_produced">PRODUZIERTE EINHEITEN</string>
+    <string name="end_time_actual">ENDZEIT (IST)</string>
+    <string name="job_left_time">JOB – VERBLEIBENDE ZEIT</string>
+    <string name="number_of_jobs">Anzahl der Jobs</string>
+    <string name="type_something">Geben Sie etwas ein</string>
+    <string name="cycle_time">Zykluszeit</string>
+    <string name="service_calls_distribution">Service-Anrufe-Verteilung</string>
+    <string name="shift_report">Schichtbericht</string>
 </resources>

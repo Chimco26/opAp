@@ -167,7 +167,7 @@
     <string name="common_signin_button_text">Вход</string>
     <string name="activate">Активировать</string>
     <string name="action_details">Подробности действий</string>
-    <string name="actionnable_jobs">Задания в ожидании</string>
+    <string name="actionnable_jobs">Выполнимые задания</string>
     <string name="actions">Действия</string>
     <string name="activate_job_dialog_message">Вы собираетесь активировать новую работу, вы уверены, что хотите продолжить?</string>
     <string name="activate_job_dialog_title">Активировать новое задание</string>
@@ -364,4 +364,22 @@
     <string name="average">ср</string>
     <string name="add_rejects">Добавить брак</string>
     <string name="minutes_long">мин.</string>
+    <string name="active_jobs">Активные задания</string>
+    <string name="select_your_machine">Выберите свою машину</string>
+    <string name="search_department_or_machine_name">Искать название цеха или машины</string>
+    <string name="storage_permission">Разрешите доступ к памяти для обновлений приложения</string>
+    <string name="update_version_messege">Доступна новая версия. Разрешите установку после завершения загрузки файла.</string>
+    <string name="update_version_title">Выполняется обновление</string>
+    <string name="filter_by">Фильтровать по</string>
+    <string name="index">УКАЗАТЕЛЬ</string>
+    <string name="catalog_maj">КАТАЛОГ</string>
+    <string name="units_target">ЦЕЛЕВОЕ КОЛИЧЕСТВО ЕДИНИЦ</string>
+    <string name="units_produced">ПРОИЗВЕДЕНО ЕДИНИЦ</string>
+    <string name="end_time_actual">ВРЕМЯ ОКОНЧАНИЯ (ФАКТИЧЕСКОЕ)</string>
+    <string name="job_left_time">ОСТАЛОСЬ ВРЕМЕНИ ВЫПОЛНЕНИЯ ЗАДАНИЯ</string>
+    <string name="number_of_jobs">число заданий</string>
+    <string name="type_something">Введите что-нибудь</string>
+    <string name="cycle_time">Время цикла</string>
+    <string name="service_calls_distribution">Распределение обращений в техподдержку</string>
+    <string name="shift_report">Отчет о смене</string>
 </resources>
