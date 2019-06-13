@@ -388,5 +388,6 @@
     <string name="shift_report">דוח משמרת</string>
     <string name="filter_by">סנן לפי</string>
     <string name="service_calls_distribution">התפלגות קריאות שירות</string>
+    <string name="you_have">יש לך</string>
 
 </resources>

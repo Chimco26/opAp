@@ -48,7 +48,7 @@ public class LineChartHelper {
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(true);
         xAxis.setDrawLabels(true);
-        xAxis.setCenterAxisLabels(true);
+        xAxis.setCenterAxisLabels(false);
         xAxis.setGranularityEnabled(false);
         xAxis.setValueFormatter(new AxisValueFormatter(){
             @Override

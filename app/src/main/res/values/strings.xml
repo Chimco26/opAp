@@ -413,6 +413,7 @@
     <string name="cycle_time">Cycle time</string>
     <string name="service_calls_distribution">Service calls distribution</string>
     <string name="shift_report">Shift Report</string>
+    <string name="you_have">You have</string>
 
     <string-array name="color_array">
         <item>#954b7d</item>

@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="112dp"
         android:background="@color/grey_transparent"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingStart="25dp"
         android:paddingEnd="22dp"
@@ -19,8 +19,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/index"
@@ -37,8 +37,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/catalog_maj"
@@ -48,15 +48,15 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/FJL_target"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/units_target"
@@ -66,15 +66,15 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/FJL_produced"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/units_produced"
@@ -84,15 +84,15 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/FJL_end_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/end_time_actual"
@@ -102,15 +102,15 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/FJL_job_left"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="center_vertical"
-            android:maxLines="1"
+            android:gravity="center"
+            android:maxLines="3"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/job_left_time"
@@ -120,22 +120,25 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="5" />
+            android:layout_weight="4" />
 
         <ImageView
             android:id="@+id/FJL_image"
-            android:layout_width="68dp"
-            android:layout_height="68dp" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:scaleType="centerInside"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="6" />
+            android:layout_weight="4" />
 
         <ImageView
             android:id="@+id/FJL_arrow"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:rotation="180"
             android:src="@drawable/ic_arrow" />
     </LinearLayout>

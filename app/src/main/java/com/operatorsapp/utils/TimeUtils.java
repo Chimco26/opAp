@@ -26,7 +26,7 @@ public class TimeUtils {
     public static final String COMMON_DATE_FORMAT = "HH:mm dd/MM/yyyy";
     public static final String COMMON_WITH_2_CHARS_YEAR = "dd/MM/yy HH:mm";
     public static final String ONLY_DATE_FORMAT = "dd/MM/yyyy";
-    private static final int ONE_MINUTE_IN_SECONDS = 60;
+    public static final int ONE_MINUTE_IN_SECONDS = 60;
     private static final int ONE_HOUR_IN_SECONDS = ONE_MINUTE_IN_SECONDS * 60;
     private static final int ONE_DAY_IN_SECONDS = ONE_HOUR_IN_SECONDS * 24;
     private static final int ONE_DAY_IN_MINUTS = ONE_DAY_IN_SECONDS / 60;

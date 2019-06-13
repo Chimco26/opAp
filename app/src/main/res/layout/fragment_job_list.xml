@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
                 android:gravity="center"
-                android:text="@string/actionnable_jobs"
+                android:text="@string/pending_jobs"
                 android:textColor="@color/white"
                 android:textSize="35sp" />
 
@@ -64,12 +64,13 @@
             android:layout_marginTop="20dp">
 
             <TextView
+                android:id="@+id/pending_jobs_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/pending_jobs"
                 android:textColor="@color/blue1"
-                android:textSize="35sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
@@ -142,9 +143,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginEnd="60dp"
-            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="22dp"            android:orientation="horizontal"
             android:weightSum="100">
 
             <TextView
@@ -152,11 +152,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/index"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="0dp"
@@ -168,11 +168,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/catalog_maj"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="0dp"
@@ -184,11 +184,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/units_target"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="0dp"
@@ -200,11 +200,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/units_produced"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="0dp"
@@ -216,11 +216,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/end_time_actual"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="0dp"
@@ -232,12 +232,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/job_left_time"
-                android:textColor="@color/grey_lite"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"/>
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
