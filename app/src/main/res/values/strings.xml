@@ -296,7 +296,7 @@
     <string name="service_call_exists">Open Service Calls</string>
     <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
     <string name="open_new_call">New Service Call</string>
-    <string name="service_call_was_canceled"><b>La chiamata di Servizio è stata cancellata</b></string>
+    <string name="service_call_was_canceled"><b>Service call was canceled</b></string>
     <string name="empty_job_list_msg">The Pending Job list is empty</string>
     <string name="call_approved">Call is approved</string>
     <string name="call_approved2">A call made by operator %1$s was approved</string>
@@ -410,7 +410,6 @@
     <string name="job_left_time">JOB LEFT TIME</string>
     <string name="number_of_jobs">number of Jobs</string>
     <string name="type_something">Type something</string>
-    <string name="cycle_time">Cycle time</string>
     <string name="service_calls_distribution">Service calls distribution</string>
     <string name="shift_report">Shift Report</string>
     <string name="you_have">You have</string>
@@ -421,5 +420,6 @@
         <item>#5aca96</item>
         <item>#599abe</item>
     </string-array >
+    <string name="cycle_time">Cycle time</string>
 
 </resources>

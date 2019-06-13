@@ -195,7 +195,7 @@
     <string name="events_selected">אירועים שנבחרו:</string>
     <string name="production_parameters"> נתוני ייצור</string>
 
-    <string name="actionnable_jobs">פק״עות ממתינות</string>
+    <string name="actionnable_jobs">פק\"עות ממתינות להפעלה</string>
     <string name="search">חיפוש</string>
     <string name="activate">הפעלה</string>
     <string name="no_available_image">אין תמונה זמינה</string>
@@ -386,8 +386,22 @@
     <string name="minutes_long">דקות</string>
     <string name="select_your_machine">בחר את המכונה שלך</string>
     <string name="shift_report">דוח משמרת</string>
-    <string name="filter_by">סנן לפי</string>
     <string name="service_calls_distribution">התפלגות קריאות שירות</string>
     <string name="you_have">יש לך</string>
+    <string name="active_jobs">הפעל פק\"ע</string>
+    <string name="search_department_or_machine_name">חפש את שם המחלקה או המכונה</string>
+    <string name="storage_permission">בבקשה אפשר גישה לאחסון לצורך עדכון האפליקציה</string>
+    <string name="update_version_messege">גרסה חדשה זמינה, בבקשה אשר את ההתקנה כאשר הורדת הקובץ תסתיים.</string>
+    <string name="update_version_title">עדכון בתהליך</string>
+    <string name="filter_by">ממוין לפי</string>
+    <string name="index">אינדקס</string>
+    <string name="catalog_maj">קטלוג</string>
+    <string name="units_target">יעד היחידות</string>
+    <string name="units_produced">יחידות מיוצרות</string>
+    <string name="end_time_actual">זמן סיום (בפועל)</string>
+    <string name="job_left_time">זמן שנותר לסיום הפק\"ע</string>
+    <string name="number_of_jobs">מספר פק\"עות</string>
+    <string name="type_something">הקלד..</string>
+    <string name="cycle_time">זמן מחזור</string>
 
 </resources>

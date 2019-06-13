@@ -171,7 +171,7 @@
     <string name="common_signin_button_text">être connecté</string>
     <string name="activate">Activer</string>
     <string name="action_details">Détails de l\'action</string>
-    <string name="actionnable_jobs">Tâches donnant lieu à une action</string>
+    <string name="actionnable_jobs">Tâches exécutables</string>
     <string name="actions">Actions</string>
     <string name="activate_job_dialog_message">Vous allez activer une nouvelle tâche, êtes-vous sûr de vouloir continuer ?</string>
     <string name="activate_job_dialog_title">Activer une nouvelle tâche</string>
@@ -370,4 +370,22 @@
     <string name="average">moyenne</string>
     <string name="add_rejects">Ajouter des rejets</string>
     <string name="minutes_long">min</string>
+    <string name="active_jobs">Tâches actives</string>
+    <string name="select_your_machine">Sélectionnez votre machine</string>
+    <string name="search_department_or_machine_name">Recherchez par département ou par nom de machine</string>
+    <string name="storage_permission">Veuillez autoriser l\'accès au stockage pour les mises à jour de l\'application</string>
+    <string name="update_version_messege">Une nouvelle version est disponible. Veuillez autoriser l\'installation à la fin du téléchargement du fichier.</string>
+    <string name="update_version_title">Mise à jour en cours</string>
+    <string name="filter_by">Filtrer par</string>
+    <string name="index">INDEX</string>
+    <string name="catalog_maj">CATALOGUE</string>
+    <string name="units_target">UNITÉS CIBLES</string>
+    <string name="units_produced">UNITÉS PRODUITES</string>
+    <string name="end_time_actual">HEURE DE FIN (RÉELLE)</string>
+    <string name="job_left_time">TEMPS RESTANT</string>
+    <string name="number_of_jobs">Nombre de tâches</string>
+    <string name="type_something">Saisissez quelque chose</string>
+    <string name="cycle_time">Durée du cycle</string>
+    <string name="service_calls_distribution">Répartition des appels de service</string>
+    <string name="shift_report">Rapport de l\'équipe de quart</string>
 </resources>

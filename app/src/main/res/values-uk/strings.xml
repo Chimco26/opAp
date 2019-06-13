@@ -169,7 +169,7 @@
     <string name="yesterday">Вчора</string>
     <string name="you_can_add_a_note">Ви можете додати нотатку</string>
     <string name="action_details">Подробиці дій</string>
-    <string name="actionnable_jobs">Завдання що очікують</string>
+    <string name="actionnable_jobs">Реальні робочі місця</string>
     <string name="actions">Дії</string>
     <string name="activate">Активувати</string>
     <string name="activate_job_dialog_message">Ви збираєтесь активувати нову роботу, ви впевнені, що бажаєте продовжити?</string>
@@ -365,5 +365,23 @@
     <string name="average">середн.</string>
     <string name="add_rejects">Додати брак</string>
     <string name="minutes_long">хв</string>
+    <string name="active_jobs">Активні вакансії</string>
+    <string name="select_your_machine">Виберіть свою машину</string>
+    <string name="search_department_or_machine_name">Пошук відділу або імені комп\'ютера</string>
+    <string name="storage_permission">Дозвольте доступ до сховища для оновлення програми</string>
+    <string name="update_version_messege">Доступна нова версія, дозвольте інсталяцію після завершення завантаження файлу.</string>
+    <string name="update_version_title">Оновлення в процесі</string>
+    <string name="filter_by">Фільтрувати за</string>
+    <string name="index">ІНДЕКС</string>
+    <string name="catalog_maj">КАТАЛОГ</string>
+    <string name="units_target">ЦІЛЬОВІ ОДИНИЦІ</string>
+    <string name="units_produced">ВИРОБЛЕНІ ОДИНИЦІ</string>
+    <string name="end_time_actual">ЧАС ЗАКІНЧЕННЯ (ФАКТИЧНИЙ)</string>
+    <string name="job_left_time">ЧАС ДО ЗАКІНЧЕННЯ ЗАВДАННЯ</string>
+    <string name="number_of_jobs">кількість робочих місць</string>
+    <string name="type_something">Введіть щось</string>
+    <string name="cycle_time">Тривалість циклу</string>
+    <string name="service_calls_distribution">Розподіл викликів служби</string>
+    <string name="shift_report">Звіт за зміну</string>
 
 </resources>

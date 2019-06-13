@@ -176,7 +176,7 @@
     <string name="common_signin_button_text">Aanmelden</string>
     <string name="activate">Activeren</string>
     <string name="action_details">Details actie</string>
-    <string name="actionnable_jobs">Actietaken</string>
+    <string name="actionnable_jobs">Uit te voeren taken</string>
     <string name="actions">"Acties "</string>
     <string name="activate_job_dialog_message">U staat op het punt om een ​​nieuwe taak te activeren, weet u zeker dat u wilt doorgaan?</string>
     <string name="activate_job_dialog_title">Activeer nieuwe taak</string>
@@ -375,5 +375,23 @@
     <string name="average">gem</string>
     <string name="add_rejects">Afgewezen toevoegen</string>
     <string name="minutes_long">min.</string>
+    <string name="active_jobs">Actieve taken</string>
+    <string name="select_your_machine">Selecteer uw machine</string>
+    <string name="search_department_or_machine_name">Zoek afdeling of machinenaam</string>
+    <string name="storage_permission">Sta toegang tot opslaag toe voor applicatie-updates</string>
+    <string name="update_version_messege">Nieuwere versie is beschikbaar, sta installatie toe als downloaden bestand klaar is.</string>
+    <string name="update_version_title">Update wordt uitgevoerd</string>
+    <string name="filter_by">Filteren op</string>
+    <string name="index">INDEX</string>
+    <string name="catalog_maj">CATALOGUS</string>
+    <string name="units_target">EENHEDEN DOEL</string>
+    <string name="units_produced">EENHEDEN GEPRODUCEERD</string>
+    <string name="end_time_actual">EINDTIJD (WERKELIJK)</string>
+    <string name="job_left_time">TAAK RESTERENDE TIJD</string>
+    <string name="number_of_jobs">aantal taken</string>
+    <string name="type_something">Typ iets</string>
+    <string name="cycle_time">Cyclustijd</string>
+    <string name="service_calls_distribution">Service-oproepen distributie</string>
+    <string name="shift_report">Ploegrapport</string>
 
 </resources>

@@ -165,7 +165,7 @@
     <string name="called_technician">已呼叫的技術人員</string>
     <string name="catalog">目錄</string>
     <string name="action_details">操作詳情</string>
-    <string name="actionnable_jobs">可操作的作業</string>
+    <string name="actionnable_jobs">可操作的工作</string>
     <string name="actions">操作</string>
     <string name="activate">啟動</string>
     <string name="activate_job_dialog_message">您即將啟動一項新作業，您確定要繼續嗎？</string>
@@ -362,6 +362,24 @@
     <string name="average">平均</string>
     <string name="add_rejects">添加拒絕</string>
     <string name="minutes_long">分</string>
+    <string name="active_jobs">活動工作</string>
+    <string name="select_your_machine">選取您的機器</string>
+    <string name="search_department_or_machine_name">搜尋部門或機器名稱</string>
+    <string name="storage_permission">請允許儲存存取以進行應用更新</string>
+    <string name="update_version_messege">有新版本可用，請在下載檔案完成後允許安裝。</string>
+    <string name="update_version_title">正在更新</string>
+    <string name="filter_by">過濾</string>
+    <string name="index">指數</string>
+    <string name="catalog_maj">目錄</string>
+    <string name="units_target">單位目標</string>
+    <string name="units_produced">已生產單位</string>
+    <string name="end_time_actual">結束時間（實際）</string>
+    <string name="job_left_time">工作剩餘時間</string>
+    <string name="number_of_jobs">工作數量</string>
+    <string name="type_something">輸入一些內容</string>
+    <string name="cycle_time">週期時間</string>
+    <string name="service_calls_distribution">服務呼叫分配</string>
+    <string name="shift_report">輪班報告</string>
 
 
 </resources>
