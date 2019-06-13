@@ -68,6 +68,7 @@ import retrofit2.Response;
 import static com.operatorsapp.utils.LineChartHelper.setXAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.setYAxisStyle;
 import static com.operatorsapp.utils.LineChartHelper.splitItemsByNull;
+import static com.operatorsapp.utils.TimeUtils.ONE_MINUTE_IN_SECONDS;
 
 public class ReportShiftFragment extends Fragment implements DashboardUICallbackListener {
 
@@ -365,6 +366,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     private void getData() {
 
         PersistenceManager pm = PersistenceManager.getInstance();
+        String shiftEnd = TimeUtils.getDate(TimeUtils.getLongFromDateString(pm.getShiftEnd(), TimeUtils.SQL_NO_T_FORMAT) + 5 * ONE_MINUTE_IN_SECONDS * 1000, TimeUtils.SQL_NO_T_FORMAT);
         String[] machineId = {String.valueOf(pm.getMachineId())};
         final GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(), pm.getShiftStart(), TimeUtils.getDateFromFormat(new Date(), TimeUtils.SQL_NO_T_FORMAT));
 //        GetTopRejectsAndEventsRequest request = new GetTopRejectsAndEventsRequest(machineId, pm.getSessionId(),"2019-05-06 07:00:46", "2019-06-06 15:47:59");
@@ -417,7 +419,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             }
         });
 
-        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), pm.getShiftEnd(), pm.getMachineId());
+
+        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
 //        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
 
         NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
@@ -444,7 +447,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
         List<Integer> machineIds = new ArrayList<>();
         machineIds.add(pm.getMachineId());
-        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime(pm.getShiftStart(), pm.getShiftEnd()));
+        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime(pm.getShiftStart(), shiftEnd));
 //        ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime("2018-05-10 07:00:46", "2019-06-10 15:47:59"));
         ArrayList<ReqDepartment> reqDepartments = new ArrayList<>();
         reqDepartments.add(reqDepartment);
