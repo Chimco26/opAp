@@ -410,7 +410,6 @@
     <string name="job_left_time">JOB LEFT TIME</string>
     <string name="number_of_jobs">number of Jobs</string>
     <string name="type_something">Type something</string>
-    <string name="cycle_time">Cycle time</string>
     <string name="service_calls_distribution">Service calls distribution</string>
     <string name="shift_report">Shift Report</string>
 
