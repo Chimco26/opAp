@@ -185,7 +185,7 @@
     <string name="parameter_deviation">Parametro di deviazione</string>
     <string name="login_fields_password_hint">Password</string>
     <string name="pending_jobs">Lavori in corso</string>
-    <string name="actionnable_jobs">Lavori in sospeso</string>
+    <string name="actionnable_jobs">Lavori disponibili</string>
     <string name="planned_start">Inizio Previsto</string>
     <string name="polling_frequency">Frequenza Polling</string>
     <string name="polling_frequency_range_error">La frequenza polling deve essere nel range 20-60 secondi</string>
@@ -313,4 +313,22 @@
     <string name="ProductionModeInjectionsCount">Riscontrati %2$s cicli su %1$s in stato di non produzione.</string>
     <string name="hr">(Ore)</string>
     <string name="one">1</string>
+    <string name="active_jobs">Lavori attivi</string>
+    <string name="select_your_machine">Seleziona la tua macchina</string>
+    <string name="search_department_or_machine_name">Cerca il dipartimento o il nome della macchina</string>
+    <string name="storage_permission">Consenti l\'accesso alla memoria per gli aggiornamenti dell\'applicazione</string>
+    <string name="update_version_messege">La versione più recente è disponibile, acconsenti all\'installazione al termine del download del file.</string>
+    <string name="update_version_title">Aggiornamento in corso</string>
+    <string name="filter_by">Filtra per</string>
+    <string name="index">INDICE</string>
+    <string name="catalog_maj">CATALOGO</string>
+    <string name="units_target">UNITÀ TARGET</string>
+    <string name="units_produced">UNITÀ PRODOTTA</string>
+    <string name="end_time_actual">ORA DI FINE (ATTUALE)</string>
+    <string name="job_left_time">TEMPO RIMANENTE LAVORO</string>
+    <string name="number_of_jobs">numero di lavori</string>
+    <string name="type_something">Scrivi qualcosa</string>
+    <string name="cycle_time">Tempo di ciclo</string>
+    <string name="service_calls_distribution">Distribuzione delle chiamate per supporto</string>
+    <string name="shift_report">Rapporto turni</string>
 </resources>

@@ -296,7 +296,7 @@
     <string name="service_call_exists">Open Service Calls</string>
     <string name="service_call_exists_subtitle">Open Service Calls were found, \n you can remove the open calls or open a new one</string>
     <string name="open_new_call">New Service Call</string>
-    <string name="service_call_was_canceled"><b>La chiamata di Servizio è stata cancellata</b></string>
+    <string name="service_call_was_canceled"><b>Service call was canceled</b></string>
     <string name="empty_job_list_msg">The Pending Job list is empty</string>
     <string name="call_approved">Call is approved</string>
     <string name="call_approved2">A call made by operator %1$s was approved</string>
@@ -420,5 +420,6 @@
         <item>#5aca96</item>
         <item>#599abe</item>
     </string-array >
+    <string name="cycle_time">Cycle time</string>
 
 </resources>
