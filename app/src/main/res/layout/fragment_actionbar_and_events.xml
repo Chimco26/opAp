@@ -563,6 +563,18 @@
                 android:layout_margin="20dp"/>
 
             <TextView
+                android:id="@+id/bottom_notification_sender_tv"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textAlignment="textStart"
+                style="@style/ToolbarTheme"
+                android:textSize="14sp"
+                android:textColor="@color/blue1"
+                android:layout_margin="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"/>
+
+            <TextView
                 android:id="@+id/bottom_notification_tv"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"

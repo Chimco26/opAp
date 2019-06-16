@@ -402,61 +402,103 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void checkUpdateNotificationToken() {
 
         final PersistenceManager pm = PersistenceManager.getInstance();
-        if (pm.isNeedUpdateToken()) {
 
-            if (pm.getNotificationToken() != null) {
-                final boolean retry[] = {true};
-
-                final String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-
-                PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
-                NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
-                    @Override
-                    public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
-                        if (response != null && response.body() != null && response.errorBody() == null) {
-                            Log.d(TAG, "token sent");
-                            pm.setNeedUpdateToken(false);
-                            pm.tryToUpdateToken("success + android id: " + id);
-                        } else {
-                            onFailure(call, new Throwable("failed "));
-                        }
-
+        if (pm.getNotificationToken() != null) {
+            final boolean retry[] = {true};
+            final String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
+            NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
+                @Override
+                public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
+                    if (response != null && response.body() != null && response.errorBody() == null) {
+                        Log.d(TAG, "token sent");
+                    } else {
+                        onFailure(call, new Throwable("failed "));
                     }
-
+                }
+                @Override
+                public void onFailure(Call<ResponseStatus> call, Throwable t) {
+                    Log.d(TAG, "token failed");
+                    if (retry[0]) {
+                        retry[0] = false;
+                        call.clone();
+                    }
+                }
+            });
+        } else {
+            try {
+                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
-                    public void onFailure(Call<ResponseStatus> call, Throwable t) {
-                        pm.setNeedUpdateToken(true);
-                        pm.tryToUpdateToken("failed + android id: " + id);
-
-                        Log.d(TAG, "token failed");
-                        if (retry[0]) {
-                            retry[0] = false;
-                            call.clone();
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
                         }
+
+                        // Get new Instance ID token
+                        PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
+                        checkUpdateNotificationToken();
                     }
                 });
-            } else {
-                try {
-
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "getInstanceId failed", task.getException());
-                                return;
-                            }
-
-                            // Get new Instance ID token
-
-                            PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
-                            checkUpdateNotificationToken();
-
-                        }
-                    });
-                } catch (IllegalStateException e) {
-                }
+            } catch (IllegalStateException e) {
             }
         }
+
+//        if (pm.isNeedUpdateToken()) {
+//
+//            if (pm.getNotificationToken() != null) {
+//                final boolean retry[] = {true};
+//
+//                final String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+//
+//                PostNotificationTokenRequest request = new PostNotificationTokenRequest(pm.getSessionId(), pm.getMachineId(), pm.getNotificationToken(), id);
+//                NetworkManager.getInstance().postNotificationToken(request, new Callback<ResponseStatus>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseStatus> call, retrofit2.Response<ResponseStatus> response) {
+//                        if (response != null && response.body() != null && response.errorBody() == null) {
+//                            Log.d(TAG, "token sent");
+//                            pm.setNeedUpdateToken(false);
+//                            pm.tryToUpdateToken("success + android id: " + id);
+//                        } else {
+//                            onFailure(call, new Throwable("failed "));
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseStatus> call, Throwable t) {
+//                        pm.setNeedUpdateToken(true);
+//                        pm.tryToUpdateToken("failed + android id: " + id);
+//
+//                        Log.d(TAG, "token failed");
+//                        if (retry[0]) {
+//                            retry[0] = false;
+//                            call.clone();
+//                        }
+//                    }
+//                });
+//            } else {
+//                try {
+//
+//                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                            if (!task.isSuccessful()) {
+//                                Log.w(TAG, "getInstanceId failed", task.getException());
+//                                return;
+//                            }
+//
+//                            // Get new Instance ID token
+//
+//                            PersistenceManager.getInstance().setNotificationToken(task.getResult().getToken());
+//                            checkUpdateNotificationToken();
+//
+//                        }
+//                    });
+//                } catch (IllegalStateException e) {
+//                }
+//            }
+//        }
 
     }
 
@@ -1506,6 +1548,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 OppAppLogger.getInstance().d(TAG, "login, onGetMachinesSucceeded(),  go Next");
                 silentLoginCallback.onSilentLoginSucceeded();
                 PersistenceManager.getInstance().setSiteName(siteName);
+                checkUpdateNotificationToken();
+
             }
 
             @Override

@@ -52,7 +52,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                         Log.w(LOG_TAG, "getInstanceId failed", task.getException());
                         return;
                     }
-
                     sendRegistrationToServer(task.getResult().getToken());
                 }
             });
@@ -92,8 +91,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
                 @Override
                 public void onFailure(Call<ResponseStatus> call, Throwable t) {
-                    pm.tryToUpdateToken("failed + android id: " + id);
-                    pm.setNeedUpdateToken(true);
                     Log.d(LOG_TAG, "token failed");
                     if (retry[0]){
                         retry[0] = false;
@@ -102,11 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 }
             });
 
-        }else {
-            pm.setNeedUpdateToken(true);
         }
-
-
     }
 
     @Override

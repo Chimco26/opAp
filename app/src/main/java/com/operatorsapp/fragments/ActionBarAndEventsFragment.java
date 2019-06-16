@@ -569,30 +569,35 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     private void initBottomNotificationLayout(View view) {
 
-        LinearLayout bottomNotifLil = view.findViewById(R.id.bottom_notification_lil);
-        ImageView bottomNotifIv = view.findViewById(R.id.bottom_notification_iv);
-        TextView bottomNotifTv = view.findViewById(R.id.bottom_notification_tv);
-        TextView bottomNotifTimeTv = view.findViewById(R.id.bottom_notification_time_tv);
+        if (view != null) {
+            LinearLayout bottomNotifLil = view.findViewById(R.id.bottom_notification_lil);
+            ImageView bottomNotifIv = view.findViewById(R.id.bottom_notification_iv);
+            TextView bottomNotifTv = view.findViewById(R.id.bottom_notification_tv);
+            TextView bottomNotifSenderTv = view.findViewById(R.id.bottom_notification_sender_tv);
+            TextView bottomNotifTimeTv = view.findViewById(R.id.bottom_notification_time_tv);
 
-        bottomNotifLil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openNotificationsList();
+            bottomNotifLil.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openNotificationsList();
+                }
+            });
+
+            ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistoryNoTech();
+            if (notList == null || notList.size() == 0) {
+                bottomNotifIv.setVisibility(View.INVISIBLE);
+                bottomNotifTv.setText("");
+                bottomNotifTimeTv.setText("");
+                bottomNotifSenderTv.setText("");
+            } else {
+                Notification notification = notList.get(0);
+                bottomNotifIv.setVisibility(View.VISIBLE);
+                bottomNotifIv.setImageResource(notification.getResponseIcon(getActivity()));
+                bottomNotifTv.setText(notification.getmBody(getActivity()));
+                bottomNotifTimeTv.setText(notification.getmResponseDate());
+                bottomNotifSenderTv.setText(notification.getmSender());
+
             }
-        });
-
-        ArrayList<Notification> notList = PersistenceManager.getInstance().getNotificationHistoryNoTech();
-        if (notList == null || notList.size() == 0){
-            bottomNotifIv.setVisibility(View.INVISIBLE);
-            bottomNotifTv.setText("");
-            bottomNotifTimeTv.setText("");
-        }else {
-            Notification notification = notList.get(0);
-            bottomNotifIv.setVisibility(View.VISIBLE);
-            bottomNotifIv.setImageResource(notification.getResponseIcon(getActivity()));
-            bottomNotifTv.setText(notification.getmBody(getActivity()));
-            bottomNotifTimeTv.setText(notification.getmResponseDate());
-
         }
 
     }
@@ -689,7 +694,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 }
 //                else if (type == Consts.NOTIFICATION_TYPE_FROM_WEB) {
 //
-                setNotificationNeedResponse();
+//                setNotificationNeedResponse();
 //                }
                 openNotificationPopUp(intent.getIntExtra(Consts.NOTIFICATION_ID, 0));
 
@@ -1528,28 +1533,28 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void setNotificationNeedResponse() {
-//        int counter = 0;
-        for (Notification item : PersistenceManager.getInstance().getNotificationHistory()) {
-            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
-                mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
-                return;
-            }
+//    private void setNotificationNeedResponse() {
+////        int counter = 0;
+//        for (Notification item : PersistenceManager.getInstance().getNotificationHistory()) {
 //            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
-//                counter++;
+//                mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
+//                return;
 //            }
-        }
-
-        mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
-
-//        if (counter > 0) {
-//            mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
-//            mNotificationIndicatorNumTv.setText(counter + "");
-//        } else {
-//            mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
-//            mNotificationIndicatorNumTv.setText(counter + "");
+////            if (item.getmNotificationType() != Consts.NOTIFICATION_TYPE_TECHNICIAN && item.getmResponseType() == Consts.NOTIFICATION_RESPONSE_TYPE_UNSET) {
+////                counter++;
+////            }
 //        }
-    }
+//
+//        mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
+//
+////        if (counter > 0) {
+////            mNotificationIndicatorCircleFl.setVisibility(View.VISIBLE);
+////            mNotificationIndicatorNumTv.setText(counter + "");
+////        } else {
+////            mNotificationIndicatorCircleFl.setVisibility(View.INVISIBLE);
+////            mNotificationIndicatorNumTv.setText(counter + "");
+////        }
+//    }
 
     private void openTechniciansList() {
         if ((getActivity()) == null || !(getActivity() instanceof DashboardActivity)) {
@@ -1896,7 +1901,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].setmResponseType(responseType);
                     nList.add(notification[0]);
                     pm.setNotificationHistory(nList);
-                    setNotificationNeedResponse();
+//                    setNotificationNeedResponse();
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
@@ -3211,20 +3216,16 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
-                    pm.tryToUpdateToken("success + android id: " + id);
                     if (mListener != null) {
                         mListener.onRefreshApplicationRequest();
                     }
                 } else {
-                    pm.tryToUpdateToken("failed + android id: " + id);
                     Log.d(LOG_TAG, "token failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseStatus> call, Throwable t) {
-                pm.tryToUpdateToken("failed + android id: " + id);
-                pm.setNeedUpdateToken(true);
                 Log.d(LOG_TAG, "token failed");
             }
         });
@@ -3291,7 +3292,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     PersistenceManager.getInstance().setNotificationHistory(null);
                 }
 
-                setNotificationNeedResponse();
+//                setNotificationNeedResponse();
                 setTechnicianCallStatus();
                 initBottomNotificationLayout(getView());
             }
