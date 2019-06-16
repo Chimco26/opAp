@@ -289,19 +289,15 @@ public class SettingsFragment extends BackStackAwareFragment implements View.OnC
             public void onResponse(Call<ResponseStatus> call, Response<ResponseStatus> response) {
                 if (response != null && response.body() != null && response.isSuccessful()) {
                     Log.d(LOG_TAG, "token sent");
-                    pm.tryToUpdateToken("success + android id: " + id);
                     mSettingsInterface.onRefreshApplicationRequest();
 
                 } else {
-                    pm.tryToUpdateToken("failed + android id: " + id);
                     Log.d(LOG_TAG, "token failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseStatus> call, Throwable t) {
-                pm.tryToUpdateToken("failed + android id: " + id);
-                pm.setNeedUpdateToken(true);
                 Log.d(LOG_TAG, "token failed");
             }
         });

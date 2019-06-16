@@ -501,10 +501,10 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return SecurePreferences.getInstance().getString(PREF_NOTIFICATION_TOKEN);
     }
 
-    public boolean isNeedUpdateToken() {
-        String str = getNotificationToken();
-        return SecurePreferences.getInstance().getBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, true);
-    }
+//    public boolean isNeedUpdateToken() {
+//        String str = getNotificationToken();
+//        return SecurePreferences.getInstance().getBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, true);
+//    }
 
     public void setNeedUpdateToken(boolean isUpdateToken) {
         SecurePreferences.getInstance().setBoolean(PREF_UPDATE_NOTIFICATION_TOKEN, isUpdateToken);
@@ -618,13 +618,13 @@ public class PersistenceManager implements LoginPersistenceManagerInterface,
         return SecurePreferences.getInstance().getString(PREF_SITE_NAME, "");
     }
 
-    public void tryToUpdateToken(String status) {
-        SecurePreferences.getInstance().setString("tryToUpdateToken", status + "  time: " + new Date().getTime());
-    }
-
-    public String getTimeOfUpdateToken() {
-        return SecurePreferences.getInstance().getString("tryToUpdateToken", "?");
-    }
+//    public void tryToUpdateToken(String status) {
+//        SecurePreferences.getInstance().setString("tryToUpdateToken", status + "  time: " + new Date().getTime());
+//    }
+//
+//    public String getTimeOfUpdateToken() {
+//        return SecurePreferences.getInstance().getString("tryToUpdateToken", "?");
+//    }
 
     public void setMachineName(String mMachineName) {
         SecurePreferences.getInstance().setString(PREF_MACHINE_NAME, mMachineName);
