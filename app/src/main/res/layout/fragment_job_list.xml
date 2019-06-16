@@ -121,7 +121,7 @@
 
                 <Spinner
                     android:id="@+id/AJA_search_rv"
-                    android:layout_width="184dp"
+                    android:layout_width="230dp"
                     android:layout_height="37dp" />
             </RelativeLayout>
 
