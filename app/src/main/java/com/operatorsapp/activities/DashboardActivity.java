@@ -338,15 +338,20 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                 initTopFiveFragment();
             }
         });
+        final float[] downX = new float[1];
+        final float[] downY = new float[1];
         final float[] dX = new float[1];
         final float[] dY = new float[1];
         final float[] moveToX = new float[1];
         final float[] moveToY = new float[1];
         mReportBtn.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        downX[0] = view.getX();
+                        downY[0] = view.getY();
                         dX[0] = view.getX() - motionEvent.getRawX();
                         dY[0] = view.getY() - motionEvent.getRawY();
                         break;
@@ -366,8 +371,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                                 .start();
                         break;
                     case MotionEvent.ACTION_UP:
-                        PersistenceManager.getInstance().setReportShiftBtnPositionX(moveToX[0]);
-                        PersistenceManager.getInstance().setReportShiftBtnPositionY(moveToY[0]);
+                        if (Math.abs(moveToX[0] - downX[0]) > 10 || Math.abs(moveToY[0] - downY[0]) > 10) {
+                            PersistenceManager.getInstance().setReportShiftBtnPositionX(moveToX[0]);
+                            PersistenceManager.getInstance().setReportShiftBtnPositionY(moveToY[0]);
+                            return true;
+                        }
                         break;
                 }
                 return false;
