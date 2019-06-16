@@ -371,7 +371,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                                 .start();
                         break;
                     case MotionEvent.ACTION_UP:
-                        if (Math.abs(moveToX[0] - downX[0]) > 20 || Math.abs(moveToY[0] - downY[0]) > 20) {
+                        if (Math.abs(moveToX[0] - downX[0]) > 10 || Math.abs(moveToY[0] - downY[0]) > 10) {
                             PersistenceManager.getInstance().setReportShiftBtnPositionX(moveToX[0]);
                             PersistenceManager.getInstance().setReportShiftBtnPositionY(moveToY[0]);
                             return true;
