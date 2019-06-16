@@ -449,7 +449,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                                 response.body().getmCriticalEvents().get(1).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }
-                    
+
                 }
                 mProgressBar.setVisibility(View.GONE);
 
