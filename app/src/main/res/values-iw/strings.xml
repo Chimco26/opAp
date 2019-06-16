@@ -387,6 +387,7 @@
     <string name="select_your_machine">בחר את המכונה שלך</string>
     <string name="shift_report">דוח משמרת</string>
     <string name="service_calls_distribution">התפלגות קריאות שירות</string>
+    <string name="you_have">יש לך</string>
     <string name="active_jobs">הפעל פק\"ע</string>
     <string name="search_department_or_machine_name">חפש את שם המחלקה או המכונה</string>
     <string name="storage_permission">בבקשה אפשר גישה לאחסון לצורך עדכון האפליקציה</string>

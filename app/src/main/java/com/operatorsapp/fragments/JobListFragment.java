@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class JobListFragment extends Fragment implements
@@ -61,6 +62,7 @@ public class JobListFragment extends Fragment implements
     private ArrayList<Header> mHeaders;
     private JobListFragmentListener mListener;
     private Header mSelectedHeader;
+    private TextView mTitleTv;
 
     public static JobListFragment newInstance(PendingJobResponse mPendingJobsResponse, ArrayList<PendingJob> mPendingJobs, ArrayList<Header> headers) {
 
@@ -108,7 +110,7 @@ public class JobListFragment extends Fragment implements
         final View rootView = inflater.inflate(R.layout.fragment_job_list, container, false);
 
         return rootView;
-    }
+    }//@+id/pending_jobs_tv"/>//you have x pending jobs
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -127,6 +129,11 @@ public class JobListFragment extends Fragment implements
 
     private void initVars(View view) {
 
+        mTitleTv = view.findViewById(R.id.pending_jobs_tv);
+        if (mPendingJobsResponse != null && mPendingJobsResponse.getPendingJobs() != null) {
+            mTitleTv.setText(String.format(Locale.getDefault(), "%s %d %s",
+                    getString(R.string.you_have), mPendingJobsResponse.getPendingJobs().size(), getString(R.string.pending_jobs)));
+        }
         initTitleViews(view);
         initVarsSearch(view);
         initRecyclerViews(view);
