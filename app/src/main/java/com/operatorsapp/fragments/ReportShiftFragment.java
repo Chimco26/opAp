@@ -252,9 +252,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 String titleByLang = OperatorApplication.isEnglishLang() ? notificationByType.getEName() : notificationByType.getLName();
                 mPieValues.add(new PieEntry(notificationByType.getPC(), String.format(Locale.getDefault(), "%s (%d)", titleByLang, notificationByType.getNumOfResponse())));
             }
-
+            mPieChart.setDrawHoleEnabled(false);
             mPieChart.setEntryLabelColor(Color.BLACK);
+
             PieDataSet pieDataSet = new PieDataSet(mPieValues, "");
+            pieDataSet.setValueLinePart1OffsetPercentage(80.f);
+            pieDataSet.setValueLinePart1Length(0.5f);
+            pieDataSet.setValueLinePart2Length(0.5f);
+            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
             ArrayList<Integer> colors = new ArrayList<>();
             for (int c : BLUE_COLORS) {
@@ -268,24 +274,19 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             data.setValueTextSize(20f);
             data.setValueTextColor(Color.BLACK);
 
-            mPieChart.setData(data);
+
+            mPieChart.setUsePercentValues(true);
+            mPieChart.getLegend().setEnabled(true);
+            mPieChart.setDrawEntryLabels(false);
+            mPieChart.getLegend().setWordWrapEnabled(true);
             mPieChart.setTouchEnabled(false);
             mPieChart.setDescription("");
-            mPieChart.setUsePercentValues(true);
             mPieChart.getLegend().setTextSize(14f);
             mPieChart.setExtraOffsets(0, 5, 0, 5);
-            mPieChart.setDrawEntryLabels(false);
-            mPieChart.setDrawHoleEnabled(false);
-            mPieChart.getLegend().setEnabled(true);
-            mPieChart.getLegend().setWordWrapEnabled(true);
 
-            pieDataSet.setValueLinePart1OffsetPercentage(80.f);
-            pieDataSet.setValueLinePart1Length(0.5f);
-            pieDataSet.setValueLinePart2Length(0.5f);
-            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-            pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-
+            mPieChart.setData(data);
             mPieChart.invalidate();
+
         }
     }
 
