@@ -257,8 +257,9 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             PieDataSet pieDataSet = new PieDataSet(mPieValues, "");
 
             ArrayList<Integer> colors = new ArrayList<>();
-            for (int c : BLUE_COLORS)
+            for (int c : BLUE_COLORS) {
                 colors.add(c);
+            }
             pieDataSet.setColors(colors);
             pieDataSet.setSliceSpace(4f);
 
@@ -267,16 +268,16 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             data.setValueTextSize(20f);
             data.setValueTextColor(Color.BLACK);
 
-            mPieChart.setDrawHoleEnabled(false);
             mPieChart.setData(data);
             mPieChart.setTouchEnabled(false);
-            mPieChart.setDescription(null);
+            mPieChart.setDescription("");
             mPieChart.setUsePercentValues(true);
-            mPieChart.getLegend().setWordWrapEnabled(true);
             mPieChart.getLegend().setTextSize(14f);
-            mPieChart.setDrawEntryLabels(false);
-            mPieChart.getLegend().setEnabled(true);
             mPieChart.setExtraOffsets(0, 5, 0, 5);
+            mPieChart.setDrawEntryLabels(false);
+            mPieChart.setDrawHoleEnabled(false);
+            mPieChart.getLegend().setEnabled(true);
+            mPieChart.getLegend().setWordWrapEnabled(true);
 
             pieDataSet.setValueLinePart1OffsetPercentage(80.f);
             pieDataSet.setValueLinePart1Length(0.5f);
@@ -401,11 +402,12 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                         goodUnits = new DecimalFormat("##.##").format(response.body().getmGoodUnits());
                     }
                     if (response.body().getmRejectsPC() != null) {
-                        rejectsPc = new DecimalFormat("##.##").format(response.body().getmRejectsPC()) + "%";
+                        rejectsPc = String.format("%s%%", new DecimalFormat("##.##").format(response.body().getmRejectsPC()));
                     }
                     if (response.body().getmRejectedUnits() != null) {
                         rejects = new DecimalFormat("##.##").format(response.body().getmRejectedUnits());
                     }
+                    ((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container)).removeAllViews();
                     initCritical((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container),
                             null,
                             goodUnits,
@@ -438,14 +440,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                     if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
                         initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(0).getmName(),
                                 response.body().getmCriticalEvents().get(0).getmDuration(),
-                                response.body().getmCriticalEvents().get(0).getmPercentageDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(0).getmPercentageDuration()),
                                 response.body().getmCriticalEvents().get(0).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }
                     if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 1) {
                         initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(1).getmName(),
                                 response.body().getmCriticalEvents().get(1).getmDuration(),
-                                response.body().getmCriticalEvents().get(1).getmPercentageDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(1).getmPercentageDuration()),
                                 response.body().getmCriticalEvents().get(1).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }
@@ -457,32 +459,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
             @Override
             public void onFailure(Call<StopAndCriticalEventsResponse> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-        });
-
-
-        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
-//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
-
-        NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
-            @Override
-            public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
-                if (isAdded() && response.body() != null && response.body().getError() == null) {
-
-                    if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
-                        mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));
-                        initServiceCallsView(response.body());
-                    }
-
-                }
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void onFailure(Call<ServiceCallsResponse> call, Throwable t) {
                 mProgressBar.setVisibility(View.GONE);
 
             }
@@ -521,15 +497,32 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
             }
         });
-    }
 
-    private void initSingleCritical(ViewGroup view, String value, String title) {
-        view.removeAllViews();
-        LayoutInflater inflater = getLayoutInflater();
-        View childLayout = inflater.inflate(R.layout.critical_single_layout, null);
-        ((TextView) childLayout.findViewById(R.id.TF_values_value)).setText(value);
-        ((TextView) childLayout.findViewById(R.id.TF_values_title)).setText(title);
-        view.addView(childLayout);
+
+//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
+        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
+
+        NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
+            @Override
+            public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
+                if (isAdded() && response.body() != null && response.body().getError() == null) {
+
+                    if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
+                        mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));
+                        initServiceCallsView(response.body());
+                    }
+
+                }
+                mProgressBar.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<ServiceCallsResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+
+            }
+        });
     }
 
     private Float getTotalAmount(ArrayList<TopFiveItem> rejectsAsTopFive) {

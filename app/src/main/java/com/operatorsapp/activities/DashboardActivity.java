@@ -352,23 +352,27 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     case MotionEvent.ACTION_DOWN:
                         downX[0] = view.getX();
                         downY[0] = view.getY();
+                        moveToX[0] = view.getX();
+                        moveToY[0] = view.getY();
                         dX[0] = view.getX() - motionEvent.getRawX();
                         dY[0] = view.getY() - motionEvent.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) > 0
-                        && motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) < mContainer3.getWidth() + mContainer3.getX()-20) {
-                            moveToX[0] = motionEvent.getRawX() + dX[0] - (view.getWidth() / 2);
+                        if (Math.abs((motionEvent.getRawX() + dX[0]) - downX[0]) > 10 && motionEvent.getRawX() + dX[0] > 0
+                        && motionEvent.getRawX() + dX[0] < mContainer3.getWidth() + mContainer3.getX() - (view.getWidth())) {
+                            moveToX[0] = motionEvent.getRawX() + dX[0];
                         }
-                        if (motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) > 0
-                                && motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) < mContainer3.getHeight() - 40) {
-                            moveToY[0] = motionEvent.getRawY() + dY[0] - (view.getHeight() / 2);
+                        if (Math.abs((motionEvent.getRawY() + dY[0]) - downY[0]) > 10 && motionEvent.getRawY() + dY[0] > 0
+                                && motionEvent.getRawY() + dY[0] < mContainer3.getHeight() - (view.getHeight() / 2)) {
+                            moveToY[0] = motionEvent.getRawY() + dY[0] ;
                         }
-                        view.animate()
-                                .x(moveToX[0])
-                                .y(moveToY[0])
-                                .setDuration(0)
-                                .start();
+                        if (moveToX[0] != 0 || moveToY[0] != 0) {
+                            view.animate()
+                                    .x(moveToX[0])
+                                    .y(moveToY[0])
+                                    .setDuration(0)
+                                    .start();
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         if (Math.abs(moveToX[0] - downX[0]) > 10 || Math.abs(moveToY[0] - downY[0]) > 10) {
