@@ -69,7 +69,7 @@
         <LinearLayout
             android:id="@+id/RWC_cycleTime_ly"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_below="@+id/RWC_cycleTime"
             android:layoutDirection="ltr"
             android:gravity="center_vertical"

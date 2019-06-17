@@ -393,7 +393,7 @@
     <string name="storage_permission">בבקשה אפשר גישה לאחסון לצורך עדכון האפליקציה</string>
     <string name="update_version_messege">גרסה חדשה זמינה, בבקשה אשר את ההתקנה כאשר הורדת הקובץ תסתיים.</string>
     <string name="update_version_title">עדכון בתהליך</string>
-    <string name="filter_by">ממוין לפי</string>
+    <string name="filter_by">סינון לפי</string>
     <string name="index">אינדקס</string>
     <string name="catalog_maj">קטלוג</string>
     <string name="units_target">יעד היחידות</string>

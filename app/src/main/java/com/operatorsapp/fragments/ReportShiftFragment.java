@@ -401,11 +401,12 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                         goodUnits = new DecimalFormat("##.##").format(response.body().getmGoodUnits());
                     }
                     if (response.body().getmRejectsPC() != null) {
-                        rejectsPc = new DecimalFormat("##.##").format(response.body().getmRejectsPC()) + "%";
+                        rejectsPc = String.format("%s%%", new DecimalFormat("##.##").format(response.body().getmRejectsPC()));
                     }
                     if (response.body().getmRejectedUnits() != null) {
                         rejects = new DecimalFormat("##.##").format(response.body().getmRejectedUnits());
                     }
+                    ((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container)).removeAllViews();
                     initCritical((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container),
                             null,
                             goodUnits,
@@ -438,14 +439,14 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                     if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
                         initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(0).getmName(),
                                 response.body().getmCriticalEvents().get(0).getmDuration(),
-                                response.body().getmCriticalEvents().get(0).getmPercentageDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(0).getmPercentageDuration()),
                                 response.body().getmCriticalEvents().get(0).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }
                     if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 1) {
                         initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(1).getmName(),
                                 response.body().getmCriticalEvents().get(1).getmDuration(),
-                                response.body().getmCriticalEvents().get(1).getmPercentageDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(1).getmPercentageDuration()),
                                 response.body().getmCriticalEvents().get(1).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }

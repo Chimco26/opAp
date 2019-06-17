@@ -1148,7 +1148,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     || mVisiblefragment instanceof WidgetFragment
                     || mVisiblefragment instanceof RecipeFragment
                     || mVisiblefragment instanceof SelectStopReasonFragment
-                    || mVisiblefragment instanceof ReportStopReasonFragment)) {
+                    || mVisiblefragment instanceof ReportStopReasonFragment
+                    || mVisiblefragment instanceof ReportShiftFragment)) {
                 return;
             }
 

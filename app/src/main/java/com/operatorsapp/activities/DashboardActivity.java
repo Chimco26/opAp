@@ -356,13 +356,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         dY[0] = view.getY() - motionEvent.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) > 0
-                        && motionEvent.getRawX() + dX[0] - (view.getWidth() / 2) < mContainer3.getWidth() + mContainer3.getX()-20) {
-                            moveToX[0] = motionEvent.getRawX() + dX[0] - (view.getWidth() / 2);
+                        if (motionEvent.getRawX() + dX[0] > 0
+                        && motionEvent.getRawX() + dX[0] < mContainer3.getWidth() + mContainer3.getX() - (view.getWidth())) {
+                            moveToX[0] = motionEvent.getRawX() + dX[0];
                         }
-                        if (motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) > 0
-                                && motionEvent.getRawY() + dY[0] - (view.getHeight() / 2) < mContainer3.getHeight() - 40) {
-                            moveToY[0] = motionEvent.getRawY() + dY[0] - (view.getHeight() / 2);
+                        if (motionEvent.getRawY() + dY[0] > 0
+                                && motionEvent.getRawY() + dY[0] < mContainer3.getHeight() - (view.getHeight() / 2)) {
+                            moveToY[0] = motionEvent.getRawY() + dY[0] ;
                         }
                         view.animate()
                                 .x(moveToX[0])
