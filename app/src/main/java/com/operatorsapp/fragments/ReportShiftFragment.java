@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -56,6 +57,7 @@ import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.TimeUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -197,29 +199,45 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         mTopRejects_rv.setAdapter(mRejectsAdapter);
     }
 
-    private void initCritical(View viewItem, String value, String events, String valueTitle, String eventsTile) {
+    private void initCritical(ViewGroup view, String name, String value, String percentage, String events, String valueTitle, String eventsTile) {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View childLayout = inflater.inflate(R.layout.critical_layout, null);
 
         if ((value != null && !value.isEmpty())
-                || events != null && !events.isEmpty()) {
-            viewItem.findViewById(R.id.TF_values_ly).setVisibility(View.VISIBLE);
-            if (value != null && !value.isEmpty()) {
-                viewItem.findViewById(R.id.TF_values).setVisibility(View.VISIBLE);
-                TextView textView = viewItem.findViewById(R.id.TF_values_value);
-                textView.setText(value);
-                ((TextView) viewItem.findViewById(R.id.TF_values_title)).setText(valueTitle);
+                || events != null && !events.isEmpty()
+                || percentage != null && !percentage.isEmpty()) {
+            view.addView(childLayout);
+            if (name != null && !name.isEmpty()) {
+                childLayout.findViewById(R.id.TF_name).setVisibility(View.VISIBLE);
+                ((TextView) childLayout.findViewById(R.id.TF_name)).setText(name);
             } else {
-                viewItem.findViewById(R.id.TF_values).setVisibility(View.GONE);
+                childLayout.findViewById(R.id.TF_name).setVisibility(View.GONE);
+            }
+            if (percentage != null && !percentage.isEmpty()) {
+                childLayout.findViewById(R.id.TF_percentage).setVisibility(View.VISIBLE);
+                ((TextView) childLayout.findViewById(R.id.TF_percentage)).setText(percentage);
+            } else {
+                childLayout.findViewById(R.id.TF_percentage).setVisibility(View.GONE);
+            }
+            if (value != null && !value.isEmpty()) {
+                childLayout.findViewById(R.id.TF_values).setVisibility(View.VISIBLE);
+                TextView textView = childLayout.findViewById(R.id.TF_values_value);
+                textView.setText(value);
+                ((TextView) childLayout.findViewById(R.id.TF_values_title)).setText(valueTitle);
+            } else {
+                childLayout.findViewById(R.id.TF_values).setVisibility(View.GONE);
             }
             if (events != null && !events.isEmpty()) {
-                viewItem.findViewById(R.id.TF_events).setVisibility(View.VISIBLE);
-                TextView textView = viewItem.findViewById(R.id.TF_events_value);
+                childLayout.findViewById(R.id.TF_events).setVisibility(View.VISIBLE);
+                TextView textView = childLayout.findViewById(R.id.TF_events_value);
                 textView.setText(events);
-                ((TextView) viewItem.findViewById(R.id.TF_events_title)).setText(eventsTile);
+                ((TextView) childLayout.findViewById(R.id.TF_events_title)).setText(eventsTile);
             } else {
-                viewItem.findViewById(R.id.TF_events).setVisibility(View.GONE);
+                childLayout.findViewById(R.id.TF_events).setVisibility(View.GONE);
             }
         } else {
-            viewItem.findViewById(R.id.TF_values_ly).setVisibility(View.GONE);
+            childLayout.findViewById(R.id.TF_values_ly).setVisibility(View.GONE);
         }
 
     }
@@ -296,7 +314,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
                         if (date != null) {
 
-                            values.add(new Entry((float) date.getTime(), (float) (Math.round( items.get(i).getY().floatValue()))));
+                            values.add(new Entry((float) date.getTime(), (float) (Math.round(items.get(i).getY().floatValue()))));
                         }
 
 
@@ -376,13 +394,29 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             public void onResponse(Call<TopRejectResponse> call, Response<TopRejectResponse> response) {
                 if (isAdded() && response.body() != null && response.body().getmError() == null && response.body().getmRejectsList() != null) {
                     ((TopFiveAdapter) mTopRejects_rv.getAdapter()).setmTopList(response.body().getRejectsAsTopFive());
-                    if (getTotalAmount(response.body().getRejectsAsTopFive()) > 0) {
-                        initCritical(mTopFiveRejectsView, null,
-                                String.valueOf(getTotalAmount(response.body().getRejectsAsTopFive())),
-                                null, getContext().getString(R.string.rejects).toLowerCase());
+                    String goodUnits = "";
+                    String rejectsPc = "";
+                    String rejects = "";
+                    if (response.body().getmGoodUnits() != null) {
+                        goodUnits = new DecimalFormat("##.##").format(response.body().getmGoodUnits());
                     }
-                    mProgressBar.setVisibility(View.GONE);
+                    if (response.body().getmRejectsPC() != null) {
+                        rejectsPc = String.format("%s%%", new DecimalFormat("##.##").format(response.body().getmRejectsPC()));
+                    }
+                    if (response.body().getmRejectedUnits() != null) {
+                        rejects = new DecimalFormat("##.##").format(response.body().getmRejectedUnits());
+                    }
+                    ((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container)).removeAllViews();
+                    initCritical((LinearLayout) mTopFiveRejectsView.findViewById(R.id.TF_top_container),
+                            null,
+                            goodUnits,
+                            rejectsPc,
+                            rejects,
+                            getString(R.string.good_units),
+                            getString(R.string.rejects).toLowerCase());
                 }
+                mProgressBar.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -401,12 +435,22 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                     if (response.body().getmStopEvents() != null && response.body().getmStopEvents().size() > 0) {
                         ((TopFiveAdapter) mTopStops_rv.getAdapter()).setmTopList(response.body().getStopsAsTopFive());
                     }
-
+                    ((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container)).removeAllViews();
                     if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 0) {
-                        initCritical(mTopFiveStopsView, response.body().getmCriticalEvents().get(0).getmDuration(),
+                        initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(0).getmName(),
+                                response.body().getmCriticalEvents().get(0).getmDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(0).getmPercentageDuration()),
                                 response.body().getmCriticalEvents().get(0).getmEventsCount(),
                                 getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
                     }
+                    if (isAdded() && response.body().getmCriticalEvents() != null && response.body().getmCriticalEvents().size() > 1) {
+                        initCritical((LinearLayout) mTopFiveStopsView.findViewById(R.id.TF_top_container), response.body().getmCriticalEvents().get(1).getmName(),
+                                response.body().getmCriticalEvents().get(1).getmDuration(),
+                                String.format("%s%%", response.body().getmCriticalEvents().get(1).getmPercentageDuration()),
+                                response.body().getmCriticalEvents().get(1).getmEventsCount(),
+                                getContext().getString(R.string.minutes_long), getContext().getString(R.string.events));
+                    }
+
                 }
                 mProgressBar.setVisibility(View.GONE);
 
@@ -478,6 +522,15 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
             }
         });
+    }
+
+    private void initSingleCritical(ViewGroup view, String value, String title) {
+        view.removeAllViews();
+        LayoutInflater inflater = getLayoutInflater();
+        View childLayout = inflater.inflate(R.layout.critical_single_layout, null);
+        ((TextView) childLayout.findViewById(R.id.TF_values_value)).setText(value);
+        ((TextView) childLayout.findViewById(R.id.TF_values_title)).setText(title);
+        view.addView(childLayout);
     }
 
     private Float getTotalAmount(ArrayList<TopFiveItem> rejectsAsTopFive) {

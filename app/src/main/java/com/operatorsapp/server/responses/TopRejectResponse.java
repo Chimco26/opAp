@@ -13,6 +13,12 @@ public class TopRejectResponse extends PojoResponse{
 
     @SerializedName("RejectsList")
     ArrayList<TopRejectReason> mRejectsList;
+    @SerializedName("GoodUnits")
+    Double mGoodUnits;
+    @SerializedName("RejectedUnits")
+    Double mRejectedUnits;
+    @SerializedName("RejectsPC")
+    Double mRejectsPC;
 
     public TopRejectResponse(ArrayList<TopRejectReason> mRejectsList) {
         this.mRejectsList = mRejectsList;
@@ -24,6 +30,30 @@ public class TopRejectResponse extends PojoResponse{
 
     public void setmRejectsList(ArrayList<TopRejectReason> mRejectsList) {
         this.mRejectsList = mRejectsList;
+    }
+
+    public Double getmGoodUnits() {
+        return mGoodUnits;
+    }
+
+    public void setmGoodUnits(Double mGoodUnits) {
+        this.mGoodUnits = mGoodUnits;
+    }
+
+    public Double getmRejectedUnits() {
+        return mRejectedUnits;
+    }
+
+    public void setmRejectedUnits(Double mRejectedUnits) {
+        this.mRejectedUnits = mRejectedUnits;
+    }
+
+    public Double getmRejectsPC() {
+        return mRejectsPC;
+    }
+
+    public void setmRejectsPC(Double mRejectsPC) {
+        this.mRejectsPC = mRejectsPC;
     }
 
     public ArrayList<TopFiveItem> getRejectsAsTopFive(){
