@@ -252,13 +252,20 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
                 String titleByLang = OperatorApplication.isEnglishLang() ? notificationByType.getEName() : notificationByType.getLName();
                 mPieValues.add(new PieEntry(notificationByType.getPC(), String.format(Locale.getDefault(), "%s (%d)", titleByLang, notificationByType.getNumOfResponse())));
             }
-
+            mPieChart.setDrawHoleEnabled(false);
             mPieChart.setEntryLabelColor(Color.BLACK);
+
             PieDataSet pieDataSet = new PieDataSet(mPieValues, "");
+            pieDataSet.setValueLinePart1OffsetPercentage(80.f);
+            pieDataSet.setValueLinePart1Length(0.5f);
+            pieDataSet.setValueLinePart2Length(0.5f);
+            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
             ArrayList<Integer> colors = new ArrayList<>();
-            for (int c : BLUE_COLORS)
+            for (int c : BLUE_COLORS) {
                 colors.add(c);
+            }
             pieDataSet.setColors(colors);
             pieDataSet.setSliceSpace(4f);
 
@@ -267,24 +274,19 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             data.setValueTextSize(20f);
             data.setValueTextColor(Color.BLACK);
 
-            mPieChart.setDrawHoleEnabled(false);
-            mPieChart.setData(data);
-            mPieChart.setTouchEnabled(false);
-            mPieChart.setDescription(null);
+
             mPieChart.setUsePercentValues(true);
-            mPieChart.getLegend().setWordWrapEnabled(true);
-            mPieChart.getLegend().setTextSize(14f);
-            mPieChart.setDrawEntryLabels(false);
             mPieChart.getLegend().setEnabled(true);
+            mPieChart.setDrawEntryLabels(false);
+            mPieChart.getLegend().setWordWrapEnabled(true);
+            mPieChart.setTouchEnabled(false);
+            mPieChart.setDescription("");
+            mPieChart.getLegend().setTextSize(14f);
             mPieChart.setExtraOffsets(0, 5, 0, 5);
 
-            pieDataSet.setValueLinePart1OffsetPercentage(80.f);
-            pieDataSet.setValueLinePart1Length(0.5f);
-            pieDataSet.setValueLinePart2Length(0.5f);
-            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-            pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-
+            mPieChart.setData(data);
             mPieChart.invalidate();
+
         }
     }
 
@@ -463,32 +465,6 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             }
         });
 
-
-        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
-//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
-
-        NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
-            @Override
-            public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
-                if (isAdded() && response.body() != null && response.body().getError() == null) {
-
-                    if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
-                        mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));
-                        initServiceCallsView(response.body());
-                    }
-
-                }
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void onFailure(Call<ServiceCallsResponse> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-        });
-
         List<Integer> machineIds = new ArrayList<>();
         machineIds.add(pm.getMachineId());
         ReqDepartment reqDepartment = new ReqDepartment(pm.getDepartmentId(), machineIds, new ShiftByTime(pm.getShiftStart(), shiftEnd));
@@ -522,15 +498,32 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 
             }
         });
-    }
 
-    private void initSingleCritical(ViewGroup view, String value, String title) {
-        view.removeAllViews();
-        LayoutInflater inflater = getLayoutInflater();
-        View childLayout = inflater.inflate(R.layout.critical_single_layout, null);
-        ((TextView) childLayout.findViewById(R.id.TF_values_value)).setText(value);
-        ((TextView) childLayout.findViewById(R.id.TF_values_title)).setText(title);
-        view.addView(childLayout);
+
+//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
+        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
+
+        NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
+            @Override
+            public void onResponse(Call<ServiceCallsResponse> call, Response<ServiceCallsResponse> response) {
+                if (isAdded() && response.body() != null && response.body().getError() == null) {
+
+                    if (response.body().getNotificationByType() != null && response.body().getNotificationByType().size() > 0) {
+                        mServiceCallsTitle.setText(getContext().getResources().getString(R.string.service_calls_distribution));
+                        initServiceCallsView(response.body());
+                    }
+
+                }
+                mProgressBar.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<ServiceCallsResponse> call, Throwable t) {
+                mProgressBar.setVisibility(View.GONE);
+
+            }
+        });
     }
 
     private Float getTotalAmount(ArrayList<TopFiveItem> rejectsAsTopFive) {
