@@ -77,7 +77,7 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mListener.getNotificationsFromServer(true);
+                mListener.onGetNotificationsFromServer(true);
             }
         });
 
@@ -178,6 +178,6 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     public interface NotificationsDialogListener{
         void onSendNewNotification(String text);
         void onNotificationResponse(int notificationId, int responseType);
-        void getNotificationsFromServer(boolean openNotificationDialog);
+        void onGetNotificationsFromServer(boolean openNotificationDialog);
     }
 }

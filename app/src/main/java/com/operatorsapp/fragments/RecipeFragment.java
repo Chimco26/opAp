@@ -224,6 +224,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
             if (mRecipeResponse != null && mRecipeResponse.getNote() != null && mRecipeResponse.getNote().length() > 0) {
                 mNoteTv.setText(mRecipeResponse.getNote());
+            }else {
+                mNoteTv.setText("");
             }
         }
     }
