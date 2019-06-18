@@ -500,8 +500,8 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
         });
 
 
-//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
-        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
+        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), pm.getShiftStart(), shiftEnd, pm.getMachineId());
+//        BaseTimeRequest baseTimeRequest = new BaseTimeRequest(pm.getSessionId(), "2019-05-06 07:00:46", "2019-06-06 15:47:59", pm.getMachineId());
 
         NetworkManager.getInstance().getServiceCalls(baseTimeRequest, new Callback<ServiceCallsResponse>() {
             @Override
