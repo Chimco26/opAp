@@ -804,17 +804,17 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
 
                             case R.id.notification_popup_approve_btn:
-                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE);
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_APPROVE, false);
                                 mPopUpDialog.dismiss();
                                 break;
 
                             case R.id.notification_popup_decline_btn:
-                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE);
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_DECLINE, false);
                                 mPopUpDialog.dismiss();
                                 break;
 
                             case R.id.notification_popup_clarify_btn:
-                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS);
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS, false );
                                 mPopUpDialog.dismiss();
                                 break;
                         }
@@ -1162,8 +1162,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ImageView tutorialIv = mToolBarView.findViewById(R.id.toolbar_tutorial_iv);
             mTechnicianIconIv = mToolBarView.findViewById(R.id.toolbar_technician_iv);
             mTechOpenCallsIv = mToolBarView.findViewById(R.id.toolbar_technician_open_calls_tv);
-            mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
-            mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
+//            mNotificationIndicatorCircleFl = mToolBarView.findViewById(R.id.toolbar_notification_counter_circle);
+//            mNotificationIndicatorNumTv = mToolBarView.findViewById(R.id.toolbar_notification_counter_tv);
             mStatusTimeMinTv = mToolBarView.findViewById(R.id.ATATV_status_time_min);
             mToolBarView.findViewById(R.id.ATATV_machine_ly).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1722,11 +1722,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             @Override
             public void onNotificationResponse(int notificationId, int responseType) {
-                sendNotificationResponse(notificationId, responseType);
+                sendNotificationResponse(notificationId, responseType, true);
             }
 
-            @Override
-            public void getNotificationsFromServer(boolean openNotificationDialog) {
+            public void onGetNotificationsFromServer(boolean openNotificationDialog) {
                 getNotificationsFromServer(openNotificationDialog);
             }
         });
@@ -1847,7 +1846,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //        });
 //    }
 
-    private void sendNotificationResponse(final int notificationId, final int responseType) {
+    private void sendNotificationResponse(final int notificationId, final int responseType, final boolean isRefresh) {
 
         final PersistenceManager pm = PersistenceManager.getInstance();
         final Notification[] notification = new Notification[1];
@@ -1876,7 +1875,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     notification[0].getmSender(),
                     pm.getOperatorName(),
                     "",
-                    notification[0].getmSourceUserID() + "");
+                    notification[0].getmTargetUserId() + "");
 
 //            RespondToNotificationRequest request = new RespondToNotificationRequest(pm.getSessionId(),
 //                    getResources().getString(R.string.respond_notification_title),
@@ -1902,6 +1901,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     nList.add(notification[0]);
                     pm.setNotificationHistory(nList);
 //                    setNotificationNeedResponse();
+                    if (isRefresh){
+                        openNotificationsList();
+                    }
                     if (ProgressDialogManager.isShowing()) {
                         ProgressDialogManager.dismiss();
                     }
