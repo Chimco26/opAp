@@ -280,7 +280,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
             mPieChart.setDrawEntryLabels(false);
             mPieChart.getLegend().setWordWrapEnabled(true);
             mPieChart.setTouchEnabled(false);
-            mPieChart.setDescription("");
+            mPieChart.getDescription().setEnabled(false);
             mPieChart.getLegend().setTextSize(14f);
             mPieChart.setExtraOffsets(0, 5, 0, 5);
 

@@ -5,11 +5,10 @@ import android.graphics.Color;
 
 import com.example.common.reportShift.Item;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,15 +49,15 @@ public class LineChartHelper {
         xAxis.setDrawLabels(true);
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularityEnabled(false);
-        xAxis.setValueFormatter(new AxisValueFormatter(){
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(){
             @Override
-            public String getFormattedValue(float value, AxisBase axis) {
+            public String getFormattedValue(float value) {
                 return getXFormat().format(new Date((long) value));
             }
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
+//            @Override
+//            public int getDecimalDigits() {
+//                return 0;
+//            }
         });
     }
     @SuppressLint("SimpleDateFormat")
