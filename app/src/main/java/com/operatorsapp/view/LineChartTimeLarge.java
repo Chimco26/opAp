@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,7 +17,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.operatorsapp.R;
@@ -65,8 +64,8 @@ public class LineChartTimeLarge extends FrameLayout {
         mChart = view.findViewById(R.id.chart1);
 
         // no description text
-        mChart.setDescription("");
-        mChart.setNoDataTextDescription(getContext().getString(R.string.no_data_chart));
+        mChart.getDescription().setEnabled(false);//mChart.setDescription("");
+        mChart.setNoDataText(getContext().getString(R.string.no_data_chart));//mChart.setNoDataTextDescription(getContext().getString(R.string.no_data_chart));
 
         // enable touch gestures
         mChart.setTouchEnabled(true);
@@ -125,9 +124,9 @@ public class LineChartTimeLarge extends FrameLayout {
             }
         });*/
 
-        xAxis.setValueFormatter(new AxisValueFormatter() {
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
             @Override
-            public String getFormattedValue(float value, AxisBase axis) {
+            public String getFormattedValue(float value) {
                 if ((int) value % mXValues.length >= 0 && mXValues[(int) value % mXValues.length] != null) {
                     if (!mXValues[(int) value % mXValues.length].equals(mXVal)) {
                         mXVal = mXValues[(int) value % mXValues.length];
@@ -140,10 +139,10 @@ public class LineChartTimeLarge extends FrameLayout {
                 }
             }
 
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
+//            @Override
+//            public int getDecimalDigits() {
+//                return 0;
+//            }
         });
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -152,9 +151,9 @@ public class LineChartTimeLarge extends FrameLayout {
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
-        leftAxis.setAxisMinValue(0f);
+        leftAxis.setAxisMinimum(0f);
         leftAxis.setLabelCount(15);
-        leftAxis.setAxisMaxValue(140f);
+        leftAxis.setAxisMaximum(140f);
         leftAxis.setYOffset(0f);
         leftAxis.setTextSize(16f);
         leftAxis.setTextColor(ContextCompat.getColor(context, R.color.default_gray));
@@ -226,7 +225,7 @@ public class LineChartTimeLarge extends FrameLayout {
 
             set1.setCircleRadius(5);
             set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
-            set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setCircleHoleColor(ContextCompat.getColor(mContext, R.color.C16));
             set1.setDrawCircleHole(true);
             set1.setDrawCircles(true);
 
@@ -268,10 +267,10 @@ public class LineChartTimeLarge extends FrameLayout {
                 max += addition;
 
                 YAxis leftAxis = mChart.getAxisLeft();
-                leftAxis.resetAxisMaxValue();
-                leftAxis.resetAxisMinValue();
-                leftAxis.setAxisMinValue(min);
-                leftAxis.setAxisMaxValue(max);
+                leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
+                leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
+                leftAxis.setAxisMinimum(min);
+                leftAxis.setAxisMaximum(max);
                 leftAxis.calculate(min, max);
 
                 mChart.zoomOut(); // needed for refresh
