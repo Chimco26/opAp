@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,7 +17,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -65,8 +64,8 @@ public class LineChartTimeSmall extends FrameLayout {
         mChart = view.findViewById(R.id.chart1);
 
         // no description text
-        mChart.setDescription("");
-        mChart.setNoDataTextDescription(getContext().getString(R.string.no_data_chart));
+        mChart.getDescription().setEnabled(false);//setDescription("");
+        mChart.setNoDataText(getContext().getString(R.string.no_data_chart));//setNoDataTextDescription(getContext().getString(R.string.no_data_chart));
 
         // enable touch gestures
         mChart.setTouchEnabled(false);
@@ -104,9 +103,9 @@ public class LineChartTimeSmall extends FrameLayout {
         xAxis.setCenterAxisLabels(true);
         xAxis.setLabelCount(5, true); // force only 4 labels as size is constant
 
-        xAxis.setValueFormatter(new AxisValueFormatter() {
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
             @Override
-            public String getFormattedValue(float value, AxisBase axis) {
+            public String getFormattedValue(float value) {
                 if (mXValues != null && (int) value % mXValues.length >= 0) {
                     if (mXVal != null && mXValues[(int) value % mXValues.length] != null && !mXValues[(int) value % mXValues.length].equals(mXVal)) {
                         mXVal = mXValues[(int) value % mXValues.length];
@@ -116,13 +115,12 @@ public class LineChartTimeSmall extends FrameLayout {
                     }
                 } else {
                     return "";
-                }
-            }
+                }            }
 
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
+//            @Override
+//            public int getDecimalDigits() {
+//                return 0;
+//            }
         });
        /* xAxis.setValueFormatter(new AxisValueFormatter() {
 
@@ -163,9 +161,9 @@ public class LineChartTimeSmall extends FrameLayout {
         leftAxis.setTypeface(mTfLight);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(false);
-        leftAxis.setAxisMinValue(0f);
+        leftAxis.setAxisMinimum(0f);
         leftAxis.setLabelCount(4, true);
-        leftAxis.setAxisMaxValue(80f);
+        leftAxis.setAxisMaximum(80f);
         leftAxis.setYOffset(0f);
         leftAxis.setTextSize(14f);
         leftAxis.setTextColor(ContextCompat.getColor(context, android.R.color.black));
@@ -186,14 +184,14 @@ public class LineChartTimeSmall extends FrameLayout {
             set1.setValueTextColor(ColorTemplate.getHoloBlue());
             set1.setLineWidth(3f);
 //        set1.setDrawCircles(false);
-            set1.setDrawValues(true);
+            set1.setDrawValues(false);
             set1.setFillAlpha(65);
             set1.setFillColor(ColorTemplate.getHoloBlue());
             set1.setHighLightColor(Color.rgb(244, 117, 117));
 //        set1.setDrawCircleHole(false);
             set1.setCircleRadius(1);
             set1.setCircleColor(ContextCompat.getColor(mContext, R.color.C16));
-            set1.setCircleColorHole(ContextCompat.getColor(mContext, R.color.C16));
+            set1.setCircleHoleColor(ContextCompat.getColor(mContext, R.color.C16));
             set1.setColor(ContextCompat.getColor(mContext, R.color.C16));
             set1.setDrawCircleHole(true);
             set1.setDrawCircles(true);
@@ -252,10 +250,10 @@ public class LineChartTimeSmall extends FrameLayout {
                 max += addition;
 
                 YAxis leftAxis = mChart.getAxisLeft();
-                leftAxis.resetAxisMaxValue();
-                leftAxis.resetAxisMinValue();
-                leftAxis.setAxisMinValue(min);
-                leftAxis.setAxisMaxValue(max);
+                leftAxis.resetAxisMaximum();//leftAxis.resetAxisMaxValue();
+                leftAxis.resetAxisMinimum();//leftAxis.resetAxisMinValue();
+                leftAxis.setAxisMinimum(min);
+                leftAxis.setAxisMaximum(max);
                 mChart.zoomOut(); // needed due to chart lib not refreshing.
                 mChart.moveViewToX(lastValue[0].getX());
 

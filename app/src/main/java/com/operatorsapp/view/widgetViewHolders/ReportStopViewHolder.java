@@ -103,7 +103,7 @@ public class ReportStopViewHolder extends RecyclerView.ViewHolder implements Vie
         if (totalMinutes >= 1) {
             mDefault.setVisibility(View.GONE);
             mSubTitle.setText(String.format(Locale.getDefault(), "%d/%d - %d%%", (int) (reportedValue + widget.getProjection()), totalMinutes, reportedPercent + filterShortPercent));
-            updateTextViews(reportedPercent);
+            updateTextViews(reportedPercent + filterShortPercent);
         } else {
             setEmptyMode(widget);
         }
