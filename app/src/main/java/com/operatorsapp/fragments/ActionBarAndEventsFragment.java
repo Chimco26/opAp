@@ -2540,7 +2540,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 cursor = getCursorByType();
                 ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursor);
                 if (mIsTimeLine) {
-                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
+                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse, getString(R.string.working));
                 }
                 myTaskListener.onUpdateEventsRecyclerViews(cursor, eventArrayList);
             }
@@ -2581,7 +2581,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 Cursor cursorNoSelect = getCursorByType();
                 ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursorNoSelect);;
                 if (mIsTimeLine) {
-                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse);
+                    eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse, getString(R.string.working));
                 }
                 if (mIsSelectionMode) {
 //                    myTaskListener.onUpdateEventsRecyclerViews(cursorSelec, eventSelectArrayList);

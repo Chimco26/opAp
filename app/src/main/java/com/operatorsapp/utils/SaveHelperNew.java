@@ -13,8 +13,6 @@ import com.example.common.machineJoshDataResponse.JobDataItem;
 import com.operatorsapp.R;
 import com.ravtech.david.sqlcore.DatabaseHelper;
 
-import org.litepal.crud.DataSupport;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -32,7 +30,7 @@ public class SaveHelperNew {
     private  static final String TAG = SaveHelperNew.class.getSimpleName();
     private static final int MAX_ID = 1000000000;
 
-    public ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse) {
+    public ArrayList<Event> updateList(ArrayList<Event> events, ActualBarExtraResponse actualBarExtraResponse, String workingString) {
 
         if (actualBarExtraResponse == null) {
             return events;
@@ -80,7 +78,7 @@ public class SaveHelperNew {
 
                         Event workingEvent1 = createIntermediateEvent(getDateFromFormat(new Date(workingEventSentTime), SIMPLE_FORMAT_FORMAT),
                                 getDateFromFormat(new Date(workingEventEndTime), SIMPLE_FORMAT_FORMAT), event.getEventID(), workingEventSentTime, workingEventEndTime,
-                                getWorkingEventName(workingEvent), getWorkingEventName(workingEvent),
+                                getWorkingEventName(workingEvent, workingString), getWorkingEventName(workingEvent, workingString),
                                 counter, workingEvent.getColor(), 1);
                         workingEvent1.setDuration(workingEvent.getDuration());
 
@@ -139,13 +137,14 @@ public class SaveHelperNew {
         events.add(0, firstEvent);
     }
 
-    private String getWorkingEventName(WorkingEvent workingEvent){
+    private String getWorkingEventName(WorkingEvent workingEvent, String workingString){
         if (workingEvent.getEventReason() != null && workingEvent.getEventReason().length() > 0) {
             return workingEvent.getEventReason();
         }else if (workingEvent.getName() != null && workingEvent.getName().length() > 0){
-            return workingEvent.getName();
+            String s = workingEvent.getName().toLowerCase().equals("working")? workingString: workingEvent.getName();
+            return s;
         }else {
-            return "working";
+            return workingString;
         }
 
     }
