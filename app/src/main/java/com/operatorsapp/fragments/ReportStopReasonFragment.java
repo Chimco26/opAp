@@ -253,8 +253,7 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
 
         try {
 
-            if (BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name)) &&
-                    mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().size() == 1) {
+            if (mReportFieldsForMachine.getStopReasons().get(position).getSubReasons().size() == 1) {//&& BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))
 
                 mSelectedPosition = position;
 
@@ -262,7 +261,6 @@ public class ReportStopReasonFragment extends BackStackAwareFragment implements 
                 sendReport();
 
             } else {
-
                 mListener.onOpenSelectStopReasonFragmentNew(SelectStopReasonFragment.newInstance(position, mJoshId,
                         mReportFieldsForMachine.getStopReasons().get(position).getId(),
                         mReportFieldsForMachine.getStopReasons().get(position).getEName(),

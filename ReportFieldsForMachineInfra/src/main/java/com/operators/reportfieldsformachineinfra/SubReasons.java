@@ -1,5 +1,6 @@
 package com.operators.reportfieldsformachineinfra;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,7 +17,7 @@ public class SubReasons implements Parcelable {
     private String EName;
     @SerializedName("LName")
     private String LName;
-    @SerializedName("EventIconID")
+    @SerializedName("EventGroupIconID")
     private String EventIconID;
     @SerializedName("EventOpAppDisplayOrder")
     private int EventOpAppDisplayOrder;
@@ -42,12 +43,24 @@ public class SubReasons implements Parcelable {
     }
 
     public String getEventIconID() {
-        return EventIconID;
+        if (EventIconID == null){
+            return "";
+        }
+        return EventIconID.replace("-","_");
     }
 
     public int getEventOpAppDisplayOrder() {
         return EventOpAppDisplayOrder;
     }
+
+    public int getEventIcon(Context context){
+        int icon = context.getResources().getIdentifier(getEventIconID(), "drawable", context.getPackageName());
+        if (icon == 0){
+            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
+        }
+        return icon;
+    }
+
 
     public SubReasons() {
     }
