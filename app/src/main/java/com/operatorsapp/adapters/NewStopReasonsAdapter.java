@@ -58,9 +58,11 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         if (BuildConfig.FLAVOR.equals(mContext.getString(R.string.lenox_flavor_name))) {
             imgId = ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         } else {
-            imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+            imgId = mStopItemsList.get(position).getGroupIcon(mContext);
+//            imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         }
-        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
+        holder.mTitleLil.setBackgroundColor(mStopItemsList.get(position).getGroupColor(mContext));
+//        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupColorID()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
@@ -119,7 +121,8 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         public void onBindViewHolder(@NonNull VerticalAdapter.VerticalViewHolder holder, final int position) {
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
-            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
+            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
+//            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

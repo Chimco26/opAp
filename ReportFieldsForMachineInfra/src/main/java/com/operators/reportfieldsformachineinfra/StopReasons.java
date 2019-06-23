@@ -1,5 +1,6 @@
 package com.operators.reportfieldsformachineinfra;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -50,16 +51,37 @@ public class StopReasons implements Parcelable {
     }
 
     public String getEventGroupColorID() {
-        return EventGroupColorID;
+
+        if (EventGroupColorID == null){
+            return "";
+        }
+        return EventGroupColorID.replace("-","_");
     }
 
     public String getEventGroupIconID() {
-        return EventGroupIconID;
+        if (EventGroupIconID == null){
+            return "";
+        }
+        return EventGroupIconID.replace("-","_");
     }
 
     public int getEventGroupOpAppDisplayOrder() {
         return EventGroupOpAppDisplayOrder;
     }
+
+    public int getGroupIcon(Context context){
+
+        int icon = context.getResources().getIdentifier(getEventGroupIconID(), "drawable", context.getPackageName());
+        if (icon == 0){
+            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
+        }
+        return icon;
+    }
+
+    public int getGroupColor(Context context){
+        return context.getResources().getIdentifier(getEventGroupColorID(), "color", context.getPackageName());
+    }
+
 
     public StopReasons() {
     }
