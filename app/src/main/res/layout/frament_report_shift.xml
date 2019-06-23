@@ -98,6 +98,14 @@
                     android:layout_weight="1" />
 
             </LinearLayout>
+
+            <include
+                android:id="@+id/FRS_job_list"
+                layout="@layout/job_list_view"
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </ScrollView>
 
