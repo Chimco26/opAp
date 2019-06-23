@@ -318,8 +318,9 @@ public class JobListFragment extends Fragment implements
                             mPendingJobs.add(pendingJob);
                         }
 
-                        if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())))
+                        if (!mHeaders.contains(mHashMapHeaders.get(property.getKey())) && mHashMapHeaders.get(property.getKey()) != null) {
                             mHeaders.add(mHashMapHeaders.get(property.getKey()));
+                        }
                     }
                 }
             }
@@ -329,9 +330,9 @@ public class JobListFragment extends Fragment implements
         mPendingJobsNoHeadersFiltered.addAll(mPendingJobs);
         sortHeaders();
         mHeaders.add(0, new Header(getString(R.string.general), 0));
-        if (mHeaders.contains(mSelectedHeader)){
+        if (mHeaders.contains(mSelectedHeader)) {
             mHeadersAdapter.setTitle(mSelectedHeader.getDisplayName());
-        }else {
+        } else {
             mHeadersAdapter.setTitle(mHeaders.get(0).getDisplayName());
         }
         if (mHeadersAdapter != null) {

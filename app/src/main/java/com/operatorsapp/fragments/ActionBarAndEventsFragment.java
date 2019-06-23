@@ -345,6 +345,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mListener.onResize(mCloseWidth, statusBarParams.height);
 
         initFilterEvents(view);
+        displayViewByServerSettings();
     }
 
     private void initLenoxMachineRv(View view) {
@@ -1492,14 +1493,12 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             mMainView.findViewById(R.id.FAAE_josh_id_ly).setVisibility(View.GONE);
             mMainView.findViewById(R.id.FAAE_josh_id_ly_separator2).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_production_spinner).setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.toolbar_technician_button).setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.toolbar_production_spinner_separator).setVisibility(View.GONE);
+            displayOperatorView(View.GONE);
+            displayTechnicianView(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_production_text).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_job_spinner_separator).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_after_job_spinner_separator).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.ATATV_language_spinner).setVisibility(View.GONE);
-            mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(View.GONE);
             mToolBarView.findViewById(R.id.toolbar_machine_separator).setVisibility(View.GONE);
             View userIcon = mToolBarView.findViewById(R.id.settings_button);
             RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) userIcon.getLayoutParams();
@@ -1508,6 +1507,35 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             ((ImageView) mToolBarView.findViewById(R.id.ATATV_flavor_logo)).setImageDrawable(getResources().getDrawable(R.drawable.lenox_logo_new_medium));
             mToolBarView.findViewById(R.id.ATATV_company_name_separator).setVisibility(View.VISIBLE);
             ((TextView) mToolBarView.findViewById(R.id.ATATV_company_name_tv)).setText(PersistenceManager.getInstance().getSiteName());
+        }
+    }
+
+    private void displayViewByServerSettings() {
+//        displayTechnicianView();
+//        displayOperatorView();
+//        if (getView() != null){
+//        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility();
+//        }
+//        if (mToolBarView != null) {
+//        mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility();
+//        }
+//        if (mTimeLineType != null) {
+//            mTimeLineType.setVisibility();
+//        mTimeLineType.setChecked();//id only one is true
+//        }
+    }
+
+    public void displayOperatorView(int visibility) {
+        if (mToolBarView != null) {
+            mToolBarView.findViewById(R.id.toolbar_operator_fl).setVisibility(visibility);
+            mToolBarView.findViewById(R.id.iv_user_icon).setVisibility(visibility);
+        }
+    }
+
+    public void displayTechnicianView(int visibility) {
+        if (mToolBarView != null) {
+            mToolBarView.findViewById(R.id.toolbar_technician_button).setVisibility(visibility);
+            mToolBarView.findViewById(R.id.toolbar_technician_separator).setVisibility(visibility);
         }
     }
 
