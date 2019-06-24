@@ -17,6 +17,8 @@ import com.operatorsapp.utils.TimeUtils;
 import java.util.Date;
 import java.util.Locale;
 
+import me.grantland.widget.AutofitTextView;
+
 public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private static final int END_LIMIT = 10;//in minute
     private final int mHeight;
@@ -28,7 +30,7 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private TextView mSubTitle;
     private View m1Ly;
     private TextView m1TimeTv;
-    private View m1Btn;
+    private AutofitTextView m1Btn;
     private View m3Ly;
     private View m2Btn;
     private View m2CountDownLy;

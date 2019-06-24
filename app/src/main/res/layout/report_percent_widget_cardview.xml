@@ -241,6 +241,7 @@
                 android:id="@+id/RPWC_percentage_text_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="150dp"
                 android:gravity="center_vertical"
                 android:text="@string/report_events_reason"
                 android:textColor="@color/blue1"

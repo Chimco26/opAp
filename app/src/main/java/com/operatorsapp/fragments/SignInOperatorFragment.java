@@ -13,13 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.app.operatorinfra.Operator;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.oppapplog.OppAppLogger;
 import com.google.gson.Gson;
-import com.example.common.callback.ErrorObjectInterface;
 import com.operators.operatorcore.OperatorCore;
 import com.operators.operatorcore.interfaces.OperatorForMachineUICallbackListener;
 import com.operatorsapp.R;
@@ -38,7 +38,7 @@ public class SignInOperatorFragment extends Fragment implements View.OnClickList
     private static final String LOG_TAG = SignInOperatorFragment.class.getSimpleName();
     private static final String SELECTED_OPERATOR = "selected_operator";
     private EditText mOperatorIdEditText;
-    private Button mSignInButton;
+    private TextView mSignInButton;
 
     private OperatorCore mOperatorCore;
     private OperatorCoreToDashboardActivityCallback mOperatorCoreToDashboardActivityCallback;
