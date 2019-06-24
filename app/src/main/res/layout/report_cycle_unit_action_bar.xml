@@ -30,11 +30,12 @@
                 android:src="@drawable/button_x_selector"/>
         </LinearLayout>
 
-        <TextView
+        <me.grantland.widget.AutofitTextView
             style="@style/Roboto_Action_Bar_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:maxLines="1"
             android:text="@string/report_cycle_units"
             android:textColor="@color/white"
             android:textSize="20dp"/>

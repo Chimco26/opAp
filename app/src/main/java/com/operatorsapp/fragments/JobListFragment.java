@@ -145,13 +145,22 @@ public class JobListFragment extends Fragment implements
     }
 
     private void initTitleViews(View view) {
-        ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(ID).getDisplayName());
-        ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(PRODUCT_CATALOG_ID).getDisplayName());
-        ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(UNITS_TARGET).getDisplayName());
-        ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(UNITS_PRODUCED).getDisplayName());
-        ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(END_TIME).getDisplayName());
-        ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(TIME_LEFT_HR_HOUR).getDisplayName());
+        if (mHashMapHeaders != null) {
+            if (mHashMapHeaders.get(ID) != null)
+                ((TextView) view.findViewById(R.id.FJL_index)).setText(mHashMapHeaders.get(ID).getDisplayName());
+            if (mHashMapHeaders.get(PRODUCT_CATALOG_ID) != null)
+                ((TextView) view.findViewById(R.id.FJL_catalog)).setText(mHashMapHeaders.get(PRODUCT_CATALOG_ID).getDisplayName());
+            if (mHashMapHeaders.get(UNITS_TARGET) != null)
+                ((TextView) view.findViewById(R.id.FJL_target)).setText(mHashMapHeaders.get(UNITS_TARGET).getDisplayName());
+            if (mHashMapHeaders.get(UNITS_PRODUCED) != null)
+                ((TextView) view.findViewById(R.id.FJL_produced)).setText(mHashMapHeaders.get(UNITS_PRODUCED).getDisplayName());
+            if (mHashMapHeaders.get(END_TIME) != null)
+                ((TextView) view.findViewById(R.id.FJL_end_time)).setText(mHashMapHeaders.get(END_TIME).getDisplayName());
+            if (mHashMapHeaders.get(TIME_LEFT_HR_HOUR) != null)
+                ((TextView) view.findViewById(R.id.FJL_job_left)).setText(mHashMapHeaders.get(TIME_LEFT_HR_HOUR).getDisplayName());
+        }
     }
+
 
     private void initVarsSearch(View view) {
         mSearchViewEt = view.findViewById(R.id.AJA_search_et);
