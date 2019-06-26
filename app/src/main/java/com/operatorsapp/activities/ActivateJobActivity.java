@@ -454,7 +454,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     private void showJobDetailsFragment(JobDetailsResponse jobDetailsResponse) {
 
-        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, mHeaders, mCurrentPendingJob);
+        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
     }
