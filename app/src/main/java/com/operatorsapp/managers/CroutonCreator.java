@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
-import com.zemingo.logrecorder.ZLogger;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -38,7 +37,7 @@ public class CroutonCreator {
         if (checkIfConnectivityCroutonIsDisplayed()) {
             return;
         }
-        if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(croutonType)) {
+        if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR) && mCurrentCrouton.getCroutonType().equals(croutonType)) {
             OppAppLogger.getInstance().v(LOG_TAG, "showCrouton(), trying to show same crouton type twice");
             return;
         }

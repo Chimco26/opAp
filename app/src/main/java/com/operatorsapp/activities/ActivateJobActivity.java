@@ -302,7 +302,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 } else if (((Response) response).getError() != null) {
 
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
-                    ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
+                    ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
 
                 } else {
@@ -387,7 +387,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 } else if (((Response) response).getError() != null) {
 
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
-                    ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
+                    ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
                 } else {
 
