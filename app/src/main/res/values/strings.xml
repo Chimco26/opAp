@@ -421,5 +421,6 @@
         <item>#599abe</item>
     </string-array >
     <string name="cycle_time">Cycle time</string>
+    <string name="jobs_on_this_shift">Jobs on this shift</string>
 
 </resources>

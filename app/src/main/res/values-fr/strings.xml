@@ -168,7 +168,7 @@
         <item quantity="one">heure</item>
         <item quantity="other">heures</item>
     </plurals>
-    <string name="common_signin_button_text">être connecté</string>
+    <string name="common_signin_button_text">Connection</string>
     <string name="activate">Activer</string>
     <string name="action_details">Détails de l\'action</string>
     <string name="actionnable_jobs">Tâches exécutables</string>
@@ -271,7 +271,7 @@
     <string name="service_call_made_new">L\'appel de service a été envoyé par l\'opérateur %1$ de la machine.</string>
     <string name="default_unanswered_technician_call">L\'opérateur %1$s a émis un appel de service. En attente de la réponse du technicien</string>
     <string name="gr">gr</string>
-    <string name="version">Version de l\\\'application</string>
+    <string name="version">Version de l\'application</string>
     <string name="incremented_successfully">Incrémenté avec succès</string>
     <string name="incremented_failure">Échec d\'incrémentation</string>
     <string name="top_five_stop_events">Top 5 des événements d\'arrêt</string>
@@ -323,7 +323,7 @@
     <string name="time_min">Temps (min)</string>
     <string name="report_events_reason">Signaler le motif des événements</string>
     <string name="keep_reporting_events_reason">Continuer à signaler le motif des événements</string>
-    <string name="target_reached">Cible atteinte!</string>
+    <string name="target_reached">Objectif atteint!</string>
     <string name="setup_rejects_dialog_text">Voulez-vous signaler certains d\'entre eux comme rejets ?</string>
     <string name="setup_good_units_dialog_text">Voulez-vous signaler certaines d\'entre elles comme bonnes unités ?</string>
     <string name="on_the_setup_you_produced">Sur la configuration que vous avez produite</string>

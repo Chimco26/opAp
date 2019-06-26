@@ -339,7 +339,8 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
         ActionsUpdateRequest actionsUpdateRequest = new ActionsUpdateRequest(persistanceManager.getSessionId(), null);
 
-        actionsUpdateRequest.setActions(new ActionsByJob(currentJobId, persistanceManager.getOperatorId(), null));
+        String operatorId = persistanceManager.getOperatorId() != null? persistanceManager.getOperatorId() : "0";
+        actionsUpdateRequest.setActions(new ActionsByJob(currentJobId, operatorId, null));
 
         actionsUpdateRequest.getActions().setActions(actions);
 
@@ -388,7 +389,6 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
                     ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
 
-
                 } else {
 
                     finishActivity((Response) response, activateJobRequest.getJobID());
@@ -406,7 +406,6 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
             }
         }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
-
 
     }
 

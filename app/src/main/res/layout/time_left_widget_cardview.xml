@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_parent_layout"
     android:layout_width="@dimen/widget_width"
     android:layout_height="@dimen/widget_height"
@@ -70,13 +71,14 @@
                 android:gravity="center"
                 android:visibility="gone"/>
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/TLWC_see_jobs_btn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/blue1"
                 android:gravity="center"
+                android:maxLines="1"
                 android:text="@string/pending_jobs"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -113,7 +115,7 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/TLWC_end_setup_btn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
@@ -161,7 +163,7 @@
                     android:textColor="@color/blue1"
                     android:textSize="18sp" />
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/TLWC_countdown_btn"
                     android:layout_width="117dp"
                     android:layout_height="30dp"

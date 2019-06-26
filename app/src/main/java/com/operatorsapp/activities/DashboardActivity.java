@@ -316,6 +316,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         setupVersionCheck();
 
         setReportBtnListener();
+
+        displayViewByServerSettings();
     }
 
     private void setReportBtnListener() {
@@ -3059,5 +3061,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             }
         }
+    }
+    private void displayViewByServerSettings(){
+//        mReportBtn.setVisibility();
     }
 }

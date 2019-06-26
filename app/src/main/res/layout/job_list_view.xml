@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/combined_shape"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/SCV_tv"
+        style="@style/ProximaNovaSemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical|start"
+        android:maxLines="2"
+        android:paddingBottom="5dp"
+        android:text="@string/jobs_on_this_shift"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/divider_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/JLV_tv_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/JLV_tv_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:textColor="@color/grey_lite"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/divider_gray" />
+
+</LinearLayout>
