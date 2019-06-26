@@ -55,9 +55,9 @@ public class SubReasons implements Parcelable {
 
     public int getEventIcon(Context context){
         int icon = context.getResources().getIdentifier(getEventIconID(), "drawable", context.getPackageName());
-        if (icon == 0){
-            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
-        }
+//        if (icon == 0){
+//            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
+//        }
         return icon;
     }
 
