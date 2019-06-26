@@ -59,16 +59,22 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
             imgId = ReasonImageLenox.getImageForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
         } else {
             imgId = mStopItemsList.get(position).getGroupIcon(mContext);
-//            imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+            if (imgId == 0){
+                imgId = ReasonImage.getImageForNewStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+            }
         }
-        holder.mTitleLil.setBackgroundColor(mStopItemsList.get(position).getGroupColor(mContext));
+        int color = (mStopItemsList.get(position).getGroupColor(mContext));
+        if (color == 0){
+            color = ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId());
+        }
+        holder.mTitleLil.setBackgroundColor(color);
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getId()));
 //        holder.mTitleLil.setBackgroundColor(ReasonImage.getColorForStopReason(mStopItemsList.get(holder.getAdapterPosition()).getEventGroupColorID()));
         holder.mReasonImage.setBackground(mContext.getResources().getDrawable(imgId));
         holder.mHorizontalRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
         holder.mHorizontalRv.setAdapter(new VerticalAdapter(position, mStopItemsList.get(position).getSubReasons(), imgId));
-        int color = new Random().nextInt(4);
-        Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
+//        int color = new Random().nextInt(4);
+//        Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]);
        // holder.mTitleLil.setBackgroundColor(Color.parseColor(mContext.getResources().getStringArray(R.array.color_array)[color]));
     }
 
@@ -121,8 +127,14 @@ public class NewStopReasonsAdapter extends RecyclerView.Adapter<NewStopReasonsAd
         public void onBindViewHolder(@NonNull VerticalAdapter.VerticalViewHolder holder, final int position) {
             String title = OperatorApplication.isEnglishLang() ? mVerticalList.get(position).getEName() : mVerticalList.get(position).getLName();
             holder.mVerticalTitle.setText(title);
-            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
-//            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
+
+            int icon = mVerticalList.get(position).getEventIcon(mContext);
+            if (icon == 0){
+                icon = mImgId;
+            }
+
+            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mImgId));
+//            holder.mVerticalImage.setBackground(mContext.getResources().getDrawable(mVerticalList.get(position).getEventIcon(mContext)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

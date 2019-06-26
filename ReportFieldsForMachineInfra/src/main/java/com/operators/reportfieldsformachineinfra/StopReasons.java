@@ -72,9 +72,9 @@ public class StopReasons implements Parcelable {
     public int getGroupIcon(Context context){
 
         int icon = context.getResources().getIdentifier(getEventGroupIconID(), "drawable", context.getPackageName());
-        if (icon == 0){
-            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
-        }
+//        if (icon == 0){
+//            icon = context.getResources().getIdentifier("rejects_copy_5", "drawable", context.getPackageName());
+//        }
         return icon;
     }
 
