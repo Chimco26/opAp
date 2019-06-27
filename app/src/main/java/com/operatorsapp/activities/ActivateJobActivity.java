@@ -244,6 +244,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                         @Override
                         public void onActionYes() {
                             dialog.dismiss();
+                            finish();
                         }
 
                         @Override

@@ -104,12 +104,13 @@
                     android:layout_height="70dp"
                     android:src="@drawable/ic_end_setup" />
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:text="@string/you_are_in_setup_mode"
                     android:textColor="@color/blue1"
                     android:textSize="18sp" />
@@ -122,6 +123,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@color/blue1"
                 android:gravity="center"
+                android:maxLines="1"
                 android:layout_marginStart="16dp"
                 android:text="@string/end_setup"
                 android:textColor="@color/white"
