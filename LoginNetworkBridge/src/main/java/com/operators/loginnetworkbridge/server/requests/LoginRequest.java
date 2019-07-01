@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.TimeZone;
 
 public class LoginRequest {
+    public static final String PLATFORM = "mobile";
+
     @SerializedName("Username")
     private String mUserName;
 
@@ -15,7 +17,7 @@ public class LoginRequest {
     private String mLanguage;
 
     @SerializedName("Platform")
-    private String mPlatform = "mobile";
+    public String mPlatform = PLATFORM;
 
     @SerializedName("TimeZone")
     private String mTimeZone = TimeZone.getDefault().getID();
