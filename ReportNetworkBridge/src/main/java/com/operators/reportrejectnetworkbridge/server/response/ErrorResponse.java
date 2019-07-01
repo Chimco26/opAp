@@ -45,6 +45,26 @@ public class ErrorResponse implements Parcelable {
         return mErrorCode;
     }
 
+    public void setmErrorDesc(String mErrorDesc) {
+        this.mErrorDesc = mErrorDesc;
+    }
+
+    public void setmErrorMessage(String mErrorMessage) {
+        this.mErrorMessage = mErrorMessage;
+    }
+
+    public void setmErrorCode(int mErrorCode) {
+        this.mErrorCode = mErrorCode;
+    }
+
+    public void setmErrorLine(int mErrorLine) {
+        this.mErrorLine = mErrorLine;
+    }
+
+    public void setmErrorFunction(String mErrorFunction) {
+        this.mErrorFunction = mErrorFunction;
+    }
+
     @Override
     public int describeContents() {
         return 0;

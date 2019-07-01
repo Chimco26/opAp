@@ -272,6 +272,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private Integer mSelectProductJoshId;
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
+    private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -361,12 +362,12 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Math.abs((motionEvent.getRawX() + dX[0]) - downX[0]) > 10 && motionEvent.getRawX() + dX[0] > 0
-                        && motionEvent.getRawX() + dX[0] < mContainer3.getWidth() + mContainer3.getX() - (view.getWidth())) {
+                                && motionEvent.getRawX() + dX[0] < mContainer3.getWidth() + mContainer3.getX() - (view.getWidth())) {
                             moveToX[0] = motionEvent.getRawX() + dX[0];
                         }
                         if (Math.abs((motionEvent.getRawY() + dY[0]) - downY[0]) > 10 && motionEvent.getRawY() + dY[0] > 0
                                 && motionEvent.getRawY() + dY[0] < mContainer3.getHeight() - (view.getHeight() / 2)) {
-                            moveToY[0] = motionEvent.getRawY() + dY[0] ;
+                            moveToY[0] = motionEvent.getRawY() + dY[0];
                         }
                         if (moveToX[0] != 0 || moveToY[0] != 0) {
                             view.animate()
@@ -430,6 +431,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         onFailure(call, new Throwable("failed "));
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseStatus> call, Throwable t) {
                     Log.d(TAG, "token failed");
@@ -2587,10 +2589,15 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     @Override
-    public void onReportCycleUnit(String value) {
+    public void onReportCycleUnit(String value, String originalValue) {
         if (value == null || value.equals("")) {
             value = "0";
         }
+        if (originalValue == null || originalValue.equals("")) {
+            originalValue = "0";
+        }
+        mReportCycleUnitValues[0] = originalValue;
+        mReportCycleUnitValues[1] = value;
         sendCycleUnitReport(Double.parseDouble(value));
     }
 
@@ -2701,7 +2708,19 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             mReportCore.unregisterListener();
 
             if (response.isFunctionSucceed()) {
-                ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.SUCCESS);
+                String text = "";
+                if (mReportCycleUnitValues[0].equals(mReportCycleUnitValues[1])) {
+                    text = response.getmError().getErrorDesc();
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.SUCCESS);
+                } else if (Double.parseDouble(mReportCycleUnitValues[0]) > Double.parseDouble(mReportCycleUnitValues[1])) {
+                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_max_reported), getString(R.string.reported),
+                            getString(R.string.max_value_is), mReportCycleUnitValues[1]);
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+                } else if (Double.parseDouble(mReportCycleUnitValues[0]) < Double.parseDouble(mReportCycleUnitValues[1])) {
+                    text = String.format("%s %s %s %s", getString(R.string.report_cycle_failed_but_min_reported), getString(R.string.reported),
+                            getString(R.string.min_value_is), mReportCycleUnitValues[1]);
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, text, CroutonCreator.CroutonType.NETWORK_ERROR);
+                }
             } else {
                 ShowCrouton.showSimpleCrouton(DashboardActivity.this, response.getmError().getErrorDesc(), CroutonCreator.CroutonType.NETWORK_ERROR);
             }
@@ -2807,6 +2826,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             if (responseNewVersion.getmError().getErrorCode() != 0) {
                 responseNewVersion.setFunctionSucceed(false);
             }
+        }
+        if (responseNewVersion.getmError() != null
+                && responseNewVersion.getmError().getErrorDesc() != null
+                && responseNewVersion.getmError().getErrorDesc().isEmpty()
+                && responseNewVersion.getmError().getmErrorFunction() != null
+                && !responseNewVersion.getmError().getmErrorFunction().isEmpty()) {
+            responseNewVersion.getmError().setmErrorDesc(responseNewVersion.getmError().getmErrorFunction());
         }
         return responseNewVersion;
     }
@@ -3062,7 +3088,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             }
         }
     }
-    private void displayViewByServerSettings(){
+
+    private void displayViewByServerSettings() {
 //        mReportBtn.setVisibility();
     }
 }
