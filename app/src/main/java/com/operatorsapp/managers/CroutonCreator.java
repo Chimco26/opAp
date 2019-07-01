@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.example.oppapplog.OppAppLogger;
 import com.operatorsapp.R;
-import com.zemingo.logrecorder.ZLogger;
+import com.operatorsapp.utils.TimeUtils;
+
+import java.util.Date;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -38,10 +41,11 @@ public class CroutonCreator {
         if (checkIfConnectivityCroutonIsDisplayed()) {
             return;
         }
-        if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(croutonType)) {
+        if (!mCurrentCrouton.isEmpty() && mCurrentCrouton.getCroutonType().equals(CroutonType.NETWORK_ERROR) && mCurrentCrouton.getCroutonType().equals(croutonType)) {
             OppAppLogger.getInstance().v(LOG_TAG, "showCrouton(), trying to show same crouton type twice");
             return;
         }
+        Crouton.cancelAllCroutons();
         Crouton crouton;
         switch (croutonType) {
             case ALERT_DIALOG:
@@ -186,12 +190,12 @@ public class CroutonCreator {
         animation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
+                Log.d(LOG_TAG, "onAnimationStart: " + TimeUtils.getDate(new Date().getTime(), TimeUtils.SIMPLE_FORMAT_FORMAT));
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
-
-
+                Log.d(LOG_TAG, "onAnimationEnd: " + TimeUtils.getDate(new Date().getTime(), TimeUtils.SIMPLE_FORMAT_FORMAT));
             }
 
             @Override

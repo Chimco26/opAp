@@ -1,5 +1,6 @@
 package com.operatorsapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -243,7 +244,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                     dialog.setListener(new GenericDialog.OnGenericDialogListener() {
                         @Override
                         public void onActionYes() {
-                            dialog.dismiss();
+                            finish();
                         }
 
                         @Override
@@ -254,6 +255,12 @@ public class ActivateJobActivity extends AppCompatActivity implements
                         @Override
                         public void onActionAnother() {
 
+                        }
+                    });
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            finish();
                         }
                     });
                     dialog.show();
@@ -302,7 +309,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
                 } else if (((Response) response).getError() != null) {
 
                     ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
-                    ShowCrouton.showSimpleCrouton(ActivateJobActivity.this, errorObject);
+                    ShowCrouton.jobsLoadingErrorCrouton(ActivateJobActivity.this, errorObject);
 
 
                 } else {
@@ -454,7 +461,7 @@ public class ActivateJobActivity extends AppCompatActivity implements
 
     private void showJobDetailsFragment(JobDetailsResponse jobDetailsResponse) {
 
-        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, mHeaders, mCurrentPendingJob);
+        JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(jobDetailsResponse, (ArrayList<Header>) mPendingJobsResponse.getHeaders(), mCurrentPendingJob);
 
         getSupportFragmentManager().beginTransaction().add(R.id.AJA_container, jobDetailsFragment).addToBackStack(JobDetailsFragment.class.getSimpleName()).commit();
     }

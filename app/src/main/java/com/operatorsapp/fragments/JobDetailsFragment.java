@@ -772,17 +772,18 @@ public class JobDetailsFragment extends Fragment implements JobActionsAdapter.Jo
     @Override
     public void onLoadFileError() {
 
-        getActivity().runOnUiThread(new Runnable() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                mProductPdfNoImageTv.setText(getString(R.string.loading_error));
-                mProductPdfNoImageLy.setVisibility(View.VISIBLE);
-                mProductPdfView.setVisibility(View.INVISIBLE);
-            }
-        });
-
+                    mProductPdfNoImageTv.setText(getString(R.string.loading_error));
+                    mProductPdfNoImageLy.setVisibility(View.VISIBLE);
+                    mProductPdfView.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
     }
 
     @Override
