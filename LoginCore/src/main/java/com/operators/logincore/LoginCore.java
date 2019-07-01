@@ -42,7 +42,6 @@ public class LoginCore {
             public void onLoginSucceeded(final String sessionId, final String siteName, final int userId) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
 
-
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {

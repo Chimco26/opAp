@@ -1,5 +1,6 @@
 package com.operatorsapp.server;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
@@ -21,6 +22,7 @@ import com.operators.jobsnetworkbridge.interfaces.GetJobsListForMachineNetworkMa
 import com.operators.jobsnetworkbridge.interfaces.StartJobForMachineNetworkManagerInterface;
 import com.operators.loginnetworkbridge.interfaces.EmeraldLoginServiceRequests;
 import com.operators.loginnetworkbridge.interfaces.LoginNetworkManagerInterface;
+import com.operators.loginnetworkbridge.server.requests.LoginRequest;
 import com.operators.machinedatanetworkbridge.interfaces.EmeraldGetMachinesDataServiceRequest;
 import com.operators.machinedatanetworkbridge.interfaces.GetMachineDataNetworkManagerInterface;
 import com.operators.operatornetworkbridge.interfaces.EmeraldGetOperatorById;
@@ -82,12 +84,16 @@ import com.operatorsapp.server.responses.StopAndCriticalEventsResponse;
 import com.operatorsapp.server.responses.TopRejectResponse;
 import com.operatorsapp.utils.SendReportUtil;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -127,6 +133,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     private HashMap<String, EmeraldLoginServiceRequests> mEmeraldServiceRequestsHashMap = new HashMap<>();
     private Retrofit mRetrofit;
     private OkHttpClient okHttpClient;
+    HeaderInterceptor headerInterceptor = new HeaderInterceptor();
 
     public static NetworkManager initInstance() {
         if (msInstance == null) {
@@ -330,7 +337,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                 Dispatcher dispatcher = new okhttp3.Dispatcher();
                 dispatcher.setMaxRequests(1);
                 HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
                 if (okHttpClient == null) {
                     if (timeout >= 0 && timeUnit != null) {
                         okHttpClient = new OkHttpClient.Builder()
@@ -338,6 +345,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .connectTimeout(timeout, timeUnit)
                                 .writeTimeout(timeout, timeUnit)
                                 .readTimeout(timeout, timeUnit)
+                                .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .dispatcher(dispatcher)
                                 .build();
@@ -345,6 +353,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                         okHttpClient = new OkHttpClient.Builder()
                                 .connectionPool(pool)
                                 .dispatcher(dispatcher)
+                                .addInterceptor(headerInterceptor)
                                 .addInterceptor(loggingInterceptor)
                                 .build();
                     }
@@ -352,10 +361,13 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
                     int millis = timeUnitToMillis(timeUnit, timeout);
 
-                    if (millis != okHttpClient.connectTimeoutMillis()) {
+                    if (millis != okHttpClient.connectTimeoutMillis()
+                            || !okHttpClient.interceptors().contains(headerInterceptor)) {
                         okHttpClient = okHttpClient.newBuilder()
                                 .connectTimeout(timeout, timeUnit)
                                 .writeTimeout(timeout, timeUnit)
+                                .addInterceptor(headerInterceptor)
+                                .addInterceptor(loggingInterceptor)
                                 .readTimeout(timeout, timeUnit)
                                 .build();
                     }
@@ -387,8 +399,35 @@ public class NetworkManager implements LoginNetworkManagerInterface,
             mRetrofit = new Retrofit.Builder().build();
 
         }
+
         return mRetrofit;
 
+    }
+
+    public class HeaderInterceptor implements Interceptor {
+
+        private static final String HEADER_TOKEN_KEY = "token";
+        private static final String HEADER_LANGUAGE_KEY = "Language";
+        private static final String HEADER_PLATFORM_KEY = "Platform";
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+            Request requestToReturn = chain.request().newBuilder().build();
+            if (chain.request().headers().get(HEADER_TOKEN_KEY) == null) {
+                requestToReturn = chain.request().newBuilder()
+                        .addHeader(HEADER_TOKEN_KEY, Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP))
+                        .addHeader(HEADER_LANGUAGE_KEY, persistenceManager.getCurrentLang())
+                        .addHeader(HEADER_PLATFORM_KEY, LoginRequest.PLATFORM)
+                        .build();
+            }
+            Log.d(LOG_TAG, "intercept: " + " : "
+                    + Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP)
+                    + String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword())
+                    + persistenceManager.getCurrentLang()
+                    + LoginRequest.PLATFORM);
+            return chain.proceed(requestToReturn);
+        }
     }
 
     private int timeUnitToMillis(TimeUnit timeUnit, int timeout) {
@@ -1028,7 +1067,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 //        call.enqueue(callback);
 //    }
 
-    public void getTopNotification(TopNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
+    public void getTopNotification(TopNotificationRequest request, final Callback<NotificationHistoryResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTopNotifications(request);
         call.enqueue(callback);
