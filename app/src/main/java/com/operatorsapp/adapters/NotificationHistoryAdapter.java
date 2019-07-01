@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.operatorsapp.R;
+import com.operatorsapp.managers.PersistenceManager;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.utils.Consts;
 import com.operatorsapp.utils.TimeUtils;
@@ -216,7 +217,8 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             }
         }else {
 
-            holder.mSenderTv.setText(notification.getmSender());
+//            holder.mSenderTv.setText(notification.getmSender());
+            holder.mSenderTv.setText(PersistenceManager.getInstance().getCurrentLang().equals("en") ? notification.getmOriginalSenderName() : notification.getmOriginalSenderHName());
             holder.mBtnsLil.setVisibility(View.VISIBLE);
 
             holder.mApproveBtn.setOnClickListener(new View.OnClickListener() {

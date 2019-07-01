@@ -37,7 +37,7 @@ public class LoginCore {
 
     public void login(final String siteUrl, final String username, final String password, final LoginUICallback<Machine> loginUICallback) {
         final String EncryptedPassword = Base64.encodeToString(password.getBytes(), Base64.NO_WRAP);
-            mLoginNetworkBridgeInterface.login(siteUrl, username,EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
+            mLoginNetworkBridgeInterface.login(siteUrl, username, EncryptedPassword, mLoginPersistenceManagerInterface.getCurrentLang(),  new LoginCoreCallback() {
             @Override
             public void onLoginSucceeded(final String sessionId, final String siteName, final int userId) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);

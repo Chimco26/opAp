@@ -596,7 +596,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 bottomNotifIv.setImageResource(notification.getResponseIcon(getActivity()));
                 bottomNotifTv.setText(notification.getmBody(getActivity()));
                 bottomNotifTimeTv.setText(notification.getmResponseDate());
-                bottomNotifSenderTv.setText(notification.getmSender());
+                bottomNotifSenderTv.setText(PersistenceManager.getInstance().getCurrentLang().equals("en") ? notification.getmOriginalSenderName() : notification.getmOriginalSenderHName());
 
             }
         }
