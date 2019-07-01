@@ -37,6 +37,12 @@ public class Notification {
     @SerializedName("Title")
     private String mTitle;
 
+    @SerializedName("SenderUserDisplayName")
+    private String mOriginalSenderName;
+
+    @SerializedName("SenderUserDisplayHName")
+    private String mOriginalSenderHName;
+
     @SerializedName("NotificationType")
     private int mNotificationType;
 
@@ -136,6 +142,20 @@ public class Notification {
 
     public int getmNotificationID() {
         return mNotificationID;
+    }
+
+    public String getmOriginalSenderName() {
+        if (mOriginalSenderName == null){
+            return getmSender();
+        }
+        return mOriginalSenderName;
+    }
+
+    public String getmOriginalSenderHName() {
+        if (mOriginalSenderHName == null){
+            return getmSender();
+        }
+        return mOriginalSenderHName;
     }
 
     public void setmBody(String mBody) {
