@@ -372,8 +372,8 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                                 .build();
                     }
                 }
+//                Gson builder = new GsonBuilder().disableHtmlEscaping().create(); to disable encoding if needed but need to check if can cause bug in one of the request in the app and in server side
                 mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(siteUrl).client(okHttpClient).build();
-
 
             }
         } catch (IllegalArgumentException | IllegalStateException e) {
@@ -414,7 +414,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         public Response intercept(Chain chain) throws IOException {
             PersistenceManager persistenceManager = PersistenceManager.getInstance();
             Request requestToReturn = chain.request().newBuilder().build();
-            if (chain.request().headers().get(HEADER_TOKEN_KEY) == null) {
+            if (chain.request().headers().get(HEADER_TOKEN_KEY) == null && persistenceManager.getUserName() != null && persistenceManager.getPassword() != null) {
                 requestToReturn = chain.request().newBuilder()
                         .addHeader(HEADER_TOKEN_KEY, Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP))
                         .addHeader(HEADER_LANGUAGE_KEY, persistenceManager.getCurrentLang())
