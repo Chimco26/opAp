@@ -13,7 +13,7 @@ public class SendNotificationRequest {
     @SerializedName("title")
     private String title;
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String sessionID;
 
     public SendNotificationRequest(int sourceMachineID, String text, String title, String sessionID) {

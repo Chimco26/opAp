@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class PostUpdateNotesForJobRequest {
 
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     @Expose
     private String sessionID;
     @SerializedName("jobID")

@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class ActionsUpdateRequest implements Parcelable {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     @Expose
     private String sessionID;
     @SerializedName("Actions")

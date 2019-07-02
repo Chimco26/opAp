@@ -10,7 +10,7 @@ public class PostNotificationTokenRequest {
 
     public static final int APPLICATION_CODE_FOR_NOTIFICATIONS = 2;
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String sessionID;
 
     @SerializedName("MachineID")
