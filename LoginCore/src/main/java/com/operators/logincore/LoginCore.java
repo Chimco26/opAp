@@ -41,12 +41,12 @@ public class LoginCore {
             @Override
             public void onLoginSucceeded(final String sessionId, final String siteName, final int userId) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded(), " + sessionId);
+                saveSessionData(sessionId, siteUrl, username, password, userId);
 
                 mGetMachinesNetworkBridgeInterface.getMachines(siteUrl, sessionId, new GetMachinesCallback<Machine>() {
                     @Override
                     public void onGetMachinesSucceeded(ArrayList<Machine> machines) {
                         OppAppLogger.getInstance().d(LOG_TAG, "getMachines, onGetMachinesSucceeded(), " + machines.size() + " machines");
-                        saveSessionData(sessionId, siteUrl, username, password, userId);
                         loginUICallback.onLoginSucceeded(machines, siteName);
                     }
 
@@ -76,7 +76,6 @@ public class LoginCore {
                 OppAppLogger.getInstance().d(LOG_TAG, "silentLoginFromDashBoard, onLoginSucceeded(), " + sessionId);
 
                 saveSessionData(sessionId, siteUrl, username, password, userId);
-
                 loginUICallback.onLoginSucceeded(null, siteName);
             }
 
