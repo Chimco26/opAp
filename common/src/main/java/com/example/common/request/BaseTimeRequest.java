@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class BaseTimeRequest {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     @Expose
     private String sessionID;
     @SerializedName("StartTime")

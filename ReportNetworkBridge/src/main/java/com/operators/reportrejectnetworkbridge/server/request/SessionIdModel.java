@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class SessionIdModel {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     @Expose
     private double sessionID;
 

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sergey on 02/08/2016.
  */
 public class GetReportFieldsForMachineRequest {
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private int mMachineId;

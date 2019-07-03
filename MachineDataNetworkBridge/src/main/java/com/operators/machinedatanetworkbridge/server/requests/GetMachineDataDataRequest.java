@@ -3,7 +3,7 @@ package com.operators.machinedatanetworkbridge.server.requests;
 import com.google.gson.annotations.SerializedName;
 
 public class GetMachineDataDataRequest {
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private int mMachineId;

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class SendMultipleStopRequest {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private String mMachineId;
