@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Sergey on 14/08/2016.
  */
 public class SendReportInventoryRequest {
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private String mMachineId;

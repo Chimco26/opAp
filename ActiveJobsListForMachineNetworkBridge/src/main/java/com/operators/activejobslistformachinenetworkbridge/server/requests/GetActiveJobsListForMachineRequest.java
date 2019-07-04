@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Sergey on 14/08/2016.
  */
 public class GetActiveJobsListForMachineRequest {
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private int mMachineId;

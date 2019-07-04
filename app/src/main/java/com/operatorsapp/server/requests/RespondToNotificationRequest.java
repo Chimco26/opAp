@@ -9,7 +9,7 @@ import com.operatorsapp.managers.PersistenceManager;
 
 public class RespondToNotificationRequest {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionID;
 
     @SerializedName("Title")

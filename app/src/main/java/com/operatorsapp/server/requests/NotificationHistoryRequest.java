@@ -8,11 +8,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class NotificationHistoryRequest {
 
-    //{"SessionID":43384.42508,"sourceMachineID":1,"applicationID":2}
+    //{"":43384.42508,"sourceMachineID":1,"applicationID":2}
 
     public static final int APPLICATION_CODE_FOR_NOTIFICATIONS = 2;
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String sessionID;
 
     @SerializedName("sourceMachineID")

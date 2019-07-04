@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetPendingJobListRequest {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     @Expose
     private String sessionID;
     @SerializedName("MachineID")

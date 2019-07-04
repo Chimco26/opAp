@@ -3,7 +3,7 @@ package com.operators.jobsnetworkbridge.server.requests;
 import com.google.gson.annotations.SerializedName;
 
 public class StartJobForMachineRequest {
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
     @SerializedName("MachineID")
     private int mMachineId;

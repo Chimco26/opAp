@@ -11,7 +11,7 @@ public class PostIncrementCounterRequest {
     @SerializedName("MachineID")
     private int mMachineID;
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String mSessionId;
 
 

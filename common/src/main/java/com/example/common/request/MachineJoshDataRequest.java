@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MachineJoshDataRequest {
 
-    @SerializedName("SessionID")
+    @SerializedName("")
     private String sessionID;
 
     @SerializedName("StartTime")

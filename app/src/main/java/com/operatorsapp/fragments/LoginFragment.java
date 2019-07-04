@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.common.callback.ErrorObjectInterface;
@@ -56,8 +55,8 @@ public class LoginFragment extends Fragment {
     private EditText mSiteUrl;
     private EditText mUserName;
     private EditText mPassword;
-    private RelativeLayout mLoginButton;
-    private ImageView mLoginBtnBackground;
+    private TextView mLoginButton;
+    private TextView mLoginBtnBackground;
     private ImageView mShowHidePass;
     private boolean mPasswordIsVisible = false;
     private boolean mGoToSelectMachine;
@@ -111,7 +110,7 @@ public class LoginFragment extends Fragment {
         mSiteUrl.setText(PersistenceManager.getInstance().getSiteUrl());
         mUserName = rootView.findViewById(R.id.user_name);
         mPassword = rootView.findViewById(R.id.password);
-        mLoginBtnBackground = rootView.findViewById(R.id.loginBtn_background);
+//        mLoginBtnBackground = rootView.findViewById(R.id.loginBtn_background);
 
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -206,9 +205,9 @@ public class LoginFragment extends Fragment {
             if (mLoginButton != null) {
                 mLoginButton.setEnabled(isAllFieldsAreValid());
                 if (isAllFieldsAreValid()) {
-                    mLoginBtnBackground.setImageResource(R.drawable.login_button_selector);
+                    mLoginButton.setBackground(getResources().getDrawable(R.drawable.login_button_selector));
                 } else {
-                    mLoginBtnBackground.setImageResource(R.drawable.button_bg_disabled);
+                    mLoginButton.setBackground(getResources().getDrawable(R.drawable.button_bg_disabled));
                 }
 
                 if (!TextUtils.isEmpty(mPassword.getText().toString())) {
@@ -289,6 +288,7 @@ public class LoginFragment extends Fragment {
             public void onLoginSucceeded(ArrayList<Machine> machines, String siteName) {
                 OppAppLogger.getInstance().d(LOG_TAG, "login, onGetMachinesSucceeded() ");
 
+//                getVersion(machines, true);
                 //getNotifications();
                 PersistenceManager.getInstance().setSiteName(siteName);
 
