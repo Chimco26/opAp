@@ -86,6 +86,7 @@ import com.operatorsapp.utils.SendReportUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ConnectionPool;
@@ -409,6 +410,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         private static final String HEADER_TOKEN_KEY = "token";
         private static final String HEADER_LANGUAGE_KEY = "Language";
         private static final String HEADER_PLATFORM_KEY = "Platform";
+        private static final String TIME_ZONE = "TimeZone";
 
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -419,6 +421,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
                         .addHeader(HEADER_TOKEN_KEY, Base64.encodeToString(String.format("%s;%s", persistenceManager.getUserName(), persistenceManager.getPassword()).getBytes(), Base64.NO_WRAP))
                         .addHeader(HEADER_LANGUAGE_KEY, persistenceManager.getCurrentLang())
                         .addHeader(HEADER_PLATFORM_KEY, LoginRequest.PLATFORM)
+                        .addHeader(TIME_ZONE, TimeZone.getDefault().getID())
                         .build();
             }
             Log.d(LOG_TAG, "intercept: " + " : "
