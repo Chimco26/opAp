@@ -14,6 +14,7 @@ import com.operatorsapp.R;
 import com.operatorsapp.model.TopFiveItem;
 import com.operatorsapp.utils.TimeUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -66,7 +67,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_REJECT:
 
                 final RejectViewHolder rejectViewHolder = (RejectViewHolder) holder;
-                rejectViewHolder.topTv.setText(mTopList.get(position).getmAmount());
+                rejectViewHolder.topTv.setText(new DecimalFormat("#.#").format(Double.parseDouble(mTopList.get(position).getmAmount())));
                 rejectViewHolder.topText.setText(mTopList.get(position).getmText());
                 setBarSize(position, rejectViewHolder.topView);
                 if (mTopList.get(position).getmColor() != null && !mTopList.get(position).getmColor().isEmpty()) {
@@ -103,7 +104,7 @@ public class TopFiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 double amount = Math.abs(Double.parseDouble(mTopList.get(position).getmAmount()));
                 int width;
                 if (amount < 1 || mTotalSum == 0) {
-                    width = 150;
+                    width = 10;
                 } else {
                     width = (int) ((parentWidth) * (Math.abs(amount) / mTotalSum));
                     if (width > (parentWidth * 80 / 100)) {

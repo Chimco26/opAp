@@ -1151,7 +1151,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             @Override
             public void onGetShiftForMachineFailed(ErrorObjectInterface reason) {
                 OppAppLogger.getInstance().w(TAG, "get shift for machine failed with reason: " + reason.getError() + " " + reason.getDetailedDescription());
-                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, reason);
+                ShowCrouton.showSimpleCrouton(DashboardActivity.this, reason);
 
                 if (ProgressDialogManager.isShowing()) {
                     ProgressDialogManager.dismiss();

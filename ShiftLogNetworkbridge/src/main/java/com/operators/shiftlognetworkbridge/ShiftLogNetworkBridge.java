@@ -92,7 +92,7 @@ public class ShiftLogNetworkBridge implements ShiftLogNetworkBridgeInterface {
                     shiftForMachineCoreCallback.onShiftForMachineSucceeded(response.body());
                 } else if (response.body() != null) {
                     OppAppLogger.getInstance().e(LOG_TAG, "GetShiftForMachine onResponse, " + response.body().getError());
-                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed");
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Server, "shift for machine failed" );
                     shiftForMachineCoreCallback.onShiftForMachineFailed(errorObject);
                 } else {
                     OppAppLogger.getInstance().d(LOG_TAG, "getShiftLog , onResponse - GetShiftForMachine failed Error");
