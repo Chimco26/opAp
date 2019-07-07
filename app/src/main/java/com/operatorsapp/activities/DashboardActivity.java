@@ -40,6 +40,8 @@ import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.PermissionResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -58,14 +60,15 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
-import com.operators.alldashboarddatacore.AllDashboardDataCore;
-import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
-import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
-import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
-import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
-import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
+import com.operatorsapp.server.pulling.AllDashboardDataCore;
+import com.operatorsapp.server.pulling.interfaces.ActualBarExtraDetailsUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachinePermissionCallback;
+import com.operatorsapp.server.pulling.interfaces.MachineStatusUICallback;
+import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
+import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
+import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
+import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
@@ -167,6 +170,7 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -180,6 +184,7 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPORT;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
@@ -273,6 +278,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
     private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
+    private HashMap<Integer, WidgetInfo> permissionForMachineHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,7 +324,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         setReportBtnListener();
 
-        displayViewByServerSettings();
+        displayViewByServerSettings(permissionForMachineHashMap);
     }
 
     private void setReportBtnListener() {
@@ -803,7 +809,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void dashboardDataStartPolling() {
 
-        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback());
+        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(),
+                getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback(), getPermissionForMachine());
 
         mAllDashboardDataCore.stopPolling();
 
@@ -811,6 +818,34 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
+    }
+
+    private MachinePermissionCallback getPermissionForMachine() {
+        return new MachinePermissionCallback() {
+
+            @Override
+            public void onMachinePermissionCallbackSucceeded(PermissionResponse permissionResponse) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                   permissionForMachineHashMap = new HashMap();
+                    for (WidgetInfo widgetInfo: permissionResponse.getWidgetInfo()){
+                        permissionForMachineHashMap.put(widgetInfo.getId(), widgetInfo);
+                    }
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                        dashboardUICallbackListener.onPermissionForMachinePolling(permissionForMachineHashMap);
+                    }
+
+                    displayViewByServerSettings(permissionForMachineHashMap);
+                }
+            }
+
+            @Override
+            public void onMachinePermissionCallbackFailed(ErrorObjectInterface reason) {
+                OppAppLogger.getInstance().w(TAG, "onMachinePermissionCallbackFailed");
+            }
+        };
     }
 
     private ActualBarExtraDetailsUICallback getActualBarUICallback() {
@@ -823,7 +858,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
-
+                OppAppLogger.getInstance().w(TAG, "onActualBarExtraDetailsFailed");
             }
         };
     }
@@ -3089,7 +3124,10 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void displayViewByServerSettings() {
-//        mReportBtn.setVisibility();
+    private void displayViewByServerSettings(HashMap<Integer, WidgetInfo> hashMap) {
+        if (permissionForMachineHashMap == null){
+            return;
+        }
+        mReportBtn.setVisibility(hashMap.get(SHIFT_REPORT).getHaspermission());
     }
 }

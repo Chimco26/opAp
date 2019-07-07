@@ -209,6 +209,11 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
+    public void onPermissionForMachinePolling(HashMap permissionResponse) {
+
+    }
+
+    @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         this.mMachineStatus = machineStatus;
         if (mWidgetAdapter != null){

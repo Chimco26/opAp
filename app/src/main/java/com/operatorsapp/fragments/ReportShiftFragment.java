@@ -20,6 +20,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.Graph;
@@ -60,6 +61,7 @@ import com.operatorsapp.utils.TimeUtils;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -346,6 +348,10 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 //        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
         graph.notifyDataSetChanged();
         graph.invalidate();
+    }
+
+    @Override
+    public void onPermissionForMachinePolling(HashMap<Integer, WidgetInfo> permissionResponse) {
     }
 
     @Override

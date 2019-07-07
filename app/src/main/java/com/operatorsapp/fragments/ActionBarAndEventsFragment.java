@@ -60,6 +60,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -148,6 +149,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.EVENT_LIST;
+import static com.example.common.permissions.WidgetInfo.PermissionId.OPERATOR_SIGN_IN;
+import static com.example.common.permissions.WidgetInfo.PermissionId.PRODUCTION_STATUS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_LOG;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
@@ -263,6 +268,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
     private Event mOpenEvent;
+    private HashMap<Integer, WidgetInfo> permissionResponseHashmap;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -345,7 +351,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mListener.onResize(mCloseWidth, statusBarParams.height);
 
         initFilterEvents(view);
-        displayViewByServerSettings();
+        displayViewByServerSettings(permissionResponseHashmap);
     }
 
     private void initLenoxMachineRv(View view) {
@@ -430,7 +436,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 setShiftLogAdapter(getCursorByType());
             }
         });
-
 
 
         //mSwipeToRefresh = view.findViewById(R.id.swipe_refresh_actionbar_events);
@@ -815,7 +820,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                                 break;
 
                             case R.id.notification_popup_clarify_btn:
-                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS, false );
+                                sendNotificationResponse(notificationId, Consts.NOTIFICATION_RESPONSE_TYPE_MORE_DETAILS, false);
                                 mPopUpDialog.dismiss();
                                 break;
                         }
@@ -1510,19 +1515,27 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void displayViewByServerSettings() {
-//        displayTechnicianView();
-//        displayOperatorView();
-//        if (getView() != null){
-//        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility();
-//        }
-//        if (mToolBarView != null) {
-//        mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility();
-//        }
-//        if (mTimeLineType != null) {
-//            mTimeLineType.setVisibility();
-//        mTimeLineType.setChecked();//id only one is true
-//        }
+    private void displayViewByServerSettings(HashMap<Integer, WidgetInfo> permissionResponse) {
+        if (permissionResponse == null) {
+            return;
+        }
+        displayTechnicianView(permissionResponse.get(WidgetInfo.PermissionId.SERVICE_CALLS).getHaspermission());
+        displayOperatorView(permissionResponse.get(permissionResponse.get(OPERATOR_SIGN_IN)).getHaspermission());
+        if (getView() != null) {
+//        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(permissionResponse.get(permissionResponse.get(MESSAGE)).getHaspermission());todo
+        }
+        if (mToolBarView != null) {
+            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(permissionResponse.get(permissionResponse.get(PRODUCTION_STATUS)).getHaspermission());
+        }
+        if (mTimeLineType != null) {
+            if (permissionResponse.get(permissionResponse.get(EVENT_LIST)).getHaspermissionBoolean()
+                    && permissionResponse.get(permissionResponse.get(SHIFT_LOG)).getHaspermissionBoolean()) {
+                mTimeLineType.setVisibility(View.VISIBLE);
+            } else {
+                mTimeLineType.setVisibility(View.GONE);
+                mTimeLineType.setChecked(permissionResponse.get(permissionResponse.get(SHIFT_LOG)).getHaspermissionBoolean());//id only one is true
+            }
+        }
     }
 
     public void displayOperatorView(int visibility) {
@@ -1930,7 +1943,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                     nList.add(notification[0]);
                     pm.setNotificationHistory(nList);
 //                    setNotificationNeedResponse();
-                    if (isRefresh){
+                    if (isRefresh) {
                         openNotificationsList();
                     }
                     if (ProgressDialogManager.isShowing()) {
@@ -2249,7 +2262,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         if (mListener != null && events != null && events.size() > 0) {
             mListener.onOpenReportStopReasonFragment(ReportStopReasonFragment.newInstance(mIsOpen, mActiveJobsListForMachine, mSelectedPosition));
-        }else {
+        } else {
             return;
         }
 
@@ -2280,6 +2293,13 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                 mIsSelectionMode, mSelectedEvents);
 
         mShiftLogRecycler.setAdapter(mShiftLogAdapter);
+    }
+
+    @Override
+    public void onPermissionForMachinePolling(HashMap<Integer, WidgetInfo> permissionResponse) {
+        permissionResponseHashmap = permissionResponse;
+        displayViewByServerSettings(permissionResponse);
+
     }
 
     @Override
@@ -2607,7 +2627,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //                    eventSelectArrayList = mDatabaseHelper.getListFromCursor(cursorSelec);
 //                }
                 Cursor cursorNoSelect = getCursorByType();
-                ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursorNoSelect);;
+                ArrayList<Event> eventArrayList = mDatabaseHelper.getListFromCursor(cursorNoSelect);
+                ;
                 if (mIsTimeLine) {
                     eventArrayList = new SaveHelperNew().updateList(mDatabaseHelper.getListFromCursor(getCursorByTypeTimeLine()), mActualBarExtraResponse, getString(R.string.working));
                 }

@@ -1,9 +1,11 @@
 package com.operatorsapp.server.interfaces;
 
+import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.request.BaseTimeRequest;
+import com.example.common.request.MachineIdRequest;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
 import com.operatorsapp.server.requests.GetTopRejectsAndEventsRequest;
 import com.operatorsapp.server.requests.NotificationHistoryRequest;
@@ -75,4 +77,7 @@ public interface OpAppServiceRequests {
 
     @POST("/LeaderMESApi/GetTopNotifications")
     Call<NotificationHistoryResponse> getTopNotifications(@Body TopNotificationRequest notificationRequest);
+
+    @POST("/LeaderMESApi/GetOperatorPermissionsForMachine")
+    Call<PermissionResponse> getPermissionForMachine(@Body MachineIdRequest machineIdRequest);
 }

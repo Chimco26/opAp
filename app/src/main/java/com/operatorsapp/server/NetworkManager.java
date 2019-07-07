@@ -3,10 +3,12 @@ package com.operatorsapp.server;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.common.permissions.PermissionResponse;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.ServiceCallsResponse;
 import com.example.common.request.BaseTimeRequest;
+import com.example.common.request.MachineIdRequest;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.ActiveJobsListForMachineNetworkManagerInterface;
 import com.operators.activejobslistformachinenetworkbridge.interfaces.EmeraldGetActiveJobsListForMachineServiceRequests;
@@ -407,7 +409,7 @@ public class NetworkManager implements LoginNetworkManagerInterface,
 
     public class HeaderInterceptor implements Interceptor {
 
-        private static final String HEADER_TOKEN_KEY = "token";
+        private static final String HEADER_TOKEN_KEY = "x-app-key";//"token";//
         private static final String HEADER_LANGUAGE_KEY = "Language";
         private static final String HEADER_PLATFORM_KEY = "Platform";
         private static final String TIME_ZONE = "TimeZone";
@@ -1073,6 +1075,12 @@ public class NetworkManager implements LoginNetworkManagerInterface,
     public void getTopNotification(TopNotificationRequest request, final Callback<NotificationHistoryResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
         Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).getTopNotifications(request);
+        call.enqueue(callback);
+    }
+
+    public void getPermissionForMachine(MachineIdRequest request, final Callback<PermissionResponse> callback) {
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<PermissionResponse> call = mRetrofit.create(OpAppServiceRequests.class).getPermissionForMachine(request);
         call.enqueue(callback);
     }
 

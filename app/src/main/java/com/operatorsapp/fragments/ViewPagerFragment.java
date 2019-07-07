@@ -30,6 +30,7 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
 
@@ -223,6 +224,11 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
 
             mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
         }
+
+    }
+
+    @Override
+    public void onPermissionForMachinePolling(HashMap permissionResponse) {
 
     }
 
