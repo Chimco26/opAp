@@ -23,6 +23,7 @@ public class TimeUtils {
     public static final String SQL_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String SIMPLE_FORMAT_FORMAT = "dd/MM/yyyy HH:mm:ss";
     public static final String SIMPLE_HMS_FORMAT = "HH:mm:ss";
+    public static final String SIMPLE_HM_FORMAT = "HH:mm";
     public static final String COMMON_DATE_FORMAT = "HH:mm dd/MM/yyyy";
     public static final String COMMON_WITH_2_CHARS_YEAR = "dd/MM/yy HH:mm";
     public static final String ONLY_DATE_FORMAT = "dd/MM/yyyy";
@@ -406,6 +407,20 @@ public class TimeUtils {
             output = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(ms),
                     TimeUnit.MILLISECONDS.toMinutes(ms) % TimeUnit.HOURS.toMinutes(1),
                     TimeUnit.MILLISECONDS.toSeconds(ms) % TimeUnit.MINUTES.toSeconds(1));
+
+        }
+
+        return output;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String getHMFromMillis(double millis) {
+        long ms = (long) millis;
+        String output = "";
+
+        if (millis >= 1000) {
+            output = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ms),
+                    TimeUnit.MILLISECONDS.toMinutes(ms) % TimeUnit.HOURS.toMinutes(1));
 
         }
 
