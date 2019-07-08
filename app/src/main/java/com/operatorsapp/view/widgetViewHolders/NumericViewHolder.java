@@ -42,6 +42,8 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private final EditText mEditCycleEt;
     private final View mEditCycleCancelBtn;
     private final View mEditCycleReportBtn;
+    private boolean mShowAddRejectsBtn = true;
+    private boolean mShowChangeUnitInCycle = true;
     private View mEditIc;
     private View mDisplayLy;
     private View mEditStep1Ly;
@@ -67,7 +69,7 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
     private OnKeyboardManagerListener mOnKeyboardManagerListener;
 
     public NumericViewHolder(View itemView, Activity activity, DashboardCentralContainerListener listener, OnKeyboardManagerListener onKeyboardManagerListener,
-                             ReportFieldsForMachine reportFieldsForMachine, int height, int width) {
+                             ReportFieldsForMachine reportFieldsForMachine, int height, int width, boolean showChangeUnitInCycleBtn, boolean showAddRejectsBtn) {
         super(itemView);
 
         mContext = activity;
@@ -76,6 +78,8 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
         mReportFieldsForMachine = reportFieldsForMachine;
         mHeight = height;
         mWidth = width;
+        mShowChangeUnitInCycle = showChangeUnitInCycleBtn;
+        mShowAddRejectsBtn = showAddRejectsBtn;
 
         mParentLayout = itemView.findViewById(R.id.widget_parent_layout);
         mDivider = itemView.findViewById(R.id.divider);
@@ -384,35 +388,50 @@ public class NumericViewHolder extends RecyclerView.ViewHolder {
 
             switch (widget.getTargetScreen()) {
                 case REPORT_REJECT_TAG:
-                    mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
+                    if (mShowAddRejectsBtn) {
+                        addEditClickListener(widget);
+                        mEditBtn.setVisibility(View.VISIBLE);
+                        mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.add_rejects));
+                    }else {
+                        mEditBtn.setVisibility(View.INVISIBLE);
+                    }
                     break;
                 case REPORT_UNIT_CYCLE_TAG:
-                    mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
-                    break;
+                    if (mShowChangeUnitInCycle) {
+                        mEditBtn.setVisibility(View.VISIBLE);
+                        mEditBtn.setText(mEditBtn.getContext().getResources().getString(R.string.report_cycle_units));
+                        addEditClickListener(widget);
+                    }else {
+                        mEditBtn.setVisibility(View.INVISIBLE);
+                    }break;
             }
 
 
-            mEditBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    editAction(widget);
-                }
-            });
-
-            mEditIc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    editAction(widget);
-                }
-            });
+            addEditClickListener(widget);
 
         } else {
 
             mEditIc.setVisibility(View.GONE);
             mEditBtn.setVisibility(View.GONE);
         }
+    }
+
+    private void addEditClickListener(final Widget widget) {
+        mEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                editAction(widget);
+            }
+        });
+
+        mEditIc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                editAction(widget);
+            }
+        });
     }
 
     private void setSizes(final RelativeLayout parent) {

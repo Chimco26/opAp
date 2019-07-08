@@ -425,5 +425,8 @@
     <string name="report_cycle_failed_but_max_reported">the value you set to report cycle unit is over max value, the max value was reported</string>
     <string name="report_cycle_failed_but_min_reported">the value you set to report cycle unit is under min value, the min value was reported</string>
     <string name="min_value_is">min value is</string>
+    <string name="next_job_will_start_in">Next Job will start in</string>
+    <string name="start_job_now">Start Job Now</string>
+    <string name="cancel_job">Cancel Job</string>
 
 </resources>

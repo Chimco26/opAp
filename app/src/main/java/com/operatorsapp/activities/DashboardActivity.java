@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.PermissionResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -58,14 +61,6 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
-import com.operators.alldashboarddatacore.AllDashboardDataCore;
-import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
-import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
-import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
-import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
-import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
@@ -88,6 +83,7 @@ import com.operators.reportrejectcore.ReportCallbackListener;
 import com.operators.reportrejectcore.ReportCore;
 import com.operators.reportrejectinfra.GetAllRecipeCallback;
 import com.operators.reportrejectinfra.GetVersionCallback;
+import com.operators.reportrejectinfra.PostActivateJobCallback;
 import com.operators.reportrejectinfra.PostSplitEventCallback;
 import com.operators.reportrejectinfra.SimpleCallback;
 import com.operators.reportrejectnetworkbridge.ReportNetworkBridge;
@@ -97,6 +93,7 @@ import com.operators.reportrejectnetworkbridge.server.response.ErrorResponse;
 import com.operators.reportrejectnetworkbridge.server.response.IntervalAndTimeOutResponse;
 import com.operators.reportrejectnetworkbridge.server.response.Recipe.RecipeResponse;
 import com.operators.reportrejectnetworkbridge.server.response.ResponseStatus;
+import com.operators.reportrejectnetworkbridge.server.response.activateJob.ActivateJobRequest;
 import com.operators.reportrejectnetworkbridge.server.response.activateJob.Response;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
 import com.operators.shiftlognetworkbridge.ShiftLogNetworkBridge;
@@ -106,6 +103,7 @@ import com.operatorsapp.activities.interfaces.GoToScreenListener;
 import com.operatorsapp.activities.interfaces.ShowDashboardCroutonListener;
 import com.operatorsapp.activities.interfaces.SilentLoginCallback;
 import com.operatorsapp.application.OperatorApplication;
+import com.operatorsapp.dialogs.NextJobTimerDialog;
 import com.operatorsapp.dialogs.SetupEndDialog;
 import com.operatorsapp.fragments.ActionBarAndEventsFragment;
 import com.operatorsapp.fragments.AdvancedSettingsFragment;
@@ -140,6 +138,15 @@ import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.pulling.AllDashboardDataCore;
+import com.operatorsapp.server.pulling.interfaces.ActualBarExtraDetailsUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachinePermissionCallback;
+import com.operatorsapp.server.pulling.interfaces.MachineStatusUICallback;
+import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
+import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
+import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
+import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
@@ -180,6 +187,7 @@ import retrofit2.Callback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
+import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_REPORT;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_ERP_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_JOB_ID;
 import static com.operatorsapp.activities.ActivateJobActivity.EXTRA_LAST_PRODUCT_NAME;
@@ -273,6 +281,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
     private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
+    private SparseArray<WidgetInfo> permissionForMachineHashMap;
+    private NextJobTimerDialog mNextJobTimerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,7 +328,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         setReportBtnListener();
 
-        displayViewByServerSettings();
     }
 
     private void setReportBtnListener() {
@@ -803,7 +812,8 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
     public void dashboardDataStartPolling() {
 
-        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(), getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback());
+        mAllDashboardDataCore.registerListener(getMachineStatusUICallback(), getMachineDataUICallback(),
+                getShiftLogUICallback(), getActualBarUICallback(), getMachineJoshDataCallback(), getPermissionForMachine());
 
         mAllDashboardDataCore.stopPolling();
 
@@ -811,6 +821,34 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         mAllDashboardDataCore.startPolling();
 
+    }
+
+    private MachinePermissionCallback getPermissionForMachine() {
+        return new MachinePermissionCallback() {
+
+            @Override
+            public void onMachinePermissionCallbackSucceeded(PermissionResponse permissionResponse) {
+                if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
+
+                   permissionForMachineHashMap = new SparseArray<>();
+                    for (WidgetInfo widgetInfo: permissionResponse.getWidgetInfo()){
+//                        widgetInfo.setHaspermission(false); for test
+                        permissionForMachineHashMap.put(widgetInfo.getId(), widgetInfo);
+                    }
+
+                    for (DashboardUICallbackListener dashboardUICallbackListener : mDashboardUICallbackListenerList) {
+
+                        dashboardUICallbackListener.onPermissionForMachinePolling(permissionForMachineHashMap);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onMachinePermissionCallbackFailed(ErrorObjectInterface reason) {
+                OppAppLogger.getInstance().w(TAG, "onMachinePermissionCallbackFailed");
+            }
+        };
     }
 
     private ActualBarExtraDetailsUICallback getActualBarUICallback() {
@@ -823,7 +861,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
             @Override
             public void onActualBarExtraDetailsFailed(ErrorObjectInterface reason) {
-
+                OppAppLogger.getInstance().w(TAG, "onActualBarExtraDetailsFailed");
             }
         };
     }
@@ -961,7 +999,16 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                     checkShowReportBtn(getVisibleFragment());
 //                    setFilterWarningText(true);
+                    showTimeNextJobDialog(mCurrentMachineStatus.getmAutoActivateNextJob(),
+                            mCurrentMachineStatus.getmNextJobID(),
+                            mCurrentMachineStatus.getmAutoActivateNextJobTimer(),
+                            mCurrentMachineStatus.getmNextERPJobID(), mCurrentMachineStatus.getmAutoActivateNextJobTimerSec());
+//     for test             showTimeNextJobDialog(true,
+//                           2,
+//                            true,
+//                            "xsx", 532232225);
                 }
+
 
             }
 
@@ -1000,7 +1047,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void showReportBtn(boolean show) {
-        if (show) {
+        boolean havePermission = true;
+        if (permissionForMachineHashMap != null){
+            havePermission = permissionForMachineHashMap.get(SHIFT_REPORT.getId()).getHaspermissionBoolean();
+        }
+        if (show && havePermission) {
             mReportBtn.setVisibility(View.VISIBLE);
         } else {
             mReportBtn.setVisibility(View.GONE);
@@ -3089,7 +3140,69 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void displayViewByServerSettings() {
-//        mReportBtn.setVisibility();
+    private void showTimeNextJobDialog(boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
+
+        if (autoActivateNextJob && nextJobID > 0) {
+            mNextJobTimerDialog = new NextJobTimerDialog(this,
+                    new NextJobTimerDialog.NextJobTimerDialogListener() {
+                        @Override
+                        public void onClickPositiveBtn() {
+                            PersistenceManager persistenceManager = PersistenceManager.getInstance();
+                            postActivateJob(new ActivateJobRequest(persistenceManager.getSessionId(),
+                                    String.valueOf(persistenceManager.getMachineId()),
+                                    String.valueOf(nextJobID),
+                                    persistenceManager.getOperatorId(),
+                                    false));
+                        }
+
+                        @Override
+                        public void onClickNegativeBtn() {
+                        }
+                    }, getString(R.string.you_ve_reached_the_production_target), getString(R.string.next_job_will_start_in),
+                    erpJobId, getString(R.string.start_job_now), getString(R.string.cancel_job), counter, autoActivateNextJobTimer
+            );
+
+            mNextJobTimerDialog.showNextJobTimerDialog().show();
+        }
+    }
+
+    private void postActivateJob(final ActivateJobRequest activateJobRequest) {
+
+        final PersistenceManager persistanceManager = PersistenceManager.getInstance();
+
+        SimpleRequests simpleRequests = new SimpleRequests();
+
+        ProgressDialogManager.show(this);
+
+        simpleRequests.postActivateJob(persistanceManager.getSiteUrl(), new PostActivateJobCallback() {
+
+            @Override
+            public void onPostActivateJobSuccess(Object response) {
+
+                ProgressDialogManager.dismiss();
+
+                if (response == null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, "PostActivateJob Failed");
+                    ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+
+                } else if (((Response) response).getError() != null) {
+
+                    ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, ((Response) response).getError().getErrorDesc());
+                    ShowCrouton.showSimpleCrouton(DashboardActivity.this, errorObject);
+
+                }
+            }
+
+            @Override
+            public void onPostActivateJobFailed(ErrorObjectInterface reason) {
+
+                ProgressDialogManager.dismiss();
+
+                ErrorObject errorObject = new ErrorObject(ErrorObject.ErrorCode.Retrofit, reason.getDetailedDescription());
+                ShowCrouton.jobsLoadingErrorCrouton(DashboardActivity.this, errorObject);
+            }
+        }, NetworkManager.getInstance(), activateJobRequest, persistanceManager.getTotalRetries(), persistanceManager.getRequestTimeout());
+
     }
 }

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.common.reportShift.DepartmentShiftGraphRequest;
 import com.example.common.reportShift.DepartmentShiftGraphResponse;
 import com.example.common.reportShift.Graph;
@@ -346,6 +348,10 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
 //        setLimitLine(graph, graphSeries.getMinValue(), graphSeries.getMaxValue());
         graph.notifyDataSetChanged();
         graph.invalidate();
+    }
+
+    @Override
+    public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.operators.alldashboarddatacore.interfaces;
+package com.operatorsapp.server.pulling.interfaces;
 
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
