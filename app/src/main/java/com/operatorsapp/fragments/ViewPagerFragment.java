@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -30,7 +32,6 @@ import com.operatorsapp.interfaces.OnActivityCallbackRegistered;
 import com.operatorsapp.managers.PersistenceManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.operatorsapp.fragments.ActionBarAndEventsFragment.MINIMUM_VERSION_FOR_NEW_ACTIVATE_JOB;
 
@@ -228,7 +229,7 @@ public class ViewPagerFragment extends Fragment implements DashboardUICallbackLi
     }
 
     @Override
-    public void onPermissionForMachinePolling(HashMap permissionResponse) {
+    public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
 
     }
 

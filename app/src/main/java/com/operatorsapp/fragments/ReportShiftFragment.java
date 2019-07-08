@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,6 @@ import com.operatorsapp.utils.TimeUtils;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -351,7 +351,7 @@ public class ReportShiftFragment extends Fragment implements DashboardUICallback
     }
 
     @Override
-    public void onPermissionForMachinePolling(HashMap<Integer, WidgetInfo> permissionResponse) {
+    public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
     }
 
     @Override

@@ -30,6 +30,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -149,10 +150,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
-import static com.example.common.permissions.WidgetInfo.PermissionId.EVENT_LIST;
-import static com.example.common.permissions.WidgetInfo.PermissionId.OPERATOR_SIGN_IN;
-import static com.example.common.permissions.WidgetInfo.PermissionId.PRODUCTION_STATUS;
-import static com.example.common.permissions.WidgetInfo.PermissionId.SHIFT_LOG;
 import static com.operatorsapp.utils.TimeUtils.convertDateToMillisecond;
 
 
@@ -268,7 +265,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     private ImageView mLegendBtn;
     private LegendDialog mLegendDialog;
     private Event mOpenEvent;
-    private HashMap<Integer, WidgetInfo> permissionResponseHashmap;
+    private SparseArray<WidgetInfo> permissionResponseHashmap;
 
 
     public static ActionBarAndEventsFragment newInstance() {
@@ -1515,25 +1512,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         }
     }
 
-    private void displayViewByServerSettings(HashMap<Integer, WidgetInfo> permissionResponse) {
+    private void displayViewByServerSettings(SparseArray<WidgetInfo> permissionResponse) {
         if (permissionResponse == null) {
             return;
         }
-        displayTechnicianView(permissionResponse.get(WidgetInfo.PermissionId.SERVICE_CALLS).getHaspermission());
-        displayOperatorView(permissionResponse.get(permissionResponse.get(OPERATOR_SIGN_IN)).getHaspermission());
+        displayTechnicianView(permissionResponse.get(WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
+        displayOperatorView(permissionResponse.get(WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
         if (getView() != null) {
-//        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(permissionResponse.get(permissionResponse.get(MESSAGE)).getHaspermission());todo
+        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(permissionResponse.get(WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
         }
         if (mToolBarView != null) {
-            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(permissionResponse.get(permissionResponse.get(PRODUCTION_STATUS)).getHaspermission());
+            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(permissionResponse.get(WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
         }
         if (mTimeLineType != null) {
-            if (permissionResponse.get(permissionResponse.get(EVENT_LIST)).getHaspermissionBoolean()
-                    && permissionResponse.get(permissionResponse.get(SHIFT_LOG)).getHaspermissionBoolean()) {
+            if (permissionResponse.get(WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
+                    && permissionResponse.get(WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean()) {
                 mTimeLineType.setVisibility(View.VISIBLE);
             } else {
                 mTimeLineType.setVisibility(View.GONE);
-                mTimeLineType.setChecked(permissionResponse.get(permissionResponse.get(SHIFT_LOG)).getHaspermissionBoolean());//id only one is true
+                mTimeLineType.setChecked(permissionResponse.get(WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean());//id only one is true
             }
         }
     }
@@ -2296,7 +2293,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     @Override
-    public void onPermissionForMachinePolling(HashMap<Integer, WidgetInfo> permissionResponse) {
+    public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
         permissionResponseHashmap = permissionResponse;
         displayViewByServerSettings(permissionResponse);
 
@@ -2323,19 +2320,28 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
             setupOperatorSpinner();
 
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(1).getUniqueID());
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(2).getUniqueID());
-            disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1, mJobActionsSpinnerItems.get(3).getUniqueID());
-
-            if (!mEndSetupDisable) {
-                disableActionInSpinner(machineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                                && machineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
-                        , mJobActionsSpinnerItems.get(4).getUniqueID());
-            } else {
-                mEndSetupDisable = false;
-            }
+            enableActionSpinner();
         }
 
+    }
+
+    public void enableActionSpinner() {
+        disableActionInSpinner(permissionResponseHashmap.get(WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
+        disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                && permissionResponseHashmap.get(WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
+        disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                && permissionResponseHashmap.get(WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
+        disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                && permissionResponseHashmap.get(WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
+
+        if (!mEndSetupDisable) {
+            disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
+                            && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
+                            && permissionResponseHashmap.get(WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
+                    , mJobActionsSpinnerItems.get(4).getUniqueID());
+        } else {
+            mEndSetupDisable = false;
+        }
     }
 
     @Override
@@ -2805,7 +2811,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
-        disableActionInSpinner(enabled, mApproveItemID);
+        disableActionInSpinner(enabled
+                && permissionResponseHashmap.get(WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(), mApproveItemID);
         mEndSetupDisable = true;
 
     }

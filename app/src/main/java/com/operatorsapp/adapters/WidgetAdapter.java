@@ -3,12 +3,14 @@ package com.operatorsapp.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.common.permissions.WidgetInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
@@ -57,12 +59,13 @@ public class WidgetAdapter extends Adapter {
     private int mSelectedReasonId;
     private int mSelectedCauseId;
     private boolean mEndSetupDisable;
+    private SparseArray<WidgetInfo> mPermissionResponse;
 
     public WidgetAdapter(Activity context, List<Widget> widgets, GoToScreenListener goToScreenListener,
                          boolean closedState, int height, int width,
                          DashboardCentralContainerListener dashboardCentralContainerListener,
                          ReportFieldsForMachine reportFieldsForMachine, MachineStatus machineStatus,
-                         NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener) {
+                         NumericViewHolder.OnKeyboardManagerListener onKeyboardManagerListener, SparseArray<WidgetInfo> permissionResponse) {
         mWidgets = widgets;
         mContext = context;
         mGoToScreenListener = goToScreenListener;
@@ -73,6 +76,7 @@ public class WidgetAdapter extends Adapter {
         mReportFieldsForMachine = reportFieldsForMachine;
         mMachineStatus = machineStatus;
         mOnKeyboardManagerListener = onKeyboardManagerListener;
+        mPermissionResponse = permissionResponse;
     }
 
     public void changeState(boolean closedState) {
@@ -80,7 +84,8 @@ public class WidgetAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
-    public void setNewData(List<Widget> widgets) {
+    public void setNewData(List<Widget> widgets, SparseArray<WidgetInfo> permissionResponse) {
+        mPermissionResponse = permissionResponse;
         if (mWidgets != null) {
             ArrayList<Widget> toUpdate = getWidgetIneditMode();
             mWidgets.clear();
@@ -146,7 +151,9 @@ public class WidgetAdapter extends Adapter {
         switch (viewType) {
             case NUMERIC: {
                 return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                        mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
+                        mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                        mPermissionResponse.get(WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                        mPermissionResponse.get(WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
             }
             case RANGE: {
                 return new RangeViewHolder(inflater.inflate(R.layout.range_widget_cardview, parent, false),
@@ -166,7 +173,9 @@ public class WidgetAdapter extends Adapter {
             }
             case TIME_LEFT: {
                 return new TimeLeftViewHolder(inflater.inflate(R.layout.time_left_widget_cardview, parent, false),
-                        mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable, mHeight, mWidth);
+                        mDashboardCentralContainerListener, mMachineStatus, mEndSetupDisable, mHeight, mWidth,
+                        mPermissionResponse.get(WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(),
+                        mPermissionResponse.get(WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean());
             }
             case REPORT_PERCENT: {
                 return new ReportStopViewHolder(inflater.inflate(R.layout.report_percent_widget_cardview, parent, false),
@@ -177,7 +186,9 @@ public class WidgetAdapter extends Adapter {
             }
         }
         return new NumericViewHolder(inflater.inflate(R.layout.numeric_widget_cardview, parent, false),
-                mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth);
+                mContext, mDashboardCentralContainerListener, mOnKeyboardManagerListener, mReportFieldsForMachine, mHeight, mWidth,
+                mPermissionResponse.get(WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(),
+                mPermissionResponse.get(WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean());
     }
 
     @SuppressLint("SimpleDateFormat")

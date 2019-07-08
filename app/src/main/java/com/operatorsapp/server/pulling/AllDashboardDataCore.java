@@ -166,12 +166,12 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             jobId = 0;
         }
 
+        getPermissionForMachine();
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
         getMachineJoshData();
         getActualBarExtraDetails(shiftLogStartingFrom);
         getShiftLogs(onJobFinishedListener);
-        getPermissionForMachine();
     }
 
     public void stopPolling() {

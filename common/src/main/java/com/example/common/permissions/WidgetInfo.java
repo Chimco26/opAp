@@ -8,7 +8,9 @@ import com.google.gson.annotations.SerializedName;
 public class WidgetInfo {
 
     public enum PermissionId{
-        SERVICE_CALLS(1),PRODUCTION_STATUS(2),OPERATOR_SIGN_IN(3),SHIFT_REPORT(4),EVENT_LIST(5),SHIFT_LOG(6),ACTIVATE_JOB(7),ADD_REJECTS(8),;
+        SERVICE_CALLS(1),PRODUCTION_STATUS(2),OPERATOR_SIGN_IN(3),SHIFT_REPORT(4),EVENT_LIST(5),
+        SHIFT_LOG(6),ACTIVATE_JOB(7),ADD_REJECTS(8),CHANGE_UNITS_IN_CYCLE(9),END_SETUP(10),
+        MESSAGES(11), REPORT_PRODUCTION(12);
 
         PermissionId(int id) {
             this.id = id;

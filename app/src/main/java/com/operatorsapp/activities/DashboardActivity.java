@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,15 +61,6 @@ import com.operators.activejobslistformachinecore.interfaces.ActiveJobsListForMa
 import com.operators.activejobslistformachineinfra.ActiveJob;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.activejobslistformachinenetworkbridge.ActiveJobsListForMachineNetworkBridge;
-import com.operatorsapp.server.pulling.AllDashboardDataCore;
-import com.operatorsapp.server.pulling.interfaces.ActualBarExtraDetailsUICallback;
-import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
-import com.operatorsapp.server.pulling.interfaces.MachinePermissionCallback;
-import com.operatorsapp.server.pulling.interfaces.MachineStatusUICallback;
-import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
-import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
-import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
-import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 import com.operators.getmachinesstatusnetworkbridge.GetMachineStatusNetworkBridge;
 import com.operators.getmachinesstatusnetworkbridge.server.requests.SetProductionModeForMachineRequest;
 import com.operators.infra.Machine;
@@ -143,6 +135,15 @@ import com.operatorsapp.model.PdfObject;
 import com.operatorsapp.model.SendRejectObject;
 import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.callback.PostProductionModeCallback;
+import com.operatorsapp.server.pulling.AllDashboardDataCore;
+import com.operatorsapp.server.pulling.interfaces.ActualBarExtraDetailsUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachinePermissionCallback;
+import com.operatorsapp.server.pulling.interfaces.MachineStatusUICallback;
+import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
+import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
+import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
+import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 import com.operatorsapp.server.requests.PostDeleteTokenRequest;
 import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
@@ -170,7 +171,6 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -278,7 +278,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private View mReportBtn;
     private boolean mIsTimeLineOpen;
     private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
-    private HashMap<Integer, WidgetInfo> permissionForMachineHashMap;
+    private SparseArray<WidgetInfo> permissionForMachineHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,7 +324,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
 
         setReportBtnListener();
 
-        displayViewByServerSettings(permissionForMachineHashMap);
     }
 
     private void setReportBtnListener() {
@@ -827,8 +826,9 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
             public void onMachinePermissionCallbackSucceeded(PermissionResponse permissionResponse) {
                 if (mDashboardUICallbackListenerList != null && mDashboardUICallbackListenerList.size() > 0) {
 
-                   permissionForMachineHashMap = new HashMap();
+                   permissionForMachineHashMap = new SparseArray<>();
                     for (WidgetInfo widgetInfo: permissionResponse.getWidgetInfo()){
+//                        widgetInfo.setHaspermission(false); for test
                         permissionForMachineHashMap.put(widgetInfo.getId(), widgetInfo);
                     }
 
@@ -837,7 +837,6 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                         dashboardUICallbackListener.onPermissionForMachinePolling(permissionForMachineHashMap);
                     }
 
-                    displayViewByServerSettings(permissionForMachineHashMap);
                 }
             }
 
@@ -1035,7 +1034,11 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     }
 
     private void showReportBtn(boolean show) {
-        if (show) {
+        boolean havePermission = true;
+        if (permissionForMachineHashMap != null){
+            havePermission = permissionForMachineHashMap.get(SHIFT_REPORT.getId()).getHaspermissionBoolean();
+        }
+        if (show && havePermission) {
             mReportBtn.setVisibility(View.VISIBLE);
         } else {
             mReportBtn.setVisibility(View.GONE);
@@ -3124,10 +3127,4 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void displayViewByServerSettings(HashMap<Integer, WidgetInfo> hashMap) {
-        if (permissionForMachineHashMap == null){
-            return;
-        }
-        mReportBtn.setVisibility(hashMap.get(SHIFT_REPORT).getHaspermission());
-    }
 }

@@ -1,5 +1,7 @@
 package com.operatorsapp.interfaces;
 
+import android.util.SparseArray;
+
 import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
@@ -10,7 +12,6 @@ import com.operators.machinedatainfra.models.Widget;
 import com.operators.machinestatusinfra.models.MachineStatus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface DashboardUICallbackListener {
 
@@ -20,7 +21,7 @@ public interface DashboardUICallbackListener {
         MachineData,
         ShiftLog;
     }
-    void onPermissionForMachinePolling(HashMap<Integer, WidgetInfo> permissionResponse);
+    void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse);
 
     void onDeviceStatusChanged(MachineStatus machineStatus);
 
