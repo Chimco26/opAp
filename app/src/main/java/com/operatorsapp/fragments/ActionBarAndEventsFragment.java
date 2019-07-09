@@ -1326,7 +1326,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if ((!BuildConfig.FLAVOR.equals(getString(R.string.lenox_flavor_name))) && PersistenceManager.getInstance().isDisplayToolbarTutorial()) {
 //            startToolbarTutorial();
         }
-
+        if (permissionResponseHashmap != null) {
+            displayViewByServerSettings(permissionResponseHashmap);
+        }
     }
 
     public void openSetupEndFragment() {
