@@ -1049,7 +1049,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private void showReportBtn(boolean show) {
         boolean havePermission = true;
         if (permissionForMachineHashMap != null){
-            havePermission = permissionForMachineHashMap.get(SHIFT_REPORT.getId()).getHaspermissionBoolean();
+            havePermission = WidgetInfo.getWidgetInfo(permissionForMachineHashMap, SHIFT_REPORT.getId()).getHaspermissionBoolean();
         }
         if (show && havePermission) {
             mReportBtn.setVisibility(View.VISIBLE);
