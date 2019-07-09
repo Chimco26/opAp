@@ -68,12 +68,12 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
 
         recyclerView = findViewById(R.id.NVP_view_pager);
         swipeRefresh = findViewById(R.id.NVP_swipe);
-//        newNotBodyEt = findViewById(R.id.NVP_create_notification_tv);
-//        newNotSendIv = findViewById(R.id.NVP_create_notification_iv);
-//        newNotTemplateIv = findViewById(R.id.NVP_template_notification_iv);
-//
-//        newNotSendIv.setOnClickListener(this);
-//        newNotTemplateIv.setOnClickListener(this);
+        newNotBodyEt = findViewById(R.id.NVP_create_notification_tv);
+        newNotSendIv = findViewById(R.id.NVP_create_notification_iv);
+        newNotTemplateIv = findViewById(R.id.NVP_template_notification_iv);
+
+        newNotSendIv.setOnClickListener(this);
+        newNotTemplateIv.setOnClickListener(this);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -91,19 +91,19 @@ public class NotificationsDialog extends Dialog implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-//            case R.id.NVP_create_notification_iv:
-//                if (!newNotBodyEt.getText().toString().isEmpty()){
-//
-//                    mListener.onSendNewNotification(newNotBodyEt.getText().toString());
-//                }
-//                break;
-//            case R.id.NVP_template_notification_iv:
-//                if (mTemplateList == null || mTemplateList.isEmpty()) {
-//                    getTopNotifications();
-//                }else {
-//                    openTemplateDialog();
-//                }
-//                break;
+            case R.id.NVP_create_notification_iv:
+                if (!newNotBodyEt.getText().toString().isEmpty()){
+
+                    mListener.onSendNewNotification(newNotBodyEt.getText().toString());
+                }
+                break;
+            case R.id.NVP_template_notification_iv:
+                if (mTemplateList == null || mTemplateList.isEmpty()) {
+                    getTopNotifications();
+                }else {
+                    openTemplateDialog();
+                }
+                break;
 
         }
     }

@@ -113,6 +113,7 @@ import com.operatorsapp.server.NetworkManager;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.responses.Notification;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
 import com.operatorsapp.utils.Consts;
@@ -721,6 +722,9 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
             }
 
             if (notification != null) {
+                //check if notification was sent to self
+                if (notification.getmTargetUserId() == notification.getmSourceUserID() && notification.getmTargetName().equals(notification.getmSender())) return;
+
                 if (mPopUpDialog != null && mPopUpDialog.isShowing()) {
                     mPopUpDialog.dismiss();
                 }
@@ -1756,7 +1760,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mPopUpDialog = new NotificationsDialog(getActivity(), new NotificationsDialog.NotificationsDialogListener() {
             @Override
             public void onSendNewNotification(String text) {
-//                sendNewNotification(text);
+                sendNewNotification(text);
             }
 
             @Override
@@ -1864,26 +1868,25 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 //
     }
 
-//    private void sendNewNotification(String text) {
-//        // TODO: 15/05/2019 create new notification
-//        int machineId = PersistenceManager.getInstance().getMachineId();
-//        String sessionId = PersistenceManager.getInstance().getSessionId();
-//        String title = "notification from opapp";
-//        SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
-//        ProgressDialogManager.show(getActivity());
-//        NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
-//            @Override
-//            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
-//                ProgressDialogManager.dismiss();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
-//                ProgressDialogManager.dismiss();
-//
-//            }
-//        });
-//    }
+    private void sendNewNotification(String text) {
+        int machineId = PersistenceManager.getInstance().getMachineId();
+        String sessionId = PersistenceManager.getInstance().getSessionId();
+        String title = "notification from opapp";
+        SendNotificationRequest request = new SendNotificationRequest(machineId, text, title, sessionId);
+        ProgressDialogManager.show(getActivity());
+        NetworkManager.getInstance().postSendNotification(request, new Callback<NotificationHistoryResponse>() {
+            @Override
+            public void onResponse(Call<NotificationHistoryResponse> call, Response<NotificationHistoryResponse> response) {
+                ProgressDialogManager.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<NotificationHistoryResponse> call, Throwable t) {
+                ProgressDialogManager.dismiss();
+
+            }
+        });
+    }
 
     private void sendNotificationResponse(final int notificationId, final int responseType, final boolean isRefresh) {
 
