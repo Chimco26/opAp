@@ -5,7 +5,7 @@
     android:layout_width="370dp"
     android:layout_height="match_parent">
 
-  <!--  <RelativeLayout
+    <RelativeLayout
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="175dp"
@@ -51,7 +51,7 @@
             android:layout_toEndOf="@+id/NVP_create_notification_fl"
             android:background="@drawable/send"/>
 
-    </RelativeLayout>-->
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/NVP_no_notifications_tv"

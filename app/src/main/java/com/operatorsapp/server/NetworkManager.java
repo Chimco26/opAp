@@ -79,6 +79,7 @@ import com.operatorsapp.server.requests.PostIncrementCounterRequest;
 import com.operatorsapp.server.requests.PostNotificationTokenRequest;
 import com.operatorsapp.server.requests.PostTechnicianCallRequest;
 import com.operatorsapp.server.requests.RespondToNotificationRequest;
+import com.operatorsapp.server.requests.SendNotificationRequest;
 import com.operatorsapp.server.requests.TopNotificationRequest;
 import com.operatorsapp.server.responses.AppVersionResponse;
 import com.operatorsapp.server.responses.NotificationHistoryResponse;
@@ -1066,11 +1067,11 @@ public class NetworkManager implements LoginNetworkManagerInterface,
         call.enqueue(callback);
     }
 
-//    public void postSendNotification(SendNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
-//        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
-//        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).sendNotification(request);
-//        call.enqueue(callback);
-//    }
+    public void postSendNotification(SendNotificationRequest request, final  Callback<NotificationHistoryResponse> callback){
+        mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
+        Call<NotificationHistoryResponse> call = mRetrofit.create(OpAppServiceRequests.class).sendNotification(request);
+        call.enqueue(callback);
+    }
 
     public void getTopNotification(TopNotificationRequest request, final Callback<NotificationHistoryResponse> callback) {
         mRetrofit = getRetrofit(PersistenceManager.getInstance().getSiteUrl(), PersistenceManager.getInstance().getRequestTimeout(), TimeUnit.SECONDS);
