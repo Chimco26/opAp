@@ -1516,21 +1516,21 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         if (permissionResponse == null) {
             return;
         }
-        displayTechnicianView(permissionResponse.get(WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
-        displayOperatorView(permissionResponse.get(WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
+        displayTechnicianView(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SERVICE_CALLS.getId()).getHaspermission());
+        displayOperatorView(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.OPERATOR_SIGN_IN.getId()).getHaspermission());
         if (getView() != null) {
-        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(permissionResponse.get(WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
+        getView().findViewById(R.id.FAAE_bottom_msg_fl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.MESSAGES.getId()).getHaspermission());
         }
         if (mToolBarView != null) {
-            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(permissionResponse.get(WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
+            mToolBarView.findViewById(R.id.toolbar_production_status_rl).setVisibility(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.PRODUCTION_STATUS.getId()).getHaspermission());
         }
         if (mTimeLineType != null) {
-            if (permissionResponse.get(WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
-                    && permissionResponse.get(WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean()) {
+            if (WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.EVENT_LIST.getId()).getHaspermissionBoolean()
+                    && WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean()) {
                 mTimeLineType.setVisibility(View.VISIBLE);
             } else {
                 mTimeLineType.setVisibility(View.GONE);
-                mTimeLineType.setChecked(permissionResponse.get(WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean());//id only one is true
+                mTimeLineType.setChecked(WidgetInfo.getWidgetInfo(permissionResponse,WidgetInfo.PermissionId.SHIFT_LOG.getId()).getHaspermissionBoolean());//id only one is true
             }
         }
     }
@@ -2326,18 +2326,18 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     }
 
     public void enableActionSpinner() {
-        disableActionInSpinner(permissionResponseHashmap.get(WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
+        disableActionInSpinner(WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.ACTIVATE_JOB.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(0).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && permissionResponseHashmap.get(WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.REPORT_PRODUCTION.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(1).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && permissionResponseHashmap.get(WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.ADD_REJECTS.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(2).getUniqueID());
         disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
-                && permissionResponseHashmap.get(WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.CHANGE_UNITS_IN_CYCLE.getId()).getHaspermissionBoolean(), mJobActionsSpinnerItems.get(3).getUniqueID());
 
         if (!mEndSetupDisable) {
             disableActionInSpinner(mCurrentMachineStatus.getAllMachinesData().get(0).getmProductionModeID() <= 1
                             && mCurrentMachineStatus.getAllMachinesData().get(0).canReportApproveFirstItem()
-                            && permissionResponseHashmap.get(WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
+                            && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean()
                     , mJobActionsSpinnerItems.get(4).getUniqueID());
         } else {
             mEndSetupDisable = false;
@@ -2812,7 +2812,7 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
     @Override
     public void onApproveFirstItemEnabledChanged(boolean enabled) {
         disableActionInSpinner(enabled
-                && permissionResponseHashmap.get(WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(), mApproveItemID);
+                && WidgetInfo.getWidgetInfo(permissionResponseHashmap,WidgetInfo.PermissionId.END_SETUP.getId()).getHaspermissionBoolean(), mApproveItemID);
         mEndSetupDisable = true;
 
     }
