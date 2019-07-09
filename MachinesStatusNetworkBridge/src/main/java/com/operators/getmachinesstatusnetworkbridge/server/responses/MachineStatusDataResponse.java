@@ -17,20 +17,9 @@ public class MachineStatusDataResponse extends ErrorBaseResponse {
     private List<AllMachinesData> mAllMachinesData = new ArrayList<>();
     @SerializedName("MissingMachineIds")
     private Object mMissingMachineIds;
-    @SerializedName("AutoActivateNextJob")
-    private Boolean mAutoActivateNextJob;
-    @SerializedName("AutoActivateNextJobTimerSec")
-    private Integer mAutoActivateNextJobTimerSec;
-    @SerializedName("AutoActivateNextJobTimer")
-    private Boolean mAutoActivateNextJobTimer;
-    @SerializedName("NextJobID")
-    private Long mNextJobID;
-    @SerializedName("NextERPJobID")
-    private String mNextERPJobID;
 
     public MachineStatus getMachineStatus() {
-        return new MachineStatus(mDepartmentMachinePC, mDepartmentOeePee, mMissingMachineIds, mAllMachinesData,
-                mAutoActivateNextJob, mAutoActivateNextJobTimerSec, mAutoActivateNextJobTimer, mNextJobID, mNextERPJobID);
+        return new MachineStatus(mDepartmentMachinePC, mDepartmentOeePee, mMissingMachineIds, mAllMachinesData);
     }
 
     public List<Object> getmDepartmentMachinePC() {
@@ -65,43 +54,4 @@ public class MachineStatusDataResponse extends ErrorBaseResponse {
         this.mMissingMachineIds = mMissingMachineIds;
     }
 
-    public Boolean getmAutoActivateNextJob() {
-        return mAutoActivateNextJob;
-    }
-
-    public void setmAutoActivateNextJob(Boolean mAutoActivateNextJob) {
-        this.mAutoActivateNextJob = mAutoActivateNextJob;
-    }
-
-    public Integer getmAutoActivateNextJobTimerSec() {
-        return mAutoActivateNextJobTimerSec;
-    }
-
-    public void setmAutoActivateNextJobTimerSec(Integer mAutoActivateNextJobTimerSec) {
-        this.mAutoActivateNextJobTimerSec = mAutoActivateNextJobTimerSec;
-    }
-
-    public Boolean getmAutoActivateNextJobTimer() {
-        return mAutoActivateNextJobTimer;
-    }
-
-    public void setmAutoActivateNextJobTimer(Boolean mAutoActivateNextJobTimer) {
-        this.mAutoActivateNextJobTimer = mAutoActivateNextJobTimer;
-    }
-
-    public Long getmNextJobID() {
-        return mNextJobID;
-    }
-
-    public void setmNextJobID(Long mNextJobID) {
-        this.mNextJobID = mNextJobID;
-    }
-
-    public String getmNextERPJobID() {
-        return mNextERPJobID;
-    }
-
-    public void setmNextERPJobID(String mNextERPJobID) {
-        this.mNextERPJobID = mNextERPJobID;
-    }
 }

@@ -5,11 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class MachineStatus {
-    private final Boolean mAutoActivateNextJob;
-    private final Integer mAutoActivateNextJobTimerSec;
-    private final Boolean mAutoActivateNextJobTimer;
-    private final Long mNextJobID;
-    private final String mNextERPJobID;
     @SerializedName("DepartmentMachinePC")
     private List<Object> mDepartmentMachinePC;
     @SerializedName("DepartmentOeePee")
@@ -19,17 +14,11 @@ public class MachineStatus {
     @SerializedName("allMachinesData")
     private List<AllMachinesData> mAllMachinesData;
 
-    public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData,
-                         Boolean autoActivateNextJob, Integer autoActivateNextJobTimerSec, Boolean autoActivateNextJobTimer, Long nextJobID, String nextERPJobID) {
+    public MachineStatus(List<Object> departmentMachinePC, List<Object> departmentOeePee, Object missingMachineIds, List<AllMachinesData> allMachinesData) {
         mDepartmentMachinePC = departmentMachinePC;
         mDepartmentOeePee = departmentOeePee;
         mMissingMachineIds = missingMachineIds;
         mAllMachinesData = allMachinesData;
-        mAutoActivateNextJob = autoActivateNextJob;
-        mAutoActivateNextJobTimerSec = autoActivateNextJobTimerSec;
-        mAutoActivateNextJobTimer = autoActivateNextJobTimer;
-        mNextJobID = nextJobID;
-        mNextERPJobID = nextERPJobID;
     }
 
     public List<AllMachinesData> getAllMachinesData() {
@@ -82,39 +71,4 @@ public class MachineStatus {
         this.mAllMachinesData = mAllMachinesData;
     }
 
-    public Boolean getmAutoActivateNextJob() {
-        if (mAutoActivateNextJob != null) {
-            return mAutoActivateNextJob;
-        }else {
-            return false;
-        }
-    }
-
-    public Integer getmAutoActivateNextJobTimerSec() {
-        if (mAutoActivateNextJobTimerSec != null) {
-            return mAutoActivateNextJobTimerSec;
-        }else {
-            return 0;
-        }
-    }
-
-    public Boolean getmAutoActivateNextJobTimer() {
-        if (mAutoActivateNextJobTimer != null) {
-            return mAutoActivateNextJobTimer;
-        }else {
-            return false;
-        }
-    }
-
-    public Long getmNextJobID() {
-        if (mNextJobID != null) {
-            return mNextJobID;
-        }else {
-            return 0l;
-        }
-    }
-
-    public String getmNextERPJobID() {
-        return mNextERPJobID;
-    }
 }
