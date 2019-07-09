@@ -54,7 +54,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
     private View mchannel1_99BotomView;
     private View mchannel100BotomView;
     private View mLayoutChannel0;
-    private TextView mLayoutChannel0Title;
     private ImageView mLayoutChannel0Image;
     private TextView mLayoutChannel0ItemTitleTv;
     private TextView mLayoutChannel0ItemSubTitleTv;
@@ -196,8 +195,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
 
         mLayoutChannel0MainLayout = view.findViewById(R.id.C0L_layout);
 
-        mLayoutChannel0Title = mLayoutChannel0.findViewById(R.id.C0L_title_tv);
-
         mLayoutChannel0Image = mLayoutChannel0.findViewById(R.id.C0L_img);
 
         View mLayoutChannel0Item = mLayoutChannel0.findViewById(R.id.C0L_item);
@@ -270,15 +267,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, No
             mLayoutChannel0NoDataTv.setVisibility(View.GONE);
 
             RecipeData recipeChannel0 = mRecipeResponse.getRecipeData().get(0);
-
-            if (PersistenceManager.getInstance().getCurrentLang().equals("en")) {
-
-                mLayoutChannel0Title.setText(recipeChannel0.getName());
-
-            } else {
-
-                mLayoutChannel0Title.setText(recipeChannel0.getName());
-            }
 
             if (mRecipeResponse.getProductData() != null && mRecipeResponse.getProductData().getFileUrl() != null &&
                     mRecipeResponse.getProductData().getFileUrl().size() > 0) {

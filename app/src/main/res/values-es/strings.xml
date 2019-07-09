@@ -271,7 +271,7 @@
     <string name="default_unanswered_technician_call">El operador %1$s ha abierto una llamada de servicio. Esperando la respuesta del técnico</string>
     <string name="incremented_successfully">Aumentado correctamente</string>
     <string name="incremented_failure">Error al aumentar</string>
-    <string name="top_five_stop_events">Mejores 5 eventos de parada</string>
+    <string name="top_five_stop_events">Principales 5 eventos de Paradas</string>
     <string name="top_five_reject_reasons">Mejores 5 razones de rechazo</string>
     <string name="attention">¡Atención!</string>
     <string name="activate_job">Activar trabajo</string>
