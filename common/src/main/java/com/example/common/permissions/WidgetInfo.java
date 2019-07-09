@@ -1,5 +1,6 @@
 package com.example.common.permissions;
 
+import android.util.SparseArray;
 import android.view.View;
 
 import com.google.gson.annotations.Expose;
@@ -89,5 +90,16 @@ public class WidgetInfo {
 
     public void setHaspermission(Boolean haspermission) {
         this.haspermission = haspermission;
+    }
+
+    public static WidgetInfo getWidgetInfo(SparseArray<WidgetInfo> permissionResponse, int typeId) {
+        if (permissionResponse != null && permissionResponse.get(typeId) != null) {
+            return permissionResponse.get(typeId);
+        } else {
+            WidgetInfo widgetInfo = new WidgetInfo();
+            widgetInfo.setHaspermission(true);
+            return widgetInfo;
+        }
+
     }
 }
