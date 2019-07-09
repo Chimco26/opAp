@@ -24,6 +24,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private final int mHeight;
     private final int mWidth;
     private final TextView m1EstimatedTv;
+    private boolean mShowActivateJobBtn = true;
+    private boolean mShowEndSetupBtn = true;
     private RelativeLayout mParentLayout;
     private boolean mEndSetupDisable;
     private TextView mTitle;
@@ -41,7 +43,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
     private MachineStatus mMachineStatus;
     private View mDivider;
 
-    public TimeLeftViewHolder(View itemView, DashboardCentralContainerListener listener, MachineStatus machineStatus, boolean endSetupDisable, int height, int width) {
+    public TimeLeftViewHolder(View itemView, DashboardCentralContainerListener listener, MachineStatus machineStatus, boolean endSetupDisable,
+                              int height, int width, boolean showEndSetupBtn, boolean showActivateJobBtn) {
         super(itemView);
 
         mListener = listener;
@@ -49,6 +52,8 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         mWidth = width;
         mMachineStatus = machineStatus;
         mEndSetupDisable = endSetupDisable;
+        mShowEndSetupBtn = showEndSetupBtn;
+        mShowActivateJobBtn =showActivateJobBtn;
 //        mParentLayout = itemView.findViewById(R.id.TLWC_parent_layout);
 //        mDivider = itemView.findViewById(R.id.TLWC_divider);
         mTitle = itemView.findViewById(R.id.TLWC_title);
@@ -99,6 +104,11 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
             m1Ly.setVisibility(View.GONE);
             m2CountDownLy.setVisibility(View.GONE);
             m3Ly.setVisibility(View.VISIBLE);
+            if (mShowEndSetupBtn){
+                m2Btn.setVisibility(View.VISIBLE);
+            }else {
+                m2Btn.setVisibility(View.INVISIBLE);
+            }
 //            mSubTitle.setText("");
             mTitle.setText(R.string.setup_mode);
         } else {
@@ -136,12 +146,22 @@ public class TimeLeftViewHolder extends RecyclerView.ViewHolder implements View.
         if (time <= endLimit) {
             m3Text.setText(m3Text.getContext().getString(R.string.dont_forget_to_activate_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.activate));
+            if (mShowActivateJobBtn) {
+                m3Btn.setVisibility(View.VISIBLE);
+            }else {
+                m3Btn.setVisibility(View.INVISIBLE);
+            }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.red_line));
 //            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
 //            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.red_line));
         } else {
             m3Text.setText(m3Text.getContext().getString(R.string.get_ready_for_your_next_job));
             m3Btn.setText(m3Btn.getContext().getString(R.string.see_job));
+            if (mShowActivateJobBtn) {
+                m3Btn.setVisibility(View.VISIBLE);
+            }else {
+                m3Btn.setVisibility(View.INVISIBLE);
+            }
             m3Text.setTextColor(m3Text.getContext().getResources().getColor(R.color.blue1));
 //            mSubTitle.setText(mSubTitle.getContext().getString(R.string.hr));
 //            m3Btn.setBackgroundColor(m3Btn.getContext().getResources().getColor(R.color.blue1));

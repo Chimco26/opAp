@@ -1,22 +1,18 @@
-package com.operators.alldashboarddatacore;
+package com.operatorsapp.server.pulling;
 
 import android.util.Log;
 
 import com.example.common.Event;
+import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
+import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.callback.GetMachineJoshDataCallback;
 import com.example.common.callback.MachineJoshDataCallback;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.PermissionResponse;
+import com.example.common.request.MachineIdRequest;
 import com.example.common.request.MachineJoshDataRequest;
 import com.example.oppapplog.OppAppLogger;
-import com.operators.alldashboarddatacore.interfaces.ActualBarExtraDetailsUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineDataUICallback;
-import com.operators.alldashboarddatacore.interfaces.MachineStatusUICallback;
-import com.operators.alldashboarddatacore.interfaces.OnTimeToEndChangedListener;
-import com.operators.alldashboarddatacore.interfaces.ShiftForMachineUICallback;
-import com.operators.alldashboarddatacore.interfaces.ShiftLogUICallback;
-import com.operators.alldashboarddatacore.polling.EmeraldJobBase;
-import com.operators.alldashboarddatacore.timecounter.TimeToEndCounter;
-import com.example.common.callback.ErrorObjectInterface;
+import com.operators.activejobslistformachinenetworkbridge.server.ErrorObject;
 import com.operators.machinedatainfra.interfaces.GetMachineDataCallback;
 import com.operators.machinedatainfra.interfaces.GetMachineDataNetworkBridgeInterface;
 import com.operators.machinedatainfra.interfaces.MachineDataPersistenceManagerInterface;
@@ -30,8 +26,18 @@ import com.operators.shiftloginfra.ShiftForMachineCoreCallback;
 import com.operators.shiftloginfra.ShiftLogCoreCallback;
 import com.operators.shiftloginfra.ShiftLogNetworkBridgeInterface;
 import com.operators.shiftloginfra.ShiftLogPersistenceManagerInterface;
-import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.operators.shiftloginfra.model.ShiftForMachineResponse;
+import com.operatorsapp.managers.PersistenceManager;
+import com.operatorsapp.polling.EmeraldJobBase;
+import com.operatorsapp.server.NetworkManager;
+import com.operatorsapp.server.pulling.interfaces.ActualBarExtraDetailsUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachineDataUICallback;
+import com.operatorsapp.server.pulling.interfaces.MachinePermissionCallback;
+import com.operatorsapp.server.pulling.interfaces.MachineStatusUICallback;
+import com.operatorsapp.server.pulling.interfaces.OnTimeToEndChangedListener;
+import com.operatorsapp.server.pulling.interfaces.ShiftForMachineUICallback;
+import com.operatorsapp.server.pulling.interfaces.ShiftLogUICallback;
+import com.operatorsapp.server.pulling.timecounter.TimeToEndCounter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +47,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ravtech.co.il.publicutils.JobBase;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 
@@ -70,6 +79,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
 
     private TimeToEndCounter mTimeToEndCounter;
     private MachineJoshDataCallback mMachineJoshDataCallback;
+    private MachinePermissionCallback mMachinePermissionsCallback;
 
 
     public AllDashboardDataCore(AllDashboardDataCoreListener listener, GetMachineStatusNetworkBridgeInterface getMachineStatusNetworkBridge,
@@ -93,12 +103,14 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
     }
 
     public void registerListener(MachineStatusUICallback machineStatusUICallback, MachineDataUICallback machineDataUICallback,
-                                 ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback, MachineJoshDataCallback machineJoshDataCallback) {
+                                 ShiftLogUICallback shiftLogUICallback, ActualBarExtraDetailsUICallback actualBarExtraDetailsUICallback, MachineJoshDataCallback machineJoshDataCallback,
+                                 MachinePermissionCallback machinePermissionCallback) {
         mMachineStatusUICallback = machineStatusUICallback;
         mMachineDataUICallback = machineDataUICallback;
         mShiftLogUICallback = shiftLogUICallback;
         mActualBarExtraUICallback = actualBarExtraDetailsUICallback;
         mMachineJoshDataCallback = machineJoshDataCallback;
+        mMachinePermissionsCallback = machinePermissionCallback;
     }
 
     public void unregisterListener() {
@@ -154,6 +166,7 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
             jobId = 0;
         }
 
+        getPermissionForMachine();
         getMachineStatus(onJobFinishedListener, jobId);
         getMachineData(onJobFinishedListener, jobId);
         getMachineJoshData();
@@ -242,6 +255,31 @@ public class AllDashboardDataCore implements OnTimeToEndChangedListener {
                 }
             }, mMachineDataPersistenceManagerInterface.getTotalRetries(), mMachineDataPersistenceManagerInterface.getRequestTimeout(), joshID);
         }
+    }
+
+    private void getPermissionForMachine() {
+        NetworkManager.getInstance().getPermissionForMachine(new MachineIdRequest(String.valueOf(PersistenceManager.getInstance().getMachineId())), new Callback<PermissionResponse>() {
+            @Override
+            public void onResponse(Call<PermissionResponse> call, Response<PermissionResponse> response) {
+
+                if (mMachinePermissionsCallback != null) {
+                    if (response.body() != null && response.body().getError() == null) {
+                        mMachinePermissionsCallback.onMachinePermissionCallbackSucceeded(response.body());
+                    } else {
+                        onFailure(call, new Throwable(""));
+                    }
+                }else {
+                    OppAppLogger.getInstance().w(LOG_TAG, "getPermissionForMachine() mMachinePermissionsCallback is null");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PermissionResponse> call, Throwable t) {
+                OppAppLogger.getInstance().w(LOG_TAG, "getPermissionForMachine() failed");
+                ErrorObjectInterface errorResponse = new ErrorObject(ErrorObject.ErrorCode.No_data, "getPermissionForMachine Response is null Error");
+                mMachinePermissionsCallback.onMachinePermissionCallbackFailed(errorResponse);
+            }
+        });
     }
 
     private void getShiftLogs(final JobBase.OnJobFinishedListener onJobFinishedListener) {

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.common.Event;
 import com.example.common.actualBarExtraResponse.ActualBarExtraResponse;
 import com.example.common.callback.ErrorObjectInterface;
 import com.example.common.machineJoshDataResponse.MachineJoshDataResponse;
+import com.example.common.permissions.WidgetInfo;
 import com.example.oppapplog.OppAppLogger;
 import com.operators.activejobslistformachineinfra.ActiveJobsListForMachine;
 import com.operators.machinedatainfra.models.Widget;
@@ -70,6 +72,7 @@ public class WidgetFragment extends Fragment implements
     private LinearLayout mKeyBoardLayout;
     private SingleLineKeyboard mKeyBoard;
     private int mSpanCount;
+    private SparseArray<WidgetInfo> mPermissionResponse;
 
     public static WidgetFragment newInstance(ReportFieldsForMachine reportFieldsForMachine) {
         WidgetFragment widgetFragment = new WidgetFragment();
@@ -160,7 +163,7 @@ public class WidgetFragment extends Fragment implements
                             mDashboardCentralContainerListener.onKeyboardEvent(false);
                         }
 
-                    });
+                    }, mPermissionResponse);
                     mWidgetRecycler.setAdapter(mWidgetAdapter);
 
                     mLoadingDataView = view.findViewById(R.id.fragment_dashboard_loading_data_widgets);
@@ -209,6 +212,11 @@ public class WidgetFragment extends Fragment implements
     }
 
     @Override
+    public void onPermissionForMachinePolling(SparseArray<WidgetInfo> permissionResponse) {
+        mPermissionResponse = permissionResponse;
+    }
+
+    @Override
     public void onDeviceStatusChanged(MachineStatus machineStatus) {
         this.mMachineStatus = machineStatus;
         if (mWidgetAdapter != null){
@@ -236,13 +244,12 @@ public class WidgetFragment extends Fragment implements
 //            mNoDataView.setVisibility(View.GONE);
             mLoadingDataView.setVisibility(View.GONE);
 
-
             if (mWidgetAdapter != null) {
-                mWidgetAdapter.setNewData(widgetList);
+                mWidgetAdapter.setNewData(widgetList, mPermissionResponse);
             } else {
                 mWidgetAdapter = new WidgetAdapter(getActivity(), widgetList, mOnGoToScreenListener,
                         !mIsOpen, mRecyclersHeight, mWidgetsLayoutWidth,
-                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, this);
+                        mDashboardCentralContainerListener, mReportFieldForMachine, mMachineStatus, this, mPermissionResponse);
                 mWidgetRecycler.setAdapter(mWidgetAdapter);
             }
         } else {
