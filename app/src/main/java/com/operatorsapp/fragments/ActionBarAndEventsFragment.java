@@ -2740,19 +2740,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         };
         mSelectAll = view.findViewById(R.id.FAAE_select_all);
         mSelectAll.setOnClickListener(onClickListener);
-//        mSelectAll.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                boolean checked = mSelectAll.isChecked();
-//                mWorkingEvents.setChecked(checked);
-//                mEventDetails.setChecked(checked);
-//                mServiceCalls.setChecked(checked);
-//                mMessages.setChecked(checked);
-//                mRejects.setChecked(checked);
-//                mProductionReport.setChecked(checked);
-//            }
-//        });
-//        mWorkingEvents.setOnCheckedChangeListener(this);
         mServiceCalls = view.findViewById(R.id.FAAE_service_alls);
         mServiceCalls.setOnClickListener(onClickListener);
         mMessages = view.findViewById(R.id.FAAE_messages);
@@ -2761,8 +2748,6 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
         mRejects.setOnClickListener(onClickListener);
         mProductionReport = view.findViewById(R.id.FAAE_production_report);
         mProductionReport.setOnClickListener(onClickListener);
-
-
     }
 
     public void addCheckedAlarms(ArrayList<Integer> checkedAlarms, Event event) {

@@ -428,5 +428,6 @@
     <string name="next_job_will_start_in">Next Job will start in</string>
     <string name="start_job_now">Start Job Now</string>
     <string name="cancel_job">Cancel Job</string>
+    <string name="graph">Graph</string>
 
 </resources>
