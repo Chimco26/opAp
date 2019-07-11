@@ -43,8 +43,8 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
         mCalendar = Calendar.getInstance();
         mCalendar.add(Calendar.DAY_OF_MONTH, 1);
         mListener = listener;
-        mFirstTodayPosition = mNotificationsList.size();
-        mFirstYesterdayPosition = mNotificationsList.size();
+        mFirstTodayPosition = -1; // mNotificationsList.size();
+        mFirstYesterdayPosition = -1;//mNotificationsList.size();
         getTitlesPosition();
     }
 
@@ -65,15 +65,16 @@ public class NotificationHistoryAdapter extends RecyclerView.Adapter<Notificatio
             if (date != null) {
                 c.setTime(date);
 
-                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && i < mFirstTodayPosition) {
+                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) && mFirstTodayPosition < 0) {
                     mFirstTodayPosition = i;
                 }
 
-                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) + 1 && i < mFirstYesterdayPosition) {
+                if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR) + 1 && mFirstYesterdayPosition < 0) {
                     mFirstYesterdayPosition = i;
                 }
             }
 
+            if (mFirstTodayPosition >= 0 && mFirstYesterdayPosition >= 0) return;
         }
     }
 

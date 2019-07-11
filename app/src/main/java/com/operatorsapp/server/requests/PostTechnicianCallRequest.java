@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class PostTechnicianCallRequest {
 
-    @SerializedName("")
+    @SerializedName("SessionID")
     private String sessionID;
 
     @SerializedName("sourceMachineID")
