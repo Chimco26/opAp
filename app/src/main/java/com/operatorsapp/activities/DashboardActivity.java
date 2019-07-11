@@ -283,6 +283,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
     private String[] mReportCycleUnitValues = new String[2];//values of cycle unit report : [0] = originalValue ; [1] = max value if orinal is over the max
     private SparseArray<WidgetInfo> permissionForMachineHashMap;
     private NextJobTimerDialog mNextJobTimerDialog;
+    private int mShowDialogJobId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -999,7 +1000,7 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
                     setFilterWarningText(mCurrentMachineStatus.getAllMachinesData().get(0).isProductionModeWarning());
                     checkShowReportBtn(getVisibleFragment());
 //                    setFilterWarningText(true);
-                    showTimeNextJobDialog(mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJob(),
+                    showTimeNextJobDialog(mCurrentMachineStatus.getAllMachinesData().get(0).getCurrentJobID(), mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJob(),
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmNextJobID(),
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmAutoActivateNextJobTimer(),
                             mCurrentMachineStatus.getAllMachinesData().get(0).getmNextERPJobID(),
@@ -3193,9 +3194,13 @@ public class DashboardActivity extends AppCompatActivity implements OnCroutonReq
         }
     }
 
-    private void showTimeNextJobDialog(boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
+    private void showTimeNextJobDialog(int currentJobID, boolean autoActivateNextJob, final long nextJobID, boolean autoActivateNextJobTimer, String erpJobId, int counter) {
 
+        if (mShowDialogJobId != 0 && mShowDialogJobId == currentJobID){
+            return;
+        }
         if (autoActivateNextJob && nextJobID > 0) {
+            mShowDialogJobId = currentJobID;
             mNextJobTimerDialog = new NextJobTimerDialog(this,
                     new NextJobTimerDialog.NextJobTimerDialogListener() {
                         @Override

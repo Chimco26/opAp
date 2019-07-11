@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.operators.reportfieldsformachineinfra.ReportFieldsForMachine;
 import com.operatorsapp.R;
 import com.operatorsapp.utils.TimeUtils;
 
@@ -27,9 +26,6 @@ public class NextJobTimerDialog implements View.OnClickListener {
     private final int mCounter;
     private final boolean mAutoActivateNextJobTimer;
     private AlertDialog mAlarmAlertDialog;
-    private ReportFieldsForMachine mReportFieldsForMachine;
-    private int mSelectedReasonId;
-    private int mSelectedTechnicianId;
     private CountDownTimer mCountDownTimer;
 
 
