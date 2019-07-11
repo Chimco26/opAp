@@ -1387,10 +1387,10 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
 
         final String techName = OperatorApplication.isEnglishLang() ? technician.getEName() : technician.getLName();
         String sourceUserId = PersistenceManager.getInstance().getOperatorId();
-        if (sourceUserId == null || sourceUserId.equals("")) {
-//            sourceUserId = "0";
-            sourceUserId = pm.getUserId() + "";
-        }
+//        if (sourceUserId == null || sourceUserId.equals("")) {
+////            sourceUserId = "0";
+//            sourceUserId = pm.getUserId() + "";
+//        }
 
 
         PostTechnicianCallRequest request = new PostTechnicianCallRequest(pm.getSessionId(), pm.getMachineId(), title, technician.getID(), body, operatorName, technician.getEName(), sourceUserId);
@@ -3325,7 +3325,8 @@ public class ActionBarAndEventsFragment extends Fragment implements DialogFragme
                             if (techList != null && techListCopy.size() > 0) {
                                 for (int i = 0; i < techListCopy.size(); i++) {
                                     TechCallInfo tech = techListCopy.get(i);
-                                    if (tech.getmNotificationId() == not.getmNotificationID()) {
+                                    if (tech.getmNotificationId() == not.getmNotificationID() && tech.getmResponseType() == not.getmResponseType()
+                                            && tech.getmTechnicianId() == not.getmTargetUserId()) {
                                         isNew = false;
                                         tech.setmCallTime(TimeUtils.getLongFromDateString(not.getmResponseDate(), TimeUtils.SIMPLE_FORMAT_FORMAT));
                                         tech.setmResponseType(not.getmResponseType());

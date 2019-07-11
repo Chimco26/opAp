@@ -247,8 +247,7 @@ public class TechCallDialog extends Dialog implements View.OnClickListener, Tech
         Date date24hrs = cal.getTime();
 
         for (Notification notification : PersistenceManager.getInstance().getNotificationHistory()) {
-            if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && notification.getmResponseType() != Consts.NOTIFICATION_RESPONSE_TYPE_CANCELLED
-                && TimeUtils.getDateForNotification(notification.getmResponseDate()).after(date24hrs)) {
+            if (notification.getmNotificationType() == Consts.NOTIFICATION_TYPE_TECHNICIAN && TimeUtils.getDateForNotification(notification.getmResponseDate()).after(date24hrs)) {
                 notList.add(notification);
             }
         }
